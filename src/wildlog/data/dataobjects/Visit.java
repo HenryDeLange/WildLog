@@ -1,3 +1,17 @@
+/*
+ * Visit.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package wildlog.data.dataobjects;
 
 import java.util.ArrayList;
@@ -46,7 +60,7 @@ public class Visit {
         htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Game Watching", gameWatchingIntensity, "Type", type);
         htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Description", description);
         htmlVisit = htmlVisit + "</table>";
-        htmlVisit = htmlVisit + "</br><h3>Visits:</h3>" + sightingString;
+        htmlVisit = htmlVisit + "</br><h3>Sightings:</h3>" + sightingString;
         return htmlVisit;
     }
 

@@ -1,7 +1,15 @@
 /*
- * PanelLocation.java
+ * PanelLocation.java is part of WildLog
  *
- * Created on May 19, 2008, 3:02 PM
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package wildlog.ui.panel;
@@ -58,7 +66,6 @@ public class PanelLocation extends javax.swing.JPanel {
     private int imageIndex;
     private UtilPanelGenerator utilPanelGenerator;
     private UtilTableGenerator utilTableGenerator;
-    private MapFrame mapFrame;
     private WildLogApp app;
     
     /** Creates new form PanelLocation */
@@ -698,32 +705,34 @@ public class PanelLocation extends javax.swing.JPanel {
         int result = fileChooser.showOpenDialog(this);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File fromFile = fileChooser.getSelectedFile();
-            File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + fromFile.getName());
-                FileInputStream fileInput = null;
-                FileOutputStream fileOutput = null;
+            File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + "Locations" + File.separatorChar + locationWL.getName());
+            toDir.mkdirs();
+            File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+            FileInputStream fileInput = null;
+            FileOutputStream fileOutput = null;
+            try {
+                fileInput = new FileInputStream(fromFile);
+                fileOutput = new FileOutputStream(toFile);
+                byte[] tempBytes = new byte[(int)fromFile.length()];
+                fileInput.read(tempBytes);
+                fileOutput.write(tempBytes);
+                fileOutput.flush();
+                if (locationWL.getFotos() == null) locationWL.setFotos(new ArrayList<Foto>());
+                locationWL.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
+                setupFotos(locationWL.getFotos().size() - 1);
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            finally {
                 try {
-                    fileInput = new FileInputStream(fromFile);
-                    fileOutput = new FileOutputStream(toFile);
-                    byte[] tempBytes = new byte[(int)fromFile.length()];
-                    fileInput.read(tempBytes);
-                    fileOutput.write(tempBytes);
-                    fileOutput.flush();
-                    if (locationWL.getFotos() == null) locationWL.setFotos(new ArrayList<Foto>());
-                    locationWL.getFotos().add(new Foto(toFile.getName()));
-                    setupFotos(locationWL.getFotos().size() - 1);
+                    fileInput.close();
+                    fileOutput.close();
                 }
                 catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                finally {
-                    try {
-                        fileInput.close();
-                        fileOutput.close();
-                    }
-                    catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
+            }
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
@@ -854,7 +863,7 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRemoveSubAreaActionPerformed
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
-        mapFrame = new MapFrame(app.getDBI(), "WildLog Map - Location: " + locationWL.getName());
+        app.getMapFrame().clearPoints();
         if (locationWL.getLatitude() != null && locationWL.getLongitude() != null)
             if (!locationWL.getLatitude().equals(Latitudes.NONE) && !locationWL.getLongitude().equals(Longitudes.NONE)) {
                 float lat = locationWL.getLatDegrees();
@@ -867,9 +876,9 @@ public class PanelLocation extends javax.swing.JPanel {
                 lon = lon + (locationWL.getLonSeconds()/60f)/60f;
                 if (locationWL.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
-                mapFrame.addPoint(lat, lon, new Color(70, 120, 190));
+                app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
             }
-        mapFrame.showMap();
+        app.getMapFrame().showMap();
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed

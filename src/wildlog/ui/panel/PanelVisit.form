@@ -334,15 +334,15 @@
         </Component>
         <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpStartDate">
           <Properties>
-            <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="visit.getStartDate()" type="code"/>
-            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder roundedCorners="true" thickness="3">
                   <Property name="color" resourceKey="dtpStartDate.border.lineColor"/>
                 </LineBorder>
               </Border>
+            </Property>
+            <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="visit.getStartDate()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="dtpStartDate" noResource="true"/>
           </Properties>
@@ -354,15 +354,15 @@
         </Component>
         <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpEndDate">
           <Properties>
-            <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="visit.getEndDate()" type="code"/>
-            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder roundedCorners="true" thickness="3">
                   <Property name="color" resourceKey="dtpEndDate.border.lineColor"/>
                 </LineBorder>
               </Border>
+            </Property>
+            <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="visit.getEndDate()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="dtpEndDate" noResource="true"/>
           </Properties>
@@ -549,15 +549,15 @@
         </Component>
         <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpSightingDate">
           <Properties>
-            <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="sighting.getDate()" type="code"/>
-            </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder roundedCorners="true" thickness="3">
                   <Property name="color" resourceKey="dtpSightingDate.border.lineColor"/>
                 </LineBorder>
               </Border>
+            </Property>
+            <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="sighting.getDate()" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="dtpSightingDate" noResource="true"/>
           </Properties>

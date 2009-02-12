@@ -1,5 +1,15 @@
 /*
- * WildLogBetaApp.java
+ * WildLogApp.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package wildlog;
@@ -9,6 +19,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import wildlog.data.dbi.DBI;
 import wildlog.data.dbi.DBI_db4o;
+import wildlog.mapping.MapFrame;
 
 /**
  * The main class of the application.
@@ -17,12 +28,12 @@ public class WildLogApp extends SingleFrameApplication {
 
     @Override
     protected void initialize(String[] arg0) {
+        System.out.println("STARTING UP WildLog...");
         super.initialize(arg0);
-        System.out.println("<<<<<<< INITIALIZING...");
         File dataFolder = new File(File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar);
         dataFolder.mkdirs();
         File imagesFolder = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar);
-        imagesFolder.mkdir();
+        imagesFolder.mkdirs();
         // Might need to add Util folder here with JAR files in... Or installer should do that...
         dbi = new DBI_db4o();
     }
@@ -62,8 +73,8 @@ public class WildLogApp extends SingleFrameApplication {
     @Override
     protected void shutdown() {
         super.shutdown();
-        System.out.println("...SHUTTING DOWN >>>>>>>>>");
         dbi.close();
+        System.out.println("SHUTTING DOWN WildLog");
     }
     
     
@@ -74,6 +85,15 @@ public class WildLogApp extends SingleFrameApplication {
     
     public DBI getDBI() {
         return dbi;
+    }
+
+    // Only open one MapFrame for the application (to reduce memory use)
+    private MapFrame mapFrame;
+
+    public MapFrame getMapFrame() {
+        // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
+        if (mapFrame == null) mapFrame = new MapFrame("WildLog Map");
+        return mapFrame;
     }
     
 }

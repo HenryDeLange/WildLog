@@ -1,9 +1,25 @@
+/*
+ * UtilsHTML.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package wildlog.data.dataobjects.util;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
 
 
 public class UtilsHTML {
@@ -60,6 +76,52 @@ public class UtilsHTML {
         //    ex.printStackTrace();
         //}
         //return null;
+    }
+
+    public static void exportHTML(Element inElement) {
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + inElement.getPrimaryName() + ".html");
+        toFile.mkdirs();
+        FileOutputStream fileOutput = null;
+        try {
+            if (toFile.exists()) toFile.delete();
+            fileOutput = new FileOutputStream(toFile);
+            fileOutput.write(inElement.toHTML().getBytes());
+            fileOutput.flush();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            try {
+                fileOutput.close();
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public static void exportHTML(Location inLocation) {
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + inLocation.getName() + ".html");
+        toFile.mkdirs();
+        FileOutputStream fileOutput = null;
+        try {
+            if (toFile.exists()) toFile.delete();
+            fileOutput = new FileOutputStream(toFile);
+            fileOutput.write(inLocation.toHTML().getBytes());
+            fileOutput.flush();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            try {
+                fileOutput.close();
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }

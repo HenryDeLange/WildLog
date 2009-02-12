@@ -1,3 +1,17 @@
+/*
+ * DBI_db4o.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package wildlog.data.dbi;
 
 import com.db4o.Db4o;
@@ -95,55 +109,6 @@ public class DBI_db4o implements DBI {
             }
         }
     }
-
-    @Override
-    public void exportHTML(Element inElement) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + inElement.getPrimaryName() + ".html");
-        toFile.mkdirs();
-        FileOutputStream fileOutput = null;
-        try {
-            if (toFile.exists()) toFile.delete();
-            fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inElement.toHTML().getBytes());
-            fileOutput.flush();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        finally {
-            try {
-                fileOutput.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void exportHTML(Location inLocation) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + inLocation.getName() + ".html");
-        toFile.mkdirs();
-        FileOutputStream fileOutput = null;
-        try {
-            if (toFile.exists()) toFile.delete();
-            fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inLocation.toHTML().getBytes());
-            fileOutput.flush();
-        }
-        catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        finally {
-            try {
-                fileOutput.close();
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
 
     @Override
     public Element find(Element inElement) {

@@ -1,5 +1,15 @@
 /*
- * WildLogBetaView.java
+ * WildLogView.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package wildlog;
@@ -25,6 +35,7 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.util.UtilsHTML;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.panel.PanelElement;
 import wildlog.ui.panel.PanelLocation;
@@ -187,10 +198,6 @@ public class WildLogView extends FrameView {
         lblListOfElements = new javax.swing.JLabel();
         lblListOfLocations = new javax.swing.JLabel();
         btnImport = new javax.swing.JButton();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         tabLocation = new javax.swing.JPanel();
@@ -243,10 +250,10 @@ public class WildLogView extends FrameView {
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
 
-        mainPanel.setMaximumSize(new java.awt.Dimension(1000, 500));
-        mainPanel.setMinimumSize(new java.awt.Dimension(1000, 500));
+        mainPanel.setMaximumSize(new java.awt.Dimension(1000, 650));
+        mainPanel.setMinimumSize(new java.awt.Dimension(1000, 650));
         mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 500));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 650));
 
         tabbedPanel.setMaximumSize(new java.awt.Dimension(1000, 500));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 500));
@@ -419,27 +426,6 @@ public class WildLogView extends FrameView {
         btnImport.setText(resourceMap.getString("btnImport.text")); // NOI18N
         btnImport.setName("btnImport"); // NOI18N
         tabHome.add(btnImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 510, 170, 30));
-
-        jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
-        jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
-        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
-        jLabel15.setName("jLabel15"); // NOI18N
-        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 480, -1, -1));
-
-        jLabel16.setForeground(resourceMap.getColor("jLabel16.foreground")); // NOI18N
-        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
-        jLabel16.setName("jLabel16"); // NOI18N
-        tabHome.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 500, -1, -1));
-
-        jLabel17.setForeground(resourceMap.getColor("jLabel17.foreground")); // NOI18N
-        jLabel17.setText(resourceMap.getString("jLabel17.text")); // NOI18N
-        jLabel17.setName("jLabel17"); // NOI18N
-        tabHome.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 520, -1, -1));
-
-        jLabel19.setForeground(resourceMap.getColor("jLabel19.foreground")); // NOI18N
-        jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
-        jLabel19.setName("jLabel19"); // NOI18N
-        tabHome.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 540, -1, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -1080,7 +1066,7 @@ public class WildLogView extends FrameView {
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
-            app.getDBI().exportHTML(tempElement);
+            UtilsHTML.exportHTML(tempElement);
         }
     }//GEN-LAST:event_btnExportElementActionPerformed
 
@@ -1088,18 +1074,18 @@ public class WildLogView extends FrameView {
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 0)));
-            app.getDBI().exportHTML(tempLocation);
+            UtilsHTML.exportHTML(tempLocation);
         }
     }//GEN-LAST:event_btnExportLocationActionPerformed
 
     private void btnExportAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportAllActionPerformed
         List<Element> listElements = app.getDBI().list(new Element());
         for (int t = 0; t < listElements.size(); t++) {
-            app.getDBI().exportHTML(listElements.get(t));
+            UtilsHTML.exportHTML(listElements.get(t));
         }
         List<Location> listLocations = app.getDBI().list(new Location());
         for (int t = 0; t < listLocations.size(); t++) {
-            app.getDBI().exportHTML(listLocations.get(t));
+            UtilsHTML.exportHTML(listLocations.get(t));
         }
     }//GEN-LAST:event_btnExportAllActionPerformed
 
@@ -1151,10 +1137,6 @@ public class WildLogView extends FrameView {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

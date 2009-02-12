@@ -1,3 +1,17 @@
+/*
+ * DBI.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package wildlog.data.dbi;
 
 import java.util.List;
@@ -12,8 +26,6 @@ import wildlog.data.dataobjects.Visit;
 public interface DBI {
     public void close();
     public void doBackup();
-    public void exportHTML(Element inElement);
-    public void exportHTML(Location inLocation);
     
     public Element find(Element inElement);
     public Location find(Location inLocation);
