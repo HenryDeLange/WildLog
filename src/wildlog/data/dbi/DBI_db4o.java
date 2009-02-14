@@ -111,14 +111,14 @@ public class DBI_db4o implements DBI {
     }
 
     @Override
-    public Element find(final Element inElement) {
+    public Element find(Element inElement) {
         ObjectSet<Element> tempList = db.get(inElement);
         if (tempList.hasNext()) return tempList.next();
         else return null;
     }
 
     @Override
-    public Location find(final Location inLocation) {
+    public Location find(Location inLocation) {
         if (inLocation == null) return null;
         ObjectSet<Location> tempList = db.get(inLocation);
         if (tempList.hasNext()) return tempList.next();
@@ -126,28 +126,28 @@ public class DBI_db4o implements DBI {
     }
 
     @Override
-    public Visit find(final Visit inVisit) {
+    public Visit find(Visit inVisit) {
         ObjectSet<Visit> tempList = db.get(inVisit);
         if (tempList.hasNext()) return tempList.next();
         else return null;
     }
 
     @Override
-    public Sighting find(final Sighting inSighting) {
+    public Sighting find(Sighting inSighting) {
         ObjectSet<Sighting> tempList = db.get(inSighting);
         if (tempList.hasNext()) return tempList.next();
         else return null;
     }
 
     @Override
-    public Foto find(final Foto inFoto) {
+    public Foto find(Foto inFoto) {
         ObjectSet<Foto> tempList = db.get(inFoto);
         if (tempList.hasNext()) return tempList.next();
         else return null;
     }
 
     @Override
-    public MapPoint find(final MapPoint inMapPoint) {
+    public MapPoint find(MapPoint inMapPoint) {
         ObjectSet<MapPoint> tempList = db.get(inMapPoint);
         if (tempList.hasNext()) return tempList.next();
         else return null;
@@ -192,44 +192,77 @@ public class DBI_db4o implements DBI {
     
     
     @Override
-    public void createOrUpdate(Element inElement) {
-        db.set(inElement);
-        db.commit();
+    public boolean createOrUpdate(Element inElement) {
+        Element tempElement = find(new Element(inElement.getPrimaryName()));
+        if (tempElement == null) {
+            db.set(inElement);
+            db.commit();
+            return true;
+        }
+        if (tempElement.equals(inElement) && list(new Element(inElement.getPrimaryName())).size() == 1) {
+            db.set(inElement);
+            db.commit();
+            return true;
+        }
+        return false;
     }
     
     @Override
-    public void createOrUpdate(Location inLocation) {
-        db.set(inLocation);
-        db.commit();
+    public boolean createOrUpdate(Location inLocation) {
+        Location tempLocation = find(new Location(inLocation.getName()));
+        if (tempLocation == null) {
+            db.set(inLocation);
+            db.commit();
+            return true;
+        }
+        if (tempLocation.equals(inLocation) && list(new Location(inLocation.getName())).size() == 1) {
+            db.set(inLocation);
+            db.commit();
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void createOrUpdate(Visit inVisit) {
-        db.set(inVisit);
-        db.commit();
+    public boolean createOrUpdate(Visit inVisit) {
+        Visit tempVisit = find(new Visit(inVisit.getName()));
+        if (tempVisit == null) {
+            db.set(inVisit);
+            db.commit();
+        return true;
+        }
+        if (tempVisit.equals(inVisit) && list(new Visit(inVisit.getName())).size() == 1) {
+            db.set(inVisit);
+            db.commit();
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void createOrUpdate(Sighting inSighting) {
+    public boolean createOrUpdate(Sighting inSighting) {
         db.set(inSighting);
         db.commit();
+        return false;
     }
 
     @Override
-    public void createOrUpdate(Foto inFoto) {
+    public boolean createOrUpdate(Foto inFoto) {
         db.set(inFoto);
         db.commit();
+        return false;
     }
 
     @Override
-    public void createOrUpdate(MapPoint inMapPoint) {
+    public boolean createOrUpdate(MapPoint inMapPoint) {
         db.set(inMapPoint);
         db.commit();
+        return false;
     }
     
     
     @Override
-    public void delete(Element inElement) {
+    public boolean delete(Element inElement) {
         inElement = find(inElement);
         // Find any sightings that have this element and delete them also
         Sighting tempSighting = new Sighting();
@@ -246,42 +279,48 @@ public class DBI_db4o implements DBI {
         }
         db.delete(inElement);
         db.commit();
+        return false;
     }
 
     @Override
-    public void delete(Location inLocation) {
+    public boolean delete(Location inLocation) {
         inLocation = find(inLocation);
         db.delete(inLocation);
         db.commit();
+        return false;
     }
 
     @Override
-    public void delete(Visit inVisit) {
+    public boolean delete(Visit inVisit) {
         inVisit = find(inVisit);
         db.delete(inVisit);
         db.commit();
+        return false;
     }
 
     @Override
-    public void delete(Sighting inSighting) {
+    public boolean delete(Sighting inSighting) {
         inSighting = find(inSighting);
         db.delete(inSighting);
         db.commit();
+        return false;
     }
 
     @Override
-    public void delete(Foto inFoto) {
+    public boolean delete(Foto inFoto) {
         // NOTE: that the actual files are not deleted currently... Moet huidiglik verkieslik nie delete nie
         inFoto = find(inFoto);
         db.delete(inFoto);
         db.commit();
+        return false;
     }
 
     @Override
-    public void delete(MapPoint inMapPoint) {
+    public boolean delete(MapPoint inMapPoint) {
         inMapPoint = find(inMapPoint);
         db.delete(inMapPoint);
         db.commit();
+        return false;
     }
     
     // NATIVE QUERY EXAMPLE:

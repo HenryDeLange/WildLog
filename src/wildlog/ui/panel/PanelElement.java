@@ -203,7 +203,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtbreedingDuration = new javax.swing.JTextField();
         txtBreedingNumber = new javax.swing.JTextField();
         lblNumberOfSightings = new javax.swing.JLabel();
-        jLabel79 = new javax.swing.JLabel();
+        lblElementName = new javax.swing.JLabel();
         cmbWishList = new javax.swing.JComboBox();
         cmbAddFrequency = new javax.swing.JComboBox();
         cmbEndangeredStatus = new javax.swing.JComboBox();
@@ -505,11 +505,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
         elementIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 1, 40, 20));
 
-        jLabel79.setFont(resourceMap.getFont("jLabel79.font")); // NOI18N
-        jLabel79.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel79.setText(element.getPrimaryName());
-        jLabel79.setName("jLabel79"); // NOI18N
-        elementIncludes.add(jLabel79, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, -1));
+        lblElementName.setFont(resourceMap.getFont("lblElementName.font")); // NOI18N
+        lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblElementName.setText(element.getPrimaryName());
+        lblElementName.setName("lblElementName"); // NOI18N
+        elementIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, -1));
 
         cmbWishList.setModel(new DefaultComboBoxModel(wildlog.data.enums.WishRating.values()));
         cmbWishList.setSelectedItem(element.getWishListRating());
@@ -634,6 +634,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         if (txtPrimaryName.getText().length() > 0) {
+            String oldName = element.getPrimaryName();
             element.setPrimaryName(txtPrimaryName.getText()); // Used for indexing (ID)
             element.setOtherName(txtOtherName.getText());
             element.setScientificName(txtScienceName.getText());
@@ -689,13 +690,19 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             element.setType((ElementType)cmbType.getSelectedItem());
             element.setFeedingClass((FeedingClass)cmbFeedingClass.getSelectedItem());
 
-            jLabel79.setText(element.getPrimaryName());
+            // Save the element
+            if (app.getDBI().createOrUpdate(element) == true) {
+                org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
+                txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
+            }
+            else {
+                txtPrimaryName.setBackground(Color.RED);
+                element.setPrimaryName(oldName);
+                txtPrimaryName.setText(txtPrimaryName.getText() + "_not_unique");
+            }
 
-            app.getDBI().createOrUpdate(element);
-
-            org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
-            txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
-
+            lblElementName.setText(element.getPrimaryName());
+            
             setupTabHeader();
         }
         else {
@@ -797,7 +804,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         Sighting sigting = new Sighting();
         sigting.setElement(element);
         List<Sighting> sightingList = app.getDBI().list(sigting);
+        boolean foundPosition = false;
         for (int t = 0; t < sightingList.size(); t++) {
+            foundPosition = false;
             if (sightingList.get(t).getLatitude() != null && sightingList.get(t).getLongitude() != null)
             if (!sightingList.get(t).getLatitude().equals(Latitudes.NONE) && !sightingList.get(t).getLongitude().equals(Longitudes.NONE)) {
                 float lat = sightingList.get(t).getLatDegrees();
@@ -811,8 +820,24 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 if (sightingList.get(t).getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
+                foundPosition = true;
+            }
+            // If the sighting did not have a position use the location's
+            if (foundPosition == false) {
+                float lat = sightingList.get(t).getLocation().getLatDegrees();
+                lat = lat + sightingList.get(t).getLocation().getLatMinutes()/60f;
+                lat = lat + (sightingList.get(t).getLocation().getLatSeconds()/60f)/60f;
+                if (sightingList.get(t).getLocation().getLatitude().equals(Latitudes.SOUTH))
+                    lat = -1 * lat;
+                float lon = sightingList.get(t).getLocation().getLonDegrees();
+                lon = lon + sightingList.get(t).getLocation().getLonMinutes()/60f;
+                lon = lon + (sightingList.get(t).getLocation().getLonSeconds()/60f)/60f;
+                if (sightingList.get(t).getLocation().getLongitude().equals(Longitudes.WEST))
+                    lon = -1 * lon;
+                app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
             }
         }
+        app.getMapFrame().changeTitle("WildLog Map - Creature: " + element.getPrimaryName());
         app.getMapFrame().showMap();
     }//GEN-LAST:event_btnMapActionPerformed
 
@@ -893,7 +918,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel77;
-    private javax.swing.JLabel jLabel79;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
@@ -903,6 +927,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JLabel lblElementName;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JTable tblLocation;

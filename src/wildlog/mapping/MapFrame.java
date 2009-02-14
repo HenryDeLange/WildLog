@@ -232,4 +232,9 @@ public class MapFrame {
         pointLayer = new PointLayer();
     }
 
+    public void changeTitle(String inTitle) {
+        title = inTitle;
+        frame.setTitle(title);
+    }
+
 }

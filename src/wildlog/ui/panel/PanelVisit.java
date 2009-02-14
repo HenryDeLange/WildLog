@@ -420,12 +420,10 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
         visitIncludes.add(cmbGameWatchIntensity, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 110, 190, -1));
 
-        dtpStartDate.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("dtpStartDate.border.lineColor"), 3, true)); // NOI18N
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setName("dtpStartDate"); // NOI18N
         visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 200, -1));
 
-        dtpEndDate.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("dtpEndDate.border.lineColor"), 3, true)); // NOI18N
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setName("dtpEndDate"); // NOI18N
         visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 52, 200, -1));
@@ -768,8 +766,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (txtName.getText().length() > 0 && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-            lblVisitName.setText(txtName.getText());
+        if (txtName.getText().length() > 0) {
+            String oldName = visit.getName();
             visit.setName(txtName.getText());
             visit.setStartDate(dtpStartDate.getDate());
             visit.setEndDate(dtpEndDate.getDate());
@@ -777,29 +775,49 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             visit.setType((VisitType)cmbType.getSelectedItem());
             visit.setDescription(txtDescription.getText());
 
-            if (locationForVisit.getVisits() != null) {
+            boolean canSave = false;
+            if (locationForVisit.getVisits() == null)
+                locationForVisit.setVisits(new ArrayList<Visit>());
+            Visit tempVisit = app.getDBI().find(new Visit(visit.getName()));
+            if (tempVisit == null) {
                 int index = locationForVisit.getVisits().indexOf(visit);
                 if (index != -1) locationForVisit.getVisits().set(index, visit);
                 else locationForVisit.getVisits().add(visit);
+                canSave = true;
             }
             else {
-                locationForVisit.setVisits(new ArrayList<Visit>());
-                locationForVisit.getVisits().add(visit);
+                if (tempVisit.equals(visit) && app.getDBI().list(new Visit(visit.getName())).size() == 1) {
+                    int index = locationForVisit.getVisits().indexOf(visit);
+                    if (index != -1) locationForVisit.getVisits().set(index, visit);
+                    else locationForVisit.getVisits().add(visit);
+                    canSave = true;
+                }
+                else {
+                    txtName.setBackground(Color.RED);
+                    visit.setName(oldName);
+                    txtName.setText(txtName.getText() + "_not_unique");
+                }
             }
 
-            app.getDBI().createOrUpdate(locationForVisit);
+            // Save the visit
+            if (canSave) {
+                if (app.getDBI().createOrUpdate(locationForVisit) == true) {
+                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
+                    txtName.setBackground(resourceMap.getColor("txtName.background"));
+                }
+                else {
+                    txtName.setBackground(Color.RED);
+                    visit.setName(oldName);
+                    txtName.setText(txtName.getText() + "_location_not_unique");
+                }
+            }
 
-            org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
-            txtName.setBackground(resourceMap.getColor("txtName.background"));
-            dtpStartDate.setBorder(new LineBorder(resourceMap.getColor("dtpStartDate.border.lineColor"), 3, true));
-            dtpEndDate.setBorder(new LineBorder(resourceMap.getColor("dtpEndDate.border.lineColor"), 3, true));
+            lblVisitName.setText(txtName.getText());
 
             setupTabHeader();
         }
         else {
             txtName.setBackground(Color.RED);
-            dtpStartDate.setBorder(new LineBorder(Color.RED, 3, true));
-            dtpEndDate.setBorder(new LineBorder(Color.RED, 3, true));
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -813,7 +831,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1))) ,locationForVisit));
+            sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))) ,locationForVisit));
             visit.getSightings().remove(sighting);
             //app.getDBI().delete(sighting);
             app.getDBI().createOrUpdate(visit);
@@ -937,6 +955,10 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
             }
+            app.getMapFrame().changeTitle("WildLog Map - Sighting: " + sighting.getElement().getPrimaryName() + " - " + sighting.getLocation().getName() + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900));
+        }
+        else {
+            app.getMapFrame().changeTitle("WildLog Map - Sighting: ...");
         }
         app.getMapFrame().showMap();
 }//GEN-LAST:event_btnMapSightingActionPerformed
@@ -997,6 +1019,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
             }
         }
+        app.getMapFrame().changeTitle("WildLog Map - Visit: " + visit.getName());
         app.getMapFrame().showMap();
 }//GEN-LAST:event_btnMapVisitActionPerformed
 

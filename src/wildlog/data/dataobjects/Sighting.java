@@ -65,7 +65,7 @@ public class Sighting {
     // METHIDS:
     @Override
     public String toString() {
-        return location.getName() + File.separatorChar + element.getPrimaryName() + File.separatorChar + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900);
+        return location.getName()  + element.getPrimaryName() +  date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900);
     }
 
     public String toHTML() {

@@ -41,18 +41,18 @@ public interface DBI {
     public List<Foto> list(Foto inFoto);
     public List<MapPoint> list(MapPoint inMapPoint);
     
-    public void createOrUpdate(Element inElement);
-    public void createOrUpdate(Location inLocation);
-    public void createOrUpdate(Visit inVisit);
-    public void createOrUpdate(Sighting inSighting);
-    public void createOrUpdate(Foto inFoto);
-    public void createOrUpdate(MapPoint inMapPoint);
+    public boolean createOrUpdate(Element inElement);
+    public boolean createOrUpdate(Location inLocation);
+    public boolean createOrUpdate(Visit inVisit);
+    public boolean createOrUpdate(Sighting inSighting);
+    public boolean createOrUpdate(Foto inFoto);
+    public boolean createOrUpdate(MapPoint inMapPoint);
     
-    public void delete(Element inElement);
-    public void delete(Location inLocation);
-    public void delete(Visit inVisit);
-    public void delete(Sighting inSighting);
-    public void delete(Foto inFoto);
-    public void delete(MapPoint inMapPoint);
+    public boolean delete(Element inElement);
+    public boolean delete(Location inLocation);
+    public boolean delete(Visit inVisit);
+    public boolean delete(Sighting inSighting);
+    public boolean delete(Foto inFoto);
+    public boolean delete(MapPoint inMapPoint);
 
 }

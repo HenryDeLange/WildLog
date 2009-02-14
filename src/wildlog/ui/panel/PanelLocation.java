@@ -650,6 +650,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         if (txtName.getText().length() > 0) {
+            String oldName = locationWL.getName();
             locationWL.setName(txtName.getText());
             locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
             locationWL.setLongitude((Longitudes)cmbLonitude.getSelectedItem());
@@ -687,12 +688,18 @@ public class PanelLocation extends javax.swing.JPanel {
             }
             locationWL.setAccommodationType(tempList);
 
+            // Save the location
+            if (app.getDBI().createOrUpdate(locationWL) == true) {
+                org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
+                txtName.setBackground(resourceMap.getColor("txtName.background"));
+            }
+            else {
+                txtName.setBackground(Color.RED);
+                locationWL.setName(oldName);
+                txtName.setText(txtName.getText() + "_not_unique");
+            }
+
             lblLocation.setText(locationWL.getName());
-
-            app.getDBI().createOrUpdate(locationWL);
-
-            org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
-            txtName.setBackground(resourceMap.getColor("txtName.background"));
 
             setupTabHeader();
         }
@@ -881,6 +888,7 @@ public class PanelLocation extends javax.swing.JPanel {
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
             }
+        app.getMapFrame().changeTitle("WildLog Map - Location: " + locationWL.getName());
         app.getMapFrame().showMap();
 }//GEN-LAST:event_btnMapActionPerformed
 

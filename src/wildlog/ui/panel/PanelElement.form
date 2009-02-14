@@ -733,14 +733,14 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel79">
+        <Component class="javax.swing.JLabel" name="lblElementName">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel79.font"/>
+            <Property name="font" type="java.awt.Font" resourceKey="lblElementName.font"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="element.getPrimaryName()" type="code"/>
             </Property>
-            <Property name="name" type="java.lang.String" value="jLabel79" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="lblElementName" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
