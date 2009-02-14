@@ -29,7 +29,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -49,6 +48,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Foto;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.util.ImageFilter;
 import wildlog.ui.util.ImagePreview;
 
@@ -56,7 +56,7 @@ import wildlog.ui.util.ImagePreview;
  *
  * @author  henry.delange
  */
-public class PanelVisit extends javax.swing.JPanel {
+public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshWhenSightingAdded {
     private Visit visit;
     private Location locationForVisit;
     private Sighting sighting;
@@ -72,12 +72,12 @@ public class PanelVisit extends javax.swing.JPanel {
         locationForVisit = inLocation;
         visit = inVisit;
         sighting = new Sighting();
-        sighting.setLocation(locationForVisit);
+        //sighting.setLocation(locationForVisit);
         utilTableGenerator = new UtilTableGenerator();
         utilPanelGenerator = new UtilPanelGenerator();
         initComponents();
         imageIndex = 0;
-        if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
+        //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         tblSightings.getTableHeader().setReorderingAllowed(false);
     }
     
@@ -123,6 +123,7 @@ public class PanelVisit extends javax.swing.JPanel {
         btnClose.setToolTipText("Close");
         btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
         btnClose.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 closeTab();
             }
@@ -136,21 +137,32 @@ public class PanelVisit extends javax.swing.JPanel {
         parent = (JTabbedPane) getParent();
         if (parent != null) parent.remove(this);
     }
+
+    @Override
+    public void refreshTableForSightings() {
+        formComponentShown(null);
+    }
     
     private void refreshSightingInfo() {
         if (sighting != null) {
             dtpSightingDate.setDate(sighting.getDate());
             if (sighting.getAreaType() != null)
                 txtAreaType.setText(sighting.getAreaType().toString());
+            else
+                txtAreaType.setText("");
             if (sighting.getCertainty() != null)
                 txtCertainty.setText(sighting.getCertainty().toString());
+            else
+                txtCertainty.setText("");
             txtDetails.setText(sighting.getDetails());
             if (sighting.getSightingEvidence() != null)
                 txtEvidence.setText(sighting.getSightingEvidence().toString());
+            else
+                txtEvidence.setText("");
             if (!sighting.getSubArea().equals(""))
                 txtSubArea.setText(sighting.getSubArea());
             else
-                txtSubArea.setText("None");
+                txtSubArea.setText("");
             if (sighting.getElement() != null) {
                 txtElement.setText(sighting.getElement().getPrimaryName());
                 if (sighting.getElement().getFotos() != null)
@@ -165,10 +177,16 @@ public class PanelVisit extends javax.swing.JPanel {
             txtNumberOfElements.setText(Integer.toString(sighting.getNumberOfElements()));
             if (sighting.getTimeOfDay() != null)
                 txtTimeOfDay.setText(sighting.getTimeOfDay().toString());
+            else
+                txtTimeOfDay.setText("");
             if (sighting.getViewRating() != null)
                 txtViewRating.setText(sighting.getViewRating().toString());
+            else
+                txtViewRating.setText("");
             if (sighting.getWeather() != null)
                 txtWeather.setText(sighting.getWeather().toString());
+            else
+                txtWeather.setText("");
 
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             if (sighting.getFotos() != null)
@@ -177,19 +195,42 @@ public class PanelVisit extends javax.swing.JPanel {
 
             if (sighting.getLatitude() != null)
                 txtLatitude.setText(sighting.getLatitude().toString());
+            else
+                txtLatitude.setText("");
             txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
             txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
             txtLatSeconds.setText(Integer.toString(sighting.getLatSeconds()));
             if (sighting.getLongitude() != null)
                 txtLongitude.setText(sighting.getLongitude().toString());
+            else
+                txtLongitude.setText("");
             txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
             txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
             txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
 
         }
         else {
-            System.out.println("Sighting was not found - null");
-            sighting = new Sighting();
+            dtpSightingDate.setDate(null);
+            txtAreaType.setText("");
+            txtCertainty.setText("");
+            txtDetails.setText("");
+            txtEvidence.setText("");
+            txtSubArea.setText("");
+            txtElement.setText("");
+            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+            txtNumberOfElements.setText("");
+            txtTimeOfDay.setText("");
+            txtViewRating.setText("");
+            txtWeather.setText("");
+            lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+            txtLatitude.setText("");
+            txtLatDegrees.setText("");
+            txtLatMinutes.setText("");
+            txtLatSeconds.setText("");
+            txtLongitude.setText("");
+            txtLonDegrees.setText("");
+            txtLonMinutes.setText("");
+            txtLonSeconds.setText("");
         }
     }
     
@@ -206,11 +247,10 @@ public class PanelVisit extends javax.swing.JPanel {
         lblVisitName = new javax.swing.JLabel();
         lblLocationName = new javax.swing.JLabel();
         jSeparator8 = new javax.swing.JSeparator();
-        btnEditSighting = new javax.swing.JButton();
         jSeparator9 = new javax.swing.JSeparator();
-        btnUpdate = new javax.swing.JButton();
         jLabel52 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
+        btnUpdate = new javax.swing.JButton();
         jLabel53 = new javax.swing.JLabel();
         jScrollPane14 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
@@ -233,6 +273,7 @@ public class PanelVisit extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         btnAddSighting = new javax.swing.JButton();
         btnDeleteSighting = new javax.swing.JButton();
+        btnEditSighting = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         dtpSightingDate = new org.jdesktop.swingx.JXDatePicker();
         jLabel7 = new javax.swing.JLabel();
@@ -275,6 +316,8 @@ public class PanelVisit extends javax.swing.JPanel {
         btnGoElement = new javax.swing.JButton();
         btnMapVisit = new javax.swing.JButton();
         txtElement = new javax.swing.JTextField();
+        jLabel65 = new javax.swing.JLabel();
+        lblNumberOfSightings = new javax.swing.JLabel();
 
         setName("Form"); // NOI18N
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -294,29 +337,28 @@ public class PanelVisit extends javax.swing.JPanel {
         lblVisitName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVisitName.setText(visit.getName());
         lblVisitName.setName("lblVisitName"); // NOI18N
-        visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 20));
+        visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 20));
 
         lblLocationName.setFont(resourceMap.getFont("lblLocationName.font")); // NOI18N
         lblLocationName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocationName.setText(locationForVisit.getName());
         lblLocationName.setName("lblLocationName"); // NOI18N
-        visitIncludes.add(lblLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, 180, 20));
+        visitIncludes.add(lblLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 180, 20));
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         visitIncludes.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        btnEditSighting.setText(resourceMap.getString("btnEditSighting.text")); // NOI18N
-        btnEditSighting.setToolTipText(resourceMap.getString("btnEditSighting.toolTipText")); // NOI18N
-        btnEditSighting.setName("btnEditSighting"); // NOI18N
-        btnEditSighting.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditSightingActionPerformed(evt);
-            }
-        });
-        visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 100, -1));
-
         jSeparator9.setName("jSeparator9"); // NOI18N
         visitIncludes.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        jLabel52.setText(resourceMap.getString("jLabel52.text")); // NOI18N
+        jLabel52.setName("jLabel52"); // NOI18N
+        visitIncludes.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 28, -1, -1));
+
+        txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
+        txtName.setText(visit.getName());
+        txtName.setName("txtName"); // NOI18N
+        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 28, 510, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -329,15 +371,6 @@ public class PanelVisit extends javax.swing.JPanel {
             }
         });
         visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 28, 110, 60));
-
-        jLabel52.setText(resourceMap.getString("jLabel52.text")); // NOI18N
-        jLabel52.setName("jLabel52"); // NOI18N
-        visitIncludes.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 28, -1, -1));
-
-        txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
-        txtName.setText(visit.getName());
-        txtName.setName("txtName"); // NOI18N
-        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 28, 510, -1));
 
         jLabel53.setText(resourceMap.getString("jLabel53.text")); // NOI18N
         jLabel53.setName("jLabel53"); // NOI18N
@@ -376,7 +409,7 @@ public class PanelVisit extends javax.swing.JPanel {
         jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        visitIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 0, -1, 20));
+        visitIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 0, -1, 20));
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
@@ -487,6 +520,16 @@ public class PanelVisit extends javax.swing.JPanel {
             }
         });
         visitIncludes.add(btnDeleteSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 100, -1));
+
+        btnEditSighting.setText(resourceMap.getString("btnEditSighting.text")); // NOI18N
+        btnEditSighting.setToolTipText(resourceMap.getString("btnEditSighting.toolTipText")); // NOI18N
+        btnEditSighting.setName("btnEditSighting"); // NOI18N
+        btnEditSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditSightingActionPerformed(evt);
+            }
+        });
+        visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 100, -1));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
@@ -698,6 +741,17 @@ public class PanelVisit extends javax.swing.JPanel {
         txtElement.setName("txtElement"); // NOI18N
         visitIncludes.add(txtElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, 150, -1));
 
+        jLabel65.setFont(resourceMap.getFont("jLabel65.font")); // NOI18N
+        jLabel65.setText(resourceMap.getString("jLabel65.text")); // NOI18N
+        jLabel65.setName("jLabel65"); // NOI18N
+        visitIncludes.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 0, -1, 20));
+
+        lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
+        lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfSightings.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfSightings.border.lineColor"))); // NOI18N
+        lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
+        visitIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 1, 40, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -754,13 +808,14 @@ public class PanelVisit extends javax.swing.JPanel {
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         sighting = null;
+        lblNumberOfSightings.setText(Integer.toString(visit.getSightings().size()));
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 3), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1))) ,locationForVisit));
+            sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1))) ,locationForVisit));
             visit.getSightings().remove(sighting);
-            app.getDBI().delete(sighting);
+            //app.getDBI().delete(sighting);
             app.getDBI().createOrUpdate(visit);
             tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
             sighting = null;
@@ -776,7 +831,7 @@ public class PanelVisit extends javax.swing.JPanel {
         final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(1015, 650);
-        dialog.add(new PanelSighting(sighting, visit), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        dialog.add(new PanelSighting(sighting, visit, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAddSightingActionPerformed
@@ -788,7 +843,7 @@ public class PanelVisit extends javax.swing.JPanel {
             final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(1015, 650);
-            dialog.add(new PanelSighting(sighting, visit), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, visit, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             dialog.setVisible(true);
         }
@@ -846,7 +901,7 @@ public class PanelVisit extends javax.swing.JPanel {
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
-        if (tblSightings.getSelectedRow() > 0) {
+        if (tblSightings.getSelectedRow() >= 0) {
             sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))) ,locationForVisit));
             refreshSightingInfo();
         }
@@ -915,11 +970,13 @@ public class PanelVisit extends javax.swing.JPanel {
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
-        PanelElement tempPanel = utilPanelGenerator.getElementPanel(sighting.getElement().getPrimaryName());
-        parent = (JTabbedPane) getParent();
-        parent.add(tempPanel);
-        tempPanel.setupTabHeader();
-        parent.setSelectedComponent(tempPanel);
+        if (sighting != null) {
+            PanelElement tempPanel = utilPanelGenerator.getElementPanel(sighting.getElement().getPrimaryName());
+            parent = (JTabbedPane) getParent();
+            parent.add(tempPanel);
+            tempPanel.setupTabHeader();
+            parent.setSelectedComponent(tempPanel);
+        }
     }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnMapVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapVisitActionPerformed
@@ -983,6 +1040,7 @@ public class PanelVisit extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -998,6 +1056,7 @@ public class PanelVisit extends javax.swing.JPanel {
     private javax.swing.JLabel lblElementImage;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblLocationName;
+    private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblVisitName;
     private javax.swing.JTable tblSightings;
     private javax.swing.JTextField txtAreaType;

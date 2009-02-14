@@ -115,6 +115,7 @@ public class PanelLocation extends javax.swing.JPanel {
         btnClose.setToolTipText("Close");
         btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
         btnClose.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 closeTab();
             }

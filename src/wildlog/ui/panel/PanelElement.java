@@ -27,11 +27,13 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import org.jdesktop.application.Application;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Foto;
 import wildlog.data.enums.ActiveTime;
@@ -53,13 +55,14 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
+import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 
 
 /**
  *
  * @author  henry.delange
  */
-public class PanelElement extends javax.swing.JPanel {
+public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefreshWhenSightingAdded {
     // Variables:
     private Element element;
     private JTabbedPane parent;
@@ -114,6 +117,7 @@ public class PanelElement extends javax.swing.JPanel {
         btnClose.setToolTipText("Close");
         btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
         btnClose.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 closeTab();
             }
@@ -126,6 +130,11 @@ public class PanelElement extends javax.swing.JPanel {
     public void closeTab() {
         parent = (JTabbedPane) getParent();
         if (parent != null) parent.remove(this);
+    }
+
+    @Override
+    public void refreshTableForSightings() {
+        formComponentShown(null);
     }
     
     private void setupFotos(int inIndex) {
@@ -185,7 +194,6 @@ public class PanelElement extends javax.swing.JPanel {
         cmbType = new javax.swing.JComboBox();
         cmbHabitat = new javax.swing.JComboBox();
         cmbWaterDependance = new javax.swing.JComboBox();
-        txtNutrition = new javax.swing.JTextField();
         cmbActiveTime = new javax.swing.JComboBox();
         txtSizeMale = new javax.swing.JTextField();
         txtSizeFemale = new javax.swing.JTextField();
@@ -211,6 +219,9 @@ public class PanelElement extends javax.swing.JPanel {
         cmbWeightUnits = new javax.swing.JComboBox();
         btnDeleteImage = new javax.swing.JButton();
         btnMap = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtNutrition = new javax.swing.JTextArea();
+        btnAddSighting = new javax.swing.JButton();
 
         setName(element.getPrimaryName());
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -325,19 +336,19 @@ public class PanelElement extends javax.swing.JPanel {
 
         jLabel59.setText(resourceMap.getString("jLabel59.text")); // NOI18N
         jLabel59.setName("jLabel59"); // NOI18N
-        elementIncludes.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 196, -1, -1));
+        elementIncludes.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
 
         jLabel60.setText(resourceMap.getString("jLabel60.text")); // NOI18N
         jLabel60.setName("jLabel60"); // NOI18N
-        elementIncludes.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 296, -1, -1));
+        elementIncludes.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         jLabel61.setText(resourceMap.getString("jLabel61.text")); // NOI18N
         jLabel61.setName("jLabel61"); // NOI18N
-        elementIncludes.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 396, -1, -1));
+        elementIncludes.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
 
         jLabel62.setText(resourceMap.getString("jLabel62.text")); // NOI18N
         jLabel62.setName("jLabel62"); // NOI18N
-        elementIncludes.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, -1, -1));
+        elementIncludes.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 197, -1, -1));
 
         jLabel63.setText(resourceMap.getString("jLabel63.text")); // NOI18N
         jLabel63.setName("jLabel63"); // NOI18N
@@ -366,11 +377,11 @@ public class PanelElement extends javax.swing.JPanel {
 
         jLabel69.setText(resourceMap.getString("jLabel69.text")); // NOI18N
         jLabel69.setName("jLabel69"); // NOI18N
-        elementIncludes.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 172, -1, -1));
+        elementIncludes.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 230, -1, -1));
 
         jLabel70.setText(resourceMap.getString("jLabel70.text")); // NOI18N
         jLabel70.setName("jLabel70"); // NOI18N
-        elementIncludes.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, -1, -1));
+        elementIncludes.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, -1));
 
         jLabel71.setText(resourceMap.getString("jLabel71.text")); // NOI18N
         jLabel71.setName("jLabel71"); // NOI18N
@@ -411,7 +422,7 @@ public class PanelElement extends javax.swing.JPanel {
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane16.setViewportView(txtDescription);
 
-        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 196, 510, 90));
+        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 234, 310, -1));
 
         jScrollPane17.setName("jScrollPane17"); // NOI18N
 
@@ -424,7 +435,7 @@ public class PanelElement extends javax.swing.JPanel {
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
-        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 296, 590, 90));
+        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 590, -1));
 
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
@@ -437,26 +448,22 @@ public class PanelElement extends javax.swing.JPanel {
         txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
         jScrollPane18.setViewportView(txtBehaviourDescription);
 
-        elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 396, 590, 90));
+        elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 590, -1));
 
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());
         cmbType.setName("cmbType"); // NOI18N
-        elementIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 140, -1));
+        elementIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 220, -1));
 
         cmbHabitat.setModel(new DefaultComboBoxModel(wildlog.data.enums.Habitat.values()));
         cmbHabitat.setSelectedItem(element.getHabitat());
         cmbHabitat.setName("cmbHabitat"); // NOI18N
-        elementIncludes.add(cmbHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 270, -1));
+        elementIncludes.add(cmbHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
 
         cmbWaterDependance.setModel(new DefaultComboBoxModel(wildlog.data.enums.WaterDependancy.values()));
         cmbWaterDependance.setSelectedItem(element.getWaterDependance());
         cmbWaterDependance.setName("cmbWaterDependance"); // NOI18N
         elementIncludes.add(cmbWaterDependance, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 172, 220, -1));
-
-        txtNutrition.setText(element.getNutrition());
-        txtNutrition.setName("txtNutrition"); // NOI18N
-        elementIncludes.add(txtNutrition, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 172, 270, -1));
 
         cmbActiveTime.setModel(new DefaultComboBoxModel(wildlog.data.enums.ActiveTime.values()));
         cmbActiveTime.setSelectedItem(element.getActiveTime());
@@ -507,7 +514,7 @@ public class PanelElement extends javax.swing.JPanel {
         cmbWishList.setModel(new DefaultComboBoxModel(wildlog.data.enums.WishRating.values()));
         cmbWishList.setSelectedItem(element.getWishListRating());
         cmbWishList.setName("cmbWishList"); // NOI18N
-        elementIncludes.add(cmbWishList, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 124, 270, -1));
+        elementIncludes.add(cmbWishList, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 124, 150, -1));
 
         cmbAddFrequency.setModel(new DefaultComboBoxModel(wildlog.data.enums.AddFrequency.values()));
         cmbAddFrequency.setSelectedItem(element.getAddFrequency());
@@ -517,16 +524,16 @@ public class PanelElement extends javax.swing.JPanel {
         cmbEndangeredStatus.setModel(new DefaultComboBoxModel(EndangeredStatus.values()));
         cmbEndangeredStatus.setSelectedItem(element.getEndangeredStatus());
         cmbEndangeredStatus.setName("cmbEndangeredStatus"); // NOI18N
-        elementIncludes.add(cmbEndangeredStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 100, 190, -1));
+        elementIncludes.add(cmbEndangeredStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 197, 220, -1));
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, -1, -1));
+        elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
         cmbFeedingClass.setName("cmbFeedingClass"); // NOI18N
-        elementIncludes.add(cmbFeedingClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 140, -1));
+        elementIncludes.add(cmbFeedingClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 150, -1));
 
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
@@ -588,7 +595,27 @@ public class PanelElement extends javax.swing.JPanel {
                 btnMapActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 196, 70, 80));
+        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 70));
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        txtNutrition.setColumns(20);
+        txtNutrition.setFont(resourceMap.getFont("txtNutrition.font")); // NOI18N
+        txtNutrition.setRows(5);
+        txtNutrition.setText(element.getNutrition());
+        txtNutrition.setName("txtNutrition"); // NOI18N
+        jScrollPane1.setViewportView(txtNutrition);
+
+        elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 250, 270, 60));
+
+        btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
+        btnAddSighting.setName("btnAddSighting"); // NOI18N
+        btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddSightingActionPerformed(evt);
+            }
+        });
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 60));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -806,9 +833,21 @@ public class PanelElement extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnDeleteImageActionPerformed
+
+    private void btnAddSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSightingActionPerformed
+        Sighting sighting = new Sighting();
+        sighting.setElement(element);
+        final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
+        dialog.setLayout(new AbsoluteLayout());
+        dialog.setSize(1015, 650);
+        dialog.add(new PanelSighting(sighting, null, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnAddSightingActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnMap;
@@ -855,6 +894,7 @@ public class PanelElement extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel77;
     private javax.swing.JLabel jLabel79;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
     private javax.swing.JScrollPane jScrollPane17;
@@ -871,7 +911,7 @@ public class PanelElement extends javax.swing.JPanel {
     private javax.swing.JTextField txtBreedingNumber;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextArea txtDiagnosticDescription;
-    private javax.swing.JTextField txtNutrition;
+    private javax.swing.JTextArea txtNutrition;
     private javax.swing.JTextField txtOtherName;
     private javax.swing.JTextField txtPrimaryName;
     private javax.swing.JTextField txtScienceName;

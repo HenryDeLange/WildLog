@@ -111,14 +111,14 @@ public class DBI_db4o implements DBI {
     }
 
     @Override
-    public Element find(Element inElement) {
+    public Element find(final Element inElement) {
         ObjectSet<Element> tempList = db.get(inElement);
         if (tempList.hasNext()) return tempList.next();
         else return null;
     }
 
     @Override
-    public Location find(Location inLocation) {
+    public Location find(final Location inLocation) {
         if (inLocation == null) return null;
         ObjectSet<Location> tempList = db.get(inLocation);
         if (tempList.hasNext()) return tempList.next();
@@ -126,7 +126,7 @@ public class DBI_db4o implements DBI {
     }
 
     @Override
-    public Visit find(Visit inVisit) {
+    public Visit find(final Visit inVisit) {
         ObjectSet<Visit> tempList = db.get(inVisit);
         if (tempList.hasNext()) return tempList.next();
         else return null;
@@ -140,14 +140,14 @@ public class DBI_db4o implements DBI {
     }
 
     @Override
-    public Foto find(Foto inFoto) {
+    public Foto find(final Foto inFoto) {
         ObjectSet<Foto> tempList = db.get(inFoto);
         if (tempList.hasNext()) return tempList.next();
         else return null;
     }
 
     @Override
-    public MapPoint find(MapPoint inMapPoint) {
+    public MapPoint find(final MapPoint inMapPoint) {
         ObjectSet<MapPoint> tempList = db.get(inMapPoint);
         if (tempList.hasNext()) return tempList.next();
         else return null;

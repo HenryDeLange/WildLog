@@ -24,7 +24,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
@@ -45,6 +44,7 @@ import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.util.ImageFilter;
 import wildlog.ui.util.ImagePreview;
 
@@ -61,13 +61,13 @@ public class PanelSighting extends javax.swing.JPanel {
     private Location searchLocation;
     private int imageIndex;
     private WildLogApp app;
+    private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
     
     /** Creates new form PanelVisit */
     public PanelSighting(Sighting inSighting, Visit inVisit) {
         app = (WildLogApp) Application.getInstance();
         sighting = inSighting;
         visit = inVisit;
-        sighting = new Sighting();
         utilTableGenerator = new UtilTableGenerator();
         searchElement = new Element();
         searchLocation = new Location();
@@ -79,6 +79,11 @@ public class PanelSighting extends javax.swing.JPanel {
         tblElement.getTableHeader().setReorderingAllowed(false);
         tblLocation.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
+    }
+
+    public PanelSighting(Sighting inSighting, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
+        this(inSighting, inVisit);
+        panelToRefresh = inPanelToRefresh;
     }
     
     /*
@@ -142,7 +147,7 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
             txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
             txtLatSeconds.setText(Integer.toString(sighting.getLatSeconds()));
-            cmbLongitude.setSelectedItem(sighting.getLocation());
+            cmbLongitude.setSelectedItem(sighting.getLongitude());
             txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
             txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
             txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
@@ -772,9 +777,16 @@ public class PanelSighting extends javax.swing.JPanel {
             lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
             dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
 
+            // Add and Save the visit
             if (!visit.getSightings().contains(sighting)) visit.getSightings().add(sighting);
-
             app.getDBI().createOrUpdate(visit);
+
+            // Premare to close dialog
+            if (panelToRefresh != null) {
+                panelToRefresh.refreshTableForSightings();
+            }
+
+            // Close the dialog
             JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
             dialog.dispose();
         }
@@ -913,6 +925,8 @@ public class PanelSighting extends javax.swing.JPanel {
             sighting.setLocation(app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString())));
             tblVisit.setModel(utilTableGenerator.getShortVisitTable(sighting.getLocation()));
             lblLocationName.setText(sighting.getLocation().getName());
+            visit = null;
+            lblVisitName.setText("...");
             if (sighting.getLocation().getFotos() != null)
                 lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getLocation().getFotos().get(0).getFileLocation()), 100));
             else
