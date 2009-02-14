@@ -26,6 +26,8 @@ import wildlog.data.dataobjects.Visit;
 public interface DBI {
     public void close();
     public void doBackup();
+
+    public boolean isSightingUnique(Sighting inSighting);
     
     public Element find(Element inElement);
     public Location find(Location inLocation);

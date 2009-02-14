@@ -196,7 +196,8 @@ public class UtilTableGenerator {
                                 "Element Type",
                                 "Date",
                                 //"View Rating",
-                                "Certainty",
+                                //"Certainty",
+                                "ID"
                                 };
         List<Sighting> tempList = inVisit.getSightings();
         Object[][] tempTable;
@@ -209,14 +210,15 @@ public class UtilTableGenerator {
                     tempTable[t][i++] = tempSighting.getElement().getPrimaryName();
                     tempTable[t][i++] = tempSighting.getElement().getType();
                 }
-                else {
-                    tempTable[t][i++] = null;
-                    tempTable[t][i++] = null;
-                    tempTable[t][i++] = null;
-                }
+                //else {
+                //    tempTable[t][i++] = null;
+                //    tempTable[t][i++] = null;
+                //    tempTable[t][i++] = null;
+                //
                 tempTable[t][i++] = tempSighting.getDate();
                 //tempTable[t][i++] = tempSighting.getViewRating();
-                tempTable[t][i++] = tempSighting.getCertainty();
+                //tempTable[t][i++] = tempSighting.getCertainty();
+                tempTable[t][i++] = tempSighting.getSightingCounter();
             }
         }
         else tempTable = new Object[0][0];
@@ -233,7 +235,7 @@ public class UtilTableGenerator {
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
-                                "Class",
+                                "Class"
                                 };
         List<Element> allElements = new ArrayList<Element>();
         Object[][] tempTable = null;

@@ -27,6 +27,7 @@ import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.MapPoint;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.util.SightingCounter;
 import wildlog.data.dataobjects.Visit;
 
 
@@ -34,6 +35,7 @@ import wildlog.data.dataobjects.Visit;
 public class DBI_db4o implements DBI {
     private final String filePath = File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar + "wildlog.wld";
     private ObjectContainer db;
+    private SightingCounter counter;
     
     // Contructor:
     public DBI_db4o() {
@@ -71,6 +73,17 @@ public class DBI_db4o implements DBI {
 
         // Open database
         db = Db4o.openFile(filePath);
+
+        // Check the SightingCounter object
+        ObjectSet<SightingCounter> tempList = db.get(new SightingCounter());
+        if (tempList.hasNext()) {
+            counter = tempList.next();
+        }
+        else {
+            counter = new SightingCounter();
+            // Start at 1, thus no sighting should ever have counter = 0
+            counter.setCount(1);
+        }
     }
     
     // Methods:
@@ -108,6 +121,27 @@ public class DBI_db4o implements DBI {
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public boolean isSightingUnique(Sighting inSighting) {
+        Sighting tempSighting = new Sighting(inSighting.getDate(), inSighting.getElement(), inSighting.getLocation(), 0);
+        // Important this method also gives the Sighting a SightingCounter, 
+        // thus makeing it unique if it doesn't have one...
+        if (inSighting.getSightingCounter() > 0)
+            tempSighting.setSightingCounter(inSighting.getSightingCounter());
+        else {
+            inSighting.setSightingCounter(counter.getCount());
+            counter.increase();
+        }
+        Sighting searchSighting = find(tempSighting);
+        if (searchSighting == null) {
+            return true;
+        }
+        if (searchSighting.equals(inSighting) && list(tempSighting).size() == 1) {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -229,7 +263,7 @@ public class DBI_db4o implements DBI {
         if (tempVisit == null) {
             db.set(inVisit);
             db.commit();
-        return true;
+            return true;
         }
         if (tempVisit.equals(inVisit) && list(new Visit(inVisit.getName())).size() == 1) {
             db.set(inVisit);
@@ -241,9 +275,13 @@ public class DBI_db4o implements DBI {
 
     @Override
     public boolean createOrUpdate(Sighting inSighting) {
-        db.set(inSighting);
-        db.commit();
-        return false;
+        if (isSightingUnique(inSighting)) {
+            db.set(inSighting);
+            db.commit();
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

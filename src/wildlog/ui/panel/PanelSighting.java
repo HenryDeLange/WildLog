@@ -151,6 +151,7 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
             txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
             txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
+            lblCounter.setText(Long.toString(sighting.getSightingCounter()));
 
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             if (sighting.getFotos() != null)
@@ -274,6 +275,10 @@ public class PanelSighting extends javax.swing.JPanel {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         chkSearchLocationDirect = new javax.swing.JCheckBox();
+        jLabel1 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        jSeparator6 = new javax.swing.JSeparator();
+        lblCounter = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1020, 630));
         setMinimumSize(new java.awt.Dimension(1020, 630));
@@ -397,7 +402,7 @@ public class PanelSighting extends javax.swing.JPanel {
         jLabel7.setName("jLabel7"); // NOI18N
         sightingIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 540, -1, -1));
 
-        cmbAreaType.setMaximumRowCount(10);
+        cmbAreaType.setMaximumRowCount(11);
         cmbAreaType.setModel(new DefaultComboBoxModel(AreaType.values()));
         cmbAreaType.setSelectedItem(sighting.getAreaType());
         cmbAreaType.setName("cmbAreaType"); // NOI18N
@@ -702,6 +707,24 @@ public class PanelSighting extends javax.swing.JPanel {
         chkSearchLocationDirect.setName("chkSearchLocationDirect"); // NOI18N
         sightingIncludes.add(chkSearchLocationDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, -1, -1));
 
+        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setName("jLabel1"); // NOI18N
+        sightingIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 580, -1, 20));
+
+        jSeparator5.setName("jSeparator5"); // NOI18N
+        sightingIncludes.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 350, 10));
+
+        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator6.setName("jSeparator6"); // NOI18N
+        sightingIncludes.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 570, 10, 40));
+
+        lblCounter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCounter.setText(resourceMap.getString("lblCounter.text")); // NOI18N
+        lblCounter.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblCounter.setName("lblCounter"); // NOI18N
+        sightingIncludes.add(lblCounter, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 580, 90, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -713,7 +736,9 @@ public class PanelSighting extends javax.swing.JPanel {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(sightingIncludes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(sightingIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -767,28 +792,38 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonSeconds.setText("0");
             }
 
+            // Add and Save the visit
+            if (app.getDBI().isSightingUnique(sighting) == true) {
+                if (!visit.getSightings().contains(sighting)) visit.getSightings().add(sighting);
+                if (app.getDBI().createOrUpdate(visit) == true) {
+                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
+                    lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                    lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                    lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                    dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                    // Premare to close dialog
+                    if (panelToRefresh != null) {
+                        panelToRefresh.refreshTableForSightings();
+                    }
+                    // Close the dialog
+                    JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
+                    dialog.dispose();
+                }
+                else {
+                    lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+                    lblVisitName.setText(visit.getName() + "_not_unique");
+                }
+            }
+            else {
+                lblElement.setBorder(new LineBorder(Color.RED, 3, true));
+                lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
+                lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+                dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
+            }
+
             lblElementName.setText(sighting.getElement().getPrimaryName());
             lblLocationName.setText(sighting.getLocation().getName());
             lblVisitName.setText(visit.getName());
-
-            org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
-            lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-            lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-            lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-            dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-
-            // Add and Save the visit
-            if (!visit.getSightings().contains(sighting)) visit.getSightings().add(sighting);
-            app.getDBI().createOrUpdate(visit);
-
-            // Premare to close dialog
-            if (panelToRefresh != null) {
-                panelToRefresh.refreshTableForSightings();
-            }
-
-            // Close the dialog
-            JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
-            dialog.dispose();
         }
         else {
             if (sighting.getElement() == null)
@@ -1016,6 +1051,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JComboBox cmbViewRating;
     private javax.swing.JComboBox cmbWeather;
     private org.jdesktop.swingx.JXDatePicker dtpSightingDate;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1041,8 +1077,11 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JLabel lblCounter;
     private javax.swing.JLabel lblElement;
     private javax.swing.JLabel lblElementImage;
     private javax.swing.JLabel lblElementName;

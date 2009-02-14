@@ -50,16 +50,18 @@ public class Sighting {
     private int lonSeconds;
     private String subArea;
     private SightingEvidence sightingEvidence;
+    private long sightingCounter;
 
 
     // CONSTRUCTORS:
     public Sighting() {
     }
 
-    public Sighting(Date inDate, Element inElement, Location inLocation) {
+    public Sighting(Date inDate, Element inElement, Location inLocation, long inSightingCounter) {
         date = inDate;
         element = inElement;
         location = inLocation;
+        sightingCounter = inSightingCounter;
     }
 
     // METHIDS:
@@ -179,6 +181,10 @@ public class Sighting {
         return sightingEvidence;
     }
 
+    public long getSightingCounter() {
+        return sightingCounter;
+    }
+
     // SETTERS:
     public void setDate(Date inDate) {
         date = inDate;
@@ -262,6 +268,10 @@ public class Sighting {
 
     public void setSightingEvidence(SightingEvidence inSightingEvidence) {
         sightingEvidence = inSightingEvidence;
+    }
+
+    public void setSightingCounter(long inSightingCounter) {
+        sightingCounter = inSightingCounter;
     }
     
 }
