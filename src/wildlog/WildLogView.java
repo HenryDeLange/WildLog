@@ -255,10 +255,10 @@ public class WildLogView extends FrameView {
         mainPanel.setName("mainPanel"); // NOI18N
         mainPanel.setPreferredSize(new java.awt.Dimension(1000, 650));
 
-        tabbedPanel.setMaximumSize(new java.awt.Dimension(1000, 500));
-        tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 500));
+        tabbedPanel.setMaximumSize(new java.awt.Dimension(1000, 485));
+        tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 485));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
-        tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 500));
+        tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 485));
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(WildLogView.class);
         tabHome.setBackground(resourceMap.getColor("tabHome.background")); // NOI18N
