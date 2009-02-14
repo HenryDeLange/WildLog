@@ -32,7 +32,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.border.LineBorder;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
@@ -140,6 +139,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     @Override
     public void refreshTableForSightings() {
+        //app.getDBI().refresh(locationForVisit);
         formComponentShown(null);
     }
     
@@ -920,7 +920,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 3)));
+            sighting = app.getDBI().find(new Sighting(new Date(Date.parse((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2))), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 3)));
             refreshSightingInfo();
         }
         else {

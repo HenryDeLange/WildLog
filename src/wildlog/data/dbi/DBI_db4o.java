@@ -133,6 +133,7 @@ public class DBI_db4o implements DBI {
         else {
             inSighting.setSightingCounter(counter.getCount());
             counter.increase();
+            db.set(counter);
         }
         Sighting searchSighting = find(tempSighting);
         if (searchSighting == null) {
@@ -143,6 +144,11 @@ public class DBI_db4o implements DBI {
         }
         return false;
     }
+
+    //@Override
+    //public void refresh(Object inObject) {
+    //    db.ext().refresh(inObject, 7);
+    //}
 
     @Override
     public Element find(Element inElement) {

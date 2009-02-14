@@ -28,6 +28,7 @@ public interface DBI {
     public void doBackup();
 
     public boolean isSightingUnique(Sighting inSighting);
+    //public void refresh(Object inObject);
     
     public Element find(Element inElement);
     public Location find(Location inLocation);

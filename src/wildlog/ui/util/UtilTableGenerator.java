@@ -141,8 +141,14 @@ public class UtilTableGenerator {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempVisit.getName();
-                tempTable[t][i++] = tempVisit.getStartDate();
-                tempTable[t][i++] = tempVisit.getEndDate();
+                if (tempVisit.getStartDate() != null)
+                    tempTable[t][i++] = tempVisit.getStartDate().getDate() + " " + getMonth(tempVisit.getStartDate().getMonth()) + " " + (tempVisit.getStartDate().getYear()+1900);
+                else
+                    tempTable[t][i++] = "";
+                if (tempVisit.getEndDate() != null)
+                    tempTable[t][i++] = tempVisit.getEndDate().getDate() + " " + getMonth(tempVisit.getEndDate().getMonth()) + " " + (tempVisit.getEndDate().getYear()+1900);
+                else
+                    tempTable[t][i++] = "";
                 tempTable[t][i++] = tempVisit.getGameWatchingIntensity();
                 tempTable[t][i++] = tempVisit.getType();
                 if (tempVisit.getSightings() != null)
@@ -174,7 +180,10 @@ public class UtilTableGenerator {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempVisit.getName();
-                tempTable[t][i++] = tempVisit.getStartDate();
+                if (tempVisit.getStartDate() != null)
+                    tempTable[t][i++] = tempVisit.getStartDate().getDate() + " " + getMonth(tempVisit.getStartDate().getMonth()) + " " + (tempVisit.getStartDate().getYear()+1900);
+                else
+                    tempTable[t][i++] = "";
                 tempTable[t][i++] = tempVisit.getType();
                 if (tempVisit.getSightings() != null)
                     tempTable[t][i++] = tempVisit.getSightings().size();
@@ -215,7 +224,10 @@ public class UtilTableGenerator {
                 //    tempTable[t][i++] = null;
                 //    tempTable[t][i++] = null;
                 //
-                tempTable[t][i++] = tempSighting.getDate();
+                if (tempSighting.getDate() != null)
+                    tempTable[t][i++] = tempSighting.getDate().getDate() + " " + getMonth(tempSighting.getDate().getMonth()) + " " + (tempSighting.getDate().getYear()+1900);
+                else
+                    tempTable[t][i++] = "";
                 //tempTable[t][i++] = tempSighting.getViewRating();
                 //tempTable[t][i++] = tempSighting.getCertainty();
                 tempTable[t][i++] = tempSighting.getSightingCounter();
@@ -319,6 +331,23 @@ public class UtilTableGenerator {
             }
         };
         return table;
+    }
+
+    // Private Methods
+    private String getMonth(int inMonth) {
+        if (inMonth == 0) return "Jan";
+        if (inMonth == 1) return "Feb";
+        if (inMonth == 2) return "Mar";
+        if (inMonth == 3) return "Apr";
+        if (inMonth == 4) return "May";
+        if (inMonth == 5) return "Jun";
+        if (inMonth == 6) return "Jul";
+        if (inMonth == 7) return "Aug";
+        if (inMonth == 8) return "Sep";
+        if (inMonth == 9) return "Oct";
+        if (inMonth == 10) return "Nov";
+        if (inMonth == 11) return "Dec";
+        return "";
     }
 
 }
