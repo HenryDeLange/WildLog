@@ -398,7 +398,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="50" y="496" width="-1" height="-1"/>
+              <AbsoluteConstraints x="40" y="500" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -409,7 +409,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="40" y="520" width="-1" height="-1"/>
+              <AbsoluteConstraints x="27" y="520" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -420,7 +420,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="400" y="496" width="-1" height="-1"/>
+              <AbsoluteConstraints x="403" y="496" width="-1" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -638,7 +638,7 @@
         <Component class="javax.swing.JTextField" name="txtSizeMale">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Integer.toString(element.getSizeMaleAverage())" type="code"/>
+              <Connection code="Double.toString(element.getSizeMaleAverage())" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtSizeMale" noResource="true"/>
           </Properties>
@@ -651,7 +651,7 @@
         <Component class="javax.swing.JTextField" name="txtSizeFemale">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="Integer.toString(element.getSizeFemaleAverage())" type="code"/>
+              <Connection code="Double.toString(element.getSizeFemaleAverage())" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtSizeFemale" noResource="true"/>
           </Properties>
@@ -664,7 +664,7 @@
         <Component class="javax.swing.JTextField" name="txtWeightMale">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="element.getWeightMaleAverage()" type="code"/>
+              <Connection code="Double.toString(element.getWeightMaleAverage())" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtWeightMale" noResource="true"/>
           </Properties>
@@ -677,7 +677,7 @@
         <Component class="javax.swing.JTextField" name="txtWeightFemale">
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="element.getWeightFemaleAverage()" type="code"/>
+              <Connection code="Double.toString(element.getWeightFemaleAverage())" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtWeightFemale" noResource="true"/>
           </Properties>

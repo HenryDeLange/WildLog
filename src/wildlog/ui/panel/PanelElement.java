@@ -53,7 +53,6 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
-import wildlog.mapping.MapFrame;
 
 
 /**
@@ -374,15 +373,15 @@ public class PanelElement extends javax.swing.JPanel {
 
         jLabel71.setText(resourceMap.getString("jLabel71.text")); // NOI18N
         jLabel71.setName("jLabel71"); // NOI18N
-        elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 496, -1, -1));
+        elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 500, -1, -1));
 
         jLabel72.setText(resourceMap.getString("jLabel72.text")); // NOI18N
         jLabel72.setName("jLabel72"); // NOI18N
-        elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 520, -1, -1));
+        elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 520, -1, -1));
 
         jLabel73.setText(resourceMap.getString("jLabel73.text")); // NOI18N
         jLabel73.setName("jLabel73"); // NOI18N
-        elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 496, -1, -1));
+        elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(403, 496, -1, -1));
 
         jLabel74.setText(resourceMap.getString("jLabel74.text")); // NOI18N
         jLabel74.setName("jLabel74"); // NOI18N
@@ -463,19 +462,19 @@ public class PanelElement extends javax.swing.JPanel {
         cmbActiveTime.setName("cmbActiveTime"); // NOI18N
         elementIncludes.add(cmbActiveTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 148, 220, -1));
 
-        txtSizeMale.setText(Integer.toString(element.getSizeMaleAverage()));
+        txtSizeMale.setText(Double.toString(element.getSizeMaleAverage()));
         txtSizeMale.setName("txtSizeMale"); // NOI18N
         elementIncludes.add(txtSizeMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 496, 110, -1));
 
-        txtSizeFemale.setText(Integer.toString(element.getSizeFemaleAverage()));
+        txtSizeFemale.setText(Double.toString(element.getSizeFemaleAverage()));
         txtSizeFemale.setName("txtSizeFemale"); // NOI18N
         elementIncludes.add(txtSizeFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 520, 110, -1));
 
-        txtWeightMale.setText(element.getWeightMaleAverage());
+        txtWeightMale.setText(Double.toString(element.getWeightMaleAverage()));
         txtWeightMale.setName("txtWeightMale"); // NOI18N
         elementIncludes.add(txtWeightMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 496, 110, -1));
 
-        txtWeightFemale.setText(element.getWeightFemaleAverage());
+        txtWeightFemale.setText(Double.toString(element.getWeightFemaleAverage()));
         txtWeightFemale.setName("txtWeightFemale"); // NOI18N
         elementIncludes.add(txtWeightFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 520, 110, -1));
 
@@ -614,14 +613,14 @@ public class PanelElement extends javax.swing.JPanel {
             element.setNutrition(txtNutrition.getText());
             element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
             try {
-                element.setSizeMaleAverage(Integer.valueOf(txtSizeMale.getText()));
+                element.setSizeMaleAverage(Double.valueOf(txtSizeMale.getText()));
             }
             catch (NumberFormatException e) {
                 System.out.println("Not a Number...");
                 txtSizeMale.setText("");
             }
             try {
-                element.setSizeFemaleAverage(Integer.valueOf(txtSizeFemale.getText()));
+                element.setSizeFemaleAverage(Double.valueOf(txtSizeFemale.getText()));
             }
             catch (NumberFormatException e) {
                 System.out.println("Not a Number...");
@@ -636,8 +635,20 @@ public class PanelElement extends javax.swing.JPanel {
             }
             element.setSizeUnit((UnitsSize)cmbSizeUnits.getSelectedItem());
             element.setWeightUnit((UnitsWeight)cmbWeightUnits.getSelectedItem());
-            element.setWeightMaleAverage(txtWeightMale.getText());
-            element.setWeightFemaleAverage(txtWeightFemale.getText());
+            try {
+                element.setWeightMaleAverage(Double.valueOf(txtWeightMale.getText()));
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Not a Number...");
+                txtBreedingNumber.setText("");
+            }
+            try {
+                element.setWeightFemaleAverage(Double.valueOf(txtWeightFemale.getText()));
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Not a Number...");
+                txtBreedingNumber.setText("");
+            }
             element.setBreedingDuration(txtbreedingDuration.getText());
             element.setBreedingAge(txtBreedingAge.getText());
             element.setWishListRating((WishRating)cmbWishList.getSelectedItem());

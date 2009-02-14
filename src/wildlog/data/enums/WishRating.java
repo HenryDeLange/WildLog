@@ -16,9 +16,9 @@ package wildlog.data.enums;
 
 
 public enum WishRating {
-    HIGH("Always great to see"),
-    NORMAL("Nice to see"),
-    LOW("Commonly seen"),
+    HIGH("High - Always great to see"),
+    NORMAL("Normal - Nice to see"),
+    LOW("Low - Commonly seen"),
     NONE("None");
     
     private final String text;

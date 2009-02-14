@@ -37,10 +37,10 @@ public class Element {
     private String description;
     private String nutrition; // What food or soil the element preferes
     private WaterDependancy waterDependance; // How dependant the element is on water
-    private int sizeMaleAverage; // Might later split all "Averages" into min and max
-    private int sizeFemaleAverage; // Measured in centimeters
-    private String weightMaleAverage; // Measusred in kilograms
-    private String weightFemaleAverage;
+    private double sizeMaleAverage; // Might later split all "Averages" into min and max
+    private double sizeFemaleAverage; // Measured in centimeters
+    private double weightMaleAverage; // Measusred in kilograms
+    private double weightFemaleAverage;
     private String breedingDuration; // How long the young is developed and how long it takes to be independant
     private double breedingNumber; // The number of young produced
     private String breedingAge;
@@ -139,19 +139,19 @@ public class Element {
         return waterDependance;
     }
 
-    public int getSizeMaleAverage() {
+    public double getSizeMaleAverage() {
         return sizeMaleAverage;
     }
 
-    public int getSizeFemaleAverage() {
+    public double getSizeFemaleAverage() {
         return sizeFemaleAverage;
     }
 
-    public String getWeightMaleAverage() {
+    public double getWeightMaleAverage() {
         return weightMaleAverage;
     }
 
-    public String getWeightFemaleAverage() {
+    public double getWeightFemaleAverage() {
         return weightFemaleAverage;
     }
 
@@ -245,19 +245,19 @@ public class Element {
         waterDependance = inWaterDependance;
     }
 
-    public void setSizeMaleAverage(int inSizeMaleAverage) {
+    public void setSizeMaleAverage(double inSizeMaleAverage) {
         sizeMaleAverage = inSizeMaleAverage;
     }
 
-    public void setSizeFemaleAverage(int inSizeFemaleAverage) {
+    public void setSizeFemaleAverage(double inSizeFemaleAverage) {
         sizeFemaleAverage = inSizeFemaleAverage;
     }
 
-    public void setWeightMaleAverage(String inWeightMaleAverage) {
+    public void setWeightMaleAverage(double inWeightMaleAverage) {
         weightMaleAverage = inWeightMaleAverage;
     }
 
-    public void setWeightFemaleAverage(String inWeightFemaleAverage) {
+    public void setWeightFemaleAverage(double inWeightFemaleAverage) {
         weightFemaleAverage = inWeightFemaleAverage;
     }
 

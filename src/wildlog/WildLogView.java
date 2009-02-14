@@ -239,6 +239,7 @@ public class WildLogView extends FrameView {
         jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        btnClearSearch = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -769,6 +770,15 @@ public class WildLogView extends FrameView {
         jSeparator1.setName("jSeparator1"); // NOI18N
         tabElement.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, 350, 10));
 
+        btnClearSearch.setText(resourceMap.getString("btnClearSearch.text")); // NOI18N
+        btnClearSearch.setName("btnClearSearch"); // NOI18N
+        btnClearSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearSearchActionPerformed(evt);
+            }
+        });
+        tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 180, -1));
+
         tabbedPanel.addTab(resourceMap.getString("tabElement.TabConstraints.tabTitle"), tabElement); // NOI18N
 
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -1108,11 +1118,20 @@ public class WildLogView extends FrameView {
         // TODO add your handling code here:
     }//GEN-LAST:event_tabFotoComponentShown
 
+    private void btnClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSearchActionPerformed
+        ckbTypeFilter.setSelected(false);
+        txtSearch.setText("");
+        cmbType.setEnabled(false);
+        searchElement = new Element();
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+    }//GEN-LAST:event_btnClearSearchActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddElement;
     private javax.swing.JButton btnAddLocation;
     private javax.swing.JButton btnAnimal;
     private javax.swing.JButton btnBackup;
+    private javax.swing.JButton btnClearSearch;
     private javax.swing.JButton btnDeleteElement;
     private javax.swing.JButton btnDeleteLocation;
     private javax.swing.JButton btnExportAll;
