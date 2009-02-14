@@ -82,6 +82,7 @@ public class PanelElement extends javax.swing.JPanel {
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         }
+        tblLocation.getTableHeader().setReorderingAllowed(false);
     }
     
     public Element getElement() {
@@ -640,14 +641,14 @@ public class PanelElement extends javax.swing.JPanel {
             }
             catch (NumberFormatException e) {
                 System.out.println("Not a Number...");
-                txtBreedingNumber.setText("");
+                txtWeightMale.setText("");
             }
             try {
                 element.setWeightFemaleAverage(Double.valueOf(txtWeightFemale.getText()));
             }
             catch (NumberFormatException e) {
                 System.out.println("Not a Number...");
-                txtBreedingNumber.setText("");
+                txtWeightFemale.setText("");
             }
             element.setBreedingDuration(txtbreedingDuration.getText());
             element.setBreedingAge(txtBreedingAge.getText());
@@ -756,7 +757,6 @@ public class PanelElement extends javax.swing.JPanel {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         if (element.getPrimaryName() != null) {
-            WildLogApp app = (WildLogApp) Application.getInstance();
             Sighting sighting = new Sighting();
             sighting.setElement(element);
             lblNumberOfSightings.setText(Integer.toString(app.getDBI().list(sighting).size()));

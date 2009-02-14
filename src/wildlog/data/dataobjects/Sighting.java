@@ -23,6 +23,7 @@ import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 
@@ -48,6 +49,7 @@ public class Sighting {
     private int lonMinutes;
     private int lonSeconds;
     private String subArea;
+    private SightingEvidence sightingEvidence;
 
 
     // CONSTRUCTORS:
@@ -173,6 +175,10 @@ public class Sighting {
         return subArea;
     }
 
+    public SightingEvidence getSightingEvidence() {
+        return sightingEvidence;
+    }
+
     // SETTERS:
     public void setDate(Date inDate) {
         date = inDate;
@@ -252,6 +258,10 @@ public class Sighting {
 
     public void setSubArea(String inSubArea) {
         subArea = inSubArea;
+    }
+
+    public void setSightingEvidence(SightingEvidence inSightingEvidence) {
+        sightingEvidence = inSightingEvidence;
     }
     
 }

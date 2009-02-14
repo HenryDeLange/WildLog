@@ -52,7 +52,6 @@ import wildlog.WildLogApp;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
-import wildlog.mapping.MapFrame;
 
 
 /**
@@ -82,6 +81,8 @@ public class PanelLocation extends javax.swing.JPanel {
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         }
+        tblElement.getTableHeader().setReorderingAllowed(false);
+        tblVisit.getTableHeader().setReorderingAllowed(false);
     }
     
     public void setLocationWL(Location inLocation) {
@@ -103,7 +104,6 @@ public class PanelLocation extends javax.swing.JPanel {
     }
     
     public void setupTabHeader() {
-        WildLogApp app = (WildLogApp) Application.getInstance();
         parent = (JTabbedPane) getParent();
         JPanel tabHeader = new JPanel();
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Location.gif"))));

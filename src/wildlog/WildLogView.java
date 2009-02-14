@@ -130,6 +130,14 @@ public class WildLogView extends FrameView {
         setupTabHeaderFoto();
         setupTabHeaderLocation();
         setupTabHeaderElement();
+
+        // Preventing the moving of table columns (this breaks the hardcoded place where the IDs are
+        // expected for database lookup...
+        tblElement.getTableHeader().setReorderingAllowed(false);
+        tblElement_LocTab.getTableHeader().setReorderingAllowed(false);
+        tblLocation.getTableHeader().setReorderingAllowed(false);
+        tblLocation_EleTab.getTableHeader().setReorderingAllowed(false);
+        tblVisit.getTableHeader().setReorderingAllowed(false);
     }
 
     @Action
@@ -236,7 +244,6 @@ public class WildLogView extends FrameView {
         ckbSearchDirect = new javax.swing.JCheckBox();
         btnExportElement = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btnClearSearch = new javax.swing.JButton();
@@ -685,7 +692,7 @@ public class WildLogView extends FrameView {
                 cmbTypeActionPerformed(evt);
             }
         });
-        tabElement.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 440, 200, -1));
+        tabElement.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 170, -1));
 
         btnGoLocation.setIcon(resourceMap.getIcon("btnGoLocation.icon")); // NOI18N
         btnGoLocation.setText(resourceMap.getString("btnGoLocation.text")); // NOI18N
@@ -706,7 +713,7 @@ public class WildLogView extends FrameView {
                 ckbTypeFilterActionPerformed(evt);
             }
         });
-        tabElement.add(ckbTypeFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 440, -1, -1));
+        tabElement.add(ckbTypeFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, -1, -1));
 
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -724,7 +731,7 @@ public class WildLogView extends FrameView {
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
-        tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, 330, -1));
+        tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 320, -1));
 
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
@@ -733,13 +740,13 @@ public class WildLogView extends FrameView {
                 btnSearchActionPerformed(evt);
             }
         });
-        tabElement.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 180, -1));
+        tabElement.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, 150, 30));
 
         ckbSearchDirect.setBackground(resourceMap.getColor("ckbSearchDirect.background")); // NOI18N
         ckbSearchDirect.setSelected(true);
         ckbSearchDirect.setText(resourceMap.getString("ckbSearchDirect.text")); // NOI18N
         ckbSearchDirect.setName("ckbSearchDirect"); // NOI18N
-        tabElement.add(ckbSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 360, -1, -1));
+        tabElement.add(ckbSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, -1, 20));
 
         btnExportElement.setText(resourceMap.getString("btnExportElement.text")); // NOI18N
         btnExportElement.setName("btnExportElement"); // NOI18N
@@ -753,12 +760,7 @@ public class WildLogView extends FrameView {
         jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
         jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
-        tabElement.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 310, 350, -1));
-
-        jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
-        tabElement.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 420, 350, -1));
+        tabElement.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 280, -1));
 
         jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -777,7 +779,7 @@ public class WildLogView extends FrameView {
                 btnClearSearchActionPerformed(evt);
             }
         });
-        tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 180, -1));
+        tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 400, 150, 30));
 
         tabbedPanel.addTab(resourceMap.getString("tabElement.TabConstraints.tabTitle"), tabElement); // NOI18N
 
@@ -1159,7 +1161,6 @@ public class WildLogView extends FrameView {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

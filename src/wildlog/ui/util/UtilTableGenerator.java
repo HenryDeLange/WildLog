@@ -195,13 +195,13 @@ public class UtilTableGenerator {
                                 "Primary Name",
                                 "Element Type",
                                 "Date",
-                                "View Rating",
+                                //"View Rating",
                                 "Certainty",
                                 };
         List<Sighting> tempList = inVisit.getSightings();
         Object[][] tempTable;
         if (tempList != null) {
-            tempTable = new Object[tempList.size()][5];
+            tempTable = new Object[tempList.size()][4];
             for (int t = 0; t < tempList.size(); t++) {
                 Sighting tempSighting = tempList.get(t);
                 int i = 0;
@@ -215,7 +215,7 @@ public class UtilTableGenerator {
                     tempTable[t][i++] = null;
                 }
                 tempTable[t][i++] = tempSighting.getDate();
-                tempTable[t][i++] = tempSighting.getViewRating();
+                //tempTable[t][i++] = tempSighting.getViewRating();
                 tempTable[t][i++] = tempSighting.getCertainty();
             }
         }
@@ -287,6 +287,28 @@ public class UtilTableGenerator {
                 tempTable[t][i++] = tempLocation.getRating();
                 tempTable[t][i++] = tempLocation.getGameViewingRating();
             }
+        }
+        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
+        return table;
+    }
+
+    public DefaultTableModel getShortLocationTable(Location inLocation) {
+        String[] columnNames = {
+                                "Name",
+                                "Province"
+                                };
+        List<Location> tempList = dbi.list(inLocation);
+        Object[][] tempTable = new Object[tempList.size()][2];
+        for (int t = 0; t < tempList.size(); t++) {
+            Location tempLocation = tempList.get(t);
+            int i = 0;
+            tempTable[t][i++] = tempLocation.getName();
+            tempTable[t][i++] = tempLocation.getProvince();
         }
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
