@@ -370,6 +370,7 @@ public class PanelVisit extends javax.swing.JPanel {
         jScrollPane14.setName("jScrollPane14"); // NOI18N
 
         txtDescription.setColumns(20);
+        txtDescription.setFont(resourceMap.getFont("txtDescription.font")); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(visit.getDescription());
@@ -377,7 +378,7 @@ public class PanelVisit extends javax.swing.JPanel {
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 310, -1));
+        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 310, 90));
 
         jLabel54.setText(resourceMap.getString("jLabel54.text")); // NOI18N
         jLabel54.setName("jLabel54"); // NOI18N
@@ -410,13 +411,13 @@ public class PanelVisit extends javax.swing.JPanel {
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
         visitIncludes.add(cmbGameWatchIntensity, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 150, -1));
 
-        dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("dtpStartDate.border.lineColor"), 3, true)); // NOI18N
+        dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setName("dtpStartDate"); // NOI18N
         visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 200, -1));
 
-        dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("dtpEndDate.border.lineColor"), 3, true)); // NOI18N
+        dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setName("dtpEndDate"); // NOI18N
         visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 52, 200, -1));
 
@@ -527,8 +528,8 @@ public class PanelVisit extends javax.swing.JPanel {
         jLabel6.setName("jLabel6"); // NOI18N
         visitIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 254, -1, -1));
 
-        dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("dtpSightingDate.border.lineColor"), 3, true)); // NOI18N
+        dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
         visitIncludes.add(dtpSightingDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 254, 180, -1));
 
@@ -570,6 +571,7 @@ public class PanelVisit extends javax.swing.JPanel {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDetails.setColumns(20);
+        txtDetails.setFont(resourceMap.getFont("txtDetails.font")); // NOI18N
         txtDetails.setLineWrap(true);
         txtDetails.setRows(5);
         txtDetails.setText(sighting.getDetails());
@@ -747,7 +749,6 @@ public class PanelVisit extends javax.swing.JPanel {
         });
         visitIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 90, 70, 80));
 
-        btnSetMainImage.setIcon(null);
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N

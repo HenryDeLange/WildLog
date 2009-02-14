@@ -403,6 +403,7 @@ public class PanelElement extends javax.swing.JPanel {
         jScrollPane16.setName("jScrollPane16"); // NOI18N
 
         txtDescription.setColumns(20);
+        txtDescription.setFont(resourceMap.getFont("txtDescription.font")); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(element.getDescription());
@@ -410,11 +411,12 @@ public class PanelElement extends javax.swing.JPanel {
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane16.setViewportView(txtDescription);
 
-        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 196, 510, -1));
+        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 196, 510, 90));
 
         jScrollPane17.setName("jScrollPane17"); // NOI18N
 
         txtDiagnosticDescription.setColumns(20);
+        txtDiagnosticDescription.setFont(resourceMap.getFont("txtDiagnosticDescription.font")); // NOI18N
         txtDiagnosticDescription.setLineWrap(true);
         txtDiagnosticDescription.setRows(5);
         txtDiagnosticDescription.setText(element.getDiagnosticDescription());
@@ -422,11 +424,12 @@ public class PanelElement extends javax.swing.JPanel {
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
-        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 296, 590, -1));
+        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 296, 590, 90));
 
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
         txtBehaviourDescription.setColumns(20);
+        txtBehaviourDescription.setFont(resourceMap.getFont("txtBehaviourDescription.font")); // NOI18N
         txtBehaviourDescription.setLineWrap(true);
         txtBehaviourDescription.setRows(5);
         txtBehaviourDescription.setText(element.getBehaviourDescription());
@@ -434,7 +437,7 @@ public class PanelElement extends javax.swing.JPanel {
         txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
         jScrollPane18.setViewportView(txtBehaviourDescription);
 
-        elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 396, 590, -1));
+        elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 396, 590, 90));
 
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());

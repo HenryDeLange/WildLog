@@ -1,3 +1,17 @@
+/*
+ * PointLayer.java is part of WildLog
+ *
+ * Copyright (C) 2009 Henry James de Lange
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package wildlog.mapping.layers;
 
 import java.awt.Color;
@@ -45,31 +59,12 @@ public class PointLayer extends Layer {
         createGraphics(omgraphics);
     }
 
-    //----------------------------------------------------------------------
-    // Layer overrides
-    //----------------------------------------------------------------------
-
-    /**
-     * Renders the graphics list. It is important to make this routine
-     * as fast as possible since it is called frequently by Swing, and
-     * the User Interface blocks while painting is done.
-     */
+    @Override
     public void paint(java.awt.Graphics g) {
         omgraphics.render(g);
     }
 
-    //----------------------------------------------------------------------
-    // ProjectionListener interface implementation
-    //----------------------------------------------------------------------
-
-    /**
-     * Handler for <code>ProjectionEvent</code>s. This function is
-     * invoked when the <code>MapBean</code> projection changes. The
-     * graphics are reprojected and then the Layer is repainted.
-     * <p>
-     * 
-     * @param e the projection event
-     */
+    @Override
     public void projectionChanged(ProjectionEvent e) {
         omgraphics.project(e.getProjection(), true);
         repaint();

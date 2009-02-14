@@ -284,6 +284,7 @@ public class PanelLocation extends javax.swing.JPanel {
         jScrollPane10.setName("jScrollPane10"); // NOI18N
 
         txtDescription.setColumns(20);
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(locationWL.getDescription());
@@ -291,11 +292,12 @@ public class PanelLocation extends javax.swing.JPanel {
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane10.setViewportView(txtDescription);
 
-        locationIncludes.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 240, -1));
+        locationIncludes.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 240, 90));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDirections.setColumns(20);
+        txtDirections.setFont(resourceMap.getFont("txtDirections.font")); // NOI18N
         txtDirections.setLineWrap(true);
         txtDirections.setRows(5);
         txtDirections.setText(locationWL.getDirections());
@@ -303,7 +305,7 @@ public class PanelLocation extends javax.swing.JPanel {
         txtDirections.setName("txtDirections"); // NOI18N
         jScrollPane2.setViewportView(txtDirections);
 
-        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 280, -1));
+        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 280, 90));
 
         txtWebsite.setText(locationWL.getWebsite());
         txtWebsite.setName("txtWebsite"); // NOI18N

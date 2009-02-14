@@ -250,22 +250,22 @@ public class WildLogView extends FrameView {
         statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
 
-        mainPanel.setMaximumSize(new java.awt.Dimension(1000, 650));
-        mainPanel.setMinimumSize(new java.awt.Dimension(1000, 650));
+        mainPanel.setMaximumSize(new java.awt.Dimension(1000, 630));
+        mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 650));
+        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
 
-        tabbedPanel.setMaximumSize(new java.awt.Dimension(1000, 485));
-        tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 485));
+        tabbedPanel.setMaximumSize(new java.awt.Dimension(1000, 630));
+        tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
-        tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 485));
+        tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(WildLogView.class);
         tabHome.setBackground(resourceMap.getColor("tabHome.background")); // NOI18N
-        tabHome.setMaximumSize(new java.awt.Dimension(1000, 500));
-        tabHome.setMinimumSize(new java.awt.Dimension(1000, 500));
+        tabHome.setMaximumSize(new java.awt.Dimension(1000, 630));
+        tabHome.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabHome.setName("tabHome"); // NOI18N
-        tabHome.setPreferredSize(new java.awt.Dimension(1000, 500));
+        tabHome.setPreferredSize(new java.awt.Dimension(1000, 630));
         tabHome.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabHomeComponentShown(evt);
@@ -430,10 +430,10 @@ public class WildLogView extends FrameView {
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
         tabFoto.setBackground(resourceMap.getColor("tabFoto.background")); // NOI18N
-        tabFoto.setMaximumSize(new java.awt.Dimension(1000, 500));
-        tabFoto.setMinimumSize(new java.awt.Dimension(1000, 500));
+        tabFoto.setMaximumSize(new java.awt.Dimension(1000, 630));
+        tabFoto.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabFoto.setName("tabFoto"); // NOI18N
-        tabFoto.setPreferredSize(new java.awt.Dimension(1000, 500));
+        tabFoto.setPreferredSize(new java.awt.Dimension(1000, 630));
         tabFoto.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabFotoComponentShown(evt);
@@ -457,16 +457,16 @@ public class WildLogView extends FrameView {
             .addGroup(tabFotoLayout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jLabel4)
-                .addContainerGap(565, Short.MAX_VALUE))
+                .addContainerGap(566, Short.MAX_VALUE))
         );
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
         tabLocation.setBackground(resourceMap.getColor("tabLocation.background")); // NOI18N
-        tabLocation.setMaximumSize(new java.awt.Dimension(1000, 500));
-        tabLocation.setMinimumSize(new java.awt.Dimension(1000, 500));
+        tabLocation.setMaximumSize(new java.awt.Dimension(1000, 630));
+        tabLocation.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabLocation.setName("tabLocation"); // NOI18N
-        tabLocation.setPreferredSize(new java.awt.Dimension(1000, 500));
+        tabLocation.setPreferredSize(new java.awt.Dimension(1000, 630));
         tabLocation.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabLocationComponentShown(evt);
@@ -601,10 +601,10 @@ public class WildLogView extends FrameView {
         tabbedPanel.addTab(resourceMap.getString("tabLocation.TabConstraints.tabTitle"), tabLocation); // NOI18N
 
         tabElement.setBackground(resourceMap.getColor("tabElement.background")); // NOI18N
-        tabElement.setMaximumSize(new java.awt.Dimension(1000, 500));
-        tabElement.setMinimumSize(new java.awt.Dimension(1000, 500));
+        tabElement.setMaximumSize(new java.awt.Dimension(1000, 630));
+        tabElement.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabElement.setName("tabElement"); // NOI18N
-        tabElement.setPreferredSize(new java.awt.Dimension(1000, 500));
+        tabElement.setPreferredSize(new java.awt.Dimension(1000, 630));
         tabElement.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabElementComponentShown(evt);
@@ -780,7 +780,7 @@ public class WildLogView extends FrameView {
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 

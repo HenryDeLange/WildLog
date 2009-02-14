@@ -16,8 +16,9 @@ package wildlog.data.enums;
 
 
 public enum CateringType {
-    SELF_CATERING("Self Catering"),
-    NON_SELF_CATERING("Not Self Catering"),
+    ONLY_SELF_CATERING("Only Self Catering"),
+    ONLY_NON_CATERING("Only Not Self Catering"),
+    ALL_CATERING("Both Self and Not Self Catering"),
     NO_CATERING("No Catering is Possible/Allowed"),
     NONE("None");
     

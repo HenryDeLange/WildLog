@@ -1,5 +1,5 @@
 /*
- * AreaType.java is part of WildLog
+ * SightingEvidence.java is part of WildLog
  *
  * Copyright (C) 2009 Henry James de Lange
  *
@@ -15,29 +15,21 @@
 package wildlog.data.enums;
 
 
-public enum AreaType {
-    OPEN("Out in the open"),
-    THICKET("In thick cover"),
-    LIGHT_COVER("In light cover"),
-    WETLAND("In a wetland area"),
-    RIVER("Near a river"),
-    DAM("Near a dam"),
-    CLIFF("Near a cliff"),
-    MOUNTAIN("On a mountain"),
-    SAND("On desert sand"),
-    HUMANS("Near human structures"),
+public enum SightingEvidence {
+    SEEN("Seen"),
+    HEARD("Heard"),
+    OTHER_EVIDENCE("Other Evidence"),
     NONE("None");
-    
-    
+
+
     private final String text;
-    
-    AreaType(String inText) {
+
+    SightingEvidence(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;
     }
-
 }
