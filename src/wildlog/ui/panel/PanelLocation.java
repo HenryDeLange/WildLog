@@ -649,6 +649,11 @@ public class PanelLocation extends javax.swing.JPanel {
         btnMapSightings.setText(resourceMap.getString("btnMapSightings.text")); // NOI18N
         btnMapSightings.setToolTipText(resourceMap.getString("btnMapSightings.toolTipText")); // NOI18N
         btnMapSightings.setName("btnMapSightings"); // NOI18N
+        btnMapSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMapSightingsActionPerformed(evt);
+            }
+        });
         locationIncludes.add(btnMapSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -946,6 +951,36 @@ public class PanelLocation extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_lblImageMouseClicked
+
+    private void btnMapSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingsActionPerformed
+        app.getMapFrame().clearPoints();
+        if (locationWL.getVisits() != null) {
+            for (int t = 0; t < locationWL.getVisits().size(); t++) {
+                if (locationWL.getVisits().get(t).getSightings() != null) {
+                    for (int i = 0; i < locationWL.getVisits().get(t).getSightings().size(); i++) {
+                        if (locationWL.getVisits().get(t).getSightings().get(i).getLatitude() != null && locationWL.getVisits().get(t).getSightings().get(i).getLongitude() != null) {
+                            if (!locationWL.getVisits().get(t).getSightings().get(i).getLatitude().equals(Latitudes.NONE) && !locationWL.getVisits().get(t).getSightings().get(i).getLongitude().equals(Longitudes.NONE)) {
+                                float lat = locationWL.getVisits().get(t).getSightings().get(i).getLatDegrees();
+                                lat = lat + locationWL.getVisits().get(t).getSightings().get(i).getLatMinutes()/60f;
+                                lat = lat + (locationWL.getVisits().get(t).getSightings().get(i).getLatSeconds()/60f)/60f;
+                                if (locationWL.getVisits().get(t).getSightings().get(i).getLatitude().equals(Latitudes.SOUTH))
+                                    lat = -1 * lat;
+                                float lon = locationWL.getVisits().get(t).getSightings().get(i).getLonDegrees();
+                                lon = lon + locationWL.getVisits().get(t).getSightings().get(i).getLonMinutes()/60f;
+                                lon = lon + (locationWL.getVisits().get(t).getSightings().get(i).getLonSeconds()/60f)/60f;
+                                if (locationWL.getVisits().get(t).getSightings().get(i).getLongitude().equals(Longitudes.WEST))
+                                    lon = -1 * lon;
+                                app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        app.getMapFrame().changeTitle("WildLog Map - All Sightings at Location: " + locationWL.getName());
+        app.getMapFrame().showMap();
+    }//GEN-LAST:event_btnMapSightingsActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
