@@ -210,7 +210,6 @@ public class PanelSighting extends javax.swing.JPanel {
         jScrollPane13 = new javax.swing.JScrollPane();
         tblElement = new javax.swing.JTable();
         jSeparator9 = new javax.swing.JSeparator();
-        jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         btnPreviousImage = new javax.swing.JButton();
@@ -234,7 +233,6 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbTimeOfDay = new javax.swing.JComboBox();
         cmbViewRating = new javax.swing.JComboBox();
         cmbCertainty = new javax.swing.JComboBox();
-        jLabel14 = new javax.swing.JLabel();
         lblElementImage = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
         jSeparator3 = new javax.swing.JSeparator();
@@ -260,7 +258,6 @@ public class PanelSighting extends javax.swing.JPanel {
         btnSetMainImage = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         cmbEvidence = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
         lblLocationName = new javax.swing.JLabel();
         jScrollPane15 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -279,21 +276,24 @@ public class PanelSighting extends javax.swing.JPanel {
         jSeparator5 = new javax.swing.JSeparator();
         jSeparator6 = new javax.swing.JSeparator();
         lblCounter = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
-        setMaximumSize(new java.awt.Dimension(1020, 630));
-        setMinimumSize(new java.awt.Dimension(1020, 630));
+        setMaximumSize(new java.awt.Dimension(1005, 595));
+        setMinimumSize(new java.awt.Dimension(1005, 595));
         setName("Form"); // NOI18N
-        setPreferredSize(new java.awt.Dimension(1020, 630));
+        setPreferredSize(new java.awt.Dimension(1005, 595));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
 
-        sightingIncludes.setMaximumSize(new java.awt.Dimension(1020, 630));
-        sightingIncludes.setMinimumSize(new java.awt.Dimension(1020, 630));
+        sightingIncludes.setMaximumSize(new java.awt.Dimension(1005, 595));
+        sightingIncludes.setMinimumSize(new java.awt.Dimension(1005, 595));
         sightingIncludes.setName("sightingIncludes"); // NOI18N
-        sightingIncludes.setPreferredSize(new java.awt.Dimension(1020, 630));
+        sightingIncludes.setPreferredSize(new java.awt.Dimension(1005, 595));
         sightingIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
@@ -307,7 +307,7 @@ public class PanelSighting extends javax.swing.JPanel {
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(resourceMap.getString("lblElementName.text")); // NOI18N
         lblElementName.setName("lblElementName"); // NOI18N
-        sightingIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 180, 20));
+        sightingIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, 200, 20));
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         sightingIncludes.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -330,11 +330,6 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jSeparator9.setName("jSeparator9"); // NOI18N
         sightingIncludes.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-
-        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
-        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, -1, 20));
 
         jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
@@ -471,11 +466,6 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbCertainty.setName("cmbCertainty"); // NOI18N
         sightingIncludes.add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 480, 270, -1));
 
-        jLabel14.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
-        jLabel14.setName("jLabel14"); // NOI18N
-        sightingIncludes.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 20));
-
         lblElementImage.setText(resourceMap.getString("lblElementImage.text")); // NOI18N
         lblElementImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblElementImage.setMaximumSize(new java.awt.Dimension(150, 150));
@@ -490,6 +480,11 @@ public class PanelSighting extends javax.swing.JPanel {
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblImageMouseClicked(evt);
+            }
+        });
         sightingIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
 
         jSeparator3.setName("jSeparator3"); // NOI18N
@@ -560,6 +555,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 200, -1));
 
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
+        btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -598,6 +594,7 @@ public class PanelSighting extends javax.swing.JPanel {
         jSeparator4.setName("jSeparator4"); // NOI18N
         sightingIncludes.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 20, 30, 420));
 
+        btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -617,15 +614,10 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbEvidence.setName("cmbEvidence"); // NOI18N
         sightingIncludes.add(cmbEvidence, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 540, 270, -1));
 
-        jLabel5.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
-        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, 30, 20));
-
         lblLocationName.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
         lblLocationName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocationName.setName("lblLocationName"); // NOI18N
-        sightingIncludes.add(lblLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 0, 180, 20));
+        sightingIncludes.add(lblLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 190, 20));
 
         jScrollPane15.setName("jScrollPane15"); // NOI18N
 
@@ -674,6 +666,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, 160, -1));
 
         btnSearchLocation.setText(resourceMap.getString("btnSearchLocation.text")); // NOI18N
+        btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
         btnSearchLocation.setName("btnSearchLocation"); // NOI18N
         btnSearchLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -708,22 +701,35 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(chkSearchLocationDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, -1, -1));
 
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel1.setForeground(resourceMap.getColor("jLabel1.foreground")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        sightingIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 580, -1, 20));
+        sightingIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 567, -1, 20));
 
         jSeparator5.setName("jSeparator5"); // NOI18N
-        sightingIncludes.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 570, 350, 10));
+        sightingIncludes.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 563, 350, 10));
 
         jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator6.setName("jSeparator6"); // NOI18N
-        sightingIncludes.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 570, 10, 40));
+        sightingIncludes.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 565, 10, 30));
 
         lblCounter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCounter.setText(resourceMap.getString("lblCounter.text")); // NOI18N
-        lblCounter.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblCounter.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblCounter.border.lineColor"))); // NOI18N
         lblCounter.setName("lblCounter"); // NOI18N
-        sightingIncludes.add(lblCounter, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 580, 90, 20));
+        sightingIncludes.add(lblCounter, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 570, 80, 20));
+
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+        sightingIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 20));
+
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 0, -1, 20));
+
+        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 0, -1, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -731,13 +737,13 @@ public class PanelSighting extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(sightingIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sightingIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(sightingIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(sightingIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -806,8 +812,10 @@ public class PanelSighting extends javax.swing.JPanel {
                         panelToRefresh.refreshTableForSightings();
                     }
                     // Close the dialog
-                    JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
-                    dialog.dispose();
+                    if (evt != null) {
+                        JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
+                        dialog.dispose();
+                    }
                 }
                 else {
                     lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
@@ -863,6 +871,8 @@ public class PanelSighting extends javax.swing.JPanel {
                 if (sighting.getFotos() == null) sighting.setFotos(new ArrayList<Foto>());
                 sighting.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
                 setupFotos(sighting.getFotos().size() - 1);
+                // everything went well - saving
+                btnUpdateSightingActionPerformed(null);
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -932,6 +942,8 @@ public class PanelSighting extends javax.swing.JPanel {
                     else {
                         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
                     }
+                    // everything went well - saving
+                    btnUpdateSightingActionPerformed(null);
                 }
             }
         }
@@ -942,6 +954,8 @@ public class PanelSighting extends javax.swing.JPanel {
             sighting.getFotos().add(0, sighting.getFotos().get(imageIndex++));
             sighting.getFotos().remove(imageIndex);
             imageIndex = 0;
+            // everything went well - saving
+            btnUpdateSightingActionPerformed(null);
         }
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
@@ -1024,6 +1038,19 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSearchLocationActionPerformed
 
+    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            try {
+                if (sighting.getFotos() != null)
+                    if (sighting.getFotos().size() > 0)
+                        Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getFileLocation());
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_lblImageMouseClicked
+
     private void setupFotos(int inIndex) {
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getFotos().get(inIndex).getFileLocation()), 300));
     }
@@ -1056,11 +1083,11 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

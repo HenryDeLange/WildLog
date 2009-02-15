@@ -206,6 +206,8 @@ public class WildLogView extends FrameView {
         lblListOfElements = new javax.swing.JLabel();
         lblListOfLocations = new javax.swing.JLabel();
         btnImport = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         tabLocation = new javax.swing.JPanel();
@@ -435,6 +437,18 @@ public class WildLogView extends FrameView {
         btnImport.setName("btnImport"); // NOI18N
         tabHome.add(btnImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 510, 170, 30));
 
+        jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
+        jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
+        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
+        jLabel15.setName("jLabel15"); // NOI18N
+        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 350, -1, -1));
+
+        jLabel16.setFont(resourceMap.getFont("jLabel16.font")); // NOI18N
+        jLabel16.setForeground(resourceMap.getColor("jLabel16.foreground")); // NOI18N
+        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
+        jLabel16.setName("jLabel16"); // NOI18N
+        tabHome.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 370, -1, -1));
+
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
         tabFoto.setBackground(resourceMap.getColor("tabFoto.background")); // NOI18N
@@ -458,7 +472,7 @@ public class WildLogView extends FrameView {
             .addGroup(tabFotoLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(526, Short.MAX_VALUE))
+                .addContainerGap(524, Short.MAX_VALUE))
         );
         tabFotoLayout.setVerticalGroup(
             tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -787,12 +801,14 @@ public class WildLogView extends FrameView {
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1022, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -832,11 +848,11 @@ public class WildLogView extends FrameView {
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
             statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 1024, Short.MAX_VALUE)
+            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 1022, Short.MAX_VALUE)
             .addGroup(statusPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 854, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 852, Short.MAX_VALUE)
                 .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(statusAnimationLabel)
@@ -1158,6 +1174,8 @@ public class WildLogView extends FrameView {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

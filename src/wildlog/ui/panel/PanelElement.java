@@ -223,14 +223,20 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtNutrition = new javax.swing.JTextArea();
         btnAddSighting = new javax.swing.JButton();
 
+        setMaximumSize(new java.awt.Dimension(1005, 585));
+        setMinimumSize(new java.awt.Dimension(1005, 585));
         setName(element.getPrimaryName());
+        setPreferredSize(new java.awt.Dimension(1005, 585));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
 
+        elementIncludes.setMaximumSize(new java.awt.Dimension(1005, 585));
+        elementIncludes.setMinimumSize(new java.awt.Dimension(1005, 585));
         elementIncludes.setName("elementIncludes"); // NOI18N
+        elementIncludes.setPreferredSize(new java.awt.Dimension(1005, 585));
         elementIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
@@ -550,6 +556,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblImageMouseClicked(evt);
+            }
+        });
         elementIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
 
         jSeparator2.setForeground(resourceMap.getColor("jSeparator2.foreground")); // NOI18N
@@ -589,13 +600,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         elementIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 326, 100, -1));
 
         btnMap.setText(resourceMap.getString("btnMap.text")); // NOI18N
+        btnMap.setToolTipText(resourceMap.getString("btnMap.toolTipText")); // NOI18N
         btnMap.setName("btnMap"); // NOI18N
         btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 70));
+        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -608,14 +620,17 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 250, 270, 60));
 
+        btnAddSighting.setFont(resourceMap.getFont("btnAddSighting.font")); // NOI18N
+        btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
         btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
+        btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddSightingActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 60));
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -623,12 +638,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(elementIncludes, javax.swing.GroupLayout.DEFAULT_SIZE, 1017, Short.MAX_VALUE)
+                .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(elementIncludes, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+            .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -732,6 +747,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 if (element.getFotos() == null) element.setFotos(new ArrayList<Foto>());
                 element.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
                 setupFotos(element.getFotos().size() - 1);
+                // everything went well - saving
+                btnUpdateActionPerformed(evt);
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -773,6 +790,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             element.getFotos().add(0, element.getFotos().get(imageIndex++));
             element.getFotos().remove(imageIndex);
             imageIndex = 0;
+            // everything went well - saving
+            btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
@@ -855,6 +874,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 else {
                     lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
                 }
+                // everything went well - saving
+                btnUpdateActionPerformed(evt);
             }
         }
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -869,6 +890,19 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAddSightingActionPerformed
+
+    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            try {
+                if (element.getFotos() != null)
+                    if (element.getFotos().size() > 0)
+                        Runtime.getRuntime().exec("cmd /c start " + element.getFotos().get(imageIndex).getFileLocation());
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_lblImageMouseClicked
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -318,18 +318,22 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         txtElement = new javax.swing.JTextField();
         jLabel65 = new javax.swing.JLabel();
         lblNumberOfSightings = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
 
+        setMaximumSize(new java.awt.Dimension(1005, 585));
+        setMinimumSize(new java.awt.Dimension(1005, 585));
         setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(1005, 585));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
             }
         });
 
-        visitIncludes.setMaximumSize(new java.awt.Dimension(1000, 600));
-        visitIncludes.setMinimumSize(new java.awt.Dimension(1000, 600));
+        visitIncludes.setMaximumSize(new java.awt.Dimension(1005, 585));
+        visitIncludes.setMinimumSize(new java.awt.Dimension(1005, 585));
         visitIncludes.setName("visitIncludes"); // NOI18N
-        visitIncludes.setPreferredSize(new java.awt.Dimension(1000, 600));
+        visitIncludes.setPreferredSize(new java.awt.Dimension(1005, 585));
         visitIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
@@ -337,7 +341,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblVisitName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVisitName.setText(visit.getName());
         lblVisitName.setName("lblVisitName"); // NOI18N
-        visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 20));
+        visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 0, 310, 20));
 
         lblLocationName.setFont(resourceMap.getFont("lblLocationName.font")); // NOI18N
         lblLocationName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -519,6 +523,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         visitIncludes.add(btnDeleteSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, 100, -1));
 
+        btnEditSighting.setIcon(resourceMap.getIcon("btnEditSighting.icon")); // NOI18N
         btnEditSighting.setText(resourceMap.getString("btnEditSighting.text")); // NOI18N
         btnEditSighting.setToolTipText(resourceMap.getString("btnEditSighting.toolTipText")); // NOI18N
         btnEditSighting.setName("btnEditSighting"); // NOI18N
@@ -527,7 +532,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 btnEditSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 210, 100, -1));
+        visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 120, -1));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
@@ -601,6 +606,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblImageMouseClicked(evt);
+            }
+        });
         visitIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
 
         jSeparator3.setName("jSeparator3"); // NOI18N
@@ -659,14 +669,16 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         visitIncludes.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 20, 30, 170));
 
         btnMapSighting.setText(resourceMap.getString("btnMapSighting.text")); // NOI18N
+        btnMapSighting.setToolTipText(resourceMap.getString("btnMapSighting.toolTipText")); // NOI18N
         btnMapSighting.setName("btnMapSighting"); // NOI18N
         btnMapSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, 150, 50));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 300, -1, 40));
 
+        btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -717,23 +729,26 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         txtEvidence.setName("txtEvidence"); // NOI18N
         visitIncludes.add(txtEvidence, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 550, 250, -1));
 
+        btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
         btnGoElement.setText(resourceMap.getString("btnGoElement.text")); // NOI18N
+        btnGoElement.setToolTipText(resourceMap.getString("btnGoElement.toolTipText")); // NOI18N
         btnGoElement.setName("btnGoElement"); // NOI18N
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGoElementActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, 150, 30));
+        visitIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(375, 250, 160, 30));
 
         btnMapVisit.setText(resourceMap.getString("btnMapVisit.text")); // NOI18N
+        btnMapVisit.setToolTipText(resourceMap.getString("btnMapVisit.toolTipText")); // NOI18N
         btnMapVisit.setName("btnMapVisit"); // NOI18N
         btnMapVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapVisitActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 80));
+        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
 
         txtElement.setText(resourceMap.getString("txtElement.text")); // NOI18N
         txtElement.setName("txtElement"); // NOI18N
@@ -750,18 +765,22 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
         visitIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 1, 40, 20));
 
+        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
+        jLabel16.setName("jLabel16"); // NOI18N
+        visitIncludes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 20));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(visitIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(visitIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(visitIncludes, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(visitIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -827,6 +846,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         sighting = null;
         lblNumberOfSightings.setText(Integer.toString(visit.getSightings().size()));
+        lblLocationName.setText(locationForVisit.getName());
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
@@ -891,6 +911,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                     if (sighting.getFotos() == null) sighting.setFotos(new ArrayList<Foto>());
                     sighting.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
                     setupFotos(sighting.getFotos().size() - 1);
+                    // everything went well - saving
+                    btnUpdateActionPerformed(evt);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace();
@@ -978,6 +1000,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                     else {
                         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
                     }
+                    // everything went well - saving
+                    btnUpdateActionPerformed(evt);
                 }
             }
         }
@@ -988,6 +1012,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             sighting.getFotos().add(0, sighting.getFotos().get(imageIndex++));
             sighting.getFotos().remove(imageIndex);
             imageIndex = 0;
+            // everything went well - saving
+            btnUpdateActionPerformed(evt);
         }
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
@@ -1023,6 +1049,20 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         app.getMapFrame().showMap();
 }//GEN-LAST:event_btnMapVisitActionPerformed
 
+    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            try {
+                if (sighting != null)
+                    if (sighting.getFotos() != null)
+                        if (sighting.getFotos().size() > 0)
+                            Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getFileLocation());
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_lblImageMouseClicked
+
     private void setupFotos(int inIndex) {
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getFotos().get(inIndex).getFileLocation()), 300));
     }
@@ -1052,6 +1092,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
