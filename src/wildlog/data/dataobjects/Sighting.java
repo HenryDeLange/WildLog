@@ -14,9 +14,9 @@
 
 package wildlog.data.dataobjects;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dataobjects.util.UtilsHTML;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
@@ -28,7 +28,7 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 
 // Foundation for the Sighting class
-public class Sighting {
+public class Sighting implements HasFotos {
     private Date date; // must include time
     private Element element;
     private Location location;
@@ -136,6 +136,7 @@ public class Sighting {
         return details;
     }
 
+    @Override
     public List<Foto> getFotos() {
         return fotos;
     }
@@ -226,6 +227,7 @@ public class Sighting {
         details = inDetails;
     }
 
+    @Override
     public void setFotos(List<Foto> inFotos) {
         fotos = inFotos;
     }

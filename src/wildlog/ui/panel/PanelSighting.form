@@ -68,7 +68,6 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="lblVisitName">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" resourceKey="lblVisitName.text"/>
             <Property name="name" type="java.lang.String" value="lblVisitName" noResource="true"/>
@@ -81,7 +80,6 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblElementName">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" resourceKey="lblElementName.text"/>
             <Property name="name" type="java.lang.String" value="lblElementName" noResource="true"/>
@@ -829,7 +827,6 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblLocationName">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="lblLocationName" noResource="true"/>
           </Properties>

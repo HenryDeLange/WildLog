@@ -16,14 +16,11 @@ package wildlog.ui.panel;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
@@ -45,8 +42,6 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.ui.util.ImageFilter;
-import wildlog.ui.util.ImagePreview;
 
 /**
  *
@@ -850,42 +845,12 @@ public class PanelSighting extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentShown
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new ImageFilter());
-        fileChooser.setAccessory(new ImagePreview(fileChooser));
-        int result = fileChooser.showOpenDialog(this);
-        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            File fromFile = fileChooser.getSelectedFile();
-            File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + "Sightings" + File.separatorChar + sighting.toString());
-            toDir.mkdirs();
-            File toFile = new File(toDir.getAbsolutePath() + File.separatorChar  + fromFile.getName());
-            FileInputStream fileInput = null;
-            FileOutputStream fileOutput = null;
-            try {
-                fileInput = new FileInputStream(fromFile);
-                fileOutput = new FileOutputStream(toFile);
-                byte[] tempBytes = new byte[(int)fromFile.length()];
-                fileInput.read(tempBytes);
-                fileOutput.write(tempBytes);
-                fileOutput.flush();
-                if (sighting.getFotos() == null) sighting.setFotos(new ArrayList<Foto>());
-                sighting.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
-                setupFotos(sighting.getFotos().size() - 1);
-                // everything went well - saving
-                btnUpdateSightingActionPerformed(null);
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            finally {
-                try {
-                    fileInput.close();
-                    fileOutput.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
+        btnUpdateSightingActionPerformed(null);
+        if (!lblElementName.getText().equals("...") && !lblLocationName.getText().equals("...") && !lblVisitName.getText().equals("...")) {
+            Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this);
+            setupFotos(sighting.getFotos().size() - 1);
+            // everything went well - saving
+            btnUpdateSightingActionPerformed(null);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
@@ -1043,7 +1008,7 @@ public class PanelSighting extends javax.swing.JPanel {
             try {
                 if (sighting.getFotos() != null)
                     if (sighting.getFotos().size() > 0)
-                        Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getFileLocation());
+                        Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getOriginalFotoLocation());
             }
             catch (IOException ex) {
                 ex.printStackTrace();

@@ -14,12 +14,22 @@
 
 package wildlog.ui.util;
 
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 
 /* Utils.java is used by FileChooserDemo2.java. */
 public class Utils {
@@ -90,4 +100,59 @@ public class Utils {
         g2.dispose();
         return resizedImg;
     }
+
+    public static void uploadImage(HasFotos inDataObject, String inFolderName, Component inComponent) {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new ImageFilter());
+        fileChooser.setAccessory(new ImagePreview(fileChooser));
+        int result = fileChooser.showOpenDialog(inComponent);
+        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
+            File fromFile = fileChooser.getSelectedFile();
+            File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + inFolderName);
+            toDir.mkdirs();
+            File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
+            File toFile_Thumbnail = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+            FileInputStream fileInput = null;
+            FileOutputStream fileOutput = null;
+            try {
+                // Write Original
+                fileInput = new FileInputStream(fromFile);
+                fileOutput = new FileOutputStream(toFile_Original);
+                byte[] tempBytes = new byte[(int)fromFile.length()];
+                fileInput.read(tempBytes);
+                fileOutput.write(tempBytes);
+                fileOutput.flush();
+                // Write Thumbnail
+                fileInput = new FileInputStream(fromFile);
+                fileOutput = new FileOutputStream(toFile_Thumbnail);
+                tempBytes = new byte[(int)fromFile.length()];
+                fileInput.read(tempBytes);
+                ImageIcon image = new ImageIcon(tempBytes);
+                image = getScaledIcon(image, 300);
+                BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D big = bi.createGraphics();
+                big.drawImage(image.getImage(), 0, 0, null);
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                ImageIO.write(bi, "jpg", os);
+                byte[] newBytes = os.toByteArray();
+                fileOutput.write(newBytes);
+                fileOutput.flush();
+                if (inDataObject.getFotos() == null) inDataObject.setFotos(new ArrayList<Foto>());
+                inDataObject.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath()));
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            finally {
+                try {
+                    fileInput.close();
+                    fileOutput.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

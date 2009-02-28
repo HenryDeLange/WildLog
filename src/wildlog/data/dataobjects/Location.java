@@ -16,6 +16,7 @@ package wildlog.data.dataobjects;
 
 import java.util.ArrayList;
 import java.util.List;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dataobjects.util.UtilsHTML;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
@@ -27,7 +28,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Province;
 
 // Foundation for the Location class
-public class Location {
+public class Location implements HasFotos {
     private String name; // Used as index (ID)
     private String description;
     private Province province; // For locations outside south africa the country name must be used
@@ -137,6 +138,7 @@ public class Location {
         return habitatType;
     }
     
+    @Override
     public List<Foto> getFotos() {
         return fotos;
     }
@@ -240,6 +242,7 @@ public class Location {
         habitatType = inHabitatType;
     }
 
+    @Override
     public void setFotos(List<Foto> inFotos) {
         fotos = inFotos;
     }

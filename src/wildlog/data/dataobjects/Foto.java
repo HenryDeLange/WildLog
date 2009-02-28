@@ -14,7 +14,6 @@
 
 package wildlog.data.dataobjects;
 
-import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.dataobjects.util.UtilsHTML;
@@ -27,6 +26,7 @@ public class Foto {
     private String name; // Automatically made from file name
     private String description;
     private String fileLocation;
+    private String originalFotoLocation;
     private FotoRating rating;
     private Date date;
 
@@ -36,9 +36,10 @@ public class Foto {
 
     }
     
-    public Foto(String inName, String inFileLocation) {
+    public Foto(String inName, String inFileLocation, String inOriginalFotoLocation) {
         name = inName;
         fileLocation = inFileLocation;
+        originalFotoLocation = inOriginalFotoLocation;
         date = Calendar.getInstance().getTime();
     }
 
@@ -73,6 +74,10 @@ public class Foto {
         return date;
     }
 
+    public String getOriginalFotoLocation() {
+        return originalFotoLocation;
+    }
+
     // SETTERS:
     public void setName(String inName) {
             name = inName;
@@ -92,6 +97,10 @@ public class Foto {
     
     public void setDate(Date inDate) {
         date = inDate;
+    }
+
+    public void setOriginalFotoLocation(String inOriginalFotoLocation) {
+        originalFotoLocation = inOriginalFotoLocation;
     }
 
 }

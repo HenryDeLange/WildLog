@@ -14,8 +14,9 @@
 
 package wildlog.data.dataobjects;
 
-import java.util.ArrayList;
 
+import java.util.List;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dataobjects.util.UtilsHTML;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
@@ -30,7 +31,7 @@ import wildlog.data.enums.WishRating;
 
 // Foundation for Elements classes
 // Use inheritance for animal, bird, plant, fish, insects, etc
-public class Element {
+public class Element implements HasFotos {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
@@ -46,13 +47,13 @@ public class Element {
     private String breedingAge;
     //private int numberOfSightings; // The number of times a sighting for this element has been recorded (don't need its own variable, can get in other ways)
     private WishRating wishListRating; // How much I wish to see the element
-    private Habitat habitat; // This needs to be improved to be more specific (maybe select from list of habitats, can create new ones)
+    //private Habitat habitat; // This needs to be improved to be more specific (maybe select from list of habitats, can create new ones)
     private String diagnosticDescription; // A description of the element that will help to identify it in the field
     private ActiveTime activeTime; // What time of day the element is most active (morning, night, day, evening, ens.)
     private EndangeredStatus endangeredStatus; // The official endangered status of the element
     private String behaviourDescription; // Used to describe some unique behaviour
     private AddFrequency addFrequency; // How often the element is added when seen (bv always at any location, usualy only at new locations, sometimes at some locations, once, ... These values should be predefined)
-    private ArrayList<Foto> fotos; // An ArrayList of Foto objects
+    private List<Foto> fotos; // An ArrayList of Foto objects
     //private Foto primaryFoto; // Not needed, the first image in the list will always be the main image...
     private ElementType type; // Animal, Bird, etc
     private FeedingClass feedingClass; // Carnivore, etc (this might need to be implemented on child class when converting to enums)
@@ -96,7 +97,7 @@ public class Element {
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Type", type, "Feeding Class", feedingClass);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Add Frequency", addFrequency, "Wish Rating", wishListRating);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Active Time", activeTime, "Endangered Status", endangeredStatus);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Water Dependance", waterDependance, "Habitat", habitat);
+        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Water Dependance", waterDependance, "",""/*"Habitat", habitat*/);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Food/Nutrition", nutrition);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Description", description);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Behaviour", behaviourDescription);
@@ -170,11 +171,11 @@ public class Element {
     public WishRating getWishListRating() {
         return wishListRating;
     }
-
+/*
     public Habitat getHabitat() {
         return habitat;
     }
-
+*/
     public String getDiagnosticDescription() {
         return diagnosticDescription;
     }
@@ -187,7 +188,8 @@ public class Element {
         return endangeredStatus;
     }
 
-    public ArrayList<Foto> getFotos() {
+    @Override
+    public List<Foto> getFotos() {
         return fotos;
     }
     
@@ -276,11 +278,11 @@ public class Element {
     public void setWishListRating(WishRating inWishListRating) {
         wishListRating = inWishListRating;
     }
-
+/*
     public void setHabitat(Habitat inHabitat) {
         habitat = inHabitat;
     }
-
+*/
     public void setDiagnosticDescription(String inDiagnosticDescription) {
         diagnosticDescription = inDiagnosticDescription;
     }
@@ -301,7 +303,8 @@ public class Element {
         addFrequency = inAddFrequency;
     }
 
-    public void setFotos(ArrayList<Foto> inFotos) {
+    @Override
+    public void setFotos(List<Foto> inFotos) {
         fotos = inFotos;
     }
     

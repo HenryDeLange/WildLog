@@ -16,7 +16,16 @@ package wildlog.data.enums;
 
 
 public enum Habitat {
-    NEED_MORE_WORK("Need to improve this...", "Maybe have two habitat types..."),
+    SUCCULENT_KAROO("Succulent Karoo", "Succulents (thick fleshy leaves), annuals (spring flowers), bulbs, tubers, etc."),
+    NAMA_KAROO("Name Karoo","Covers most of the central plateau and forms a transition between the Cape flora and the tropical savanna."),
+    FYNBOS("Fynbos","Evergreen heathlands and shrublands whith fine-leafed low shrubs and leafless tufted grasslike plants. Trees and grasses are rare."),
+    GRASSLAND("Grassland","Grasses dominate the vegetation and woody plants are absent or rare."),
+    SAVANNA("Savanna","Wooded grasslands of the tropics and subtropics."),
+    THICKET("Thicket","Closed shrubland to low forest dominated by trees, shrubs and vines."),
+    FORREST("Forest","Indigenous evergreen and semi-deciduous closed forests of the coastal lowlands and escarpment slopes."),
+    WETLAND("Wetland","Inland and coastal habitats (mountain sponges, midland marshes, swamp forests, estuaries). Linked by rivers and streams. High water table, water-carrying soil."),
+    COASTAL("Coastal","Sandy beaches, sand dunes and rocky shores."),
+    MARINE("Marine","Coral reefs, kelp beds and the open sea."),
     OTHER("Other", "Other"),
     NONE("None", "None");
     

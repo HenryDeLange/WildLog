@@ -19,8 +19,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +26,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -48,8 +46,6 @@ import wildlog.data.dataobjects.Foto;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.ui.util.ImageFilter;
-import wildlog.ui.util.ImagePreview;
 
 /**
  *
@@ -890,43 +886,28 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         int row = tblSightings.getSelectedRow();
         if (row >= 0) {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new ImageFilter());
-            fileChooser.setAccessory(new ImagePreview(fileChooser));
-            int result = fileChooser.showOpenDialog(this);
-            if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-                File fromFile = fileChooser.getSelectedFile();
-                File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + "Sightings" + File.separatorChar + sighting.toString());
-                toDir.mkdirs();
-                File toFile = new File(toDir.getAbsolutePath() + File.separatorChar  + fromFile.getName());
-                FileInputStream fileInput = null;
-                FileOutputStream fileOutput = null;
-                try {
-                    fileInput = new FileInputStream(fromFile);
-                    fileOutput = new FileOutputStream(toFile);
-                    byte[] tempBytes = new byte[(int)fromFile.length()];
-                    fileInput.read(tempBytes);
-                    fileOutput.write(tempBytes);
-                    fileOutput.flush();
-                    if (sighting.getFotos() == null) sighting.setFotos(new ArrayList<Foto>());
-                    sighting.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
-                    setupFotos(sighting.getFotos().size() - 1);
-                    // everything went well - saving
-                    btnUpdateActionPerformed(evt);
+            Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this);
+            setupFotos(sighting.getFotos().size() - 1);
+            // everything went well - saving
+            btnUpdateActionPerformed(evt);
+        }
+        else {
+            final JDialog dialog = new JDialog(new JFrame(), "Upload Image", true);
+            dialog.setLayout(new AbsoluteLayout());
+            JLabel label = new JLabel("Please select a Sighting first.");
+            label.setSize(200, 20);
+            dialog.add(label, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 4, 50, -1));
+            JButton button = new JButton("Close");
+            button.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    dialog.dispose();
                 }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                finally {
-                    try {
-                        fileInput.close();
-                        fileOutput.close();
-                    }
-                    catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-            }
+            });
+            dialog.setSize(210, 84);
+            dialog.add(button, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 23, 200, -1));
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
@@ -1055,7 +1036,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 if (sighting != null)
                     if (sighting.getFotos() != null)
                         if (sighting.getFotos().size() > 0)
-                            Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getFileLocation());
+                            Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getOriginalFotoLocation());
             }
             catch (IOException ex) {
                 ex.printStackTrace();

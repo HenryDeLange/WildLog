@@ -19,16 +19,12 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -44,8 +40,6 @@ import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Habitat;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
-import wildlog.ui.util.ImageFilter;
-import wildlog.ui.util.ImagePreview;
 import wildlog.ui.util.UtilPanelGenerator;
 import wildlog.ui.util.UtilTableGenerator;
 import wildlog.ui.util.Utils;
@@ -170,7 +164,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jLabel60 = new javax.swing.JLabel();
         jLabel61 = new javax.swing.JLabel();
         jLabel62 = new javax.swing.JLabel();
-        jLabel63 = new javax.swing.JLabel();
         jLabel64 = new javax.swing.JLabel();
         jLabel65 = new javax.swing.JLabel();
         jLabel66 = new javax.swing.JLabel();
@@ -192,7 +185,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jScrollPane18 = new javax.swing.JScrollPane();
         txtBehaviourDescription = new javax.swing.JTextArea();
         cmbType = new javax.swing.JComboBox();
-        cmbHabitat = new javax.swing.JComboBox();
         cmbWaterDependance = new javax.swing.JComboBox();
         cmbActiveTime = new javax.swing.JComboBox();
         txtSizeMale = new javax.swing.JTextField();
@@ -356,10 +348,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jLabel62.setName("jLabel62"); // NOI18N
         elementIncludes.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 197, -1, -1));
 
-        jLabel63.setText(resourceMap.getString("jLabel63.text")); // NOI18N
-        jLabel63.setName("jLabel63"); // NOI18N
-        elementIncludes.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 148, -1, -1));
-
         jLabel64.setText(resourceMap.getString("jLabel64.text")); // NOI18N
         jLabel64.setName("jLabel64"); // NOI18N
         elementIncludes.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 148, -1, -1));
@@ -460,11 +448,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         cmbType.setSelectedItem(element.getType());
         cmbType.setName("cmbType"); // NOI18N
         elementIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 220, -1));
-
-        cmbHabitat.setModel(new DefaultComboBoxModel(wildlog.data.enums.Habitat.values()));
-        cmbHabitat.setSelectedItem(element.getHabitat());
-        cmbHabitat.setName("cmbHabitat"); // NOI18N
-        elementIncludes.add(cmbHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
 
         cmbWaterDependance.setModel(new DefaultComboBoxModel(wildlog.data.enums.WaterDependancy.values()));
         cmbWaterDependance.setSelectedItem(element.getWaterDependance());
@@ -696,7 +679,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             element.setBreedingDuration(txtbreedingDuration.getText());
             element.setBreedingAge(txtBreedingAge.getText());
             element.setWishListRating((WishRating)cmbWishList.getSelectedItem());
-            element.setHabitat((Habitat)cmbHabitat.getSelectedItem());
+            //element.setHabitat((Habitat)cmbHabitat.getSelectedItem());
             element.setDiagnosticDescription(txtDiagnosticDescription.getText());
             element.setActiveTime((ActiveTime)cmbActiveTime.getSelectedItem());
             element.setEndangeredStatus((EndangeredStatus)cmbEndangeredStatus.getSelectedItem());
@@ -726,42 +709,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new ImageFilter());
-        fileChooser.setAccessory(new ImagePreview(fileChooser));
-        int result = fileChooser.showOpenDialog(this);
-        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            File fromFile = fileChooser.getSelectedFile();
-            File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar+ "Creatures" + File.separatorChar + element.getPrimaryName());
-            toDir.mkdirs();
-            File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-            FileInputStream fileInput = null;
-            FileOutputStream fileOutput = null;
-            try {
-                fileInput = new FileInputStream(fromFile);
-                fileOutput = new FileOutputStream(toFile);
-                byte[] tempBytes = new byte[(int)fromFile.length()];
-                fileInput.read(tempBytes);
-                fileOutput.write(tempBytes);
-                fileOutput.flush();
-                if (element.getFotos() == null) element.setFotos(new ArrayList<Foto>());
-                element.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
-                setupFotos(element.getFotos().size() - 1);
-                // everything went well - saving
-                btnUpdateActionPerformed(evt);
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            finally {
-                try {
-                    fileInput.close();
-                    fileOutput.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
+        btnUpdateActionPerformed(evt);
+        if (!txtPrimaryName.getBackground().equals(Color.RED)) {
+            Utils.uploadImage(element, "Creatures"+File.separatorChar+element.getPrimaryName(), this);
+            setupFotos(element.getFotos().size() - 1);
+            // everything went well - saving
+            btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
@@ -896,7 +849,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             try {
                 if (element.getFotos() != null)
                     if (element.getFotos().size() > 0)
-                        Runtime.getRuntime().exec("cmd /c start " + element.getFotos().get(imageIndex).getFileLocation());
+                        Runtime.getRuntime().exec("cmd /c start " + element.getFotos().get(imageIndex).getOriginalFotoLocation());
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -919,7 +872,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JComboBox cmbAddFrequency;
     private javax.swing.JComboBox cmbEndangeredStatus;
     private javax.swing.JComboBox cmbFeedingClass;
-    private javax.swing.JComboBox cmbHabitat;
     private javax.swing.JComboBox cmbSizeUnits;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JComboBox cmbWaterDependance;
@@ -937,7 +889,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
-    private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel66;

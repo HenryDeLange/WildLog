@@ -19,8 +19,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,8 +40,6 @@ import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.Habitat;
 import wildlog.data.enums.Province;
-import wildlog.ui.util.ImageFilter;
-import wildlog.ui.util.ImagePreview;
 import wildlog.ui.util.UtilPanelGenerator;
 import wildlog.ui.util.UtilTableGenerator;
 import wildlog.ui.util.Utils;
@@ -279,6 +274,7 @@ public class PanelLocation extends javax.swing.JPanel {
         jSeparator6.setName("jSeparator6"); // NOI18N
         locationIncludes.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 361, 20, 220));
 
+        cmbHabitat.setMaximumRowCount(13);
         cmbHabitat.setModel(new DefaultComboBoxModel(Habitat.values()));
         cmbHabitat.setSelectedItem(locationWL.getHabitatType());
         cmbHabitat.setName("cmbHabitat"); // NOI18N
@@ -356,7 +352,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         jLabel42.setText(resourceMap.getString("jLabel42.text")); // NOI18N
         jLabel42.setName("jLabel42"); // NOI18N
-        locationIncludes.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, -1, -1));
+        locationIncludes.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, -1, -1));
 
         jLabel44.setText(resourceMap.getString("jLabel44.text")); // NOI18N
         jLabel44.setName("jLabel44"); // NOI18N
@@ -732,42 +728,12 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new ImageFilter());
-        fileChooser.setAccessory(new ImagePreview(fileChooser));
-        int result = fileChooser.showOpenDialog(this);
-        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            File fromFile = fileChooser.getSelectedFile();
-            File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + "Locations" + File.separatorChar + locationWL.getName());
-            toDir.mkdirs();
-            File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-            FileInputStream fileInput = null;
-            FileOutputStream fileOutput = null;
-            try {
-                fileInput = new FileInputStream(fromFile);
-                fileOutput = new FileOutputStream(toFile);
-                byte[] tempBytes = new byte[(int)fromFile.length()];
-                fileInput.read(tempBytes);
-                fileOutput.write(tempBytes);
-                fileOutput.flush();
-                if (locationWL.getFotos() == null) locationWL.setFotos(new ArrayList<Foto>());
-                locationWL.getFotos().add(new Foto(toFile.getName(), toFile.getAbsolutePath()));
-                setupFotos(locationWL.getFotos().size() - 1);
-                // everything went well - saving
-                btnUpdateActionPerformed(evt);
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            finally {
-                try {
-                    fileInput.close();
-                    fileOutput.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
+        btnUpdateActionPerformed(evt);
+        if (!txtName.getBackground().equals(Color.RED)) {
+            Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this);
+            setupFotos(locationWL.getFotos().size() - 1);
+            // everything went well - saving
+            btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
@@ -944,7 +910,7 @@ public class PanelLocation extends javax.swing.JPanel {
             try {
                 if (locationWL.getFotos() != null)
                     if (locationWL.getFotos().size() > 0)
-                        Runtime.getRuntime().exec("cmd /c start " + locationWL.getFotos().get(imageIndex).getFileLocation());
+                        Runtime.getRuntime().exec("cmd /c start " + locationWL.getFotos().get(imageIndex).getOriginalFotoLocation());
             }
             catch (IOException ex) {
                 ex.printStackTrace();
