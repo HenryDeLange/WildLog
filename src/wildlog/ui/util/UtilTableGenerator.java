@@ -243,6 +243,37 @@ public class UtilTableGenerator {
         return table;
     }
 
+    public DefaultTableModel getElementsForVisitTable(Visit inVisit) {
+        String[] columnNames = {
+                                "Primary Name",
+                                "Type",
+                                "Class"
+                                };
+        List<Element> allElements = new ArrayList<Element>();
+        Object[][] tempTable = null;
+        if (inVisit != null && inVisit.getSightings() != null) {
+            for (int i = 0; i < inVisit.getSightings().size(); i++) {
+                if (!allElements.contains(inVisit.getSightings().get(i).getElement()))
+                    allElements.add(inVisit.getSightings().get(i).getElement());
+            }
+            tempTable = new Object[allElements.size()][3];
+            for (int t = 0; t < allElements.size(); t++) {
+                Element tempElement = allElements.get(t);
+                int i = 0;
+                tempTable[t][i++] = tempElement.getPrimaryName();
+                tempTable[t][i++] = tempElement.getType();
+                tempTable[t][i++] = tempElement.getFeedingClass();
+            }
+        }
+        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
+        return table;
+    }
+
     public DefaultTableModel getElementsForLocationTable(Location inLocation) {
         String[] columnNames = {
                                 "Primary Name",

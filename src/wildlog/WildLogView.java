@@ -611,7 +611,9 @@ public class WildLogView extends FrameView {
         jLabel7.setName("jLabel7"); // NOI18N
         tabLocation.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, -1));
 
+        btnExportLocation.setIcon(resourceMap.getIcon("btnExportLocation.icon")); // NOI18N
         btnExportLocation.setText(resourceMap.getString("btnExportLocation.text")); // NOI18N
+        btnExportLocation.setToolTipText(resourceMap.getString("btnExportLocation.toolTipText")); // NOI18N
         btnExportLocation.setName("btnExportLocation"); // NOI18N
         btnExportLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -762,7 +764,9 @@ public class WildLogView extends FrameView {
         ckbSearchDirect.setName("ckbSearchDirect"); // NOI18N
         tabElement.add(ckbSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, -1, 20));
 
+        btnExportElement.setIcon(resourceMap.getIcon("btnExportElement.icon")); // NOI18N
         btnExportElement.setText(resourceMap.getString("btnExportElement.text")); // NOI18N
+        btnExportElement.setToolTipText(resourceMap.getString("btnExportElement.toolTipText")); // NOI18N
         btnExportElement.setName("btnExportElement"); // NOI18N
         btnExportElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

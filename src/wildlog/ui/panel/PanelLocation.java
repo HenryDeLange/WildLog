@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Foto;
@@ -44,6 +45,7 @@ import wildlog.ui.util.UtilPanelGenerator;
 import wildlog.ui.util.UtilTableGenerator;
 import wildlog.ui.util.Utils;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
@@ -153,6 +155,7 @@ public class PanelLocation extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         locationIncludes = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         lblLocation = new javax.swing.JLabel();
@@ -208,7 +211,6 @@ public class PanelLocation extends javax.swing.JPanel {
         txtLonDegrees = new javax.swing.JTextField();
         txtLonMinutes = new javax.swing.JTextField();
         txtLonSeconds = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
         cmbLatitude = new javax.swing.JComboBox();
         cmbLonitude = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
@@ -221,6 +223,9 @@ public class PanelLocation extends javax.swing.JPanel {
         lblNumberOfVisits = new javax.swing.JLabel();
         btnMap = new javax.swing.JButton();
         btnMapSightings = new javax.swing.JButton();
+        rdbLocation = new javax.swing.JRadioButton();
+        rdbVisit = new javax.swing.JRadioButton();
+        lblNumberOfElements = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -248,11 +253,11 @@ public class PanelLocation extends javax.swing.JPanel {
         lblLocation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocation.setText(locationWL.getName());
         lblLocation.setName("lblLocation"); // NOI18N
-        locationIncludes.add(lblLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 20));
+        locationIncludes.add(lblLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 20));
 
         jLabel35.setText(resourceMap.getString("jLabel35.text")); // NOI18N
         jLabel35.setName("jLabel35"); // NOI18N
-        locationIncludes.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 52, -1, -1));
+        locationIncludes.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 52, -1, -1));
 
         cmbProvince.setMaximumRowCount(10);
         cmbProvince.setModel(new DefaultComboBoxModel(Province.values()));
@@ -262,7 +267,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         jLabel36.setText(resourceMap.getString("jLabel36.text")); // NOI18N
         jLabel36.setName("jLabel36"); // NOI18N
-        locationIncludes.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
+        locationIncludes.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, -1, -1));
 
         cmbRating.setModel(new DefaultComboBoxModel(LocationRating.values()));
         cmbRating.setSelectedItem(locationWL.getRating());
@@ -317,7 +322,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtLatDegrees.setText(Integer.toString(locationWL.getLatDegrees()));
         txtLatDegrees.setName("txtLatDegrees"); // NOI18N
-        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 224, 30, -1));
+        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 224, 30, -1));
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
@@ -331,28 +336,28 @@ public class PanelLocation extends javax.swing.JPanel {
         lstAccommodationType.setVisibleRowCount(4);
         jScrollPane1.setViewportView(lstAccommodationType);
 
-        locationIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 110, 160, 80));
+        locationIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 160, 90));
 
         txtContactNumber.setText(locationWL.getContactNumbers());
         txtContactNumber.setName("txtContactNumber"); // NOI18N
-        locationIncludes.add(txtContactNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 240, -1));
+        locationIncludes.add(txtContactNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 248, 240, -1));
 
         cmbCatering.setModel(new DefaultComboBoxModel(CateringType.values()));
         cmbCatering.setSelectedItem(locationWL.getCatering());
         cmbCatering.setName("cmbCatering"); // NOI18N
-        locationIncludes.add(cmbCatering, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 274, 240, -1));
+        locationIncludes.add(cmbCatering, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 272, 240, -1));
 
         jLabel40.setText(resourceMap.getString("jLabel40.text")); // NOI18N
         jLabel40.setName("jLabel40"); // NOI18N
-        locationIncludes.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 76, -1, -1));
+        locationIncludes.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 76, -1, -1));
 
         jLabel41.setText(resourceMap.getString("jLabel41.text")); // NOI18N
         jLabel41.setName("jLabel41"); // NOI18N
-        locationIncludes.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 50, -1, -1));
+        locationIncludes.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 52, -1, -1));
 
         jLabel42.setText(resourceMap.getString("jLabel42.text")); // NOI18N
         jLabel42.setName("jLabel42"); // NOI18N
-        locationIncludes.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 80, -1, -1));
+        locationIncludes.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 76, -1, -1));
 
         jLabel44.setText(resourceMap.getString("jLabel44.text")); // NOI18N
         jLabel44.setName("jLabel44"); // NOI18N
@@ -371,6 +376,11 @@ public class PanelLocation extends javax.swing.JPanel {
             }
         ));
         tblVisit.setName("tblVisit"); // NOI18N
+        tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblVisitMouseReleased(evt);
+            }
+        });
         jScrollPane12.setViewportView(tblVisit);
 
         locationIncludes.add(jScrollPane12, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 376, 590, 200));
@@ -490,7 +500,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnGoElementActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 548, 290, 30));
+        locationIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 548, 130, 30));
 
         jLabel48.setText(resourceMap.getString("jLabel48.text")); // NOI18N
         jLabel48.setName("jLabel48"); // NOI18N
@@ -498,27 +508,27 @@ public class PanelLocation extends javax.swing.JPanel {
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        locationIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 110, 90, -1));
+        locationIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 90, -1));
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        locationIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 274, -1, -1));
+        locationIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 272, -1, -1));
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        locationIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(3, 248, -1, -1));
+        locationIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 248, -1, -1));
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
-        locationIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 224, -1, -1));
+        locationIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 224, -1, -1));
 
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        locationIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, -1, -1));
+        locationIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
-        locationIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 250, -1, -1));
+        locationIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, -1, -1));
 
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -538,55 +548,50 @@ public class PanelLocation extends javax.swing.JPanel {
 
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
-        locationIncludes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 298, -1, -1));
+        locationIncludes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 296, -1, -1));
 
         txtLatMinutes.setText(Integer.toString(locationWL.getLatMinutes()));
         txtLatMinutes.setName("txtLatMinutes"); // NOI18N
-        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 224, 30, -1));
+        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 224, 30, -1));
 
         txtLatSeconds.setText(Integer.toString(locationWL.getLatSeconds()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
-        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 224, 30, -1));
+        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 224, 30, -1));
 
         txtLonDegrees.setText(Integer.toString(locationWL.getLonDegrees()));
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
-        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 224, 30, -1));
+        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 224, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(locationWL.getLonMinutes()));
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
-        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 224, 30, -1));
+        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 224, 30, -1));
 
         txtLonSeconds.setText(Integer.toString(locationWL.getLonSeconds()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
-        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 224, 30, -1));
-
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-        locationIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, -1));
+        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 224, 30, -1));
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
-        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 200, 90, -1));
+        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 200, 90, -1));
 
         cmbLonitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLonitude.setSelectedIndex(2);
         cmbLonitude.setName("cmbLonitude"); // NOI18N
-        locationIncludes.add(cmbLonitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, 90, -1));
+        locationIncludes.add(cmbLonitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, 90, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, -1, 20));
+        locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, 20));
 
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
-        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, -1, 20));
+        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, 20));
 
         cmbSubAreas.setMaximumRowCount(15);
         cmbSubAreas.setModel(new DefaultComboBoxModel(locationWL.getSubAreas().toArray()));
         cmbSubAreas.setName("cmbSubAreas"); // NOI18N
-        locationIncludes.add(cmbSubAreas, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 298, 240, -1));
+        locationIncludes.add(cmbSubAreas, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 296, 240, -1));
 
         btnAddSubArea.setIcon(resourceMap.getIcon("btnAddSubArea.icon")); // NOI18N
         btnAddSubArea.setText(resourceMap.getString("btnAddSubArea.text")); // NOI18N
@@ -624,14 +629,16 @@ public class PanelLocation extends javax.swing.JPanel {
         jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
-        locationIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 0, -1, 20));
+        locationIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, 20));
 
         lblNumberOfVisits.setFont(resourceMap.getFont("lblNumberOfVisits.font")); // NOI18N
         lblNumberOfVisits.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfVisits.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfVisits.border.lineColor"))); // NOI18N
         lblNumberOfVisits.setName("lblNumberOfVisits"); // NOI18N
-        locationIncludes.add(lblNumberOfVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 1, 40, 20));
+        locationIncludes.add(lblNumberOfVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 1, 30, 20));
 
+        btnMap.setFont(resourceMap.getFont("btnMap.font")); // NOI18N
+        btnMap.setIcon(resourceMap.getIcon("btnMap.icon")); // NOI18N
         btnMap.setText(resourceMap.getString("btnMap.text")); // NOI18N
         btnMap.setToolTipText(resourceMap.getString("btnMap.toolTipText")); // NOI18N
         btnMap.setName("btnMap"); // NOI18N
@@ -642,6 +649,8 @@ public class PanelLocation extends javax.swing.JPanel {
         });
         locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
 
+        btnMapSightings.setFont(resourceMap.getFont("btnMapSightings.font")); // NOI18N
+        btnMapSightings.setIcon(resourceMap.getIcon("btnMapSightings.icon")); // NOI18N
         btnMapSightings.setText(resourceMap.getString("btnMapSightings.text")); // NOI18N
         btnMapSightings.setToolTipText(resourceMap.getString("btnMapSightings.toolTipText")); // NOI18N
         btnMapSightings.setName("btnMapSightings"); // NOI18N
@@ -651,6 +660,28 @@ public class PanelLocation extends javax.swing.JPanel {
             }
         });
         locationIncludes.add(btnMapSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
+
+        buttonGroup1.add(rdbLocation);
+        rdbLocation.setSelected(true);
+        rdbLocation.setText(resourceMap.getString("rdbLocation.text")); // NOI18N
+        rdbLocation.setName("rdbLocation"); // NOI18N
+        rdbLocation.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdbLocationItemStateChanged(evt);
+            }
+        });
+        locationIncludes.add(rdbLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, -1));
+
+        buttonGroup1.add(rdbVisit);
+        rdbVisit.setText(resourceMap.getString("rdbVisit.text")); // NOI18N
+        rdbVisit.setName("rdbVisit"); // NOI18N
+        locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
+
+        lblNumberOfElements.setFont(resourceMap.getFont("lblNumberOfElements.font")); // NOI18N
+        lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfElements.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfElements.border.lineColor"))); // NOI18N
+        lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
+        locationIncludes.add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 550, 30, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -785,6 +816,8 @@ public class PanelLocation extends javax.swing.JPanel {
             lblNumberOfVisits.setText(Integer.toString(locationWL.getVisits().size()));
         else
             lblNumberOfVisits.setText("0");
+        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        rdbLocation.setSelected(true);
         if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
     }//GEN-LAST:event_formComponentShown
 
@@ -947,6 +980,23 @@ public class PanelLocation extends javax.swing.JPanel {
         app.getMapFrame().changeTitle("WildLog Map - All Sightings at Location: " + locationWL.getName());
         app.getMapFrame().showMap();
     }//GEN-LAST:event_btnMapSightingsActionPerformed
+
+    private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
+        if (rdbLocation.isSelected()) {
+            tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
+        }
+        else {
+            if  (tblVisit.getSelectedRowCount() == 1) {
+                tblElement.setModel(utilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
+            }
+            else tblElement.setModel(new DefaultTableModel());
+        }
+        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+    }//GEN-LAST:event_rdbLocationItemStateChanged
+
+    private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
+        rdbLocationItemStateChanged(null);
+    }//GEN-LAST:event_tblVisitMouseReleased
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -964,6 +1014,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbCatering;
     private javax.swing.JComboBox cmbGameRating;
     private javax.swing.JComboBox cmbHabitat;
@@ -975,7 +1026,6 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
@@ -1001,9 +1051,12 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblLocation;
+    private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfVisits;
     private javax.swing.JPanel locationIncludes;
     private javax.swing.JList lstAccommodationType;
+    private javax.swing.JRadioButton rdbLocation;
+    private javax.swing.JRadioButton rdbVisit;
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblVisit;
     private javax.swing.JTextField txtContactNumber;

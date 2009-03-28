@@ -37,7 +37,6 @@ import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.Habitat;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
 import wildlog.ui.util.UtilPanelGenerator;
@@ -214,6 +213,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNutrition = new javax.swing.JTextArea();
         btnAddSighting = new javax.swing.JButton();
+        lblNumberOfLocations = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -234,15 +234,15 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
         jLabel55.setText(resourceMap.getString("jLabel55.text")); // NOI18N
         jLabel55.setName("jLabel55"); // NOI18N
-        elementIncludes.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 28, -1, -1));
+        elementIncludes.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, -1, -1));
 
         jLabel56.setText(resourceMap.getString("jLabel56.text")); // NOI18N
         jLabel56.setName("jLabel56"); // NOI18N
-        elementIncludes.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 52, -1, -1));
+        elementIncludes.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, -1));
 
         jLabel57.setText(resourceMap.getString("jLabel57.text")); // NOI18N
         jLabel57.setName("jLabel57"); // NOI18N
-        elementIncludes.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 76, -1, -1));
+        elementIncludes.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 76, -1, -1));
 
         txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background")); // NOI18N
         txtPrimaryName.setText(element.getPrimaryName());
@@ -327,47 +327,47 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnGoLocationActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 548, 290, 30));
+        elementIncludes.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 548, 250, 30));
 
         jSeparator11.setName("jSeparator11"); // NOI18N
         elementIncludes.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel59.setText(resourceMap.getString("jLabel59.text")); // NOI18N
         jLabel59.setName("jLabel59"); // NOI18N
-        elementIncludes.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
+        elementIncludes.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         jLabel60.setText(resourceMap.getString("jLabel60.text")); // NOI18N
         jLabel60.setName("jLabel60"); // NOI18N
-        elementIncludes.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+        elementIncludes.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, -1, -1));
 
         jLabel61.setText(resourceMap.getString("jLabel61.text")); // NOI18N
         jLabel61.setName("jLabel61"); // NOI18N
-        elementIncludes.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 410, -1, -1));
+        elementIncludes.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, -1, -1));
 
         jLabel62.setText(resourceMap.getString("jLabel62.text")); // NOI18N
         jLabel62.setName("jLabel62"); // NOI18N
-        elementIncludes.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 197, -1, -1));
+        elementIncludes.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 197, -1, -1));
 
         jLabel64.setText(resourceMap.getString("jLabel64.text")); // NOI18N
         jLabel64.setName("jLabel64"); // NOI18N
-        elementIncludes.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 148, -1, -1));
+        elementIncludes.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 148, 80, -1));
 
         jLabel65.setFont(resourceMap.getFont("jLabel65.font")); // NOI18N
         jLabel65.setText(resourceMap.getString("jLabel65.text")); // NOI18N
         jLabel65.setName("jLabel65"); // NOI18N
-        elementIncludes.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 0, -1, 20));
+        elementIncludes.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, -1, 20));
 
         jLabel66.setText(resourceMap.getString("jLabel66.text")); // NOI18N
         jLabel66.setName("jLabel66"); // NOI18N
-        elementIncludes.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 124, -1, -1));
+        elementIncludes.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 124, 90, -1));
 
         jLabel67.setText(resourceMap.getString("jLabel67.text")); // NOI18N
         jLabel67.setName("jLabel67"); // NOI18N
-        elementIncludes.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 124, -1, -1));
+        elementIncludes.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 124, 80, -1));
 
         jLabel68.setText(resourceMap.getString("jLabel68.text")); // NOI18N
         jLabel68.setName("jLabel68"); // NOI18N
-        elementIncludes.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 172, -1, -1));
+        elementIncludes.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 172, -1, -1));
 
         jLabel69.setText(resourceMap.getString("jLabel69.text")); // NOI18N
         jLabel69.setName("jLabel69"); // NOI18N
@@ -375,19 +375,19 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         jLabel70.setText(resourceMap.getString("jLabel70.text")); // NOI18N
         jLabel70.setName("jLabel70"); // NOI18N
-        elementIncludes.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 100, -1, -1));
+        elementIncludes.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 80, -1));
 
         jLabel71.setText(resourceMap.getString("jLabel71.text")); // NOI18N
         jLabel71.setName("jLabel71"); // NOI18N
-        elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 500, -1, -1));
+        elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, -1, -1));
 
         jLabel72.setText(resourceMap.getString("jLabel72.text")); // NOI18N
         jLabel72.setName("jLabel72"); // NOI18N
-        elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 520, -1, -1));
+        elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, -1, -1));
 
         jLabel73.setText(resourceMap.getString("jLabel73.text")); // NOI18N
         jLabel73.setName("jLabel73"); // NOI18N
-        elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(403, 496, -1, -1));
+        elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 500, -1, -1));
 
         jLabel74.setText(resourceMap.getString("jLabel74.text")); // NOI18N
         jLabel74.setName("jLabel74"); // NOI18N
@@ -395,15 +395,15 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         jLabel75.setText(resourceMap.getString("jLabel75.text")); // NOI18N
         jLabel75.setName("jLabel75"); // NOI18N
-        elementIncludes.add(jLabel75, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 544, -1, -1));
+        elementIncludes.add(jLabel75, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 148, 80, -1));
 
         jLabel76.setText(resourceMap.getString("jLabel76.text")); // NOI18N
         jLabel76.setName("jLabel76"); // NOI18N
-        elementIncludes.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 544, -1, -1));
+        elementIncludes.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 172, -1, -1));
 
         jLabel77.setText(resourceMap.getString("jLabel77.text")); // NOI18N
         jLabel77.setName("jLabel77"); // NOI18N
-        elementIncludes.add(jLabel77, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 544, -1, -1));
+        elementIncludes.add(jLabel77, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 197, -1, -1));
 
         jScrollPane16.setName("jScrollPane16"); // NOI18N
 
@@ -416,7 +416,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane16.setViewportView(txtDescription);
 
-        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 234, 310, -1));
+        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 590, -1));
 
         jScrollPane17.setName("jScrollPane17"); // NOI18N
 
@@ -429,7 +429,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
-        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 590, -1));
+        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 310, -1));
 
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
@@ -477,28 +477,28 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         txtBreedingAge.setText(element.getBreedingAge());
         txtBreedingAge.setName("txtBreedingAge"); // NOI18N
-        elementIncludes.add(txtBreedingAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 544, 120, -1));
+        elementIncludes.add(txtBreedingAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
 
         txtbreedingDuration.setText(element.getBreedingDuration());
         txtbreedingDuration.setName("txtbreedingDuration"); // NOI18N
-        elementIncludes.add(txtbreedingDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 544, 110, -1));
+        elementIncludes.add(txtbreedingDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 172, 150, -1));
 
         txtBreedingNumber.setText(Double.toString(element.getBreedingNumber()));
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
-        elementIncludes.add(txtBreedingNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 544, 110, -1));
+        elementIncludes.add(txtBreedingNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 197, 150, -1));
 
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
         lblNumberOfSightings.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfSightings.border.lineColor"))); // NOI18N
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
-        elementIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 1, 40, 20));
+        elementIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 1, 30, 20));
 
         lblElementName.setFont(resourceMap.getFont("lblElementName.font")); // NOI18N
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(element.getPrimaryName());
         lblElementName.setName("lblElementName"); // NOI18N
-        elementIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 590, -1));
+        elementIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, -1));
 
         cmbWishList.setModel(new DefaultComboBoxModel(wildlog.data.enums.WishRating.values()));
         cmbWishList.setSelectedItem(element.getWishListRating());
@@ -517,7 +517,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
+        elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 80, -1));
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
@@ -582,6 +582,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 326, 100, -1));
 
+        btnMap.setFont(resourceMap.getFont("btnMap.font")); // NOI18N
+        btnMap.setIcon(resourceMap.getIcon("btnMap.icon")); // NOI18N
         btnMap.setText(resourceMap.getString("btnMap.text")); // NOI18N
         btnMap.setToolTipText(resourceMap.getString("btnMap.toolTipText")); // NOI18N
         btnMap.setName("btnMap"); // NOI18N
@@ -598,6 +600,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtNutrition.setFont(resourceMap.getFont("txtNutrition.font")); // NOI18N
         txtNutrition.setRows(5);
         txtNutrition.setText(element.getNutrition());
+        txtNutrition.setWrapStyleWord(true);
         txtNutrition.setName("txtNutrition"); // NOI18N
         jScrollPane1.setViewportView(txtNutrition);
 
@@ -614,6 +617,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             }
         });
         elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
+
+        lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
+        lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfLocations.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfLocations.border.lineColor"))); // NOI18N
+        lblNumberOfLocations.setName("lblNumberOfLocations"); // NOI18N
+        elementIncludes.add(lblNumberOfLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 550, 30, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -766,9 +775,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             Sighting sighting = new Sighting();
             sighting.setElement(element);
             lblNumberOfSightings.setText(Integer.toString(app.getDBI().list(sighting).size()));
+            lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
         }
-        else
+        else {
             lblNumberOfSightings.setText("0");
+            lblNumberOfLocations.setText("0");
+        }
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
@@ -838,7 +850,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         sighting.setElement(element);
         final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
         dialog.setLayout(new AbsoluteLayout());
-        dialog.setSize(1015, 650);
+        dialog.setSize(965, 625);
         dialog.add(new PanelSighting(sighting, null, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
@@ -914,6 +926,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblElementName;
     private javax.swing.JLabel lblImage;
+    private javax.swing.JLabel lblNumberOfLocations;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTextArea txtBehaviourDescription;

@@ -721,7 +721,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnExportLocation">
                   <Properties>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnExportLocation.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnExportLocation.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnExportLocation.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="btnExportLocation" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1008,7 +1010,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnExportElement">
                   <Properties>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnExportElement.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnExportElement.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnExportElement.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="btnExportElement" noResource="true"/>
                   </Properties>
                   <Events>
