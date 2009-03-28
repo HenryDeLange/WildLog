@@ -15,6 +15,7 @@
 package wildlog;
 
 import java.io.File;
+import javax.swing.ImageIcon;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import wildlog.data.dbi.DBI;
@@ -43,7 +44,10 @@ public class WildLogApp extends SingleFrameApplication {
      */
     @Override
     protected void startup() {
-        show(new WildLogView(this));
+        ImageIcon icon = new ImageIcon(getClass().getResource("resources/icons/WildLog Icon.gif"));
+        WildLogView view = new WildLogView(this);
+        view.getFrame().setIconImage(icon.getImage());
+        show(view);
     }
 
     /**
@@ -92,7 +96,9 @@ public class WildLogApp extends SingleFrameApplication {
 
     public MapFrame getMapFrame() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
-        if (mapFrame == null) mapFrame = new MapFrame("WildLog Map");
+        if (mapFrame == null) {
+            mapFrame = new MapFrame("WildLog Map");
+        }
         return mapFrame;
     }
     

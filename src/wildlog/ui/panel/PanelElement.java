@@ -461,30 +461,65 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         txtSizeMale.setText(Double.toString(element.getSizeMaleAverage()));
         txtSizeMale.setName("txtSizeMale"); // NOI18N
+        txtSizeMale.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSizeMaleFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtSizeMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 496, 110, -1));
 
         txtSizeFemale.setText(Double.toString(element.getSizeFemaleAverage()));
         txtSizeFemale.setName("txtSizeFemale"); // NOI18N
+        txtSizeFemale.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSizeFemaleFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtSizeFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 520, 110, -1));
 
         txtWeightMale.setText(Double.toString(element.getWeightMaleAverage()));
         txtWeightMale.setName("txtWeightMale"); // NOI18N
+        txtWeightMale.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtWeightMaleFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtWeightMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 496, 110, -1));
 
         txtWeightFemale.setText(Double.toString(element.getWeightFemaleAverage()));
         txtWeightFemale.setName("txtWeightFemale"); // NOI18N
+        txtWeightFemale.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtWeightFemaleFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtWeightFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 520, 110, -1));
 
         txtBreedingAge.setText(element.getBreedingAge());
         txtBreedingAge.setName("txtBreedingAge"); // NOI18N
+        txtBreedingAge.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBreedingAgeFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtBreedingAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
 
         txtbreedingDuration.setText(element.getBreedingDuration());
         txtbreedingDuration.setName("txtbreedingDuration"); // NOI18N
+        txtbreedingDuration.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtbreedingDurationFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtbreedingDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 172, 150, -1));
 
         txtBreedingNumber.setText(Double.toString(element.getBreedingNumber()));
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
+        txtBreedingNumber.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBreedingNumberFocusGained(evt);
+            }
+        });
         elementIncludes.add(txtBreedingNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 197, 150, -1));
 
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
@@ -853,6 +888,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         dialog.setSize(965, 625);
         dialog.add(new PanelSighting(sighting, null, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(this);
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+        dialog.setIconImage(icon.getImage());
         dialog.setVisible(true);
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
@@ -868,6 +905,41 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             }
         }
     }//GEN-LAST:event_lblImageMouseClicked
+
+    private void txtSizeMaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleFocusGained
+        txtSizeMale.setSelectionStart(0);
+        txtSizeMale.setSelectionEnd(txtSizeMale.getText().length());
+    }//GEN-LAST:event_txtSizeMaleFocusGained
+
+    private void txtSizeFemaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeFemaleFocusGained
+        txtSizeFemale.setSelectionStart(0);
+        txtSizeFemale.setSelectionEnd(txtSizeFemale.getText().length());
+    }//GEN-LAST:event_txtSizeFemaleFocusGained
+
+    private void txtWeightMaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightMaleFocusGained
+        txtWeightMale.setSelectionStart(0);
+        txtWeightMale.setSelectionEnd(txtWeightMale.getText().length());
+    }//GEN-LAST:event_txtWeightMaleFocusGained
+
+    private void txtWeightFemaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightFemaleFocusGained
+        txtWeightFemale.setSelectionStart(0);
+        txtWeightFemale.setSelectionEnd(txtWeightFemale.getText().length());
+    }//GEN-LAST:event_txtWeightFemaleFocusGained
+
+    private void txtBreedingAgeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBreedingAgeFocusGained
+        txtBreedingAge.setSelectionStart(0);
+        txtBreedingAge.setSelectionEnd(txtBreedingAge.getText().length());
+    }//GEN-LAST:event_txtBreedingAgeFocusGained
+
+    private void txtbreedingDurationFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtbreedingDurationFocusGained
+        txtbreedingDuration.setSelectionStart(0);
+        txtbreedingDuration.setSelectionEnd(txtbreedingDuration.getText().length());
+    }//GEN-LAST:event_txtbreedingDurationFocusGained
+
+    private void txtBreedingNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBreedingNumberFocusGained
+        txtBreedingNumber.setSelectionStart(0);
+        txtBreedingNumber.setSelectionEnd(txtBreedingNumber.getText().length());
+    }//GEN-LAST:event_txtBreedingNumberFocusGained
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

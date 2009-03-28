@@ -346,7 +346,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnUpdateSightingActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnUpdateSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, 90, 70));
+        sightingIncludes.add(btnUpdateSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, 100, 70));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
@@ -407,6 +407,11 @@ public class PanelSighting extends javax.swing.JPanel {
 
         txtNumberOfElements.setText(String.valueOf(sighting.getNumberOfElements()));
         txtNumberOfElements.setName("txtNumberOfElements"); // NOI18N
+        txtNumberOfElements.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtNumberOfElementsFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 290, 80, -1));
 
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
@@ -489,26 +494,56 @@ public class PanelSighting extends javax.swing.JPanel {
 
         txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
         txtLatDegrees.setName("txtLatDegrees"); // NOI18N
+        txtLatDegrees.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatDegreesFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 360, 30, -1));
 
         txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
         txtLatMinutes.setName("txtLatMinutes"); // NOI18N
+        txtLatMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatMinutesFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 360, 30, -1));
 
         txtLatSeconds.setText(Integer.toString(sighting.getLatSeconds()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
+        txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatSecondsFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 360, 30, -1));
 
         txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
+        txtLonDegrees.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonDegreesFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 360, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
+        txtLonMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonMinutesFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 360, 30, -1));
 
         txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
+        txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonSecondsFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 360, 30, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
@@ -600,7 +635,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         jScrollPane14.setViewportView(tblVisit);
 
-        sightingIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 310, 135));
+        sightingIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 320, 135));
 
         lblElement.setText(resourceMap.getString("lblElement.text")); // NOI18N
         lblElement.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true)); // NOI18N
@@ -932,6 +967,41 @@ public class PanelSighting extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_lblImageMouseClicked
+
+    private void txtNumberOfElementsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumberOfElementsFocusGained
+        txtNumberOfElements.setSelectionStart(0);
+        txtNumberOfElements.setSelectionEnd(txtNumberOfElements.getText().length());
+    }//GEN-LAST:event_txtNumberOfElementsFocusGained
+
+    private void txtLatDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatDegreesFocusGained
+        txtLatDegrees.setSelectionStart(0);
+        txtLatDegrees.setSelectionEnd(txtLatDegrees.getText().length());
+    }//GEN-LAST:event_txtLatDegreesFocusGained
+
+    private void txtLatMinutesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatMinutesFocusGained
+        txtLatMinutes.setSelectionStart(0);
+        txtLatMinutes.setSelectionEnd(txtLatMinutes.getText().length());
+    }//GEN-LAST:event_txtLatMinutesFocusGained
+
+    private void txtLatSecondsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatSecondsFocusGained
+        txtLatSeconds.setSelectionStart(0);
+        txtLatSeconds.setSelectionEnd(txtLatSeconds.getText().length());
+    }//GEN-LAST:event_txtLatSecondsFocusGained
+
+    private void txtLonDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonDegreesFocusGained
+        txtLonDegrees.setSelectionStart(0);
+        txtLonDegrees.setSelectionEnd(txtLonDegrees.getText().length());
+    }//GEN-LAST:event_txtLonDegreesFocusGained
+
+    private void txtLonMinutesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonMinutesFocusGained
+        txtLonMinutes.setSelectionStart(0);
+        txtLonMinutes.setSelectionEnd(txtLonMinutes.getText().length());
+    }//GEN-LAST:event_txtLonMinutesFocusGained
+
+    private void txtLonSecondsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonSecondsFocusGained
+        txtLonSeconds.setSelectionStart(0);
+        txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
+    }//GEN-LAST:event_txtLonSecondsFocusGained
 
     private void setupFotos(int inIndex) {
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getFotos().get(inIndex).getFileLocation()), 300));

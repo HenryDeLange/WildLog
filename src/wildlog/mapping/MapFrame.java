@@ -27,6 +27,8 @@ import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
 import java.awt.Color;
 import java.util.Properties;
+import javax.swing.ImageIcon;
+import org.jdesktop.application.Application;
 import wildlog.mapping.layers.PointLayer;
 
 public class MapFrame {
@@ -59,6 +61,9 @@ public class MapFrame {
         mapPanel = new BasicMapPanel();
         frame = new OpenMapFrame(title);
         mapHandler = mapPanel.getMapHandler();
+        // Setup Icon for the Frame
+        ImageIcon icon = new ImageIcon(Application.getInstance().getClass().getResource("resources/icons/WildLog Map Icon.gif"));
+        frame.setIconImage(icon.getImage());
         
         // Add the frame to the MapHandler. This is the frame that will be used to show the map.
         mapHandler.add(frame);

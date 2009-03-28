@@ -322,6 +322,11 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtLatDegrees.setText(Integer.toString(locationWL.getLatDegrees()));
         txtLatDegrees.setName("txtLatDegrees"); // NOI18N
+        txtLatDegrees.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatDegreesFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 224, 30, -1));
 
         txtEmail.setText(locationWL.getEmail());
@@ -552,22 +557,47 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtLatMinutes.setText(Integer.toString(locationWL.getLatMinutes()));
         txtLatMinutes.setName("txtLatMinutes"); // NOI18N
+        txtLatMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatMinutesFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 224, 30, -1));
 
         txtLatSeconds.setText(Integer.toString(locationWL.getLatSeconds()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
+        txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatSecondsFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 224, 30, -1));
 
         txtLonDegrees.setText(Integer.toString(locationWL.getLonDegrees()));
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
+        txtLonDegrees.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonDegreesFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 224, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(locationWL.getLonMinutes()));
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
+        txtLonMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonMinutesFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 224, 30, -1));
 
         txtLonSeconds.setText(Integer.toString(locationWL.getLonSeconds()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
+        txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonSecondsFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 224, 30, -1));
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
@@ -997,6 +1027,36 @@ public class PanelLocation extends javax.swing.JPanel {
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         rdbLocationItemStateChanged(null);
     }//GEN-LAST:event_tblVisitMouseReleased
+
+    private void txtLatDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatDegreesFocusGained
+        txtLatDegrees.setSelectionStart(0);
+        txtLatDegrees.setSelectionEnd(txtLatDegrees.getText().length());
+    }//GEN-LAST:event_txtLatDegreesFocusGained
+
+    private void txtLatMinutesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatMinutesFocusGained
+        txtLatMinutes.setSelectionStart(0);
+        txtLatMinutes.setSelectionEnd(txtLatMinutes.getText().length());
+    }//GEN-LAST:event_txtLatMinutesFocusGained
+
+    private void txtLatSecondsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatSecondsFocusGained
+        txtLatSeconds.setSelectionStart(0);
+        txtLatSeconds.setSelectionEnd(txtLatSeconds.getText().length());
+    }//GEN-LAST:event_txtLatSecondsFocusGained
+
+    private void txtLonDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonDegreesFocusGained
+        txtLonDegrees.setSelectionStart(0);
+        txtLonDegrees.setSelectionEnd(txtLonDegrees.getText().length());
+    }//GEN-LAST:event_txtLonDegreesFocusGained
+
+    private void txtLonMinutesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonMinutesFocusGained
+        txtLonMinutes.setSelectionStart(0);
+        txtLonMinutes.setSelectionEnd(txtLonMinutes.getText().length());
+    }//GEN-LAST:event_txtLonMinutesFocusGained
+
+    private void txtLonSecondsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonSecondsFocusGained
+        txtLonSeconds.setSelectionStart(0);
+        txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
+    }//GEN-LAST:event_txtLonSecondsFocusGained
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
