@@ -32,6 +32,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
+import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
@@ -424,6 +427,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 90, 50));
 
+        lblSightingsImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingsImage.setText(resourceMap.getString("lblSightingsImage.text")); // NOI18N
         lblSightingsImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblSightingsImage.setMaximumSize(new java.awt.Dimension(150, 150));
@@ -432,6 +436,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblSightingsImage.setPreferredSize(new java.awt.Dimension(150, 150));
         visitIncludes.add(lblSightingsImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 390, -1, -1));
 
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -534,6 +539,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         visitIncludes.add(btnNextImageSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 550, 40, 30));
 
+        lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblElementImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setMinimumSize(new java.awt.Dimension(150, 150));
@@ -642,6 +648,12 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 allElements.add(visit.getSightings().get(i).getElement());
         }
         lblNumberOfElements.setText(Integer.toString(allElements.size()));
+        // Setup table column sizes
+        resizeTables();
+        // Sort rows for Sightings
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblSightings.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
@@ -726,7 +738,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting(new Date(Date.parse((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2))), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 3)));
+            sighting = app.getDBI().find(new Sighting(new Date(Date.parse((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1))), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
             refreshSightingInfo();
         }
         else {
@@ -838,8 +850,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             try {
                 if (sighting != null)
                     if (sighting.getFotos() != null)
-                        if (sighting.getFotos().size() > 0)
-                            Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getOriginalFotoLocation());
+                        if (sighting.getFotos().size() > 0) {
+                            String fileName = sighting.getFotos().get(imageIndex).getOriginalFotoLocation();
+                            String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                            Runtime.getRuntime().exec(commands);
+                    }
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -872,6 +887,31 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void setupFotosSightings(int inIndex) {
 //        lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getFotos().get(inIndex).getFileLocation()), 150));
+    }
+
+    private void resizeTables() {
+        TableColumn column = null;
+        for (int i = 0; i < tblSightings.getColumnModel().getColumnCount(); i++) {
+            column = tblSightings.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(180);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(55);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(55);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(80);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(10);
+            }
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

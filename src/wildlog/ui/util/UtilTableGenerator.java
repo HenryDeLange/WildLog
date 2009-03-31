@@ -40,22 +40,18 @@ public class UtilTableGenerator {
         String[] columnNames = {
                                 "Primary Name",
                                 "Other Name",
-                                "End Stat",
                                 "Type",
                                 "Class",
                                 "Wish Rate",
                                 "Add Freq"
                                 };
         List<Element> tempList = dbi.list(inElement);
-        Object[][] tempTable = new Object[tempList.size()][7];
+        Object[][] tempTable = new Object[tempList.size()][6];
         for (int t = 0; t < tempList.size(); t++) {
             Element tempElement = tempList.get(t);
             int i = 0;
             tempTable[t][i++] = tempElement.getPrimaryName();
             tempTable[t][i++] = tempElement.getOtherName();
-            if (tempElement.getEndangeredStatus() != null)
-                tempTable[t][i++] = tempElement.getEndangeredStatus().key();
-            else i++;
             tempTable[t][i++] = tempElement.getType();
             tempTable[t][i++] = tempElement.getFeedingClass();
             tempTable[t][i++] = tempElement.getWishListRating();
@@ -99,8 +95,8 @@ public class UtilTableGenerator {
                                 "Name",
                                 "Province",
                                 "Rating",
-                                "Game Rating",
-                                "Accommodation Type",
+                                "Wildlife",
+                                "Accommodation",
                                 "Catering"
                                 };
         List<Location> tempList = dbi.list(inLocation);
@@ -175,7 +171,7 @@ public class UtilTableGenerator {
         List<Visit> tempList = inLocation.getVisits();
         Object[][] tempTable;
         if (tempList != null) {
-            tempTable = new Object[tempList.size()][6];
+            tempTable = new Object[tempList.size()][4];
             for (int t = 0; t < tempList.size(); t++) {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
@@ -198,26 +194,56 @@ public class UtilTableGenerator {
         };
         return table;
     }
+
+    public DefaultTableModel getVeryShortVisitTable(Location inLocation) {
+        String[] columnNames = {
+                                "Name",
+                                "Start Date",
+                                "Visit Type"
+                                };
+        List<Visit> tempList = inLocation.getVisits();
+        Object[][] tempTable;
+        if (tempList != null) {
+            tempTable = new Object[tempList.size()][3];
+            for (int t = 0; t < tempList.size(); t++) {
+                Visit tempVisit = tempList.get(t);
+                int i = 0;
+                tempTable[t][i++] = tempVisit.getName();
+                if (tempVisit.getStartDate() != null)
+                    tempTable[t][i++] = tempVisit.getStartDate().getDate() + " " + getMonth(tempVisit.getStartDate().getMonth()) + " " + (tempVisit.getStartDate().getYear()+1900);
+                else
+                    tempTable[t][i++] = "";
+                tempTable[t][i++] = tempVisit.getType();
+            }
+        }
+        else tempTable = new Object[0][0];
+        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
+            @Override
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return false;
+            }
+        };
+        return table;
+    }
     
     public DefaultTableModel getCompleteSightingTable(Visit inVisit) {
         String[] columnNames = {
                                 "Primary Name",
-                                "Element Type",
                                 "Date",
-                                //"View Rating",
-                                //"Certainty",
+                                "View Rating",
+                                "Certainty",
+                                "Type",
                                 "ID"
                                 };
         List<Sighting> tempList = inVisit.getSightings();
         Object[][] tempTable;
         if (tempList != null) {
-            tempTable = new Object[tempList.size()][4];
+            tempTable = new Object[tempList.size()][6];
             for (int t = 0; t < tempList.size(); t++) {
                 Sighting tempSighting = tempList.get(t);
                 int i = 0;
                 if (tempSighting.getElement() != null) {
                     tempTable[t][i++] = tempSighting.getElement().getPrimaryName();
-                    tempTable[t][i++] = tempSighting.getElement().getType();
                 }
                 //else {
                 //    tempTable[t][i++] = null;
@@ -228,8 +254,9 @@ public class UtilTableGenerator {
                     tempTable[t][i++] = tempSighting.getDate().getDate() + " " + getMonth(tempSighting.getDate().getMonth()) + " " + (tempSighting.getDate().getYear()+1900);
                 else
                     tempTable[t][i++] = "";
-                //tempTable[t][i++] = tempSighting.getViewRating();
-                //tempTable[t][i++] = tempSighting.getCertainty();
+                tempTable[t][i++] = tempSighting.getViewRating();
+                tempTable[t][i++] = tempSighting.getCertainty();
+                tempTable[t][i++] = tempSighting.getElement().getType();
                 tempTable[t][i++] = tempSighting.getSightingCounter();
             }
         }
@@ -311,8 +338,7 @@ public class UtilTableGenerator {
         String[] columnNames = {
                                 "Name",
                                 "Province",
-                                "Rating",
-                                "Game Rating"
+                                "Wildlife"
                                 };
         List<Location> allLocations = new ArrayList<Location>();
         Object[][] tempTable = null;
@@ -323,13 +349,12 @@ public class UtilTableGenerator {
                     if (!allLocations.contains(allSightings.get(t).getLocation()))
                         allLocations.add(allSightings.get(t).getLocation());
             }
-            tempTable = new Object[allLocations.size()][4];
+            tempTable = new Object[allLocations.size()][3];
             for (int t = 0; t < allLocations.size(); t++) {
                 Location tempLocation = allLocations.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempLocation.getName();
                 tempTable[t][i++] = tempLocation.getProvince();
-                tempTable[t][i++] = tempLocation.getRating();
                 tempTable[t][i++] = tempLocation.getGameViewingRating();
             }
         }

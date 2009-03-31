@@ -18,11 +18,15 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -74,6 +78,16 @@ public class PanelSighting extends javax.swing.JPanel {
         tblElement.getTableHeader().setReorderingAllowed(false);
         tblLocation.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
+        // Setup table column sizes
+        resizeTalbes();
+        // Sort rows for Element
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblElement.getRowSorter().setSortKeys(tempList);
+        // Sort rows for Location
+        tblLocation.getRowSorter().setSortKeys(tempList);
+        // Sort rows for Visit
+        //tblVisit.getRowSorter().setSortKeys(tempList);
     }
 
     public PanelSighting(Sighting inSighting, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
@@ -197,6 +211,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private void initComponents() {
 
         sightingIncludes = new javax.swing.JPanel();
+        btnUpdateSighting = new javax.swing.JButton();
         jSeparator8 = new javax.swing.JSeparator();
         jScrollPane13 = new javax.swing.JScrollPane();
         tblElement = new javax.swing.JTable();
@@ -205,7 +220,6 @@ public class PanelSighting extends javax.swing.JPanel {
         btnPreviousImage = new javax.swing.JButton();
         btnNextImage = new javax.swing.JButton();
         btnUploadImage = new javax.swing.JButton();
-        btnUpdateSighting = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         dtpSightingDate = new org.jdesktop.swingx.JXDatePicker();
         jLabel7 = new javax.swing.JLabel();
@@ -253,13 +267,15 @@ public class PanelSighting extends javax.swing.JPanel {
         lblElement = new javax.swing.JLabel();
         lblLocation = new javax.swing.JLabel();
         txtSearchLocation = new javax.swing.JTextField();
-        btnSearchLocation = new javax.swing.JButton();
         lblVisit = new javax.swing.JLabel();
         lblLocationImage = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         chkSearchLocationDirect = new javax.swing.JCheckBox();
+        btnSearchLocation = new javax.swing.JButton();
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
+        setBackground(resourceMap.getColor("Form.background")); // NOI18N
         setMaximumSize(new java.awt.Dimension(965, 595));
         setMinimumSize(new java.awt.Dimension(965, 595));
         setName("Form"); // NOI18N
@@ -270,11 +286,24 @@ public class PanelSighting extends javax.swing.JPanel {
             }
         });
 
+        sightingIncludes.setBackground(resourceMap.getColor("sightingIncludes.background")); // NOI18N
         sightingIncludes.setMaximumSize(new java.awt.Dimension(965, 575));
         sightingIncludes.setMinimumSize(new java.awt.Dimension(965, 575));
         sightingIncludes.setName("sightingIncludes"); // NOI18N
         sightingIncludes.setPreferredSize(new java.awt.Dimension(965, 575));
         sightingIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnUpdateSighting.setBackground(resourceMap.getColor("btnUpdateSighting.background")); // NOI18N
+        btnUpdateSighting.setIcon(resourceMap.getIcon("btnUpdateSighting.icon")); // NOI18N
+        btnUpdateSighting.setText(resourceMap.getString("btnUpdateSighting.text")); // NOI18N
+        btnUpdateSighting.setToolTipText(resourceMap.getString("btnUpdateSighting.toolTipText")); // NOI18N
+        btnUpdateSighting.setName("btnUpdateSighting"); // NOI18N
+        btnUpdateSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateSightingActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnUpdateSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 190, 110, 70));
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         sightingIncludes.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -282,7 +311,6 @@ public class PanelSighting extends javax.swing.JPanel {
         jScrollPane13.setName("jScrollPane13"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
         tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
         tblElement.setName("tblElement"); // NOI18N
@@ -335,18 +363,6 @@ public class PanelSighting extends javax.swing.JPanel {
             }
         });
         sightingIncludes.add(btnUploadImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 220, -1));
-
-        btnUpdateSighting.setBackground(resourceMap.getColor("btnUpdateSighting.background")); // NOI18N
-        btnUpdateSighting.setIcon(resourceMap.getIcon("btnUpdateSighting.icon")); // NOI18N
-        btnUpdateSighting.setText(resourceMap.getString("btnUpdateSighting.text")); // NOI18N
-        btnUpdateSighting.setToolTipText(resourceMap.getString("btnUpdateSighting.toolTipText")); // NOI18N
-        btnUpdateSighting.setName("btnUpdateSighting"); // NOI18N
-        btnUpdateSighting.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateSightingActionPerformed(evt);
-            }
-        });
-        sightingIncludes.add(btnUpdateSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 190, 100, 70));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
@@ -435,14 +451,16 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbCertainty.setName("cmbCertainty"); // NOI18N
         sightingIncludes.add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 390, 250, -1));
 
+        lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementImage.setText(resourceMap.getString("lblElementImage.text")); // NOI18N
         lblElementImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblElementImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setName("lblElementImage"); // NOI18N
         lblElementImage.setPreferredSize(new java.awt.Dimension(100, 100));
-        sightingIncludes.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 180, -1, -1));
+        sightingIncludes.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(405, 180, -1, -1));
 
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -456,6 +474,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
 
+        chkElementTypeFilter.setBackground(resourceMap.getColor("chkElementTypeFilter.background")); // NOI18N
         chkElementTypeFilter.setName("chkElementTypeFilter"); // NOI18N
         chkElementTypeFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -560,7 +579,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 235, 80, -1));
 
-        chkSearchDirect.setSelected(true);
+        chkSearchDirect.setBackground(resourceMap.getColor("chkSearchDirect.background")); // NOI18N
         chkSearchDirect.setText(resourceMap.getString("chkSearchDirect.text")); // NOI18N
         chkSearchDirect.setName("chkSearchDirect"); // NOI18N
         sightingIncludes.add(chkSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, -1, -1));
@@ -651,21 +670,12 @@ public class PanelSighting extends javax.swing.JPanel {
         txtSearchLocation.setName("txtSearchLocation"); // NOI18N
         sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 200, -1));
 
-        btnSearchLocation.setText(resourceMap.getString("btnSearchLocation.text")); // NOI18N
-        btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
-        btnSearchLocation.setName("btnSearchLocation"); // NOI18N
-        btnSearchLocation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchLocationActionPerformed(evt);
-            }
-        });
-        sightingIncludes.add(btnSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 80, -1));
-
         lblVisit.setText(resourceMap.getString("lblVisit.text")); // NOI18N
         lblVisit.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("lblVisit.border.lineColor"), 3, true)); // NOI18N
         lblVisit.setName("lblVisit"); // NOI18N
         sightingIncludes.add(lblVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, -1, -1));
 
+        lblLocationImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocationImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblLocationImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblLocationImage.setMinimumSize(new java.awt.Dimension(150, 150));
@@ -679,12 +689,22 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jLabel17.setText(resourceMap.getString("jLabel17.text")); // NOI18N
         jLabel17.setName("jLabel17"); // NOI18N
-        sightingIncludes.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 160, -1, -1));
+        sightingIncludes.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(405, 160, -1, -1));
 
-        chkSearchLocationDirect.setSelected(true);
+        chkSearchLocationDirect.setBackground(resourceMap.getColor("chkSearchLocationDirect.background")); // NOI18N
         chkSearchLocationDirect.setText(resourceMap.getString("chkSearchLocationDirect.text")); // NOI18N
         chkSearchLocationDirect.setName("chkSearchLocationDirect"); // NOI18N
-        sightingIncludes.add(chkSearchLocationDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, -1, -1));
+        sightingIncludes.add(chkSearchLocationDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, -1, 20));
+
+        btnSearchLocation.setText(resourceMap.getString("btnSearchLocation.text")); // NOI18N
+        btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
+        btnSearchLocation.setName("btnSearchLocation"); // NOI18N
+        btnSearchLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchLocationActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 80, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -798,7 +818,7 @@ public class PanelSighting extends javax.swing.JPanel {
 }//GEN-LAST:event_btnUpdateSightingActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-
+        // Does not get called
     }//GEN-LAST:event_formComponentShown
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
@@ -891,7 +911,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (tblLocation.getSelectedRow() >= 0) {
             sighting.setLocation(app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString())));
-            tblVisit.setModel(utilTableGenerator.getShortVisitTable(sighting.getLocation()));
+            tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(sighting.getLocation()));
             visit = null;
             if (sighting.getLocation().getFotos() != null)
                 lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getLocation().getFotos().get(0).getFileLocation()), 100));
@@ -901,21 +921,26 @@ public class PanelSighting extends javax.swing.JPanel {
         else {
             
         }
+        resizeTalbes();
 }//GEN-LAST:event_tblLocationMouseReleased
 
     private void chkElementTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkElementTypeFilterActionPerformed
         searchElement = new Element();
         if (!cmbElementType.isEnabled())
             searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
         cmbElementType.setEnabled(!cmbElementType.isEnabled());
         txtSearch.setText("");
+        // Setup table column sizes
+        resizeTalbes();
 }//GEN-LAST:event_chkElementTypeFilterActionPerformed
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
         tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
         txtSearch.setText("");
+        // Setup table column sizes
+        resizeTalbes();
 }//GEN-LAST:event_cmbElementTypeActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -936,6 +961,8 @@ public class PanelSighting extends javax.swing.JPanel {
             }
             tblElement.setModel(model);
         }
+        // Setup table column sizes
+        resizeTalbes();
 }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnSearchLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchLocationActionPerformed
@@ -953,14 +980,19 @@ public class PanelSighting extends javax.swing.JPanel {
             }
             tblLocation.setModel(model);
         }
+        // Setup table column sizes
+        resizeTalbes();
     }//GEN-LAST:event_btnSearchLocationActionPerformed
 
     private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
         if (System.getProperty("os.name").equals("Windows XP")) {
             try {
                 if (sighting.getFotos() != null)
-                    if (sighting.getFotos().size() > 0)
-                        Runtime.getRuntime().exec("cmd /c start " + sighting.getFotos().get(imageIndex).getOriginalFotoLocation());
+                    if (sighting.getFotos().size() > 0) {
+                        String fileName = sighting.getFotos().get(imageIndex).getOriginalFotoLocation();
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -1005,6 +1037,43 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void setupFotos(int inIndex) {
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getFotos().get(inIndex).getFileLocation()), 300));
+    }
+
+    private void resizeTalbes() {
+        TableColumn column = null;
+        for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
+            column = tblElement.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(25);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(40);
+            }
+        }
+        for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
+            column = tblLocation.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(30);
+            }
+        }
+        for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
+            column = tblVisit.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(45);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(25);
+            }
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

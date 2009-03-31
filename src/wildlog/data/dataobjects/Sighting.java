@@ -67,7 +67,7 @@ public class Sighting implements HasFotos {
     // METHIDS:
     @Override
     public String toString() {
-        return location.getName()  + element.getPrimaryName() +  date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900);
+        return location.getName() + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + element.getPrimaryName();
     }
 
     public String toHTML() {

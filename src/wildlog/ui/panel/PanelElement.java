@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -28,6 +29,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
+import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
@@ -570,6 +574,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(btnUploadImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 300, 220, -1));
 
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setName("lblImage"); // NOI18N
@@ -816,6 +821,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
+        // Setup table column sizes
+        resizeTables();
+        // Sort rows for Locations
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblLocation.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
@@ -897,8 +908,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         if (System.getProperty("os.name").equals("Windows XP")) {
             try {
                 if (element.getFotos() != null)
-                    if (element.getFotos().size() > 0)
-                        Runtime.getRuntime().exec("cmd /c start " + element.getFotos().get(imageIndex).getOriginalFotoLocation());
+                    if (element.getFotos().size() > 0) {
+                        String fileName = element.getFotos().get(imageIndex).getOriginalFotoLocation();
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -940,7 +954,22 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtBreedingNumber.setSelectionStart(0);
         txtBreedingNumber.setSelectionEnd(txtBreedingNumber.getText().length());
     }//GEN-LAST:event_txtBreedingNumberFocusGained
-    
+
+    private void resizeTables() {
+        TableColumn column = null;
+        for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
+            column = tblLocation.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(35);
+            }
+        }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;

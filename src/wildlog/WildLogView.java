@@ -22,6 +22,7 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Timer;
@@ -31,7 +32,10 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -597,6 +601,7 @@ public class WildLogView extends FrameView {
         });
         tabLocation.add(btnGoVisit_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 550, 360, 30));
 
+        lblImage_LocTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage_LocTab.setText(resourceMap.getString("lblImage_LocTab.text")); // NOI18N
         lblImage_LocTab.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage_LocTab.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -731,6 +736,7 @@ public class WildLogView extends FrameView {
         });
         tabElement.add(ckbTypeFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, -1, -1));
 
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -759,7 +765,6 @@ public class WildLogView extends FrameView {
         tabElement.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, 150, 30));
 
         ckbSearchDirect.setBackground(resourceMap.getColor("ckbSearchDirect.background")); // NOI18N
-        ckbSearchDirect.setSelected(true);
         ckbSearchDirect.setText(resourceMap.getString("ckbSearchDirect.text")); // NOI18N
         ckbSearchDirect.setName("ckbSearchDirect"); // NOI18N
         tabElement.add(ckbSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, -1, 20));
@@ -922,8 +927,13 @@ public class WildLogView extends FrameView {
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
         tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
         tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(searchElement));
-        WildLogApp app = (WildLogApp) Application.getInstance();
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        // Setup the table column sizes
+        resizeTalbes_Element();
+        // Sort rows for Element
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblElement.getRowSorter().setSortKeys(tempList);
 }//GEN-LAST:event_tabElementComponentShown
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
@@ -948,8 +958,13 @@ public class WildLogView extends FrameView {
         tblLocation.setModel(utilTableGenerator.getCompleteLocationTable(searchLocation));
         tblVisit.setModel(utilTableGenerator.getShortVisitTable(searchLocation));
         tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(searchLocation));
-        WildLogApp app = (WildLogApp) Application.getInstance();
         lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        // Setup Column width for tables:
+        resizeTables_Location();
+        // Sort location rows
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblLocation.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tabLocationComponentShown
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
@@ -970,12 +985,16 @@ public class WildLogView extends FrameView {
         tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
         cmbType.setEnabled(!cmbType.isEnabled());
         txtSearch.setText("");
+        // Setup table column sizes
+        resizeTalbes_Element();
     }//GEN-LAST:event_ckbTypeFilterActionPerformed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element((ElementType)cmbType.getSelectedItem());
         tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
         txtSearch.setText("");
+        // Setup talbe column sizes
+        resizeTalbes_Element();
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnFotosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFotosActionPerformed
@@ -1042,10 +1061,15 @@ public class WildLogView extends FrameView {
             tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(tempElement));
         }
         else {
-            WildLogApp app = (WildLogApp) Application.getInstance();
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
         }
+        // Setup table column sizes
+        resizeTalbes_Element();
+        // Sort rows for locations
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblLocation_EleTab.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
@@ -1067,11 +1091,16 @@ public class WildLogView extends FrameView {
             tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(tempLocation));
         }
         else {
-            WildLogApp app = (WildLogApp) Application.getInstance();
             lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             tblVisit.setModel(utilTableGenerator.getShortVisitTable(new Location()));
             tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(new Location()));
         }
+        resizeTables_Location();
+        // Sort rows for visits and elements
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblVisit.getRowSorter().setSortKeys(tempList);
+        tblElement_LocTab.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tblLocationMouseReleased
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -1092,6 +1121,8 @@ public class WildLogView extends FrameView {
             }
             tblElement.setModel(model);
         }
+        // Setup talbe column sizes
+        resizeTalbes_Element();
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnExportElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportElementActionPerformed
@@ -1146,7 +1177,98 @@ public class WildLogView extends FrameView {
         cmbType.setEnabled(false);
         searchElement = new Element();
         tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        // Setup talbe column sizes
+        resizeTalbes_Element();
     }//GEN-LAST:event_btnClearSearchActionPerformed
+
+    private void resizeTables_Location() {
+        TableColumn column = null;
+        for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
+            column = tblLocation.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(200);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(40);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(22);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(22);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(140);
+            }
+        }
+        for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
+            column = tblVisit.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(110);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(30);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(18);
+            }
+        }
+        for (int i = 0; i < tblElement_LocTab.getColumnModel().getColumnCount(); i++) {
+            column = tblElement_LocTab.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(50);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(50);
+            }
+        }
+    }
+
+    private void resizeTalbes_Element() {
+        TableColumn column = null;
+        for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
+            column = tblElement.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(200);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(180);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(50);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(50);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(80);
+            }
+        }
+        for (int i = 0; i < tblLocation_EleTab.getColumnModel().getColumnCount(); i++) {
+            column = tblLocation_EleTab.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(110);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(30);
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddElement;

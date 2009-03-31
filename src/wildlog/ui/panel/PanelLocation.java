@@ -31,7 +31,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Foto;
@@ -535,6 +538,7 @@ public class PanelLocation extends javax.swing.JPanel {
         jLabel6.setName("jLabel6"); // NOI18N
         locationIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, -1, -1));
 
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -849,6 +853,13 @@ public class PanelLocation extends javax.swing.JPanel {
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
         rdbLocation.setSelected(true);
         if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
+        // Setup tavle column sizes
+        resizeTables();
+        // Sort rows for visits
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblVisit.getRowSorter().setSortKeys(tempList);
+        tblElement.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_formComponentShown
 
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
@@ -972,8 +983,11 @@ public class PanelLocation extends javax.swing.JPanel {
         if (System.getProperty("os.name").equals("Windows XP")) {
             try {
                 if (locationWL.getFotos() != null)
-                    if (locationWL.getFotos().size() > 0)
-                        Runtime.getRuntime().exec("cmd /c start " + locationWL.getFotos().get(imageIndex).getOriginalFotoLocation());
+                    if (locationWL.getFotos().size() > 0) {
+                        String fileName = locationWL.getFotos().get(imageIndex).getOriginalFotoLocation();
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
             }
             catch (IOException ex) {
                 ex.printStackTrace();
@@ -1022,6 +1036,12 @@ public class PanelLocation extends javax.swing.JPanel {
             else tblElement.setModel(new DefaultTableModel());
         }
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        // Setup table column sizes
+        resizeTables();
+        // Sort rows for Element
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblElement.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_rdbLocationItemStateChanged
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
@@ -1057,7 +1077,44 @@ public class PanelLocation extends javax.swing.JPanel {
         txtLonSeconds.setSelectionStart(0);
         txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
     }//GEN-LAST:event_txtLonSecondsFocusGained
-    
+
+
+    private void resizeTables() {
+        TableColumn column = null;
+        for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
+            column = tblVisit.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(160);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(45);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(45);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(75);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(30);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(30);
+            }
+        }
+        for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
+            column = tblElement.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(50);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(50);
+            }
+        }
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSubArea;

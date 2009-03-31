@@ -683,6 +683,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblImage_LocTab">
                   <Properties>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" resourceKey="lblImage_LocTab.text"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -934,6 +935,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblImage">
                   <Properties>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" resourceKey="lblImage.text"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -998,7 +1000,6 @@
                 <Component class="javax.swing.JCheckBox" name="ckbSearchDirect">
                   <Properties>
                     <Property name="background" type="java.awt.Color" resourceKey="ckbSearchDirect.background"/>
-                    <Property name="selected" type="boolean" value="true"/>
                     <Property name="text" type="java.lang.String" resourceKey="ckbSearchDirect.text"/>
                     <Property name="name" type="java.lang.String" value="ckbSearchDirect" noResource="true"/>
                   </Properties>
