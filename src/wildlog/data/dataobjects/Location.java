@@ -140,6 +140,7 @@ public class Location implements HasFotos {
     
     @Override
     public List<Foto> getFotos() {
+        if (fotos == null) fotos = new ArrayList<Foto>(1);
         return fotos;
     }
     

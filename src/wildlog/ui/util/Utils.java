@@ -24,12 +24,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.interfaces.HasFotos;
+import wildlog.data.dbi.DBI;
 
 /* Utils.java is used by FileChooserDemo2.java. */
 public class Utils {
@@ -101,7 +104,7 @@ public class Utils {
         return resizedImg;
     }
 
-    public static void uploadImage(HasFotos inDataObject, String inFolderName, Component inComponent) {
+    public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setAccessory(new ImagePreview(fileChooser));
@@ -140,9 +143,10 @@ public class Utils {
                     byte[] newBytes = os.toByteArray();
                     fileOutput.write(newBytes);
                     fileOutput.flush();
-                    if (inDataObject.getFotos() == null) inDataObject.setFotos(new ArrayList<Foto>());
-                    inDataObject.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath()));
+                    if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
+                    inHasFotos.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath()));
                     big.dispose();
+                    setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace();
@@ -158,6 +162,70 @@ public class Utils {
                 }
             }
         }
+        if (inHasFotos.getFotos().size() - 1 > 0) return inHasFotos.getFotos().size() - 1;
+        else return 0;
+    }
+
+    // Methods for the buttons on the panels that work with the images
+    public static int previousImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel) {
+        if (inHasFotos.getFotos().size() > 0) {
+            if (inImageIndex > 0) {
+                inImageIndex = inImageIndex - 1;
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+            }
+            else {
+                inImageIndex = inHasFotos.getFotos().size() - 1;
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+            }
+        }
+        return inImageIndex;
+    }
+
+    public static int nextImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel) {
+        if (inHasFotos.getFotos().size() > 0) {
+            if (inImageIndex < inHasFotos.getFotos().size() - 1) {
+                inImageIndex = inImageIndex + 1;
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+            }
+            else {
+                inImageIndex = 0;
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+            }
+        }
+        return inImageIndex;
+    }
+
+    public static int setMainImage(HasFotos inHasFotos, int inImageIndex) {
+        if (inHasFotos.getFotos().size() > 0) {
+            inHasFotos.getFotos().add(0, inHasFotos.getFotos().get(inImageIndex++));
+            inHasFotos.getFotos().remove(inImageIndex);
+            inImageIndex = 0;
+        }
+        return inImageIndex;
+    }
+
+    public static int removeImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL) {
+        if (inHasFotos.getFotos().size() > 0) {
+            Foto tempFoto = inHasFotos.getFotos().get(inImageIndex);
+            inHasFotos.getFotos().remove(tempFoto);
+            inDBI.delete(tempFoto);
+            File tempFile = new File(tempFoto.getFileLocation());
+            tempFile.delete();
+            tempFile = new File(tempFoto.getOriginalFotoLocation());
+            tempFile.delete();
+            if (inHasFotos.getFotos().size() >= 1) {
+                // Behave like moving back button was pressed
+                inImageIndex = previousImage(inHasFotos, inImageIndex, inImageLabel);
+            }
+            else {
+                inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), 300));
+            }
+        }
+        return inImageIndex;
+    }
+
+    public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel) {
+        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
     }
 
 }

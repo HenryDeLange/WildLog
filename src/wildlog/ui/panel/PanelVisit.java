@@ -701,7 +701,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         int row = tblSightings.getSelectedRow();
         if (row >= 0) {
-            Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this);
+            //Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this);
             setupFotos(sighting.getFotos().size() - 1);
             // everything went well - saving
             btnUpdateActionPerformed(evt);

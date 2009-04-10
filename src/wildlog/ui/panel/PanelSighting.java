@@ -40,7 +40,6 @@ import wildlog.data.enums.Weather;
 import wildlog.ui.util.UtilTableGenerator;
 import wildlog.ui.util.Utils;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
@@ -162,9 +161,8 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
 
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            if (sighting.getFotos() != null)
-                if (sighting.getFotos().size() > 0)
-                    setupFotos(0);
+            if (sighting.getFotos().size() > 0)
+                Utils.setupFoto(sighting, imageIndex, lblImage);
 
             if (sighting.getElement() != null) {
                 if (sighting.getElement().getFotos() != null)
@@ -824,21 +822,14 @@ public class PanelSighting extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateSightingActionPerformed(null);
         //if (!lblElementName.getText().equals("...") && !lblLocationName.getText().equals("...") && !lblVisitName.getText().equals("...")) {
-            Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this);
-            setupFotos(sighting.getFotos().size() - 1);
+            imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage);
             // everything went well - saving
             btnUpdateSightingActionPerformed(null);
         //}
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        if (sighting.getFotos() != null && sighting.getFotos().size() > 0) {
-            if (imageIndex > 0) setupFotos(--imageIndex);
-            else {
-                imageIndex = sighting.getFotos().size() - 1;
-                setupFotos(imageIndex);
-            }
-        }
+        imageIndex = Utils.previousImage(sighting, imageIndex, lblImage);
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
@@ -858,45 +849,17 @@ public class PanelSighting extends javax.swing.JPanel {
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        if (sighting.getFotos() != null && sighting.getFotos().size() > 0) {
-            if (imageIndex < sighting.getFotos().size() - 1) setupFotos(++imageIndex);
-            else {
-                imageIndex = 0;
-                setupFotos(imageIndex);
-            }
-        }
+        imageIndex = Utils.nextImage(sighting, imageIndex, lblImage);
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        if (sighting != null) {
-            if (sighting.getFotos() != null) {
-                if (sighting.getFotos().size() > 0) {
-                    Foto tempFoto = sighting.getFotos().get(imageIndex);
-                    sighting.getFotos().remove(tempFoto);
-                    app.getDBI().delete(tempFoto);
-                    app.getDBI().createOrUpdate(sighting);
-                    if (sighting.getFotos().size() >= 1) {
-                        // Behave like moving back button was pressed
-                        btnPreviousImageActionPerformed(evt);
-                    }
-                    else {
-                        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-                    }
-                    // everything went well - saving
-                    btnUpdateSightingActionPerformed(null);
-                }
-            }
-        }
+        imageIndex = Utils.removeImage(sighting, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"));
+        btnUpdateSightingActionPerformed(null);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        if (sighting.getFotos() != null && sighting.getFotos().size() > 0) {
-            sighting.getFotos().add(0, sighting.getFotos().get(imageIndex++));
-            sighting.getFotos().remove(imageIndex);
-            imageIndex = 0;
-            // everything went well - saving
-            btnUpdateSightingActionPerformed(null);
-        }
+        imageIndex = Utils.setMainImage(sighting, imageIndex);
+        btnUpdateSightingActionPerformed(null);
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
@@ -1034,10 +997,6 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLonSeconds.setSelectionStart(0);
         txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
     }//GEN-LAST:event_txtLonSecondsFocusGained
-
-    private void setupFotos(int inIndex) {
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getFotos().get(inIndex).getFileLocation()), 300));
-    }
 
     private void resizeTalbes() {
         TableColumn column = null;

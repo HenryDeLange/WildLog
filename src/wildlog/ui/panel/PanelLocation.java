@@ -37,7 +37,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
@@ -76,7 +75,7 @@ public class PanelLocation extends javax.swing.JPanel {
         initComponents();
         imageIndex = 0;
         if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            setupFotos(0);
+            Utils.setupFoto(locationWL, imageIndex, lblImage);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
@@ -128,10 +127,6 @@ public class PanelLocation extends javax.swing.JPanel {
     public void closeTab() {
         parent = (JTabbedPane) getParent();
         if (parent != null) parent.remove(this);
-    }
-    
-    private void setupFotos(int inIndex) {
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(locationWL.getFotos().get(inIndex).getFileLocation()), 300));
     }
     
     // Need to look again later at listbox and how I use it...
@@ -795,41 +790,23 @@ public class PanelLocation extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this);
-            setupFotos(locationWL.getFotos().size() - 1);
+            imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage);
             // everything went well - saving
             btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            if (imageIndex > 0) setupFotos(--imageIndex);
-            else {
-                imageIndex = locationWL.getFotos().size() - 1;
-                setupFotos(imageIndex);
-            }
-        }
+        imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage);
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            if (imageIndex < locationWL.getFotos().size() - 1) setupFotos(++imageIndex);
-            else {
-               imageIndex = 0;
-                setupFotos(imageIndex);
-            }
-        }
+        imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage);
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            locationWL.getFotos().add(0, locationWL.getFotos().get(imageIndex++));
-            locationWL.getFotos().remove(imageIndex);
-            imageIndex = 0;
-            // everything went well - saving
-            btnUpdateActionPerformed(evt);
-        }
+        imageIndex = Utils.setMainImage(locationWL, imageIndex);
+        btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
@@ -960,23 +937,8 @@ public class PanelLocation extends javax.swing.JPanel {
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        if (locationWL.getFotos() != null) {
-            if (locationWL.getFotos().size() > 0) {
-                Foto tempFoto = locationWL.getFotos().get(imageIndex);
-                locationWL.getFotos().remove(tempFoto);
-                app.getDBI().delete(tempFoto);
-                app.getDBI().createOrUpdate(locationWL);
-                if (locationWL.getFotos().size() >= 1) {
-                    // Behave like moving back button was pressed
-                    btnPreviousImageActionPerformed(evt);
-                }
-                else {
-                    lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-                }
-                // everything went well - saving
-                btnUpdateActionPerformed(evt);
-            }
-        }
+        imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"));
+        btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked

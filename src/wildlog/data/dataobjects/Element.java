@@ -15,6 +15,7 @@
 package wildlog.data.dataobjects;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dataobjects.util.UtilsHTML;
@@ -190,6 +191,7 @@ public class Element implements HasFotos {
 
     @Override
     public List<Foto> getFotos() {
+        if (fotos == null) fotos = new ArrayList<Foto>(1);
         return fotos;
     }
     

@@ -35,7 +35,6 @@ import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -76,8 +75,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
-        if (element.getFotos() != null && element.getFotos().size() > 0) {
-            setupFotos(0);
+        if (element.getFotos().size() > 0) {
+            Utils.setupFoto(element, imageIndex, lblImage);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
@@ -134,9 +133,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         formComponentShown(null);
     }
     
-    private void setupFotos(int inIndex) {
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(element.getFotos().get(inIndex).getFileLocation()), 300));
-    }
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -760,41 +756,23 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            Utils.uploadImage(element, "Creatures"+File.separatorChar+element.getPrimaryName(), this);
-            setupFotos(element.getFotos().size() - 1);
+            imageIndex = Utils.uploadImage(element, "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage);
             // everything went well - saving
             btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        if (element.getFotos() != null && element.getFotos().size() > 0) {
-            if (imageIndex > 0) setupFotos(--imageIndex);
-            else {
-                imageIndex = element.getFotos().size() - 1;
-                setupFotos(imageIndex);
-            }
-        }
+        imageIndex = Utils.previousImage(element, imageIndex, lblImage);
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        if (element.getFotos() != null && element.getFotos().size() > 0) {
-            if (imageIndex < element.getFotos().size() - 1) setupFotos(++imageIndex);
-            else {
-               imageIndex = 0;
-                setupFotos(imageIndex);
-            }
-        }
+        imageIndex = Utils.nextImage(element, imageIndex, lblImage);
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        if (element.getFotos() != null && element.getFotos().size() > 0) {
-            element.getFotos().add(0, element.getFotos().get(imageIndex++));
-            element.getFotos().remove(imageIndex);
-            imageIndex = 0;
-            // everything went well - saving
-            btnUpdateActionPerformed(evt);
-        }
+        imageIndex = Utils.setMainImage(element, imageIndex);
+        btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
@@ -872,23 +850,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        if (element.getFotos() != null) {
-            if (element.getFotos().size() > 0) {
-                Foto tempFoto = element.getFotos().get(imageIndex);
-                element.getFotos().remove(tempFoto);
-                app.getDBI().delete(tempFoto);
-                app.getDBI().createOrUpdate(element);
-                if (element.getFotos().size() >= 1) {
-                    // Behave like moving back button was pressed
-                    btnPreviousImageActionPerformed(evt);
-                }
-                else {
-                    lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-                }
-                // everything went well - saving
-                btnUpdateActionPerformed(evt);
-            }
-        }
+        imageIndex = Utils.removeImage(element, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"));
+        btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnAddSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSightingActionPerformed

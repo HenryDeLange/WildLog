@@ -1048,15 +1048,10 @@ public class WildLogView extends FrameView {
         if (tblElement.getSelectedRowCount() == 1) {
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-            if (tempElement.getFotos() != null) {
-                if (tempElement.getFotos().size() > 0)
-                    lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(tempElement.getFotos().get(0).getFileLocation()), 300));
-                else
-                    lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            }
-            else {
+            if (tempElement.getFotos().size() > 0)
+                lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(tempElement.getFotos().get(0).getFileLocation()), 300));
+            else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            }
             // Get Locations
             tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(tempElement));
         }
@@ -1076,15 +1071,10 @@ public class WildLogView extends FrameView {
         if (tblLocation.getSelectedRowCount() == 1) {
             // Get Image
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-            if (tempLocation.getFotos() != null) {
-                if (tempLocation.getFotos().size() > 0)
-                    lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(tempLocation.getFotos().get(0).getFileLocation()), 300));
-                else
-                    lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            }
-            else {
+            if (tempLocation.getFotos().size() > 0)
+                lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(tempLocation.getFotos().get(0).getFileLocation()), 300));
+            else
                 lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            }
             // Get Visits
             tblVisit.setModel(utilTableGenerator.getShortVisitTable(tempLocation));
             // Get All Elements seen
