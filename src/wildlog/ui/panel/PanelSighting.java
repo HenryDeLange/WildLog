@@ -165,7 +165,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 Utils.setupFoto(sighting, imageIndex, lblImage);
 
             if (sighting.getElement() != null) {
-                if (sighting.getElement().getFotos() != null)
+                if (sighting.getElement().getFotos().size() > 0)
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getElement().getFotos().get(0).getFileLocation()), 100));
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
@@ -176,7 +176,7 @@ public class PanelSighting extends javax.swing.JPanel {
             lblNumberOfImages.setText(imageIndex+1 + " of " + sighting.getFotos().size());
 
             if (sighting.getLocation() != null) {
-                if (sighting.getLocation().getFotos() != null)
+                if (sighting.getLocation().getFotos().size() > 0)
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getLocation().getFotos().get(0).getFileLocation()), 100));
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
