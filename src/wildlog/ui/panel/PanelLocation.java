@@ -80,6 +80,7 @@ public class PanelLocation extends javax.swing.JPanel {
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         }
+        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
         tblElement.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
     }
@@ -224,6 +225,7 @@ public class PanelLocation extends javax.swing.JPanel {
         rdbLocation = new javax.swing.JRadioButton();
         rdbVisit = new javax.swing.JRadioButton();
         lblNumberOfElements = new javax.swing.JLabel();
+        lblNumberOfImages = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -437,7 +439,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnSetMainImageActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnSetMainImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 326, 100, -1));
+        locationIncludes.add(btnSetMainImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 326, 90, -1));
 
         btnNextImage.setIcon(resourceMap.getIcon("btnNextImage.icon")); // NOI18N
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
@@ -653,7 +655,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnDeleteImageActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 326, 100, -1));
+        locationIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 326, 90, -1));
 
         jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
@@ -711,6 +713,12 @@ public class PanelLocation extends javax.swing.JPanel {
         lblNumberOfElements.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfElements.border.lineColor"))); // NOI18N
         lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
         locationIncludes.add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 550, 30, 20));
+
+        lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
+        lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfImages.setText(resourceMap.getString("lblNumberOfImages.text")); // NOI18N
+        lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
+        locationIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 40, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -791,6 +799,7 @@ public class PanelLocation extends javax.swing.JPanel {
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
             imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage);
+            lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
             // everything went well - saving
             btnUpdateActionPerformed(evt);
         }
@@ -798,10 +807,12 @@ public class PanelLocation extends javax.swing.JPanel {
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
         imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage);
+        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
         imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage);
+        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
@@ -938,6 +949,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
         imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"));
+        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
@@ -1131,6 +1143,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblLocation;
     private javax.swing.JLabel lblNumberOfElements;
+    private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JLabel lblNumberOfVisits;
     private javax.swing.JPanel locationIncludes;
     private javax.swing.JList lstAccommodationType;

@@ -149,7 +149,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private void refreshSightingInfo() {
         if (sighting != null) {
             if (sighting.getElement() != null) {
-                if (sighting.getElement().getFotos() != null)
+                if (sighting.getElement().getFotos().size() > 0)
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getElement().getFotos().get(0).getFileLocation()), 150));
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
