@@ -45,7 +45,7 @@ public class Element implements HasFotos {
     private double weightFemaleAverage;
     private String breedingDuration; // How long the young is developed and how long it takes to be independant
     private double breedingNumber; // The number of young produced
-    private String breedingAge;
+    private String breedingAge; // CURRENTLY NOT USSED!!!
     //private int numberOfSightings; // The number of times a sighting for this element has been recorded (don't need its own variable, can get in other ways)
     private WishRating wishListRating; // How much I wish to see the element
     //private Habitat habitat; // This needs to be improved to be more specific (maybe select from list of habitats, can create new ones)
@@ -63,6 +63,7 @@ public class Element implements HasFotos {
     //private Date breedingSeasonEnd;
     private UnitsSize sizeUnit;
     private UnitsWeight weightUnit;
+    private String lifespan;
 
    
     // CONSTRUCTORS:
@@ -107,7 +108,7 @@ public class Element implements HasFotos {
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Female Size", sizeFemaleAverage, "Size Units", sizeUnit);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Male Weight", weightMaleAverage, "Weight Units", weightUnit);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Female Weight", weightFemaleAverage, "Weight Units", weightUnit);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Breeding Age", breedingAge);
+        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Age", lifespan);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Breeding Duration", breedingDuration, "Breeding Number", breedingNumber);
         htmlElement = htmlElement + "</table>";
         htmlElement = htmlElement + "</br><h3>Fotos:</h3>" + fotoString;
@@ -222,6 +223,10 @@ public class Element implements HasFotos {
     public UnitsWeight getWeightUnit() {
         return weightUnit;
     }
+
+    public String getLifespan() {
+        return lifespan;
+    }
     
 
     // SETTERS:
@@ -328,6 +333,10 @@ public class Element implements HasFotos {
 
     public void setWeightUnit(UnitsWeight inWeightUnit) {
         weightUnit = inWeightUnit;
+    }
+
+    public void setLifespan(String inLifespan) {
+        lifespan = inLifespan;
     }
 
 }

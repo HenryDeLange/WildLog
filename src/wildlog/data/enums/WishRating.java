@@ -21,7 +21,7 @@ public enum WishRating {
     LOW("Low - Commonly seen"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     WishRating(String inText) {
         text = inText;

@@ -21,7 +21,7 @@ public enum GameViewRating {
     BAD("Bad"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     GameViewRating(String inText) {
         text = inText;

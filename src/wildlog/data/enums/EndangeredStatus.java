@@ -25,8 +25,8 @@ public enum EndangeredStatus {
     LC("Lc", "Least Concern"),
     NONE("", "None");
     
-    private final String text;
-    private final String key;
+    private String text;
+    private String key;
     
     EndangeredStatus(String inKey, String inText) {
         text = inText;

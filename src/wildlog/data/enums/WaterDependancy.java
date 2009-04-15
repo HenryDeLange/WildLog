@@ -22,7 +22,7 @@ public enum WaterDependancy {
     LOW("Not effected/interisted"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     WaterDependancy(String inText) {
         text = inText;

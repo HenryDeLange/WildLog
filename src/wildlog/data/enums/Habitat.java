@@ -17,7 +17,7 @@ package wildlog.data.enums;
 
 public enum Habitat {
     SUCCULENT_KAROO("Succulent Karoo", "Succulents (thick fleshy leaves), annuals (spring flowers), bulbs, tubers, etc."),
-    NAMA_KAROO("Name Karoo","Covers most of the central plateau and forms a transition between the Cape flora and the tropical savanna."),
+    NAMA_KAROO("Nama Karoo","Covers most of the central plateau and forms a transition between the Cape flora and the tropical savanna."),
     FYNBOS("Fynbos","Evergreen heathlands and shrublands whith fine-leafed low shrubs and leafless tufted grasslike plants. Trees and grasses are rare."),
     GRASSLAND("Grassland","Grasses dominate the vegetation and woody plants are absent or rare."),
     SAVANNA("Savanna","Wooded grasslands of the tropics and subtropics."),
@@ -29,8 +29,8 @@ public enum Habitat {
     OTHER("Other", "Other"),
     NONE("None", "None");
     
-    private final String text;
-    private final String description;
+    private String text;
+    private String description;
     
     Habitat(String inText, String inDescription) {
         text = inText;
@@ -44,6 +44,10 @@ public enum Habitat {
     
     public String description() {
         return description;
+    }
+
+    public void fix(String inText) {
+        text = inText;
     }
 
 }

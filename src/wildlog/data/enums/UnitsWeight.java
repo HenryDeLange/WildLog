@@ -19,7 +19,7 @@ public enum UnitsWeight {
     GRAM("g"),
     NONE("None");
 
-    private final String text;
+    private String text;
 
     UnitsWeight(String inText) {
         text = inText;

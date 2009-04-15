@@ -29,7 +29,7 @@ public enum AreaType {
     NONE("None");
     
     
-    private final String text;
+    private String text;
     
     AreaType(String inText) {
         text = inText;

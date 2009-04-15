@@ -22,8 +22,8 @@ public enum AddFrequency {
     VERY_LOW("0 - 40%", "Very seldomly added. (Might be so common that it is not realy recorded)"),
     NONE("None", "None");
     
-    private final String text;
-    private final String description;
+    private String text;
+    private String description;
 
     public String getText() {
         return text;

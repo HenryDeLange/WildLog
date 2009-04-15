@@ -191,7 +191,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtSizeFemale = new javax.swing.JTextField();
         txtWeightMale = new javax.swing.JTextField();
         txtWeightFemale = new javax.swing.JTextField();
-        txtBreedingAge = new javax.swing.JTextField();
+        txtLifespan = new javax.swing.JTextField();
         txtbreedingDuration = new javax.swing.JTextField();
         txtBreedingNumber = new javax.swing.JTextField();
         lblNumberOfSightings = new javax.swing.JLabel();
@@ -497,14 +497,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(txtWeightFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 520, 110, -1));
 
-        txtBreedingAge.setText(element.getBreedingAge());
-        txtBreedingAge.setName("txtBreedingAge"); // NOI18N
-        txtBreedingAge.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtLifespan.setText(element.getLifespan());
+        txtLifespan.setName("txtLifespan"); // NOI18N
+        txtLifespan.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtBreedingAgeFocusGained(evt);
+                txtLifespanFocusGained(evt);
             }
         });
-        elementIncludes.add(txtBreedingAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
+        elementIncludes.add(txtLifespan, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
 
         txtbreedingDuration.setText(element.getBreedingDuration());
         txtbreedingDuration.setName("txtbreedingDuration"); // NOI18N
@@ -730,7 +730,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 txtWeightFemale.setText("");
             }
             element.setBreedingDuration(txtbreedingDuration.getText());
-            element.setBreedingAge(txtBreedingAge.getText());
+            element.setLifespan(txtLifespan.getText());
             element.setWishListRating((WishRating)cmbWishList.getSelectedItem());
             //element.setHabitat((Habitat)cmbHabitat.getSelectedItem());
             element.setDiagnosticDescription(txtDiagnosticDescription.getText());
@@ -915,10 +915,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtWeightFemale.setSelectionEnd(txtWeightFemale.getText().length());
     }//GEN-LAST:event_txtWeightFemaleFocusGained
 
-    private void txtBreedingAgeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBreedingAgeFocusGained
-        txtBreedingAge.setSelectionStart(0);
-        txtBreedingAge.setSelectionEnd(txtBreedingAge.getText().length());
-    }//GEN-LAST:event_txtBreedingAgeFocusGained
+    private void txtLifespanFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLifespanFocusGained
+        txtLifespan.setSelectionStart(0);
+        txtLifespan.setSelectionEnd(txtLifespan.getText().length());
+}//GEN-LAST:event_txtLifespanFocusGained
 
     private void txtbreedingDurationFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtbreedingDurationFocusGained
         txtbreedingDuration.setSelectionStart(0);
@@ -1007,10 +1007,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTextArea txtBehaviourDescription;
-    private javax.swing.JTextField txtBreedingAge;
     private javax.swing.JTextField txtBreedingNumber;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextArea txtDiagnosticDescription;
+    private javax.swing.JTextField txtLifespan;
     private javax.swing.JTextArea txtNutrition;
     private javax.swing.JTextField txtOtherName;
     private javax.swing.JTextField txtPrimaryName;

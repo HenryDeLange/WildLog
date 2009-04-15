@@ -19,7 +19,7 @@ public enum UnitsSize {
     CENTI_METER("cm"),
     NONE("None");
 
-    private final String text;
+    private String text;
 
     UnitsSize(String inText) {
         text = inText;

@@ -22,7 +22,7 @@ public enum CateringType {
     NO_CATERING("No Catering is Possible/Allowed"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     CateringType(String inText) {
         text = inText;

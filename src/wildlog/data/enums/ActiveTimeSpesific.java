@@ -26,7 +26,7 @@ public enum ActiveTimeSpesific {
     DEEP_NIGHT("Night - Darkness of night"),
     NONE("None");
 
-    private final String text;
+    private String text;
 
     ActiveTimeSpesific(String inText) {
         text = inText;

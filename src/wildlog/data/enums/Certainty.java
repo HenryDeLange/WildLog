@@ -22,7 +22,7 @@ public enum Certainty {
     VERY_BAD(" 0 - 70% (Unsure)"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     Certainty(String inText) {
         text = inText;

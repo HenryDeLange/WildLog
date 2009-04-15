@@ -23,7 +23,7 @@ public enum FeedingClass {
     PARASITE("Parasite"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     FeedingClass(String inText) {
         text = inText;

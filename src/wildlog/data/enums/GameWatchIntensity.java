@@ -23,7 +23,7 @@ public enum GameWatchIntensity {
     VERY_LOW("No Focus"),
     NONE("None");
             
-    private final String text;
+    private String text;
     
     GameWatchIntensity(String inText) {
         text = inText;

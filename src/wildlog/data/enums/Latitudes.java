@@ -19,8 +19,8 @@ public enum Latitudes {
     SOUTH("S", "South (-)"),
     NONE("", "None");
 
-    private final String key;
-    private final String text;
+    private String key;
+    private String text;
 
     Latitudes(String inKey, String inText) {
         key = inKey;

@@ -18,10 +18,11 @@ package wildlog.data.enums;
 public enum LocationRating {
     HIGH("Very Nice"),
     NORMAL("Nice"),
+    DECENT("Decent"),
     LOW("Bad"),
     NONE("None");
 
-    private final String text;
+    private String text;
 
     LocationRating(String inText) {
         text = inText;

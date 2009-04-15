@@ -30,6 +30,7 @@ public class Visit {
     private GameWatchIntensity gameWatchingIntensity; // How intensely did we watch game (predefined values)
     private List<Sighting> sightings; // An ArrayList of sighting objects
     private VisitType type; // Vacation, Remote Camera, Bird Atlasing, Other
+    private List<Foto> fotos;
 
 
     // CONSTRUCTORS:
@@ -93,7 +94,10 @@ public class Visit {
     public VisitType getType() {
         return type;
     }
-    
+
+    public List<Foto> getFotos() {
+        return fotos;
+    }
 
     // SETTERS:
     public void setName(String inName) {
@@ -122,6 +126,10 @@ public class Visit {
     
     public void setType(VisitType inType) {
         type = inType;
+    }
+
+    public void setFotos(List<Foto> inFotos) {
+        fotos = inFotos;
     }
 
 }

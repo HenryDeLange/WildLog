@@ -21,7 +21,7 @@ public enum ElementType {
     PLANT("Plant"),
     OTHER("Other");
     
-    private final String text;
+    private String text;
     
     ElementType(String inText) {
         text = inText;

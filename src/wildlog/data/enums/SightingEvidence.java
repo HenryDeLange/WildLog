@@ -22,7 +22,7 @@ public enum SightingEvidence {
     NONE("None");
 
 
-    private final String text;
+    private String text;
 
     SightingEvidence(String inText) {
         text = inText;

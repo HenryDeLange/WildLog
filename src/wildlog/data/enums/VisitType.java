@@ -19,10 +19,11 @@ public enum VisitType {
     VACATION("Vacation"),
     REMOTE_CAMERA("Remote Camera"),
     BIRD_ATLASSING("Bird Atlassing"),
+    DAY_VISIT("Day Visit"),
     OTHER("Other"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     VisitType(String inText) {
         text = inText;

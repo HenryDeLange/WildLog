@@ -17,6 +17,7 @@ package wildlog.data.dbi;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.query.Query;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -29,6 +30,8 @@ import wildlog.data.dataobjects.MapPoint;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.util.SightingCounter;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.util.IndicatorOfVersionAndUpdate;
+import wildlog.data.enums.Habitat;
 
 
 // Look at maybe callign commit only at certain times, maybe even only when database is closed? My be faster or slower...
@@ -36,6 +39,7 @@ public class DBI_db4o implements DBI {
     private final String filePath = File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar + "wildlog.wld";
     private ObjectContainer db;
     private SightingCounter counter;
+    private final int currentDatabaseVersion = 2;
     
     // Contructor:
     public DBI_db4o() {
@@ -84,6 +88,19 @@ public class DBI_db4o implements DBI {
             // Start at 1, thus no sighting should ever have counter = 0
             counter.setCount(1);
         }
+
+        // Check to see if it is needed to do an update of the database
+        ObjectSet<IndicatorOfVersionAndUpdate> results = db.get(new IndicatorOfVersionAndUpdate());
+        if (results.hasNext()) {
+            IndicatorOfVersionAndUpdate temp = results.next();
+            if (temp.getDatabaseVersion() == 1) doUpdate_v1();
+        }
+        else {
+            IndicatorOfVersionAndUpdate temp = new IndicatorOfVersionAndUpdate();
+            temp.setDatabaseVersion(currentDatabaseVersion);
+            db.set(temp);
+        }
+        
     }
     
     // Methods:
@@ -365,6 +382,45 @@ public class DBI_db4o implements DBI {
         db.delete(inMapPoint);
         db.commit();
         return false;
+    }
+
+    // Private Update Method
+    private void doUpdate_v1() {
+        System.out.println("Performing database update...");
+        // Update ENUMs
+        // Note: New fields can just be added, but changes in fields needs to be re-updated
+        Query query = db.query();
+        query.constrain(Habitat.class);
+        query.descend("text").constrain("Name Karoo");
+        ObjectSet result = query.execute();
+        for(int x = 0; x < result.size(); x++) {
+            Habitat hab = (Habitat)result.get(x);
+            hab.fix("Nama Karoo");
+            db.set(hab);
+        }
+        query = db.query();
+        query.constrain(Element.class);
+        result = query.execute();
+        for(int x = 0; x < result.size(); x++) {
+            Element element = (Element)result.get(x);
+            element.setLifespan(element.getBreedingAge());
+            element.setBreedingAge("");
+            db.set(element);
+        }
+
+        // Other Updates
+        // Note: most can be done implicitely in the code and don't need explicit updates...
+
+        // Set IndicatorOfVersionAndUpdate to represent changes
+        ObjectSet<IndicatorOfVersionAndUpdate> results = db.get(new IndicatorOfVersionAndUpdate());
+        if (results.hasNext()) {
+            IndicatorOfVersionAndUpdate temp = results.next();
+            temp.setDatabaseVersion(2);
+            db.set(temp);
+        }
+
+        // Commit Changes
+        db.commit();
     }
     
     // NATIVE QUERY EXAMPLE:

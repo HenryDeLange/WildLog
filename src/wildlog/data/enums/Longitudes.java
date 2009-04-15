@@ -19,8 +19,8 @@ public enum Longitudes {
     WEST("W", "West (-)"),
     NONE("", "None");
 
-    private final String key;
-    private final String text;
+    private String key;
+    private String text;
 
     Longitudes(String inKey, String inText) {
         key = inKey;

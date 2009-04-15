@@ -23,7 +23,7 @@ public enum ViewRating {
     VERY_BAD("Very bad"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     ViewRating(String inText) {
         text = inText;

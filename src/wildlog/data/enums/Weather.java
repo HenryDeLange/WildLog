@@ -25,7 +25,7 @@ public enum Weather {
     OTHER("Other (Can specify in details)"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     Weather(String inText) {
         text = inText;

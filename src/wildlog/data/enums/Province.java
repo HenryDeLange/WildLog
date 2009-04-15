@@ -27,7 +27,7 @@ public enum Province {
     NORTHERN_CAPE("North Cape"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     Province(String inText) {
         text = inText;

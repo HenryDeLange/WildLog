@@ -21,7 +21,7 @@ public enum AccommodationType {
     BIG_UNIT("Big Unit"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     AccommodationType(String inText) {
         text = inText;

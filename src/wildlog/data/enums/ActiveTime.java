@@ -22,7 +22,7 @@ public enum ActiveTime {
     DAWN_OR_DUST("Dawn or Dust"),
     NONE("None");
     
-    private final String text;
+    private String text;
     
     ActiveTime(String inText) {
         text = inText;
