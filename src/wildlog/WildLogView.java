@@ -1049,7 +1049,7 @@ public class WildLogView extends FrameView {
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
             if (tempElement.getFotos().size() > 0)
-                lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(tempElement.getFotos().get(0).getFileLocation()), 300));
+                Utils.setupFoto(tempElement, 0, lblImage, 300);
             else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             // Get Locations
@@ -1072,7 +1072,7 @@ public class WildLogView extends FrameView {
             // Get Image
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
             if (tempLocation.getFotos().size() > 0)
-                lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(tempLocation.getFotos().get(0).getFileLocation()), 300));
+                Utils.setupFoto(tempLocation, 0, lblImage_LocTab, 300);
             else
                 lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             // Get Visits

@@ -75,12 +75,13 @@ public class PanelLocation extends javax.swing.JPanel {
         initComponents();
         imageIndex = 0;
         if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            Utils.setupFoto(locationWL, imageIndex, lblImage);
+            Utils.setupFoto(locationWL, imageIndex, lblImage, 300);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         }
-        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+        setupNumberOfImages();
+        
         tblElement.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
     }
@@ -798,25 +799,26 @@ public class PanelLocation extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage);
-            lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+            imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300);
+            setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage);
-        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+        imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage, 300);
+        setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage);
-        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+        imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage, 300);
+        setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
         imageIndex = Utils.setMainImage(locationWL, imageIndex);
+        setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
@@ -948,8 +950,8 @@ public class PanelLocation extends javax.swing.JPanel {
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"));
-        lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+        imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
+        setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
@@ -1088,6 +1090,13 @@ public class PanelLocation extends javax.swing.JPanel {
                 column.setPreferredWidth(50);
             }
         }
+    }
+
+    private void setupNumberOfImages() {
+        if (locationWL.getFotos().size() > 0)
+            lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+        else
+            lblNumberOfImages.setText("0 of 0");
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -17,12 +17,13 @@ package wildlog.data.dataobjects;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dataobjects.util.UtilsHTML;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 
 // Foundation for the Visit class
-public class Visit {
+public class Visit implements HasFotos {
     private String name; // Used as index (ID)
     private Date startDate;
     private Date endDate;
@@ -95,7 +96,9 @@ public class Visit {
         return type;
     }
 
+    @Override
     public List<Foto> getFotos() {
+        if (fotos == null) fotos = new ArrayList<Foto>(1);
         return fotos;
     }
 
@@ -128,6 +131,7 @@ public class Visit {
         type = inType;
     }
 
+    @Override
     public void setFotos(List<Foto> inFotos) {
         fotos = inFotos;
     }

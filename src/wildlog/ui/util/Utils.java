@@ -42,6 +42,7 @@ public class Utils {
     protected final static String tiff = "tiff";
     protected final static String tif = "tif";
     protected final static String png = "png";
+    private static final int THUMBNAIL_SIZE = 300;
 
     /*
      * Get the extension of a file.
@@ -104,7 +105,7 @@ public class Utils {
         return resizedImg;
     }
 
-    public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel) {
+    public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setAccessory(new ImagePreview(fileChooser));
@@ -134,7 +135,7 @@ public class Utils {
                     tempBytes = new byte[(int)fromFile.length()];
                     fileInput.read(tempBytes);
                     ImageIcon image = new ImageIcon(tempBytes);
-                    image = getScaledIcon(image, 300);
+                    image = getScaledIcon(image, THUMBNAIL_SIZE);
                     BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
                     Graphics2D big = bi.createGraphics();
                     big.drawImage(image.getImage(), 0, 0, null);
@@ -146,7 +147,7 @@ public class Utils {
                     if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
                     inHasFotos.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath()));
                     big.dispose();
-                    setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel);
+                    setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace();
@@ -167,29 +168,29 @@ public class Utils {
     }
 
     // Methods for the buttons on the panels that work with the images
-    public static int previousImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel) {
+    public static int previousImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize) {
         if (inHasFotos.getFotos().size() > 0) {
             if (inImageIndex > 0) {
                 inImageIndex = inImageIndex - 1;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
             else {
                 inImageIndex = inHasFotos.getFotos().size() - 1;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
         }
         return inImageIndex;
     }
 
-    public static int nextImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel) {
+    public static int nextImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize) {
         if (inHasFotos.getFotos().size() > 0) {
             if (inImageIndex < inHasFotos.getFotos().size() - 1) {
                 inImageIndex = inImageIndex + 1;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
             else {
                 inImageIndex = 0;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
         }
         return inImageIndex;
@@ -204,7 +205,7 @@ public class Utils {
         return inImageIndex;
     }
 
-    public static int removeImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL) {
+    public static int removeImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize) {
         if (inHasFotos.getFotos().size() > 0) {
             Foto tempFoto = inHasFotos.getFotos().get(inImageIndex);
             inHasFotos.getFotos().remove(tempFoto);
@@ -215,17 +216,17 @@ public class Utils {
             tempFile.delete();
             if (inHasFotos.getFotos().size() >= 1) {
                 // Behave like moving back button was pressed
-                inImageIndex = previousImage(inHasFotos, inImageIndex, inImageLabel);
+                inImageIndex = previousImage(inHasFotos, inImageIndex, inImageLabel, inSize);
             }
             else {
-                inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), 300));
+                inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
             }
         }
         return inImageIndex;
     }
 
-    public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel) {
-        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), 300));
+    public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize) {
+        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
     }
 
 }

@@ -76,12 +76,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         initComponents();
         imageIndex = 0;
         if (element.getFotos().size() > 0) {
-            Utils.setupFoto(element, imageIndex, lblImage);
+            Utils.setupFoto(element, imageIndex, lblImage, 300);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         }
-        lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+        setupNumberOfImages();
+
         tblLocation.getTableHeader().setReorderingAllowed(false);
     }
     
@@ -764,25 +765,26 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            imageIndex = Utils.uploadImage(element, "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage);
-            lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+            imageIndex = Utils.uploadImage(element, "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage, 300);
+            setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(element, imageIndex, lblImage);
-        lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+        imageIndex = Utils.previousImage(element, imageIndex, lblImage, 300);
+        setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(element, imageIndex, lblImage);
-        lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+        imageIndex = Utils.nextImage(element, imageIndex, lblImage, 300);
+        setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
         imageIndex = Utils.setMainImage(element, imageIndex);
+        setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
@@ -861,8 +863,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(element, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"));
-        lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+        imageIndex = Utils.removeImage(element, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
+        setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
@@ -944,6 +946,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 column.setPreferredWidth(35);
             }
         }
+    }
+
+    private void setupNumberOfImages() {
+        if (element.getFotos().size() > 0)
+            lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+        else
+            lblNumberOfImages.setText("0 of 0");
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

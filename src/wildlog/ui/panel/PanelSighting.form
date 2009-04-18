@@ -1002,6 +1002,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblNumberOfImages">
           <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblNumberOfImages.font"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" resourceKey="lblNumberOfImages.text"/>
             <Property name="name" type="java.lang.String" value="lblNumberOfImages" noResource="true"/>
