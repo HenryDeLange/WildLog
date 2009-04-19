@@ -869,16 +869,19 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnAddSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSightingActionPerformed
-        Sighting sighting = new Sighting();
-        sighting.setElement(element);
-        final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
-        dialog.setLayout(new AbsoluteLayout());
-        dialog.setSize(965, 625);
-        dialog.add(new PanelSighting(sighting, null, null, element, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-        dialog.setLocationRelativeTo(this);
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-        dialog.setIconImage(icon.getImage());
-        dialog.setVisible(true);
+        btnUpdateActionPerformed(evt);
+        if (!txtPrimaryName.getBackground().equals(Color.RED)) {
+            Sighting sighting = new Sighting();
+            sighting.setElement(element);
+            final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
+            dialog.setLayout(new AbsoluteLayout());
+            dialog.setSize(965, 625);
+            dialog.add(new PanelSighting(sighting, null, null, element, this, true), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.setLocationRelativeTo(this);
+            ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+            dialog.setIconImage(icon.getImage());
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
     private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked

@@ -61,10 +61,12 @@ public class PanelSighting extends javax.swing.JPanel {
     private int imageIndex;
     private WildLogApp app;
     private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
+    private boolean treatAsNewSighting;
     
     /** Creates new form PanelVisit */
-    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement) {
+    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, boolean inTreatAsNewSighting) {
         sighting = inSighting;
+        treatAsNewSighting = inTreatAsNewSighting;
         if (sighting != null) {
             // Initiate all objects
             app = (WildLogApp) Application.getInstance();
@@ -78,8 +80,8 @@ public class PanelSighting extends javax.swing.JPanel {
             // Auto-generated code
             initComponents();
             // Setup Dropdown Boxes
-            if (sighting.getLocation() != null)
-                cmbSubArea.setModel(new DefaultComboBoxModel(sighting.getLocation().getSubAreas().toArray()));
+            if (location != null)
+                cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
             //Setup Tables
             tblElement.getTableHeader().setReorderingAllowed(false);
             tblLocation.getTableHeader().setReorderingAllowed(false);
@@ -89,8 +91,7 @@ public class PanelSighting extends javax.swing.JPanel {
             tempList.add(new SortKey(0, SortOrder.ASCENDING));
             tblElement.getRowSorter().setSortKeys(tempList);
             tblLocation.getRowSorter().setSortKeys(tempList);
-            //tblVisit.getRowSorter().setSortKeys(tempList);
-            // Setup default values
+            // Setup default values for tables
             if (location != null) {
                 int select = -1;
                 for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
@@ -115,13 +116,47 @@ public class PanelSighting extends javax.swing.JPanel {
                         tblElement.scrollRectToVisible(tblElement.getCellRect(select-5, 0, true));
                 }
             }
-            // Setup the Sighting info
-            setupSightingInfo();
+            if (location != null && visit != null) {
+                // Build the table
+                tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(location));
+                // Sort the table
+                tblVisit.getRowSorter().setSortKeys(tempList);
+                // Select the visit
+                int select = -1;
+                for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
+                    if (tblVisit.getValueAt(t, 0).equals(visit.getName()))
+                        select = t;
+                }
+                if (select >= 0) {
+                    tblVisit.getSelectionModel().setSelectionInterval(select, select);
+                    if (select > 2)
+                        tblVisit.scrollRectToVisible(tblVisit.getCellRect(select-2, 0, true));
+                }
+            }
+            // Setup default values for input fields
+            if (treatAsNewSighting) {
+                cmbCertainty.setSelectedItem(Certainty.SURE);
+                cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
+                txtNumberOfElements.setText("");
+                cmbViewRating.setSelectedItem(ViewRating.NORMAL);
+                cmbLatitude.setSelectedItem(Latitudes.SOUTH);
+                txtLatDegrees.setText("");
+                txtLatMinutes.setText("");
+                txtLatSeconds.setText("");
+                cmbLongitude.setSelectedItem(Longitudes.EAST);
+                txtLonDegrees.setText("");
+                txtLonMinutes.setText("");
+                txtLonSeconds.setText("");
+            }
+            else {
+                // Setup the Sighting info
+                setupSightingInfo();
+            }
         }
     }
 
-    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
-        this(inSighting, inLocation, inVisit, inElement);
+    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh, boolean inTreatAsNewSighting) {
+        this(inSighting, inLocation, inVisit, inElement, inTreatAsNewSighting);
         panelToRefresh = inPanelToRefresh;
     }
 
@@ -168,13 +203,6 @@ public class PanelSighting extends javax.swing.JPanel {
                     Utils.setupFoto(location, 0, lblLocationImage, 100);
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
-            }
-
-            if (visit != null) {
-                
-            }
-            else {
-                
             }
 
         }
@@ -715,7 +743,18 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnUpdateSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSightingActionPerformed
         if (sighting != null) {
-            if (sighting.getLocation() != null && sighting.getElement() != null && visit != null && dtpSightingDate.getDate() != null) {
+            // Reset the colors to green
+            org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
+            lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+            lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+            lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+            dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+            if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
+                // Set Location and Element
+                sighting.setLocation(location);
+                sighting.setElement(element);
+
+                // Set variables
                 sighting.setDate(dtpSightingDate.getDate());
                 sighting.setAreaType((AreaType)cmbAreaType.getSelectedItem());
                 sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
@@ -733,17 +772,6 @@ public class PanelSighting extends javax.swing.JPanel {
                 sighting.setSubArea((String)cmbSubArea.getSelectedItem());
                 if (tblElement.getSelectedRowCount() > 0)
                     sighting.setElement(app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(),0))));
-
-                if (visit.getSightings() != null) {
-                    int index = visit.getSightings().indexOf(sighting);
-                    if (index != -1) visit.getSightings().set(index, sighting);
-                    else visit.getSightings().add(sighting);
-                }
-                else {
-                    visit.setSightings(new ArrayList<Sighting>());
-                    visit.getSightings().add(sighting);
-                }
-
                 sighting.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
                 sighting.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
                 try {
@@ -764,15 +792,24 @@ public class PanelSighting extends javax.swing.JPanel {
                     txtLonSeconds.setText("0");
                 }
 
+                // Setup Visit
+                if (visit.getSightings() != null) {
+                    int index = visit.getSightings().indexOf(sighting);
+                    if (index != -1)
+                        visit.getSightings().set(index, sighting);
+                    else
+                        visit.getSightings().add(sighting);
+                }
+                else {
+                    visit.setSightings(new ArrayList<Sighting>());
+                    visit.getSightings().add(sighting);
+                }
+
                 // Add and Save the visit
                 if (app.getDBI().isSightingUnique(sighting) == true) {
-                    if (!visit.getSightings().contains(sighting)) visit.getSightings().add(sighting);
+                    if (!visit.getSightings().contains(sighting))
+                        visit.getSightings().add(sighting);
                     if (app.getDBI().createOrUpdate(visit) == true) {
-                        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
-                        lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                        lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                        lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                        dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
                         // Premare to close dialog
                         if (panelToRefresh != null) {
                             panelToRefresh.refreshTableForSightings();
@@ -798,6 +835,7 @@ public class PanelSighting extends javax.swing.JPanel {
             else {
                 if (sighting.getElement() == null)
                     lblElement.setBorder(new LineBorder(Color.RED, 3, true));
+                else
                 if (sighting.getLocation() == null)
                     lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
                 if (visit == null)
@@ -815,12 +853,11 @@ public class PanelSighting extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         if (sighting != null) {
             btnUpdateSightingActionPerformed(null);
-            //if (!lblElementName.getText().equals("...") && !lblLocationName.getText().equals("...") && !lblVisitName.getText().equals("...")) {
+            if (!dtpSightingDate.getBorder().equals(Color.RED) && !lblLocation.getBorder().equals(Color.RED) && !lblVisit.getBorder().equals(Color.RED) && !lblElement.getBorder().equals(Color.RED)) {
                 imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300);
                 setupNumberOfImages();
-                // everything went well - saving
                 btnUpdateSightingActionPerformed(null);
-            //}
+            }
         }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
@@ -868,19 +905,18 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         if (sighting != null) {
-            if (tblVisit.getSelectedRow() >= 0) {
+            if (tblVisit.getSelectedRowCount() == 1) {
                 visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 0).toString()));
-            }
-            else {
-
             }
         }
 }//GEN-LAST:event_tblVisitMouseReleased
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (sighting != null) {
-            if (tblLocation.getSelectedRow() >= 0) {
+            if (tblLocation.getSelectedRowCount() == 1) {
                 location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
+                if (location != null)
+                    cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
                 tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(location));
                 visit = null;
                 if (location.getFotos().size() > 0)

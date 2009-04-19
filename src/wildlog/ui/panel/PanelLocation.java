@@ -1012,7 +1012,7 @@ public class PanelLocation extends javax.swing.JPanel {
             if  (tblVisit.getSelectedRowCount() == 1) {
                 tblElement.setModel(utilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
             }
-            else tblElement.setModel(new DefaultTableModel());
+            else tblElement.setModel(new DefaultTableModel(new String[]{"No Visit Selected"}, 0));
         }
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
         // Setup table column sizes
