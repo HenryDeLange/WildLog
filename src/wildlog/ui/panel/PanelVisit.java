@@ -86,11 +86,6 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         imageSightingIndex = 0;
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         tblSightings.getTableHeader().setReorderingAllowed(false);
-
-        if (visit.getName() != null)
-            lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
-        else
-            lblVisitName.setText(". . .  - [" + locationForVisit.getName() + "]");
     }
     
     public void setVisit(Visit inVisit) {
@@ -678,6 +673,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblSightings.getRowSorter().setSortKeys(tempList);
+
+        if (visit.getName() != null)
+            lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
+        else
+            lblVisitName.setText(". . .  - [" + locationForVisit.getName() + "]");
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
@@ -700,7 +700,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(965, 625);
-        dialog.add(new PanelSighting(sighting, visit, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        dialog.add(new PanelSighting(sighting, locationForVisit, visit, null, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(this);
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
         dialog.setIconImage(icon.getImage());
@@ -714,7 +714,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, visit, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, locationForVisit, visit, sighting.getElement(), this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());

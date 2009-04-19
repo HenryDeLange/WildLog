@@ -823,10 +823,13 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
-        PanelVisit tempPanel = utilPanelGenerator.getNewVisitPanel(locationWL);
-        parent.add(tempPanel);
-        tempPanel.setupTabHeader();
-        parent.setSelectedComponent(tempPanel);
+        btnUpdateActionPerformed(evt);
+        if (!txtName.getBackground().equals(Color.RED)) {
+            PanelVisit tempPanel = utilPanelGenerator.getNewVisitPanel(locationWL);
+            parent.add(tempPanel);
+            tempPanel.setupTabHeader();
+            parent.setSelectedComponent(tempPanel);
+        }
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown

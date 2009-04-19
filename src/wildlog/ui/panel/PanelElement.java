@@ -874,7 +874,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(965, 625);
-        dialog.add(new PanelSighting(sighting, null, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        dialog.add(new PanelSighting(sighting, null, null, element, this), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(this);
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
         dialog.setIconImage(icon.getImage());

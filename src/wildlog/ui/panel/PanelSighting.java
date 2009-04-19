@@ -51,9 +51,10 @@ import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
  * @author  henry.delange
  */
 public class PanelSighting extends javax.swing.JPanel {
+    private Location location;
     private Visit visit;
+    private Element element;
     private Sighting sighting;
-    //private JPanel owner;
     private UtilTableGenerator utilTableGenerator;
     private Element searchElement;
     private Location searchLocation;
@@ -62,79 +63,68 @@ public class PanelSighting extends javax.swing.JPanel {
     private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
     
     /** Creates new form PanelVisit */
-    public PanelSighting(Sighting inSighting, Visit inVisit) {
-        app = (WildLogApp) Application.getInstance();
+    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement) {
         sighting = inSighting;
-        visit = inVisit;
-        utilTableGenerator = new UtilTableGenerator();
-        searchElement = new Element();
-        searchLocation = new Location();
-        initComponents();
-        if (sighting.getLocation() != null)
-            cmbSubArea.setModel(new DefaultComboBoxModel(sighting.getLocation().getSubAreas().toArray()));
-        imageIndex = 0;
-        setupSightingInfo();
-        tblElement.getTableHeader().setReorderingAllowed(false);
-        tblLocation.getTableHeader().setReorderingAllowed(false);
-        tblVisit.getTableHeader().setReorderingAllowed(false);
-        // Setup table column sizes
-        resizeTalbes();
-        // Sort rows for Element
-        List tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
-        // Sort rows for Location
-        tblLocation.getRowSorter().setSortKeys(tempList);
-        // Sort rows for Visit
-        //tblVisit.getRowSorter().setSortKeys(tempList);
+        if (sighting != null) {
+            // Initiate all objects
+            app = (WildLogApp) Application.getInstance();
+            location = inLocation;
+            visit = inVisit;
+            element = inElement;
+            utilTableGenerator = new UtilTableGenerator();
+            searchElement = new Element();
+            searchLocation = new Location();
+            imageIndex = 0;
+            // Auto-generated code
+            initComponents();
+            // Setup Dropdown Boxes
+            if (sighting.getLocation() != null)
+                cmbSubArea.setModel(new DefaultComboBoxModel(sighting.getLocation().getSubAreas().toArray()));
+            //Setup Tables
+            tblElement.getTableHeader().setReorderingAllowed(false);
+            tblLocation.getTableHeader().setReorderingAllowed(false);
+            tblVisit.getTableHeader().setReorderingAllowed(false);
+            resizeTalbes();
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(0, SortOrder.ASCENDING));
+            tblElement.getRowSorter().setSortKeys(tempList);
+            tblLocation.getRowSorter().setSortKeys(tempList);
+            //tblVisit.getRowSorter().setSortKeys(tempList);
+            // Setup default values
+            if (location != null) {
+                int select = -1;
+                for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
+                    if (tblLocation.getValueAt(t, 0).equals(location.getName()))
+                        select = t;
+                }
+                if (select >= 0) {
+                    tblLocation.getSelectionModel().setSelectionInterval(select, select);
+                    if (select > 3)
+                        tblLocation.scrollRectToVisible(tblLocation.getCellRect(select-3, 0, true));
+                }
+            }
+            if (element != null) {
+                int select = -1;
+                for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
+                    if (tblElement.getValueAt(t, 0).equals(element.getPrimaryName()))
+                        select = t;
+                }
+                if (select >= 0) {
+                    tblElement.getSelectionModel().setSelectionInterval(select, select);
+                    if (select > 5)
+                        tblElement.scrollRectToVisible(tblElement.getCellRect(select-5, 0, true));
+                }
+            }
+            // Setup the Sighting info
+            setupSightingInfo();
+        }
     }
 
-    public PanelSighting(Sighting inSighting, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
-        this(inSighting, inVisit);
+    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
+        this(inSighting, inLocation, inVisit, inElement);
         panelToRefresh = inPanelToRefresh;
     }
-    
-    /*
-    @Override
-    public boolean equals(Object inObject) {
-        if (getClass() != inObject.getClass()) return false;
-        final PanelSighting inPanel = (PanelSighting) inObject;
-        if (visit == null) return true;
-        if (locationForVisit == null) return true;
-        if (visit.getName() == null) return true;
-        if (locationForVisit.getName() == null) return true;
-        if (!visit.getName().equalsIgnoreCase(inPanel.getVisit().getName()) ||
-            !locationForVisit.getName().equalsIgnoreCase(inPanel.getLocationForVisit().getName()))
-                return false;
-        return true;
-    }
-    
-    public void setupTabHeader() {
-        parent = (JTabbedPane) getParent();
-        JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif"))));
-        if (visit.getName() != null) tabHeader.add(new JLabel(visit.getName() + " "));
-        else tabHeader.add(new JLabel("[new] "));
-        JButton btnClose = new JButton();
-        btnClose.setPreferredSize(new Dimension(12, 12));
-        btnClose.setBackground(new Color(255, 000, 000));
-        btnClose.setToolTipText("Close");
-        btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
-        btnClose.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                closeTab();
-            }
-        });
-        tabHeader.add(btnClose);
-        tabHeader.setBackground(new Color(0, 0, 0, 0));
-        parent.setTabComponentAt(parent.indexOfComponent(this), tabHeader);
-    }
 
-    public void closeTab() {
-        parent = (JTabbedPane) getParent();
-        if (parent != null) parent.remove(this);
-    }
-    */
     
     private void setupSightingInfo() {
         if (sighting != null) {
@@ -160,32 +150,24 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
             txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
 
-            if (sighting.getFotos().size() > 0) {
+            if (sighting.getFotos().size() > 0)
                 Utils.setupFoto(sighting, imageIndex, lblImage, 300);
-            }
-            else {
+            else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            }
             setupNumberOfImages();
 
-            if (sighting.getElement() != null) {
-                if (sighting.getElement().getFotos().size() > 0)
-                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getElement().getFotos().get(0).getFileLocation()), 100));
+            if (element != null) {
+                if (element.getFotos().size() > 0)
+                    Utils.setupFoto(element, 0, lblElementImage, 100);
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
-            else {
-                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
-            }
 
-            if (sighting.getLocation() != null) {
-                if (sighting.getLocation().getFotos().size() > 0)
-                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getLocation().getFotos().get(0).getFileLocation()), 100));
+            if (location != null) {
+                if (location.getFotos().size() > 0)
+                    Utils.setupFoto(location, 0, lblLocationImage, 100);
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
-            }
-            else {
-                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
 
             if (visit != null) {
@@ -197,9 +179,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         }
         else {
-            System.out.println("Sighting was not found - null");
-            sighting = new Sighting();
-            visit.getSightings().add(sighting);
+            System.out.println("No sighting provided...");
         }
     }
     
@@ -734,95 +714,97 @@ public class PanelSighting extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSightingActionPerformed
-        if (sighting.getLocation() != null && sighting.getElement() != null && visit != null && dtpSightingDate.getDate() != null) {
-            sighting.setDate(dtpSightingDate.getDate());
-            sighting.setAreaType((AreaType)cmbAreaType.getSelectedItem());
-            sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
-            sighting.setDetails(txtDetails.getText());
-            sighting.setSightingEvidence((SightingEvidence)cmbEvidence.getSelectedItem());
-            try {
-                sighting.setNumberOfElements(Integer.parseInt(txtNumberOfElements.getText()));
-            }
-            catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-            sighting.setTimeOfDay((ActiveTimeSpesific)cmbTimeOfDay.getSelectedItem());
-            sighting.setViewRating((ViewRating)cmbViewRating.getSelectedItem());
-            sighting.setWeather((Weather)cmbWeather.getSelectedItem());
-            sighting.setSubArea((String)cmbSubArea.getSelectedItem());
-            if (tblElement.getSelectedRowCount() > 0)
-                sighting.setElement(app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(),0))));
+        if (sighting != null) {
+            if (sighting.getLocation() != null && sighting.getElement() != null && visit != null && dtpSightingDate.getDate() != null) {
+                sighting.setDate(dtpSightingDate.getDate());
+                sighting.setAreaType((AreaType)cmbAreaType.getSelectedItem());
+                sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
+                sighting.setDetails(txtDetails.getText());
+                sighting.setSightingEvidence((SightingEvidence)cmbEvidence.getSelectedItem());
+                try {
+                    sighting.setNumberOfElements(Integer.parseInt(txtNumberOfElements.getText()));
+                }
+                catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+                sighting.setTimeOfDay((ActiveTimeSpesific)cmbTimeOfDay.getSelectedItem());
+                sighting.setViewRating((ViewRating)cmbViewRating.getSelectedItem());
+                sighting.setWeather((Weather)cmbWeather.getSelectedItem());
+                sighting.setSubArea((String)cmbSubArea.getSelectedItem());
+                if (tblElement.getSelectedRowCount() > 0)
+                    sighting.setElement(app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(),0))));
 
-            if (visit.getSightings() != null) {
-                int index = visit.getSightings().indexOf(sighting);
-                if (index != -1) visit.getSightings().set(index, sighting);
-                else visit.getSightings().add(sighting);
-            }
-            else {
-                visit.setSightings(new ArrayList<Sighting>());
-                visit.getSightings().add(sighting);
-            }
+                if (visit.getSightings() != null) {
+                    int index = visit.getSightings().indexOf(sighting);
+                    if (index != -1) visit.getSightings().set(index, sighting);
+                    else visit.getSightings().add(sighting);
+                }
+                else {
+                    visit.setSightings(new ArrayList<Sighting>());
+                    visit.getSightings().add(sighting);
+                }
 
-            sighting.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
-            sighting.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
-            try {
-                sighting.setLatDegrees(Integer.parseInt(txtLatDegrees.getText()));
-                sighting.setLatMinutes(Integer.parseInt(txtLatMinutes.getText()));
-                sighting.setLatSeconds(Integer.parseInt(txtLatSeconds.getText()));
-                sighting.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
-                sighting.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
-                sighting.setLonSeconds(Integer.parseInt(txtLonSeconds.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtLatDegrees.setText("0");
-                txtLatMinutes.setText("0");
-                txtLatSeconds.setText("0");
-                txtLonDegrees.setText("0");
-                txtLonMinutes.setText("0");
-                txtLonSeconds.setText("0");
-            }
+                sighting.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
+                sighting.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
+                try {
+                    sighting.setLatDegrees(Integer.parseInt(txtLatDegrees.getText()));
+                    sighting.setLatMinutes(Integer.parseInt(txtLatMinutes.getText()));
+                    sighting.setLatSeconds(Integer.parseInt(txtLatSeconds.getText()));
+                    sighting.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
+                    sighting.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
+                    sighting.setLonSeconds(Integer.parseInt(txtLonSeconds.getText()));
+                }
+                catch (NumberFormatException e) {
+                    System.out.println("Not a Number...");
+                    txtLatDegrees.setText("0");
+                    txtLatMinutes.setText("0");
+                    txtLatSeconds.setText("0");
+                    txtLonDegrees.setText("0");
+                    txtLonMinutes.setText("0");
+                    txtLonSeconds.setText("0");
+                }
 
-            // Add and Save the visit
-            if (app.getDBI().isSightingUnique(sighting) == true) {
-                if (!visit.getSightings().contains(sighting)) visit.getSightings().add(sighting);
-                if (app.getDBI().createOrUpdate(visit) == true) {
-                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
-                    lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                    lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                    lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                    dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-                    // Premare to close dialog
-                    if (panelToRefresh != null) {
-                        panelToRefresh.refreshTableForSightings();
+                // Add and Save the visit
+                if (app.getDBI().isSightingUnique(sighting) == true) {
+                    if (!visit.getSightings().contains(sighting)) visit.getSightings().add(sighting);
+                    if (app.getDBI().createOrUpdate(visit) == true) {
+                        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
+                        lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                        lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                        lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                        dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+                        // Premare to close dialog
+                        if (panelToRefresh != null) {
+                            panelToRefresh.refreshTableForSightings();
+                        }
+                        // Close the dialog
+                        if (evt != null) {
+                            JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
+                            dialog.dispose();
+                        }
                     }
-                    // Close the dialog
-                    if (evt != null) {
-                        JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
-                        dialog.dispose();
+                    else {
+                        lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
                     }
                 }
                 else {
+                    lblElement.setBorder(new LineBorder(Color.RED, 3, true));
+                    lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
                     lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+                    dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
                 }
+
             }
             else {
-                lblElement.setBorder(new LineBorder(Color.RED, 3, true));
-                lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
-                lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
-                dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
+                if (sighting.getElement() == null)
+                    lblElement.setBorder(new LineBorder(Color.RED, 3, true));
+                if (sighting.getLocation() == null)
+                    lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
+                if (visit == null)
+                    lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+                if (dtpSightingDate.getDate() == null)
+                    dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
             }
-
-        }
-        else {
-            if (sighting.getElement() == null)
-                lblElement.setBorder(new LineBorder(Color.RED, 3, true));
-            if (sighting.getLocation() == null)
-                lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
-            if (visit == null)
-                lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
-            if (dtpSightingDate.getDate() == null)
-                dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
         }
 }//GEN-LAST:event_btnUpdateSightingActionPerformed
 
@@ -831,231 +813,269 @@ public class PanelSighting extends javax.swing.JPanel {
     }//GEN-LAST:event_formComponentShown
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        btnUpdateSightingActionPerformed(null);
-        //if (!lblElementName.getText().equals("...") && !lblLocationName.getText().equals("...") && !lblVisitName.getText().equals("...")) {
-            imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300);
-            setupNumberOfImages();
-            // everything went well - saving
+        if (sighting != null) {
             btnUpdateSightingActionPerformed(null);
-        //}
+            //if (!lblElementName.getText().equals("...") && !lblLocationName.getText().equals("...") && !lblVisitName.getText().equals("...")) {
+                imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300);
+                setupNumberOfImages();
+                // everything went well - saving
+                btnUpdateSightingActionPerformed(null);
+            //}
+        }
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(sighting, imageIndex, lblImage, 300);
-        setupNumberOfImages();
+        if (sighting != null) {
+            imageIndex = Utils.previousImage(sighting, imageIndex, lblImage, 300);
+            setupNumberOfImages();
+        }
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (sighting != null) {
             if (tblElement.getSelectedRowCount() == 1) {
-                sighting.setElement(app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0))));
-                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
-                if (sighting.getElement().getFotos() != null)
-                    if (sighting.getElement().getFotos().size() > 0)
-                        lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getElement().getFotos().get(0).getFileLocation()), 100));
-            }
-            else {
-                sighting.setElement(null);
-                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
+                if (element.getFotos().size() > 0)
+                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(element.getFotos().get(0).getFileLocation()), 100));
+                else
+                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
         }
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(sighting, imageIndex, lblImage, 300);
-        setupNumberOfImages();
+        if (sighting != null) {
+            imageIndex = Utils.nextImage(sighting, imageIndex, lblImage, 300);
+            setupNumberOfImages();
+        }
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(sighting, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
-        setupNumberOfImages();
-        btnUpdateSightingActionPerformed(null);
+        if (sighting != null) {
+            imageIndex = Utils.removeImage(sighting, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
+            setupNumberOfImages();
+            btnUpdateSightingActionPerformed(null);
+        }
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        imageIndex = Utils.setMainImage(sighting, imageIndex);
-        setupNumberOfImages();
-        btnUpdateSightingActionPerformed(null);
+        if (sighting != null) {
+            imageIndex = Utils.setMainImage(sighting, imageIndex);
+            setupNumberOfImages();
+            btnUpdateSightingActionPerformed(null);
+        }
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
-        if (tblVisit.getSelectedRow() >= 0) {
-            visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 0).toString()));
-        }
-        else {
-            
+        if (sighting != null) {
+            if (tblVisit.getSelectedRow() >= 0) {
+                visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 0).toString()));
+            }
+            else {
+
+            }
         }
 }//GEN-LAST:event_tblVisitMouseReleased
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
-        if (tblLocation.getSelectedRow() >= 0) {
-            sighting.setLocation(app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString())));
-            tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(sighting.getLocation()));
-            visit = null;
-            if (sighting.getLocation().getFotos() != null)
-                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(sighting.getLocation().getFotos().get(0).getFileLocation()), 100));
-            else
-                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+        if (sighting != null) {
+            if (tblLocation.getSelectedRow() >= 0) {
+                location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
+                tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(location));
+                visit = null;
+                if (location.getFotos().size() > 0)
+                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(location.getFotos().get(0).getFileLocation()), 100));
+                else
+                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            }
+            else {
+
+            }
+            resizeTalbes();
         }
-        else {
-            
-        }
-        resizeTalbes();
 }//GEN-LAST:event_tblLocationMouseReleased
 
     private void chkElementTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkElementTypeFilterActionPerformed
-        searchElement = new Element();
-        if (!cmbElementType.isEnabled())
-            searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
-        cmbElementType.setEnabled(!cmbElementType.isEnabled());
-        txtSearch.setText("");
-        // Setup table column sizes
-        resizeTalbes();
+        if (sighting != null) {
+            searchElement = new Element();
+            if (!cmbElementType.isEnabled())
+                searchElement.setType((ElementType)cmbElementType.getSelectedItem());
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
+            cmbElementType.setEnabled(!cmbElementType.isEnabled());
+            txtSearch.setText("");
+            // Setup table column sizes
+            resizeTalbes();
+        }
 }//GEN-LAST:event_chkElementTypeFilterActionPerformed
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
-        searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
-        txtSearch.setText("");
-        // Setup table column sizes
-        resizeTalbes();
+        if (sighting != null) {
+            searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
+            txtSearch.setText("");
+            // Setup table column sizes
+            resizeTalbes();
+        }
 }//GEN-LAST:event_cmbElementTypeActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        searchElement = new Element();
-        if (chkElementTypeFilter.isSelected())
-            searchElement.setType((ElementType)cmbElementType.getSelectedItem());
+        if (sighting != null) {
+            searchElement = new Element();
+            if (chkElementTypeFilter.isSelected())
+                searchElement.setType((ElementType)cmbElementType.getSelectedItem());
 
-        if (chkSearchDirect.isSelected()) {
-            searchElement.setPrimaryName(txtSearch.getText());
-            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
-        }
-        else {
-            DefaultTableModel model = utilTableGenerator.getShortElementTable(searchElement);
-            for (int t = 0; t < model.getRowCount(); t++) {
-                if (!((String)model.getValueAt(t, 0)).contains(txtSearch.getText())) {
-                    model.removeRow(t--);
-                }
+            if (chkSearchDirect.isSelected()) {
+                searchElement.setPrimaryName(txtSearch.getText());
+                tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
             }
-            tblElement.setModel(model);
+            else {
+                DefaultTableModel model = utilTableGenerator.getShortElementTable(searchElement);
+                for (int t = 0; t < model.getRowCount(); t++) {
+                    if (!((String)model.getValueAt(t, 0)).contains(txtSearch.getText())) {
+                        model.removeRow(t--);
+                    }
+                }
+                tblElement.setModel(model);
+            }
+            // Setup table column sizes
+            resizeTalbes();
         }
-        // Setup table column sizes
-        resizeTalbes();
 }//GEN-LAST:event_btnSearchActionPerformed
 
     private void btnSearchLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchLocationActionPerformed
-        searchLocation = new Location();
-        if (chkSearchLocationDirect.isSelected()) {
-            searchLocation.setName(txtSearchLocation.getText());
-            tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation));
-        }
-        else {
-            DefaultTableModel model = utilTableGenerator.getShortLocationTable(searchLocation);
-            for (int t = 0; t < model.getRowCount(); t++) {
-                if (!((String)model.getValueAt(t, 0)).contains(txtSearchLocation.getText())) {
-                    model.removeRow(t--);
-                }
+        if (sighting != null) {
+            searchLocation = new Location();
+            if (chkSearchLocationDirect.isSelected()) {
+                searchLocation.setName(txtSearchLocation.getText());
+                tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation));
             }
-            tblLocation.setModel(model);
+            else {
+                DefaultTableModel model = utilTableGenerator.getShortLocationTable(searchLocation);
+                for (int t = 0; t < model.getRowCount(); t++) {
+                    if (!((String)model.getValueAt(t, 0)).contains(txtSearchLocation.getText())) {
+                        model.removeRow(t--);
+                    }
+                }
+                tblLocation.setModel(model);
+            }
+            // Setup table column sizes
+            resizeTalbes();
         }
-        // Setup table column sizes
-        resizeTalbes();
     }//GEN-LAST:event_btnSearchLocationActionPerformed
 
     private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            try {
-                if (sighting.getFotos() != null)
-                    if (sighting.getFotos().size() > 0) {
-                        String fileName = sighting.getFotos().get(imageIndex).getOriginalFotoLocation();
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
+        if (sighting != null) {
+            if (System.getProperty("os.name").equals("Windows XP")) {
+                try {
+                    if (sighting.getFotos() != null)
+                        if (sighting.getFotos().size() > 0) {
+                            String fileName = sighting.getFotos().get(imageIndex).getOriginalFotoLocation();
+                            String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                            Runtime.getRuntime().exec(commands);
+                        }
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }//GEN-LAST:event_lblImageMouseClicked
 
     private void txtNumberOfElementsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumberOfElementsFocusGained
-        txtNumberOfElements.setSelectionStart(0);
-        txtNumberOfElements.setSelectionEnd(txtNumberOfElements.getText().length());
+        if (sighting != null) {
+            txtNumberOfElements.setSelectionStart(0);
+            txtNumberOfElements.setSelectionEnd(txtNumberOfElements.getText().length());
+        }
     }//GEN-LAST:event_txtNumberOfElementsFocusGained
 
     private void txtLatDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatDegreesFocusGained
-        txtLatDegrees.setSelectionStart(0);
-        txtLatDegrees.setSelectionEnd(txtLatDegrees.getText().length());
+        if (sighting != null) {
+            txtLatDegrees.setSelectionStart(0);
+            txtLatDegrees.setSelectionEnd(txtLatDegrees.getText().length());
+        }
     }//GEN-LAST:event_txtLatDegreesFocusGained
 
     private void txtLatMinutesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatMinutesFocusGained
-        txtLatMinutes.setSelectionStart(0);
-        txtLatMinutes.setSelectionEnd(txtLatMinutes.getText().length());
+        if (sighting != null) {
+            txtLatMinutes.setSelectionStart(0);
+            txtLatMinutes.setSelectionEnd(txtLatMinutes.getText().length());
+        }
     }//GEN-LAST:event_txtLatMinutesFocusGained
 
     private void txtLatSecondsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatSecondsFocusGained
-        txtLatSeconds.setSelectionStart(0);
-        txtLatSeconds.setSelectionEnd(txtLatSeconds.getText().length());
+        if (sighting != null) {
+            txtLatSeconds.setSelectionStart(0);
+            txtLatSeconds.setSelectionEnd(txtLatSeconds.getText().length());
+        }
     }//GEN-LAST:event_txtLatSecondsFocusGained
 
     private void txtLonDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonDegreesFocusGained
-        txtLonDegrees.setSelectionStart(0);
-        txtLonDegrees.setSelectionEnd(txtLonDegrees.getText().length());
+        if (sighting != null) {
+            txtLonDegrees.setSelectionStart(0);
+            txtLonDegrees.setSelectionEnd(txtLonDegrees.getText().length());
+        }
     }//GEN-LAST:event_txtLonDegreesFocusGained
 
     private void txtLonMinutesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonMinutesFocusGained
-        txtLonMinutes.setSelectionStart(0);
-        txtLonMinutes.setSelectionEnd(txtLonMinutes.getText().length());
+        if (sighting != null) {
+            txtLonMinutes.setSelectionStart(0);
+            txtLonMinutes.setSelectionEnd(txtLonMinutes.getText().length());
+        }
     }//GEN-LAST:event_txtLonMinutesFocusGained
 
     private void txtLonSecondsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonSecondsFocusGained
-        txtLonSeconds.setSelectionStart(0);
-        txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
+        if (sighting != null) {
+            txtLonSeconds.setSelectionStart(0);
+            txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
+        }
     }//GEN-LAST:event_txtLonSecondsFocusGained
 
     private void resizeTalbes() {
-        TableColumn column = null;
-        for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
-            column = tblElement.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(150);
+        if (sighting != null) {
+            TableColumn column = null;
+            for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
+                column = tblElement.getColumnModel().getColumn(i);
+                if (i == 0) {
+                    column.setPreferredWidth(150);
+                }
+                else if (i == 1) {
+                    column.setPreferredWidth(25);
+                }
+                else if (i == 2) {
+                    column.setPreferredWidth(40);
+                }
             }
-            else if (i == 1) {
-                column.setPreferredWidth(25);
+            for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
+                column = tblLocation.getColumnModel().getColumn(i);
+                if (i == 0) {
+                    column.setPreferredWidth(150);
+                }
+                else if (i == 1) {
+                    column.setPreferredWidth(30);
+                }
             }
-            else if (i == 2) {
-                column.setPreferredWidth(40);
-            }
-        }
-        for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
-            column = tblLocation.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(150);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(30);
-            }
-        }
-        for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
-            column = tblVisit.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(100);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(45);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(25);
+            for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
+                column = tblVisit.getColumnModel().getColumn(i);
+                if (i == 0) {
+                    column.setPreferredWidth(100);
+                }
+                else if (i == 1) {
+                    column.setPreferredWidth(45);
+                }
+                else if (i == 2) {
+                    column.setPreferredWidth(25);
+                }
             }
         }
     }
 
     private void setupNumberOfImages() {
-        if (sighting.getFotos().size() > 0)
-            lblNumberOfImages.setText(imageIndex+1 + " of " + sighting.getFotos().size());
-        else
-            lblNumberOfImages.setText("0 of 0");
+        if (sighting != null) {
+            if (sighting.getFotos().size() > 0)
+                lblNumberOfImages.setText(imageIndex+1 + " of " + sighting.getFotos().size());
+            else
+                lblNumberOfImages.setText("0 of 0");
+        }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
