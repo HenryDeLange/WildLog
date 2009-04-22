@@ -766,11 +766,13 @@ public class PanelSighting extends javax.swing.JPanel {
                 sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
                 sighting.setDetails(txtDetails.getText());
                 sighting.setSightingEvidence((SightingEvidence)cmbEvidence.getSelectedItem());
-                try {
-                    sighting.setNumberOfElements(Integer.parseInt(txtNumberOfElements.getText()));
-                }
-                catch (NumberFormatException e) {
-                    e.printStackTrace();
+                if (txtNumberOfElements.getText().length() > 0) {
+                    try {
+                        sighting.setNumberOfElements(Integer.parseInt(txtNumberOfElements.getText()));
+                    }
+                    catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
                 }
                 sighting.setTimeOfDay((ActiveTimeSpesific)cmbTimeOfDay.getSelectedItem());
                 sighting.setViewRating((ViewRating)cmbViewRating.getSelectedItem());
@@ -839,10 +841,10 @@ public class PanelSighting extends javax.swing.JPanel {
 
             }
             else {
-                if (sighting.getElement() == null)
+                if (element == null)
                     lblElement.setBorder(new LineBorder(Color.RED, 3, true));
                 else
-                if (sighting.getLocation() == null)
+                if (location == null)
                     lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
                 if (visit == null)
                     lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
@@ -859,7 +861,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         if (sighting != null) {
             btnUpdateSightingActionPerformed(null);
-            if (!dtpSightingDate.getBorder().equals(Color.RED) && !lblLocation.getBorder().equals(Color.RED) && !lblVisit.getBorder().equals(Color.RED) && !lblElement.getBorder().equals(Color.RED)) {
+            if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300);
                 setupNumberOfImages();
                 btnUpdateSightingActionPerformed(null);
