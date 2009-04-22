@@ -197,12 +197,18 @@ public class PanelSighting extends javax.swing.JPanel {
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
+            else {
+                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            }
 
             if (location != null) {
                 if (location.getFotos().size() > 0)
                     Utils.setupFoto(location, 0, lblLocationImage, 100);
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            }
+            else {
+                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
 
         }
