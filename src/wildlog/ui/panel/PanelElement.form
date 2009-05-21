@@ -997,7 +997,8 @@
               <Properties>
                 <Property name="columns" type="int" value="20"/>
                 <Property name="font" type="java.awt.Font" resourceKey="txtNutrition.font"/>
-                <Property name="rows" type="int" value="5"/>
+                <Property name="lineWrap" type="boolean" value="true"/>
+                <Property name="rows" type="int" value="3"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="element.getNutrition()" type="code"/>
                 </Property>

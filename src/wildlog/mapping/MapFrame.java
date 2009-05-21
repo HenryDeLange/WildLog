@@ -25,6 +25,7 @@ import com.bbn.openmap.gui.BasicMapPanel;
 import com.bbn.openmap.gui.MapPanel;
 import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
+import com.bbn.openmap.proj.Mercator;
 import java.awt.Color;
 import java.util.Properties;
 import javax.swing.ImageIcon;
@@ -82,25 +83,23 @@ public class MapFrame {
         //NavMouseMode navMouseMode = new NavMouseMode();
         //mapHandler.add(navMouseMode);
 
-        /*
         ShapeLayer shapeLayerBase = new ShapeLayer();
         Properties shapeLayerPropsBase = new Properties();
         shapeLayerPropsBase.put("prettyName", "World");
         shapeLayerPropsBase.put("lineColor", "000000");
         shapeLayerPropsBase.put("fillColor", "BDDE83");
-        shapeLayerPropsBase.put("shapeFile", "wildlog/mapping/data/shape/WorldBase.shp");
-        shapeLayerPropsBase.put("spatialIndex", "wildlog/mapping/data/shape/WorldBase.ssx");
+        shapeLayerPropsBase.put("shapeFile", "WorldBase.shp");
+        shapeLayerPropsBase.put("spatialIndex", "WorldBase.ssx");
         shapeLayerBase.setProperties(shapeLayerPropsBase);
         shapeLayerBase.setVisible(true);
-        */
 
         ShapeLayer shapeLayerSouthAfrica = new ShapeLayer();
         Properties shapeLayerPropsSouthAfrica = new Properties();
         shapeLayerPropsSouthAfrica.put("prettyName", "South Africa");
         shapeLayerPropsSouthAfrica.put("lineColor", "000000");
         shapeLayerPropsSouthAfrica.put("fillColor", "CDDE73");
-        shapeLayerPropsSouthAfrica.put("shapeFile", "wildlog/mapping/data/shape/provinces.shp");
-        shapeLayerPropsSouthAfrica.put("spatialIndex", "wildlog/mapping/data/shape/provinces.ssx");
+        shapeLayerPropsSouthAfrica.put("shapeFile", "provinces.shp");
+        shapeLayerPropsSouthAfrica.put("spatialIndex", "provinces.ssx");
         shapeLayerSouthAfrica.setProperties(shapeLayerPropsSouthAfrica);
         shapeLayerSouthAfrica.setVisible(true);
 
@@ -109,47 +108,36 @@ public class MapFrame {
         shapeLayerPropsRoads.put("prettyName", "South Africa");
         shapeLayerPropsRoads.put("lineColor", "A0A000");
         shapeLayerPropsRoads.put("fillColor", "A9A909");
-        shapeLayerPropsRoads.put("shapeFile", "wildlog/mapping/data/shape/roads.shp");
-        shapeLayerPropsRoads.put("spatialIndex", "wildlog/mapping/data/shape/roads.ssx");
+        shapeLayerPropsRoads.put("shapeFile", "roads.shp");
+        shapeLayerPropsRoads.put("spatialIndex", "roads.ssx");
         shapeLayerRoads.setProperties(shapeLayerPropsRoads);
         shapeLayerRoads.setVisible(true);
-        /*
+
         ShapeLayer shapeLayerTowns = new ShapeLayer();
         Properties shapeLayerPropsTowns = new Properties();
         shapeLayerPropsTowns.put("prettyName", "South Africa");
         shapeLayerPropsTowns.put("lineColor", "000000");
         shapeLayerPropsTowns.put("fillColor", "BDDE83");
-        shapeLayerPropsTowns.put("shapeFile", "wildlog/mapping/data/shape/town2.shp");
-        shapeLayerPropsTowns.put("spatialIndex", "wildlog/mapping/data/shape/town2.ssx");
+        shapeLayerPropsTowns.put("shapeFile", "town2.shp");
+        shapeLayerPropsTowns.put("spatialIndex", "town2.ssx");
         shapeLayerTowns.setProperties(shapeLayerPropsTowns);
         shapeLayerTowns.setVisible(true);
-        */
+
         ShapeLayer shapeLayerProtectedLand = new ShapeLayer();
         Properties shapeLayerPropsProtectedLand = new Properties();
         shapeLayerPropsProtectedLand.put("prettyName", "Protected Land Areas");
         shapeLayerPropsProtectedLand.put("lineColor", "4E7F12");
         shapeLayerPropsProtectedLand.put("fillColor", "8EBA52");
-        shapeLayerPropsProtectedLand.put("shapeFile", "wildlog/mapping/data/shape/protected_land.shp");
-        shapeLayerPropsProtectedLand.put("spatialIndex", "wildlog/mapping/data/shape/protected_land.ssx");
+        shapeLayerPropsProtectedLand.put("shapeFile", "protected_land.shp");
+        shapeLayerPropsProtectedLand.put("spatialIndex", "protected_land.ssx");
         shapeLayerProtectedLand.setProperties(shapeLayerPropsProtectedLand);
         shapeLayerProtectedLand.setVisible(true);
-
-        ShapeLayer shapeLayerProtectedSea = new ShapeLayer();
-        Properties shapeLayerPropsProtectedSea = new Properties();
-        shapeLayerPropsProtectedSea.put("prettyName", "Protected Sea Areas");
-        shapeLayerPropsProtectedSea.put("lineColor", "208090");
-        shapeLayerPropsProtectedSea.put("fillColor", "00BBDD");
-        shapeLayerPropsProtectedSea.put("shapeFile", "wildlog/mapping/data/shape/protected_Sea.shp");
-        shapeLayerPropsProtectedSea.put("spatialIndex", "wildlog/mapping/data/shape/protected_Sea.ssx");
-        shapeLayerProtectedSea.setProperties(shapeLayerPropsProtectedSea);
-        shapeLayerProtectedSea.setVisible(true);
-
+        
         // Last on top
-        //mapHandler.add(shapeLayerBase);
+        mapHandler.add(shapeLayerBase);
         mapHandler.add(shapeLayerSouthAfrica);
         mapHandler.add(shapeLayerRoads);
-        //mapHandler.add(shapeLayerTowns);
-        mapHandler.add(shapeLayerProtectedSea);
+        //mapHandler.add(shapeLayerTowns); // Baie punte, so los dit tot ek layers kan aan en af sit met die mapping
         mapHandler.add(shapeLayerProtectedLand);
     }
 

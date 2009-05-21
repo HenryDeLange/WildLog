@@ -139,11 +139,11 @@ public class PanelSighting extends javax.swing.JPanel {
                 cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
                 txtNumberOfElements.setText("");
                 cmbViewRating.setSelectedItem(ViewRating.NORMAL);
-                cmbLatitude.setSelectedItem(Latitudes.SOUTH);
+                //cmbLatitude.setSelectedItem(Latitudes.SOUTH);
                 txtLatDegrees.setText("");
                 txtLatMinutes.setText("");
                 txtLatSeconds.setText("");
-                cmbLongitude.setSelectedItem(Longitudes.EAST);
+                //cmbLongitude.setSelectedItem(Longitudes.EAST);
                 txtLonDegrees.setText("");
                 txtLonMinutes.setText("");
                 txtLonSeconds.setText("");

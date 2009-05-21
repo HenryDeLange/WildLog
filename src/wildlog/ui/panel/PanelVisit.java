@@ -250,6 +250,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
         lblVisitName.setFont(resourceMap.getFont("lblVisitName.font")); // NOI18N
         lblVisitName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblVisitName.setText(resourceMap.getString("lblVisitName.text")); // NOI18N
         lblVisitName.setName("lblVisitName"); // NOI18N
         visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
 
@@ -678,6 +679,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
         else
             lblVisitName.setText(". . .  - [" + locationForVisit.getName() + "]");
+        setupNumberOfSightingImages();
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
@@ -751,7 +753,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 }//GEN-LAST:event_tblSightingsMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.previousImage(visit, imageIndex, lblImage, 300);
+        imageIndex = Utils.nextImage(visit, imageIndex, lblImage, 300);
         setupNumberOfImages();
 }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -849,7 +851,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void btnNextImageSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageSightingActionPerformed
         if (sighting != null) {
-            imageSightingIndex = Utils.previousImage(sighting, imageSightingIndex, lblSightingImage, 150);
+            imageSightingIndex = Utils.nextImage(sighting, imageSightingIndex, lblSightingImage, 150);
             setupNumberOfSightingImages();
         }
 }//GEN-LAST:event_btnNextImageSightingActionPerformed
@@ -890,10 +892,12 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private void setupNumberOfSightingImages() {
         if (sighting != null) {
             if (sighting.getFotos().size() > 0)
-                lblNumberOfSightingImages.setText(imageIndex+1 + " of " + sighting.getFotos().size());
+                lblNumberOfSightingImages.setText(imageSightingIndex+1 + " of " + sighting.getFotos().size());
             else
                 lblNumberOfSightingImages.setText("0 of 0");
         }
+        else
+            lblNumberOfSightingImages.setText("");
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

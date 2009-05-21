@@ -637,7 +637,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         txtNutrition.setColumns(20);
         txtNutrition.setFont(resourceMap.getFont("txtNutrition.font")); // NOI18N
-        txtNutrition.setRows(5);
+        txtNutrition.setLineWrap(true);
+        txtNutrition.setRows(3);
         txtNutrition.setText(element.getNutrition());
         txtNutrition.setWrapStyleWord(true);
         txtNutrition.setName("txtNutrition"); // NOI18N
