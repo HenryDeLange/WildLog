@@ -21,6 +21,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.MapPoint;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.ElementType;
 
 
 public interface DBI {
@@ -43,6 +44,11 @@ public interface DBI {
     public List<Sighting> list(Sighting inSighting);
     public List<Foto> list(Foto inFoto);
     public List<MapPoint> list(MapPoint inMapPoint);
+
+    public List<Element> searchElementOnType(ElementType inType);
+    public List<Element> searchElementOnPrimaryName(String inPrimaryName);
+    public List<Element> searchElementOnTypeAndPrimaryName(ElementType inType, String inPrimaryString);
+    public List<Location> searchLocationOnName(String inName);
     
     public boolean createOrUpdate(Element inElement);
     public boolean createOrUpdate(Location inLocation);

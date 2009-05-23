@@ -36,7 +36,7 @@ public class UtilTableGenerator {
     }
     
     // METHODS:
-    public DefaultTableModel getCompleteElementTable(Element inElement) {
+    public DefaultTableModel getCompleteElementTable(Element inElement, boolean inUseSearch) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Other Name",
@@ -45,7 +45,29 @@ public class UtilTableGenerator {
                                 "Wish Rate",
                                 "Add Freq"
                                 };
-        List<Element> tempList = dbi.list(inElement);
+        List<Element> tempList = null;
+        if (inUseSearch) {
+            if (inElement.getType() == null) {
+                if (inElement.getPrimaryName() != null) {
+                    tempList = dbi.searchElementOnPrimaryName(inElement.getPrimaryName());
+                }
+                else {
+                    // Both where null so do normal listing
+                    tempList = dbi.list(inElement);
+                }
+            }
+            else {
+                if (inElement.getPrimaryName() == null) {
+                    tempList = dbi.searchElementOnType(inElement.getType());
+                }
+                else {
+                    tempList = dbi.searchElementOnTypeAndPrimaryName(inElement.getType(), inElement.getPrimaryName());
+                }
+            }
+        }
+        else
+            tempList = dbi.list(inElement);
+
         Object[][] tempTable = new Object[tempList.size()][6];
         for (int t = 0; t < tempList.size(); t++) {
             Element tempElement = tempList.get(t);
@@ -66,13 +88,35 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getShortElementTable(Element inElement) {
+    public DefaultTableModel getShortElementTable(Element inElement, boolean inUseSearch) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
                                 "Class"
                                 };
-        List<Element> tempList = dbi.list(inElement);
+        List<Element> tempList = null;
+        if (inUseSearch) {
+            if (inElement.getType() == null) {
+                if (inElement.getPrimaryName() != null) {
+                    tempList = dbi.searchElementOnPrimaryName(inElement.getPrimaryName());
+                }
+                else {
+                    // Both where null so do normal listing
+                    tempList = dbi.list(inElement);
+                }
+            }
+            else {
+                if (inElement.getPrimaryName() == null) {
+                    tempList = dbi.searchElementOnType(inElement.getType());
+                }
+                else {
+                    tempList = dbi.searchElementOnTypeAndPrimaryName(inElement.getType(), inElement.getPrimaryName());
+                }
+            }
+        }
+        else
+            tempList = dbi.list(inElement);
+
         Object[][] tempTable = new Object[tempList.size()][4];
         for (int t = 0; t < tempList.size(); t++) {
             Element tempElement = tempList.get(t);
@@ -367,12 +411,23 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getShortLocationTable(Location inLocation) {
+    public DefaultTableModel getShortLocationTable(Location inLocation, boolean inUseSearch) {
         String[] columnNames = {
                                 "Name",
                                 "Province"
                                 };
-        List<Location> tempList = dbi.list(inLocation);
+        List<Location> tempList = null;
+        if (inUseSearch) {
+            if (inLocation.getName() != null) {
+                tempList = dbi.searchLocationOnName(inLocation.getName());
+            }
+            else {
+                tempList = dbi.list(inLocation);
+            }
+        }
+        else
+            tempList = dbi.list(inLocation);
+        
         Object[][] tempTable = new Object[tempList.size()][2];
         for (int t = 0; t < tempList.size(); t++) {
             Location tempLocation = tempList.get(t);

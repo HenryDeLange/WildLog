@@ -247,7 +247,6 @@ public class WildLogView extends FrameView {
         jLabel9 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        ckbSearchDirect = new javax.swing.JCheckBox();
         btnExportElement = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -645,7 +644,7 @@ public class WildLogView extends FrameView {
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, false));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -763,11 +762,6 @@ public class WildLogView extends FrameView {
             }
         });
         tabElement.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, 150, 30));
-
-        ckbSearchDirect.setBackground(resourceMap.getColor("ckbSearchDirect.background")); // NOI18N
-        ckbSearchDirect.setText(resourceMap.getString("ckbSearchDirect.text")); // NOI18N
-        ckbSearchDirect.setName("ckbSearchDirect"); // NOI18N
-        tabElement.add(ckbSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, -1, 20));
 
         btnExportElement.setIcon(resourceMap.getIcon("btnExportElement.icon")); // NOI18N
         btnExportElement.setText(resourceMap.getString("btnExportElement.text")); // NOI18N
@@ -925,7 +919,7 @@ public class WildLogView extends FrameView {
 }//GEN-LAST:event_btnAddElementActionPerformed
 
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, false));
         tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(searchElement));
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         // Setup the table column sizes
@@ -944,7 +938,7 @@ public class WildLogView extends FrameView {
             tabbedPanel.remove(tempPanel);
             app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
         }
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, false));
     }//GEN-LAST:event_btnDeleteElementActionPerformed
 
     private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
@@ -982,7 +976,7 @@ public class WildLogView extends FrameView {
         searchElement = new Element();
         if (!cmbType.isEnabled())
             searchElement.setType((ElementType)cmbType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, true));
         cmbType.setEnabled(!cmbType.isEnabled());
         txtSearch.setText("");
         // Setup table column sizes
@@ -991,7 +985,7 @@ public class WildLogView extends FrameView {
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element((ElementType)cmbType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, true));
         txtSearch.setText("");
         // Setup talbe column sizes
         resizeTalbes_Element();
@@ -1097,20 +1091,11 @@ public class WildLogView extends FrameView {
         searchElement = new Element();
         if (ckbTypeFilter.isSelected())
             searchElement.setType((ElementType)cmbType.getSelectedItem());
-
-        if (ckbSearchDirect.isSelected()) {
-            searchElement.setPrimaryName(txtSearch.getText());
-            tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        if (txtSearch.getText() != null) {
+            if (txtSearch.getText().length() > 0)
+                searchElement.setPrimaryName(txtSearch.getText());
         }
-        else {
-            DefaultTableModel model = utilTableGenerator.getCompleteElementTable(searchElement);
-            for (int t = 0; t < model.getRowCount(); t++) {
-                if (!((String)model.getValueAt(t, 0)).contains(txtSearch.getText())) {
-                    model.removeRow(t--);
-                }
-            }
-            tblElement.setModel(model);
-        }
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, true));
         // Setup talbe column sizes
         resizeTalbes_Element();
     }//GEN-LAST:event_btnSearchActionPerformed
@@ -1166,7 +1151,7 @@ public class WildLogView extends FrameView {
         txtSearch.setText("");
         cmbType.setEnabled(false);
         searchElement = new Element();
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, false));
         // Setup talbe column sizes
         resizeTalbes_Element();
     }//GEN-LAST:event_btnClearSearchActionPerformed
@@ -1281,7 +1266,6 @@ public class WildLogView extends FrameView {
     private javax.swing.JButton btnImport;
     private javax.swing.JButton btnLocation;
     private javax.swing.JButton btnSearch;
-    private javax.swing.JCheckBox ckbSearchDirect;
     private javax.swing.JCheckBox ckbTypeFilter;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JLabel jLabel1;

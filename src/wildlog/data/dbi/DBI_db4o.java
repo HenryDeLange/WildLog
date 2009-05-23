@@ -17,11 +17,13 @@ package wildlog.data.dbi;
 import com.db4o.Db4o;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Foto;
@@ -31,6 +33,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.util.SightingCounter;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.util.IndicatorOfVersionAndUpdate;
+import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Habitat;
 
 
@@ -245,6 +248,76 @@ public class DBI_db4o implements DBI {
     public List<MapPoint> list(MapPoint inMapPoint) {
        ObjectSet<MapPoint> tempList = db.get(inMapPoint);
        return tempList;
+    }
+
+
+    @Override
+    public List<Element> searchElementOnType(final ElementType inType) {
+        List<Element> tempList = db.query(new Predicate<Element>() {
+            public boolean match(Element temp) {
+                if (inType != null) {
+                    if (!(inType.equals(temp.getType()))) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+        if (tempList.size() > 0) return tempList;
+        else return new ArrayList<Element>(0);
+    }
+
+    @Override
+    public List<Element> searchElementOnPrimaryName(final String inPrimaryName) {
+        List<Element> tempList = db.query(new Predicate<Element>() {
+            public boolean match(Element temp) {
+                if (inPrimaryName != null) {
+                    if (!(temp.getPrimaryName().toLowerCase().indexOf(inPrimaryName.toLowerCase()) > -1)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+        if (tempList.size() > 0) return tempList;
+        else return new ArrayList<Element>(0);
+    }
+
+    @Override
+    public List<Element> searchElementOnTypeAndPrimaryName(final ElementType inType, final String inPrimaryName) {
+        List<Element> tempList = db.query(new Predicate<Element>() {
+            public boolean match(Element temp) {
+                if (inType != null) {
+                    if (!(inType.equals(temp.getType()))) {
+                        return false;
+                    }
+                }
+                if (inPrimaryName != null) {
+                    if (!(temp.getPrimaryName().toLowerCase().indexOf(inPrimaryName.toLowerCase()) > -1)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+        if (tempList.size() > 0) return tempList;
+        else return new ArrayList<Element>(0);
+    }
+
+    @Override
+    public List<Location> searchLocationOnName(final String inName) {
+        List<Location> tempList = db.query(new Predicate<Location>() {
+            public boolean match(Location temp) {
+                if (inName != null) {
+                    if (!(temp.getName().toLowerCase().indexOf(inName.toLowerCase()) > -1)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+        if (tempList.size() > 0) return tempList;
+        else return new ArrayList<Location>(0);
     }
     
     

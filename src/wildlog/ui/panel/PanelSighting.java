@@ -269,7 +269,6 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLonSeconds = new javax.swing.JTextField();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        chkSearchDirect = new javax.swing.JCheckBox();
         jLabel20 = new javax.swing.JLabel();
         cmbSubArea = new javax.swing.JComboBox();
         btnDeleteImage = new javax.swing.JButton();
@@ -329,7 +328,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
-        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
+        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, false));
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -596,11 +595,6 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 235, 80, -1));
 
-        chkSearchDirect.setBackground(resourceMap.getColor("chkSearchDirect.background")); // NOI18N
-        chkSearchDirect.setText(resourceMap.getString("chkSearchDirect.text")); // NOI18N
-        chkSearchDirect.setName("chkSearchDirect"); // NOI18N
-        sightingIncludes.add(chkSearchDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, -1, -1));
-
         jLabel20.setText(resourceMap.getString("jLabel20.text")); // NOI18N
         jLabel20.setName("jLabel20"); // NOI18N
         sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, -1, -1));
@@ -645,7 +639,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
-        tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation));
+        tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation, false));
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -944,7 +938,7 @@ public class PanelSighting extends javax.swing.JPanel {
             searchElement = new Element();
             if (!cmbElementType.isEnabled())
                 searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, true));
             cmbElementType.setEnabled(!cmbElementType.isEnabled());
             txtSearch.setText("");
             // Setup table column sizes
@@ -955,7 +949,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         if (sighting != null) {
             searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
-            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, true));
             txtSearch.setText("");
             // Setup table column sizes
             resizeTalbes();
@@ -967,20 +961,11 @@ public class PanelSighting extends javax.swing.JPanel {
             searchElement = new Element();
             if (chkElementTypeFilter.isSelected())
                 searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-
-            if (chkSearchDirect.isSelected()) {
-                searchElement.setPrimaryName(txtSearch.getText());
-                tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
+            if (txtSearch.getText() != null) {
+                if (txtSearch.getText().length() > 0)
+                    searchElement.setPrimaryName(txtSearch.getText());
             }
-            else {
-                DefaultTableModel model = utilTableGenerator.getShortElementTable(searchElement);
-                for (int t = 0; t < model.getRowCount(); t++) {
-                    if (!((String)model.getValueAt(t, 0)).contains(txtSearch.getText())) {
-                        model.removeRow(t--);
-                    }
-                }
-                tblElement.setModel(model);
-            }
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, true));
             // Setup table column sizes
             resizeTalbes();
         }
@@ -989,19 +974,11 @@ public class PanelSighting extends javax.swing.JPanel {
     private void btnSearchLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchLocationActionPerformed
         if (sighting != null) {
             searchLocation = new Location();
-            if (chkSearchLocationDirect.isSelected()) {
-                searchLocation.setName(txtSearchLocation.getText());
-                tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation));
+            if (txtSearchLocation.getText() != null) {
+                if (txtSearchLocation.getText().length() > 0)
+                    searchLocation.setName(txtSearchLocation.getText());
             }
-            else {
-                DefaultTableModel model = utilTableGenerator.getShortLocationTable(searchLocation);
-                for (int t = 0; t < model.getRowCount(); t++) {
-                    if (!((String)model.getValueAt(t, 0)).contains(txtSearchLocation.getText())) {
-                        model.removeRow(t--);
-                    }
-                }
-                tblLocation.setModel(model);
-            }
+            tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation, true));
             // Setup table column sizes
             resizeTalbes();
         }
@@ -1132,7 +1109,6 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JButton btnUpdateSighting;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JCheckBox chkElementTypeFilter;
-    private javax.swing.JCheckBox chkSearchDirect;
     private javax.swing.JCheckBox chkSearchLocationDirect;
     private javax.swing.JComboBox cmbAreaType;
     private javax.swing.JComboBox cmbCertainty;
