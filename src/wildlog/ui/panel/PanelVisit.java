@@ -27,6 +27,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -170,6 +171,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
             }
             setupNumberOfSightingImages();
+        }
+        else {
+            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+            lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+            lblNumberOfSightingImages.setText("");
         }
     }
     
@@ -441,6 +447,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblSightingImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblSightingImage.setName("lblSightingImage"); // NOI18N
         lblSightingImage.setPreferredSize(new java.awt.Dimension(150, 150));
+        lblSightingImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblSightingImageMouseReleased(evt);
+            }
+        });
         visitIncludes.add(lblSightingImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 390, -1, -1));
 
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -451,8 +462,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblImageMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
             }
         });
         visitIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
@@ -552,6 +563,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblElementImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setName("lblElementImage"); // NOI18N
         lblElementImage.setPreferredSize(new java.awt.Dimension(150, 150));
+        lblElementImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblElementImageMouseReleased(evt);
+            }
+        });
         visitIncludes.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 390, -1, -1));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
@@ -680,17 +696,41 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         else
             lblVisitName.setText(". . .  - [" + locationForVisit.getName() + "]");
         setupNumberOfSightingImages();
+        refreshSightingInfo();
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
-        if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Date)tblSightings.getValueAt(tblSightings.getSelectedRow(), 2), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 3)));
-            visit.getSightings().remove(sighting);
-            //app.getDBI().delete(sighting);
-            app.getDBI().createOrUpdate(visit);
-            tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
-            sighting = null;
-            refreshSightingInfo();
+       if (tblSightings.getSelectedRowCount() > 0) {
+            final JDialog dialog = new JDialog(new JFrame(), "Delete", true);
+            dialog.setLayout(new AbsoluteLayout());
+            JLabel text = new JLabel("Are you sure you want to delete the Sighting?");
+            dialog.add(text, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 350, -1));
+            JButton buttonYes = new JButton("Yes");
+            buttonYes.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    sighting = app.getDBI().find(new Sighting(parseDate(tblSightings.getValueAt(tblSightings.getSelectedRow(), 1).toString()), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
+                    visit.getSightings().remove(sighting);
+                    //app.getDBI().delete(sighting);
+                    app.getDBI().createOrUpdate(visit);
+                    tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
+                    sighting = null;
+                    refreshSightingInfo();
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 25, 100, -1));
+            JButton buttonNo = new JButton("No");
+            buttonNo.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 25, 100, -1));
+            dialog.setSize(255, 84);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnDeleteSightingActionPerformed
 
@@ -709,13 +749,15 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());
             dialog.setVisible(true);
+            // Reset Sighting on this panel
+            sighting = null;
+            refreshSightingInfo();
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
     private void btnEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSightingActionPerformed
         if (sighting != null) {
             tblSightings.clearSelection();
-            refreshSightingInfo();
             final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
@@ -724,6 +766,9 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());
             dialog.setVisible(true);
+            // Reset Sighting on this panel
+            sighting = null;
+            refreshSightingInfo();
         }
 }//GEN-LAST:event_btnEditSightingActionPerformed
 
@@ -826,22 +871,6 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         app.getMapFrame().showMap();
 }//GEN-LAST:event_btnMapVisitActionPerformed
 
-    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            try {
-            if (visit != null)
-                    if (visit.getFotos().size() > 0) {
-                        String fileName = visit.getFotos().get(imageIndex).getOriginalFotoLocation();
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-                }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }//GEN-LAST:event_lblImageMouseClicked
-
     private void btnPreviousImageSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageSightingActionPerformed
         if (sighting != null) {
             imageSightingIndex = Utils.previousImage(sighting, imageSightingIndex, lblSightingImage, 150);
@@ -855,6 +884,26 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             setupNumberOfSightingImages();
         }
 }//GEN-LAST:event_btnNextImageSightingActionPerformed
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            Utils.openImage(visit, imageIndex);
+        }
+    }//GEN-LAST:event_lblImageMouseReleased
+
+    private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
+        if (sighting != null) {
+            if (sighting.getElement() != null) {
+                Utils.openImage(sighting.getElement(), 0);
+            }
+        }
+    }//GEN-LAST:event_lblElementImageMouseReleased
+
+    private void lblSightingImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSightingImageMouseReleased
+        if (sighting != null) {
+            Utils.openImage(sighting, imageSightingIndex);
+        }
+    }//GEN-LAST:event_lblSightingImageMouseReleased
 
 
     private void resizeTables() {
@@ -898,6 +947,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         }
         else
             lblNumberOfSightingImages.setText("");
+    }
+
+    private Date parseDate(String inDate) {
+        Date date = new Date(inDate);
+        return date;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

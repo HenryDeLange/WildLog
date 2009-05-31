@@ -579,8 +579,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblImageMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
             }
         });
         elementIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
@@ -885,22 +885,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
-    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            try {
-                if (element.getFotos() != null)
-                    if (element.getFotos().size() > 0) {
-                        String fileName = element.getFotos().get(imageIndex).getOriginalFotoLocation();
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }//GEN-LAST:event_lblImageMouseClicked
-
     private void txtSizeMaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleFocusGained
         txtSizeMale.setSelectionStart(0);
         txtSizeMale.setSelectionEnd(txtSizeMale.getText().length());
@@ -935,6 +919,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtBreedingNumber.setSelectionStart(0);
         txtBreedingNumber.setSelectionEnd(txtBreedingNumber.getText().length());
     }//GEN-LAST:event_txtBreedingNumberFocusGained
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        Utils.openImage(element, imageIndex);
+    }//GEN-LAST:event_lblImageMouseReleased
 
     private void resizeTables() {
         TableColumn column = null;

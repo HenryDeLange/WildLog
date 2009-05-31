@@ -229,4 +229,21 @@ public class Utils {
         inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
     }
 
+    public static void openImage(HasFotos inHasFotos, int inIndex) {
+        if (inHasFotos != null) {
+            if (System.getProperty("os.name").equals("Windows XP")) {
+                try {
+                    if (inHasFotos.getFotos().size() > 0) {
+                        String fileName = inHasFotos.getFotos().get(inIndex).getOriginalFotoLocation();
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
 }

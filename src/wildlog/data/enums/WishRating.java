@@ -16,6 +16,8 @@ package wildlog.data.enums;
 
 
 public enum WishRating {
+    EXCEPTIONAL("Very High - Exceptional"),
+    NEED_GOOD_SIGHTING("High - Need good sighting"),
     HIGH("High - Always great to see"),
     NORMAL("Normal - Nice to see"),
     LOW("Low - Commonly seen"),

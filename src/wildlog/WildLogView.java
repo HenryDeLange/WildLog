@@ -28,6 +28,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.Timer;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,6 +38,7 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.util.UtilsHTML;
@@ -607,6 +609,11 @@ public class WildLogView extends FrameView {
         lblImage_LocTab.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage_LocTab.setName("lblImage_LocTab"); // NOI18N
         lblImage_LocTab.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImage_LocTabMouseReleased(evt);
+            }
+        });
         tabLocation.add(lblImage_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
@@ -742,6 +749,11 @@ public class WildLogView extends FrameView {
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
+            }
+        });
         tabElement.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         jLabel9.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
@@ -931,14 +943,39 @@ public class WildLogView extends FrameView {
 }//GEN-LAST:event_tabElementComponentShown
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
-        int[] selectedRows = tblElement.getSelectedRows();
-        JPanel tempPanel = null;
-        for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
-            tabbedPanel.remove(tempPanel);
-            app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
+        if (tblElement.getSelectedRowCount() > 0) {
+            final JDialog dialog = new JDialog(new JFrame(), "Delete", true);
+            dialog.setLayout(new AbsoluteLayout());
+            JLabel text = new JLabel("Are you sure you want to delete the Creature(s)?");
+            dialog.add(text, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 350, -1));
+            JButton buttonYes = new JButton("Yes");
+            buttonYes.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    int[] selectedRows = tblElement.getSelectedRows();
+                    PanelElement tempPanel = null;
+                    for (int t = 0; t < selectedRows.length; t++) {
+                        tempPanel = utilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+                        tabbedPanel.remove(tempPanel);
+                        app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
+                    }
+                    tabElementComponentShown(null);
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 25, 100, -1));
+            JButton buttonNo = new JButton("No");
+            buttonNo.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 25, 100, -1));
+            dialog.setSize(255, 84);
+            dialog.setLocationRelativeTo(this.getComponent());
+            dialog.setVisible(true);
         }
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, false));
     }//GEN-LAST:event_btnDeleteElementActionPerformed
 
     private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
@@ -1023,19 +1060,44 @@ public class WildLogView extends FrameView {
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
-        int[] selectedRows = tblLocation.getSelectedRows();
-        for (int t = 0; t < selectedRows.length; t++) {
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 0)));
-            if (tempLocation.getVisits() != null) {
-                for (int i = 0; i < tempLocation.getVisits().size(); i++) {
-                    PanelVisit tempPanel = utilPanelGenerator.getVisitPanel(tempLocation, tempLocation.getVisits().get(i).getName());
-                    tabbedPanel.remove(tempPanel);
+        if (tblLocation.getSelectedRowCount() > 0) {
+            final JDialog dialog = new JDialog(new JFrame(), "Delete", true);
+            dialog.setLayout(new AbsoluteLayout());
+            JLabel text = new JLabel("Are you sure you want to delete the Location(s)?");
+            dialog.add(text, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 350, -1));
+            JButton buttonYes = new JButton("Yes");
+            buttonYes.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    int[] selectedRows = tblLocation.getSelectedRows();
+                    for (int t = 0; t < selectedRows.length; t++) {
+                        Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 0)));
+                        if (tempLocation.getVisits() != null) {
+                            for (int i = 0; i < tempLocation.getVisits().size(); i++) {
+                                PanelVisit tempPanel = utilPanelGenerator.getVisitPanel(tempLocation, tempLocation.getVisits().get(i).getName());
+                                tabbedPanel.remove(tempPanel);
+                            }
+                        }
+                        tabbedPanel.remove(utilPanelGenerator.getLocationPanel(tempLocation.getName()));
+                        app.getDBI().delete(tempLocation);
+                    }
+                    tabLocationComponentShown(null);
+                    dialog.dispose();
                 }
-            }
-            tabbedPanel.remove(utilPanelGenerator.getLocationPanel(tempLocation.getName()));
-            app.getDBI().delete(tempLocation);
+            });
+            dialog.add(buttonYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 25, 100, -1));
+            JButton buttonNo = new JButton("No");
+            buttonNo.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 25, 100, -1));
+            dialog.setSize(255, 84);
+            dialog.setLocationRelativeTo(this.getComponent());
+            dialog.setVisible(true);
         }
-        tabLocationComponentShown(null);
     }//GEN-LAST:event_btnDeleteLocationActionPerformed
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
@@ -1155,6 +1217,20 @@ public class WildLogView extends FrameView {
         // Setup talbe column sizes
         resizeTalbes_Element();
     }//GEN-LAST:event_btnClearSearchActionPerformed
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        if (tblElement.getSelectedRowCount() == 1) {
+            Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
+                Utils.openImage(tempElement, 0);
+        }
+    }//GEN-LAST:event_lblImageMouseReleased
+
+    private void lblImage_LocTabMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage_LocTabMouseReleased
+        if (tblLocation.getSelectedRowCount() == 1) {
+            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
+            Utils.openImage(tempLocation, 0);
+        }
+    }//GEN-LAST:event_lblImage_LocTabMouseReleased
 
     private void resizeTables_Location() {
         TableColumn column = null;

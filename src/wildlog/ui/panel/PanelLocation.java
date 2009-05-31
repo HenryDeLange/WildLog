@@ -544,8 +544,8 @@ public class PanelLocation extends javax.swing.JPanel {
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblImageMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
             }
         });
         locationIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
@@ -867,16 +867,41 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGoVisitActionPerformed
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
-        int[] selectedRows = tblVisit.getSelectedRows();
-        PanelVisit tempPanel = null;
-        for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-            parent.remove(tempPanel);
-            locationWL.getVisits().remove(tempPanel.getVisit());
-            app.getDBI().createOrUpdate(locationWL);
-            app.getDBI().delete(tempPanel.getVisit());
+        if (tblVisit.getSelectedRowCount() > 0) {
+            final JDialog dialog = new JDialog(new JFrame(), "Delete", true);
+            dialog.setLayout(new AbsoluteLayout());
+            JLabel text = new JLabel("Are you sure you want to delete the Visit(s)?");
+            dialog.add(text, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 350, -1));
+            JButton buttonYes = new JButton("Yes");
+            buttonYes.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    int[] selectedRows = tblVisit.getSelectedRows();
+                    PanelVisit tempPanel = null;
+                    for (int t = 0; t < selectedRows.length; t++) {
+                        tempPanel = utilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
+                        parent.remove(tempPanel);
+                        locationWL.getVisits().remove(tempPanel.getVisit());
+                        app.getDBI().createOrUpdate(locationWL);
+                        app.getDBI().delete(tempPanel.getVisit());
+                    }
+                    formComponentShown(null);
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 25, 100, -1));
+            JButton buttonNo = new JButton("No");
+            buttonNo.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    dialog.dispose();
+                }
+            });
+            dialog.add(buttonNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 25, 100, -1));
+            dialog.setSize(255, 84);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
         }
-        tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(locationWL));
     }//GEN-LAST:event_btnDeleteVisitActionPerformed
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
@@ -957,22 +982,6 @@ public class PanelLocation extends javax.swing.JPanel {
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
-
-    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            try {
-                if (locationWL.getFotos() != null)
-                    if (locationWL.getFotos().size() > 0) {
-                        String fileName = locationWL.getFotos().get(imageIndex).getOriginalFotoLocation();
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }//GEN-LAST:event_lblImageMouseClicked
 
     private void btnMapSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingsActionPerformed
         app.getMapFrame().clearPoints();
@@ -1056,6 +1065,10 @@ public class PanelLocation extends javax.swing.JPanel {
         txtLonSeconds.setSelectionStart(0);
         txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
     }//GEN-LAST:event_txtLonSecondsFocusGained
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        Utils.openImage(locationWL, imageIndex);
+    }//GEN-LAST:event_lblImageMouseReleased
 
 
     private void resizeTables() {

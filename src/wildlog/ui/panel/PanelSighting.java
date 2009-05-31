@@ -16,7 +16,6 @@ package wildlog.ui.panel;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -474,6 +473,11 @@ public class PanelSighting extends javax.swing.JPanel {
         lblElementImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setName("lblElementImage"); // NOI18N
         lblElementImage.setPreferredSize(new java.awt.Dimension(100, 100));
+        lblElementImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblElementImageMouseReleased(evt);
+            }
+        });
         sightingIncludes.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(405, 180, -1, -1));
 
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -484,8 +488,8 @@ public class PanelSighting extends javax.swing.JPanel {
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblImageMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
             }
         });
         sightingIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
@@ -692,6 +696,11 @@ public class PanelSighting extends javax.swing.JPanel {
         lblLocationImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblLocationImage.setName("lblLocationImage"); // NOI18N
         lblLocationImage.setPreferredSize(new java.awt.Dimension(100, 100));
+        lblLocationImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblLocationImageMouseReleased(evt);
+            }
+        });
         sightingIncludes.add(lblLocationImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 180, -1, -1));
 
         jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
@@ -984,24 +993,6 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSearchLocationActionPerformed
 
-    private void lblImageMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseClicked
-        if (sighting != null) {
-            if (System.getProperty("os.name").equals("Windows XP")) {
-                try {
-                    if (sighting.getFotos() != null)
-                        if (sighting.getFotos().size() > 0) {
-                            String fileName = sighting.getFotos().get(imageIndex).getOriginalFotoLocation();
-                            String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                            Runtime.getRuntime().exec(commands);
-                        }
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-    }//GEN-LAST:event_lblImageMouseClicked
-
     private void txtNumberOfElementsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumberOfElementsFocusGained
         if (sighting != null) {
             txtNumberOfElements.setSelectionStart(0);
@@ -1050,6 +1041,24 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLonSeconds.setSelectionEnd(txtLonSeconds.getText().length());
         }
     }//GEN-LAST:event_txtLonSecondsFocusGained
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        if (sighting != null) {
+            Utils.openImage(sighting, imageIndex);
+        }
+    }//GEN-LAST:event_lblImageMouseReleased
+
+    private void lblLocationImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationImageMouseReleased
+        if (location != null) {
+            Utils.openImage(location, 0);
+        }
+    }//GEN-LAST:event_lblLocationImageMouseReleased
+
+    private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
+        if (element != null) {
+            Utils.openImage(element, 0);
+        }
+    }//GEN-LAST:event_lblElementImageMouseReleased
 
     private void resizeTalbes() {
         if (sighting != null) {

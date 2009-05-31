@@ -398,19 +398,39 @@ public class DBI_db4o implements DBI {
     @Override
     public boolean delete(Element inElement) {
         inElement = find(inElement);
-        // Find any sightings that have this element and delete them also
+        // Find any sightings that have this element and delete them
         Sighting tempSighting = new Sighting();
         tempSighting.setElement(inElement);
-        List<Sighting>  sightings = list(tempSighting);
-        for (int t = 0; t < sightings.size(); t++) {
-            // Also delete sighting from Visit
-            Visit tempVisit = new Visit();
-            tempVisit.getSightings().add(sightings.get(t));
-            tempVisit = find(tempVisit);
-            tempVisit.getSightings().remove(sightings.get(t));
-            createOrUpdate(tempVisit);
-            delete(sightings.get(t));
+        final List<Sighting>  sightings = list(tempSighting);
+        if (sightings != null) {
+            for (int t = 0; t < sightings.size(); t++) {
+                // Also delete sighting from Visit
+                final int index = t;
+                List<Visit> tempList = db.query(new Predicate<Visit>() {
+                    public boolean match(Visit temp) {
+                        if (temp.getSightings().contains(sightings.get(index)))
+                            return true;
+                        else
+                            return false;
+                    }
+                });
+                for (int i = 0; i < tempList.size(); i++) {
+                    tempList.get(i).getSightings().remove(sightings.get(index));
+                    createOrUpdate(tempList.get(i));
+                }
+                delete(sightings.get(t));
+                // The code below used to work but broke.. Above is a work around.
+//                // Also delete sighting from Visit
+//                Visit tempVisit = new Visit();
+//                tempVisit.getSightings().add(sightings.get(t));
+//                tempVisit = find(tempVisit);
+//                tempVisit.getSightings().remove(sightings.get(t));
+//                createOrUpdate(tempVisit);
+//                delete(sightings.get(t));
+            }
         }
+        // This leaves the Sightings still intact, but with null Elements,
+        // thats why they are removed above.
         db.delete(inElement);
         db.commit();
         return false;
