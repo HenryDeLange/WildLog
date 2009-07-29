@@ -447,24 +447,24 @@ public class UtilTableGenerator {
     public DefaultTableModel getSightingsForElementTable(Element inElement) {
         String[] columnNames = {
                                 "Location",
-                                "Date"
+                                "Date",
+                                "ID"
                                 };
         Sighting templateSighting = new Sighting();
         templateSighting.setElement(inElement);
         List<Sighting> tempList = dbi.list(templateSighting);
         Object[][] tempTable;
         if (tempList != null) {
-            tempTable = new Object[tempList.size()][2];
+            tempTable = new Object[tempList.size()][3];
             for (int t = 0; t < tempList.size(); t++) {
                 Sighting tempSighting = tempList.get(t);
                 int i = 0;
-                if (tempSighting.getLocation() != null) {
-                    tempTable[t][i++] = tempSighting.getLocation().getName();
-                }
+                tempTable[t][i++] = tempSighting.getLocation().getName();
                 if (tempSighting.getDate() != null)
                     tempTable[t][i++] = tempSighting.getDate().getDate() + " " + getMonth(tempSighting.getDate().getMonth()) + " " + (tempSighting.getDate().getYear()+1900);
                 else
                     tempTable[t][i++] = "";
+                tempTable[t][i++] = tempSighting.getSightingCounter();
             }
         }
         else tempTable = new Object[0][0];

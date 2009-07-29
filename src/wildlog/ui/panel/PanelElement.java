@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -46,7 +47,9 @@ import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
@@ -814,15 +817,34 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
-        int[] selectedRows = tblLocation.getSelectedRows();
-        PanelLocation tempPanel = null;
-        for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
-            parent = (JTabbedPane) getParent();
-            parent.add(tempPanel);
-            tempPanel.setupTabHeader();
+        if (rdbLocations.isSelected()) {
+            int[] selectedRows = tblLocation.getSelectedRows();
+            PanelLocation tempPanel = null;
+            for (int t = 0; t < selectedRows.length; t++) {
+                tempPanel = utilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
+                parent = (JTabbedPane) getParent();
+                parent.add(tempPanel);
+                tempPanel.setupTabHeader();
+            }
+            if (tempPanel != null) parent.setSelectedComponent(tempPanel);
         }
-        if (tempPanel != null) parent.setSelectedComponent(tempPanel);
+        else {
+            if (tblLocation.getSelectedRowCount() == 1) {
+                final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
+                dialog.setLayout(new AbsoluteLayout());
+                dialog.setSize(965, 625);
+                Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
+                Sighting sighting = app.getDBI().find(new Sighting(new Date(Date.parse((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1))), element, location, (Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
+                Visit tempVisit = new Visit();
+                tempVisit.getSightings().add(sighting);
+                Visit visit = app.getDBI().find(tempVisit);
+                dialog.add(new PanelSighting(sighting, location, visit, element, this, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+                dialog.setLocationRelativeTo(this);
+                ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+                dialog.setIconImage(icon.getImage());
+                dialog.setVisible(true);
+            }
+        }
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
@@ -961,6 +983,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         else {
             tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         }
+        // Setup table column sizes
+        resizeTables();
         // Sort rows for Locations
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
@@ -968,17 +992,34 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_rdbSightingsItemStateChanged
 
     private void resizeTables() {
-        TableColumn column = null;
-        for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
-            column = tblLocation.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(100);
+        if (rdbSightings.isSelected()) {
+            TableColumn column = null;
+            for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
+                column = tblLocation.getColumnModel().getColumn(i);
+                if (i == 0) {
+                    column.setPreferredWidth(135);
+                }
+                else if (i == 1) {
+                    column.setPreferredWidth(75);
+                }
+                else if (i == 2) {
+                    column.setPreferredWidth(5);
+                }
             }
-            else if (i == 1) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(35);
+        }
+        else {
+            TableColumn column = null;
+            for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
+                column = tblLocation.getColumnModel().getColumn(i);
+                if (i == 0) {
+                    column.setPreferredWidth(100);
+                }
+                else if (i == 1) {
+                    column.setPreferredWidth(35);
+                }
+                else if (i == 2) {
+                    column.setPreferredWidth(35);
+                }
             }
         }
     }
