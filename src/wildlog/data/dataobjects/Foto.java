@@ -14,9 +14,10 @@
 
 package wildlog.data.dataobjects;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import wildlog.data.dataobjects.util.UtilsHTML;
+import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.FotoRating;
 
 
@@ -50,7 +51,8 @@ public class Foto {
     }
 
     public String toHTML() {
-        return UtilsHTML.generateHTMLImages(fileLocation);
+        // Moet die getter hier gebruik want ek wil die File().exists() doen...
+        return UtilsHTML.generateHTMLImages(getFileLocation());
     }
 
     // GETTERS:
@@ -63,7 +65,11 @@ public class Foto {
     }
 
     public String getFileLocation() {
-        return fileLocation;
+        // Dis bietjie van 'n hack, maar dit help vir die kere wat 'n rekenaar 'n ander C drive het...
+        if (new File(fileLocation.substring(2)).exists())
+            return fileLocation.substring(2);
+        else
+            return fileLocation;
     }
 
     public FotoRating getRating() {
@@ -75,7 +81,11 @@ public class Foto {
     }
 
     public String getOriginalFotoLocation() {
-        return originalFotoLocation;
+        // Dis bietjie van 'n hack, maar dit help vir die kere wat 'n rekenaar 'n ander C drive het...
+        if (new File(originalFotoLocation.substring(2)).exists())
+            return originalFotoLocation.substring(2);
+        else
+            return originalFotoLocation;
     }
 
     // SETTERS:

@@ -14,10 +14,12 @@
 
 package wildlog.data.dataobjects;
 
+import CsvGenerator.CsvGenerator;
+import KmlGenerator.objects.KmlEntry;
 import java.util.ArrayList;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.data.dataobjects.util.UtilsHTML;
+import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -26,6 +28,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Province;
+import wildlog.utils.LatLonConverter;
 
 // Foundation for the Location class
 public class Location implements HasFotos {
@@ -74,7 +77,7 @@ public class Location implements HasFotos {
         return name;
     }
 
-    public String toHTML() {
+    public String toHTML(boolean inUsedForKML) {
         String fotoString = "";
         if (fotos != null)
             for (int t = 0; t < fotos.size(); t++) {
@@ -86,10 +89,11 @@ public class Location implements HasFotos {
                 subAreasString = subAreasString + subAreas.get(t);
             }
         String visitsString = "";
-        if (visits != null)
-            for (int t = 0; t < visits.size(); t++) {
-                visitsString = visitsString + visits.get(t).toHTML() + "<br/>";
-            }
+        if (inUsedForKML == false)
+            if (visits != null)
+                for (int t = 0; t < visits.size(); t++) {
+                    visitsString = visitsString + visits.get(t).toHTML() + "<br/>";
+                }
         String htmlLocation = "<head><title>" + name + "</title></head>";
         htmlLocation = htmlLocation + "<body>";
         htmlLocation = htmlLocation + "<h2>" + name + "</h2><br/>";
@@ -107,10 +111,48 @@ public class Location implements HasFotos {
         htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Longitude Minutes", lonMinutes, "Longitude Seconds", lonSeconds);
         htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Sub Areas", subAreasString);
         htmlLocation = htmlLocation + "</table>";
-        htmlLocation = htmlLocation + "</br><h3>Fotos:</h3>" + fotoString;
-        htmlLocation = htmlLocation + "</br><h3>Visits:</h3>" + visitsString;
+            htmlLocation = htmlLocation + "</br><h3>Photos:</h3>" + fotoString;
+        if (inUsedForKML == false)
+            htmlLocation = htmlLocation + "</br><h3>Visits:</h3>" + visitsString;
         htmlLocation = htmlLocation + "</body>";
         return htmlLocation;
+    }
+
+    public KmlEntry toKML(int inID) {
+        KmlEntry entry = new KmlEntry();
+        entry.setId(inID);
+        entry.setName(name);
+        entry.setDescription(this.toHTML(true));
+        entry.setStyle("locationStyle");
+        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+        return entry;
+    }
+
+    public void toCSV(CsvGenerator inCSVGenerator) {
+        inCSVGenerator.addData(name);
+        inCSVGenerator.addData(description);
+        inCSVGenerator.addData(province);
+        inCSVGenerator.addData(rating);
+        inCSVGenerator.addData(gameViewingRating);
+        inCSVGenerator.addData(habitatType);
+        inCSVGenerator.addData(fotos);
+        //inCSVGenerator.addData("Visits");
+        inCSVGenerator.addData(accommodationType);
+        inCSVGenerator.addData(catering);
+        inCSVGenerator.addData(contactNumbers);
+        inCSVGenerator.addData(website);
+        inCSVGenerator.addData(email);
+        inCSVGenerator.addData(directions);
+        inCSVGenerator.addData(latitude);
+        inCSVGenerator.addData(latDegrees);
+        inCSVGenerator.addData(latMinutes);
+        inCSVGenerator.addData(latSeconds);
+        inCSVGenerator.addData(longitude);
+        inCSVGenerator.addData(lonDegrees);
+        inCSVGenerator.addData(lonMinutes);
+        inCSVGenerator.addData(lonSeconds);
+        inCSVGenerator.addData(subAreas);
     }
 
     // GETTERS:

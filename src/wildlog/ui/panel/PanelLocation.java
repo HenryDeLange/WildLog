@@ -18,8 +18,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -43,9 +43,9 @@ import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.Habitat;
 import wildlog.data.enums.Province;
-import wildlog.ui.util.UtilPanelGenerator;
-import wildlog.ui.util.UtilTableGenerator;
-import wildlog.ui.util.Utils;
+import wildlog.utils.ui.UtilPanelGenerator;
+import wildlog.utils.ui.UtilTableGenerator;
+import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
@@ -387,6 +387,11 @@ public class PanelLocation extends javax.swing.JPanel {
                 tblVisitMouseReleased(evt);
             }
         });
+        tblVisit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblVisitKeyPressed(evt);
+            }
+        });
         jScrollPane12.setViewportView(tblVisit);
 
         locationIncludes.add(jScrollPane12, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 376, 590, 200));
@@ -396,6 +401,11 @@ public class PanelLocation extends javax.swing.JPanel {
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
         tblElement.setName("tblElement"); // NOI18N
+        tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblElementKeyPressed(evt);
+            }
+        });
         jScrollPane11.setViewportView(tblElement);
 
         locationIncludes.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 376, 290, 170));
@@ -1069,6 +1079,16 @@ public class PanelLocation extends javax.swing.JPanel {
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         Utils.openImage(locationWL, imageIndex);
     }//GEN-LAST:event_lblImageMouseReleased
+
+    private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoVisitActionPerformed(null);
+    }//GEN-LAST:event_tblVisitKeyPressed
+
+    private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoElementActionPerformed(null);
+    }//GEN-LAST:event_tblElementKeyPressed
 
 
     private void resizeTables() {

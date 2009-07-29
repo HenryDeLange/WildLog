@@ -15,16 +15,16 @@
 package wildlog.data.dataobjects;
 
 
+import CsvGenerator.CsvGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.data.dataobjects.util.UtilsHTML;
+import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.Habitat;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
@@ -111,9 +111,37 @@ public class Element implements HasFotos {
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Age", lifespan);
         htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Breeding Duration", breedingDuration, "Breeding Number", breedingNumber);
         htmlElement = htmlElement + "</table>";
-        htmlElement = htmlElement + "</br><h3>Fotos:</h3>" + fotoString;
+        htmlElement = htmlElement + "</br><h3>Photos:</h3>" + fotoString;
         htmlElement = htmlElement + "</body>";
         return htmlElement;
+    }
+
+    public void toCSV(CsvGenerator inCSVGenerator) {
+        inCSVGenerator.addData(primaryName);
+        inCSVGenerator.addData(otherName);
+        inCSVGenerator.addData(scientificName);
+        inCSVGenerator.addData(description);
+        inCSVGenerator.addData(nutrition);
+        inCSVGenerator.addData(waterDependance);
+        inCSVGenerator.addData(sizeMaleAverage);
+        inCSVGenerator.addData(sizeFemaleAverage);
+        inCSVGenerator.addData(sizeUnit);
+        inCSVGenerator.addData(weightMaleAverage);
+        inCSVGenerator.addData(weightFemaleAverage);
+        inCSVGenerator.addData(weightUnit);
+        inCSVGenerator.addData(breedingDuration);
+        inCSVGenerator.addData(breedingNumber);
+        inCSVGenerator.addData(breedingAge);
+        inCSVGenerator.addData(wishListRating);
+        inCSVGenerator.addData(diagnosticDescription);
+        inCSVGenerator.addData(activeTime);
+        inCSVGenerator.addData(endangeredStatus);
+        inCSVGenerator.addData(behaviourDescription);
+        inCSVGenerator.addData(addFrequency);
+        inCSVGenerator.addData(fotos);
+        inCSVGenerator.addData(type);
+        inCSVGenerator.addData(feedingClass);
+        inCSVGenerator.addData(lifespan);
     }
     
 

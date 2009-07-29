@@ -14,11 +14,12 @@
 
 package wildlog.data.dataobjects;
 
+import CsvGenerator.CsvGenerator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.data.dataobjects.util.UtilsHTML;
+import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 
@@ -49,6 +50,11 @@ public class Visit implements HasFotos {
     }
 
     public String toHTML() {
+        String fotoString = "";
+        if (fotos != null)
+            for (int t = 0; t < fotos.size(); t++) {
+                fotoString = fotoString + fotos.get(t).toHTML();
+            }
         String sightingString = "";
         if (sightings != null)
             for (int t = 0; t < sightings.size(); t++) {
@@ -62,8 +68,20 @@ public class Visit implements HasFotos {
         htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Game Watching", gameWatchingIntensity, "Type", type);
         htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Description", description);
         htmlVisit = htmlVisit + "</table>";
+        htmlVisit = htmlVisit + "</br><h3>Photos:</h3>" + fotoString;
         htmlVisit = htmlVisit + "</br><h3>Sightings:</h3>" + sightingString;
         return htmlVisit;
+    }
+
+    public void toCSV(CsvGenerator inCSVGenerator) {
+        inCSVGenerator.addData(name);
+        inCSVGenerator.addData(startDate);
+        inCSVGenerator.addData(endDate);
+        inCSVGenerator.addData(description);
+        inCSVGenerator.addData(gameWatchingIntensity);
+        //inCSVGenerator.addData("Sightings");
+        inCSVGenerator.addData(type.toString());
+        inCSVGenerator.addData(fotos.toString());
     }
 
     // GETTERS:

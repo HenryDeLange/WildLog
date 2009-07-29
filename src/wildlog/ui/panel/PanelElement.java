@@ -18,8 +18,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -42,9 +42,9 @@ import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
-import wildlog.ui.util.UtilPanelGenerator;
-import wildlog.ui.util.UtilTableGenerator;
-import wildlog.ui.util.Utils;
+import wildlog.utils.ui.UtilPanelGenerator;
+import wildlog.utils.ui.UtilTableGenerator;
+import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.Latitudes;
@@ -144,6 +144,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         elementIncludes = new javax.swing.JPanel();
         jLabel55 = new javax.swing.JLabel();
         jLabel56 = new javax.swing.JLabel();
@@ -217,6 +218,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnAddSighting = new javax.swing.JButton();
         lblNumberOfLocations = new javax.swing.JLabel();
         lblNumberOfImages = new javax.swing.JLabel();
+        rdbLocations = new javax.swing.JRadioButton();
+        rdbSightings = new javax.swing.JRadioButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -317,6 +320,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         tblLocation.setName("tblLocation"); // NOI18N
+        tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblLocationKeyPressed(evt);
+            }
+        });
         jScrollPane15.setViewportView(tblLocation);
 
         elementIncludes.add(jScrollPane15, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 376, 290, 170));
@@ -330,7 +338,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnGoLocationActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 548, 250, 30));
+        elementIncludes.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(853, 548, -1, 30));
 
         jSeparator11.setName("jSeparator11"); // NOI18N
         elementIncludes.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -670,6 +678,22 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         elementIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 40, 20));
 
+        buttonGroup1.add(rdbLocations);
+        rdbLocations.setSelected(true);
+        rdbLocations.setText(resourceMap.getString("rdbLocations.text")); // NOI18N
+        rdbLocations.setName("rdbLocations"); // NOI18N
+        elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, -1));
+
+        buttonGroup1.add(rdbSightings);
+        rdbSightings.setText(resourceMap.getString("rdbSightings.text")); // NOI18N
+        rdbSightings.setName("rdbSightings"); // NOI18N
+        rdbSightings.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdbSightingsItemStateChanged(evt);
+            }
+        });
+        elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -819,6 +843,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblLocation.getRowSorter().setSortKeys(tempList);
+        rdbLocations.setSelected(true);
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
@@ -924,6 +949,24 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         Utils.openImage(element, imageIndex);
     }//GEN-LAST:event_lblImageMouseReleased
 
+    private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoLocationActionPerformed(null);
+    }//GEN-LAST:event_tblLocationKeyPressed
+
+    private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
+        if (rdbSightings.isSelected()) {
+            tblLocation.setModel(utilTableGenerator.getSightingsForElementTable(element));
+        }
+        else {
+            tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
+        }
+        // Sort rows for Locations
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblLocation.getRowSorter().setSortKeys(tempList);
+    }//GEN-LAST:event_rdbSightingsItemStateChanged
+
     private void resizeTables() {
         TableColumn column = null;
         for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
@@ -957,6 +1000,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbActiveTime;
     private javax.swing.JComboBox cmbAddFrequency;
     private javax.swing.JComboBox cmbEndangeredStatus;
@@ -1006,6 +1050,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JLabel lblNumberOfLocations;
     private javax.swing.JLabel lblNumberOfSightings;
+    private javax.swing.JRadioButton rdbLocations;
+    private javax.swing.JRadioButton rdbSightings;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTextArea txtBehaviourDescription;
     private javax.swing.JTextField txtBreedingNumber;

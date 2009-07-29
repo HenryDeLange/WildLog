@@ -14,11 +14,13 @@
 
 package wildlog.data.dataobjects;
 
+import CsvGenerator.CsvGenerator;
+import KmlGenerator.objects.KmlEntry;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.data.dataobjects.util.UtilsHTML;
+import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
@@ -27,6 +29,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
+import wildlog.utils.LatLonConverter;
 
 // Foundation for the Sighting class
 public class Sighting implements HasFotos {
@@ -92,8 +95,71 @@ public class Sighting implements HasFotos {
         htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Longitude Minutes", lonMinutes, "Longitude Seconds", lonSeconds);
         htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Sub Area", subArea);
         htmlSighting = htmlSighting + "</table>";
-        htmlSighting = htmlSighting + "</br><h3>Fotos:</h3>" + fotoString;
+        htmlSighting = htmlSighting + "</br><h3>Photos:</h3>" + fotoString;
         return htmlSighting;
+    }
+
+    public KmlEntry toKML(int inID) {
+        KmlEntry entry = new KmlEntry();
+        entry.setId(inID);
+        entry.setName(element.getPrimaryName());
+        entry.setDescription(this.toHTML());
+        entry.setStyle("elementStyle");
+        if (latitude == null || longitude == null) {
+            if (location.getLatitude() != null && location.getLongitude() != null) {
+                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                }
+            }
+            else {
+                entry.setLatitude(0);
+                entry.setLongitude(0);
+            }
+        }
+        else
+        if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
+            if (location.getLatitude() != null && location.getLongitude() != null) {
+                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                }
+            }
+            else {
+                entry.setLatitude(0);
+                entry.setLongitude(0);
+            }
+        }
+        else {
+            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+        }
+        return entry;
+    }
+
+    public void toCSV(CsvGenerator inCSVGenerator) {
+        inCSVGenerator.addData(date);
+        inCSVGenerator.addData(element.getPrimaryName());
+        inCSVGenerator.addData(location.getName());
+        inCSVGenerator.addData(timeOfDay);
+        inCSVGenerator.addData(weather);
+        inCSVGenerator.addData(areaType);
+        inCSVGenerator.addData(viewRating);
+        inCSVGenerator.addData(certainty);
+        inCSVGenerator.addData(numberOfElements);
+        inCSVGenerator.addData(details);
+        inCSVGenerator.addData(fotos);
+        inCSVGenerator.addData(latitude);
+        inCSVGenerator.addData(latDegrees);
+        inCSVGenerator.addData(latMinutes);
+        inCSVGenerator.addData(latSeconds);
+        inCSVGenerator.addData(longitude);
+        inCSVGenerator.addData(lonDegrees);
+        inCSVGenerator.addData(lonMinutes);
+        inCSVGenerator.addData(lonSeconds);
+        inCSVGenerator.addData(subArea);
+        inCSVGenerator.addData(sightingEvidence);
+        //inCSVGenerator.addData(sightingCounter);
     }
 
     // GETTERS:

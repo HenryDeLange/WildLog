@@ -14,6 +14,10 @@
 
 package wildlog;
 
+import CsvGenerator.CsvGenerator;
+import KmlGenerator.KmlGenerator;
+import KmlGenerator.objects.KmlEntry;
+import KmlGenerator.objects.KmlStyle;
 import java.awt.Color;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
@@ -22,6 +26,9 @@ import org.jdesktop.application.FrameView;
 import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -35,20 +42,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
-import wildlog.data.dataobjects.util.UtilsHTML;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
+import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.panel.PanelElement;
 import wildlog.ui.panel.PanelLocation;
 import wildlog.ui.panel.PanelVisit;
-import wildlog.ui.util.UtilPanelGenerator;
-import wildlog.ui.util.UtilTableGenerator;
-import wildlog.ui.util.Utils;
+import wildlog.utils.ui.UtilPanelGenerator;
+import wildlog.utils.ui.UtilTableGenerator;
+import wildlog.utils.ui.Utils;
 
 /**
  * The application's main frame.
@@ -159,7 +167,7 @@ public class WildLogView extends FrameView {
     public void setupTabHeaderFoto() {
         JPanel tabHeader = new JPanel();
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/FotoList.gif"))));
-        tabHeader.add(new JLabel("Fotos"));
+        tabHeader.add(new JLabel("Photos"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
         tabbedPanel.setTabComponentAt(1, tabHeader);
     }
@@ -194,28 +202,14 @@ public class WildLogView extends FrameView {
         btnLocation = new javax.swing.JButton();
         btnAnimal = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        btnBackup = new javax.swing.JButton();
         btnFotos = new javax.swing.JButton();
         btnFancyStuff = new javax.swing.JButton();
-        btnExportAll = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
-        jLabel13 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jSeparator5 = new javax.swing.JSeparator();
-        jSeparator6 = new javax.swing.JSeparator();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
-        lblListOfElements = new javax.swing.JLabel();
-        lblListOfLocations = new javax.swing.JLabel();
-        btnImport = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -232,7 +226,6 @@ public class WildLogView extends FrameView {
         btnGoVisit_LocTab = new javax.swing.JButton();
         lblImage_LocTab = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        btnExportLocation = new javax.swing.JButton();
         tabElement = new javax.swing.JPanel();
         scrlElement = new javax.swing.JScrollPane();
         tblElement = new javax.swing.JTable();
@@ -249,13 +242,23 @@ public class WildLogView extends FrameView {
         jLabel9 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        btnExportElement = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btnClearSearch = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        importMenu = new javax.swing.JMenu();
+        wldImportMenuItem = new javax.swing.JMenuItem();
+        csvImportMenuItem = new javax.swing.JMenuItem();
+        exportMenu = new javax.swing.JMenu();
+        wldExportMenuItem = new javax.swing.JMenuItem();
+        csvExportMenuItem = new javax.swing.JMenuItem();
+        kmlExportMenuItem = new javax.swing.JMenuItem();
+        htmlExportMenuItem1 = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JSeparator();
+        backupMenuItem = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JSeparator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
@@ -310,17 +313,7 @@ public class WildLogView extends FrameView {
         jLabel3.setForeground(resourceMap.getColor("jLabel3.foreground")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        tabHome.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 490, -1, -1));
-
-        btnBackup.setBackground(resourceMap.getColor("btnBackup.background")); // NOI18N
-        btnBackup.setText(resourceMap.getString("btnBackup.text")); // NOI18N
-        btnBackup.setName("btnBackup"); // NOI18N
-        btnBackup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBackupActionPerformed(evt);
-            }
-        });
-        tabHome.add(btnBackup, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 50, 160, 30));
+        tabHome.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, -1, -1));
 
         btnFotos.setBackground(resourceMap.getColor("btnFotos.background")); // NOI18N
         btnFotos.setText(resourceMap.getString("btnFotos.text")); // NOI18N
@@ -330,22 +323,12 @@ public class WildLogView extends FrameView {
                 btnFotosActionPerformed(evt);
             }
         });
-        tabHome.add(btnFotos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 170, 30));
+        tabHome.add(btnFotos, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 210, 270, 40));
 
         btnFancyStuff.setBackground(resourceMap.getColor("btnFancyStuff.background")); // NOI18N
         btnFancyStuff.setText(resourceMap.getString("btnFancyStuff.text")); // NOI18N
         btnFancyStuff.setName("btnFancyStuff"); // NOI18N
         tabHome.add(btnFancyStuff, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 550, 170, 30));
-
-        btnExportAll.setBackground(resourceMap.getColor("btnExportAll.background")); // NOI18N
-        btnExportAll.setText(resourceMap.getString("btnExportAll.text")); // NOI18N
-        btnExportAll.setName("btnExportAll"); // NOI18N
-        btnExportAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportAllActionPerformed(evt);
-            }
-        });
-        tabHome.add(btnExportAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 170, 160, 30));
 
         jLabel10.setFont(resourceMap.getFont("jLabel10.font")); // NOI18N
         jLabel10.setForeground(resourceMap.getColor("jLabel10.foreground")); // NOI18N
@@ -365,94 +348,17 @@ public class WildLogView extends FrameView {
         jLabel12.setName("jLabel12"); // NOI18N
         tabHome.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, -1, -1));
 
-        jSeparator4.setBackground(resourceMap.getColor("jSeparator4.background")); // NOI18N
-        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jSeparator4.setName("jSeparator4"); // NOI18N
-        tabHome.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 0, 10, 340));
-
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel13.setForeground(resourceMap.getColor("jLabel13.foreground")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-        tabHome.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 20, -1, -1));
-
-        jScrollPane5.setBackground(resourceMap.getColor("jScrollPane5.background")); // NOI18N
-        jScrollPane5.setBorder(null);
-        jScrollPane5.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane5.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jScrollPane5.setName("jScrollPane5"); // NOI18N
-
-        jTextArea2.setBackground(resourceMap.getColor("jTextArea2.background")); // NOI18N
-        jTextArea2.setColumns(20);
-        jTextArea2.setEditable(false);
-        jTextArea2.setFont(resourceMap.getFont("jTextArea2.font")); // NOI18N
-        jTextArea2.setForeground(resourceMap.getColor("jTextArea2.foreground")); // NOI18N
-        jTextArea2.setLineWrap(true);
-        jTextArea2.setRows(5);
-        jTextArea2.setText(resourceMap.getString("jTextArea2.text")); // NOI18N
-        jTextArea2.setWrapStyleWord(true);
-        jTextArea2.setName("jTextArea2"); // NOI18N
-        jScrollPane5.setViewportView(jTextArea2);
-
-        tabHome.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 210, 160, 130));
-
-        jSeparator5.setBackground(resourceMap.getColor("jSeparator5.background")); // NOI18N
-        jSeparator5.setName("jSeparator5"); // NOI18N
-        tabHome.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 340, 182, 10));
-
-        jSeparator6.setBackground(resourceMap.getColor("jSeparator6.background")); // NOI18N
-        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jSeparator6.setName("jSeparator6"); // NOI18N
-        tabHome.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 0, 10, 340));
-
-        jScrollPane7.setBackground(resourceMap.getColor("jScrollPane7.background")); // NOI18N
-        jScrollPane7.setBorder(null);
-        jScrollPane7.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane7.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        jScrollPane7.setName("jScrollPane7"); // NOI18N
-
-        jTextArea3.setBackground(resourceMap.getColor("jTextArea3.background")); // NOI18N
-        jTextArea3.setColumns(20);
-        jTextArea3.setEditable(false);
-        jTextArea3.setFont(resourceMap.getFont("jTextArea3.font")); // NOI18N
-        jTextArea3.setForeground(resourceMap.getColor("jTextArea3.foreground")); // NOI18N
-        jTextArea3.setLineWrap(true);
-        jTextArea3.setRows(5);
-        jTextArea3.setText(resourceMap.getString("jTextArea3.text")); // NOI18N
-        jTextArea3.setWrapStyleWord(true);
-        jTextArea3.setName("jTextArea3"); // NOI18N
-        jScrollPane7.setViewportView(jTextArea3);
-
-        tabHome.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 90, 160, 70));
-
-        lblListOfElements.setFont(resourceMap.getFont("lblListOfElements.font")); // NOI18N
-        lblListOfElements.setForeground(resourceMap.getColor("lblListOfElements.foreground")); // NOI18N
-        lblListOfElements.setText(resourceMap.getString("lblListOfElements.text")); // NOI18N
-        lblListOfElements.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        lblListOfElements.setName("lblListOfElements"); // NOI18N
-        tabHome.add(lblListOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 260, 270, 210));
-
-        lblListOfLocations.setFont(resourceMap.getFont("lblListOfLocations.font")); // NOI18N
-        lblListOfLocations.setForeground(resourceMap.getColor("lblListOfLocations.foreground")); // NOI18N
-        lblListOfLocations.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        lblListOfLocations.setName("lblListOfLocations"); // NOI18N
-        tabHome.add(lblListOfLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 270, 210));
-
-        btnImport.setText(resourceMap.getString("btnImport.text")); // NOI18N
-        btnImport.setName("btnImport"); // NOI18N
-        tabHome.add(btnImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 510, 170, 30));
-
         jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
         jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
         jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
-        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 350, -1, -1));
+        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 20, -1, -1));
 
         jLabel16.setFont(resourceMap.getFont("jLabel16.font")); // NOI18N
         jLabel16.setForeground(resourceMap.getColor("jLabel16.foreground")); // NOI18N
         jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
         jLabel16.setName("jLabel16"); // NOI18N
-        tabHome.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 370, -1, -1));
+        tabHome.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 40, -1, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -467,24 +373,15 @@ public class WildLogView extends FrameView {
             }
         });
 
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
-
         javax.swing.GroupLayout tabFotoLayout = new javax.swing.GroupLayout(tabFoto);
         tabFoto.setLayout(tabFotoLayout);
         tabFotoLayout.setHorizontalGroup(
             tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabFotoLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 472, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(524, Short.MAX_VALUE))
+            .addGap(0, 1017, Short.MAX_VALUE)
         );
         tabFotoLayout.setVerticalGroup(
             tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabFotoLayout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel4)
-                .addContainerGap(566, Short.MAX_VALUE))
+            .addGap(0, 602, Short.MAX_VALUE)
         );
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
@@ -513,6 +410,14 @@ public class WildLogView extends FrameView {
                 tblLocationMouseReleased(evt);
             }
         });
+        tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblLocationKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblLocationKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblLocation);
 
         tabLocation.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 860, 260));
@@ -533,6 +438,11 @@ public class WildLogView extends FrameView {
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(new Location()));
         tblVisit.setName("tblVisit"); // NOI18N
+        tblVisit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblVisitKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblVisit);
 
         tabLocation.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, 360, 250));
@@ -587,6 +497,11 @@ public class WildLogView extends FrameView {
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
         tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(new Location()));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
+        tblElement_LocTab.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblElement_LocTabKeyPressed(evt);
+            }
+        });
         jScrollPane3.setViewportView(tblElement_LocTab);
 
         tabLocation.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 300, 300, 250));
@@ -622,17 +537,6 @@ public class WildLogView extends FrameView {
         jLabel7.setName("jLabel7"); // NOI18N
         tabLocation.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, -1));
 
-        btnExportLocation.setIcon(resourceMap.getIcon("btnExportLocation.icon")); // NOI18N
-        btnExportLocation.setText(resourceMap.getString("btnExportLocation.text")); // NOI18N
-        btnExportLocation.setToolTipText(resourceMap.getString("btnExportLocation.toolTipText")); // NOI18N
-        btnExportLocation.setName("btnExportLocation"); // NOI18N
-        btnExportLocation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportLocationActionPerformed(evt);
-            }
-        });
-        tabLocation.add(btnExportLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 130, 30));
-
         tabbedPanel.addTab(resourceMap.getString("tabLocation.TabConstraints.tabTitle"), tabLocation); // NOI18N
 
         tabElement.setBackground(resourceMap.getColor("tabElement.background")); // NOI18N
@@ -657,6 +561,14 @@ public class WildLogView extends FrameView {
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblElementMouseReleased(evt);
+            }
+        });
+        tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblElementKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblElementKeyReleased(evt);
             }
         });
         scrlElement.setViewportView(tblElement);
@@ -707,6 +619,11 @@ public class WildLogView extends FrameView {
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
         tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
+        tblLocation_EleTab.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblLocation_EleTabKeyPressed(evt);
+            }
+        });
         jScrollPane6.setViewportView(tblLocation_EleTab);
 
         tabElement.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 300, 330, 250));
@@ -775,17 +692,6 @@ public class WildLogView extends FrameView {
         });
         tabElement.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, 150, 30));
 
-        btnExportElement.setIcon(resourceMap.getIcon("btnExportElement.icon")); // NOI18N
-        btnExportElement.setText(resourceMap.getString("btnExportElement.text")); // NOI18N
-        btnExportElement.setToolTipText(resourceMap.getString("btnExportElement.toolTipText")); // NOI18N
-        btnExportElement.setName("btnExportElement"); // NOI18N
-        btnExportElement.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportElementActionPerformed(evt);
-            }
-        });
-        tabElement.add(btnExportElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 130, 30));
-
         jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
         jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
@@ -832,7 +738,55 @@ public class WildLogView extends FrameView {
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
+        importMenu.setText(resourceMap.getString("importMenu.text")); // NOI18N
+        importMenu.setName("importMenu"); // NOI18N
+
+        wldImportMenuItem.setText(resourceMap.getString("wldImportMenuItem.text")); // NOI18N
+        wldImportMenuItem.setName("wldImportMenuItem"); // NOI18N
+        importMenu.add(wldImportMenuItem);
+
+        csvImportMenuItem.setText(resourceMap.getString("csvImportMenuItem.text")); // NOI18N
+        csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
+        importMenu.add(csvImportMenuItem);
+
+        fileMenu.add(importMenu);
+
+        exportMenu.setText(resourceMap.getString("exportMenu.text")); // NOI18N
+        exportMenu.setName("exportMenu"); // NOI18N
+
+        wldExportMenuItem.setText(resourceMap.getString("wldExportMenuItem.text")); // NOI18N
+        wldExportMenuItem.setName("wldExportMenuItem"); // NOI18N
+        exportMenu.add(wldExportMenuItem);
+
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getActionMap(WildLogView.class, this);
+        csvExportMenuItem.setAction(actionMap.get("exportToCSV")); // NOI18N
+        csvExportMenuItem.setText(resourceMap.getString("csvExportMenuItem.text")); // NOI18N
+        csvExportMenuItem.setName("csvExportMenuItem"); // NOI18N
+        exportMenu.add(csvExportMenuItem);
+
+        kmlExportMenuItem.setAction(actionMap.get("exportToKML")); // NOI18N
+        kmlExportMenuItem.setText(resourceMap.getString("kmlExportMenuItem.text")); // NOI18N
+        kmlExportMenuItem.setName("kmlExportMenuItem"); // NOI18N
+        exportMenu.add(kmlExportMenuItem);
+
+        htmlExportMenuItem1.setAction(actionMap.get("exportToHTML")); // NOI18N
+        htmlExportMenuItem1.setText(resourceMap.getString("htmlExportMenuItem1.text")); // NOI18N
+        htmlExportMenuItem1.setName("htmlExportMenuItem1"); // NOI18N
+        exportMenu.add(htmlExportMenuItem1);
+
+        fileMenu.add(exportMenu);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        fileMenu.add(jSeparator3);
+
+        backupMenuItem.setAction(actionMap.get("backup")); // NOI18N
+        backupMenuItem.setText(resourceMap.getString("backupMenuItem.text")); // NOI18N
+        backupMenuItem.setName("backupMenuItem"); // NOI18N
+        fileMenu.add(backupMenuItem);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        fileMenu.add(jSeparator2);
+
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -1032,11 +986,6 @@ public class WildLogView extends FrameView {
         tabbedPanel.setSelectedIndex(1);
 }//GEN-LAST:event_btnFotosActionPerformed
 
-    private void btnBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackupActionPerformed
-        app.getDBI().doBackup();
-        getApplication().exit();
-}//GEN-LAST:event_btnBackupActionPerformed
-
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
         int[] selectedRows = tblElement_LocTab.getSelectedRows();
         PanelElement tempPanel = null;
@@ -1162,46 +1111,8 @@ public class WildLogView extends FrameView {
         resizeTalbes_Element();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnExportElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportElementActionPerformed
-        int[] selectedRows = tblElement.getSelectedRows();
-        for (int t = 0; t < selectedRows.length; t++) {
-            Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
-            UtilsHTML.exportHTML(tempElement);
-        }
-    }//GEN-LAST:event_btnExportElementActionPerformed
-
-    private void btnExportLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportLocationActionPerformed
-        int[] selectedRows = tblLocation.getSelectedRows();
-        for (int t = 0; t < selectedRows.length; t++) {
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 0)));
-            UtilsHTML.exportHTML(tempLocation);
-        }
-    }//GEN-LAST:event_btnExportLocationActionPerformed
-
-    private void btnExportAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportAllActionPerformed
-        List<Element> listElements = app.getDBI().list(new Element());
-        for (int t = 0; t < listElements.size(); t++) {
-            UtilsHTML.exportHTML(listElements.get(t));
-        }
-        List<Location> listLocations = app.getDBI().list(new Location());
-        for (int t = 0; t < listLocations.size(); t++) {
-            UtilsHTML.exportHTML(listLocations.get(t));
-        }
-    }//GEN-LAST:event_btnExportAllActionPerformed
-
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
-        List<Element> listElements = app.getDBI().list(new Element());
-        String elements = "<html>";
-        for (int t = 0; t < listElements.size(); t++) {
-            elements = elements + listElements.get(t).getPrimaryName() + "<br/>";
-        }
-        lblListOfElements.setText(elements);
-        List<Location> listLocations = app.getDBI().list(new Location());
-        String locations = "<html>";
-        for (int t = 0; t < listLocations.size(); t++) {
-            locations = locations + listLocations.get(t).getName() + "<br/>";
-        }
-        lblListOfLocations.setText(locations);
+        
     }//GEN-LAST:event_tabHomeComponentShown
 
     private void tabFotoComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabFotoComponentShown
@@ -1231,6 +1142,41 @@ public class WildLogView extends FrameView {
             Utils.openImage(tempLocation, 0);
         }
     }//GEN-LAST:event_lblImage_LocTabMouseReleased
+
+    private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoLocation_LocTabActionPerformed(null);
+    }//GEN-LAST:event_tblLocationKeyPressed
+
+    private void tblLocationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
+            tblLocationMouseReleased(null);
+    }//GEN-LAST:event_tblLocationKeyReleased
+
+    private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoElementActionPerformed(null);
+    }//GEN-LAST:event_tblElementKeyPressed
+
+    private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
+            tblElementMouseReleased(null);
+    }//GEN-LAST:event_tblElementKeyReleased
+
+    private void tblLocation_EleTabKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocation_EleTabKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoLocationActionPerformed(null);
+    }//GEN-LAST:event_tblLocation_EleTabKeyPressed
+
+    private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoVisit_LocTabActionPerformed(null);
+    }//GEN-LAST:event_tblVisitKeyPressed
+
+    private void tblElement_LocTabKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElement_LocTabKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnGoElement_LocTabActionPerformed(null);
+    }//GEN-LAST:event_tblElement_LocTabKeyPressed
 
     private void resizeTables_Location() {
         TableColumn column = null;
@@ -1321,17 +1267,193 @@ public class WildLogView extends FrameView {
         }
     }
 
+    @Action
+    public void backup() {
+        app.getDBI().doBackup();
+        getApplication().exit();
+    }
+
+    @Action
+    public void exportToHTML() {
+        List<Element> listElements = app.getDBI().list(new Element());
+        for (int t = 0; t < listElements.size(); t++) {
+            UtilsHTML.exportHTML(listElements.get(t));
+        }
+        List<Location> listLocations = app.getDBI().list(new Location());
+        for (int t = 0; t < listLocations.size(); t++) {
+            UtilsHTML.exportHTML(listLocations.get(t));
+        }
+    }
+
+    @Action
+    public void exportToKML() {
+        // First do the HTML export to generate the Images in the right place
+        exportToHTML();
+
+        // Then do KML export
+        String path = File.separatorChar + "WildLog" + File.separatorChar + "KML";
+        File tempFile = new File(path);
+        tempFile.mkdirs();
+        KmlGenerator kmlgen = new KmlGenerator();
+        kmlgen.setKmlPath(path + File.separatorChar + "WildLogMarkers.kml");
+
+        List<KmlStyle> styles = new ArrayList<KmlStyle>();
+        KmlStyle style1 = new KmlStyle();
+        style1.setName("locationStyle");
+        style1.setIconName("locationIcon");
+        style1.setIconPath("http://maps.google.com/mapfiles/kml/pal3/icon31.png");
+        styles.add(style1);
+        KmlStyle style2 = new KmlStyle();
+        style2.setName("elementStyle");
+        style2.setIconName("elementIcon");
+        style2.setIconPath("http://maps.google.com/mapfiles/kml/pal5/icon6.png");
+        styles.add(style2);
+
+        List<KmlEntry> entries = new ArrayList<KmlEntry>();
+        // Sightings
+        List<Sighting> listSightings = app.getDBI().list(new Sighting());
+        for (int t = 0; t < listSightings.size(); t++) {
+            entries.add(listSightings.get(t).toKML(t));
+        }
+        // Locations
+        List<Location> listLocations = app.getDBI().list(new Location());
+        for (int t = 0; t < listLocations.size(); t++) {
+            entries.add(listLocations.get(t).toKML(listSightings.size() + t));
+        }
+
+        kmlgen.generateFile(entries, styles);
+
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            try {
+                String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", path + File.separatorChar + "WildLogMarkers.kml"};
+                Runtime.getRuntime().exec(commands);
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    @Action
+    public void exportToCSV() {
+        String path = File.separatorChar + "WildLog" + File.separatorChar + "CSV";
+        File tempFile = new File(path);
+        tempFile.mkdirs();
+        // Locations
+        CsvGenerator csvGenerator = new CsvGenerator(path + File.separatorChar + "Locations.csv");
+        csvGenerator.addHeader("Name");
+        csvGenerator.addHeader("Description");
+        csvGenerator.addHeader("Province");
+        csvGenerator.addHeader("Rating");
+        csvGenerator.addHeader("Wildlife Viewing Rating");
+        csvGenerator.addHeader("Habitat Type");
+        csvGenerator.addHeader("Photos");
+        csvGenerator.addHeader("Accommodation Type");
+        csvGenerator.addHeader("Catering");
+        csvGenerator.addHeader("Contact Number");
+        csvGenerator.addHeader("Website");
+        csvGenerator.addHeader("Email");
+        csvGenerator.addHeader("Directions");
+        csvGenerator.addHeader("Latitude Indicator");
+        csvGenerator.addHeader("Latitude Degrees");
+        csvGenerator.addHeader("Latitude Minutes");
+        csvGenerator.addHeader("Latitude Seconds");
+        csvGenerator.addHeader("Longitude Indicator");
+        csvGenerator.addHeader("Longitude Degrees");
+        csvGenerator.addHeader("Longitude Minutes");
+        csvGenerator.addHeader("Longitude Seconds");
+        csvGenerator.addHeader("Sub Areas");
+        List<Location> listLocations = app.getDBI().list(new Location());
+        for (int t = 0; t < listLocations.size(); t++) {
+            listLocations.get(t).toCSV(csvGenerator);
+        }
+        csvGenerator.writeCSV();
+        // Visits
+        csvGenerator = new CsvGenerator(path + File.separatorChar + "Visits.csv");
+        csvGenerator.addHeader("Name");
+        csvGenerator.addHeader("Start Date");
+        csvGenerator.addHeader("End Date");
+        csvGenerator.addHeader("Description");
+        csvGenerator.addHeader("Game Watching Intensity");
+        //csvGenerator.addHeader("Sightings");
+        csvGenerator.addHeader("Type");
+        csvGenerator.addHeader("Photos");
+        List<Visit> listVisits = app.getDBI().list(new Visit());
+        for (int t = 0; t < listVisits.size(); t++) {
+            listVisits.get(t).toCSV(csvGenerator);
+        }
+        csvGenerator.writeCSV();
+        // Sightings
+        csvGenerator = new CsvGenerator(path + File.separatorChar + "Sightings.csv");
+        csvGenerator.addHeader("Date");
+        csvGenerator.addHeader("Element Primary Name");
+        csvGenerator.addHeader("Location Name");
+        csvGenerator.addHeader("Time of Day");
+        csvGenerator.addHeader("Weather");
+        csvGenerator.addHeader("Area Type");
+        csvGenerator.addHeader("View Rating");
+        csvGenerator.addHeader("Certainty");
+        csvGenerator.addHeader("Number of Creatures");
+        csvGenerator.addHeader("Details");
+        csvGenerator.addHeader("Photos");
+        csvGenerator.addHeader("Latitude Indicator");
+        csvGenerator.addHeader("Latitude Degrees");
+        csvGenerator.addHeader("Latitude Minutes");
+        csvGenerator.addHeader("Latitude Seconds");
+        csvGenerator.addHeader("Longitude Indicator");
+        csvGenerator.addHeader("Longitude Degree");
+        csvGenerator.addHeader("Longitude Minutes");
+        csvGenerator.addHeader("Longitude Seconds");
+        csvGenerator.addHeader("Sub Area");
+        csvGenerator.addHeader("Sighting Evidence");
+        //csvGenerator.addHeader("Sighting Counter");
+        List<Sighting> listSightings = app.getDBI().list(new Sighting());
+        for (int t = 0; t < listSightings.size(); t++) {
+            listSightings.get(t).toCSV(csvGenerator);
+        }
+        csvGenerator.writeCSV();
+        // Elements
+        csvGenerator = new CsvGenerator(path + File.separatorChar + "Creatures.csv");
+        csvGenerator.addHeader("Primary Name");
+        csvGenerator.addHeader("Other Name");
+        csvGenerator.addHeader("Scientific Name");
+        csvGenerator.addHeader("Description");
+        csvGenerator.addHeader("Nutrition");
+        csvGenerator.addHeader("Water Dependance");
+        csvGenerator.addHeader("Average Male Size");
+        csvGenerator.addHeader("Average Female Size");
+        csvGenerator.addHeader("Size Unit");
+        csvGenerator.addHeader("Average Male Weight");
+        csvGenerator.addHeader("Average Female Weight");
+        csvGenerator.addHeader("Weight Unit");
+        csvGenerator.addHeader("Breeding Duration");
+        csvGenerator.addHeader("Breeding Number");
+        csvGenerator.addHeader("Breeding Age");
+        csvGenerator.addHeader("Wish List Rating");
+        csvGenerator.addHeader("Diagnostic Description");
+        csvGenerator.addHeader("Active Time");
+        csvGenerator.addHeader("Endangered Status");
+        csvGenerator.addHeader("Behaviour Description");
+        csvGenerator.addHeader("Add Frequency");
+        csvGenerator.addHeader("Photos");
+        csvGenerator.addHeader("Type");
+        csvGenerator.addHeader("Feeding Class");
+        csvGenerator.addHeader("Lifespan");
+        List<Element> listElements = app.getDBI().list(new Element());
+        for (int t = 0; t < listElements.size(); t++) {
+            listElements.get(t).toCSV(csvGenerator);
+        }
+        csvGenerator.writeCSV();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem backupMenuItem;
     private javax.swing.JButton btnAddElement;
     private javax.swing.JButton btnAddLocation;
     private javax.swing.JButton btnAnimal;
-    private javax.swing.JButton btnBackup;
     private javax.swing.JButton btnClearSearch;
     private javax.swing.JButton btnDeleteElement;
     private javax.swing.JButton btnDeleteLocation;
-    private javax.swing.JButton btnExportAll;
-    private javax.swing.JButton btnExportElement;
-    private javax.swing.JButton btnExportLocation;
     private javax.swing.JButton btnFancyStuff;
     private javax.swing.JButton btnFotos;
     private javax.swing.JButton btnGoElement;
@@ -1339,22 +1461,24 @@ public class WildLogView extends FrameView {
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoLocation_LocTab;
     private javax.swing.JButton btnGoVisit_LocTab;
-    private javax.swing.JButton btnImport;
     private javax.swing.JButton btnLocation;
     private javax.swing.JButton btnSearch;
     private javax.swing.JCheckBox ckbTypeFilter;
     private javax.swing.JComboBox cmbType;
+    private javax.swing.JMenuItem csvExportMenuItem;
+    private javax.swing.JMenuItem csvImportMenuItem;
+    private javax.swing.JMenu exportMenu;
+    private javax.swing.JMenuItem htmlExportMenuItem1;
+    private javax.swing.JMenu importMenu;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1362,19 +1486,13 @@ public class WildLogView extends FrameView {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblImage_LocTab;
-    private javax.swing.JLabel lblListOfElements;
-    private javax.swing.JLabel lblListOfLocations;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JProgressBar progressBar;
@@ -1393,6 +1511,8 @@ public class WildLogView extends FrameView {
     private javax.swing.JTable tblLocation_EleTab;
     private javax.swing.JTable tblVisit;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JMenuItem wldExportMenuItem;
+    private javax.swing.JMenuItem wldImportMenuItem;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;

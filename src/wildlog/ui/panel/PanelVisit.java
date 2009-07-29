@@ -18,8 +18,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,9 +42,9 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
-import wildlog.ui.util.UtilPanelGenerator;
-import wildlog.ui.util.UtilTableGenerator;
-import wildlog.ui.util.Utils;
+import wildlog.utils.ui.UtilPanelGenerator;
+import wildlog.utils.ui.UtilTableGenerator;
+import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
@@ -385,6 +385,14 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         tblSightings.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblSightingsMouseReleased(evt);
+            }
+        });
+        tblSightings.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblSightingsKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblSightingsKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(tblSightings);
@@ -904,6 +912,16 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             Utils.openImage(sighting, imageSightingIndex);
         }
     }//GEN-LAST:event_lblSightingImageMouseReleased
+
+    private void tblSightingsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnEditSightingActionPerformed(null);
+    }//GEN-LAST:event_tblSightingsKeyPressed
+
+    private void tblSightingsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
+            tblSightingsMouseReleased(null);
+    }//GEN-LAST:event_tblSightingsKeyReleased
 
 
     private void resizeTables() {
