@@ -152,6 +152,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnPreviousImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnPreviousImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnPreviousImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnPreviousImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnPreviousImage.toolTipText"/>
@@ -168,6 +169,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnNextImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnNextImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnNextImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnNextImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnNextImage.toolTipText"/>
@@ -184,6 +186,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnUploadImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnUploadImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnUploadImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUploadImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUploadImage.toolTipText"/>
@@ -687,6 +690,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSearch">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnSearch.background"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSearch.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSearch.toolTipText"/>
             <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
@@ -729,6 +733,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDeleteImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnDeleteImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnDeleteImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteImage.toolTipText"/>
@@ -745,6 +750,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSetMainImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnSetMainImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSetMainImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSetMainImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSetMainImage.toolTipText"/>
@@ -981,6 +987,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSearchLocation">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnSearchLocation.background"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSearchLocation.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSearchLocation.toolTipText"/>
             <Property name="name" type="java.lang.String" value="btnSearchLocation" noResource="true"/>

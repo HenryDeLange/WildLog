@@ -49,27 +49,30 @@ public class Visit implements HasFotos {
         return name;
     }
 
-    public String toHTML() {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
         if (fotos != null)
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString = fotoString + fotos.get(t).toHTML();
             }
         String sightingString = "";
-        if (sightings != null)
-            for (int t = 0; t < sightings.size(); t++) {
-                sightingString = sightingString + sightings.get(t).toHTML() + "<br/>";
-            }
+        if (inIsRecursive)
+            if (sightings != null)
+                for (int t = 0; t < sightings.size(); t++) {
+                    sightingString = sightingString + sightings.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
+                }
 
         String htmlVisit = "";
-        htmlVisit = htmlVisit + "<h2>" + name + "</h2><br/>";
-        htmlVisit = htmlVisit + "<table border='1' width='850px'>";
-        htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Start Date", startDate, "End Date", endDate);
-        htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Game Watching", gameWatchingIntensity, "Type", type);
-        htmlVisit = htmlVisit + UtilsHTML.generateHTMLRow("Description", description);
-        htmlVisit = htmlVisit + "</table>";
-        htmlVisit = htmlVisit + "</br><h3>Photos:</h3>" + fotoString;
-        htmlVisit = htmlVisit + "</br><h3>Sightings:</h3>" + sightingString;
+        htmlVisit = htmlVisit + "<H2>" + name + "</H2>";
+        htmlVisit = htmlVisit + "<b>Start Date:</b> " + startDate;
+        htmlVisit = htmlVisit + "<br/><b>End Date:</b> " + endDate;
+        htmlVisit = htmlVisit + "<br/><b>Game Watching:</b> " + gameWatchingIntensity;
+        htmlVisit = htmlVisit + "<br/><b>Type:</b> " + type;
+        htmlVisit = htmlVisit + "<br/><b>Description:</b> " + description;
+        if (inIncludeImages)
+            htmlVisit = htmlVisit + "<br/><b>Photos:</b></br/>" + fotoString;
+        if (inIsRecursive)
+            htmlVisit = htmlVisit + "</br><H3>Sightings:</H3>" + sightingString;
         return htmlVisit;
     }
 

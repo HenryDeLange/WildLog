@@ -26,10 +26,12 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.table.TableColumn;
@@ -842,6 +844,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 dialog.setLocationRelativeTo(this);
                 ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
                 dialog.setIconImage(icon.getImage());
+                ActionListener escListener = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        dialog.dispose();
+                    }
+                };
+                dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
                 dialog.setVisible(true);
             }
         }
@@ -928,6 +937,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());
+            ActionListener escListener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    refreshTableForSightings();
+                    dialog.dispose();
+                }
+            };
+            dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed

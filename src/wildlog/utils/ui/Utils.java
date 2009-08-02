@@ -24,8 +24,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -43,6 +47,7 @@ public class Utils {
     protected final static String tif = "tif";
     protected final static String png = "png";
     private static final int THUMBNAIL_SIZE = 300;
+    private static String lastFilePath = "";
 
     /*
      * Get the extension of a file.
@@ -106,7 +111,11 @@ public class Utils {
     }
 
     public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize) {
-        JFileChooser fileChooser = new JFileChooser();
+        JFileChooser fileChooser;
+        if (lastFilePath.length() > 0)
+            fileChooser = new JFileChooser(lastFilePath);
+        else
+            fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setAccessory(new ImagePreview(fileChooser));
         fileChooser.setMultiSelectionEnabled(true);
@@ -115,6 +124,7 @@ public class Utils {
             File[] files = fileChooser.getSelectedFiles();
             for (int t = 0; t < files.length; t++) {
                 File fromFile = files[t];
+                lastFilePath = fromFile.getPath();
                 File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + inFolderName);
                 toDir.mkdirs();
                 File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
@@ -238,6 +248,23 @@ public class Utils {
                         String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
                         Runtime.getRuntime().exec(commands);
                     }
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void openImage(URL inURL) {
+        if (inURL != null) {
+            if (System.getProperty("os.name").equals("Windows XP")) {
+                try {
+                    URI uri = new URI(inURL.getPath());
+                    String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", uri.getPath().substring(3)};
+                    Runtime.getRuntime().exec(commands);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace();

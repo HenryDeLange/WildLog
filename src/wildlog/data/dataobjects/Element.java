@@ -85,7 +85,7 @@ public class Element implements HasFotos {
         return primaryName;
     }
 
-    public String toHTML() {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
         if (fotos != null)
             for (int t = 0; t < fotos.size(); t++) {
@@ -94,24 +94,29 @@ public class Element implements HasFotos {
 
         String htmlElement = "<head><title>" + primaryName + "</title></head>";
         htmlElement = htmlElement + "<body>";
-        htmlElement = htmlElement + "<h2>" + primaryName + "</h2><h3/>(" + otherName + ")</h3><br/><h3/><i>[" + scientificName + "]</i></h3><br/>";
-        htmlElement = htmlElement + "<table border='1' width='850px'>";
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Type", type, "Feeding Class", feedingClass);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Add Frequency", addFrequency, "Wish Rating", wishListRating);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Active Time", activeTime, "Endangered Status", endangeredStatus);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Water Dependance", waterDependance, "",""/*"Habitat", habitat*/);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Food/Nutrition", nutrition);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Description", description);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Behaviour", behaviourDescription);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Diagnostic", diagnosticDescription);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Male Size", sizeMaleAverage, "Size Units", sizeUnit);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Female Size", sizeFemaleAverage, "Size Units", sizeUnit);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Male Weight", weightMaleAverage, "Weight Units", weightUnit);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Average Female Weight", weightFemaleAverage, "Weight Units", weightUnit);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Age", lifespan);
-        htmlElement = htmlElement + UtilsHTML.generateHTMLRow("Breeding Duration", breedingDuration, "Breeding Number", breedingNumber);
-        htmlElement = htmlElement + "</table>";
-        htmlElement = htmlElement + "</br><h3>Photos:</h3>" + fotoString;
+        htmlElement = htmlElement + "<H2>" + primaryName + "</H2>";
+        htmlElement = htmlElement + "<b>Other Name:</b> " + otherName;
+        htmlElement = htmlElement + "<br/><b>Scientific Name:</b> <i>" + scientificName + "</i>";
+        htmlElement = htmlElement + "<br/><b>Type:</b> " + type;
+        htmlElement = htmlElement + "<br/><b>Feeding Class:</b> " + feedingClass;
+        htmlElement = htmlElement + "<br/><b>Add Frequency:</b> " + addFrequency;
+        htmlElement = htmlElement + "<br/><b>Wish Rating:</b> " + wishListRating;
+        htmlElement = htmlElement + "<br/><b>Active Time:</b> " + activeTime;
+        htmlElement = htmlElement + "<br/><b>Endangered Status:</b> " + endangeredStatus;
+        htmlElement = htmlElement + "<br/><b>Water Dependance:</b> " + waterDependance;
+        htmlElement = htmlElement + "<br/><b>Food/Nutrition:</b> " + nutrition;
+        htmlElement = htmlElement + "<br/><b>Description:</b> " + description;
+        htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + behaviourDescription;
+        htmlElement = htmlElement + "<br/><b>Diagnostic:</b> " + diagnosticDescription;
+        htmlElement = htmlElement + "<br/><b>Average Male Size:</b> " + sizeMaleAverage + " " + sizeUnit;
+        htmlElement = htmlElement + "<br/><b>Average Female Size:</b> " + sizeFemaleAverage + " " + sizeUnit;
+        htmlElement = htmlElement + "<br/><b>Average Male Weight:</b> " + weightMaleAverage + " " + weightUnit;
+        htmlElement = htmlElement + "<br/><b>Average Female Weight:</b> " + weightFemaleAverage + " " + weightUnit;
+        htmlElement = htmlElement + "<br/><b>Age:</b> " + lifespan;
+        htmlElement = htmlElement + "<br/><b>Breeding Duration:</b> " + breedingDuration;
+        htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + breedingNumber;
+        if (inIncludeImages)
+            htmlElement = htmlElement + "</br><b>Photos:</b></br/>" + fotoString;
         htmlElement = htmlElement + "</body>";
         return htmlElement;
     }

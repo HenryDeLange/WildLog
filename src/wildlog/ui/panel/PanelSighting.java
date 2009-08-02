@@ -346,6 +346,7 @@ public class PanelSighting extends javax.swing.JPanel {
         jSeparator2.setName("jSeparator2"); // NOI18N
         sightingIncludes.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 360, 280, 10));
 
+        btnPreviousImage.setBackground(resourceMap.getColor("btnPreviousImage.background")); // NOI18N
         btnPreviousImage.setIcon(resourceMap.getIcon("btnPreviousImage.icon")); // NOI18N
         btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
         btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
@@ -357,6 +358,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(btnPreviousImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 300, 40, 50));
 
+        btnNextImage.setBackground(resourceMap.getColor("btnNextImage.background")); // NOI18N
         btnNextImage.setIcon(resourceMap.getIcon("btnNextImage.icon")); // NOI18N
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
         btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
@@ -368,6 +370,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(btnNextImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 300, 40, 50));
 
+        btnUploadImage.setBackground(resourceMap.getColor("btnUploadImage.background")); // NOI18N
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
@@ -589,6 +592,7 @@ public class PanelSighting extends javax.swing.JPanel {
         txtSearch.setName("txtSearch"); // NOI18N
         sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 235, 200, -1));
 
+        btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
@@ -608,6 +612,7 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbSubArea.setName("cmbSubArea"); // NOI18N
         sightingIncludes.add(cmbSubArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 300, -1));
 
+        btnDeleteImage.setBackground(resourceMap.getColor("btnDeleteImage.background")); // NOI18N
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
@@ -619,6 +624,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 326, 90, -1));
 
+        btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
@@ -716,6 +722,7 @@ public class PanelSighting extends javax.swing.JPanel {
         chkSearchLocationDirect.setName("chkSearchLocationDirect"); // NOI18N
         sightingIncludes.add(chkSearchLocationDirect, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 0, -1, 20));
 
+        btnSearchLocation.setBackground(resourceMap.getColor("btnSearchLocation.background")); // NOI18N
         btnSearchLocation.setText(resourceMap.getString("btnSearchLocation.text")); // NOI18N
         btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
         btnSearchLocation.setName("btnSearchLocation"); // NOI18N
@@ -825,7 +832,7 @@ public class PanelSighting extends javax.swing.JPanel {
                         if (panelToRefresh != null) {
                             panelToRefresh.refreshTableForSightings();
                         }
-                        // Close the dialog
+                        // Close the dialog - (Evt is null if the Image Upload calls save method...)
                         if (evt != null) {
                             JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
                             dialog.dispose();

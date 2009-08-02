@@ -77,7 +77,7 @@ public class Location implements HasFotos {
         return name;
     }
 
-    public String toHTML(boolean inUsedForKML) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
         if (fotos != null)
             for (int t = 0; t < fotos.size(); t++) {
@@ -89,31 +89,38 @@ public class Location implements HasFotos {
                 subAreasString = subAreasString + subAreas.get(t);
             }
         String visitsString = "";
-        if (inUsedForKML == false)
+        if (inIsRecursive)
             if (visits != null)
                 for (int t = 0; t < visits.size(); t++) {
-                    visitsString = visitsString + visits.get(t).toHTML() + "<br/>";
+                    visitsString = visitsString + visits.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
                 }
         String htmlLocation = "<head><title>" + name + "</title></head>";
         htmlLocation = htmlLocation + "<body>";
-        htmlLocation = htmlLocation + "<h2>" + name + "</h2><br/>";
-        htmlLocation = htmlLocation + "<table border='1' width='850px'>";
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Province", province, "Rating", rating);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Game View Rating", gameViewingRating, "Habitat", habitatType);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Description", description);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Directions", directions);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Website", website);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Email", email, "Contact Number", contactNumbers);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Catering", catering, "Accomodation", accommodationType);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Latitude", latitude, "Latitude Degrees", latDegrees);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Latitude Minutes", latMinutes, "Latitude Seconds", latSeconds);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Longitude", longitude, "Longitude Degrees", lonDegrees);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Longitude Minutes", lonMinutes, "Longitude Seconds", lonSeconds);
-        htmlLocation = htmlLocation + UtilsHTML.generateHTMLRow("Sub Areas", subAreasString);
-        htmlLocation = htmlLocation + "</table>";
-            htmlLocation = htmlLocation + "</br><h3>Photos:</h3>" + fotoString;
-        if (inUsedForKML == false)
-            htmlLocation = htmlLocation + "</br><h3>Visits:</h3>" + visitsString;
+        htmlLocation = htmlLocation + "<H2>" + name + "</H2>";
+        htmlLocation = htmlLocation + "<b>Province:</b> " + province;
+        htmlLocation = htmlLocation + "<br/><b>Rating:</b> " + rating;
+        htmlLocation = htmlLocation + "<br/><b>Game View Rating:</b> " + gameViewingRating;
+        htmlLocation = htmlLocation + "<br/><b>Habitat:</b> " + habitatType;
+        htmlLocation = htmlLocation + "<br/><b>Description:</b> " + description;
+        htmlLocation = htmlLocation + "<br/><b>Directions:</b> " + directions;
+        if (website != null)
+            if (website.length() > 0)
+                htmlLocation = htmlLocation + "<br/><b>Website:</b> <a href=\"" + website + "\">Link</a>";
+            else
+                htmlLocation = htmlLocation + "<br/><b>Website:</b> " + website;
+        else
+            htmlLocation = htmlLocation + "<br/><b>Website:</b> " + website;
+        htmlLocation = htmlLocation + "<br/><b>Email:</b> " + email;
+        htmlLocation = htmlLocation + "<br/><b>Contact Number:</b> " + contactNumbers;
+        htmlLocation = htmlLocation + "<br/><b>Catering:</b> " + catering;
+        htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + accommodationType;
+        htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSeconds;
+        htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
+        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + subAreasString;
+        if (inIncludeImages)
+            htmlLocation = htmlLocation + "</br><b>Photos:</b></br/>" + fotoString;
+        if (inIsRecursive)
+            htmlLocation = htmlLocation + "</br><H3>Visits:</H3><hr/>" + visitsString;
         htmlLocation = htmlLocation + "</body>";
         return htmlLocation;
     }
@@ -122,7 +129,7 @@ public class Location implements HasFotos {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(name);
-        entry.setDescription(this.toHTML(true));
+        entry.setDescription(this.toHTML(false, true));
         entry.setStyle("locationStyle");
         entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
         entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
@@ -191,6 +198,7 @@ public class Location implements HasFotos {
 //    }
     
     public List<Visit> getVisits() {
+        if (visits == null) visits = new ArrayList<Visit>();
         return visits;
     }
     

@@ -74,28 +74,29 @@ public class Sighting implements HasFotos {
         return location.getName() + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + element.getPrimaryName();
     }
 
-    public String toHTML() {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
         if (fotos != null)
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString = fotoString + fotos.get(t).toHTML();
             }
         String htmlSighting = "";
-        htmlSighting = htmlSighting + "<h2>" + element.getPrimaryName() + " - " + date + " - " + location.getName() + "</h2><br/>";
-        htmlSighting = htmlSighting + "<table border='1' width='850px'>";
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Date", date);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Element", element.getPrimaryName(), "Location", location.getName());
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Time of Day", timeOfDay, "Weather", weather);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Area Type", areaType, "View Rating", viewRating);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Certainty", certainty, "Number of Creatures", numberOfElements);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Details", details);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Latitude", latitude, "Latitude Degrees", latDegrees);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Latitude Minutes", latMinutes, "Latitude Seconds", latSeconds);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Longitude", longitude, "Longitude Degrees", lonDegrees);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Longitude Minutes", lonMinutes, "Longitude Seconds", lonSeconds);
-        htmlSighting = htmlSighting + UtilsHTML.generateHTMLRow("Sub Area", subArea);
-        htmlSighting = htmlSighting + "</table>";
-        htmlSighting = htmlSighting + "</br><h3>Photos:</h3>" + fotoString;
+        htmlSighting = htmlSighting + "<H2>" + element.getPrimaryName() + " - " + date + " - " + location.getName() + "</H2>";
+        htmlSighting = htmlSighting + "<b>Date:</b> " + date;
+        htmlSighting = htmlSighting + "<br/><b>Element:</b> " + element.getPrimaryName();
+        htmlSighting = htmlSighting + "<br/><b>Location:</b> " + location.getName();
+        htmlSighting = htmlSighting + "<br/><b>Time of Day:</b> " + timeOfDay;
+        htmlSighting = htmlSighting + "<br/><b>Weather:</b> " + weather;
+        htmlSighting = htmlSighting + "<br/><b>Area Type:</b> " + areaType;
+        htmlSighting = htmlSighting + "<br/><b>View Rating:</b> " + viewRating;
+        htmlSighting = htmlSighting + "<br/><b>Certainty:</b> " + certainty;
+        htmlSighting = htmlSighting + "<br/><b>Number of Creatures:</b> " + numberOfElements;
+        htmlSighting = htmlSighting + "<br/><b>Details:</b> " + details;
+        htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSeconds;
+        htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
+        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + subArea;
+        if (inIncludeImages)
+            htmlSighting = htmlSighting + "</br><b>Photos:</b></br/>" + fotoString;
         return htmlSighting;
     }
 
@@ -103,7 +104,7 @@ public class Sighting implements HasFotos {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(element.getPrimaryName());
-        entry.setDescription(this.toHTML());
+        entry.setDescription(this.toHTML(false, true));
         entry.setStyle("elementStyle");
         if (latitude == null || longitude == null) {
             if (location.getLatitude() != null && location.getLongitude() != null) {

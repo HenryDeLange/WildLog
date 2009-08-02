@@ -86,7 +86,7 @@ public class UtilsHTML {
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inElement.toHTML().getBytes());
+            fileOutput.write(inElement.toHTML(true, true).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {
@@ -109,7 +109,7 @@ public class UtilsHTML {
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inLocation.toHTML(false).getBytes());
+            fileOutput.write(inLocation.toHTML(true, true).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {

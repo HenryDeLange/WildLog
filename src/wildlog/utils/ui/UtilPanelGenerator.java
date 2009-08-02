@@ -37,8 +37,8 @@ public class UtilPanelGenerator {
         return new PanelElement(new Element());
     }
     
-    public PanelElement getElementPanel(String inEnglishName) {
-        Element tempElement = dbi.find(new Element(inEnglishName));
+    public PanelElement getElementPanel(String inPrimaryName) {
+        Element tempElement = dbi.find(new Element(inPrimaryName));
         return new PanelElement(tempElement);
     }
     
