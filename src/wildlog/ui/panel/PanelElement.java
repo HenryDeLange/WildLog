@@ -102,8 +102,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     public boolean equals(Object inObject) {
         if (getClass() != inObject.getClass()) return false;
         final PanelElement inPanel = (PanelElement) inObject;
-        if (element == null) return true;
-        if (element.getPrimaryName() == null) return true;
+        if (element == null && inPanel.getElement() == null) return true;
+        if (element.getPrimaryName() == null && inPanel.getElement().getPrimaryName() == null) return true;
+        if (element == null) return false;
+        if (element.getPrimaryName() == null) return false;
         if (!element.getPrimaryName().equalsIgnoreCase(inPanel.getElement().getPrimaryName())) return false;
         return true;
     }
@@ -715,81 +717,83 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (txtPrimaryName.getText().length() > 0) {
-            String oldName = element.getPrimaryName();
-            element.setPrimaryName(txtPrimaryName.getText()); // Used for indexing (ID)
-            element.setOtherName(txtOtherName.getText());
-            element.setScientificName(txtScienceName.getText());
-            element.setDescription(txtDescription.getText());
-            element.setNutrition(txtNutrition.getText());
-            element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
-            try {
-                element.setSizeMaleAverage(Double.valueOf(txtSizeMale.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtSizeMale.setText("");
-            }
-            try {
-                element.setSizeFemaleAverage(Double.valueOf(txtSizeFemale.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtSizeFemale.setText("");
-            }
-            try {
-                element.setBreedingNumber(Double.valueOf(txtBreedingNumber.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtBreedingNumber.setText("");
-            }
-            element.setSizeUnit((UnitsSize)cmbSizeUnits.getSelectedItem());
-            element.setWeightUnit((UnitsWeight)cmbWeightUnits.getSelectedItem());
-            try {
-                element.setWeightMaleAverage(Double.valueOf(txtWeightMale.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtWeightMale.setText("");
-            }
-            try {
-                element.setWeightFemaleAverage(Double.valueOf(txtWeightFemale.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtWeightFemale.setText("");
-            }
-            element.setBreedingDuration(txtbreedingDuration.getText());
-            element.setLifespan(txtLifespan.getText());
-            element.setWishListRating((WishRating)cmbWishList.getSelectedItem());
-            //element.setHabitat((Habitat)cmbHabitat.getSelectedItem());
-            element.setDiagnosticDescription(txtDiagnosticDescription.getText());
-            element.setActiveTime((ActiveTime)cmbActiveTime.getSelectedItem());
-            element.setEndangeredStatus((EndangeredStatus)cmbEndangeredStatus.getSelectedItem());
-            element.setBehaviourDescription(txtBehaviourDescription.getText());
-            element.setAddFrequency((AddFrequency)cmbAddFrequency.getSelectedItem());
-            element.setType((ElementType)cmbType.getSelectedItem());
-            element.setFeedingClass((FeedingClass)cmbFeedingClass.getSelectedItem());
+        if (Utils.checkCharacters(txtPrimaryName.getText())) {
+            if (txtPrimaryName.getText().length() > 0) {
+                String oldName = element.getPrimaryName();
+                element.setPrimaryName(txtPrimaryName.getText()); // Used for indexing (ID)
+                element.setOtherName(txtOtherName.getText());
+                element.setScientificName(txtScienceName.getText());
+                element.setDescription(txtDescription.getText());
+                element.setNutrition(txtNutrition.getText());
+                element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
+                try {
+                    element.setSizeMaleAverage(Double.valueOf(txtSizeMale.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtSizeMale.setText("");
+                }
+                try {
+                    element.setSizeFemaleAverage(Double.valueOf(txtSizeFemale.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtSizeFemale.setText("");
+                }
+                try {
+                    element.setBreedingNumber(Double.valueOf(txtBreedingNumber.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtBreedingNumber.setText("");
+                }
+                element.setSizeUnit((UnitsSize)cmbSizeUnits.getSelectedItem());
+                element.setWeightUnit((UnitsWeight)cmbWeightUnits.getSelectedItem());
+                try {
+                    element.setWeightMaleAverage(Double.valueOf(txtWeightMale.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtWeightMale.setText("");
+                }
+                try {
+                    element.setWeightFemaleAverage(Double.valueOf(txtWeightFemale.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtWeightFemale.setText("");
+                }
+                element.setBreedingDuration(txtbreedingDuration.getText());
+                element.setLifespan(txtLifespan.getText());
+                element.setWishListRating((WishRating)cmbWishList.getSelectedItem());
+                //element.setHabitat((Habitat)cmbHabitat.getSelectedItem());
+                element.setDiagnosticDescription(txtDiagnosticDescription.getText());
+                element.setActiveTime((ActiveTime)cmbActiveTime.getSelectedItem());
+                element.setEndangeredStatus((EndangeredStatus)cmbEndangeredStatus.getSelectedItem());
+                element.setBehaviourDescription(txtBehaviourDescription.getText());
+                element.setAddFrequency((AddFrequency)cmbAddFrequency.getSelectedItem());
+                element.setType((ElementType)cmbType.getSelectedItem());
+                element.setFeedingClass((FeedingClass)cmbFeedingClass.getSelectedItem());
 
-            // Save the element
-            if (app.getDBI().createOrUpdate(element) == true) {
-                org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
-                txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
+                // Save the element
+                if (app.getDBI().createOrUpdate(element) == true) {
+                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
+                    txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
+                }
+                else {
+                    txtPrimaryName.setBackground(Color.RED);
+                    element.setPrimaryName(oldName);
+                    txtPrimaryName.setText(txtPrimaryName.getText() + "_not_unique");
+                }
+
+                lblElementName.setText(element.getPrimaryName());
+
+                setupTabHeader();
             }
             else {
                 txtPrimaryName.setBackground(Color.RED);
-                element.setPrimaryName(oldName);
-                txtPrimaryName.setText(txtPrimaryName.getText() + "_not_unique");
             }
-
-            lblElementName.setText(element.getPrimaryName());
-            
-            setupTabHeader();
         }
         else {
+            txtPrimaryName.setText(txtPrimaryName.getText() + "_unsupported_character");
             txtPrimaryName.setBackground(Color.RED);
         }
+
 }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
@@ -836,7 +840,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 dialog.setLayout(new AbsoluteLayout());
                 dialog.setSize(965, 625);
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-                Sighting sighting = app.getDBI().find(new Sighting(new Date(Date.parse((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1))), element, location, (Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
+                Sighting sighting = app.getDBI().find(new Sighting(/*new Date(Date.parse((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)))*/null, element, location, (Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
                 Visit tempVisit = new Visit();
                 tempVisit.getSightings().add(sighting);
                 Visit visit = app.getDBI().find(tempVisit);

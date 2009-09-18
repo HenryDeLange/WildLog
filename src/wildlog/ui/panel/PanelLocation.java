@@ -98,8 +98,10 @@ public class PanelLocation extends javax.swing.JPanel {
     public boolean equals(Object inObject) {
         if (getClass() != inObject.getClass()) return false;
         final PanelLocation inPanel = (PanelLocation) inObject;
-        if (locationWL == null) return true;
-        if (locationWL.getName() == null) return true;
+        if (locationWL == null && inPanel.getLocationWL() == null) return true;
+        if (locationWL.getName() == null && inPanel.getLocationWL().getName() == null) return true;
+        if (locationWL == null) return false;
+        if (locationWL.getName() == null) return false;
         if (!locationWL.getName().equalsIgnoreCase(inPanel.getLocationWL().getName())) return false;
         return true;
     }
@@ -747,61 +749,66 @@ public class PanelLocation extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (txtName.getText().length() > 0) {
-            String oldName = locationWL.getName();
-            locationWL.setName(txtName.getText());
-            locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
-            locationWL.setLongitude((Longitudes)cmbLonitude.getSelectedItem());
-            try {
-                locationWL.setLatDegrees(Integer.parseInt(txtLatDegrees.getText()));
-                locationWL.setLatMinutes(Integer.parseInt(txtLatMinutes.getText()));
-                locationWL.setLatSeconds(Integer.parseInt(txtLatSeconds.getText()));
-                locationWL.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
-                locationWL.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
-                locationWL.setLonSeconds(Integer.parseInt(txtLonSeconds.getText()));
-            }
-            catch (NumberFormatException e) {
-                System.out.println("Not a Number...");
-                txtLatDegrees.setText("0");
-                txtLatMinutes.setText("0");
-                txtLatSeconds.setText("0");
-                txtLonDegrees.setText("0");
-                txtLonMinutes.setText("0");
-                txtLonSeconds.setText("0");
-            }
-            locationWL.setDescription(txtDescription.getText());
-            locationWL.setProvince((Province)cmbProvince.getSelectedItem());
-            locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
-            locationWL.setCatering((CateringType)cmbCatering.getSelectedItem());
-            locationWL.setHabitatType((Habitat)cmbHabitat.getSelectedItem());
-            locationWL.setGameViewingRating((GameViewRating)cmbGameRating.getSelectedItem());
-            locationWL.setContactNumbers(txtContactNumber.getText());
-            locationWL.setEmail(txtEmail.getText());
-            locationWL.setWebsite(txtWebsite.getText());
-            locationWL.setDirections(txtDirections.getText());
-            Object[] tempArray = lstAccommodationType.getSelectedValues();
-            List<AccommodationType> tempList = new ArrayList<AccommodationType>(tempArray.length);
-            for (Object tempObject : tempArray) {
-                tempList.add((AccommodationType)tempObject);
-            }
-            locationWL.setAccommodationType(tempList);
+        if (Utils.checkCharacters(txtName.getText())) {
+            if (txtName.getText().length() > 0) {
+                String oldName = locationWL.getName();
+                locationWL.setName(txtName.getText());
+                locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
+                locationWL.setLongitude((Longitudes)cmbLonitude.getSelectedItem());
+                try {
+                    locationWL.setLatDegrees(Integer.parseInt(txtLatDegrees.getText()));
+                    locationWL.setLatMinutes(Integer.parseInt(txtLatMinutes.getText()));
+                    locationWL.setLatSeconds(Integer.parseInt(txtLatSeconds.getText()));
+                    locationWL.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
+                    locationWL.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
+                    locationWL.setLonSeconds(Integer.parseInt(txtLonSeconds.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtLatDegrees.setText("0");
+                    txtLatMinutes.setText("0");
+                    txtLatSeconds.setText("0");
+                    txtLonDegrees.setText("0");
+                    txtLonMinutes.setText("0");
+                    txtLonSeconds.setText("0");
+                }
+                locationWL.setDescription(txtDescription.getText());
+                locationWL.setProvince((Province)cmbProvince.getSelectedItem());
+                locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
+                locationWL.setCatering((CateringType)cmbCatering.getSelectedItem());
+                locationWL.setHabitatType((Habitat)cmbHabitat.getSelectedItem());
+                locationWL.setGameViewingRating((GameViewRating)cmbGameRating.getSelectedItem());
+                locationWL.setContactNumbers(txtContactNumber.getText());
+                locationWL.setEmail(txtEmail.getText());
+                locationWL.setWebsite(txtWebsite.getText());
+                locationWL.setDirections(txtDirections.getText());
+                Object[] tempArray = lstAccommodationType.getSelectedValues();
+                List<AccommodationType> tempList = new ArrayList<AccommodationType>(tempArray.length);
+                for (Object tempObject : tempArray) {
+                    tempList.add((AccommodationType)tempObject);
+                }
+                locationWL.setAccommodationType(tempList);
 
-            // Save the location
-            if (app.getDBI().createOrUpdate(locationWL) == true) {
-                org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
-                txtName.setBackground(resourceMap.getColor("txtName.background"));
+                // Save the location
+                if (app.getDBI().createOrUpdate(locationWL) == true) {
+                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
+                    txtName.setBackground(resourceMap.getColor("txtName.background"));
+                }
+                else {
+                    txtName.setBackground(Color.RED);
+                    locationWL.setName(oldName);
+                    txtName.setText(txtName.getText() + "_not_unique");
+                }
+
+                lblLocation.setText(locationWL.getName());
+
+                setupTabHeader();
             }
             else {
                 txtName.setBackground(Color.RED);
-                locationWL.setName(oldName);
-                txtName.setText(txtName.getText() + "_not_unique");
             }
-
-            lblLocation.setText(locationWL.getName());
-
-            setupTabHeader();
         }
         else {
+            txtName.setText(txtName.getText() + "_unsupported_chracter");
             txtName.setBackground(Color.RED);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed

@@ -111,9 +111,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     public boolean equals(Object inObject) {
         if (getClass() != inObject.getClass()) return false;
         final PanelVisit inPanel = (PanelVisit) inObject;
-        if (visit == null) return true;
+        if (visit == null && inPanel.getVisit() == null) return true;
+        if (visit.getName() == null && inPanel.getVisit().getName() == null) return true;
+        if (visit == null) return false;
         if (locationForVisit == null) return true;
-        if (visit.getName() == null) return true;
+        if (visit.getName() == null) return false;
         if (locationForVisit.getName() == null) return true;
         if (!visit.getName().equalsIgnoreCase(inPanel.getVisit().getName()) ||
             !locationForVisit.getName().equalsIgnoreCase(inPanel.getLocationForVisit().getName()))
@@ -626,57 +628,63 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (txtName.getText().length() > 0) {
-            String oldName = visit.getName();
-            visit.setName(txtName.getText());
-            visit.setStartDate(dtpStartDate.getDate());
-            visit.setEndDate(dtpEndDate.getDate());
-            visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());
-            visit.setType((VisitType)cmbType.getSelectedItem());
-            visit.setDescription(txtDescription.getText());
+        if (Utils.checkCharacters(txtName.getText())) {
+            if (txtName.getText().length() > 0) {
+                String oldName = visit.getName();
+                visit.setName(txtName.getText());
+                visit.setStartDate(dtpStartDate.getDate());
+                visit.setEndDate(dtpEndDate.getDate());
+                visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());
+                visit.setType((VisitType)cmbType.getSelectedItem());
+                visit.setDescription(txtDescription.getText());
 
-            boolean canSave = false;
-            if (locationForVisit.getVisits() == null)
-                locationForVisit.setVisits(new ArrayList<Visit>());
-            Visit tempVisit = app.getDBI().find(new Visit(visit.getName()));
-            if (tempVisit == null) {
-                int index = locationForVisit.getVisits().indexOf(visit);
-                if (index != -1) locationForVisit.getVisits().set(index, visit);
-                else locationForVisit.getVisits().add(visit);
-                canSave = true;
-            }
-            else {
-                if (tempVisit.equals(visit) && app.getDBI().list(new Visit(visit.getName())).size() == 1) {
+                boolean canSave = false;
+                if (locationForVisit.getVisits() == null)
+                    locationForVisit.setVisits(new ArrayList<Visit>());
+                Visit tempVisit = app.getDBI().find(new Visit(visit.getName()));
+                if (tempVisit == null) {
                     int index = locationForVisit.getVisits().indexOf(visit);
                     if (index != -1) locationForVisit.getVisits().set(index, visit);
                     else locationForVisit.getVisits().add(visit);
                     canSave = true;
                 }
                 else {
-                    txtName.setBackground(Color.RED);
-                    visit.setName(oldName);
-                    txtName.setText(txtName.getText() + "_not_unique");
+                    if (tempVisit.equals(visit) && app.getDBI().list(new Visit(visit.getName())).size() == 1) {
+                        int index = locationForVisit.getVisits().indexOf(visit);
+                        if (index != -1) locationForVisit.getVisits().set(index, visit);
+                        else locationForVisit.getVisits().add(visit);
+                        canSave = true;
+                    }
+                    else {
+                        txtName.setBackground(Color.RED);
+                        visit.setName(oldName);
+                        txtName.setText(txtName.getText() + "_not_unique");
+                    }
                 }
+
+                // Save the visit
+                if (canSave) {
+                    if (app.getDBI().createOrUpdate(locationForVisit) == true) {
+                        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
+                        txtName.setBackground(resourceMap.getColor("txtName.background"));
+                    }
+                    else {
+                        txtName.setBackground(Color.RED);
+                        visit.setName(oldName);
+                        txtName.setText(txtName.getText() + "_location_not_unique");
+                    }
+                }
+
+                lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
+
+                setupTabHeader();
             }
-
-            // Save the visit
-            if (canSave) {
-                if (app.getDBI().createOrUpdate(locationForVisit) == true) {
-                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
-                    txtName.setBackground(resourceMap.getColor("txtName.background"));
-                }
-                else {
-                    txtName.setBackground(Color.RED);
-                    visit.setName(oldName);
-                    txtName.setText(txtName.getText() + "_location_not_unique");
-                }
+            else {
+                txtName.setBackground(Color.RED);
             }
-
-            lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
-
-            setupTabHeader();
         }
         else {
+            txtName.setText(txtName.getText() + "_unsupported_chracter");
             txtName.setBackground(Color.RED);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
@@ -721,7 +729,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     sighting = app.getDBI().find(new Sighting(parseDate(tblSightings.getValueAt(tblSightings.getSelectedRow(), 1).toString()), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
                     visit.getSightings().remove(sighting);
-                    //app.getDBI().delete(sighting);
+                    app.getDBI().delete(sighting);
                     app.getDBI().createOrUpdate(visit);
                     tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
                     sighting = null;
@@ -815,7 +823,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting(new Date(Date.parse((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1))), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
+            sighting = app.getDBI().find(new Sighting(/*new Date(Date.parse((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1)))*/null, app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
             refreshSightingInfo();
         }
         else {
@@ -932,13 +940,17 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }//GEN-LAST:event_lblSightingImageMouseReleased
 
     private void tblSightingsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-            btnEditSightingActionPerformed(null);
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            evt.consume();
+        }
     }//GEN-LAST:event_tblSightingsKeyPressed
 
     private void tblSightingsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
             tblSightingsMouseReleased(null);
+        else
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnEditSightingActionPerformed(null);
     }//GEN-LAST:event_tblSightingsKeyReleased
 
 

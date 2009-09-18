@@ -27,6 +27,7 @@ public class SightingCounter {
 
     // Methods
     public void increase() {
+        if (count == Long.MAX_VALUE) count = 0;
         count++;
     }
 

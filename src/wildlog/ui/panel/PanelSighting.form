@@ -125,6 +125,7 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblElementMouseReleased"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblElementKeyReleased"/>
               </Events>
             </Component>
           </SubComponents>
@@ -203,6 +204,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="jLabel6.font"/>
             <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
             <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
           </Properties>
@@ -214,13 +216,6 @@
         </Component>
         <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpSightingDate">
           <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder roundedCorners="true" thickness="3">
-                  <Property name="color" resourceKey="dtpSightingDate.border.lineColor"/>
-                </LineBorder>
-              </Border>
-            </Property>
             <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getDate()" type="code"/>
             </Property>
@@ -228,7 +223,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="330" y="290" width="130" height="-1"/>
+              <AbsoluteConstraints x="333" y="290" width="130" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -256,7 +251,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="370" y="480" width="250" height="-1"/>
+              <AbsoluteConstraints x="360" y="480" width="260" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -385,7 +380,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="370" y="450" width="250" height="-1"/>
+              <AbsoluteConstraints x="360" y="450" width="260" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -402,7 +397,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="370" y="540" width="250" height="-1"/>
+              <AbsoluteConstraints x="360" y="540" width="170" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -418,7 +413,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="370" y="510" width="250" height="-1"/>
+              <AbsoluteConstraints x="360" y="510" width="260" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -434,7 +429,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="370" y="390" width="250" height="-1"/>
+              <AbsoluteConstraints x="360" y="390" width="260" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -682,6 +677,9 @@
             <Property name="text" type="java.lang.String" resourceKey="txtSearch.text"/>
             <Property name="name" type="java.lang.String" value="txtSearch" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSearchKeyPressed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="0" y="235" width="200" height="-1"/>
@@ -788,7 +786,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="370" y="420" width="250" height="-1"/>
+              <AbsoluteConstraints x="360" y="420" width="260" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -821,6 +819,7 @@
               </Properties>
               <Events>
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblLocationMouseReleased"/>
+                <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblLocationKeyReleased"/>
               </Events>
             </Component>
           </SubComponents>
@@ -860,14 +859,8 @@
         </Container>
         <Component class="javax.swing.JLabel" name="lblElement">
           <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblElement.font"/>
             <Property name="text" type="java.lang.String" resourceKey="lblElement.text"/>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder roundedCorners="true" thickness="3">
-                  <Property name="color" resourceKey="lblElement.border.lineColor"/>
-                </LineBorder>
-              </Border>
-            </Property>
             <Property name="name" type="java.lang.String" value="lblElement" noResource="true"/>
           </Properties>
           <Constraints>
@@ -878,14 +871,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblLocation">
           <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblLocation.font"/>
             <Property name="text" type="java.lang.String" resourceKey="lblLocation.text"/>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder roundedCorners="true" thickness="3">
-                  <Property name="color" resourceKey="lblLocation.border.lineColor"/>
-                </LineBorder>
-              </Border>
-            </Property>
             <Property name="name" type="java.lang.String" value="lblLocation" noResource="true"/>
           </Properties>
           <Constraints>
@@ -899,6 +886,9 @@
             <Property name="text" type="java.lang.String" resourceKey="txtSearchLocation.text"/>
             <Property name="name" type="java.lang.String" value="txtSearchLocation" noResource="true"/>
           </Properties>
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSearchLocationKeyPressed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="0" y="20" width="200" height="-1"/>
@@ -907,14 +897,8 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblVisit">
           <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="lblVisit.font"/>
             <Property name="text" type="java.lang.String" resourceKey="lblVisit.text"/>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder roundedCorners="true" thickness="3">
-                  <Property name="color" resourceKey="lblVisit.border.lineColor"/>
-                </LineBorder>
-              </Border>
-            </Property>
             <Property name="name" type="java.lang.String" value="lblVisit" noResource="true"/>
           </Properties>
           <Constraints>
@@ -973,18 +957,6 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JCheckBox" name="chkSearchLocationDirect">
-          <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="chkSearchLocationDirect.background"/>
-            <Property name="text" type="java.lang.String" resourceKey="chkSearchLocationDirect.text"/>
-            <Property name="name" type="java.lang.String" value="chkSearchLocationDirect" noResource="true"/>
-          </Properties>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="210" y="0" width="-1" height="20"/>
-            </Constraint>
-          </Constraints>
-        </Component>
         <Component class="javax.swing.JButton" name="btnSearchLocation">
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnSearchLocation.background"/>
@@ -1011,6 +983,60 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="760" y="330" width="40" height="20"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtHours">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="txtHours" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtHoursFocusGained"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="532" y="540" width="20" height="-1"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtMinutes">
+          <Properties>
+            <Property name="name" type="java.lang.String" value="txtMinutes" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtMinutesFocusGained"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="558" y="540" width="20" height="-1"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel1">
+          <Properties>
+            <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+            <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+            <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="553" y="539" width="10" height="20"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cmbTimeFormat">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultComboBoxModel(TimeFormat.values())" type="code"/>
+            </Property>
+            <Property name="selectedIndex" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="0" type="code"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="cmbTimeFormat" noResource="true"/>
+          </Properties>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="580" y="540" width="40" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
