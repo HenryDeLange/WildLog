@@ -15,6 +15,8 @@
 package wildlog.utils.ui;
 
 import java.awt.Component;
+import java.awt.FileDialog;
+import java.awt.Frame;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -111,6 +113,11 @@ public class Utils {
     }
 
     public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize) {
+//        // Native File Upload Window. Het Thumbnails, maar het nie Multi Selct nie :(
+//        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
+//        d.setDirectory(lastFilePath);
+//        d.setVisible(true);
+        
         JFileChooser fileChooser;
         if (lastFilePath.length() > 0)
             fileChooser = new JFileChooser(lastFilePath);
@@ -119,6 +126,8 @@ public class Utils {
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setAccessory(new ImagePreview(fileChooser));
         fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         int result = fileChooser.showOpenDialog(inComponent);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File[] files = fileChooser.getSelectedFiles();
@@ -272,5 +281,31 @@ public class Utils {
             }
         }
     }
+
+    public static boolean checkCharacters(final String s) {
+        if (s == null) return false;
+        final char[] chars = s.toCharArray();
+        for (int x = 0; x < chars.length; x++) {
+            final char c = chars[x];
+            if ((c >= 'a') && (c <= 'z')) continue; // Lowercase
+            if ((c >= 'A') && (c <= 'Z')) continue; // Uppercase
+            if ((c >= '0') && (c <= '9')) continue; // Numeric
+            if (c == 'ê' || c == 'ë') continue;
+            if (c == 'ô' || c == ' ') continue;
+            // Check Characters
+            if (c == '!') continue;
+            if (c == '.' || c == ',') continue;
+            if (c == '-' || c == '_') continue;
+            if (c == '(' || c == ')') continue;
+            if (c == '[' || c == ']') continue;
+            if (c == '&' || c == '@') continue;
+            if (c == '#' || c == ';') continue;
+            if (c == '+' || c == '=') continue;
+            if (c == '`' || c == '\'') continue;
+            return false;
+        }
+        return true;
+    }
+
 
 }

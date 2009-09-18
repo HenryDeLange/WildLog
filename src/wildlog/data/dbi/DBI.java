@@ -14,6 +14,7 @@
 
 package wildlog.data.dbi;
 
+import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Foto;
@@ -49,6 +50,7 @@ public interface DBI {
     public List<Element> searchElementOnPrimaryName(String inPrimaryName);
     public List<Element> searchElementOnTypeAndPrimaryName(ElementType inType, String inPrimaryString);
     public List<Location> searchLocationOnName(String inName);
+    public List<Sighting> searchSightingOnDate(Date inStartDate, Date inEndDate);
     
     public boolean createOrUpdate(Element inElement);
     public boolean createOrUpdate(Location inLocation);

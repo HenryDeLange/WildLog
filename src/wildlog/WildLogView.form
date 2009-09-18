@@ -287,7 +287,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="rdbBrowseDate.text"/>
                     <Property name="toolTipText" type="java.lang.String" resourceKey="rdbBrowseDate.toolTipText"/>
-                    <Property name="enabled" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="rdbBrowseDate" noResource="true"/>
                   </Properties>
                   <Events>
@@ -373,7 +372,7 @@
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="10" y="60" width="250" height="490"/>
+                      <AbsoluteConstraints x="10" y="90" width="250" height="460"/>
                     </Constraint>
                   </Constraints>
 
@@ -414,12 +413,13 @@
                       <Connection code="imgBrowsePhotos.getZoomInAction()" type="code"/>
                     </Property>
                     <Property name="background" type="java.awt.Color" resourceKey="btnZoomIn.background"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnZoomIn.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnZoomIn.text"/>
                     <Property name="name" type="java.lang.String" value="btnZoomIn" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="931" y="10" width="80" height="30"/>
+                      <AbsoluteConstraints x="840" y="40" width="80" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -429,12 +429,13 @@
                       <Connection code="imgBrowsePhotos.getZoomOutAction()" type="code"/>
                     </Property>
                     <Property name="background" type="java.awt.Color" resourceKey="btnZoomOut.background"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnZoomOut.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnZoomOut.text"/>
                     <Property name="name" type="java.lang.String" value="btnZoomOut" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="930" y="43" width="80" height="30"/>
+                      <AbsoluteConstraints x="930" y="40" width="80" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -449,7 +450,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="520" y="40" width="-1" height="30"/>
+                      <AbsoluteConstraints x="840" y="17" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -465,7 +466,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="730" y="20" width="-1" height="50"/>
+                      <AbsoluteConstraints x="520" y="20" width="-1" height="50"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -481,7 +482,41 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="830" y="20" width="-1" height="50"/>
+                      <AbsoluteConstraints x="590" y="20" width="-1" height="50"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpStartDate">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="dtpStartDate" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="10" y="60" width="90" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpEndDate">
+                  <Properties>
+                    <Property name="name" type="java.lang.String" value="dtpEndDate" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="100" y="60" width="90" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnRefreshDates">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="btnRefreshDates.text"/>
+                    <Property name="name" type="java.lang.String" value="btnRefreshDates" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshDatesActionPerformed"/>
+                  </Events>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="190" y="60" width="70" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1017,6 +1052,9 @@
                     <Property name="text" type="java.lang.String" resourceKey="txtSearch.text"/>
                     <Property name="name" type="java.lang.String" value="txtSearch" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSearchKeyPressed"/>
+                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="340" y="360" width="320" height="-1"/>
@@ -1223,6 +1261,7 @@
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="wildlog.WildLogBetaView" id="showAboutBox" methodName="showAboutBox"/>
                 </Property>
+                <Property name="text" type="java.lang.String" resourceKey="aboutMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>
               </Properties>
               <AuxValues>

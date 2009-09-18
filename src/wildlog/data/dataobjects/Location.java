@@ -160,6 +160,7 @@ public class Location implements HasFotos {
         inCSVGenerator.addData(lonMinutes);
         inCSVGenerator.addData(lonSeconds);
         inCSVGenerator.addData(subAreas);
+        inCSVGenerator.addData(visits);
     }
 
     // GETTERS:

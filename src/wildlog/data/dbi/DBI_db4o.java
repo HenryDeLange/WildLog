@@ -24,15 +24,16 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.MapPoint;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.util.SightingCounter;
+import wildlog.data.dataobjects.helpers.SightingCounter;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.util.IndicatorOfVersionAndUpdate;
+import wildlog.data.dataobjects.helpers.IndicatorOfVersionAndUpdate;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Habitat;
 
@@ -319,6 +320,22 @@ public class DBI_db4o implements DBI {
         if (tempList.size() > 0) return tempList;
         else return new ArrayList<Location>(0);
     }
+
+    @Override
+    public List<Sighting> searchSightingOnDate(final Date inStartDate, final Date inEndDate) {
+        List<Sighting> tempList = db.query(new Predicate<Sighting>() {
+            public boolean match(Sighting temp) {
+                if (inStartDate != null && inEndDate != null) {
+                    if ((inStartDate.equals(temp.getDate()) || inStartDate.before(temp.getDate())) && (inEndDate.equals(temp.getDate()) || inEndDate.after(temp.getDate()))) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+        if (tempList.size() > 0) return tempList;
+        else return new ArrayList<Sighting>(0);
+    }
     
     
     @Override
@@ -496,8 +513,8 @@ public class DBI_db4o implements DBI {
         result = query.execute();
         for(int x = 0; x < result.size(); x++) {
             Element element = (Element)result.get(x);
-            element.setLifespan(element.getBreedingAge());
-            element.setBreedingAge("");
+            //element.setLifespan(element.getBreedingAge());
+            //element.setBreedingAge("");
             db.set(element);
         }
 

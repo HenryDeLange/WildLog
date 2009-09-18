@@ -83,8 +83,8 @@ public class Visit implements HasFotos {
         inCSVGenerator.addData(description);
         inCSVGenerator.addData(gameWatchingIntensity);
         //inCSVGenerator.addData("Sightings");
-        inCSVGenerator.addData(type.toString());
-        inCSVGenerator.addData(fotos.toString());
+        inCSVGenerator.addData(type);
+        inCSVGenerator.addData(fotos);
     }
 
     // GETTERS:

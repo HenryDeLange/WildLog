@@ -233,6 +233,9 @@ public class WildLogView extends FrameView {
         btnViewImage = new javax.swing.JButton();
         btnBrowsePrev = new javax.swing.JButton();
         btnBrowseNext = new javax.swing.JButton();
+        dtpStartDate = new org.jdesktop.swingx.JXDatePicker();
+        dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
+        btnRefreshDates = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -423,7 +426,6 @@ public class WildLogView extends FrameView {
         buttonGroup1.add(rdbBrowseDate);
         rdbBrowseDate.setText(resourceMap.getString("rdbBrowseDate.text")); // NOI18N
         rdbBrowseDate.setToolTipText(resourceMap.getString("rdbBrowseDate.toolTipText")); // NOI18N
-        rdbBrowseDate.setEnabled(false);
         rdbBrowseDate.setName("rdbBrowseDate"); // NOI18N
         rdbBrowseDate.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -475,7 +477,7 @@ public class WildLogView extends FrameView {
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
-        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 250, 490));
+        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 250, 460));
 
         btnGoBrowseSelection.setBackground(resourceMap.getColor("btnGoBrowseSelection.background")); // NOI18N
         btnGoBrowseSelection.setIcon(resourceMap.getIcon("btnGoBrowseSelection.icon")); // NOI18N
@@ -490,15 +492,17 @@ public class WildLogView extends FrameView {
 
         btnZoomIn.setAction(imgBrowsePhotos.getZoomInAction());
         btnZoomIn.setBackground(resourceMap.getColor("btnZoomIn.background")); // NOI18N
+        btnZoomIn.setIcon(resourceMap.getIcon("btnZoomIn.icon")); // NOI18N
         btnZoomIn.setText(resourceMap.getString("btnZoomIn.text")); // NOI18N
         btnZoomIn.setName("btnZoomIn"); // NOI18N
-        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(931, 10, 80, 30));
+        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 80, 30));
 
         btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
         btnZoomOut.setBackground(resourceMap.getColor("btnZoomOut.background")); // NOI18N
+        btnZoomOut.setIcon(resourceMap.getIcon("btnZoomOut.icon")); // NOI18N
         btnZoomOut.setText(resourceMap.getString("btnZoomOut.text")); // NOI18N
         btnZoomOut.setName("btnZoomOut"); // NOI18N
-        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 43, 80, 30));
+        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 40, 80, 30));
 
         btnViewImage.setBackground(resourceMap.getColor("btnViewImage.background")); // NOI18N
         btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
@@ -508,7 +512,7 @@ public class WildLogView extends FrameView {
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 40, -1, 30));
+        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 17, -1, -1));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -519,7 +523,7 @@ public class WildLogView extends FrameView {
                 btnBrowsePrevActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 20, -1, 50));
+        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 20, -1, 50));
 
         btnBrowseNext.setBackground(resourceMap.getColor("btnBrowseNext.background")); // NOI18N
         btnBrowseNext.setIcon(resourceMap.getIcon("btnBrowseNext.icon")); // NOI18N
@@ -530,7 +534,22 @@ public class WildLogView extends FrameView {
                 btnBrowseNextActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 20, -1, 50));
+        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, -1, 50));
+
+        dtpStartDate.setName("dtpStartDate"); // NOI18N
+        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 90, -1));
+
+        dtpEndDate.setName("dtpEndDate"); // NOI18N
+        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 90, -1));
+
+        btnRefreshDates.setText(resourceMap.getString("btnRefreshDates.text")); // NOI18N
+        btnRefreshDates.setName("btnRefreshDates"); // NOI18N
+        btnRefreshDates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshDatesActionPerformed(evt);
+            }
+        });
+        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 70, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -838,6 +857,11 @@ public class WildLogView extends FrameView {
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
+            }
+        });
         tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 320, -1));
 
         btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
@@ -956,6 +980,7 @@ public class WildLogView extends FrameView {
         helpMenu.setName("helpMenu"); // NOI18N
 
         aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
+        aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
         aboutMenuItem.setName("aboutMenuItem"); // NOI18N
         helpMenu.add(aboutMenuItem);
 
@@ -1268,6 +1293,13 @@ public class WildLogView extends FrameView {
         tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, true));
         // Setup talbe column sizes
         resizeTalbes_Element();
+        // Sort rows for Element
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblElement.getRowSorter().setSortKeys(tempList);
+        // Reset the Image and Location table
+        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
@@ -1277,6 +1309,7 @@ public class WildLogView extends FrameView {
     private void tabFotoComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabFotoComponentShown
         if (!buttonGroup1.isSelected(rdbBrowseLocation.getModel()) && !buttonGroup1.isSelected(rdbBrowseElement.getModel()) && !buttonGroup1.isSelected(rdbBrowseDate.getModel()))
             rdbBrowseLocation.setSelected(true);
+        treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
     }//GEN-LAST:event_tabFotoComponentShown
 
     private void btnClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSearchActionPerformed
@@ -1285,8 +1318,8 @@ public class WildLogView extends FrameView {
         cmbType.setEnabled(false);
         searchElement = new Element();
         tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement, false));
-        // Setup talbe column sizes
-        resizeTalbes_Element();
+        // Reset everything
+        tabElementComponentShown(null);
     }//GEN-LAST:event_btnClearSearchActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
@@ -1425,10 +1458,12 @@ public class WildLogView extends FrameView {
             }
             // Maak paar display issues reg
             imageIndex = 0;
-            if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-            else
-                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            if (imgBrowsePhotos.getImage() != null) {
+                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
+                else
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            }
             txtPhotoInformation.getCaret().setDot(0);
         }
     }//GEN-LAST:event_treBrowsePhotoValueChanged
@@ -1584,10 +1619,12 @@ public class WildLogView extends FrameView {
                 }
             }
             // Scale image
-            if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-            else
-                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            if (imgBrowsePhotos.getImage() != null) {
+                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
+                else
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            }
         }
     }//GEN-LAST:event_btnBrowsePrevActionPerformed
 
@@ -1681,12 +1718,23 @@ public class WildLogView extends FrameView {
                 }
             }
             // Scale image
-            if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-            else
-                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            if (imgBrowsePhotos.getImage() != null) {
+                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
+                else
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            }
         }
     }//GEN-LAST:event_btnBrowseNextActionPerformed
+
+    private void btnRefreshDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshDatesActionPerformed
+        rdbBrowseDateItemStateChanged(null);
+    }//GEN-LAST:event_btnRefreshDatesActionPerformed
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnSearchActionPerformed(null);
+    }//GEN-LAST:event_txtSearchKeyPressed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -1702,7 +1750,6 @@ public class WildLogView extends FrameView {
                 }
             }
         }
-        treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
 
@@ -1719,24 +1766,25 @@ public class WildLogView extends FrameView {
                 tempElementNode.add(new DefaultMutableTreeNode(new SightingWrapper(tempSighting, false)));
             }
         }
-        treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
 
     private void browseByDate() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
-//        List<Element> elements = app.getDBI().list(new Element());
-//        for (Element tempElement : elements) {
-//            DefaultMutableTreeNode tempElementNode = new DefaultMutableTreeNode(tempElement);
-//            root.add(tempElementNode);
-//            Sighting templateSighting = new Sighting();
-//            templateSighting.setElement(tempElement);
-//            List<Sighting> sightings = app.getDBI().list(templateSighting);
-//            for (Sighting tempSighting : sightings) {
-//                tempElementNode.add(new DefaultMutableTreeNode(new SightingWrapper(tempSighting)));
-//            }
-//        }
-        treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
+            List<Sighting> sightings = app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate());
+            for (Sighting tempSighting : sightings) {
+                DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, true));
+                root.add(tempSightingNode);
+                DefaultMutableTreeNode tempLocationNode = new DefaultMutableTreeNode(tempSighting.getLocation());
+                tempSightingNode.add(tempLocationNode);
+                DefaultMutableTreeNode tempElementNode = new DefaultMutableTreeNode(tempSighting.getElement());
+                tempSightingNode.add(tempElementNode);
+            }
+        }
+        else {
+            root.add(new DefaultMutableTreeNode("Please select dates first"));
+        }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
 
@@ -1902,7 +1950,7 @@ public class WildLogView extends FrameView {
         File tempFile = new File(path);
         tempFile.mkdirs();
         // Locations
-        CsvGenerator csvGenerator = new CsvGenerator(path + File.separatorChar + "Locations.csv");
+        CsvGenerator csvGenerator = new CsvGenerator();
         csvGenerator.addHeader("Name");
         csvGenerator.addHeader("Description");
         csvGenerator.addHeader("Province");
@@ -1925,13 +1973,14 @@ public class WildLogView extends FrameView {
         csvGenerator.addHeader("Longitude Minutes");
         csvGenerator.addHeader("Longitude Seconds");
         csvGenerator.addHeader("Sub Areas");
+        csvGenerator.addHeader("Visits");
         List<Location> listLocations = app.getDBI().list(new Location());
         for (int t = 0; t < listLocations.size(); t++) {
             listLocations.get(t).toCSV(csvGenerator);
         }
-        csvGenerator.writeCSV();
+        csvGenerator.writeCSV(path + File.separatorChar + "Locations.csv");
         // Visits
-        csvGenerator = new CsvGenerator(path + File.separatorChar + "Visits.csv");
+        csvGenerator = new CsvGenerator();
         csvGenerator.addHeader("Name");
         csvGenerator.addHeader("Start Date");
         csvGenerator.addHeader("End Date");
@@ -1944,9 +1993,9 @@ public class WildLogView extends FrameView {
         for (int t = 0; t < listVisits.size(); t++) {
             listVisits.get(t).toCSV(csvGenerator);
         }
-        csvGenerator.writeCSV();
+        csvGenerator.writeCSV(path + File.separatorChar + "Visits.csv");
         // Sightings
-        csvGenerator = new CsvGenerator(path + File.separatorChar + "Sightings.csv");
+        csvGenerator = new CsvGenerator();
         csvGenerator.addHeader("Date");
         csvGenerator.addHeader("Element Primary Name");
         csvGenerator.addHeader("Location Name");
@@ -1973,9 +2022,9 @@ public class WildLogView extends FrameView {
         for (int t = 0; t < listSightings.size(); t++) {
             listSightings.get(t).toCSV(csvGenerator);
         }
-        csvGenerator.writeCSV();
+        csvGenerator.writeCSV(path + File.separatorChar + "Sightings.csv");
         // Elements
-        csvGenerator = new CsvGenerator(path + File.separatorChar + "Creatures.csv");
+        csvGenerator = new CsvGenerator();
         csvGenerator.addHeader("Primary Name");
         csvGenerator.addHeader("Other Name");
         csvGenerator.addHeader("Scientific Name");
@@ -2005,7 +2054,7 @@ public class WildLogView extends FrameView {
         for (int t = 0; t < listElements.size(); t++) {
             listElements.get(t).toCSV(csvGenerator);
         }
-        csvGenerator.writeCSV();
+        csvGenerator.writeCSV(path + File.separatorChar + "Creatures.csv");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2027,6 +2076,7 @@ public class WildLogView extends FrameView {
     private javax.swing.JButton btnGoLocation_LocTab;
     private javax.swing.JButton btnGoVisit_LocTab;
     private javax.swing.JButton btnLocation;
+    private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnViewImage;
     private javax.swing.JButton btnZoomIn;
@@ -2036,6 +2086,8 @@ public class WildLogView extends FrameView {
     private javax.swing.JComboBox cmbType;
     private javax.swing.JMenuItem csvExportMenuItem;
     private javax.swing.JMenuItem csvImportMenuItem;
+    private org.jdesktop.swingx.JXDatePicker dtpEndDate;
+    private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenuItem htmlExportMenuItem1;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
