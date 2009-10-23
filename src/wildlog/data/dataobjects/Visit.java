@@ -19,12 +19,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 
 // Foundation for the Visit class
-public class Visit implements HasFotos {
+public class Visit implements HasFotos, Comparable<Visit> {
     private String name; // Used as index (ID)
     private Date startDate;
     private Date endDate;
@@ -47,6 +46,15 @@ public class Visit implements HasFotos {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Visit inVisit) {
+        if (inVisit != null)
+            if (name != null && inVisit.getName() != null) {
+                return(name.compareToIgnoreCase(inVisit.getName()));
+            }
+        return 0;
     }
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {

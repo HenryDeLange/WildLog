@@ -805,12 +805,11 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnUpdateSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateSightingActionPerformed
         if (sighting != null) {
-            // Reset the colors to green
-            org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
-            lblElement.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-            lblLocation.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-            lblVisit.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
-            dtpSightingDate.setBorder(new LineBorder(resourceMap.getColor("lblElement.border.lineColor"), 3, true));
+            // Reset the border colors
+            lblElement.setBorder(null);
+            lblLocation.setBorder(null);
+            lblVisit.setBorder(null);
+            dtpSightingDate.setBorder(null);
             if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 // Set Location and Element
                 sighting.setLocation(location);
@@ -820,8 +819,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 Date date = dtpSightingDate.getDate();
                 try {
                     if (cmbTimeFormat.getSelectedItem().equals(TimeFormat.PM)) {
-                        date.setHours(12 + Integer.parseInt(txtHours.getText()));
-                        if (date.getHours() > 24) date.setHours(date.getHours() - 12);
+                        int tempHours = 12 + Integer.parseInt(txtHours.getText());
+                        if (tempHours >= 24) date.setHours(tempHours - 12);
+                        else date.setHours(tempHours);
                     }
                     else
                         date.setHours(Integer.parseInt(txtHours.getText()));
@@ -883,30 +883,34 @@ public class PanelSighting extends javax.swing.JPanel {
                 }
 
                 // Add and Save the visit
-                if (app.getDBI().isSightingUnique(sighting) == true) {
-                    if (!visit.getSightings().contains(sighting))
-                        visit.getSightings().add(sighting);
-                    if (app.getDBI().createOrUpdate(visit) == true) {
-                        // Premare to close dialog
-                        if (panelToRefresh != null) {
-                            panelToRefresh.refreshTableForSightings();
-                        }
-                        // Close the dialog - (Evt is null if the Image Upload calls save method...)
-                        if (evt != null) {
-                            JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
-                            dialog.dispose();
-                        }
+                //if (app.getDBI().isSightingUnique(sighting) == true) {
+                if (sighting.getSightingCounter() == 0) {
+                    // Add new
+                    app.getDBI().createOrUpdate(sighting);
+                }
+                if (!visit.getSightings().contains(sighting))
+                    visit.getSightings().add(sighting);
+                if (app.getDBI().createOrUpdate(visit) == true) {
+                    // Premare to close dialog
+                    if (panelToRefresh != null) {
+                        panelToRefresh.refreshTableForSightings();
                     }
-                    else {
-                        lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+                    // Close the dialog - (Evt is null if the Image Upload calls save method...)
+                    if (evt != null) {
+                        JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
+                        dialog.dispose();
                     }
                 }
                 else {
-                    lblElement.setBorder(new LineBorder(Color.RED, 3, true));
-                    lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
                     lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
-                    dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
                 }
+                //}
+                //else {
+                //    lblElement.setBorder(new LineBorder(Color.RED, 3, true));
+                //    lblLocation.setBorder(new LineBorder(Color.RED, 3, true));
+                //    lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+                //    dtpSightingDate.setBorder(new LineBorder(Color.RED, 3, true));
+                //}
 
             }
             else {

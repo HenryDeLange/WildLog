@@ -24,8 +24,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
@@ -34,8 +37,11 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.helpers.SightingCounter;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.helpers.IndicatorOfVersionAndUpdate;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Habitat;
+import wildlog.utils.ui.Utils;
+import wildlog.utils.ui.WldFilter;
 
 
 // Look at maybe callign commit only at certain times, maybe even only when database is closed? My be faster or slower...
@@ -97,14 +103,27 @@ public class DBI_db4o implements DBI {
         ObjectSet<IndicatorOfVersionAndUpdate> results = db.get(new IndicatorOfVersionAndUpdate());
         if (results.hasNext()) {
             IndicatorOfVersionAndUpdate temp = results.next();
-            if (temp.getDatabaseVersion() == 1) doUpdate_v1();
+            if (temp.getDatabaseVersion() == 1) doUpdate_v1(db);
         }
         else {
             IndicatorOfVersionAndUpdate temp = new IndicatorOfVersionAndUpdate();
             temp.setDatabaseVersion(currentDatabaseVersion);
             db.set(temp);
         }
-        
+
+        // Update database - Net local nodig:
+        // Fix SightingCounter wat reset het omdat hy van Package verander het
+//        List<Sighting> list = list(new Sighting());
+//        long t = 0;
+//        for (Sighting temp : list) {
+//            t++;
+//            temp.setSightingCounter(t);
+//            db.set(temp);
+//        }
+//
+//        counter.setCount(t);
+//        db.set(counter);
+//        db.commit();
     }
     
     // Methods:
@@ -145,8 +164,132 @@ public class DBI_db4o implements DBI {
     }
 
     @Override
+    public void exportWLD(boolean inIncludeThumbnails) {
+        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "WLD";
+        if (inIncludeThumbnails) path = path + " (images)";
+        File tempFile = new File(path);
+        tempFile.mkdirs();
+        db.ext().backup(path + File.separatorChar + "wildlog export (" + Integer.toString(1900+Calendar.getInstance().getTime().getYear()) + "-" + Calendar.getInstance().getTime().getMonth() + "-" + Calendar.getInstance().getTime().getDate() + ").wld");
+        ObjectContainer exportDb = Db4o.openFile(path + File.separatorChar + "wildlog export (" + Integer.toString(1900+Calendar.getInstance().getTime().getYear()) + "-" + Calendar.getInstance().getTime().getMonth() + "-" + Calendar.getInstance().getTime().getDate() + ").wld");
+        if (inIncludeThumbnails) {
+            ObjectSet<Foto> fotos = exportDb.get(new Foto());
+            for (Foto tempFoto : fotos) {
+                tempFoto.setOriginalFotoLocation(tempFoto.getFileLocation());
+                // Copy the image file
+                File fromFile = new File(tempFoto.getFileLocation());
+                File toDir = new File(path + File.separatorChar + "Images" + tempFoto.getFileLocation().substring(0, tempFoto.getFileLocation().lastIndexOf(File.separatorChar)));
+                toDir.mkdirs();
+                File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                FileInputStream fileInput = null;
+                FileOutputStream fileOutput = null;
+                try {
+                    fileInput = new FileInputStream(fromFile);
+                    fileOutput = new FileOutputStream(toFile);
+                    byte[] tempBytes = new byte[(int) fromFile.length()];
+                    fileInput.read(tempBytes);
+                    fileOutput.write(tempBytes);
+                    fileOutput.flush();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } finally {
+                    try {
+                        fileInput.close();
+                        fileOutput.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        }
+        else {
+            ObjectSet<HasFotos> hasFotos = exportDb.get(HasFotos.class);
+            for (HasFotos tempHasFoto : hasFotos) {
+                for (Foto tempFoto : tempHasFoto.getFotos()) {
+                    exportDb.delete(tempFoto);
+                }
+                tempHasFoto.getFotos().clear();
+                exportDb.set(tempHasFoto);
+            }
+        }
+        exportDb.commit();
+        exportDb.close();
+    }
+
+    @Override
+    public void importWLD() {
+        if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data before importing (WildLog folder). Do you want to continue with the import now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new WldFilter());
+            fileChooser.setMultiSelectionEnabled(false);
+            fileChooser.setAcceptAllFileFilterUsed(false);
+            fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+            int result = fileChooser.showOpenDialog(null);
+            if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION) && (fileChooser.getSelectedFile() != null)) {
+                ObjectContainer importDb = Db4o.openFile(fileChooser.getSelectedFile().getPath());
+                // Kyk dat die database versions dieselfde is, anders apply "patches"
+                ObjectSet<IndicatorOfVersionAndUpdate> resultsDb = db.get(new IndicatorOfVersionAndUpdate());
+                ObjectSet<IndicatorOfVersionAndUpdate> resultsImportDb = importDb.get(new IndicatorOfVersionAndUpdate());
+                if (resultsDb.hasNext() && resultsImportDb.hasNext()) {
+                    IndicatorOfVersionAndUpdate tempDb = resultsDb.next();
+                    IndicatorOfVersionAndUpdate tempImportDb = resultsImportDb.next();
+                    if (tempImportDb.getDatabaseVersion() < tempDb.getDatabaseVersion()) {
+                        if (tempImportDb.getDatabaseVersion() == 1) doUpdate_v1(importDb);
+                    }
+                }
+
+                // Import alles (Maak seker naam is uniek)
+                String prefix = "";
+                while (prefix.length() <= 0 || Utils.checkCharacters(prefix) == false) {
+                    prefix = JOptionPane.showInputDialog(null, "Pleas enter the prefix:", "Importing WLD file", JOptionPane.PLAIN_MESSAGE);
+                }
+                ObjectSet<Location> locations = importDb.get(new Location());
+                for (Location tempLocation : locations) {
+                    tempLocation.setName(prefix + tempLocation.getName());
+                    Location found = find(new Location(tempLocation.getName()));
+                    if (found == null) {
+                        createOrUpdate(tempLocation);
+                        importDb.set(tempLocation);
+                    }
+                    else JOptionPane.showMessageDialog(null, "The prefix you provided did not ensure that all imports will have a unique new name in your database. The import has been aborted, please try again with a different prefix.", "Import error!", JOptionPane.ERROR_MESSAGE);
+                }
+                ObjectSet<Visit> visits = importDb.get(new Visit());
+                for (Visit tempVisit : visits) {
+                    tempVisit.setName(prefix + tempVisit.getName());
+                    Location found = find(new Location(tempVisit.getName()));
+                    if (found == null) {
+                        createOrUpdate(tempVisit);
+                        importDb.set(tempVisit);
+                    }
+                    else JOptionPane.showMessageDialog(null, "The prefix you provided did not ensure that all imports will have a unique new name in your database. The import has been aborted, please try again with a different prefix.", "Import error!", JOptionPane.ERROR_MESSAGE);
+                }
+                ObjectSet<Element> elements = importDb.get(new Element());
+                for (Element tempElement : elements) {
+                    tempElement.setPrimaryName(prefix + tempElement.getPrimaryName());
+                    Location found = find(new Location(tempElement.getPrimaryName()));
+                    if (found == null) {
+                        createOrUpdate(tempElement);
+                        importDb.set(tempElement);
+                    }
+                    else JOptionPane.showMessageDialog(null, "The prefix you provided did not ensure that all imports will have a unique new name in your database. The import has been aborted, please try again with a different prefix.", "Import error!", JOptionPane.ERROR_MESSAGE);
+                }
+                ObjectSet<Sighting> sightings = importDb.get(new Sighting());
+                for (Sighting tempSighting : sightings) {
+                    createOrUpdate(tempSighting);
+                    importDb.set(tempSighting);
+                }
+
+                // Close import database
+                importDb.close();
+                // Commit changes to this database
+                db.commit();
+            }
+            JOptionPane.showMessageDialog(null, "If you are importing images you will need to copy them into the WildLog folder. (Make sure to follow the same folder structure.)", "Importing Images", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    @Override
     public boolean isSightingUnique(Sighting inSighting) {
-        Sighting tempSighting = new Sighting(inSighting.getDate(), inSighting.getElement(), inSighting.getLocation(), 0);
+        Sighting tempSighting = new Sighting();
         // Important this method also gives the Sighting a SightingCounter, 
         // thus makeing it unique if it doesn't have one...
         if (inSighting.getSightingCounter() > 0)
@@ -495,42 +638,42 @@ public class DBI_db4o implements DBI {
     }
 
     // Private Update Method
-    private void doUpdate_v1() {
+    private void doUpdate_v1(ObjectContainer inDb) {
         System.out.println("Performing database update...");
         // Update ENUMs
         // Note: New fields can just be added, but changes in fields needs to be re-updated
-        Query query = db.query();
+        Query query = inDb.query();
         query.constrain(Habitat.class);
         query.descend("text").constrain("Name Karoo");
         ObjectSet result = query.execute();
         for(int x = 0; x < result.size(); x++) {
             Habitat hab = (Habitat)result.get(x);
             hab.fix("Nama Karoo");
-            db.set(hab);
+            inDb.set(hab);
         }
-        query = db.query();
+        query = inDb.query();
         query.constrain(Element.class);
         result = query.execute();
         for(int x = 0; x < result.size(); x++) {
             Element element = (Element)result.get(x);
             //element.setLifespan(element.getBreedingAge());
             //element.setBreedingAge("");
-            db.set(element);
+            inDb.set(element);
         }
 
         // Other Updates
         // Note: most can be done implicitely in the code and don't need explicit updates...
 
         // Set IndicatorOfVersionAndUpdate to represent changes
-        ObjectSet<IndicatorOfVersionAndUpdate> results = db.get(new IndicatorOfVersionAndUpdate());
+        ObjectSet<IndicatorOfVersionAndUpdate> results = inDb.get(new IndicatorOfVersionAndUpdate());
         if (results.hasNext()) {
             IndicatorOfVersionAndUpdate temp = results.next();
             temp.setDatabaseVersion(2);
-            db.set(temp);
+            inDb.set(temp);
         }
 
         // Commit Changes
-        db.commit();
+        inDb.commit();
     }
     
     // NATIVE QUERY EXAMPLE:

@@ -727,7 +727,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             buttonYes.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    sighting = app.getDBI().find(new Sighting(parseDate(tblSightings.getValueAt(tblSightings.getSelectedRow(), 1).toString()), app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
+                    sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
                     visit.getSightings().remove(sighting);
                     app.getDBI().delete(sighting);
                     app.getDBI().createOrUpdate(visit);
@@ -823,7 +823,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting(/*new Date(Date.parse((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 1)))*/null, app.getDBI().find(new Element((String)tblSightings.getValueAt(tblSightings.getSelectedRow(), 0))), locationForVisit, (Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
+            sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
             refreshSightingInfo();
         }
         else {

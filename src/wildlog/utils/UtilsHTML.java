@@ -43,7 +43,7 @@ public class UtilsHTML {
             //URL imgURL = UtilsHTML.class.getResource(inFileLocation);
             //if (imgURL != null) {
                 File fromFile = new File(inFileLocation);
-                File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + "Images" + inFileLocation.substring(0, inFileLocation.lastIndexOf(File.separatorChar)));
+                File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Images" + inFileLocation.substring(0, inFileLocation.lastIndexOf(File.separatorChar)));
                 toDir.mkdirs();
                 File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
                 FileInputStream fileInput = null;
@@ -66,7 +66,7 @@ public class UtilsHTML {
                     }
                 }
                 // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
-                return "<img src='../HTML/Images/" + inFileLocation.toLowerCase() + "'>";
+                return "<img src='../HTML/Images" + inFileLocation.toLowerCase() + "'>";
             //}
             //else {
             //    System.out.println("path is wrong " + inFileLocation);
@@ -80,7 +80,7 @@ public class UtilsHTML {
     }
 
     public static void exportHTML(Element inElement) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + inElement.getPrimaryName() + ".html");
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + inElement.getPrimaryName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -103,7 +103,7 @@ public class UtilsHTML {
     }
 
     public static void exportHTML(Location inLocation) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "HTML" + File.separatorChar + inLocation.getName() + ".html");
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {

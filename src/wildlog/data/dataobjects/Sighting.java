@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
@@ -32,7 +31,7 @@ import wildlog.data.enums.Weather;
 import wildlog.utils.LatLonConverter;
 
 // Foundation for the Sighting class
-public class Sighting implements HasFotos {
+public class Sighting implements HasFotos, Comparable<Sighting> {
     private Date date; // must include time
     private Element element;
     private Location location;
@@ -61,6 +60,10 @@ public class Sighting implements HasFotos {
     public Sighting() {
     }
 
+    public Sighting(long inSightingCounter) {
+        sightingCounter = inSightingCounter;
+    }
+
     public Sighting(Date inDate, Element inElement, Location inLocation, long inSightingCounter) {
         date = inDate;
         element = inElement;
@@ -72,6 +75,15 @@ public class Sighting implements HasFotos {
     @Override
     public String toString() {
         return location.getName() + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + element.getPrimaryName();
+    }
+
+    @Override
+    public int compareTo(Sighting inSighting) {
+        if (inSighting != null)
+            if (date != null && inSighting.getDate() != null) {
+                return(date.compareTo(inSighting.getDate()));
+            }
+        return 0;
     }
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {

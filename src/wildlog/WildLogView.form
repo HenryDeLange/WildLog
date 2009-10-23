@@ -80,74 +80,6 @@
                 <Property name="useNullLayout" type="boolean" value="false"/>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JButton" name="btnLocation">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" resourceKey="btnLocation.text"/>
-                    <Property name="name" type="java.lang.String" value="btnLocation" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLocationActionPerformed"/>
-                  </Events>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="30" y="210" width="270" height="40"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnAnimal">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" resourceKey="btnAnimal.text"/>
-                    <Property name="name" type="java.lang.String" value="btnAnimal" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAnimalActionPerformed"/>
-                  </Events>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="330" y="210" width="270" height="40"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.JLabel" name="jLabel3">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
-                    <Property name="foreground" type="java.awt.Color" resourceKey="jLabel3.foreground"/>
-                    <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
-                    <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="20" y="520" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnFotos">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" resourceKey="btnFotos.background"/>
-                    <Property name="text" type="java.lang.String" resourceKey="btnFotos.text"/>
-                    <Property name="name" type="java.lang.String" value="btnFotos" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFotosActionPerformed"/>
-                  </Events>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="630" y="210" width="270" height="40"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnFancyStuff">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" resourceKey="btnFancyStuff.background"/>
-                    <Property name="text" type="java.lang.String" resourceKey="btnFancyStuff.text"/>
-                    <Property name="name" type="java.lang.String" value="btnFancyStuff" noResource="true"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="20" y="550" width="170" height="30"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel10">
                   <Properties>
                     <Property name="font" type="java.awt.Font" resourceKey="jLabel10.font"/>
@@ -197,6 +129,18 @@
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="880" y="10" width="-1" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="jLabel3">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="jLabel3.icon"/>
+                    <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+                    <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="850" y="330" width="160" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -300,6 +244,7 @@
                 </Component>
                 <Container class="org.jdesktop.swingx.JXImageView" name="imgBrowsePhotos">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" resourceKey="imgBrowsePhotos.background"/>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                         <LineBorder/>
@@ -508,6 +453,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnRefreshDates">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" resourceKey="btnRefreshDates.background"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnRefreshDates.text"/>
                     <Property name="name" type="java.lang.String" value="btnRefreshDates" noResource="true"/>
                   </Properties>
@@ -1193,8 +1139,20 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="wldExportMenuItem">
               <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="exportToWld" methodName="exportToWld"/>
+                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="wldExportMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="wldExportMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="wldExportNoImagesMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="exportToWLDWithoutImages" methodName="exportToWLDWithoutImages"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="wldExportNoImagesMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="wldExportNoImagesMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
@@ -1234,6 +1192,9 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="wldImportMenuItem">
               <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="importFromWLD" methodName="importFromWLD"/>
+                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="wldImportMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="wldImportMenuItem" noResource="true"/>
               </Properties>
@@ -1241,7 +1202,34 @@
             <MenuItem class="javax.swing.JMenuItem" name="csvImportMenuItem">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="csvImportMenuItem.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="csvImportMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="advancedMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="advancedMenu.text"/>
+            <Property name="name" type="java.lang.String" value="advancedMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="linkElementsMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="advancedLinkElements" methodName="advancedLinkElements"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="linkElementsMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="linkElementsMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="advancedMoveVisits" methodName="advancedMoveVisits"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="moveVisitsMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="moveVisitsMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>
@@ -1259,7 +1247,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogBetaView" id="showAboutBox" methodName="showAboutBox"/>
+                  <action class="wildlog.WildLogView" id="showAboutBox" methodName="showAboutBox"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="aboutMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>

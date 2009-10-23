@@ -28,6 +28,8 @@ import wildlog.data.enums.ElementType;
 public interface DBI {
     public void close();
     public void doBackup();
+    public void exportWLD(boolean inIncludeThumbnails);
+    public void importWLD();
 
     public boolean isSightingUnique(Sighting inSighting);
     //public void refresh(Object inObject);

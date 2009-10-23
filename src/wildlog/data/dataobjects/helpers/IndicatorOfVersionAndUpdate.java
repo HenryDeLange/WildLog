@@ -17,6 +17,7 @@ package wildlog.data.dataobjects.helpers;
 /**
  *
  * @author Henry
+ * MOET NIE PACKAGE VERANDER NIE, WANT DIT CONFUSE DB4O!!!!!
  */
 public class IndicatorOfVersionAndUpdate {
     // Variables

@@ -19,7 +19,6 @@ import CsvGenerator.CsvGenerator;
 import java.util.ArrayList;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -32,7 +31,7 @@ import wildlog.data.enums.WishRating;
 
 // Foundation for Elements classes
 // Use inheritance for animal, bird, plant, fish, insects, etc
-public class Element implements HasFotos {
+public class Element implements HasFotos, Comparable<Element> {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
@@ -83,6 +82,15 @@ public class Element implements HasFotos {
     @Override
     public String toString() {
         return primaryName;
+    }
+
+    @Override
+    public int compareTo(Element inElement) {
+        if (inElement != null)
+            if (primaryName != null && inElement.getPrimaryName() != null) {
+                return(primaryName.compareToIgnoreCase(inElement.getPrimaryName()));
+            }
+        return 0;
     }
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {

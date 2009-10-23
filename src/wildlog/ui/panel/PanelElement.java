@@ -21,7 +21,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -840,7 +839,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 dialog.setLayout(new AbsoluteLayout());
                 dialog.setSize(965, 625);
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-                Sighting sighting = app.getDBI().find(new Sighting(/*new Date(Date.parse((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)))*/null, element, location, (Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
+                Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
                 Visit tempVisit = new Visit();
                 tempVisit.getSightings().add(sighting);
                 Visit visit = app.getDBI().find(tempVisit);

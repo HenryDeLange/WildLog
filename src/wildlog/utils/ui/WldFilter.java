@@ -35,7 +35,7 @@ import java.io.File;
 import javax.swing.filechooser.*;
 
 /* ImageFilter.java is used by FileChooserDemo2.java. */
-public class ImageFilter extends FileFilter {
+public class WldFilter extends FileFilter {
 
     //Accept all directories and all gif, jpg, tiff, or png files.
     @Override
@@ -46,12 +46,7 @@ public class ImageFilter extends FileFilter {
 
         String extension = Utils.getExtension(f);
         if (extension != null) {
-            if (extension.equalsIgnoreCase(Utils.tiff) ||
-                extension.equalsIgnoreCase(Utils.tif) ||
-                extension.equalsIgnoreCase(Utils.gif) ||
-                extension.equalsIgnoreCase(Utils.jpeg) ||
-                extension.equalsIgnoreCase(Utils.jpg) ||
-                extension.equalsIgnoreCase(Utils.png)) {
+            if (extension.equalsIgnoreCase("wld")) {
                     return true;
             } else {
                 return false;
@@ -64,6 +59,6 @@ public class ImageFilter extends FileFilter {
     //The description of this filter
     @Override
     public String getDescription() {
-        return "Just Images";
+        return "Just Wld files";
     }
 }

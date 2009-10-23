@@ -19,7 +19,6 @@ import KmlGenerator.objects.KmlEntry;
 import java.util.ArrayList;
 import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
-import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -31,7 +30,7 @@ import wildlog.data.enums.Province;
 import wildlog.utils.LatLonConverter;
 
 // Foundation for the Location class
-public class Location implements HasFotos {
+public class Location implements HasFotos, Comparable<Location> {
     private String name; // Used as index (ID)
     private String description;
     private Province province; // For locations outside south africa the country name must be used
@@ -75,6 +74,15 @@ public class Location implements HasFotos {
     @Override
     public String toString() {
         return name;
+    }
+
+    @Override
+    public int compareTo(Location inLocation) {
+        if (inLocation != null)
+            if (name != null && inLocation.getName() != null) {
+                return(name.compareToIgnoreCase(inLocation.getName()));
+            }
+        return 0;
     }
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
