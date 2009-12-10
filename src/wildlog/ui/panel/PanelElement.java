@@ -326,6 +326,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         tblLocation.setName("tblLocation"); // NOI18N
+        tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLocationMouseClicked(evt);
+            }
+        });
         tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblLocationKeyPressed(evt);
@@ -843,7 +848,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 Visit tempVisit = new Visit();
                 tempVisit.getSightings().add(sighting);
                 Visit visit = app.getDBI().find(tempVisit);
-                dialog.add(new PanelSighting(sighting, location, visit, element, this, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+                dialog.add(new PanelSighting(sighting, location, visit, element, this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
                 dialog.setLocationRelativeTo(this);
                 ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
                 dialog.setIconImage(icon.getImage());
@@ -936,7 +941,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, null, null, element, this, true), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, null, null, element, this, true, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());
@@ -1003,6 +1008,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         else {
             tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         }
+        lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
         // Setup table column sizes
         resizeTables();
         // Sort rows for Locations
@@ -1010,6 +1016,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblLocation.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_rdbSightingsItemStateChanged
+
+    private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoLocationActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblLocationMouseClicked
 
     private void resizeTables() {
         if (rdbSightings.isSelected()) {

@@ -75,6 +75,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnUpdateSighting.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUpdateSighting.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUpdateSighting.toolTipText"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnUpdateSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -117,6 +120,9 @@
                 <Property name="font" type="java.awt.Font" resourceKey="tblElement.font"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="utilTableGenerator.getShortElementTable(searchElement, false)" type="code"/>
+                </Property>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblElement" noResource="true"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
@@ -191,6 +197,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnUploadImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUploadImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUploadImage.toolTipText"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
           </Properties>
           <Events>
@@ -219,6 +228,9 @@
             <Property name="date" type="java.util.Date" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getDate()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="dtpSightingDate" noResource="true"/>
           </Properties>
           <Constraints>
@@ -246,6 +258,9 @@
             </Property>
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getAreaType()" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="cmbAreaType" noResource="true"/>
           </Properties>
@@ -347,6 +362,9 @@
                   <Connection code="sighting.getDetails()" type="code"/>
                 </Property>
                 <Property name="wrapStyleWord" type="boolean" value="true"/>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="!disableEditing" type="code"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="txtDetails" noResource="true"/>
               </Properties>
             </Component>
@@ -356,6 +374,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="String.valueOf(sighting.getNumberOfElements())" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtNumberOfElements" noResource="true"/>
           </Properties>
@@ -376,6 +397,9 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getWeather()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbWeather" noResource="true"/>
           </Properties>
           <Constraints>
@@ -393,6 +417,9 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getTimeOfDay()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbTimeOfDay" noResource="true"/>
           </Properties>
           <Constraints>
@@ -409,6 +436,9 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getViewRating()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbViewRating" noResource="true"/>
           </Properties>
           <Constraints>
@@ -424,6 +454,9 @@
             </Property>
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getCertainty()" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="cmbCertainty" noResource="true"/>
           </Properties>
@@ -494,6 +527,9 @@
         <Component class="javax.swing.JCheckBox" name="chkElementTypeFilter">
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="chkElementTypeFilter.background"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="chkElementTypeFilter" noResource="true"/>
           </Properties>
           <Events>
@@ -541,6 +577,9 @@
             <Property name="selectedIndex" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="2" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbLatitude" noResource="true"/>
           </Properties>
           <Constraints>
@@ -568,6 +607,9 @@
             <Property name="selectedIndex" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="2" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbLongitude" noResource="true"/>
           </Properties>
           <Constraints>
@@ -580,6 +622,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Integer.toString(sighting.getLatDegrees())" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtLatDegrees" noResource="true"/>
           </Properties>
@@ -597,6 +642,9 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Integer.toString(sighting.getLatMinutes())" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtLatMinutes" noResource="true"/>
           </Properties>
           <Events>
@@ -612,6 +660,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Integer.toString(sighting.getLatSeconds())" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtLatSeconds" noResource="true"/>
           </Properties>
@@ -629,6 +680,9 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Integer.toString(sighting.getLonDegrees())" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtLonDegrees" noResource="true"/>
           </Properties>
           <Events>
@@ -644,6 +698,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Integer.toString(sighting.getLonMinutes())" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtLonMinutes" noResource="true"/>
           </Properties>
@@ -661,6 +718,9 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="Integer.toString(sighting.getLonSeconds())" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtLonSeconds" noResource="true"/>
           </Properties>
           <Events>
@@ -675,6 +735,9 @@
         <Component class="javax.swing.JTextField" name="txtSearch">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="txtSearch.text"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtSearch" noResource="true"/>
           </Properties>
           <Events>
@@ -689,8 +752,12 @@
         <Component class="javax.swing.JButton" name="btnSearch">
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnSearch.background"/>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSearch.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSearch.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSearch.toolTipText"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
           </Properties>
           <Events>
@@ -698,7 +765,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="210" y="235" width="80" height="-1"/>
+              <AbsoluteConstraints x="200" y="235" width="90" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -721,6 +788,9 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getSubArea()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbSubArea" noResource="true"/>
           </Properties>
           <Constraints>
@@ -735,6 +805,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnDeleteImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteImage.toolTipText"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
           <Events>
@@ -752,6 +825,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSetMainImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSetMainImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSetMainImage.toolTipText"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
           </Properties>
           <Events>
@@ -782,6 +858,9 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getSightingEvidence()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbEvidence" noResource="true"/>
           </Properties>
           <Constraints>
@@ -811,6 +890,9 @@
                 <Property name="font" type="java.awt.Font" resourceKey="tblLocation.font"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="utilTableGenerator.getShortLocationTable(searchLocation, false)" type="code"/>
+                </Property>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblLocation" noResource="true"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
@@ -845,6 +927,9 @@
                 <Property name="font" type="java.awt.Font" resourceKey="tblVisit.font"/>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="new DefaultTableModel()" type="code"/>
+                </Property>
+                <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblVisit" noResource="true"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
@@ -884,6 +969,9 @@
         <Component class="javax.swing.JTextField" name="txtSearchLocation">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="txtSearchLocation.text"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtSearchLocation" noResource="true"/>
           </Properties>
           <Events>
@@ -960,8 +1048,12 @@
         <Component class="javax.swing.JButton" name="btnSearchLocation">
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnSearchLocation.background"/>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSearchLocation.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSearchLocation.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSearchLocation.toolTipText"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnSearchLocation" noResource="true"/>
           </Properties>
           <Events>
@@ -969,7 +1061,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="210" y="20" width="80" height="-1"/>
+              <AbsoluteConstraints x="200" y="20" width="90" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -988,6 +1080,9 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtHours">
           <Properties>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtHours" noResource="true"/>
           </Properties>
           <Events>
@@ -1001,6 +1096,9 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtMinutes">
           <Properties>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="txtMinutes" noResource="true"/>
           </Properties>
           <Events>
@@ -1031,6 +1129,9 @@
             </Property>
             <Property name="selectedIndex" type="int" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="0" type="code"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="cmbTimeFormat" noResource="true"/>
           </Properties>

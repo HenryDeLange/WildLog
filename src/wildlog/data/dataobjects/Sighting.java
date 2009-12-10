@@ -23,6 +23,8 @@ import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
@@ -117,7 +119,49 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         entry.setId(inID);
         entry.setName(element.getPrimaryName());
         entry.setDescription(this.toHTML(false, true));
-        entry.setStyle("elementStyle");
+        if (element.getType() != null) {
+            if (element.getType().equals(ElementType.ANIMAL)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("animalOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("animalCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("animalHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("animalOmnivoreStyle");
+                else
+                    entry.setStyle("animalOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.BIRD)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("birdOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("birdCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("birdHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("birdOmnivoreStyle");
+                else
+                    entry.setStyle("birdOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.PLANT)) {
+                    entry.setStyle("plantStyle");
+            }
+            else {
+                entry.setStyle("nostyle");
+            }
+        }
+        else {
+            entry.setStyle("nostyle");
+        }
         if (latitude == null || longitude == null) {
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {

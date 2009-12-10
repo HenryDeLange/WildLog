@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -65,7 +66,10 @@ import wildlog.ui.panel.PanelElement;
 import wildlog.ui.panel.PanelLocation;
 import wildlog.ui.panel.PanelMergeElements;
 import wildlog.ui.panel.PanelMoveVisit;
+import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.PanelVisit;
+import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -73,7 +77,7 @@ import wildlog.utils.ui.Utils;
 /**
  * The application's main frame.
  */
-public class WildLogView extends FrameView {
+public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSightingAdded {
     
     // This section contains all the custom initializations that needs to happen...
     private UtilPanelGenerator utilPanelGenerator;
@@ -154,6 +158,7 @@ public class WildLogView extends FrameView {
         });
 
         // Setup the tab headers
+        setupTabHeaderHome();
         setupTabHeaderFoto();
         setupTabHeaderLocation();
         setupTabHeaderElement();
@@ -175,6 +180,14 @@ public class WildLogView extends FrameView {
             aboutBox.setLocationRelativeTo(mainFrame);
         }
         WildLogApp.getApplication().show(aboutBox);
+    }
+
+    public void setupTabHeaderHome() {
+        JPanel tabHeader = new JPanel();
+        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif"))));
+        tabHeader.add(new JLabel(""));
+        tabHeader.setBackground(new Color(0, 0, 0, 0));
+        tabbedPanel.setTabComponentAt(0, tabHeader);
     }
 
     public void setupTabHeaderFoto() {
@@ -223,7 +236,6 @@ public class WildLogView extends FrameView {
         rdbBrowseElement = new javax.swing.JRadioButton();
         rdbBrowseDate = new javax.swing.JRadioButton();
         imgBrowsePhotos = new org.jdesktop.swingx.JXImageView();
-        jLabel13 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         txtPhotoInformation = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -237,6 +249,7 @@ public class WildLogView extends FrameView {
         dtpStartDate = new org.jdesktop.swingx.JXDatePicker();
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         btnRefreshDates = new javax.swing.JButton();
+        lblNumberOfImages = new javax.swing.JLabel();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -282,8 +295,8 @@ public class WildLogView extends FrameView {
         exportMenu = new javax.swing.JMenu();
         wldExportMenuItem = new javax.swing.JMenuItem();
         wldExportNoImagesMenuItem = new javax.swing.JMenuItem();
-        csvExportMenuItem = new javax.swing.JMenuItem();
         kmlExportMenuItem = new javax.swing.JMenuItem();
+        csvExportMenuItem = new javax.swing.JMenuItem();
         htmlExportMenuItem1 = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         wldImportMenuItem = new javax.swing.JMenuItem();
@@ -422,11 +435,6 @@ public class WildLogView extends FrameView {
 
         tabFoto.add(imgBrowsePhotos, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 80, 500, 500));
 
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-        tabFoto.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, -1, -1));
-
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
         txtPhotoInformation.setContentType(resourceMap.getString("txtPhotoInformation.contentType")); // NOI18N
@@ -435,7 +443,7 @@ public class WildLogView extends FrameView {
         txtPhotoInformation.setName("txtPhotoInformation"); // NOI18N
         jScrollPane5.setViewportView(txtPhotoInformation);
 
-        tabFoto.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(268, 32, 240, 550));
+        tabFoto.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(268, 12, 240, 570));
 
         jScrollPane4.setName("jScrollPane4"); // NOI18N
 
@@ -484,7 +492,7 @@ public class WildLogView extends FrameView {
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 17, -1, -1));
+        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 5, -1, -1));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -506,15 +514,16 @@ public class WildLogView extends FrameView {
                 btnBrowseNextActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, -1, 50));
+        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, -1, 50));
 
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 90, -1));
+        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 100, -1));
 
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 60, 90, -1));
+        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 100, -1));
 
         btnRefreshDates.setBackground(resourceMap.getColor("btnRefreshDates.background")); // NOI18N
+        btnRefreshDates.setIcon(resourceMap.getIcon("btnRefreshDates.icon")); // NOI18N
         btnRefreshDates.setText(resourceMap.getString("btnRefreshDates.text")); // NOI18N
         btnRefreshDates.setName("btnRefreshDates"); // NOI18N
         btnRefreshDates.addActionListener(new java.awt.event.ActionListener() {
@@ -522,7 +531,13 @@ public class WildLogView extends FrameView {
                 btnRefreshDatesActionPerformed(evt);
             }
         });
-        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 70, -1));
+        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 55, 40, 30));
+
+        lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
+        lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfImages.setText(resourceMap.getString("lblNumberOfImages.text")); // NOI18N
+        lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
+        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 35, 80, 20));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -546,6 +561,9 @@ public class WildLogView extends FrameView {
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLocationMouseClicked(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblLocationMouseReleased(evt);
             }
@@ -578,6 +596,11 @@ public class WildLogView extends FrameView {
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(new Location()));
         tblVisit.setName("tblVisit"); // NOI18N
+        tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVisitMouseClicked(evt);
+            }
+        });
         tblVisit.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblVisitKeyPressed(evt);
@@ -641,6 +664,11 @@ public class WildLogView extends FrameView {
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
         tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(new Location()));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
+        tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblElement_LocTabMouseClicked(evt);
+            }
+        });
         tblElement_LocTab.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblElement_LocTabKeyPressed(evt);
@@ -704,6 +732,9 @@ public class WildLogView extends FrameView {
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblElementMouseClicked(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblElementMouseReleased(evt);
             }
@@ -767,6 +798,11 @@ public class WildLogView extends FrameView {
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
         tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
+        tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLocation_EleTabMouseClicked(evt);
+            }
+        });
         tblLocation_EleTab.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblLocation_EleTabKeyPressed(evt);
@@ -838,6 +874,7 @@ public class WildLogView extends FrameView {
         tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 320, -1));
 
         btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
+        btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -863,6 +900,7 @@ public class WildLogView extends FrameView {
         tabElement.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, 350, 10));
 
         btnClearSearch.setBackground(resourceMap.getColor("btnClearSearch.background")); // NOI18N
+        btnClearSearch.setIcon(resourceMap.getIcon("btnClearSearch.icon")); // NOI18N
         btnClearSearch.setText(resourceMap.getString("btnClearSearch.text")); // NOI18N
         btnClearSearch.setName("btnClearSearch"); // NOI18N
         btnClearSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -925,15 +963,15 @@ public class WildLogView extends FrameView {
         wldExportNoImagesMenuItem.setName("wldExportNoImagesMenuItem"); // NOI18N
         exportMenu.add(wldExportNoImagesMenuItem);
 
-        csvExportMenuItem.setAction(actionMap.get("exportToCSV")); // NOI18N
-        csvExportMenuItem.setText(resourceMap.getString("csvExportMenuItem.text")); // NOI18N
-        csvExportMenuItem.setName("csvExportMenuItem"); // NOI18N
-        exportMenu.add(csvExportMenuItem);
-
         kmlExportMenuItem.setAction(actionMap.get("exportToKML")); // NOI18N
         kmlExportMenuItem.setText(resourceMap.getString("kmlExportMenuItem.text")); // NOI18N
         kmlExportMenuItem.setName("kmlExportMenuItem"); // NOI18N
         exportMenu.add(kmlExportMenuItem);
+
+        csvExportMenuItem.setAction(actionMap.get("exportToCSV")); // NOI18N
+        csvExportMenuItem.setText(resourceMap.getString("csvExportMenuItem.text")); // NOI18N
+        csvExportMenuItem.setName("csvExportMenuItem"); // NOI18N
+        exportMenu.add(csvExportMenuItem);
 
         htmlExportMenuItem1.setAction(actionMap.get("exportToHTML")); // NOI18N
         htmlExportMenuItem1.setText(resourceMap.getString("htmlExportMenuItem1.text")); // NOI18N
@@ -1366,6 +1404,7 @@ public class WildLogView extends FrameView {
                 if (tempLocation.getFotos().size() > 0) {
                     try {
                         imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(0).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText("1 of " + tempLocation.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1374,6 +1413,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1387,6 +1427,7 @@ public class WildLogView extends FrameView {
                 if (tempElement.getFotos().size() > 0) {
                     try {
                         imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(0).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText("1 of " + tempElement.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1395,6 +1436,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1408,6 +1450,7 @@ public class WildLogView extends FrameView {
                 if (tempVisit.getFotos().size() > 0) {
                     try {
                         imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(0).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText("1 of " + tempVisit.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1416,6 +1459,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1429,6 +1473,7 @@ public class WildLogView extends FrameView {
                 if (tempSighting.getFotos().size() > 0) {
                     try {
                         imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(0).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText("1 of " + tempSighting.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1437,6 +1482,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1511,15 +1557,33 @@ public class WildLogView extends FrameView {
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                //Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                JDialog dialog = new JDialog(app.getMainFrame(), "Can't view Sightings from here...", true);
-                dialog.add(new JLabel("Not implemented"));
-                dialog.setSize(300, 75);
-                dialog.setLocationRelativeTo(this.getFrame());
+                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
+                Visit tempVisit = new Visit();
+                tempVisit.getSightings().add(tempSighting);
+                final JDialog dialog = new JDialog(app.getMainFrame(), "View an Existing Sighting", true);
+                dialog.setLayout(new AbsoluteLayout());
+                dialog.setSize(965, 625);
+                dialog.add(new PanelSighting(tempSighting, tempSighting.getLocation(), app.getDBI().find(tempVisit), tempSighting.getElement(), this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+                dialog.setLocationRelativeTo(this.getComponent());
+                ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+                dialog.setIconImage(icon.getImage());
+                ActionListener escListener = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        tabFotoComponentShown(null);
+                        dialog.dispose();
+                    }
+                };
+                dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
                 dialog.setVisible(true);
             }
         }
     }//GEN-LAST:event_btnGoBrowseSelectionActionPerformed
+
+    @Override
+    public void refreshTableForSightings() {
+        tabFotoComponentShown(null);
+    }
 
     private void btnViewImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewImageActionPerformed
         Utils.openImage(imgBrowsePhotos.getImageURL());
@@ -1534,6 +1598,7 @@ public class WildLogView extends FrameView {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempLocation.getFotos().size() - 1;
                         imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempLocation.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1542,6 +1607,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1556,6 +1622,7 @@ public class WildLogView extends FrameView {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempElement.getFotos().size() - 1;
                         imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempElement.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1564,6 +1631,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1578,6 +1646,7 @@ public class WildLogView extends FrameView {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempVisit.getFotos().size() - 1;
                         imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempVisit.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1586,6 +1655,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1600,6 +1670,7 @@ public class WildLogView extends FrameView {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempSighting.getFotos().size() - 1;
                         imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempSighting.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1608,6 +1679,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1633,6 +1705,7 @@ public class WildLogView extends FrameView {
                         imageIndex++;
                         if (imageIndex >= tempLocation.getFotos().size()) imageIndex = 0;
                         imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempLocation.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1641,6 +1714,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1655,6 +1729,7 @@ public class WildLogView extends FrameView {
                         imageIndex++;
                         if (imageIndex >= tempElement.getFotos().size()) imageIndex = 0;
                         imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempElement.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1663,6 +1738,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1677,6 +1753,7 @@ public class WildLogView extends FrameView {
                         imageIndex++;
                         if (imageIndex >= tempVisit.getFotos().size()) imageIndex = 0;
                         imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempVisit.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1685,6 +1762,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1699,6 +1777,7 @@ public class WildLogView extends FrameView {
                         imageIndex++;
                         if (imageIndex >= tempSighting.getFotos().size()) imageIndex = 0;
                         imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempSighting.getFotos().size());
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1707,6 +1786,7 @@ public class WildLogView extends FrameView {
                 else {
                     try {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                        lblNumberOfImages.setText("0 of 0");
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1731,6 +1811,36 @@ public class WildLogView extends FrameView {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
             btnSearchActionPerformed(null);
     }//GEN-LAST:event_txtSearchKeyPressed
+
+    private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoLocation_LocTabActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblLocationMouseClicked
+
+    private void tblVisitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoVisit_LocTabActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblVisitMouseClicked
+
+    private void tblElement_LocTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElement_LocTabMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoElement_LocTabActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblElement_LocTabMouseClicked
+
+    private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoElementActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblElementMouseClicked
+
+    private void tblLocation_EleTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocation_EleTabMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoLocationActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblLocation_EleTabMouseClicked
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -1824,6 +1934,7 @@ public class WildLogView extends FrameView {
             }
             else if (i == 1) {
                 column.setPreferredWidth(35);
+                column.setCellRenderer(new DateCellRenderer());
             }
             else if (i == 2) {
                 column.setPreferredWidth(30);
@@ -1915,20 +2026,72 @@ public class WildLogView extends FrameView {
         String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
         File tempFile = new File(path);
         tempFile.mkdirs();
+        // Make sure icons exist in the KML folder
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalCarnivore.gif"), new File(path + File.separatorChar + "AnimalCarnivore.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalHerbivore.gif"), new File(path + File.separatorChar + "AnimalHerbivore.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOmnivore.gif"), new File(path + File.separatorChar + "AnimalOmnivore.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOther.gif"), new File(path + File.separatorChar + "AnimalOther.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdCarnivore.gif"), new File(path + File.separatorChar + "BirdCarnivore.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdHerbivore.gif"), new File(path + File.separatorChar + "BirdHerbivore.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOmnivore.gif"), new File(path + File.separatorChar + "BirdOmnivore.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOther.gif"), new File(path + File.separatorChar + "BirdOther.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Plant.gif"), new File(path + File.separatorChar + "Plant.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Location.gif"), new File(path + File.separatorChar + "Location.gif"));
+        // KML Stuff
         KmlGenerator kmlgen = new KmlGenerator();
         kmlgen.setKmlPath(path + File.separatorChar + "WildLogMarkers.kml");
 
         List<KmlStyle> styles = new ArrayList<KmlStyle>();
-        KmlStyle style1 = new KmlStyle();
-        style1.setName("locationStyle");
-        style1.setIconName("locationIcon");
-        style1.setIconPath("http://maps.google.com/mapfiles/kml/pal3/icon31.png");
-        styles.add(style1);
-        KmlStyle style2 = new KmlStyle();
-        style2.setName("elementStyle");
-        style2.setIconName("elementIcon");
-        style2.setIconPath("http://maps.google.com/mapfiles/kml/pal5/icon6.png");
-        styles.add(style2);
+        KmlStyle tempStyle = new KmlStyle();
+        tempStyle.setName("locationStyle");
+        tempStyle.setIconName("locationIcon");
+        tempStyle.setIconPath("Location.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("animalCarnivoreStyle");
+        tempStyle.setIconName("animalCarnivoreIcon");
+        tempStyle.setIconPath("AnimalCarnivore.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("animalHerbivoreStyle");
+        tempStyle.setIconName("animalHerbivoreIcon");
+        tempStyle.setIconPath("AnimalHerbivore.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("animalOmnivoreStyle");
+        tempStyle.setIconName("animalOmnivoreIcon");
+        tempStyle.setIconPath("AnimalOmnivore.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("animalOtherStyle");
+        tempStyle.setIconName("animalOtherIcon");
+        tempStyle.setIconPath("AnimalOther.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("birdCarnivoreStyle");
+        tempStyle.setIconName("birdCarnivoreIcon");
+        tempStyle.setIconPath("BirdCarnivore.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("birdHerbivoreStyle");
+        tempStyle.setIconName("birdHerbivoreIcon");
+        tempStyle.setIconPath("BirdHerbivore.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("birdOmnivoreStyle");
+        tempStyle.setIconName("birdOmnivoreIcon");
+        tempStyle.setIconPath("BirdOmnivore.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("birdOtherStyle");
+        tempStyle.setIconName("birdOtherIcon");
+        tempStyle.setIconPath("BirdOther.gif");
+        styles.add(tempStyle);
+        tempStyle = new KmlStyle();
+        tempStyle.setName("plantStyle");
+        tempStyle.setIconName("plantIcon");
+        tempStyle.setIconPath("Plant.gif");
+        styles.add(tempStyle);
 
         List<KmlEntry> entries = new ArrayList<KmlEntry>();
         // Sightings
@@ -2169,7 +2332,6 @@ public class WildLogView extends FrameView {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
@@ -2191,6 +2353,7 @@ public class WildLogView extends FrameView {
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblImage_LocTab;
+    private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JMenuItem linkElementsMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
@@ -2228,4 +2391,5 @@ public class WildLogView extends FrameView {
     private int busyIconIndex = 0;
 
     private JDialog aboutBox;
+
 }

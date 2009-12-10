@@ -15,8 +15,7 @@
 package wildlog.utils.ui;
 
 import java.awt.Component;
-import java.awt.FileDialog;
-import java.awt.Frame;
+import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -26,6 +25,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -113,6 +113,7 @@ public class Utils {
     }
 
     public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize) {
+        inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Selct nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
 //        d.setDirectory(lastFilePath);
@@ -182,6 +183,7 @@ public class Utils {
                 }
             }
         }
+        inComponent.setCursor(Cursor.getDefaultCursor());
         if (inHasFotos.getFotos().size() - 1 > 0) return inHasFotos.getFotos().size() - 1;
         else return 0;
     }
@@ -305,6 +307,39 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    public static void copyFile(InputStream inFileToRead, File inFileToWrite) {
+        if (!inFileToWrite.exists()) {
+            InputStream fileInput = null;
+            FileOutputStream fileOutput = null;
+            try {
+                fileInput = inFileToRead;
+                if (fileInput != null) {
+                    fileOutput = new FileOutputStream(inFileToWrite);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = fileInput.read(buf)) > 0) {
+                        fileOutput.write(buf, 0, len);
+                    }
+                    fileOutput.flush();
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            finally {
+                try {
+                    if (fileInput != null)
+                        fileInput.close();
+                    if (fileOutput != null)
+                        fileOutput.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
 

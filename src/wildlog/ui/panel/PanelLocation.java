@@ -51,6 +51,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
+import wildlog.utils.ui.DateCellRenderer;
 
 
 /**
@@ -385,6 +386,9 @@ public class PanelLocation extends javax.swing.JPanel {
         ));
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblVisitMouseClicked(evt);
+            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblVisitMouseReleased(evt);
             }
@@ -403,6 +407,11 @@ public class PanelLocation extends javax.swing.JPanel {
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
         tblElement.setName("tblElement"); // NOI18N
+        tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblElementMouseClicked(evt);
+            }
+        });
         tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblElementKeyPressed(evt);
@@ -1097,6 +1106,18 @@ public class PanelLocation extends javax.swing.JPanel {
             btnGoElementActionPerformed(null);
     }//GEN-LAST:event_tblElementKeyPressed
 
+    private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoElementActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblElementMouseClicked
+
+    private void tblVisitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnGoVisitActionPerformed(null);
+        }
+    }//GEN-LAST:event_tblVisitMouseClicked
+
 
     private void resizeTables() {
         TableColumn column = null;
@@ -1107,9 +1128,11 @@ public class PanelLocation extends javax.swing.JPanel {
             }
             else if (i == 1) {
                 column.setPreferredWidth(45);
+                column.setCellRenderer(new DateCellRenderer());
             }
             else if (i == 2) {
                 column.setPreferredWidth(45);
+                column.setCellRenderer(new DateCellRenderer());
             }
             else if (i == 3) {
                 column.setPreferredWidth(75);

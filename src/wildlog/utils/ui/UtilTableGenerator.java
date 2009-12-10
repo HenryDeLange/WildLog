@@ -15,6 +15,7 @@
 package wildlog.utils.ui;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
@@ -181,14 +182,8 @@ public class UtilTableGenerator {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempVisit.getName();
-                if (tempVisit.getStartDate() != null)
-                    tempTable[t][i++] = tempVisit.getStartDate().getDate() + " " + getMonth(tempVisit.getStartDate().getMonth()) + " " + (tempVisit.getStartDate().getYear()+1900);
-                else
-                    tempTable[t][i++] = "";
-                if (tempVisit.getEndDate() != null)
-                    tempTable[t][i++] = tempVisit.getEndDate().getDate() + " " + getMonth(tempVisit.getEndDate().getMonth()) + " " + (tempVisit.getEndDate().getYear()+1900);
-                else
-                    tempTable[t][i++] = "";
+                tempTable[t][i++] = tempVisit.getStartDate();
+                tempTable[t][i++] = tempVisit.getEndDate();
                 tempTable[t][i++] = tempVisit.getGameWatchingIntensity();
                 tempTable[t][i++] = tempVisit.getType();
                 if (tempVisit.getSightings() != null)
@@ -200,6 +195,16 @@ public class UtilTableGenerator {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
+            }
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 1 || column == 2) {
+                    return Date.class;
+                }
+                if (column == 5) {
+                    return Integer.class;
+                }
+                return Object.class;
             }
         };
         return table;
@@ -220,10 +225,7 @@ public class UtilTableGenerator {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempVisit.getName();
-                if (tempVisit.getStartDate() != null)
-                    tempTable[t][i++] = tempVisit.getStartDate().getDate() + " " + getMonth(tempVisit.getStartDate().getMonth()) + " " + (tempVisit.getStartDate().getYear()+1900);
-                else
-                    tempTable[t][i++] = "";
+                tempTable[t][i++] = tempVisit.getStartDate();
                 tempTable[t][i++] = tempVisit.getType();
                 if (tempVisit.getSightings() != null)
                     tempTable[t][i++] = tempVisit.getSightings().size();
@@ -234,6 +236,16 @@ public class UtilTableGenerator {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
+            }
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 1) {
+                    return Date.class;
+                }
+                if (column == 3) {
+                    return Integer.class;
+                }
+                return Object.class;
             }
         };
         return table;
@@ -253,10 +265,7 @@ public class UtilTableGenerator {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempVisit.getName();
-                if (tempVisit.getStartDate() != null)
-                    tempTable[t][i++] = tempVisit.getStartDate().getDate() + " " + getMonth(tempVisit.getStartDate().getMonth()) + " " + (tempVisit.getStartDate().getYear()+1900);
-                else
-                    tempTable[t][i++] = "";
+                tempTable[t][i++] = tempVisit.getStartDate();
                 tempTable[t][i++] = tempVisit.getType();
             }
         }
@@ -265,6 +274,13 @@ public class UtilTableGenerator {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
+            }
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 1) {
+                    return Date.class;
+                }
+                return Object.class;
             }
         };
         return table;
@@ -294,10 +310,7 @@ public class UtilTableGenerator {
                 //    tempTable[t][i++] = null;
                 //    tempTable[t][i++] = null;
                 //
-                if (tempSighting.getDate() != null)
-                    tempTable[t][i++] = tempSighting.getDate().getDate() + " " + getMonth(tempSighting.getDate().getMonth()) + " " + (tempSighting.getDate().getYear()+1900);
-                else
-                    tempTable[t][i++] = "";
+                tempTable[t][i++] = tempSighting.getDate();
                 tempTable[t][i++] = tempSighting.getViewRating();
                 tempTable[t][i++] = tempSighting.getCertainty();
                 tempTable[t][i++] = tempSighting.getElement().getType();
@@ -309,6 +322,13 @@ public class UtilTableGenerator {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
+            }
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 1) {
+                    return Date.class;
+                }
+                return Object.class;
             }
         };
         return table;
@@ -460,10 +480,7 @@ public class UtilTableGenerator {
                 Sighting tempSighting = tempList.get(t);
                 int i = 0;
                 tempTable[t][i++] = tempSighting.getLocation().getName();
-                if (tempSighting.getDate() != null)
-                    tempTable[t][i++] = tempSighting.getDate().getDate() + " " + getMonth(tempSighting.getDate().getMonth()) + " " + (tempSighting.getDate().getYear()+1900);
-                else
-                    tempTable[t][i++] = "";
+                tempTable[t][i++] = tempSighting.getDate();
                 tempTable[t][i++] = tempSighting.getSightingCounter();
             }
         }
@@ -473,11 +490,19 @@ public class UtilTableGenerator {
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
+            @Override
+            public Class<?> getColumnClass(int column) {
+                if (column == 1) {
+                    return Date.class;
+                }
+                return Object.class;
+            }
         };
         return table;
     }
 
     // Private Methods
+/* Not used anymore
     private String getMonth(int inMonth) {
         if (inMonth == 0) return "Jan";
         if (inMonth == 1) return "Feb";
@@ -493,5 +518,5 @@ public class UtilTableGenerator {
         if (inMonth == 11) return "Dec";
         return "";
     }
-
+*/
 }

@@ -55,6 +55,7 @@ import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 public class PanelSighting extends javax.swing.JPanel {
     private Location location;
     private Visit visit;
+    private Visit oldVisit;
     private Element element;
     private Sighting sighting;
     private UtilTableGenerator utilTableGenerator;
@@ -64,16 +65,19 @@ public class PanelSighting extends javax.swing.JPanel {
     private WildLogApp app;
     private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
     private boolean treatAsNewSighting;
+    private boolean disableEditing = false;
     
     /** Creates new form PanelVisit */
-    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, boolean inTreatAsNewSighting) {
+    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, boolean inTreatAsNewSighting, boolean inDisableEditing) {
         sighting = inSighting;
         treatAsNewSighting = inTreatAsNewSighting;
+        disableEditing = inDisableEditing;
         if (sighting != null) {
             // Initiate all objects
             app = (WildLogApp) Application.getInstance();
             location = inLocation;
             visit = inVisit;
+            oldVisit = inVisit;
             element = inElement;
             utilTableGenerator = new UtilTableGenerator();
             searchElement = new Element();
@@ -84,11 +88,6 @@ public class PanelSighting extends javax.swing.JPanel {
             // Setup Dropdown Boxes
             if (location != null)
                 cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
-            //Setup Tables
-            tblElement.getTableHeader().setReorderingAllowed(false);
-            tblLocation.getTableHeader().setReorderingAllowed(false);
-            tblVisit.getTableHeader().setReorderingAllowed(false);
-            resizeTalbes();
             List tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(0, SortOrder.ASCENDING));
             tblElement.getRowSorter().setSortKeys(tempList);
@@ -153,6 +152,11 @@ public class PanelSighting extends javax.swing.JPanel {
             else {
                 lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
+            //Setup Tables
+            tblElement.getTableHeader().setReorderingAllowed(false);
+            tblLocation.getTableHeader().setReorderingAllowed(false);
+            tblVisit.getTableHeader().setReorderingAllowed(false);
+            resizeTalbes();
             // Setup default values for input fields
             if (treatAsNewSighting) {
                 cmbCertainty.setSelectedItem(Certainty.SURE);
@@ -175,8 +179,8 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }
 
-    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh, boolean inTreatAsNewSighting) {
-        this(inSighting, inLocation, inVisit, inElement, inTreatAsNewSighting);
+    public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh, boolean inTreatAsNewSighting, boolean inDisableEditing) {
+        this(inSighting, inLocation, inVisit, inElement, inTreatAsNewSighting, inDisableEditing);
         panelToRefresh = inPanelToRefresh;
     }
 
@@ -317,6 +321,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnUpdateSighting.setIcon(resourceMap.getIcon("btnUpdateSighting.icon")); // NOI18N
         btnUpdateSighting.setText(resourceMap.getString("btnUpdateSighting.text")); // NOI18N
         btnUpdateSighting.setToolTipText(resourceMap.getString("btnUpdateSighting.toolTipText")); // NOI18N
+        btnUpdateSighting.setEnabled(!disableEditing);
         btnUpdateSighting.setName("btnUpdateSighting"); // NOI18N
         btnUpdateSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -333,6 +338,7 @@ public class PanelSighting extends javax.swing.JPanel {
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
         tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, false));
+        tblElement.setEnabled(!disableEditing);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -384,6 +390,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
+        btnUploadImage.setEnabled(!disableEditing);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -398,6 +405,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 290, 30, -1));
 
         dtpSightingDate.setDate(sighting.getDate());
+        dtpSightingDate.setEnabled(!disableEditing);
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
         sightingIncludes.add(dtpSightingDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(333, 290, 130, -1));
 
@@ -408,6 +416,7 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbAreaType.setMaximumRowCount(11);
         cmbAreaType.setModel(new DefaultComboBoxModel(AreaType.values()));
         cmbAreaType.setSelectedItem(sighting.getAreaType());
+        cmbAreaType.setEnabled(!disableEditing);
         cmbAreaType.setName("cmbAreaType"); // NOI18N
         sightingIncludes.add(cmbAreaType, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 480, 260, -1));
 
@@ -444,12 +453,14 @@ public class PanelSighting extends javax.swing.JPanel {
         txtDetails.setRows(5);
         txtDetails.setText(sighting.getDetails());
         txtDetails.setWrapStyleWord(true);
+        txtDetails.setEnabled(!disableEditing);
         txtDetails.setName("txtDetails"); // NOI18N
         jScrollPane2.setViewportView(txtDetails);
 
         sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 440, 300, 130));
 
         txtNumberOfElements.setText(String.valueOf(sighting.getNumberOfElements()));
+        txtNumberOfElements.setEnabled(!disableEditing);
         txtNumberOfElements.setName("txtNumberOfElements"); // NOI18N
         txtNumberOfElements.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -460,22 +471,26 @@ public class PanelSighting extends javax.swing.JPanel {
 
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
         cmbWeather.setSelectedItem(sighting.getWeather());
+        cmbWeather.setEnabled(!disableEditing);
         cmbWeather.setName("cmbWeather"); // NOI18N
         sightingIncludes.add(cmbWeather, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 450, 260, -1));
 
         cmbTimeOfDay.setMaximumRowCount(9);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
+        cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
         sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 540, 170, -1));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
+        cmbViewRating.setEnabled(!disableEditing);
         cmbViewRating.setName("cmbViewRating"); // NOI18N
         sightingIncludes.add(cmbViewRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 510, 260, -1));
 
         cmbCertainty.setModel(new DefaultComboBoxModel(Certainty.values()));
         cmbCertainty.setSelectedItem(sighting.getCertainty());
+        cmbCertainty.setEnabled(!disableEditing);
         cmbCertainty.setName("cmbCertainty"); // NOI18N
         sightingIncludes.add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 390, 260, -1));
 
@@ -508,6 +523,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
 
         chkElementTypeFilter.setBackground(resourceMap.getColor("chkElementTypeFilter.background")); // NOI18N
+        chkElementTypeFilter.setEnabled(!disableEditing);
         chkElementTypeFilter.setName("chkElementTypeFilter"); // NOI18N
         chkElementTypeFilter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -532,6 +548,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
+        cmbLatitude.setEnabled(!disableEditing);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
         sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 90, -1));
 
@@ -541,10 +558,12 @@ public class PanelSighting extends javax.swing.JPanel {
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
+        cmbLongitude.setEnabled(!disableEditing);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
         sightingIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 90, -1));
 
         txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
+        txtLatDegrees.setEnabled(!disableEditing);
         txtLatDegrees.setName("txtLatDegrees"); // NOI18N
         txtLatDegrees.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -554,6 +573,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 360, 30, -1));
 
         txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
+        txtLatMinutes.setEnabled(!disableEditing);
         txtLatMinutes.setName("txtLatMinutes"); // NOI18N
         txtLatMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -563,6 +583,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 360, 30, -1));
 
         txtLatSeconds.setText(Integer.toString(sighting.getLatSeconds()));
+        txtLatSeconds.setEnabled(!disableEditing);
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
         txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -572,6 +593,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 360, 30, -1));
 
         txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
+        txtLonDegrees.setEnabled(!disableEditing);
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
         txtLonDegrees.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -581,6 +603,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 360, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
+        txtLonMinutes.setEnabled(!disableEditing);
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
         txtLonMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -590,6 +613,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 360, 30, -1));
 
         txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
+        txtLonSeconds.setEnabled(!disableEditing);
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
         txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -599,6 +623,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 360, 30, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
+        txtSearch.setEnabled(!disableEditing);
         txtSearch.setName("txtSearch"); // NOI18N
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -608,15 +633,17 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 235, 200, -1));
 
         btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
+        btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
+        btnSearch.setEnabled(!disableEditing);
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 235, 80, -1));
+        sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 235, 90, -1));
 
         jLabel20.setText(resourceMap.getString("jLabel20.text")); // NOI18N
         jLabel20.setName("jLabel20"); // NOI18N
@@ -624,6 +651,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         cmbSubArea.setModel(new DefaultComboBoxModel());
         cmbSubArea.setSelectedItem(sighting.getSubArea());
+        cmbSubArea.setEnabled(!disableEditing);
         cmbSubArea.setName("cmbSubArea"); // NOI18N
         sightingIncludes.add(cmbSubArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 300, -1));
 
@@ -631,6 +659,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
+        btnDeleteImage.setEnabled(!disableEditing);
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -643,6 +672,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
+        btnSetMainImage.setEnabled(!disableEditing);
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -657,6 +687,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         cmbEvidence.setModel(new DefaultComboBoxModel(SightingEvidence.values()));
         cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
+        cmbEvidence.setEnabled(!disableEditing);
         cmbEvidence.setName("cmbEvidence"); // NOI18N
         sightingIncludes.add(cmbEvidence, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 420, 260, -1));
 
@@ -665,6 +696,7 @@ public class PanelSighting extends javax.swing.JPanel {
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
         tblLocation.setModel(utilTableGenerator.getShortLocationTable(searchLocation, false));
+        tblLocation.setEnabled(!disableEditing);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -686,6 +718,7 @@ public class PanelSighting extends javax.swing.JPanel {
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setModel(new DefaultTableModel());
+        tblVisit.setEnabled(!disableEditing);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -708,6 +741,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(lblLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         txtSearchLocation.setText(resourceMap.getString("txtSearchLocation.text")); // NOI18N
+        txtSearchLocation.setEnabled(!disableEditing);
         txtSearchLocation.setName("txtSearchLocation"); // NOI18N
         txtSearchLocation.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -743,15 +777,17 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(405, 160, -1, -1));
 
         btnSearchLocation.setBackground(resourceMap.getColor("btnSearchLocation.background")); // NOI18N
+        btnSearchLocation.setIcon(resourceMap.getIcon("btnSearchLocation.icon")); // NOI18N
         btnSearchLocation.setText(resourceMap.getString("btnSearchLocation.text")); // NOI18N
         btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
+        btnSearchLocation.setEnabled(!disableEditing);
         btnSearchLocation.setName("btnSearchLocation"); // NOI18N
         btnSearchLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSearchLocationActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 80, -1));
+        sightingIncludes.add(btnSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 90, -1));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -759,6 +795,7 @@ public class PanelSighting extends javax.swing.JPanel {
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         sightingIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 330, 40, 20));
 
+        txtHours.setEnabled(!disableEditing);
         txtHours.setName("txtHours"); // NOI18N
         txtHours.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -767,6 +804,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(txtHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(532, 540, 20, -1));
 
+        txtMinutes.setEnabled(!disableEditing);
         txtMinutes.setName("txtMinutes"); // NOI18N
         txtMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -782,6 +820,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         cmbTimeFormat.setModel(new DefaultComboBoxModel(TimeFormat.values()));
         cmbTimeFormat.setSelectedIndex(0);
+        cmbTimeFormat.setEnabled(!disableEditing);
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
         sightingIncludes.add(cmbTimeFormat, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 540, 40, 20));
 
@@ -869,7 +908,13 @@ public class PanelSighting extends javax.swing.JPanel {
                     txtLonSeconds.setText("0");
                 }
 
-                // Setup Visit
+                // Delete from old visit
+                if (!visit.equals(oldVisit)) {
+                    oldVisit.getSightings().remove(sighting);
+                    app.getDBI().createOrUpdate(oldVisit);
+                }
+
+                // Setup new Visit
                 if (visit.getSightings() != null) {
                     int index = visit.getSightings().indexOf(sighting);
                     if (index != -1)
@@ -1234,6 +1279,14 @@ public class PanelSighting extends javax.swing.JPanel {
             else
                 lblNumberOfImages.setText("0 of 0");
         }
+    }
+
+    public boolean isDisableEditing() {
+        return disableEditing;
+    }
+
+    public void setDisableEditing(boolean disableEditing) {
+        this.disableEditing = disableEditing;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

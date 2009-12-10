@@ -271,18 +271,6 @@
                     </DimensionLayout>
                   </Layout>
                 </Container>
-                <Component class="javax.swing.JLabel" name="jLabel13">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" resourceKey="jLabel13.font"/>
-                    <Property name="text" type="java.lang.String" resourceKey="jLabel13.text"/>
-                    <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="270" y="10" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
                 <Container class="javax.swing.JScrollPane" name="jScrollPane5">
                   <Properties>
                     <Property name="name" type="java.lang.String" value="jScrollPane5" noResource="true"/>
@@ -292,7 +280,7 @@
                   </AuxValues>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="268" y="32" width="240" height="550"/>
+                      <AbsoluteConstraints x="268" y="12" width="240" height="570"/>
                     </Constraint>
                   </Constraints>
 
@@ -395,7 +383,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="840" y="17" width="-1" height="-1"/>
+                      <AbsoluteConstraints x="840" y="5" width="-1" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -427,7 +415,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="590" y="20" width="-1" height="50"/>
+                      <AbsoluteConstraints x="660" y="20" width="-1" height="50"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -437,7 +425,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="10" y="60" width="90" height="-1"/>
+                      <AbsoluteConstraints x="10" y="60" width="100" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -447,13 +435,14 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="100" y="60" width="90" height="-1"/>
+                      <AbsoluteConstraints x="110" y="60" width="100" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnRefreshDates">
                   <Properties>
                     <Property name="background" type="java.awt.Color" resourceKey="btnRefreshDates.background"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnRefreshDates.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnRefreshDates.text"/>
                     <Property name="name" type="java.lang.String" value="btnRefreshDates" noResource="true"/>
                   </Properties>
@@ -462,7 +451,20 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="190" y="60" width="70" height="-1"/>
+                      <AbsoluteConstraints x="215" y="55" width="40" height="30"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblNumberOfImages">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" resourceKey="lblNumberOfImages.font"/>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
+                    <Property name="text" type="java.lang.String" resourceKey="lblNumberOfImages.text"/>
+                    <Property name="name" type="java.lang.String" value="lblNumberOfImages" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="578" y="35" width="80" height="20"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -527,6 +529,7 @@
                         </Property>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblLocationMouseClicked"/>
                         <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblLocationMouseReleased"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblLocationKeyPressed"/>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblLocationKeyReleased"/>
@@ -583,6 +586,7 @@
                         <Property name="name" type="java.lang.String" value="tblVisit" noResource="true"/>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblVisitMouseClicked"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblVisitKeyPressed"/>
                       </Events>
                     </Component>
@@ -681,6 +685,7 @@
                         <Property name="name" type="java.lang.String" value="tblElement_LocTab" noResource="true"/>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblElement_LocTabMouseClicked"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblElement_LocTabKeyPressed"/>
                       </Events>
                     </Component>
@@ -802,6 +807,7 @@
                         <Property name="name" type="java.lang.String" value="tblElement" noResource="true"/>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblElementMouseClicked"/>
                         <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblElementMouseReleased"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblElementKeyPressed"/>
                         <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblElementKeyReleased"/>
@@ -897,6 +903,7 @@
                         <Property name="name" type="java.lang.String" value="tblLocation_EleTab" noResource="true"/>
                       </Properties>
                       <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblLocation_EleTabMouseClicked"/>
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tblLocation_EleTabKeyPressed"/>
                       </Events>
                     </Component>
@@ -1010,6 +1017,7 @@
                 <Component class="javax.swing.JButton" name="btnSearch">
                   <Properties>
                     <Property name="background" type="java.awt.Color" resourceKey="btnSearch.background"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnSearch.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnSearch.text"/>
                     <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
                   </Properties>
@@ -1061,6 +1069,7 @@
                 <Component class="javax.swing.JButton" name="btnClearSearch">
                   <Properties>
                     <Property name="background" type="java.awt.Color" resourceKey="btnClearSearch.background"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnClearSearch.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnClearSearch.text"/>
                     <Property name="name" type="java.lang.String" value="btnClearSearch" noResource="true"/>
                   </Properties>
@@ -1155,15 +1164,6 @@
                 <Property name="name" type="java.lang.String" value="wldExportNoImagesMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToCSV" methodName="exportToCSV"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="csvExportMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="kmlExportMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1171,6 +1171,15 @@
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="kmlExportMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="kmlExportMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="exportToCSV" methodName="exportToCSV"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="csvExportMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="htmlExportMenuItem1">
