@@ -21,6 +21,7 @@ import java.util.List;
 import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
+import wildlog.utils.UtilsHTML;
 
 // Foundation for the Visit class
 public class Visit implements HasFotos, Comparable<Visit> {
@@ -71,12 +72,14 @@ public class Visit implements HasFotos, Comparable<Visit> {
                 }
 
         String htmlVisit = "";
-        htmlVisit = htmlVisit + "<H2>" + name + "</H2>";
-        htmlVisit = htmlVisit + "<b>Start Date:</b> " + startDate;
-        htmlVisit = htmlVisit + "<br/><b>End Date:</b> " + endDate;
-        htmlVisit = htmlVisit + "<br/><b>Game Watching:</b> " + gameWatchingIntensity;
-        htmlVisit = htmlVisit + "<br/><b>Type:</b> " + type;
-        htmlVisit = htmlVisit + "<br/><b>Description:</b> " + description;
+        htmlVisit = htmlVisit + "<H2>Visit</H2>";
+        htmlVisit = htmlVisit + "<b>Visit:</b> " + name;
+        htmlVisit = htmlVisit + "<br/>";
+        htmlVisit = htmlVisit + "<br/><b>Start Date:</b> " + UtilsHTML.formatDate(startDate, false);
+        htmlVisit = htmlVisit + "<br/><b>End Date:</b> " + UtilsHTML.formatDate(endDate, false);
+        htmlVisit = htmlVisit + "<br/><b>Game Watching:</b> " + UtilsHTML.formatString(gameWatchingIntensity);
+        htmlVisit = htmlVisit + "<br/><b>Type:</b> " + UtilsHTML.formatString(type);
+        htmlVisit = htmlVisit + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
         if (inIncludeImages)
             htmlVisit = htmlVisit + "<br/><b>Photos:</b></br/>" + fotoString;
         if (inIsRecursive)

@@ -18,6 +18,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 
@@ -123,6 +125,20 @@ public class UtilsHTML {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public static String formatString(Object inObject) {
+        if (inObject == null)
+            return "";
+        else
+            return inObject.toString();
+    }
+
+    public static String formatDate(Date inDate, boolean inShowTime) {
+        if (inShowTime)
+            return new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)").format((Date)inDate);
+        else
+            return new SimpleDateFormat("E, dd MMM yyyy").format((Date)inDate);
     }
 
 }

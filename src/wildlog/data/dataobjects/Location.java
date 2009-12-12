@@ -28,6 +28,7 @@ import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Province;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.UtilsHTML;
 
 // Foundation for the Location class
 public class Location implements HasFotos, Comparable<Location> {
@@ -104,27 +105,29 @@ public class Location implements HasFotos, Comparable<Location> {
                 }
         String htmlLocation = "<head><title>" + name + "</title></head>";
         htmlLocation = htmlLocation + "<body>";
-        htmlLocation = htmlLocation + "<H2>" + name + "</H2>";
-        htmlLocation = htmlLocation + "<b>Province:</b> " + province;
-        htmlLocation = htmlLocation + "<br/><b>Rating:</b> " + rating;
-        htmlLocation = htmlLocation + "<br/><b>Game View Rating:</b> " + gameViewingRating;
-        htmlLocation = htmlLocation + "<br/><b>Habitat:</b> " + habitatType;
-        htmlLocation = htmlLocation + "<br/><b>Description:</b> " + description;
-        htmlLocation = htmlLocation + "<br/><b>Directions:</b> " + directions;
+        htmlLocation = htmlLocation + "<H2>Location</H2>";
+        htmlLocation = htmlLocation + "<b>Name:</b> " + name;
+        htmlLocation = htmlLocation + "<br/>";
+        htmlLocation = htmlLocation + "<br/><b>Province:</b> " + UtilsHTML.formatString(province);
+        htmlLocation = htmlLocation + "<br/><b>Rating:</b> " + UtilsHTML.formatString(rating);
+        htmlLocation = htmlLocation + "<br/><b>Game View Rating:</b> " + UtilsHTML.formatString(gameViewingRating);
+        htmlLocation = htmlLocation + "<br/><b>Habitat:</b> " + UtilsHTML.formatString(habitatType);
+        htmlLocation = htmlLocation + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
+        htmlLocation = htmlLocation + "<br/><b>Directions:</b> " + UtilsHTML.formatString(directions);
         if (website != null)
             if (website.length() > 0)
-                htmlLocation = htmlLocation + "<br/><b>Website:</b> <a href=\"" + website + "\">Link</a>";
+                htmlLocation = htmlLocation + "<br/><b>Website:</b> <a href=\"" + UtilsHTML.formatString(website) + "\">Link</a>";
             else
-                htmlLocation = htmlLocation + "<br/><b>Website:</b> " + website;
+                htmlLocation = htmlLocation + "<br/><b>Website:</b> " + UtilsHTML.formatString(website);
         else
-            htmlLocation = htmlLocation + "<br/><b>Website:</b> " + website;
-        htmlLocation = htmlLocation + "<br/><b>Email:</b> " + email;
-        htmlLocation = htmlLocation + "<br/><b>Contact Number:</b> " + contactNumbers;
-        htmlLocation = htmlLocation + "<br/><b>Catering:</b> " + catering;
-        htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + accommodationType;
+            htmlLocation = htmlLocation + "<br/><b>Website:</b> " + UtilsHTML.formatString(website);
+        htmlLocation = htmlLocation + "<br/><b>Email:</b> " + UtilsHTML.formatString(email);
+        htmlLocation = htmlLocation + "<br/><b>Contact Number:</b> " + UtilsHTML.formatString(contactNumbers);
+        htmlLocation = htmlLocation + "<br/><b>Catering:</b> " + UtilsHTML.formatString(catering);
+        htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + UtilsHTML.formatString(accommodationType);
         htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSeconds;
         htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
-        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + subAreasString;
+        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
         if (inIncludeImages)
             htmlLocation = htmlLocation + "</br><b>Photos:</b></br/>" + fotoString;
         if (inIsRecursive)

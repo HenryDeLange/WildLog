@@ -1856,7 +1856,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 tempLocationNode.add(tempVisitNode);
                 Collections.sort(tempVisit.getSightings());
                 for (Sighting tempSighting : tempVisit.getSightings()) {
-                    tempVisitNode.add(new DefaultMutableTreeNode(new SightingWrapper(tempSighting, true)));
+                    DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, true));
+                    tempVisitNode.add(tempSightingNode);
+                    tempSightingNode.add(new DefaultMutableTreeNode(app.getDBI().find(tempSighting.getElement())));
                 }
             }
         }
@@ -1877,7 +1879,10 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             List<Sighting> sightings = new ArrayList<Sighting>(app.getDBI().list(templateSighting));
             Collections.sort(sightings);
             for (Sighting tempSighting : sightings) {
-                tempElementNode.add(new DefaultMutableTreeNode(new SightingWrapper(tempSighting, false)));
+                DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, false));
+                tempElementNode.add(tempSightingNode);
+                tempSightingNode.add(new DefaultMutableTreeNode(tempSighting.getLocation()));
+
             }
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));

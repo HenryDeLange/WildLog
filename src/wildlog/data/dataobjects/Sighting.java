@@ -16,6 +16,7 @@ package wildlog.data.dataobjects;
 
 import CsvGenerator.CsvGenerator;
 import KmlGenerator.objects.KmlEntry;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +32,7 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.UtilsHTML;
 
 // Foundation for the Sighting class
 public class Sighting implements HasFotos, Comparable<Sighting> {
@@ -94,21 +96,21 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString = fotoString + fotos.get(t).toHTML();
             }
-        String htmlSighting = "";
-        htmlSighting = htmlSighting + "<H2>" + element.getPrimaryName() + " - " + date + " - " + location.getName() + "</H2>";
-        htmlSighting = htmlSighting + "<b>Date:</b> " + date;
+        String htmlSighting = "<H2>Sighting</H2>";
+        htmlSighting = htmlSighting + "<b>Date:</b> " + UtilsHTML.formatDate(date, true);
         htmlSighting = htmlSighting + "<br/><b>Element:</b> " + element.getPrimaryName();
-        htmlSighting = htmlSighting + "<br/><b>Location:</b> " + location.getName();
-        htmlSighting = htmlSighting + "<br/><b>Time of Day:</b> " + timeOfDay;
-        htmlSighting = htmlSighting + "<br/><b>Weather:</b> " + weather;
-        htmlSighting = htmlSighting + "<br/><b>Area Type:</b> " + areaType;
-        htmlSighting = htmlSighting + "<br/><b>View Rating:</b> " + viewRating;
-        htmlSighting = htmlSighting + "<br/><b>Certainty:</b> " + certainty;
-        htmlSighting = htmlSighting + "<br/><b>Number of Creatures:</b> " + numberOfElements;
-        htmlSighting = htmlSighting + "<br/><b>Details:</b> " + details;
+        htmlSighting = htmlSighting + "<br/><b>Location:</b> " + UtilsHTML.formatString(location.getName());
+        htmlSighting = htmlSighting + "<br/>";
+        htmlSighting = htmlSighting + "<br/><b>Time of Day:</b> " + UtilsHTML.formatString(timeOfDay);
+        htmlSighting = htmlSighting + "<br/><b>Weather:</b> " + UtilsHTML.formatString(weather);
+        htmlSighting = htmlSighting + "<br/><b>Area Type:</b> " + UtilsHTML.formatString(areaType);
+        htmlSighting = htmlSighting + "<br/><b>View Rating:</b> " + UtilsHTML.formatString(viewRating);
+        htmlSighting = htmlSighting + "<br/><b>Certainty:</b> " + UtilsHTML.formatString(certainty);
+        htmlSighting = htmlSighting + "<br/><b>Number of Creatures:</b> " + UtilsHTML.formatString(numberOfElements);
+        htmlSighting = htmlSighting + "<br/><b>Details:</b> " + UtilsHTML.formatString(details);
         htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSeconds;
         htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
-        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + subArea;
+        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
         if (inIncludeImages)
             htmlSighting = htmlSighting + "</br><b>Photos:</b></br/>" + fotoString;
         return htmlSighting;

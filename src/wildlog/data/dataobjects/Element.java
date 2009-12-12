@@ -28,6 +28,7 @@ import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
+import wildlog.utils.UtilsHTML;
 
 // Foundation for Elements classes
 // Use inheritance for animal, bird, plant, fish, insects, etc
@@ -102,27 +103,29 @@ public class Element implements HasFotos, Comparable<Element> {
 
         String htmlElement = "<head><title>" + primaryName + "</title></head>";
         htmlElement = htmlElement + "<body>";
-        htmlElement = htmlElement + "<H2>" + primaryName + "</H2>";
-        htmlElement = htmlElement + "<b>Other Name:</b> " + otherName;
-        htmlElement = htmlElement + "<br/><b>Scientific Name:</b> <i>" + scientificName + "</i>";
-        htmlElement = htmlElement + "<br/><b>Type:</b> " + type;
-        htmlElement = htmlElement + "<br/><b>Feeding Class:</b> " + feedingClass;
-        htmlElement = htmlElement + "<br/><b>Add Frequency:</b> " + addFrequency;
-        htmlElement = htmlElement + "<br/><b>Wish Rating:</b> " + wishListRating;
-        htmlElement = htmlElement + "<br/><b>Active Time:</b> " + activeTime;
-        htmlElement = htmlElement + "<br/><b>Endangered Status:</b> " + endangeredStatus;
-        htmlElement = htmlElement + "<br/><b>Water Dependance:</b> " + waterDependance;
-        htmlElement = htmlElement + "<br/><b>Food/Nutrition:</b> " + nutrition;
-        htmlElement = htmlElement + "<br/><b>Description:</b> " + description;
-        htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + behaviourDescription;
-        htmlElement = htmlElement + "<br/><b>Diagnostic:</b> " + diagnosticDescription;
-        htmlElement = htmlElement + "<br/><b>Average Male Size:</b> " + sizeMaleAverage + " " + sizeUnit;
-        htmlElement = htmlElement + "<br/><b>Average Female Size:</b> " + sizeFemaleAverage + " " + sizeUnit;
-        htmlElement = htmlElement + "<br/><b>Average Male Weight:</b> " + weightMaleAverage + " " + weightUnit;
-        htmlElement = htmlElement + "<br/><b>Average Female Weight:</b> " + weightFemaleAverage + " " + weightUnit;
-        htmlElement = htmlElement + "<br/><b>Age:</b> " + lifespan;
-        htmlElement = htmlElement + "<br/><b>Breeding Duration:</b> " + breedingDuration;
-        htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + breedingNumber;
+        htmlElement = htmlElement + "<H2>Creature</H2>";
+        htmlElement = htmlElement + "<b>Primary Name:</b> " + primaryName;
+        htmlElement = htmlElement + "<br/><b>Other Name:</b> " + UtilsHTML.formatString(otherName);
+        htmlElement = htmlElement + "<br/><b>Scientific Name:</b> <i>" + UtilsHTML.formatString(scientificName) + "</i>";
+        htmlElement = htmlElement + "<br/>";
+        htmlElement = htmlElement + "<br/><b>Type:</b> " + UtilsHTML.formatString(type);
+        htmlElement = htmlElement + "<br/><b>Feeding Class:</b> " + UtilsHTML.formatString(feedingClass);
+        htmlElement = htmlElement + "<br/><b>Add Frequency:</b> " + UtilsHTML.formatString(addFrequency);
+        htmlElement = htmlElement + "<br/><b>Wish Rating:</b> " + UtilsHTML.formatString(wishListRating);
+        htmlElement = htmlElement + "<br/><b>Active Time:</b> " + UtilsHTML.formatString(activeTime);
+        htmlElement = htmlElement + "<br/><b>Endangered Status:</b> " + UtilsHTML.formatString(endangeredStatus);
+        htmlElement = htmlElement + "<br/><b>Water Dependance:</b> " + UtilsHTML.formatString(waterDependance);
+        htmlElement = htmlElement + "<br/><b>Food/Nutrition:</b> " + UtilsHTML.formatString(nutrition);
+        htmlElement = htmlElement + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
+        htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + UtilsHTML.formatString(behaviourDescription);
+        htmlElement = htmlElement + "<br/><b>Diagnostic:</b> " + UtilsHTML.formatString(diagnosticDescription);
+        htmlElement = htmlElement + "<br/><b>Average Male Size:</b> " + UtilsHTML.formatString(sizeMaleAverage) + " " + UtilsHTML.formatString(sizeUnit);
+        htmlElement = htmlElement + "<br/><b>Average Female Size:</b> " + UtilsHTML.formatString(sizeFemaleAverage) + " " + UtilsHTML.formatString(sizeUnit);
+        htmlElement = htmlElement + "<br/><b>Average Male Weight:</b> " + UtilsHTML.formatString(weightMaleAverage) + " " + UtilsHTML.formatString(weightUnit);
+        htmlElement = htmlElement + "<br/><b>Average Female Weight:</b> " + UtilsHTML.formatString(weightFemaleAverage) + " " + UtilsHTML.formatString(weightUnit);
+        htmlElement = htmlElement + "<br/><b>Age:</b> " + UtilsHTML.formatString(lifespan);
+        htmlElement = htmlElement + "<br/><b>Breeding Duration:</b> " + UtilsHTML.formatString(breedingDuration);
+        htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + UtilsHTML.formatString(breedingNumber);
         if (inIncludeImages)
             htmlElement = htmlElement + "</br><b>Photos:</b></br/>" + fotoString;
         htmlElement = htmlElement + "</body>";
