@@ -139,7 +139,7 @@ public class PanelSighting extends javax.swing.JPanel {
             }
             if (location != null) {
                 if (location.getFotos().size() > 0)
-                    Utils.setupFoto(location, 0, lblLocationImage, 100);
+                    Utils.setupFoto(location, 0, lblLocationImage, 100, app);
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
@@ -148,7 +148,7 @@ public class PanelSighting extends javax.swing.JPanel {
             }
             if (element != null) {
                 if (element.getFotos().size() > 0)
-                    Utils.setupFoto(element, 0, lblElementImage, 100);
+                    Utils.setupFoto(element, 0, lblElementImage, 100, app);
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
@@ -219,7 +219,7 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLonSeconds.setText(Float.toString(sighting.getLonSecondsFloat()));
 
             if (sighting.getFotos().size() > 0)
-                Utils.setupFoto(sighting, imageIndex, lblImage, 300);
+                Utils.setupFoto(sighting, imageIndex, lblImage, 300, app);
             else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             setupNumberOfImages();
@@ -1023,7 +1023,7 @@ public class PanelSighting extends javax.swing.JPanel {
         if (sighting != null) {
             btnUpdateSightingActionPerformed(null);
             if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
-                imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300);
+                imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300, app);
                 setupNumberOfImages();
                 btnUpdateSightingActionPerformed(null);
             }
@@ -1032,7 +1032,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.previousImage(sighting, imageIndex, lblImage, 300);
+            imageIndex = Utils.previousImage(sighting, imageIndex, lblImage, 300, app);
             setupNumberOfImages();
         }
     }//GEN-LAST:event_btnPreviousImageActionPerformed
@@ -1051,14 +1051,14 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.nextImage(sighting, imageIndex, lblImage, 300);
+            imageIndex = Utils.nextImage(sighting, imageIndex, lblImage, 300, app);
             setupNumberOfImages();
         }
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.removeImage(sighting, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
+            imageIndex = Utils.removeImage(sighting, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
             setupNumberOfImages();
             btnUpdateSightingActionPerformed(null);
         }

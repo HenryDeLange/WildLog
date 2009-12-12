@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Date;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.FotoRating;
+import wildlog.data.enums.FotoType;
 
 
 // Foundation for the Foto class
@@ -30,6 +31,7 @@ public class Foto {
     private String originalFotoLocation;
     private FotoRating rating;
     private Date date;
+    private FotoType fotoType;
 
 
     // CONSTRUCTORS:
@@ -37,11 +39,12 @@ public class Foto {
 
     }
     
-    public Foto(String inName, String inFileLocation, String inOriginalFotoLocation) {
+    public Foto(String inName, String inFileLocation, String inOriginalFotoLocation, FotoType inFotoType) {
         name = inName;
         fileLocation = inFileLocation;
         originalFotoLocation = inOriginalFotoLocation;
         date = Calendar.getInstance().getTime();
+        fotoType = inFotoType;
     }
 
     // METHODS:
@@ -51,8 +54,17 @@ public class Foto {
     }
 
     public String toHTML() {
-        // Moet die getter hier gebruik want ek wil die File().exists() doen...
-        return UtilsHTML.generateHTMLImages(getFileLocation());
+        if (fotoType.equals(FotoType.IMAGE))
+            // Moet die getter hier gebruik want ek wil die File().exists() doen...
+            return UtilsHTML.generateHTMLImages(getFileLocation());
+        else
+        if (fotoType.equals(FotoType.MOVIE))
+            return "[Movie]";
+        else
+        if (fotoType.equals(FotoType.OTHER))
+            return "[Other File]";
+        else
+            return "";
     }
 
     // GETTERS:
@@ -88,6 +100,10 @@ public class Foto {
             return originalFotoLocation;
     }
 
+    public FotoType getFotoType() {
+        return fotoType;
+    }
+
     // SETTERS:
     public void setName(String inName) {
             name = inName;
@@ -111,6 +127,10 @@ public class Foto {
 
     public void setOriginalFotoLocation(String inOriginalFotoLocation) {
         originalFotoLocation = inOriginalFotoLocation;
+    }
+
+    public void setFotoType(FotoType inFotoType) {
+        fotoType = inFotoType;
     }
 
 }

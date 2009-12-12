@@ -39,6 +39,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.helpers.IndicatorOfVersionAndUpdate;
 import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.FotoType;
 import wildlog.data.enums.Habitat;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.Utils;
@@ -169,7 +170,9 @@ public class DBI_db4o implements DBI {
         db.ext().backup(path + File.separatorChar + "wildlog export (" + Integer.toString(1900+Calendar.getInstance().getTime().getYear()) + "-" + Calendar.getInstance().getTime().getMonth() + "-" + Calendar.getInstance().getTime().getDate() + ").wld");
         ObjectContainer exportDb = Db4o.openFile(path + File.separatorChar + "wildlog export (" + Integer.toString(1900+Calendar.getInstance().getTime().getYear()) + "-" + Calendar.getInstance().getTime().getMonth() + "-" + Calendar.getInstance().getTime().getDate() + ").wld");
         if (inIncludeThumbnails) {
-            ObjectSet<Foto> fotos = exportDb.get(new Foto());
+            Foto templateFoto = new Foto();
+            templateFoto.setFotoType(FotoType.IMAGE);
+            ObjectSet<Foto> fotos = exportDb.get(templateFoto);
             for (Foto tempFoto : fotos) {
                 tempFoto.setOriginalFotoLocation(tempFoto.getFileLocation());
                 // Copy the image file
@@ -694,6 +697,15 @@ public class DBI_db4o implements DBI {
             Sighting sighting = (Sighting)result.get(i);
             sighting.doUpdate_v2();
             db.set(sighting);
+        }
+        q = db.query();
+        q.constrain(Foto.class);
+        result = q.execute();
+        for (int i = 0; i< result.size(); i++) {
+            Foto foto = (Foto)result.get(i);
+            if (foto.getFotoType() == null)
+                foto.setFotoType(FotoType.IMAGE);
+            db.set(foto);
         }
 
 

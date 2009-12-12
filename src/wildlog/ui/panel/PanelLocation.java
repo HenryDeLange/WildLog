@@ -79,7 +79,7 @@ public class PanelLocation extends javax.swing.JPanel {
         initComponents();
         imageIndex = 0;
         if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            Utils.setupFoto(locationWL, imageIndex, lblImage, 300);
+            Utils.setupFoto(locationWL, imageIndex, lblImage, 300, app);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
@@ -862,7 +862,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300);
+            imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -870,12 +870,12 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage, 300);
+        imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage, 300);
+        imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -1045,7 +1045,7 @@ public class PanelLocation extends javax.swing.JPanel {
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
+        imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed

@@ -36,9 +36,11 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dbi.DBI;
+import wildlog.data.enums.FotoType;
 
 /* Utils.java is used by FileChooserDemo2.java. */
 public class Utils {
@@ -112,7 +114,7 @@ public class Utils {
         return resizedImg;
     }
 
-    public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize) {
+    public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Selct nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
@@ -124,10 +126,11 @@ public class Utils {
             fileChooser = new JFileChooser(lastFilePath);
         else
             fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(true);
+        fileChooser.setFileFilter(new MovieFilter());
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setAccessory(new ImagePreview(fileChooser));
         fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         int result = fileChooser.showOpenDialog(inComponent);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
@@ -135,50 +138,117 @@ public class Utils {
             for (int t = 0; t < files.length; t++) {
                 File fromFile = files[t];
                 lastFilePath = fromFile.getPath();
-                File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + inFolderName);
-                toDir.mkdirs();
-                File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
-                File toFile_Thumbnail = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-                FileInputStream fileInput = null;
-                FileOutputStream fileOutput = null;
-                try {
-                    // Write Original
-                    fileInput = new FileInputStream(fromFile);
-                    fileOutput = new FileOutputStream(toFile_Original);
-                    byte[] tempBytes = new byte[(int)fromFile.length()];
-                    fileInput.read(tempBytes);
-                    fileOutput.write(tempBytes);
-                    fileOutput.flush();
-                    // Write Thumbnail
-                    fileInput = new FileInputStream(fromFile);
-                    fileOutput = new FileOutputStream(toFile_Thumbnail);
-                    tempBytes = new byte[(int)fromFile.length()];
-                    fileInput.read(tempBytes);
-                    ImageIcon image = new ImageIcon(tempBytes);
-                    image = getScaledIcon(image, THUMBNAIL_SIZE);
-                    BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-                    Graphics2D big = bi.createGraphics();
-                    big.drawImage(image.getImage(), 0, 0, null);
-                    ByteArrayOutputStream os = new ByteArrayOutputStream();
-                    ImageIO.write(bi, "jpg", os);
-                    byte[] newBytes = os.toByteArray();
-                    fileOutput.write(newBytes);
-                    fileOutput.flush();
-                    if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
-                    inHasFotos.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath()));
-                    big.dispose();
-                    setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize);
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                finally {
+                // Is an image
+                if (new ImageFilter().accept(fromFile)) {
+                    File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + inFolderName);
+                    toDir.mkdirs();
+                    File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
+                    File toFile_Thumbnail = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                    FileInputStream fileInput = null;
+                    FileOutputStream fileOutput = null;
                     try {
-                        fileInput.close();
-                        fileOutput.close();
+                        // Write Original
+                        fileInput = new FileInputStream(fromFile);
+                        fileOutput = new FileOutputStream(toFile_Original);
+                        byte[] tempBytes = new byte[(int)fromFile.length()];
+                        fileInput.read(tempBytes);
+                        fileOutput.write(tempBytes);
+                        fileOutput.flush();
+                        // Write Thumbnail
+                        fileInput = new FileInputStream(fromFile);
+                        fileOutput = new FileOutputStream(toFile_Thumbnail);
+                        tempBytes = new byte[(int)fromFile.length()];
+                        fileInput.read(tempBytes);
+                        ImageIcon image = new ImageIcon(tempBytes);
+                        image = getScaledIcon(image, THUMBNAIL_SIZE);
+                        BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                        Graphics2D big = bi.createGraphics();
+                        big.drawImage(image.getImage(), 0, 0, null);
+                        ByteArrayOutputStream os = new ByteArrayOutputStream();
+                        ImageIO.write(bi, "jpg", os);
+                        byte[] newBytes = os.toByteArray();
+                        fileOutput.write(newBytes);
+                        fileOutput.flush();
+                        if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
+                        inHasFotos.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), FotoType.IMAGE));
+                        big.dispose();
+                        setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
+                    }
+                    finally {
+                        try {
+                            fileInput.close();
+                            fileOutput.close();
+                        }
+                        catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+                else
+                // Is a movie
+                if (new MovieFilter().accept(fromFile)) {
+                    File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Movies" + File.separatorChar + inFolderName);
+                    toDir.mkdirs();
+                    File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                    FileInputStream fileInput = null;
+                    FileOutputStream fileOutput = null;
+                    try {
+                        // Write Original
+                        fileInput = new FileInputStream(fromFile);
+                        fileOutput = new FileOutputStream(toFile);
+                        byte[] tempBytes = new byte[(int)fromFile.length()];
+                        fileInput.read(tempBytes);
+                        fileOutput.write(tempBytes);
+                        fileOutput.flush();
+                        if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
+                        inHasFotos.getFotos().add(new Foto(toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.MOVIE));
+                        setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize, inApp);
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    finally {
+                        try {
+                            fileInput.close();
+                            fileOutput.close();
+                        }
+                        catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+                else {
+                    File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Other Uploads" + File.separatorChar + inFolderName);
+                    toDir.mkdirs();
+                    File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                    FileInputStream fileInput = null;
+                    FileOutputStream fileOutput = null;
+                    try {
+                        // Write Original
+                        fileInput = new FileInputStream(fromFile);
+                        fileOutput = new FileOutputStream(toFile);
+                        byte[] tempBytes = new byte[(int)fromFile.length()];
+                        fileInput.read(tempBytes);
+                        fileOutput.write(tempBytes);
+                        fileOutput.flush();
+                        if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
+                        inHasFotos.getFotos().add(new Foto(toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.OTHER));
+                        setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize, inApp);
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    finally {
+                        try {
+                            fileInput.close();
+                            fileOutput.close();
+                        }
+                        catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
                     }
                 }
             }
@@ -189,30 +259,28 @@ public class Utils {
     }
 
     // Methods for the buttons on the panels that work with the images
-    public static int previousImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize) {
+    public static int previousImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         if (inHasFotos.getFotos().size() > 0) {
             if (inImageIndex > 0) {
                 inImageIndex = inImageIndex - 1;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
             else {
                 inImageIndex = inHasFotos.getFotos().size() - 1;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
+            setupFoto(inHasFotos, inImageIndex, inImageLabel, inSize, inApp);
         }
         return inImageIndex;
     }
 
-    public static int nextImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize) {
+    public static int nextImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         if (inHasFotos.getFotos().size() > 0) {
             if (inImageIndex < inHasFotos.getFotos().size() - 1) {
                 inImageIndex = inImageIndex + 1;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
             else {
                 inImageIndex = 0;
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
             }
+            setupFoto(inHasFotos, inImageIndex, inImageLabel, inSize, inApp);
         }
         return inImageIndex;
     }
@@ -226,7 +294,7 @@ public class Utils {
         return inImageIndex;
     }
 
-    public static int removeImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize) {
+    public static int removeImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize, WildLogApp inApp) {
         if (inHasFotos.getFotos().size() > 0) {
             Foto tempFoto = inHasFotos.getFotos().get(inImageIndex);
             inHasFotos.getFotos().remove(tempFoto);
@@ -237,7 +305,7 @@ public class Utils {
             tempFile.delete();
             if (inHasFotos.getFotos().size() >= 1) {
                 // Behave like moving back button was pressed
-                inImageIndex = previousImage(inHasFotos, inImageIndex, inImageLabel, inSize);
+                inImageIndex = previousImage(inHasFotos, inImageIndex, inImageLabel, inSize, inApp);
             }
             else {
                 inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
@@ -246,8 +314,15 @@ public class Utils {
         return inImageIndex;
     }
 
-    public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize) {
-        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
+    public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+        if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.IMAGE))
+            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
+        else
+        if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.MOVIE))
+            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
+        else
+        if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.OTHER))
+            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Other.gif")), inSize));
     }
 
     public static void openImage(HasFotos inHasFotos, int inIndex) {

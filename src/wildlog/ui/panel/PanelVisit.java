@@ -79,7 +79,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         initComponents();
         imageIndex = 0;
         if (visit.getFotos().size() > 0) {
-            Utils.setupFoto(visit, imageIndex, lblImage, 300);
+            Utils.setupFoto(visit, imageIndex, lblImage, 300, app);
             lblNumberOfImages.setText(imageIndex+1 + " of " + visit.getFotos().size());
         }
         else {
@@ -160,7 +160,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         if (sighting != null) {
             if (sighting.getElement() != null) {
                 if (sighting.getElement().getFotos().size() > 0)
-                    Utils.setupFoto(sighting.getElement(), 0, lblElementImage, 150);
+                    Utils.setupFoto(sighting.getElement(), 0, lblElementImage, 150, app);
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
             }
@@ -169,7 +169,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             }
             imageSightingIndex = 0;
             if (sighting.getFotos().size() > 0 ) {
-                Utils.setupFoto(sighting, imageSightingIndex, lblSightingImage, 150);
+                Utils.setupFoto(sighting, imageSightingIndex, lblSightingImage, 150, app);
             }
             else {
                 lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
@@ -812,7 +812,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = Utils.uploadImage(visit, "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), this, lblImage, 300);
+            imageIndex = Utils.uploadImage(visit, "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -820,7 +820,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(visit, imageIndex, lblImage, 300);
+        imageIndex = Utils.previousImage(visit, imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
@@ -835,7 +835,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 }//GEN-LAST:event_tblSightingsMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(visit, imageIndex, lblImage, 300);
+        imageIndex = Utils.nextImage(visit, imageIndex, lblImage, 300, app);
         setupNumberOfImages();
 }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -865,7 +865,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 }//GEN-LAST:event_btnMapSightingActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(visit, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300);
+        imageIndex = Utils.removeImage(visit, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -910,14 +910,14 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void btnPreviousImageSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageSightingActionPerformed
         if (sighting != null) {
-            imageSightingIndex = Utils.previousImage(sighting, imageSightingIndex, lblSightingImage, 150);
+            imageSightingIndex = Utils.previousImage(sighting, imageSightingIndex, lblSightingImage, 150, app);
             setupNumberOfSightingImages();
         }
 }//GEN-LAST:event_btnPreviousImageSightingActionPerformed
 
     private void btnNextImageSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageSightingActionPerformed
         if (sighting != null) {
-            imageSightingIndex = Utils.nextImage(sighting, imageSightingIndex, lblSightingImage, 150);
+            imageSightingIndex = Utils.nextImage(sighting, imageSightingIndex, lblSightingImage, 150, app);
             setupNumberOfSightingImages();
         }
 }//GEN-LAST:event_btnNextImageSightingActionPerformed
