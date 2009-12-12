@@ -40,6 +40,7 @@ import wildlog.data.dataobjects.helpers.IndicatorOfVersionAndUpdate;
 import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Habitat;
+import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.Utils;
 import wildlog.utils.ui.WldFilter;
 
@@ -49,15 +50,10 @@ public class DBI_db4o implements DBI {
     private final String filePath = File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar + "wildlog.wld";
     private ObjectContainer db;
     private SightingCounter counter;
-    private final int currentDatabaseVersion = 2;
+    private final int currentDatabaseVersion = 3;
     
     // Contructor:
     public DBI_db4o() {
-        // Database File
-        File tempFile = new File(filePath);
-        // Can remove delete at later point...
-        //tempFile.delete();
-
         // Cascade Update
         Db4o.configure().objectClass(Element.class).cascadeOnUpdate(true);
         Db4o.configure().objectClass(Location.class).cascadeOnUpdate(true);
@@ -104,6 +100,7 @@ public class DBI_db4o implements DBI {
         if (results.hasNext()) {
             IndicatorOfVersionAndUpdate temp = results.next();
             if (temp.getDatabaseVersion() == 1) doUpdate_v1(db);
+            if (temp.getDatabaseVersion() == 2) doUpdate_v2(db);
         }
         else {
             IndicatorOfVersionAndUpdate temp = new IndicatorOfVersionAndUpdate();
@@ -136,7 +133,7 @@ public class DBI_db4o implements DBI {
     public void doBackup() {
         close();
         File fromFile = new File(filePath);
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "backup.wld");
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "backup (" + UtilsHTML.formatDate(Calendar.getInstance().getTime(), false) + ").wld");
         toFile.mkdirs();
         FileInputStream fileInput = null;
         FileOutputStream fileOutput = null;
@@ -639,7 +636,7 @@ public class DBI_db4o implements DBI {
 
     // Private Update Method
     private void doUpdate_v1(ObjectContainer inDb) {
-        System.out.println("Performing database update...");
+        System.out.println("Performing database update v1...");
         // Update ENUMs
         // Note: New fields can just be added, but changes in fields needs to be re-updated
         Query query = inDb.query();
@@ -669,6 +666,45 @@ public class DBI_db4o implements DBI {
         if (results.hasNext()) {
             IndicatorOfVersionAndUpdate temp = results.next();
             temp.setDatabaseVersion(2);
+            inDb.set(temp);
+        }
+
+        // Commit Changes
+        inDb.commit();
+    }
+
+    private void doUpdate_v2(ObjectContainer inDb) {
+        System.out.println("Performing database update v2...");
+        // Update ENUMs
+        // Note: New fields can just be added, but changes in fields needs to be re-updated
+
+        // Change variable types
+        Query q = db.query();
+        q.constrain(Location.class);
+        ObjectSet result = q.execute();
+        for (int i = 0; i< result.size(); i++) {
+            Location location = (Location)result.get(i);
+            location.doUpdate_v2();
+            db.set(location);
+        }
+        q = db.query();
+        q.constrain(Sighting.class);
+        result = q.execute();
+        for (int i = 0; i< result.size(); i++) {
+            Sighting sighting = (Sighting)result.get(i);
+            sighting.doUpdate_v2();
+            db.set(sighting);
+        }
+
+
+        // Other Updates
+        // Note: most can be done implicitely in the code and don't need explicit updates...
+
+        // Set IndicatorOfVersionAndUpdate to represent changes
+        ObjectSet<IndicatorOfVersionAndUpdate> results = inDb.get(new IndicatorOfVersionAndUpdate());
+        if (results.hasNext()) {
+            IndicatorOfVersionAndUpdate temp = results.next();
+//            temp.setDatabaseVersion(3);
             inDb.set(temp);
         }
 

@@ -135,10 +135,14 @@ public class UtilsHTML {
     }
 
     public static String formatDate(Date inDate, boolean inShowTime) {
-        if (inShowTime)
-            return new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)").format((Date)inDate);
+        if (inDate != null) {
+            if (inShowTime)
+                return new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)").format((Date)inDate);
+            else
+                return new SimpleDateFormat("E, dd MMM yyyy").format((Date)inDate);
+        }
         else
-            return new SimpleDateFormat("E, dd MMM yyyy").format((Date)inDate);
+            return "";
     }
 
 }

@@ -16,7 +16,6 @@ package wildlog.data.dataobjects;
 
 import CsvGenerator.CsvGenerator;
 import KmlGenerator.objects.KmlEntry;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,11 +49,13 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
     private Latitudes latitude;
     private int latDegrees;
     private int latMinutes;
-    private int latSeconds;
+    private int latSeconds;  // Old field not used anymore
+    private float latSecondsFloat;
     private Longitudes longitude;
     private int lonDegrees;
     private int lonMinutes;
-    private int lonSeconds;
+    private int lonSeconds;  // Old field not used anymore
+    private float lonSecondsFloat;
     private String subArea;
     private SightingEvidence sightingEvidence;
     private long sightingCounter;
@@ -108,8 +109,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         htmlSighting = htmlSighting + "<br/><b>Certainty:</b> " + UtilsHTML.formatString(certainty);
         htmlSighting = htmlSighting + "<br/><b>Number of Creatures:</b> " + UtilsHTML.formatString(numberOfElements);
         htmlSighting = htmlSighting + "<br/><b>Details:</b> " + UtilsHTML.formatString(details);
-        htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSeconds;
-        htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
+        htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
+        htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
         htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
         if (inIncludeImages)
             htmlSighting = htmlSighting + "</br><b>Photos:</b></br/>" + fotoString;
@@ -167,8 +168,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         if (latitude == null || longitude == null) {
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
                 }
             }
             else {
@@ -180,8 +181,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
                 }
             }
             else {
@@ -190,8 +191,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
             }
         }
         else {
-            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
-            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
+            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
         }
         return entry;
     }
@@ -211,14 +212,19 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         inCSVGenerator.addData(latitude);
         inCSVGenerator.addData(latDegrees);
         inCSVGenerator.addData(latMinutes);
-        inCSVGenerator.addData(latSeconds);
+        inCSVGenerator.addData(latSecondsFloat);
         inCSVGenerator.addData(longitude);
         inCSVGenerator.addData(lonDegrees);
         inCSVGenerator.addData(lonMinutes);
-        inCSVGenerator.addData(lonSeconds);
+        inCSVGenerator.addData(lonSecondsFloat);
         inCSVGenerator.addData(subArea);
         inCSVGenerator.addData(sightingEvidence);
         //inCSVGenerator.addData(sightingCounter);
+    }
+
+    public void doUpdate_v2() {
+        latSecondsFloat = latSeconds;
+        lonSecondsFloat = lonSeconds;
     }
 
     // GETTERS:
@@ -276,8 +282,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         return latMinutes;
     }
 
-    public int getLatSeconds() {
-        return latSeconds;
+    public float getLatSecondsFloat() {
+        return latSecondsFloat;
     }
 
     public Latitudes getLatitude() {
@@ -292,8 +298,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         return lonMinutes;
     }
 
-    public int getLonSeconds() {
-        return lonSeconds;
+    public float getLonSecondsFloat() {
+        return lonSecondsFloat;
     }
 
     public Longitudes getLongitude() {
@@ -367,8 +373,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         latMinutes = inLatMinutes;
     }
 
-    public void setLatSeconds(int inLatSeconds) {
-        latSeconds = inLatSeconds;
+    public void setLatSecondsFloat(float inLatSeconds) {
+        latSecondsFloat = inLatSeconds;
     }
 
     public void setLatitude(Latitudes inLatitude) {
@@ -383,8 +389,8 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         lonMinutes = inLonMinutes;
     }
 
-    public void setLonSeconds(int inLonSeconds) {
-        lonSeconds = inLonSeconds;
+    public void setLonSecondsFloat(float inLonSeconds) {
+        lonSecondsFloat = inLonSeconds;
     }
 
     public void setLongitude(Longitudes inLongitude) {

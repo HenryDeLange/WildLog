@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -28,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -51,6 +53,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
+import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.DateCellRenderer;
 
 
@@ -159,6 +162,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroup2 = new javax.swing.ButtonGroup();
         locationIncludes = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         lblLocation = new javax.swing.JLabel();
@@ -215,7 +219,7 @@ public class PanelLocation extends javax.swing.JPanel {
         txtLonMinutes = new javax.swing.JTextField();
         txtLonSeconds = new javax.swing.JTextField();
         cmbLatitude = new javax.swing.JComboBox();
-        cmbLonitude = new javax.swing.JComboBox();
+        cmbLongitude = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         cmbSubAreas = new javax.swing.JComboBox();
@@ -230,6 +234,10 @@ public class PanelLocation extends javax.swing.JPanel {
         rdbVisit = new javax.swing.JRadioButton();
         lblNumberOfElements = new javax.swing.JLabel();
         lblNumberOfImages = new javax.swing.JLabel();
+        rdbDMS = new javax.swing.JRadioButton();
+        rdbDD = new javax.swing.JRadioButton();
+        txtLatDecimal = new javax.swing.JTextField();
+        txtLonDecimal = new javax.swing.JTextField();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -331,7 +339,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatDegreesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 224, 30, -1));
+        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 30, -1));
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
@@ -585,16 +593,16 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatMinutesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 224, 30, -1));
+        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, 30, -1));
 
-        txtLatSeconds.setText(Integer.toString(locationWL.getLatSeconds()));
+        txtLatSeconds.setText(Float.toString(locationWL.getLatSecondsFloat()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
         txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtLatSecondsFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 224, 30, -1));
+        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 200, 50, -1));
 
         txtLonDegrees.setText(Integer.toString(locationWL.getLonDegrees()));
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
@@ -603,7 +611,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonDegreesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 224, 30, -1));
+        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(locationWL.getLonMinutes()));
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
@@ -612,26 +620,26 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonMinutesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 224, 30, -1));
+        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 220, 30, -1));
 
-        txtLonSeconds.setText(Integer.toString(locationWL.getLonSeconds()));
+        txtLonSeconds.setText(Float.toString(locationWL.getLonSecondsFloat()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
         txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtLonSecondsFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 224, 30, -1));
+        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 220, 50, -1));
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
-        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 200, 90, -1));
+        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 90, -1));
 
-        cmbLonitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
-        cmbLonitude.setSelectedIndex(2);
-        cmbLonitude.setName("cmbLonitude"); // NOI18N
-        locationIncludes.add(cmbLonitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, 90, -1));
+        cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
+        cmbLongitude.setSelectedIndex(2);
+        cmbLongitude.setName("cmbLongitude"); // NOI18N
+        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 90, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
@@ -639,7 +647,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
-        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 200, -1, 20));
+        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 220, -1, 20));
 
         cmbSubAreas.setMaximumRowCount(15);
         cmbSubAreas.setModel(new DefaultComboBoxModel(locationWL.getSubAreas().toArray()));
@@ -742,6 +750,34 @@ public class PanelLocation extends javax.swing.JPanel {
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         locationIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 40, 20));
 
+        buttonGroup2.add(rdbDMS);
+        rdbDMS.setText(resourceMap.getString("rdbDMS.text")); // NOI18N
+        rdbDMS.setName("rdbDMS"); // NOI18N
+        rdbDMS.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdbDMSItemStateChanged(evt);
+            }
+        });
+        locationIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 200, -1, -1));
+
+        buttonGroup2.add(rdbDD);
+        rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
+        rdbDD.setName("rdbDD"); // NOI18N
+        rdbDD.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdbDDItemStateChanged(evt);
+            }
+        });
+        locationIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 220, -1, -1));
+
+        txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
+        txtLatDecimal.setName("txtLatDecimal"); // NOI18N
+        locationIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 130, -1));
+
+        txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
+        txtLonDecimal.setName("txtLonDecimal"); // NOI18N
+        locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 130, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -763,14 +799,15 @@ public class PanelLocation extends javax.swing.JPanel {
                 String oldName = locationWL.getName();
                 locationWL.setName(txtName.getText());
                 locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
-                locationWL.setLongitude((Longitudes)cmbLonitude.getSelectedItem());
+                locationWL.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
+                rdbDMS.setSelected(true);
                 try {
                     locationWL.setLatDegrees(Integer.parseInt(txtLatDegrees.getText()));
                     locationWL.setLatMinutes(Integer.parseInt(txtLatMinutes.getText()));
-                    locationWL.setLatSeconds(Integer.parseInt(txtLatSeconds.getText()));
+                    locationWL.setLatSecondsFloat(Float.parseFloat(txtLatSeconds.getText()));
                     locationWL.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
                     locationWL.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
-                    locationWL.setLonSeconds(Integer.parseInt(txtLonSeconds.getText()));
+                    locationWL.setLonSecondsFloat(Float.parseFloat(txtLonSeconds.getText()));
                 }
                 catch (NumberFormatException e) {
                     txtLatDegrees.setText("0");
@@ -864,7 +901,7 @@ public class PanelLocation extends javax.swing.JPanel {
         if (locationWL.getLatitude() != null)
             cmbLatitude.setSelectedItem(locationWL.getLatitude());
         if (locationWL.getLongitude() != null)
-            cmbLonitude.setSelectedItem(locationWL.getLongitude());
+            cmbLongitude.setSelectedItem(locationWL.getLongitude());
         if (locationWL.getVisits() != null)
             lblNumberOfVisits.setText(Integer.toString(locationWL.getVisits().size()));
         else
@@ -879,6 +916,10 @@ public class PanelLocation extends javax.swing.JPanel {
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblVisit.getRowSorter().setSortKeys(tempList);
         tblElement.getRowSorter().setSortKeys(tempList);
+        // Lat Lon stuff
+        txtLatDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText()))));
+        txtLonDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText()))));
+        rdbDMS.setSelected(true);
     }//GEN-LAST:event_formComponentShown
 
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
@@ -989,12 +1030,12 @@ public class PanelLocation extends javax.swing.JPanel {
             if (!locationWL.getLatitude().equals(Latitudes.NONE) && !locationWL.getLongitude().equals(Longitudes.NONE)) {
                 float lat = locationWL.getLatDegrees();
                 lat = lat + locationWL.getLatMinutes()/60f;
-                lat = lat + (locationWL.getLatSeconds()/60f)/60f;
+                lat = lat + (locationWL.getLatSecondsFloat()/60f)/60f;
                 if (locationWL.getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
                 float lon = locationWL.getLonDegrees();
                 lon = lon + locationWL.getLonMinutes()/60f;
-                lon = lon + (locationWL.getLonSeconds()/60f)/60f;
+                lon = lon + (locationWL.getLonSecondsFloat()/60f)/60f;
                 if (locationWL.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
@@ -1019,12 +1060,12 @@ public class PanelLocation extends javax.swing.JPanel {
                             if (!locationWL.getVisits().get(t).getSightings().get(i).getLatitude().equals(Latitudes.NONE) && !locationWL.getVisits().get(t).getSightings().get(i).getLongitude().equals(Longitudes.NONE)) {
                                 float lat = locationWL.getVisits().get(t).getSightings().get(i).getLatDegrees();
                                 lat = lat + locationWL.getVisits().get(t).getSightings().get(i).getLatMinutes()/60f;
-                                lat = lat + (locationWL.getVisits().get(t).getSightings().get(i).getLatSeconds()/60f)/60f;
+                                lat = lat + (locationWL.getVisits().get(t).getSightings().get(i).getLatSecondsFloat()/60f)/60f;
                                 if (locationWL.getVisits().get(t).getSightings().get(i).getLatitude().equals(Latitudes.SOUTH))
                                     lat = -1 * lat;
                                 float lon = locationWL.getVisits().get(t).getSightings().get(i).getLonDegrees();
                                 lon = lon + locationWL.getVisits().get(t).getSightings().get(i).getLonMinutes()/60f;
-                                lon = lon + (locationWL.getVisits().get(t).getSightings().get(i).getLonSeconds()/60f)/60f;
+                                lon = lon + (locationWL.getVisits().get(t).getSightings().get(i).getLonSecondsFloat()/60f)/60f;
                                 if (locationWL.getVisits().get(t).getSightings().get(i).getLongitude().equals(Longitudes.WEST))
                                     lon = -1 * lon;
                                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
@@ -1118,6 +1159,54 @@ public class PanelLocation extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tblVisitMouseClicked
 
+    private void rdbDDItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbDDItemStateChanged
+        if (rdbDD.isSelected()) {
+            try {
+                txtLatDecimal.setText(Double.toString(Math.abs(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText())))));
+                txtLonDecimal.setText(Double.toString(Math.abs(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText())))));
+                // If the parsing worked then continue
+                txtLatDegrees.setVisible(false);
+                txtLonDegrees.setVisible(false);
+                txtLatMinutes.setVisible(false);
+                txtLonMinutes.setVisible(false);
+                txtLatSeconds.setVisible(false);
+                txtLonSeconds.setVisible(false);
+                txtLatDecimal.setVisible(true);
+                txtLonDecimal.setVisible(true);
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "The input format should be <integer> <integer> <decimal>", "Wrong Number Format", JOptionPane.INFORMATION_MESSAGE);
+                rdbDMS.setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_rdbDDItemStateChanged
+
+    private void rdbDMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbDMSItemStateChanged
+        if (rdbDMS.isSelected()) {
+            try {
+                txtLatDegrees.setText(Integer.toString(Math.abs(LatLonConverter.getDegrees((Latitudes)cmbLatitude.getSelectedItem(), Double.parseDouble(txtLatDecimal.getText())))));
+                txtLonDegrees.setText(Integer.toString(Math.abs(LatLonConverter.getDegrees((Longitudes)cmbLongitude.getSelectedItem(), Double.parseDouble(txtLonDecimal.getText())))));
+                txtLatMinutes.setText(Integer.toString(LatLonConverter.getMinutes((Latitudes)cmbLatitude.getSelectedItem(), Double.parseDouble(txtLatDecimal.getText()))));
+                txtLonMinutes.setText(Integer.toString(LatLonConverter.getMinutes((Longitudes)cmbLongitude.getSelectedItem(), Double.parseDouble(txtLonDecimal.getText()))));
+                txtLatSeconds.setText(new DecimalFormat("#.###").format(LatLonConverter.getSeconds((Latitudes)cmbLatitude.getSelectedItem(), Double.parseDouble(txtLatDecimal.getText()))));
+                txtLonSeconds.setText(new DecimalFormat("#.###").format(LatLonConverter.getSeconds((Longitudes)cmbLongitude.getSelectedItem(), Double.parseDouble(txtLonDecimal.getText()))));
+                // If the parsing worked then continue
+                txtLatDegrees.setVisible(true);
+                txtLonDegrees.setVisible(true);
+                txtLatMinutes.setVisible(true);
+                txtLonMinutes.setVisible(true);
+                txtLatSeconds.setVisible(true);
+                txtLonSeconds.setVisible(true);
+                txtLatDecimal.setVisible(false);
+                txtLonDecimal.setVisible(false);
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "The input format should be <decimal>", "Wrong Number Format", JOptionPane.INFORMATION_MESSAGE);
+                rdbDD.setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_rdbDMSItemStateChanged
+
 
     private void resizeTables() {
         TableColumn column = null;
@@ -1181,11 +1270,12 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox cmbCatering;
     private javax.swing.JComboBox cmbGameRating;
     private javax.swing.JComboBox cmbHabitat;
     private javax.swing.JComboBox cmbLatitude;
-    private javax.swing.JComboBox cmbLonitude;
+    private javax.swing.JComboBox cmbLongitude;
     private javax.swing.JComboBox cmbProvince;
     private javax.swing.JComboBox cmbRating;
     private javax.swing.JComboBox cmbSubAreas;
@@ -1222,6 +1312,8 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JLabel lblNumberOfVisits;
     private javax.swing.JPanel locationIncludes;
     private javax.swing.JList lstAccommodationType;
+    private javax.swing.JRadioButton rdbDD;
+    private javax.swing.JRadioButton rdbDMS;
     private javax.swing.JRadioButton rdbLocation;
     private javax.swing.JRadioButton rdbVisit;
     private javax.swing.JTable tblElement;
@@ -1230,9 +1322,11 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextArea txtDirections;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtLatDecimal;
     private javax.swing.JTextField txtLatDegrees;
     private javax.swing.JTextField txtLatMinutes;
     private javax.swing.JTextField txtLatSeconds;
+    private javax.swing.JTextField txtLonDecimal;
     private javax.swing.JTextField txtLonDegrees;
     private javax.swing.JTextField txtLonMinutes;
     private javax.swing.JTextField txtLonSeconds;

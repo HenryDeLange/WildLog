@@ -55,11 +55,13 @@ public class Location implements HasFotos, Comparable<Location> {
     private Latitudes latitude;
     private int latDegrees;
     private int latMinutes;
-    private int latSeconds;
+    private int latSeconds; // Old field not used anymore
+    private float latSecondsFloat;
     private Longitudes longitude;
     private int lonDegrees;
     private int lonMinutes;
-    private int lonSeconds;
+    private int lonSeconds;  // Old field not used anymore
+    private float lonSecondsFloat;
     private List<String> subAreas;
 
     
@@ -125,7 +127,7 @@ public class Location implements HasFotos, Comparable<Location> {
         htmlLocation = htmlLocation + "<br/><b>Contact Number:</b> " + UtilsHTML.formatString(contactNumbers);
         htmlLocation = htmlLocation + "<br/><b>Catering:</b> " + UtilsHTML.formatString(catering);
         htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + UtilsHTML.formatString(accommodationType);
-        htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSeconds;
+        htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
         htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
         htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
         if (inIncludeImages)
@@ -142,7 +144,7 @@ public class Location implements HasFotos, Comparable<Location> {
         entry.setName(name);
         entry.setDescription(this.toHTML(false, true));
         entry.setStyle("locationStyle");
-        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
         entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         return entry;
     }
@@ -165,13 +167,18 @@ public class Location implements HasFotos, Comparable<Location> {
         inCSVGenerator.addData(latitude);
         inCSVGenerator.addData(latDegrees);
         inCSVGenerator.addData(latMinutes);
-        inCSVGenerator.addData(latSeconds);
+        inCSVGenerator.addData(latSecondsFloat);
         inCSVGenerator.addData(longitude);
         inCSVGenerator.addData(lonDegrees);
         inCSVGenerator.addData(lonMinutes);
         inCSVGenerator.addData(lonSeconds);
         inCSVGenerator.addData(subAreas);
         inCSVGenerator.addData(visits);
+    }
+
+    public void doUpdate_v2() {
+        latSecondsFloat = latSeconds;
+        lonSecondsFloat = lonSeconds;
     }
 
     // GETTERS:
@@ -246,8 +253,8 @@ public class Location implements HasFotos, Comparable<Location> {
         return latMinutes;
     }
 
-    public int getLatSeconds() {
-        return latSeconds;
+    public float getLatSecondsFloat() {
+        return latSecondsFloat;
     }
 
     public Latitudes getLatitude() {
@@ -262,8 +269,8 @@ public class Location implements HasFotos, Comparable<Location> {
         return lonMinutes;
     }
 
-    public int getLonSeconds() {
-        return lonSeconds;
+    public float getLonSecondsFloat() {
+        return lonSecondsFloat;
     }
 
     public Longitudes getLongitude() {
@@ -350,8 +357,8 @@ public class Location implements HasFotos, Comparable<Location> {
         latMinutes = inLatMinutes;
     }
 
-    public void setLatSeconds(int inLatSeconds) {
-        latSeconds = inLatSeconds;
+    public void setLatSecondsFloat(float inLatSeconds) {
+        latSecondsFloat = inLatSeconds;
     }
 
     public void setLatitude(Latitudes inLatitude) {
@@ -366,8 +373,8 @@ public class Location implements HasFotos, Comparable<Location> {
         lonMinutes = inLonMinutes;
     }
 
-    public void setLonSeconds(int inLonSeconds) {
-        lonSeconds = inLonSeconds;
+    public void setLonSecondsFloat(float inLonSeconds) {
+        lonSecondsFloat = inLonSeconds;
     }
 
     public void setLongitude(Longitudes inLongitude) {

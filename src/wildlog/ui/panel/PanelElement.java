@@ -897,12 +897,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             if (!sightingList.get(t).getLatitude().equals(Latitudes.NONE) && !sightingList.get(t).getLongitude().equals(Longitudes.NONE)) {
                 float lat = sightingList.get(t).getLatDegrees();
                 lat = lat + sightingList.get(t).getLatMinutes()/60f;
-                lat = lat + (sightingList.get(t).getLatSeconds()/60f)/60f;
+                lat = lat + (sightingList.get(t).getLatSecondsFloat()/60f)/60f;
                 if (sightingList.get(t).getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
                 float lon = sightingList.get(t).getLonDegrees();
                 lon = lon + sightingList.get(t).getLonMinutes()/60f;
-                lon = lon + (sightingList.get(t).getLonSeconds()/60f)/60f;
+                lon = lon + (sightingList.get(t).getLonSecondsFloat()/60f)/60f;
                 if (sightingList.get(t).getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
@@ -912,12 +912,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             if (foundPosition == false) {
                 float lat = sightingList.get(t).getLocation().getLatDegrees();
                 lat = lat + sightingList.get(t).getLocation().getLatMinutes()/60f;
-                lat = lat + (sightingList.get(t).getLocation().getLatSeconds()/60f)/60f;
+                lat = lat + (sightingList.get(t).getLocation().getLatSecondsFloat()/60f)/60f;
                 if (sightingList.get(t).getLocation().getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
                 float lon = sightingList.get(t).getLocation().getLonDegrees();
                 lon = lon + sightingList.get(t).getLocation().getLonMinutes()/60f;
-                lon = lon + (sightingList.get(t).getLocation().getLonSeconds()/60f)/60f;
+                lon = lon + (sightingList.get(t).getLocation().getLonSecondsFloat()/60f)/60f;
                 if (sightingList.get(t).getLocation().getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));

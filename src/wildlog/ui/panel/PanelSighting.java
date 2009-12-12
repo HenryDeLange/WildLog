@@ -17,12 +17,14 @@ package wildlog.ui.panel;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.border.LineBorder;
@@ -47,6 +49,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeFormat;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.utils.LatLonConverter;
 
 /**
  *
@@ -164,19 +167,23 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtNumberOfElements.setText("");
                 cmbViewRating.setSelectedItem(ViewRating.NORMAL);
                 //cmbLatitude.setSelectedItem(Latitudes.SOUTH);
-                txtLatDegrees.setText("");
-                txtLatMinutes.setText("");
-                txtLatSeconds.setText("");
+                txtLatDegrees.setText("0");
+                txtLatMinutes.setText("0");
+                txtLatSeconds.setText("0");
                 //cmbLongitude.setSelectedItem(Longitudes.EAST);
-                txtLonDegrees.setText("");
-                txtLonMinutes.setText("");
-                txtLonSeconds.setText("");
+                txtLonDegrees.setText("0");
+                txtLonMinutes.setText("0");
+                txtLonSeconds.setText("0");
             }
             else {
                 // Setup the Sighting info
                 setupSightingInfo();
             }
         }
+        // Lat Lon stuff
+        txtLatDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText()))));
+        txtLonDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText()))));
+        rdbDMS.setSelected(true);
     }
 
     public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh, boolean inTreatAsNewSighting, boolean inDisableEditing) {
@@ -205,11 +212,11 @@ public class PanelSighting extends javax.swing.JPanel {
             cmbLatitude.setSelectedItem(sighting.getLatitude());
             txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
             txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
-            txtLatSeconds.setText(Integer.toString(sighting.getLatSeconds()));
+            txtLatSeconds.setText(Float.toString(sighting.getLatSecondsFloat()));
             cmbLongitude.setSelectedItem(sighting.getLongitude());
             txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
             txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
-            txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
+            txtLonSeconds.setText(Float.toString(sighting.getLonSecondsFloat()));
 
             if (sighting.getFotos().size() > 0)
                 Utils.setupFoto(sighting, imageIndex, lblImage, 300);
@@ -231,6 +238,7 @@ public class PanelSighting extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         sightingIncludes = new javax.swing.JPanel();
         btnUpdateSighting = new javax.swing.JButton();
         jSeparator8 = new javax.swing.JSeparator();
@@ -297,6 +305,10 @@ public class PanelSighting extends javax.swing.JPanel {
         txtMinutes = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         cmbTimeFormat = new javax.swing.JComboBox();
+        rdbDMS = new javax.swing.JRadioButton();
+        rdbDD = new javax.swing.JRadioButton();
+        txtLatDecimal = new javax.swing.JTextField();
+        txtLonDecimal = new javax.swing.JTextField();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -550,17 +562,17 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setEnabled(!disableEditing);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
-        sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 330, 90, -1));
+        sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 80, -1));
 
         jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
         jLabel19.setName("jLabel19"); // NOI18N
-        sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 330, -1, 20));
+        sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 350, -1, 20));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setEnabled(!disableEditing);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
-        sightingIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 90, -1));
+        sightingIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, 80, -1));
 
         txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
         txtLatDegrees.setEnabled(!disableEditing);
@@ -570,7 +582,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatDegreesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 360, 30, -1));
+        sightingIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 330, 30, -1));
 
         txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
         txtLatMinutes.setEnabled(!disableEditing);
@@ -580,9 +592,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatMinutesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 360, 30, -1));
+        sightingIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 30, -1));
 
-        txtLatSeconds.setText(Integer.toString(sighting.getLatSeconds()));
+        txtLatSeconds.setText(Float.toString(sighting.getLatSecondsFloat()));
         txtLatSeconds.setEnabled(!disableEditing);
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
         txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -590,7 +602,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatSecondsFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 360, 30, -1));
+        sightingIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 330, 50, -1));
 
         txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
         txtLonDegrees.setEnabled(!disableEditing);
@@ -600,7 +612,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonDegreesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 360, 30, -1));
+        sightingIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 350, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
         txtLonMinutes.setEnabled(!disableEditing);
@@ -610,9 +622,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonMinutesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 360, 30, -1));
+        sightingIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, 30, -1));
 
-        txtLonSeconds.setText(Integer.toString(sighting.getLonSeconds()));
+        txtLonSeconds.setText(Float.toString(sighting.getLonSecondsFloat()));
         txtLonSeconds.setEnabled(!disableEditing);
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
         txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -620,7 +632,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonSecondsFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 360, 30, -1));
+        sightingIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 350, 50, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setEnabled(!disableEditing);
@@ -824,6 +836,36 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
         sightingIncludes.add(cmbTimeFormat, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 540, 40, 20));
 
+        rdbDMS.setBackground(resourceMap.getColor("rdbDMS.background")); // NOI18N
+        buttonGroup1.add(rdbDMS);
+        rdbDMS.setText(resourceMap.getString("rdbDMS.text")); // NOI18N
+        rdbDMS.setName("rdbDMS"); // NOI18N
+        rdbDMS.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdbDMSItemStateChanged(evt);
+            }
+        });
+        sightingIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, -1, -1));
+
+        rdbDD.setBackground(resourceMap.getColor("rdbDD.background")); // NOI18N
+        buttonGroup1.add(rdbDD);
+        rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
+        rdbDD.setName("rdbDD"); // NOI18N
+        rdbDD.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                rdbDDItemStateChanged(evt);
+            }
+        });
+        sightingIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, -1, -1));
+
+        txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
+        txtLatDecimal.setName("txtLatDecimal"); // NOI18N
+        sightingIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 330, 120, -1));
+
+        txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
+        txtLonDecimal.setName("txtLonDecimal"); // NOI18N
+        sightingIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 350, 120, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -889,15 +931,16 @@ public class PanelSighting extends javax.swing.JPanel {
                 sighting.setSubArea((String)cmbSubArea.getSelectedItem());
                 if (tblElement.getSelectedRowCount() > 0)
                     sighting.setElement(app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(),0))));
+                rdbDMS.setSelected(true);
                 sighting.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
                 sighting.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
                 try {
                     sighting.setLatDegrees(Integer.parseInt(txtLatDegrees.getText()));
                     sighting.setLatMinutes(Integer.parseInt(txtLatMinutes.getText()));
-                    sighting.setLatSeconds(Integer.parseInt(txtLatSeconds.getText()));
+                    sighting.setLatSecondsFloat(Float.parseFloat(txtLatSeconds.getText()));
                     sighting.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
                     sighting.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
-                    sighting.setLonSeconds(Integer.parseInt(txtLonSeconds.getText()));
+                    sighting.setLonSecondsFloat(Float.parseFloat(txtLonSeconds.getText()));
                 }
                 catch (NumberFormatException e) {
                     txtLatDegrees.setText("0");
@@ -1233,6 +1276,54 @@ public class PanelSighting extends javax.swing.JPanel {
             tblElementMouseReleased(null);
     }//GEN-LAST:event_tblElementKeyReleased
 
+    private void rdbDMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbDMSItemStateChanged
+        if (rdbDMS.isSelected()) {
+            try {
+                txtLatDegrees.setText(Integer.toString(Math.abs(LatLonConverter.getDegrees((Latitudes)cmbLatitude.getSelectedItem(), Double.parseDouble(txtLatDecimal.getText())))));
+                txtLonDegrees.setText(Integer.toString(Math.abs(LatLonConverter.getDegrees((Longitudes)cmbLongitude.getSelectedItem(), Double.parseDouble(txtLonDecimal.getText())))));
+                txtLatMinutes.setText(Integer.toString(LatLonConverter.getMinutes((Latitudes)cmbLatitude.getSelectedItem(), Double.parseDouble(txtLatDecimal.getText()))));
+                txtLonMinutes.setText(Integer.toString(LatLonConverter.getMinutes((Longitudes)cmbLongitude.getSelectedItem(), Double.parseDouble(txtLonDecimal.getText()))));
+                txtLatSeconds.setText(new DecimalFormat("#.###").format(LatLonConverter.getSeconds((Latitudes)cmbLatitude.getSelectedItem(), Double.parseDouble(txtLatDecimal.getText()))));
+                txtLonSeconds.setText(new DecimalFormat("#.###").format(LatLonConverter.getSeconds((Longitudes)cmbLongitude.getSelectedItem(), Double.parseDouble(txtLonDecimal.getText()))));
+                // If the parsing worked then continue
+                txtLatDegrees.setVisible(true);
+                txtLonDegrees.setVisible(true);
+                txtLatMinutes.setVisible(true);
+                txtLonMinutes.setVisible(true);
+                txtLatSeconds.setVisible(true);
+                txtLonSeconds.setVisible(true);
+                txtLatDecimal.setVisible(false);
+                txtLonDecimal.setVisible(false);
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "The input format should be <decimal>", "Wrong Number Format", JOptionPane.INFORMATION_MESSAGE);
+                rdbDD.setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_rdbDMSItemStateChanged
+
+    private void rdbDDItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbDDItemStateChanged
+        if (rdbDD.isSelected()) {
+            try {
+                txtLatDecimal.setText(Double.toString(Math.abs(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText())))));
+                txtLonDecimal.setText(Double.toString(Math.abs(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText())))));
+                // If the parsing worked then continue
+                txtLatDegrees.setVisible(false);
+                txtLonDegrees.setVisible(false);
+                txtLatMinutes.setVisible(false);
+                txtLonMinutes.setVisible(false);
+                txtLatSeconds.setVisible(false);
+                txtLonSeconds.setVisible(false);
+                txtLatDecimal.setVisible(true);
+                txtLonDecimal.setVisible(true);
+            }
+            catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "The input format should be <integer> <integer> <decimal>", "Wrong Number Format", JOptionPane.INFORMATION_MESSAGE);
+                rdbDMS.setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_rdbDDItemStateChanged
+
     private void resizeTalbes() {
         if (sighting != null) {
             TableColumn column = null;
@@ -1298,6 +1389,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdateSighting;
     private javax.swing.JButton btnUploadImage;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkElementTypeFilter;
     private javax.swing.JComboBox cmbAreaType;
     private javax.swing.JComboBox cmbCertainty;
@@ -1340,15 +1432,19 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JLabel lblLocationImage;
     private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JLabel lblVisit;
+    private javax.swing.JRadioButton rdbDD;
+    private javax.swing.JRadioButton rdbDMS;
     private javax.swing.JPanel sightingIncludes;
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTable tblVisit;
     private javax.swing.JTextArea txtDetails;
     private javax.swing.JTextField txtHours;
+    private javax.swing.JTextField txtLatDecimal;
     private javax.swing.JTextField txtLatDegrees;
     private javax.swing.JTextField txtLatMinutes;
     private javax.swing.JTextField txtLatSeconds;
+    private javax.swing.JTextField txtLonDecimal;
     private javax.swing.JTextField txtLonDegrees;
     private javax.swing.JTextField txtLonMinutes;
     private javax.swing.JTextField txtLonSeconds;
