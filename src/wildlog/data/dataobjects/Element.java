@@ -36,7 +36,7 @@ public class Element implements HasFotos, Comparable<Element> {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
-    private String description;
+    private String description; // HABITAT Discription
     private String nutrition; // What food or soil the element preferes
     private WaterDependancy waterDependance; // How dependant the element is on water
     private double sizeMaleAverage; // Might later split all "Averages" into min and max
@@ -64,6 +64,7 @@ public class Element implements HasFotos, Comparable<Element> {
     private UnitsSize sizeUnit;
     private UnitsWeight weightUnit;
     private String lifespan;
+    private String referenceID;
 
    
     // CONSTRUCTORS:
@@ -107,6 +108,7 @@ public class Element implements HasFotos, Comparable<Element> {
         htmlElement = htmlElement + "<b>Primary Name:</b> " + primaryName;
         htmlElement = htmlElement + "<br/><b>Other Name:</b> " + UtilsHTML.formatString(otherName);
         htmlElement = htmlElement + "<br/><b>Scientific Name:</b> <i>" + UtilsHTML.formatString(scientificName) + "</i>";
+        htmlElement = htmlElement + "<br/><b>Reference ID:</b> " + UtilsHTML.formatString(referenceID);
         htmlElement = htmlElement + "<br/>";
         htmlElement = htmlElement + "<br/><b>Type:</b> " + UtilsHTML.formatString(type);
         htmlElement = htmlElement + "<br/><b>Feeding Class:</b> " + UtilsHTML.formatString(feedingClass);
@@ -116,9 +118,9 @@ public class Element implements HasFotos, Comparable<Element> {
         htmlElement = htmlElement + "<br/><b>Endangered Status:</b> " + UtilsHTML.formatString(endangeredStatus);
         htmlElement = htmlElement + "<br/><b>Water Dependance:</b> " + UtilsHTML.formatString(waterDependance);
         htmlElement = htmlElement + "<br/><b>Food/Nutrition:</b> " + UtilsHTML.formatString(nutrition);
-        htmlElement = htmlElement + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
+        htmlElement = htmlElement + "<br/><b>Identification:</b> " + UtilsHTML.formatString(diagnosticDescription);
+        htmlElement = htmlElement + "<br/><b>Habitat:</b> " + UtilsHTML.formatString(description);
         htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + UtilsHTML.formatString(behaviourDescription);
-        htmlElement = htmlElement + "<br/><b>Diagnostic:</b> " + UtilsHTML.formatString(diagnosticDescription);
         htmlElement = htmlElement + "<br/><b>Average Male Size:</b> " + UtilsHTML.formatString(sizeMaleAverage) + " " + UtilsHTML.formatString(sizeUnit);
         htmlElement = htmlElement + "<br/><b>Average Female Size:</b> " + UtilsHTML.formatString(sizeFemaleAverage) + " " + UtilsHTML.formatString(sizeUnit);
         htmlElement = htmlElement + "<br/><b>Average Male Weight:</b> " + UtilsHTML.formatString(weightMaleAverage) + " " + UtilsHTML.formatString(weightUnit);
@@ -136,6 +138,7 @@ public class Element implements HasFotos, Comparable<Element> {
         inCSVGenerator.addData(primaryName);
         inCSVGenerator.addData(otherName);
         inCSVGenerator.addData(scientificName);
+        inCSVGenerator.addData(referenceID);
         inCSVGenerator.addData(description);
         inCSVGenerator.addData(nutrition);
         inCSVGenerator.addData(waterDependance);
@@ -172,6 +175,10 @@ public class Element implements HasFotos, Comparable<Element> {
 
     public String getScientificName() {
         return scientificName;
+    }
+
+    public String getReferenceID() {
+        return referenceID;
     }
 
     public String getDescription() {
@@ -284,6 +291,10 @@ public class Element implements HasFotos, Comparable<Element> {
 
     public void setScientificName(String inScientificName) {
         scientificName = inScientificName;
+    }
+
+    public void setReferenceID(String inReferenceID) {
+        referenceID = inReferenceID;
     }
 
     public void setDescription(String inDescription) {

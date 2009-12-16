@@ -716,7 +716,7 @@ public class DBI_db4o implements DBI {
         ObjectSet<IndicatorOfVersionAndUpdate> results = inDb.get(new IndicatorOfVersionAndUpdate());
         if (results.hasNext()) {
             IndicatorOfVersionAndUpdate temp = results.next();
-//            temp.setDatabaseVersion(3);
+            temp.setDatabaseVersion(3);
             inDb.set(temp);
         }
 

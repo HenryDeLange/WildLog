@@ -32,7 +32,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -301,6 +300,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         importMenu = new javax.swing.JMenu();
         wldImportMenuItem = new javax.swing.JMenuItem();
         csvImportMenuItem = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JSeparator();
         advancedMenu = new javax.swing.JMenu();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
@@ -358,7 +358,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
         jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
-        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 10, -1, -1));
+        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, -1, -1));
 
         jLabel3.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
@@ -492,7 +492,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 5, -1, -1));
+        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 5, 170, 30));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -503,7 +503,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnBrowsePrevActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 20, -1, 50));
+        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, 60));
 
         btnBrowseNext.setBackground(resourceMap.getColor("btnBrowseNext.background")); // NOI18N
         btnBrowseNext.setIcon(resourceMap.getIcon("btnBrowseNext.icon")); // NOI18N
@@ -514,7 +514,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnBrowseNextActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 20, -1, 50));
+        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, -1, 60));
 
         dtpStartDate.setName("dtpStartDate"); // NOI18N
         tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 100, -1));
@@ -537,7 +537,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setText(resourceMap.getString("lblNumberOfImages.text")); // NOI18N
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
-        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 35, 80, 20));
+        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 15, 80, 50));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -993,7 +993,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
         importMenu.add(csvImportMenuItem);
 
-        menuBar.add(importMenu);
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        importMenu.add(jSeparator4);
 
         advancedMenu.setText(resourceMap.getString("advancedMenu.text")); // NOI18N
         advancedMenu.setName("advancedMenu"); // NOI18N
@@ -1008,7 +1009,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         moveVisitsMenuItem.setName("moveVisitsMenuItem"); // NOI18N
         advancedMenu.add(moveVisitsMenuItem);
 
-        menuBar.add(advancedMenu);
+        importMenu.add(advancedMenu);
+
+        menuBar.add(importMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
@@ -1300,8 +1303,10 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         // Sort rows for visits and elements
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblVisit.getRowSorter().setSortKeys(tempList);
         tblElement_LocTab.getRowSorter().setSortKeys(tempList);
+        tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(1, SortOrder.ASCENDING));
+        tblVisit.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tblLocationMouseReleased
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -1938,14 +1943,14 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 column.setPreferredWidth(110);
             }
             else if (i == 1) {
-                column.setPreferredWidth(35);
+                column.setPreferredWidth(40);
                 column.setCellRenderer(new DateCellRenderer());
             }
             else if (i == 2) {
                 column.setPreferredWidth(30);
             }
             else if (i == 3) {
-                column.setPreferredWidth(18);
+                column.setPreferredWidth(13);
             }
         }
         for (int i = 0; i < tblElement_LocTab.getColumnModel().getColumnCount(); i++) {
@@ -2209,6 +2214,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         csvGenerator.addHeader("Primary Name");
         csvGenerator.addHeader("Other Name");
         csvGenerator.addHeader("Scientific Name");
+        csvGenerator.addHeader("Reference ID");
         csvGenerator.addHeader("Description");
         csvGenerator.addHeader("Nutrition");
         csvGenerator.addHeader("Water Dependance");
@@ -2355,6 +2361,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblImage_LocTab;

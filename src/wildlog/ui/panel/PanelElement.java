@@ -226,6 +226,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         lblNumberOfImages = new javax.swing.JLabel();
         rdbLocations = new javax.swing.JRadioButton();
         rdbSightings = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        txtReferenceID = new javax.swing.JTextField();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -267,7 +269,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         txtScienceName.setText(element.getScientificName());
         txtScienceName.setName("txtScienceName"); // NOI18N
-        elementIncludes.add(txtScienceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 76, 490, -1));
+        elementIncludes.add(txtScienceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 76, 330, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -705,6 +707,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
 
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+        elementIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 76, -1, -1));
+
+        txtReferenceID.setText(element.getReferenceID());
+        txtReferenceID.setName("txtReferenceID"); // NOI18N
+        elementIncludes.add(txtReferenceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 76, 80, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -727,6 +737,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 element.setPrimaryName(txtPrimaryName.getText()); // Used for indexing (ID)
                 element.setOtherName(txtOtherName.getText());
                 element.setScientificName(txtScienceName.getText());
+                element.setReferenceID(txtReferenceID.getText());
                 element.setDescription(txtDescription.getText());
                 element.setNutrition(txtNutrition.getText());
                 element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
@@ -1004,17 +1015,21 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         if (rdbSightings.isSelected()) {
             tblLocation.setModel(utilTableGenerator.getSightingsForElementTable(element));
+            // Sort rows for Sightings
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(1, SortOrder.ASCENDING));
+            tblLocation.getRowSorter().setSortKeys(tempList);
         }
         else {
             tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
+            // Sort rows for Locations
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(0, SortOrder.ASCENDING));
+            tblLocation.getRowSorter().setSortKeys(tempList);
         }
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
         // Setup table column sizes
         resizeTables();
-        // Sort rows for Locations
-        List tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblLocation.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_rdbSightingsItemStateChanged
 
     private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
@@ -1085,6 +1100,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JComboBox cmbWishList;
     private javax.swing.JPanel elementIncludes;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel55;
@@ -1134,6 +1150,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JTextArea txtNutrition;
     private javax.swing.JTextField txtOtherName;
     private javax.swing.JTextField txtPrimaryName;
+    private javax.swing.JTextField txtReferenceID;
     private javax.swing.JTextField txtScienceName;
     private javax.swing.JTextField txtSizeFemale;
     private javax.swing.JTextField txtSizeMale;

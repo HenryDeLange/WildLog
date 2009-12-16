@@ -124,6 +124,8 @@ public class PanelSighting extends javax.swing.JPanel {
                 // Build the table
                 tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(location));
                 // Sort the table
+                tempList = new ArrayList<SortKey>(1);
+                tempList.add(new SortKey(1, SortOrder.ASCENDING));
                 tblVisit.getRowSorter().setSortKeys(tempList);
                 // Select the visit
                 int select = -1;
@@ -1097,6 +1099,9 @@ public class PanelSighting extends javax.swing.JPanel {
 
             }
             resizeTalbes();
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(1, SortOrder.ASCENDING));
+            tblVisit.getRowSorter().setSortKeys(tempList);
         }
 }//GEN-LAST:event_tblLocationMouseReleased
 

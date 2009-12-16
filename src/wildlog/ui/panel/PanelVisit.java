@@ -709,7 +709,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         resizeTables();
         // Sort rows for Sightings
         List tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tempList.add(new SortKey(1, SortOrder.ASCENDING));
         tblSightings.getRowSorter().setSortKeys(tempList);
 
         if (visit.getName() != null)

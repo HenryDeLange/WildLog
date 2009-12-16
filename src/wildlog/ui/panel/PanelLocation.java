@@ -914,8 +914,10 @@ public class PanelLocation extends javax.swing.JPanel {
         // Sort rows for visits
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblVisit.getRowSorter().setSortKeys(tempList);
         tblElement.getRowSorter().setSortKeys(tempList);
+        tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(1, SortOrder.ASCENDING));
+        tblVisit.getRowSorter().setSortKeys(tempList);
         // Lat Lon stuff
         txtLatDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText()))));
         txtLonDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText()))));

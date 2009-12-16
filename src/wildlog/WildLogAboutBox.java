@@ -133,7 +133,7 @@ public class WildLogAboutBox extends javax.swing.JDialog {
                             .addComponent(appVersionLabel)
                             .addComponent(developerNameLabel)
                             .addComponent(emailAddressLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE))
                     .addComponent(appTitleLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
