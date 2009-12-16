@@ -112,6 +112,7 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
         htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
         htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
+        htmlSighting = htmlSighting + "<br/><b>Sighting ID:</b> " + UtilsHTML.formatString(sightingCounter);
         if (inIncludeImages)
             htmlSighting = htmlSighting + "</br><b>Photos:</b></br/>" + fotoString;
         return htmlSighting;

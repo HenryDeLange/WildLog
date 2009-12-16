@@ -72,6 +72,7 @@ import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
+import wildlog.utils.ui.WildLogTreeCellRenderer;
 
 /**
  * The application's main frame.
@@ -1868,6 +1869,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             }
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
+        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
     }
 
     private void browseByElement() {

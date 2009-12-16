@@ -737,6 +737,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                     tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
                     sighting = null;
                     refreshSightingInfo();
+                    refreshTableForSightings();
                     dialog.dispose();
                 }
             });

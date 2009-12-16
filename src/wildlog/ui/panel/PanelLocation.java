@@ -343,6 +343,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
+        txtEmail.setNextFocusableComponent(txtContactNumber);
         locationIncludes.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 224, 240, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -597,6 +598,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtLatSeconds.setText(Float.toString(locationWL.getLatSecondsFloat()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
+        txtLatSeconds.setNextFocusableComponent(txtLonDegrees);
         txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtLatSecondsFocusGained(evt);
@@ -624,6 +626,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtLonSeconds.setText(Float.toString(locationWL.getLonSecondsFloat()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
+        txtLonSeconds.setNextFocusableComponent(txtEmail);
         txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtLonSecondsFocusGained(evt);
@@ -634,11 +637,13 @@ public class PanelLocation extends javax.swing.JPanel {
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
+        cmbLatitude.setNextFocusableComponent(cmbLongitude);
         locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 90, -1));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
+        cmbLongitude.setNextFocusableComponent(txtLatDegrees);
         locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 90, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
@@ -772,10 +777,22 @@ public class PanelLocation extends javax.swing.JPanel {
 
         txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
         txtLatDecimal.setName("txtLatDecimal"); // NOI18N
+        txtLatDecimal.setNextFocusableComponent(txtLonDecimal);
+        txtLatDecimal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatDecimalFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 130, -1));
 
         txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
         txtLonDecimal.setName("txtLonDecimal"); // NOI18N
+        txtLonDecimal.setNextFocusableComponent(txtEmail);
+        txtLonDecimal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonDecimalFocusGained(evt);
+            }
+        });
         locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1208,6 +1225,16 @@ public class PanelLocation extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_rdbDMSItemStateChanged
+
+    private void txtLatDecimalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatDecimalFocusGained
+        txtLatDecimal.setSelectionStart(0);
+        txtLatDecimal.setSelectionEnd(txtLatDecimal.getText().length());
+    }//GEN-LAST:event_txtLatDecimalFocusGained
+
+    private void txtLonDecimalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonDecimalFocusGained
+        txtLonDecimal.setSelectionStart(0);
+        txtLonDecimal.setSelectionEnd(txtLonDecimal.getText().length());
+    }//GEN-LAST:event_txtLonDecimalFocusGained
 
 
     private void resizeTables() {

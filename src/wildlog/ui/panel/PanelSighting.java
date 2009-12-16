@@ -196,6 +196,7 @@ public class PanelSighting extends javax.swing.JPanel {
     
     private void setupSightingInfo() {
         if (sighting != null) {
+            lblSightingID.setText("ID: " + Long.toString(sighting.getSightingCounter()));
             dtpSightingDate.setDate(sighting.getDate());
             txtHours.setText("" + sighting.getDate().getHours());
             txtMinutes.setText("" + sighting.getDate().getMinutes());
@@ -311,6 +312,7 @@ public class PanelSighting extends javax.swing.JPanel {
         rdbDD = new javax.swing.JRadioButton();
         txtLatDecimal = new javax.swing.JTextField();
         txtLonDecimal = new javax.swing.JTextField();
+        lblSightingID = new javax.swing.JLabel();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -342,7 +344,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnUpdateSightingActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnUpdateSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 190, 110, 70));
+        sightingIncludes.add(btnUpdateSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 180, 110, 70));
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         sightingIncludes.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -564,6 +566,7 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setEnabled(!disableEditing);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
+        cmbLatitude.setNextFocusableComponent(cmbLongitude);
         sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 80, -1));
 
         jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
@@ -574,6 +577,7 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setEnabled(!disableEditing);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
+        cmbLongitude.setNextFocusableComponent(txtLatDegrees);
         sightingIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, 80, -1));
 
         txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
@@ -599,6 +603,7 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLatSeconds.setText(Float.toString(sighting.getLatSecondsFloat()));
         txtLatSeconds.setEnabled(!disableEditing);
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
+        txtLatSeconds.setNextFocusableComponent(txtLonDegrees);
         txtLatSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtLatSecondsFocusGained(evt);
@@ -629,6 +634,7 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLonSeconds.setText(Float.toString(sighting.getLonSecondsFloat()));
         txtLonSeconds.setEnabled(!disableEditing);
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
+        txtLonSeconds.setNextFocusableComponent(cmbCertainty);
         txtLonSeconds.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 txtLonSecondsFocusGained(evt);
@@ -862,11 +868,28 @@ public class PanelSighting extends javax.swing.JPanel {
 
         txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
         txtLatDecimal.setName("txtLatDecimal"); // NOI18N
+        txtLatDecimal.setNextFocusableComponent(txtLonDecimal);
+        txtLatDecimal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLatDecimalFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 330, 120, -1));
 
         txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
         txtLonDecimal.setName("txtLonDecimal"); // NOI18N
+        txtLonDecimal.setNextFocusableComponent(cmbCertainty);
+        txtLonDecimal.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtLonDecimalFocusGained(evt);
+            }
+        });
         sightingIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 350, 120, -1));
+
+        lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSightingID.setText(resourceMap.getString("lblSightingID.text")); // NOI18N
+        lblSightingID.setName("lblSightingID"); // NOI18N
+        sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(514, 260, 110, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1329,6 +1352,20 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_rdbDDItemStateChanged
 
+    private void txtLatDecimalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatDecimalFocusGained
+        if (sighting != null) {
+            txtLatDecimal.setSelectionStart(0);
+            txtLatDecimal.setSelectionEnd(txtLatDecimal.getText().length());
+        }
+    }//GEN-LAST:event_txtLatDecimalFocusGained
+
+    private void txtLonDecimalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLonDecimalFocusGained
+        if (sighting != null) {
+            txtLonDecimal.setSelectionStart(0);
+            txtLonDecimal.setSelectionEnd(txtLonDecimal.getText().length());
+        }
+    }//GEN-LAST:event_txtLonDecimalFocusGained
+
     private void resizeTalbes() {
         if (sighting != null) {
             TableColumn column = null;
@@ -1436,6 +1473,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JLabel lblLocation;
     private javax.swing.JLabel lblLocationImage;
     private javax.swing.JLabel lblNumberOfImages;
+    private javax.swing.JLabel lblSightingID;
     private javax.swing.JLabel lblVisit;
     private javax.swing.JRadioButton rdbDD;
     private javax.swing.JRadioButton rdbDMS;

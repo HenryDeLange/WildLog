@@ -20,6 +20,7 @@ import com.bbn.openmap.Layer;
 import com.bbn.openmap.omGraphics.OMGraphicList;
 import com.bbn.openmap.event.ProjectionEvent;
 import com.bbn.openmap.omGraphics.OMPoint;
+import com.bbn.openmap.tools.icon.OMIconFactory;
 import java.util.ArrayList;
 import java.util.List;
 
