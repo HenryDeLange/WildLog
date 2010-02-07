@@ -969,21 +969,24 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         for (int i = 0; i < tblSightings.getColumnModel().getColumnCount(); i++) {
             column = tblSightings.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(180);
+                column.setPreferredWidth(170);
             }
             else if (i == 1) {
-                column.setPreferredWidth(55);
+                column.setPreferredWidth(65);
             }
             else if (i == 2) {
                 column.setPreferredWidth(55);
             }
             else if (i == 3) {
-                column.setPreferredWidth(80);
+                column.setPreferredWidth(70);
             }
             else if (i == 4) {
                 column.setPreferredWidth(35);
             }
             else if (i == 5) {
+                column.setPreferredWidth(10);
+            }
+            else if (i == 6) {
                 column.setPreferredWidth(10);
             }
         }

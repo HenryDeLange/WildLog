@@ -20,8 +20,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -56,6 +60,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.utils.UtilsHTML;
 
 
 /**
@@ -228,6 +233,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         rdbSightings = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         txtReferenceID = new javax.swing.JTextField();
+        btnHTML = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -715,6 +721,16 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtReferenceID.setName("txtReferenceID"); // NOI18N
         elementIncludes.add(txtReferenceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 76, 80, -1));
 
+        btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
+        btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setName("btnHTML"); // NOI18N
+        btnHTML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHTMLActionPerformed(evt);
+            }
+        });
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, 110, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -1038,6 +1054,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
     }//GEN-LAST:event_tblLocationMouseClicked
 
+    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
+        UtilsHTML.exportHTML(element);
+        Utils.openImage(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + element.getPrimaryName() + ".html");
+    }//GEN-LAST:event_btnHTMLActionPerformed
+
     private void resizeTables() {
         if (rdbSightings.isSelected()) {
             TableColumn column = null;
@@ -1082,6 +1103,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGoLocation;
+    private javax.swing.JButton btnHTML;
     private javax.swing.JButton btnMap;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;

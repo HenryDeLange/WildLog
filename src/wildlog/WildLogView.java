@@ -58,9 +58,11 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.FotoType;
 import wildlog.ui.panel.PanelElement;
 import wildlog.ui.panel.PanelLocation;
 import wildlog.ui.panel.PanelMergeElements;
@@ -1415,13 +1417,21 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     private void treBrowsePhotoValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treBrowsePhotoValueChanged
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempLocation.toHTML(false, false));
                 if (tempLocation.getFotos().size() > 0) {
                     try {
-                        imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(0).getOriginalFotoLocation()));
-                        lblNumberOfImages.setText("1 of " + tempLocation.getFotos().size());
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempLocation.getFotos().size());
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1443,8 +1453,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 txtPhotoInformation.setText(tempElement.toHTML(false, false));
                 if (tempElement.getFotos().size() > 0) {
                     try {
-                        imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(0).getOriginalFotoLocation()));
-                        lblNumberOfImages.setText("1 of " + tempElement.getFotos().size());
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempElement.getFotos().size());
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1466,8 +1483,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 txtPhotoInformation.setText(tempVisit.toHTML(false, false));
                 if (tempVisit.getFotos().size() > 0) {
                     try {
-                        imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(0).getOriginalFotoLocation()));
-                        lblNumberOfImages.setText("1 of " + tempVisit.getFotos().size());
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempVisit.getFotos().size());
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1489,8 +1513,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 txtPhotoInformation.setText(tempSighting.toHTML(false, false));
                 if (tempSighting.getFotos().size() > 0) {
                     try {
-                        imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(0).getOriginalFotoLocation()));
-                        lblNumberOfImages.setText("1 of " + tempSighting.getFotos().size());
+                        lblNumberOfImages.setText(imageIndex+1 + " of " + tempSighting.getFotos().size());
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1507,7 +1538,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 }
             }
             // Maak paar display issues reg
-            imageIndex = 0;
             if (imgBrowsePhotos.getImage() != null) {
                 if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
                     imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
@@ -1603,7 +1633,17 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     }
 
     private void btnViewImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewImageActionPerformed
-        Utils.openImage(imgBrowsePhotos.getImageURL());
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof HasFotos) {
+                HasFotos tempObject = (HasFotos)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                Utils.openImage(tempObject, imageIndex);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                SightingWrapper tempWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                Utils.openImage(tempWrapper.getSighting(), imageIndex);
+            }
+        }
     }//GEN-LAST:event_btnViewImageActionPerformed
 
     private void btnBrowsePrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowsePrevActionPerformed
@@ -1614,8 +1654,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempLocation.getFotos().size() - 1;
-                        imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempLocation.getFotos().size());
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1638,8 +1685,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempElement.getFotos().size() - 1;
-                        imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempElement.getFotos().size());
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1662,8 +1716,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempVisit.getFotos().size() - 1;
-                        imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempVisit.getFotos().size());
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1686,8 +1747,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex--;
                         if (imageIndex < 0) imageIndex = tempSighting.getFotos().size() - 1;
-                        imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempSighting.getFotos().size());
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1721,8 +1789,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex++;
                         if (imageIndex >= tempLocation.getFotos().size()) imageIndex = 0;
-                        imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempLocation.getFotos().size());
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempLocation.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempLocation.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1745,8 +1820,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex++;
                         if (imageIndex >= tempElement.getFotos().size()) imageIndex = 0;
-                        imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempElement.getFotos().size());
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempElement.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempElement.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1769,8 +1851,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex++;
                         if (imageIndex >= tempVisit.getFotos().size()) imageIndex = 0;
-                        imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempVisit.getFotos().size());
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempVisit.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempVisit.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1793,8 +1882,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     try {
                         imageIndex++;
                         if (imageIndex >= tempSighting.getFotos().size()) imageIndex = 0;
-                        imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
                         lblNumberOfImages.setText(imageIndex+1 + " of " + tempSighting.getFotos().size());
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                            imgBrowsePhotos.setImage(new File(tempSighting.getFotos().get(imageIndex).getOriginalFotoLocation()));
+                        else
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                        else
+                        if (tempSighting.getFotos().get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,12 +20,89 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import wildlog.data.dbi.DBI;
 import wildlog.data.dbi.DBI_db4o;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrame;
 
 /**
  * The main class of the application.
  */
 public class WildLogApp extends SingleFrameApplication {
+    // Variables - This is actualy a very bad hack, but its the easiest and quickest to do for now...
+    private Latitudes prevLat;
+    private String prevLatDeg;
+    private String prevLatMin;
+    private String prevLatSec;
+    private Longitudes prevLon;
+    private String prevLonDeg;
+    private String prevLonMin;
+    private String prevLonSec;
+
+    // Getters and Setters
+    public Latitudes getPrevLat() {
+        return prevLat;
+    }
+
+    public void setPrevLat(Latitudes prevLat) {
+        this.prevLat = prevLat;
+    }
+
+    public String getPrevLatDeg() {
+        return prevLatDeg;
+    }
+
+    public void setPrevLatDeg(String prevLatDeg) {
+        this.prevLatDeg = prevLatDeg;
+    }
+
+    public String getPrevLatMin() {
+        return prevLatMin;
+    }
+
+    public void setPrevLatMin(String prevLatMin) {
+        this.prevLatMin = prevLatMin;
+    }
+
+    public String getPrevLatSec() {
+        return prevLatSec;
+    }
+
+    public void setPrevLatSec(String prevLatSec) {
+        this.prevLatSec = prevLatSec;
+    }
+
+    public Longitudes getPrevLon() {
+        return prevLon;
+    }
+
+    public void setPrevLon(Longitudes prevLon) {
+        this.prevLon = prevLon;
+    }
+
+    public String getPrevLonDeg() {
+        return prevLonDeg;
+    }
+
+    public void setPrevLonDeg(String prevLonDeg) {
+        this.prevLonDeg = prevLonDeg;
+    }
+
+    public String getPrevLonMin() {
+        return prevLonMin;
+    }
+
+    public void setPrevLonMin(String prevLonMin) {
+        this.prevLonMin = prevLonMin;
+    }
+
+    public String getPrevLonSec() {
+        return prevLonSec;
+    }
+
+    public void setPrevLonSec(String prevLonSec) {
+        this.prevLonSec = prevLonSec;
+    }
+
 
     @Override
     protected void initialize(String[] arg0) {

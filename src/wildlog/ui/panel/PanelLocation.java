@@ -54,6 +54,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.DateCellRenderer;
 
 
@@ -238,6 +239,7 @@ public class PanelLocation extends javax.swing.JPanel {
         rdbDD = new javax.swing.JRadioButton();
         txtLatDecimal = new javax.swing.JTextField();
         txtLonDecimal = new javax.swing.JTextField();
+        btnHTML = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -405,6 +407,9 @@ public class PanelLocation extends javax.swing.JPanel {
         tblVisit.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblVisitKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblVisitKeyReleased(evt);
             }
         });
         jScrollPane12.setViewportView(tblVisit);
@@ -713,7 +718,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnMapActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
+        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 89, 110, 40));
 
         btnMapSightings.setFont(resourceMap.getFont("btnMapSightings.font")); // NOI18N
         btnMapSightings.setIcon(resourceMap.getIcon("btnMapSightings.icon")); // NOI18N
@@ -725,7 +730,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnMapSightingsActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnMapSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
+        locationIncludes.add(btnMapSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 128, 110, 40));
 
         buttonGroup1.add(rdbLocation);
         rdbLocation.setSelected(true);
@@ -794,6 +799,15 @@ public class PanelLocation extends javax.swing.JPanel {
             }
         });
         locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 130, -1));
+
+        btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
+        btnHTML.setName("btnHTML"); // NOI18N
+        btnHTML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHTMLActionPerformed(evt);
+            }
+        });
+        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 167, 110, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1236,6 +1250,16 @@ public class PanelLocation extends javax.swing.JPanel {
         txtLonDecimal.setSelectionEnd(txtLonDecimal.getText().length());
     }//GEN-LAST:event_txtLonDecimalFocusGained
 
+    private void tblVisitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
+            tblVisitMouseReleased(null);
+    }//GEN-LAST:event_tblVisitKeyReleased
+
+    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
+        UtilsHTML.exportHTML(locationWL);
+        Utils.openImage(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + locationWL.getName() + ".html");
+}//GEN-LAST:event_btnHTMLActionPerformed
+
 
     private void resizeTables() {
         TableColumn column = null;
@@ -1290,6 +1314,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JButton btnDeleteVisit;
     private javax.swing.JButton btnGoElement;
     private javax.swing.JButton btnGoVisit;
+    private javax.swing.JButton btnHTML;
     private javax.swing.JButton btnMap;
     private javax.swing.JButton btnMapSightings;
     private javax.swing.JButton btnNextImage;

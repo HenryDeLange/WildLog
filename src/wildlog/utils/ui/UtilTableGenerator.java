@@ -25,6 +25,8 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dbi.DBI;
 import wildlog.WildLogApp;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 
 
 public class UtilTableGenerator {
@@ -293,12 +295,13 @@ public class UtilTableGenerator {
                                 "View Rating",
                                 "Certainty",
                                 "Type",
-                                "ID"
+                                "ID",
+                                "GPS"
                                 };
         List<Sighting> tempList = inVisit.getSightings();
         Object[][] tempTable;
         if (tempList != null) {
-            tempTable = new Object[tempList.size()][6];
+            tempTable = new Object[tempList.size()][7];
             for (int t = 0; t < tempList.size(); t++) {
                 Sighting tempSighting = tempList.get(t);
                 int i = 0;
@@ -315,6 +318,12 @@ public class UtilTableGenerator {
                 tempTable[t][i++] = tempSighting.getCertainty();
                 tempTable[t][i++] = tempSighting.getElement().getType();
                 tempTable[t][i++] = tempSighting.getSightingCounter();
+                if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null)
+                    if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE))
+                        tempTable[t][i++] = "Yes";
+                    else tempTable[t][i++] = "";
+                else
+                    tempTable[t][i++] = "";
             }
         }
         else tempTable = new Object[0][0];

@@ -313,6 +313,8 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLatDecimal = new javax.swing.JTextField();
         txtLonDecimal = new javax.swing.JTextField();
         lblSightingID = new javax.swing.JLabel();
+        btnUseLocationGPS = new javax.swing.JButton();
+        btnUsePrevGPS = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -560,25 +562,25 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jLabel18.setText(resourceMap.getString("jLabel18.text")); // NOI18N
         jLabel18.setName("jLabel18"); // NOI18N
-        sightingIncludes.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, -1, 20));
+        sightingIncludes.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, -1, 20));
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setEnabled(!disableEditing);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
         cmbLatitude.setNextFocusableComponent(cmbLongitude);
-        sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 330, 80, -1));
+        sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 320, 80, -1));
 
         jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
         jLabel19.setName("jLabel19"); // NOI18N
-        sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 350, -1, 20));
+        sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 340, -1, 20));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setEnabled(!disableEditing);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
         cmbLongitude.setNextFocusableComponent(txtLatDegrees);
-        sightingIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, 80, -1));
+        sightingIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 340, 80, -1));
 
         txtLatDegrees.setText(Integer.toString(sighting.getLatDegrees()));
         txtLatDegrees.setEnabled(!disableEditing);
@@ -588,7 +590,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatDegreesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 330, 30, -1));
+        sightingIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 320, 30, -1));
 
         txtLatMinutes.setText(Integer.toString(sighting.getLatMinutes()));
         txtLatMinutes.setEnabled(!disableEditing);
@@ -598,7 +600,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatMinutesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 330, 30, -1));
+        sightingIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 320, 30, -1));
 
         txtLatSeconds.setText(Float.toString(sighting.getLatSecondsFloat()));
         txtLatSeconds.setEnabled(!disableEditing);
@@ -609,7 +611,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatSecondsFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 330, 50, -1));
+        sightingIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, 50, -1));
 
         txtLonDegrees.setText(Integer.toString(sighting.getLonDegrees()));
         txtLonDegrees.setEnabled(!disableEditing);
@@ -619,7 +621,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonDegreesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 350, 30, -1));
+        sightingIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 340, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
         txtLonMinutes.setEnabled(!disableEditing);
@@ -629,7 +631,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonMinutesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 350, 30, -1));
+        sightingIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 340, 30, -1));
 
         txtLonSeconds.setText(Float.toString(sighting.getLonSecondsFloat()));
         txtLonSeconds.setEnabled(!disableEditing);
@@ -640,7 +642,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonSecondsFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 350, 50, -1));
+        sightingIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 340, 50, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setEnabled(!disableEditing);
@@ -853,7 +855,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 rdbDMSItemStateChanged(evt);
             }
         });
-        sightingIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 330, -1, -1));
+        sightingIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 320, -1, -1));
 
         rdbDD.setBackground(resourceMap.getColor("rdbDD.background")); // NOI18N
         buttonGroup1.add(rdbDD);
@@ -864,7 +866,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 rdbDDItemStateChanged(evt);
             }
         });
-        sightingIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, -1, -1));
+        sightingIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 340, -1, -1));
 
         txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
         txtLatDecimal.setName("txtLatDecimal"); // NOI18N
@@ -874,7 +876,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLatDecimalFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 330, 120, -1));
+        sightingIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 320, 120, -1));
 
         txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
         txtLonDecimal.setName("txtLonDecimal"); // NOI18N
@@ -884,12 +886,32 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonDecimalFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(445, 350, 120, -1));
+        sightingIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 340, 120, -1));
 
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingID.setText(resourceMap.getString("lblSightingID.text")); // NOI18N
         lblSightingID.setName("lblSightingID"); // NOI18N
         sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(514, 260, 110, 20));
+
+        btnUseLocationGPS.setBackground(resourceMap.getColor("btnUseLocationGPS.background")); // NOI18N
+        btnUseLocationGPS.setText(resourceMap.getString("btnUseLocationGPS.text")); // NOI18N
+        btnUseLocationGPS.setName("btnUseLocationGPS"); // NOI18N
+        btnUseLocationGPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseLocationGPSActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnUseLocationGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 363, 130, -1));
+
+        btnUsePrevGPS.setBackground(resourceMap.getColor("btnUsePrevGPS.background")); // NOI18N
+        btnUsePrevGPS.setText(resourceMap.getString("btnUsePrevGPS.text")); // NOI18N
+        btnUsePrevGPS.setName("btnUsePrevGPS"); // NOI18N
+        btnUsePrevGPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsePrevGPSActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnUsePrevGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 363, 130, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -966,6 +988,16 @@ public class PanelSighting extends javax.swing.JPanel {
                     sighting.setLonDegrees(Integer.parseInt(txtLonDegrees.getText()));
                     sighting.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
                     sighting.setLonSecondsFloat(Float.parseFloat(txtLonSeconds.getText()));
+
+                    // Save values on App to be able to reload them on next Sighting if button pressed
+                    app.setPrevLat(sighting.getLatitude());
+                    app.setPrevLatDeg(""+sighting.getLatDegrees());
+                    app.setPrevLatMin(""+sighting.getLatMinutes());
+                    app.setPrevLatSec(""+sighting.getLatSecondsFloat());
+                    app.setPrevLon(sighting.getLongitude());
+                    app.setPrevLonDeg(""+sighting.getLonDegrees());
+                    app.setPrevLonMin(""+sighting.getLonMinutes());
+                    app.setPrevLonSec(""+sighting.getLonSecondsFloat());
                 }
                 catch (NumberFormatException e) {
                     txtLatDegrees.setText("0");
@@ -1368,6 +1400,32 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtLonDecimalFocusGained
 
+    private void btnUseLocationGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseLocationGPSActionPerformed
+        if (location != null) {
+            rdbDMS.setSelected(true);
+            cmbLatitude.setSelectedItem(location.getLatitude());
+            txtLatDegrees.setText(""+location.getLatDegrees());
+            txtLatMinutes.setText(""+location.getLatMinutes());
+            txtLatSeconds.setText(""+location.getLatSecondsFloat());
+            cmbLongitude.setSelectedItem(location.getLongitude());
+            txtLonDegrees.setText(""+location.getLonDegrees());
+            txtLonMinutes.setText(""+location.getLonMinutes());
+            txtLonSeconds.setText(""+location.getLonSecondsFloat());
+        }
+    }//GEN-LAST:event_btnUseLocationGPSActionPerformed
+
+    private void btnUsePrevGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsePrevGPSActionPerformed
+        rdbDMS.setSelected(true);
+        cmbLatitude.setSelectedItem(app.getPrevLat());
+        txtLatDegrees.setText(app.getPrevLatDeg());
+        txtLatMinutes.setText(app.getPrevLatMin());
+        txtLatSeconds.setText(app.getPrevLatSec());
+        cmbLongitude.setSelectedItem(app.getPrevLon());
+        txtLonDegrees.setText(app.getPrevLonDeg());
+        txtLonMinutes.setText(app.getPrevLonMin());
+        txtLonSeconds.setText(app.getPrevLonSec());
+    }//GEN-LAST:event_btnUsePrevGPSActionPerformed
+
     private void resizeTalbes() {
         if (sighting != null) {
             TableColumn column = null;
@@ -1433,6 +1491,8 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdateSighting;
     private javax.swing.JButton btnUploadImage;
+    private javax.swing.JButton btnUseLocationGPS;
+    private javax.swing.JButton btnUsePrevGPS;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkElementTypeFilter;
     private javax.swing.JComboBox cmbAreaType;

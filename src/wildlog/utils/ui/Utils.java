@@ -342,15 +342,12 @@ public class Utils {
         }
     }
 
-    public static void openImage(URL inURL) {
-        if (inURL != null) {
+    public static void openImage(String inPath) {
+        if (inPath != null) {
             if (System.getProperty("os.name").equals("Windows XP")) {
                 try {
-                    URI uri = new URI(inURL.getPath());
-                    String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", uri.getPath().substring(3)};
+                    String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath};
                     Runtime.getRuntime().exec(commands);
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace();
