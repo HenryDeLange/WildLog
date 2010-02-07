@@ -977,9 +977,11 @@ public class PanelSighting extends javax.swing.JPanel {
                 }
 
                 // Delete from old visit
-                if (!visit.equals(oldVisit)) {
-                    oldVisit.getSightings().remove(sighting);
-                    app.getDBI().createOrUpdate(oldVisit);
+                if (oldVisit != null) {
+                    if (!visit.equals(oldVisit)) {
+                        oldVisit.getSightings().remove(sighting);
+                        app.getDBI().createOrUpdate(oldVisit);
+                    }
                 }
 
                 // Setup new Visit

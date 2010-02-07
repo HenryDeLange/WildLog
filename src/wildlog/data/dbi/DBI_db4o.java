@@ -51,7 +51,7 @@ public class DBI_db4o implements DBI {
     private final String filePath = File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar + "wildlog.wld";
     private ObjectContainer db;
     private SightingCounter counter;
-    private final int currentDatabaseVersion = 3;
+    private final int currentDatabaseVersion = 4;
     
     // Contructor:
     public DBI_db4o() {
@@ -102,6 +102,7 @@ public class DBI_db4o implements DBI {
             IndicatorOfVersionAndUpdate temp = results.next();
             if (temp.getDatabaseVersion() == 1) doUpdate_v1(db);
             if (temp.getDatabaseVersion() == 2) doUpdate_v2(db);
+            if (temp.getDatabaseVersion() == 3) doUpdate_v3(db);
         }
         else {
             IndicatorOfVersionAndUpdate temp = new IndicatorOfVersionAndUpdate();
@@ -717,6 +718,32 @@ public class DBI_db4o implements DBI {
         if (results.hasNext()) {
             IndicatorOfVersionAndUpdate temp = results.next();
             temp.setDatabaseVersion(3);
+            inDb.set(temp);
+        }
+
+        // Commit Changes
+        inDb.commit();
+    }
+
+    private void doUpdate_v3(ObjectContainer inDb) {
+        System.out.println("Performing database update v3...");
+        // Update ENUMs
+        // Note: New fields can just be added, but changes in fields needs to be re-updated
+        Query query = inDb.query();
+        query.constrain(ElementType.class);
+        query.descend("text").constrain("Animal");
+        ObjectSet result = query.execute();
+        for(int x = 0; x < result.size(); x++) {
+            ElementType type = (ElementType)result.get(x);
+            type.fix("Mammal");
+            inDb.set(type);
+        }
+
+        // Set IndicatorOfVersionAndUpdate to represent changes
+        ObjectSet<IndicatorOfVersionAndUpdate> results = inDb.get(new IndicatorOfVersionAndUpdate());
+        if (results.hasNext()) {
+            IndicatorOfVersionAndUpdate temp = results.next();
+            temp.setDatabaseVersion(4);
             inDb.set(temp);
         }
 

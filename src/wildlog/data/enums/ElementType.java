@@ -16,8 +16,12 @@ package wildlog.data.enums;
 
 
 public enum ElementType {
-    ANIMAL("Animal"),
+    ANIMAL("Mammal"),
     BIRD("Bird"),
+    REPTILE("Reptile"),
+    AMPHIBIAN("Amphibian"),
+    FISH("Fish"),
+    INSECT("Insect"),
     PLANT("Plant"),
     OTHER("Other");
     
@@ -30,6 +34,10 @@ public enum ElementType {
     @Override
     public String toString() {
         return text;
+    }
+
+    public void fix(String inText) {
+        text = inText;
     }
     
 }

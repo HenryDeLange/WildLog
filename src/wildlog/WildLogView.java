@@ -286,6 +286,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         btnClearSearch = new javax.swing.JButton();
+        lblSearchResults = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         jSeparator3 = new javax.swing.JSeparator();
@@ -821,7 +822,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 cmbTypeActionPerformed(evt);
             }
         });
-        tabElement.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 170, -1));
+        tabElement.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 150, -1));
 
         btnGoLocation.setBackground(resourceMap.getColor("btnGoLocation.background")); // NOI18N
         btnGoLocation.setIcon(resourceMap.getIcon("btnGoLocation.icon")); // NOI18N
@@ -910,6 +911,12 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             }
         });
         tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 400, 150, 30));
+
+        lblSearchResults.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSearchResults.setText(resourceMap.getString("lblSearchResults.text")); // NOI18N
+        lblSearchResults.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblSearchResults.border.lineColor"))); // NOI18N
+        lblSearchResults.setName("lblSearchResults"); // NOI18N
+        tabElement.add(lblSearchResults, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 130, 20));
 
         tabbedPanel.addTab(resourceMap.getString("tabElement.TabConstraints.tabTitle"), tabElement); // NOI18N
 
@@ -1108,6 +1115,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
+        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
 }//GEN-LAST:event_tabElementComponentShown
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
@@ -1186,6 +1194,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         txtSearch.setText("");
         // Setup table column sizes
         resizeTalbes_Element();
+        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_ckbTypeFilterActionPerformed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
@@ -1194,6 +1203,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         txtSearch.setText("");
         // Setup talbe column sizes
         resizeTalbes_Element();
+        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
@@ -1328,6 +1338,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         // Reset the Image and Location table
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
@@ -2368,6 +2379,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblImage_LocTab;
     private javax.swing.JLabel lblNumberOfImages;
+    private javax.swing.JLabel lblSearchResults;
     private javax.swing.JMenuItem linkElementsMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
