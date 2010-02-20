@@ -51,6 +51,7 @@ import wildlog.WildLogApp;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.ui.report.ReportVisit;
 
 /**
  *
@@ -240,6 +241,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblNumberOfElements = new javax.swing.JLabel();
         lblNumberOfSightingImages = new javax.swing.JLabel();
         lblNumberOfImages = new javax.swing.JLabel();
+        btnReport = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -616,6 +618,15 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         visitIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 40, 20));
 
+        btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setName("btnReport"); // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -963,6 +974,13 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         }
     }//GEN-LAST:event_tblSightingsMouseClicked
 
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        JFrame report = new ReportVisit(visit);
+        report.setPreferredSize(new Dimension(550, 750));
+        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+    }//GEN-LAST:event_btnReportActionPerformed
+
 
     private void resizeTables() {
         TableColumn column = null;
@@ -1027,6 +1045,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     private javax.swing.JButton btnNextImageSighting;
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnPreviousImageSighting;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;

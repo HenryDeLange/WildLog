@@ -346,7 +346,7 @@ public class ReportLocation extends javax.swing.JFrame {
         try {
             final JFrame frame = this;
             PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setJobName("WildLog Print");
+            pj.setJobName("WildLog Location Report");
             pj.setCopies(1);
             PageFormat format = pj.defaultPage();
             format.setOrientation(PageFormat.PORTRAIT);

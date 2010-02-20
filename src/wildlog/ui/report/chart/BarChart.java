@@ -84,7 +84,7 @@ public class BarChart extends JPanel {
 
             // Paint bars and labels
             final int labelsBuffer = 85;
-            final int totalsBuffer = 10;
+            final int totalsBuffer = 11;
             //final int scaleBuffer = 20;
             final int scaleBuffer = 10;
             int barHeight = ((chartHeight - scaleBuffer) / chartMaxValues.size()) - 5;
@@ -129,7 +129,7 @@ public class BarChart extends JPanel {
                 BarChartCoordinate coord = chartCoords.get(entity.getBarName());
                 if (coord != null) {
                     g.setColor(Color.BLACK);
-                    g.drawString(chartMaxValues.get(entity.getBarName()).toString(), coord.getX() + 5, coord.getY() + barHeight/2 + 4);
+                    g.drawString(chartMaxValues.get(entity.getBarName()).toString(), coord.getX() + 3, coord.getY() + barHeight/2 + 5);
                     chartCoords.remove(entity.getBarName());
                 }
             }
