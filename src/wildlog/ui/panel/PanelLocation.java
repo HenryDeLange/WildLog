@@ -53,6 +53,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
+import wildlog.ui.report.ReportLocation;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.DateCellRenderer;
@@ -240,6 +241,7 @@ public class PanelLocation extends javax.swing.JPanel {
         txtLatDecimal = new javax.swing.JTextField();
         txtLonDecimal = new javax.swing.JTextField();
         btnHTML = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -809,6 +811,15 @@ public class PanelLocation extends javax.swing.JPanel {
         });
         locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 167, 110, 30));
 
+        btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setName("btnReport"); // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -1260,6 +1271,13 @@ public class PanelLocation extends javax.swing.JPanel {
         Utils.openImage(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + locationWL.getName() + ".html");
 }//GEN-LAST:event_btnHTMLActionPerformed
 
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        JFrame report = new ReportLocation(locationWL);
+        report.setPreferredSize(new Dimension(550, 750));
+        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+    }//GEN-LAST:event_btnReportActionPerformed
+
 
     private void resizeTables() {
         TableColumn column = null;
@@ -1320,6 +1338,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnRemoveSubArea;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;

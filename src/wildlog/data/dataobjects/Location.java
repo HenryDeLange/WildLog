@@ -128,7 +128,7 @@ public class Location implements HasFotos, Comparable<Location> {
         htmlLocation = htmlLocation + "<br/><b>Catering:</b> " + UtilsHTML.formatString(catering);
         htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + UtilsHTML.formatString(accommodationType);
         htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
-        htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSeconds;
+        htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
         htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
         if (inIncludeImages)
             htmlLocation = htmlLocation + "</br><b>Photos:</b></br/>" + fotoString;
@@ -145,7 +145,7 @@ public class Location implements HasFotos, Comparable<Location> {
         entry.setDescription(this.toHTML(false, true));
         entry.setStyle("locationStyle");
         entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
-        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
         return entry;
     }
 

@@ -315,14 +315,19 @@ public class Utils {
     }
 
     public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.IMAGE))
-            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
-        else
-        if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.MOVIE))
-            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
-        else
-        if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.OTHER))
-            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Other.gif")), inSize));
+        if (inHasFotos.getFotos().get(inImageIndex).getFotoType() != null) {
+            if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.IMAGE))
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
+            else
+            if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.MOVIE))
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
+            else
+            if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.OTHER))
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Other.gif")), inSize));
+        }
+        else {
+            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+        }
     }
 
     public static void openImage(HasFotos inHasFotos, int inIndex) {

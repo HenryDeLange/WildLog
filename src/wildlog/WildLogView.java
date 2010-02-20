@@ -20,6 +20,8 @@ import KmlGenerator.objects.KmlEntry;
 import KmlGenerator.objects.KmlStyle;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.application.Action;
@@ -30,6 +32,11 @@ import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -252,6 +259,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         btnRefreshDates = new javax.swing.JButton();
         lblNumberOfImages = new javax.swing.JLabel();
+        btnPrintBrowse = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -507,7 +515,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnBrowsePrevActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 10, -1, 60));
+        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 5, -1, 65));
 
         btnBrowseNext.setBackground(resourceMap.getColor("btnBrowseNext.background")); // NOI18N
         btnBrowseNext.setIcon(resourceMap.getIcon("btnBrowseNext.icon")); // NOI18N
@@ -518,7 +526,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnBrowseNextActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 10, -1, 60));
+        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 5, -1, 65));
 
         dtpStartDate.setName("dtpStartDate"); // NOI18N
         tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 100, -1));
@@ -542,6 +550,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         lblNumberOfImages.setText(resourceMap.getString("lblNumberOfImages.text")); // NOI18N
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 15, 80, 50));
+
+        btnPrintBrowse.setText(resourceMap.getString("btnPrintBrowse.text")); // NOI18N
+        btnPrintBrowse.setName("btnPrintBrowse"); // NOI18N
+        btnPrintBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintBrowseActionPerformed(evt);
+            }
+        });
+        tabFoto.add(btnPrintBrowse, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 5, 100, 65));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1196,6 +1213,10 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         txtSearch.setText("");
         // Setup table column sizes
         resizeTalbes_Element();
+        // Sort rows for Element
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblElement.getRowSorter().setSortKeys(tempList);
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_ckbTypeFilterActionPerformed
 
@@ -1205,6 +1226,10 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         txtSearch.setText("");
         // Setup talbe column sizes
         resizeTalbes_Element();
+        // Sort rows for Element
+        List tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(0, SortOrder.ASCENDING));
+        tblElement.getRowSorter().setSortKeys(tempList);
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -1955,6 +1980,36 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         }
     }//GEN-LAST:event_tblLocation_EleTabMouseClicked
 
+    private void btnPrintBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintBrowseActionPerformed
+        try {
+            PrinterJob pj = PrinterJob.getPrinterJob();
+            pj.setJobName("WildLog Print");
+            pj.setCopies(1);
+            PageFormat format = pj.defaultPage();
+            format.setOrientation(PageFormat.LANDSCAPE);
+            pj.setPrintable(new Printable() {
+                @Override
+                public int print(Graphics pg, PageFormat pf, int pageNum) {
+                    if (pageNum > 0) {
+                        return Printable.NO_SUCH_PAGE;
+                    }
+                    Graphics2D g2 = (Graphics2D) pg;
+                    g2.translate(pf.getImageableX(), pf.getImageableY());
+                    
+                    tabFoto.paint(g2);
+
+                    return Printable.PAGE_EXISTS;
+                }
+            });
+            if (pj.printDialog() == false) {
+                return;
+            }
+            pj.print();
+        } catch (PrinterException ex) {
+            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPrintBrowseActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -2432,6 +2487,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoLocation_LocTab;
     private javax.swing.JButton btnGoVisit_LocTab;
+    private javax.swing.JButton btnPrintBrowse;
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnViewImage;
