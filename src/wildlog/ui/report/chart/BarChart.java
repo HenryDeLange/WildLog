@@ -101,7 +101,7 @@ public class BarChart extends JPanel {
                     String label = entity.getBarName();
                     if (label.length() > 13)
                         label = label.substring(0, 10) + "...";
-                    g.drawString(label, 5, coord.getY() + barHeight/2 + 4);
+                    g.drawString(label, 5, coord.getY() + barHeight/2 + 5);
                 }
 
                 // Draw Bars
