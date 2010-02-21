@@ -86,38 +86,38 @@ public class ReportLocation extends javax.swing.JFrame {
                 // Time
                 if (sighting.getTimeOfDay() != null) {
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
-                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1, Color.GRAY));
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
                         numNightSightings++;
                     }
                     else
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  new Color(214,210,166)));
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblOther1.getForeground()));
                     }
                     else {
-                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1, Color.ORANGE));
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
                         numDaySightings++;
                     }
                 }
                 else
-                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), ActiveTimeSpesific.NONE.name(), 1, new Color(214,210,166)));
+                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), ActiveTimeSpesific.NONE.name(), 1, lblOther1.getForeground()));
                 // Type
                 if (visit.getType() != null) {
                     if (visit.getType().equals(VisitType.REMOTE_CAMERA))
-                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, new Color(90,157,46)));
+                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, lblRemoteCamera.getForeground()));
                     else
                     if (visit.getType().equals(VisitType.DAY_VISIT))
-                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, new Color(60,170,193)));
+                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, lblDayVisit.getForeground()));
                     else
                     if (visit.getType().equals(VisitType.VACATION))
-                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, new Color(24,134,166)));
+                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, lblVacation.getForeground()));
                     else
                     if (visit.getType().equals(VisitType.BIRD_ATLASSING))
-                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, new Color(208,163,78)));
+                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, lblAtlas.getForeground()));
                     else
-                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, new Color(214,210,166)));
+                        chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), visit.getType().name(), 1, lblOther2.getForeground()));
                 }
                 else
-                    chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), VisitType.NONE.name(), 1, new Color(214,210,166)));
+                    chartType.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), VisitType.NONE.name(), 1, lblOther2.getForeground()));
             }
         }
 
@@ -163,16 +163,16 @@ public class ReportLocation extends javax.swing.JFrame {
         lblLastVisit = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lblActiveDays = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lblNight = new javax.swing.JLabel();
+        lblDay = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        lblOther1 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        lblRemoteCamera = new javax.swing.JLabel();
+        lblDayVisit = new javax.swing.JLabel();
+        lblVacation = new javax.swing.JLabel();
+        lblAtlas = new javax.swing.JLabel();
+        lblOther2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -265,61 +265,61 @@ public class ReportLocation extends javax.swing.JFrame {
         lblActiveDays.setName("lblActiveDays"); // NOI18N
         getContentPane().add(lblActiveDays, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 50, -1, -1));
 
-        jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
-        jLabel4.setForeground(resourceMap.getColor("jLabel4.foreground")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 700, 50, -1));
+        lblNight.setFont(resourceMap.getFont("lblNight.font")); // NOI18N
+        lblNight.setForeground(resourceMap.getColor("lblNight.foreground")); // NOI18N
+        lblNight.setText(resourceMap.getString("lblNight.text")); // NOI18N
+        lblNight.setName("lblNight"); // NOI18N
+        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 700, 50, -1));
 
-        jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
-        jLabel8.setForeground(resourceMap.getColor("jLabel8.foreground")); // NOI18N
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
-        jLabel8.setName("jLabel8"); // NOI18N
-        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 700, -1, -1));
+        lblDay.setFont(resourceMap.getFont("lblDay.font")); // NOI18N
+        lblDay.setForeground(resourceMap.getColor("lblDay.foreground")); // NOI18N
+        lblDay.setText(resourceMap.getString("lblDay.text")); // NOI18N
+        lblDay.setName("lblDay"); // NOI18N
+        getContentPane().add(lblDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 700, -1, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 700, -1, -1));
 
-        jLabel11.setFont(resourceMap.getFont("jLabel11.font")); // NOI18N
-        jLabel11.setForeground(resourceMap.getColor("jLabel11.foreground")); // NOI18N
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
-        jLabel11.setName("jLabel11"); // NOI18N
-        getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 700, -1, -1));
+        lblOther1.setFont(resourceMap.getFont("lblOther1.font")); // NOI18N
+        lblOther1.setForeground(resourceMap.getColor("lblOther1.foreground")); // NOI18N
+        lblOther1.setText(resourceMap.getString("lblOther1.text")); // NOI18N
+        lblOther1.setName("lblOther1"); // NOI18N
+        getContentPane().add(lblOther1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 700, -1, -1));
 
         jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 700, -1, -1));
 
-        jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
-        jLabel14.setForeground(resourceMap.getColor("jLabel14.foreground")); // NOI18N
-        jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
-        jLabel14.setName("jLabel14"); // NOI18N
-        getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 700, -1, -1));
+        lblRemoteCamera.setFont(resourceMap.getFont("lblRemoteCamera.font")); // NOI18N
+        lblRemoteCamera.setForeground(resourceMap.getColor("lblRemoteCamera.foreground")); // NOI18N
+        lblRemoteCamera.setText(resourceMap.getString("lblRemoteCamera.text")); // NOI18N
+        lblRemoteCamera.setName("lblRemoteCamera"); // NOI18N
+        getContentPane().add(lblRemoteCamera, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 700, -1, -1));
 
-        jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
-        jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
-        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
-        jLabel15.setName("jLabel15"); // NOI18N
-        getContentPane().add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 700, -1, -1));
+        lblDayVisit.setFont(resourceMap.getFont("lblDayVisit.font")); // NOI18N
+        lblDayVisit.setForeground(resourceMap.getColor("lblDayVisit.foreground")); // NOI18N
+        lblDayVisit.setText(resourceMap.getString("lblDayVisit.text")); // NOI18N
+        lblDayVisit.setName("lblDayVisit"); // NOI18N
+        getContentPane().add(lblDayVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 700, -1, -1));
 
-        jLabel16.setFont(resourceMap.getFont("jLabel16.font")); // NOI18N
-        jLabel16.setForeground(resourceMap.getColor("jLabel16.foreground")); // NOI18N
-        jLabel16.setText(resourceMap.getString("jLabel16.text")); // NOI18N
-        jLabel16.setName("jLabel16"); // NOI18N
-        getContentPane().add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 720, -1, -1));
+        lblVacation.setFont(resourceMap.getFont("lblVacation.font")); // NOI18N
+        lblVacation.setForeground(resourceMap.getColor("lblVacation.foreground")); // NOI18N
+        lblVacation.setText(resourceMap.getString("lblVacation.text")); // NOI18N
+        lblVacation.setName("lblVacation"); // NOI18N
+        getContentPane().add(lblVacation, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 720, -1, -1));
 
-        jLabel17.setFont(resourceMap.getFont("jLabel17.font")); // NOI18N
-        jLabel17.setForeground(resourceMap.getColor("jLabel17.foreground")); // NOI18N
-        jLabel17.setText(resourceMap.getString("jLabel17.text")); // NOI18N
-        jLabel17.setName("jLabel17"); // NOI18N
-        getContentPane().add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 700, -1, -1));
+        lblAtlas.setFont(resourceMap.getFont("lblAtlas.font")); // NOI18N
+        lblAtlas.setForeground(resourceMap.getColor("lblAtlas.foreground")); // NOI18N
+        lblAtlas.setText(resourceMap.getString("lblAtlas.text")); // NOI18N
+        lblAtlas.setName("lblAtlas"); // NOI18N
+        getContentPane().add(lblAtlas, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 700, -1, -1));
 
-        jLabel18.setFont(resourceMap.getFont("jLabel18.font")); // NOI18N
-        jLabel18.setForeground(resourceMap.getColor("jLabel18.foreground")); // NOI18N
-        jLabel18.setText(resourceMap.getString("jLabel18.text")); // NOI18N
-        jLabel18.setName("jLabel18"); // NOI18N
-        getContentPane().add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 720, 50, -1));
+        lblOther2.setFont(resourceMap.getFont("lblOther2.font")); // NOI18N
+        lblOther2.setForeground(resourceMap.getColor("lblOther2.foreground")); // NOI18N
+        lblOther2.setText(resourceMap.getString("lblOther2.text")); // NOI18N
+        lblOther2.setName("lblOther2"); // NOI18N
+        getContentPane().add(lblOther2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 720, 50, -1));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -374,33 +374,33 @@ public class ReportLocation extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblActiveDays;
+    private javax.swing.JLabel lblAtlas;
+    private javax.swing.JLabel lblDay;
     private javax.swing.JLabel lblDaySightings;
+    private javax.swing.JLabel lblDayVisit;
     private javax.swing.JLabel lblFirstVisit;
     private javax.swing.JLabel lblLastVisit;
     private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblNight;
     private javax.swing.JLabel lblNightSightings;
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblNumberOfVisits;
+    private javax.swing.JLabel lblOther1;
+    private javax.swing.JLabel lblOther2;
+    private javax.swing.JLabel lblRemoteCamera;
+    private javax.swing.JLabel lblVacation;
     private javax.swing.JMenu mnuPrint;
     // End of variables declaration//GEN-END:variables
 

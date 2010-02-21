@@ -20,6 +20,7 @@ import KmlGenerator.objects.KmlEntry;
 import KmlGenerator.objects.KmlStyle;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.logging.Level;
@@ -77,6 +78,9 @@ import wildlog.ui.panel.PanelMoveVisit;
 import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.PanelVisit;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.ui.report.ReportElement;
+import wildlog.ui.report.ReportLocation;
+import wildlog.ui.report.ReportVisit;
 import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
@@ -260,6 +264,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         btnRefreshDates = new javax.swing.JButton();
         lblNumberOfImages = new javax.swing.JLabel();
         btnPrintBrowse = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -558,7 +563,16 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnPrintBrowseActionPerformed(evt);
             }
         });
-        tabFoto.add(btnPrintBrowse, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 5, 100, 65));
+        tabFoto.add(btnPrintBrowse, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 5, 100, 30));
+
+        btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setName("btnReport"); // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 40, 100, 30));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -2010,6 +2024,42 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         }
     }//GEN-LAST:event_btnPrintBrowseActionPerformed
 
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                JFrame report = new ReportLocation(tempLocation);
+                report.setPreferredSize(new Dimension(550, 750));
+                report.setLocationRelativeTo(null);
+                report.setVisible(true);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                JFrame report = new ReportElement(tempElement, app);
+                report.setPreferredSize(new Dimension(550, 750));
+                report.setLocationRelativeTo(null);
+                report.setVisible(true);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                JFrame report = new ReportVisit(tempVisit);
+                report.setPreferredSize(new Dimension(550, 750));
+                report.setLocationRelativeTo(null);
+                report.setVisible(true);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
+//                JFrame report = new ReportVisit(tempVisit);
+//                report.setPreferredSize(new Dimension(550, 750));
+//                report.setLocationRelativeTo(null);
+//                report.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_btnReportActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -2489,6 +2539,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JButton btnGoVisit_LocTab;
     private javax.swing.JButton btnPrintBrowse;
     private javax.swing.JButton btnRefreshDates;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnViewImage;
     private javax.swing.JButton btnZoomIn;

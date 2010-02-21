@@ -31,6 +31,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -60,6 +61,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.ui.report.ReportElement;
 import wildlog.utils.UtilsHTML;
 
 
@@ -234,6 +236,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jLabel2 = new javax.swing.JLabel();
         txtReferenceID = new javax.swing.JTextField();
         btnHTML = new javax.swing.JButton();
+        btnReport = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -658,7 +661,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnMapActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
+        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 110, 40));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -683,7 +686,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnAddSightingActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 130, 110, 40));
 
         lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -729,7 +732,16 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnHTMLActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, 110, 30));
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 210, 110, 30));
+
+        btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setName("btnReport"); // NOI18N
+        btnReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReportActionPerformed(evt);
+            }
+        });
+        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 173, 110, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1059,6 +1071,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         Utils.openImage(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + element.getPrimaryName() + ".html");
     }//GEN-LAST:event_btnHTMLActionPerformed
 
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        JFrame report = new ReportElement(element, app);
+        report.setPreferredSize(new Dimension(550, 750));
+        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+    }//GEN-LAST:event_btnReportActionPerformed
+
     private void resizeTables() {
         if (rdbSightings.isSelected()) {
             TableColumn column = null;
@@ -1107,6 +1126,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JButton btnMap;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;
+    private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
