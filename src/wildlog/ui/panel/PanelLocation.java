@@ -330,7 +330,7 @@ public class PanelLocation extends javax.swing.JPanel {
         txtDirections.setName("txtDirections"); // NOI18N
         jScrollPane2.setViewportView(txtDirections);
 
-        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 280, 90));
+        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 160, 90));
 
         txtWebsite.setText(locationWL.getWebsite());
         txtWebsite.setName("txtWebsite"); // NOI18N
@@ -720,7 +720,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnMapActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 89, 110, 40));
+        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
 
         btnMapSightings.setFont(resourceMap.getFont("btnMapSightings.font")); // NOI18N
         btnMapSightings.setIcon(resourceMap.getIcon("btnMapSightings.icon")); // NOI18N
@@ -732,7 +732,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnMapSightingsActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnMapSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 128, 110, 40));
+        locationIncludes.add(btnMapSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
 
         buttonGroup1.add(rdbLocation);
         rdbLocation.setSelected(true);
@@ -809,7 +809,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnHTMLActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 167, 110, 30));
+        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 110, 30));
 
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setName("btnReport"); // NOI18N
@@ -818,7 +818,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnReportActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, -1, -1));
+        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 290, 110, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1273,6 +1273,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         JFrame report = new ReportLocation(locationWL);
+        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
         report.setPreferredSize(new Dimension(550, 750));
         report.setLocationRelativeTo(null);
         report.setVisible(true);

@@ -291,7 +291,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 btnUpdateActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 28, 110, 60));
+        visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 25, 110, 60));
 
         jLabel53.setText(resourceMap.getString("jLabel53.text")); // NOI18N
         jLabel53.setName("jLabel53"); // NOI18N
@@ -513,7 +513,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 40));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 125, 110, 40));
 
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
@@ -546,7 +546,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 btnMapVisitActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 95, 110, 40));
+        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 85, 110, 40));
 
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -625,7 +625,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 80, -1, -1));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 165, 110, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -976,6 +976,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         JFrame report = new ReportVisit(visit);
+        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
         report.setPreferredSize(new Dimension(550, 750));
         report.setLocationRelativeTo(null);
         report.setVisible(true);

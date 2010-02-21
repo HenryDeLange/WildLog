@@ -2029,6 +2029,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 JFrame report = new ReportLocation(tempLocation);
+                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
                 report.setPreferredSize(new Dimension(550, 750));
                 report.setLocationRelativeTo(null);
                 report.setVisible(true);
@@ -2037,6 +2038,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 JFrame report = new ReportElement(tempElement, app);
+                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
                 report.setPreferredSize(new Dimension(550, 750));
                 report.setLocationRelativeTo(null);
                 report.setVisible(true);
@@ -2045,18 +2047,20 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 JFrame report = new ReportVisit(tempVisit);
+                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
                 report.setPreferredSize(new Dimension(550, 750));
                 report.setLocationRelativeTo(null);
                 report.setVisible(true);
             }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
+//            else
+//            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+//                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
 //                JFrame report = new ReportVisit(tempVisit);
+//                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
 //                report.setPreferredSize(new Dimension(550, 750));
 //                report.setLocationRelativeTo(null);
 //                report.setVisible(true);
-            }
+//            }
         }
     }//GEN-LAST:event_btnReportActionPerformed
 

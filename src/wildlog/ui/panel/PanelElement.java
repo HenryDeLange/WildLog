@@ -661,7 +661,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnMapActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 110, 40));
+        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 40));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -686,7 +686,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnAddSightingActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 130, 110, 40));
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 110, 40));
 
         lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -732,7 +732,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnHTMLActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 210, 110, 30));
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 110, 30));
 
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setName("btnReport"); // NOI18N
@@ -741,7 +741,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnReportActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 173, 110, 30));
+        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 20));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1073,6 +1073,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         JFrame report = new ReportElement(element, app);
+        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
         report.setPreferredSize(new Dimension(550, 750));
         report.setLocationRelativeTo(null);
         report.setVisible(true);
