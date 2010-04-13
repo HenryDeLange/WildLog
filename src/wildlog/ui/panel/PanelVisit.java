@@ -285,6 +285,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
         btnUpdate.setText(resourceMap.getString("btnUpdate.text")); // NOI18N
         btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
+        btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -336,10 +337,12 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
         visitIncludes.add(cmbGameWatchIntensity, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 110, 190, -1));
 
+        dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setName("dtpStartDate"); // NOI18N
         visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 200, -1));
 
+        dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setName("dtpEndDate"); // NOI18N
         visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 52, 200, -1));
@@ -355,6 +358,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnPreviousImage.setIcon(resourceMap.getIcon("btnPreviousImage.icon")); // NOI18N
         btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
         btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
+        btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -366,6 +370,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnNextImage.setIcon(resourceMap.getIcon("btnNextImage.icon")); // NOI18N
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
         btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
+        btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -411,6 +416,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
+        btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -427,6 +433,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
         btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
         btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
+        btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -438,6 +445,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnDeleteSighting.setIcon(resourceMap.getIcon("btnDeleteSighting.icon")); // NOI18N
         btnDeleteSighting.setText(resourceMap.getString("btnDeleteSighting.text")); // NOI18N
         btnDeleteSighting.setToolTipText(resourceMap.getString("btnDeleteSighting.toolTipText")); // NOI18N
+        btnDeleteSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteSighting.setName("btnDeleteSighting"); // NOI18N
         btnDeleteSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -449,6 +457,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnEditSighting.setIcon(resourceMap.getIcon("btnEditSighting.icon")); // NOI18N
         btnEditSighting.setText(resourceMap.getString("btnEditSighting.text")); // NOI18N
         btnEditSighting.setToolTipText(resourceMap.getString("btnEditSighting.toolTipText")); // NOI18N
+        btnEditSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEditSighting.setName("btnEditSighting"); // NOI18N
         btnEditSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -457,12 +466,15 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 90, 50));
 
+        lblSightingImage.setBackground(resourceMap.getColor("lblSightingImage.background")); // NOI18N
         lblSightingImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingImage.setText(resourceMap.getString("lblSightingImage.text")); // NOI18N
         lblSightingImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblSightingImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblSightingImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblSightingImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblSightingImage.setName("lblSightingImage"); // NOI18N
+        lblSightingImage.setOpaque(true);
         lblSightingImage.setPreferredSize(new java.awt.Dimension(150, 150));
         lblSightingImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -471,12 +483,15 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         visitIncludes.add(lblSightingImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 390, -1, -1));
 
+        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setName("lblImage"); // NOI18N
+        lblImage.setOpaque(true);
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -491,6 +506,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
+        btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -507,6 +523,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnMapSighting.setIcon(resourceMap.getIcon("btnMapSighting.icon")); // NOI18N
         btnMapSighting.setText(resourceMap.getString("btnMapSighting.text")); // NOI18N
         btnMapSighting.setToolTipText(resourceMap.getString("btnMapSighting.toolTipText")); // NOI18N
+        btnMapSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMapSighting.setName("btnMapSighting"); // NOI18N
         btnMapSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -518,6 +535,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
+        btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -529,6 +547,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
         btnGoElement.setText(resourceMap.getString("btnGoElement.text")); // NOI18N
         btnGoElement.setToolTipText(resourceMap.getString("btnGoElement.toolTipText")); // NOI18N
+        btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoElement.setName("btnGoElement"); // NOI18N
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -540,6 +559,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         btnMapVisit.setIcon(resourceMap.getIcon("btnMapVisit.icon")); // NOI18N
         btnMapVisit.setText(resourceMap.getString("btnMapVisit.text")); // NOI18N
         btnMapVisit.setToolTipText(resourceMap.getString("btnMapVisit.toolTipText")); // NOI18N
+        btnMapVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMapVisit.setName("btnMapVisit"); // NOI18N
         btnMapVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -556,6 +576,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
         btnPreviousImageSighting.setIcon(resourceMap.getIcon("btnPreviousImageSighting.icon")); // NOI18N
         btnPreviousImageSighting.setToolTipText(resourceMap.getString("btnPreviousImageSighting.toolTipText")); // NOI18N
+        btnPreviousImageSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPreviousImageSighting.setName("btnPreviousImageSighting"); // NOI18N
         btnPreviousImageSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -566,6 +587,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
         btnNextImageSighting.setIcon(resourceMap.getIcon("btnNextImageSighting.icon")); // NOI18N
         btnNextImageSighting.setToolTipText(resourceMap.getString("btnNextImageSighting.toolTipText")); // NOI18N
+        btnNextImageSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextImageSighting.setName("btnNextImageSighting"); // NOI18N
         btnNextImageSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -574,11 +596,14 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         visitIncludes.add(btnNextImageSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 550, 40, 30));
 
+        lblElementImage.setBackground(resourceMap.getColor("lblElementImage.background")); // NOI18N
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblElementImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setName("lblElementImage"); // NOI18N
+        lblElementImage.setOpaque(true);
         lblElementImage.setPreferredSize(new java.awt.Dimension(150, 150));
         lblElementImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -620,6 +645,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -643,10 +669,10 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (Utils.checkCharacters(txtName.getText())) {
+        if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = visit.getName();
-                visit.setName(txtName.getText());
+                visit.setName(txtName.getText().trim());
                 visit.setStartDate(dtpStartDate.getDate());
                 visit.setEndDate(dtpEndDate.getDate());
                 visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());

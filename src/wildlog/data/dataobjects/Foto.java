@@ -36,7 +36,6 @@ public class Foto {
 
     // CONSTRUCTORS:
     public Foto() {
-
     }
     
     public Foto(String inName, String inFileLocation, String inOriginalFotoLocation, FotoType inFotoType) {

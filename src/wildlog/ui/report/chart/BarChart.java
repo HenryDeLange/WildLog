@@ -17,7 +17,10 @@ package wildlog.ui.report.chart;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -47,14 +50,23 @@ public class BarChart extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
             if (bars.size() > 0) {
+                if (bars.get(0).getBarName() instanceof Date)
+                    Collections.sort(bars, Collections.reverseOrder());
+                else
+                    Collections.sort(bars);
+            }
+            if (bars.size() > 0) {
                 // Determine longest bar
-                Map<String, Integer> chartMaxValues = new HashMap<String, Integer>();
+                Map<String, Integer> chartMaxValues = new LinkedHashMap<String, Integer>();
                 int max = Integer.MIN_VALUE;
                 for (BarChartEntity entity : bars) {
-                    Integer temp = chartMaxValues.get(entity.getBarName());
+                    String entityName = entity.getBarName().toString();
+                    if (entity.getBarName() instanceof Date)
+                        entityName = new SimpleDateFormat("dd MMM yyyy").format(entity.getBarName());
+                    Integer temp = chartMaxValues.get(entityName);
                     if (temp == null) temp = 0;
-                    chartMaxValues.put(entity.getBarName(), temp + entity.getValue());
-                    max = Math.max(max, chartMaxValues.get(entity.getBarName()));
+                    chartMaxValues.put(entityName, temp + entity.getValue());
+                    max = Math.max(max, chartMaxValues.get(entityName));
                 }
 
                 // Determine bar sort order
@@ -85,21 +97,24 @@ public class BarChart extends JPanel {
 
                 // Paint bars and labels
                 final int labelsBuffer = 102;
-                final int totalsBuffer = 11;
+                final int totalsBuffer = 15;
                 //final int scaleBuffer = 20;
                 final int scaleBuffer = 10;
                 int barHeight = ((chartHeight - scaleBuffer) / chartMaxValues.size()) - 5;
                 Map<String, BarChartCoordinate> chartCoords = new LinkedHashMap<String, BarChartCoordinate>();
                 for (BarChartEntity entity : bars) {
+                    String entityName = entity.getBarName().toString();
+                    if (entity.getBarName() instanceof Date)
+                        entityName = new SimpleDateFormat("dd MMM yyyy").format(entity.getBarName());
                     // Setup
                     int value = entity.getValue();
                     int barWidth = (int)((chartWidth - (labelsBuffer + totalsBuffer)) * ((double)value / max));
-                    BarChartCoordinate coord = chartCoords.get(entity.getBarName());
+                    BarChartCoordinate coord = chartCoords.get(entityName);
                     if (coord == null) {
-                        coord = new BarChartCoordinate(labelsBuffer, (barHeight + 5) * chartSortOrder.get(entity.getBarName()) + 5);
+                        coord = new BarChartCoordinate(labelsBuffer, (barHeight + 5) * chartSortOrder.get(entityName) + 5);
                         // Labels
                         g.setColor(Color.BLACK);
-                        String label = entity.getBarName();
+                        String label = entityName;
                         if (label.length() > 17)
                             label = label.substring(0, 15) + "..";
                         g.drawString(label, 5, coord.getY() + barHeight/2 + 5);
@@ -123,15 +138,18 @@ public class BarChart extends JPanel {
 
                     // Update Coordinates
                     coord.setX(coord.getX() + barWidth);
-                    chartCoords.put(entity.getBarName(), coord);
+                    chartCoords.put(entityName, coord);
                 }
                 // Paint totals
                 for (BarChartEntity entity : bars) {
-                    BarChartCoordinate coord = chartCoords.get(entity.getBarName());
+                    String entityName = entity.getBarName().toString();
+                    if (entity.getBarName() instanceof Date)
+                        entityName = new SimpleDateFormat("dd MMM yyyy").format(entity.getBarName());
+                    BarChartCoordinate coord = chartCoords.get(entityName);
                     if (coord != null) {
                         g.setColor(Color.BLACK);
-                        g.drawString(chartMaxValues.get(entity.getBarName()).toString(), coord.getX() + 3, coord.getY() + barHeight/2 + 5);
-                        chartCoords.remove(entity.getBarName());
+                        g.drawString(chartMaxValues.get(entityName).toString(), coord.getX() + 3, coord.getY() + barHeight/2 + 5);
+                        chartCoords.remove(entityName);
                     }
                 }
             }

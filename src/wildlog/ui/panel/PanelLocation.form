@@ -500,6 +500,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnUpdate.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUpdate.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUpdate.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnUpdate" noResource="true"/>
           </Properties>
           <Events>
@@ -516,6 +519,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnPreviousImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnPreviousImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnPreviousImage.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnPreviousImage" noResource="true"/>
           </Properties>
           <Events>
@@ -532,6 +538,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSetMainImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSetMainImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSetMainImage.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
           </Properties>
           <Events>
@@ -548,6 +557,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnNextImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnNextImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnNextImage.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnNextImage" noResource="true"/>
           </Properties>
           <Events>
@@ -564,6 +576,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnUploadImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUploadImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUploadImage.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
           </Properties>
           <Events>
@@ -580,6 +595,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnGoVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnGoVisit.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnGoVisit.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnGoVisit" noResource="true"/>
           </Properties>
           <Events>
@@ -596,6 +614,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnAddVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnAddVisit.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnAddVisit.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnAddVisit" noResource="true"/>
           </Properties>
           <Events>
@@ -612,6 +633,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnDeleteVisit.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteVisit.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnDeleteVisit" noResource="true"/>
           </Properties>
           <Events>
@@ -628,6 +652,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnGoElement.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnGoElement.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnGoElement.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnGoElement" noResource="true"/>
           </Properties>
           <Events>
@@ -718,12 +745,16 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="lblImage.background"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" resourceKey="lblImage.text"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
               </Border>
+            </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
             </Property>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[300, 300]"/>
@@ -732,6 +763,7 @@
               <Dimension value="[300, 300]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="lblImage" noResource="true"/>
+            <Property name="opaque" type="boolean" value="true"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[300, 300]"/>
             </Property>
@@ -931,6 +963,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnAddSubArea.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnAddSubArea.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnAddSubArea.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnAddSubArea" noResource="true"/>
           </Properties>
           <Events>
@@ -947,6 +982,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnRemoveSubArea.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnRemoveSubArea.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnRemoveSubArea.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnRemoveSubArea" noResource="true"/>
           </Properties>
           <Events>
@@ -963,6 +1001,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnDeleteImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteImage.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
           <Events>
@@ -1011,6 +1052,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnMap.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnMap.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnMap.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnMap" noResource="true"/>
           </Properties>
           <Events>
@@ -1028,6 +1072,9 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnMapSightings.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnMapSightings.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnMapSightings.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnMapSightings" noResource="true"/>
           </Properties>
           <Events>
@@ -1046,6 +1093,9 @@
             </Property>
             <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" resourceKey="rdbLocation.text"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="rdbLocation" noResource="true"/>
           </Properties>
           <Events>
@@ -1063,6 +1113,9 @@
               <ComponentRef name="buttonGroup1"/>
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="rdbVisit.text"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="rdbVisit" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1109,6 +1162,9 @@
               <ComponentRef name="buttonGroup2"/>
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="rdbDMS.text"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="rdbDMS" noResource="true"/>
           </Properties>
           <Events>
@@ -1126,6 +1182,9 @@
               <ComponentRef name="buttonGroup2"/>
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="rdbDD.text"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="rdbDD" noResource="true"/>
           </Properties>
           <Events>
@@ -1174,6 +1233,9 @@
         <Component class="javax.swing.JButton" name="btnHTML">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnHTML.icon"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnHTML" noResource="true"/>
           </Properties>
           <Events>
@@ -1189,6 +1251,9 @@
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnReport.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnReport.text"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
           </Properties>
           <Events>

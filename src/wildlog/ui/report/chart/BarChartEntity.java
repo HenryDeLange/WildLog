@@ -20,19 +20,29 @@ import java.awt.Color;
  *
  * @author DeLangeH
  */
-public class BarChartEntity {
+public class BarChartEntity implements Comparable<BarChartEntity> {
     // Variables
     private Color color;
     private int value;
     private String description;
-    private String barName;
+    private Object barName;
 
     // Constructor
-    public BarChartEntity(String inBarName, String inDescription, int inValue, Color inColor) {
+    public BarChartEntity(Object inBarName, String inDescription, int inValue, Color inColor) {
         color = inColor;
         value = inValue;
         description = inDescription;
         barName = inBarName;
+    }
+
+    @Override
+    public int compareTo(BarChartEntity inBarChartEntity) {
+        if (barName == null || inBarChartEntity.getBarName() == null)
+            return 0;
+        if (barName instanceof Comparable && inBarChartEntity.getBarName() instanceof Comparable) {
+            return ((Comparable)barName).compareTo(((Comparable)inBarChartEntity.getBarName()));
+        }
+        else return 0;
     }
 
     // Getters and Setters
@@ -44,11 +54,11 @@ public class BarChartEntity {
         this.color = color;
     }
 
-    public String getBarName() {
+    public Object getBarName() {
         return barName;
     }
 
-    public void setBarName(String barName) {
+    public void setBarName(Object barName) {
         this.barName = barName;
     }
 

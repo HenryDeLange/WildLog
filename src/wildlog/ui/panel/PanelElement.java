@@ -280,6 +280,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
         btnUpdate.setText(resourceMap.getString("btnUpdate.text")); // NOI18N
         btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
+        btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -294,6 +295,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnPreviousImage.setIcon(resourceMap.getIcon("btnPreviousImage.icon")); // NOI18N
         btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
         btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
+        btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,6 +307,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnNextImage.setIcon(resourceMap.getIcon("btnNextImage.icon")); // NOI18N
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
         btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
+        btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,6 +319,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
+        btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,6 +354,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnGoLocation.setIcon(resourceMap.getIcon("btnGoLocation.icon")); // NOI18N
         btnGoLocation.setText(resourceMap.getString("btnGoLocation.text")); // NOI18N
         btnGoLocation.setToolTipText(resourceMap.getString("btnGoLocation.toolTipText")); // NOI18N
+        btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoLocation.setName("btnGoLocation"); // NOI18N
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -591,6 +596,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
+        btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -599,10 +605,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(btnUploadImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 300, 220, -1));
 
+        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setName("lblImage"); // NOI18N
+        lblImage.setOpaque(true);
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -625,6 +634,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 510, -1, 20));
 
         cmbSizeUnits.setModel(new DefaultComboBoxModel(UnitsSize.values()));
+        cmbSizeUnits.setSelectedItem(element.getSizeUnit());
         cmbSizeUnits.setName("cmbSizeUnits"); // NOI18N
         elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 510, 70, -1));
 
@@ -633,12 +643,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 510, -1, 20));
 
         cmbWeightUnits.setModel(new DefaultComboBoxModel(UnitsWeight.values()));
+        cmbWeightUnits.setSelectedItem(element.getWeightUnit());
         cmbWeightUnits.setName("cmbWeightUnits"); // NOI18N
         elementIncludes.add(cmbWeightUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 510, 70, -1));
 
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
+        btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -651,6 +663,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnMap.setIcon(resourceMap.getIcon("btnMap.icon")); // NOI18N
         btnMap.setText(resourceMap.getString("btnMap.text")); // NOI18N
         btnMap.setToolTipText(resourceMap.getString("btnMap.toolTipText")); // NOI18N
+        btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMap.setName("btnMap"); // NOI18N
         btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -676,6 +689,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
         btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
         btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
+        btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -699,11 +713,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         buttonGroup1.add(rdbLocations);
         rdbLocations.setSelected(true);
         rdbLocations.setText(resourceMap.getString("rdbLocations.text")); // NOI18N
+        rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbLocations.setName("rdbLocations"); // NOI18N
         elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, -1));
 
         buttonGroup1.add(rdbSightings);
         rdbSightings.setText(resourceMap.getString("rdbSightings.text")); // NOI18N
+        rdbSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSightings.setName("rdbSightings"); // NOI18N
         rdbSightings.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -722,6 +738,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
         btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -732,6 +749,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -756,10 +774,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        if (Utils.checkCharacters(txtPrimaryName.getText())) {
+        if (Utils.checkCharacters(txtPrimaryName.getText().trim())) {
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = element.getPrimaryName();
-                element.setPrimaryName(txtPrimaryName.getText()); // Used for indexing (ID)
+                element.setPrimaryName(txtPrimaryName.getText().trim()); // Used for indexing (ID)
                 element.setOtherName(txtOtherName.getText());
                 element.setScientificName(txtScienceName.getText());
                 element.setReferenceID(txtReferenceID.getText());

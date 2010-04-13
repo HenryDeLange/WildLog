@@ -21,8 +21,13 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,9 +48,12 @@ import wildlog.ui.report.chart.BarChartEntity;
  */
 public class ReportLocation extends javax.swing.JFrame {
     private boolean usePrimaryName = true;
+    private boolean viewReport1 = true;
+    private boolean viewReport2 = false;
     private Location location;
     private BarChart chartTime;
     private BarChart chartType;
+    private BarChart chartSpecies;
 
 
     /** Creates new form ReportLocation */
@@ -84,9 +92,9 @@ public class ReportLocation extends javax.swing.JFrame {
         lblActiveDays = new javax.swing.JLabel();
         lblNight = new javax.swing.JLabel();
         lblDay = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblLegend1 = new javax.swing.JLabel();
         lblOther1 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        lblLegend2 = new javax.swing.JLabel();
         lblRemoteCamera = new javax.swing.JLabel();
         lblDayVisit = new javax.swing.JLabel();
         lblVacation = new javax.swing.JLabel();
@@ -94,7 +102,10 @@ public class ReportLocation extends javax.swing.JFrame {
         lblOther2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuPrintReport = new javax.swing.JMenuItem();
+        mnuReports = new javax.swing.JMenu();
+        mnuLoadReport1 = new javax.swing.JMenuItem();
+        MnuLoadReport2 = new javax.swing.JMenuItem();
         mnuExtra = new javax.swing.JMenu();
         mnuName = new javax.swing.JMenuItem();
 
@@ -198,9 +209,9 @@ public class ReportLocation extends javax.swing.JFrame {
         lblDay.setName("lblDay"); // NOI18N
         getContentPane().add(lblDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 700, -1, -1));
 
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
-        jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 700, -1, -1));
+        lblLegend1.setText(resourceMap.getString("lblLegend1.text")); // NOI18N
+        lblLegend1.setName("lblLegend1"); // NOI18N
+        getContentPane().add(lblLegend1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 700, -1, -1));
 
         lblOther1.setFont(resourceMap.getFont("lblOther1.font")); // NOI18N
         lblOther1.setForeground(resourceMap.getColor("lblOther1.foreground")); // NOI18N
@@ -208,9 +219,9 @@ public class ReportLocation extends javax.swing.JFrame {
         lblOther1.setName("lblOther1"); // NOI18N
         getContentPane().add(lblOther1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 700, -1, -1));
 
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 700, -1, -1));
+        lblLegend2.setText(resourceMap.getString("lblLegend2.text")); // NOI18N
+        lblLegend2.setName("lblLegend2"); // NOI18N
+        getContentPane().add(lblLegend2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 700, -1, -1));
 
         lblRemoteCamera.setFont(resourceMap.getFont("lblRemoteCamera.font")); // NOI18N
         lblRemoteCamera.setForeground(resourceMap.getColor("lblRemoteCamera.foreground")); // NOI18N
@@ -234,7 +245,7 @@ public class ReportLocation extends javax.swing.JFrame {
         lblAtlas.setForeground(resourceMap.getColor("lblAtlas.foreground")); // NOI18N
         lblAtlas.setText(resourceMap.getString("lblAtlas.text")); // NOI18N
         lblAtlas.setName("lblAtlas"); // NOI18N
-        getContentPane().add(lblAtlas, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 700, -1, -1));
+        getContentPane().add(lblAtlas, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 700, -1, -1));
 
         lblOther2.setFont(resourceMap.getFont("lblOther2.font")); // NOI18N
         lblOther2.setForeground(resourceMap.getColor("lblOther2.foreground")); // NOI18N
@@ -247,16 +258,39 @@ public class ReportLocation extends javax.swing.JFrame {
         mnuPrint.setText(resourceMap.getString("mnuPrint.text")); // NOI18N
         mnuPrint.setName("mnuPrint"); // NOI18N
 
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mnuPrintReport.setText(resourceMap.getString("mnuPrintReport.text")); // NOI18N
+        mnuPrintReport.setName("mnuPrintReport"); // NOI18N
+        mnuPrintReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mnuPrintReportActionPerformed(evt);
             }
         });
-        mnuPrint.add(jMenuItem1);
+        mnuPrint.add(mnuPrintReport);
 
         jMenuBar1.add(mnuPrint);
+
+        mnuReports.setText(resourceMap.getString("mnuReports.text")); // NOI18N
+        mnuReports.setName("mnuReports"); // NOI18N
+
+        mnuLoadReport1.setText(resourceMap.getString("mnuLoadReport1.text")); // NOI18N
+        mnuLoadReport1.setName("mnuLoadReport1"); // NOI18N
+        mnuLoadReport1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLoadReport1ActionPerformed(evt);
+            }
+        });
+        mnuReports.add(mnuLoadReport1);
+
+        MnuLoadReport2.setText(resourceMap.getString("MnuLoadReport2.text")); // NOI18N
+        MnuLoadReport2.setName("MnuLoadReport2"); // NOI18N
+        MnuLoadReport2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MnuLoadReport2ActionPerformed(evt);
+            }
+        });
+        mnuReports.add(MnuLoadReport2);
+
+        jMenuBar1.add(mnuReports);
 
         mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
         mnuExtra.setName("mnuExtra"); // NOI18N
@@ -277,7 +311,7 @@ public class ReportLocation extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mnuPrintReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrintReportActionPerformed
         try {
             final JFrame frame = this;
             PrinterJob pj = PrinterJob.getPrinterJob();
@@ -304,15 +338,44 @@ public class ReportLocation extends javax.swing.JFrame {
         } catch (PrinterException ex) {
             Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mnuPrintReportActionPerformed
 
     private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
         usePrimaryName = ! usePrimaryName;
+        if (viewReport1) {
+            doReport1();
+            // Re-Draw
+            repaint();
+            setVisible(true);
+        }
+        else
+        if (viewReport2) {
+            doReport2();
+            // Re-Draw
+            repaint();
+            setVisible(true);
+        }
+    }//GEN-LAST:event_mnuNameActionPerformed
+
+    private void mnuLoadReport1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoadReport1ActionPerformed
+        viewReport1 = true;
+        viewReport2 = false;
+        usePrimaryName = true;
         doReport1();
         // Re-Draw
         repaint();
         setVisible(true);
-    }//GEN-LAST:event_mnuNameActionPerformed
+    }//GEN-LAST:event_mnuLoadReport1ActionPerformed
+
+    private void MnuLoadReport2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnuLoadReport2ActionPerformed
+        viewReport1 = false;
+        viewReport2 = true;
+        usePrimaryName = true;
+        doReport2();
+        // Re-Draw
+        repaint();
+        setVisible(true);
+    }//GEN-LAST:event_MnuLoadReport2ActionPerformed
 
     private void doReport1() {
         // Init report fields
@@ -331,6 +394,8 @@ public class ReportLocation extends javax.swing.JFrame {
             this.getContentPane().remove(chartTime);
         if (chartType != null)
             this.getContentPane().remove(chartType);
+        if (chartSpecies != null)
+            this.getContentPane().remove(chartSpecies);
         chartTime = new BarChart(290, 600);
         chartType = new BarChart(290, 600);
         for (Visit visit : location.getVisits()) {
@@ -418,13 +483,181 @@ public class ReportLocation extends javax.swing.JFrame {
 
         // Setup Frame Look and Feel
         this.getContentPane().setBackground(Color.WHITE);
+        lblLegend1.setVisible(true);
+        lblDay.setVisible(true);
+        lblNight.setVisible(true);
+        lblOther1.setVisible(true);
+        lblLegend2.setVisible(true);
+        lblAtlas.setVisible(true);
+        lblDayVisit.setVisible(true);
+        lblRemoteCamera.setVisible(true);
+        lblVacation.setVisible(true);
+        lblOther2.setVisible(true);
+    }
+
+    private void doReport2() {
+        class ReportData implements Comparable<ReportData> {
+            public Date dateAsDay;
+            public int creatureCount;
+            public String name;
+
+            public ReportData(Date inDateAsDay, int inCreatureCount, String inName) {
+                dateAsDay = inDateAsDay;
+                creatureCount = inCreatureCount;
+                name = inName;
+            }
+
+            @Override
+            public int compareTo(ReportData inReportData) {
+                return this.dateAsDay.compareTo(inReportData.dateAsDay);
+            }
+        }
+
+        // Init report fields
+        lblName.setText(location.getName());
+        lblNumberOfVisits.setText(Integer.toString(location.getVisits().size()));
+        int numOfSightings = 0;
+        Set<String> numOfElements = new HashSet<String>();
+        int numDaySightings = 0;
+        int numNightSightings = 0;
+        Date firstDate = null;
+        Date lastDate = null;
+        int activeDays = 0;
+
+        // Add Charts
+        if (chartTime != null)
+            this.getContentPane().remove(chartTime);
+        if (chartType != null)
+            this.getContentPane().remove(chartType);
+        if (chartSpecies != null)
+            this.getContentPane().remove(chartSpecies);
+        chartSpecies = new BarChart(590, 650);
+        // Get a sorted list of all visits with dates
+        List<Visit> sortedVisits = new ArrayList<Visit>(location.getVisits().size());
+        for (Visit visit : location.getVisits()) {
+            if (visit.getStartDate() != null && visit.getEndDate() != null) {
+                if (sortedVisits.size() == 0) {
+                    sortedVisits.add(visit);
+                }
+                else {
+                    boolean added = false;
+                    for (int i = 0; i < sortedVisits.size(); i++) {
+                        if (visit.getStartDate().before(sortedVisits.get(i).getStartDate())) {
+                            sortedVisits.add(i, visit);
+                            added = true;
+                            break;
+                        }
+                    }
+                    if (added == false) {
+                        sortedVisits.add(visit);
+                    }
+                }
+                long diff = visit.getEndDate().getTime() - visit.getStartDate().getTime();
+                activeDays = activeDays + (int)Math.ceil((double)diff/60/60/24/1000) + 1;
+            }
+        }
+        firstDate = sortedVisits.get(0).getStartDate();
+        lastDate = sortedVisits.get(sortedVisits.size()-1).getEndDate();
+
+        List<ReportData> tempData = new ArrayList<ReportData>();
+        for (Visit visit : location.getVisits()) {
+            Collections.sort(visit.getSightings());
+            for (Sighting sighting : visit.getSightings()) {
+                numOfSightings++;
+                numOfElements.add(sighting.getElement().getPrimaryName());
+                //if (!numOfElements.contains(sighting.getElement().getPrimaryName()))
+                //    chartSpecies.addBar(new BarChartEntity(sighting.getElement().getPrimaryName() + "-" + sighting.getDate(), visit.getName(), (numOfElements.size()), Color.yellow));
+                tempData.add(new ReportData(new Date(sighting.getDate().getYear(), sighting.getDate().getMonth(), sighting.getDate().getDate()), numOfElements.size(), sighting.getElement().getPrimaryName()));
+
+                if (sighting.getTimeOfDay() != null) {
+                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+                        numNightSightings++;
+                    }
+                    else
+                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+                        // Do nothing
+                    }
+                    else {
+                        numDaySightings++;
+                    }
+                }
+            }
+        }
+
+        List<ReportData> tempDataCore = new ArrayList<ReportData>(numOfElements.size());
+        Collections.sort(tempData);
+        Set<String> tempSet = new HashSet<String>(numOfElements.size());
+        for (ReportData temp : tempData) {
+            if (!tempSet.contains(temp.name)) {
+                tempDataCore.add(new ReportData(temp.dateAsDay, tempSet.size(), ""));
+                tempSet.add(temp.name);
+            }
+        }
+
+        final double ROWS = 35.0;
+        int interval = 1;
+        int days = (int)((lastDate.getTime() - firstDate.getTime())/60/60/24/1000);
+        if (days > ROWS)
+            interval = (int)Math.ceil(days/ROWS);
+        int count = 0;
+        Map<Date, Integer> finalChartData = new HashMap<Date, Integer>((int)ROWS);
+        int maxCreatures = 0;
+        for (int t = 0; t < days; t++) {
+            for (ReportData data : tempDataCore) {
+                if (data.dateAsDay.equals(new Date(firstDate.getTime() + (long)t*60*60*24*1000))) {
+                    maxCreatures = data.creatureCount;
+                }
+            }
+            if (count >= interval) {
+                finalChartData.put(new Date(firstDate.getTime() + (long)t*60*60*24*1000), maxCreatures);
+                count = 0;
+            }
+            count++;
+        }
+        if (count < interval && count > 0) {
+            finalChartData.put(lastDate, maxCreatures);
+        }
+
+        for (Date temp : finalChartData.keySet()) {
+            chartSpecies.addBar(new BarChartEntity(temp, "", finalChartData.get(temp), new Color(125, 198, 48)));
+        }
+
+
+        this.getContentPane().add(chartSpecies, new AbsoluteConstraints(0, 90, -1, -1));
+
+        // Wrap up report fields
+        lblNumberOfSightings.setText(Integer.toString(numOfSightings));
+        lblNumberOfElements.setText(Integer.toString(numOfElements.size()));
+        lblDaySightings.setText(Integer.toString(numDaySightings));
+        lblNightSightings.setText(Integer.toString(numNightSightings));
+        if (firstDate != null)
+            lblFirstVisit.setText(new SimpleDateFormat("dd MMM yyyy").format(firstDate));
+        else
+            lblFirstVisit.setText("Unknown");
+        if (lastDate != null)
+            lblLastVisit.setText(new SimpleDateFormat("dd MMM yyyy").format(lastDate));
+        else
+            lblLastVisit.setText("Unknown");
+        lblActiveDays.setText(Integer.toString(activeDays));
+
+        // Setup Frame Look and Feel
+        this.getContentPane().setBackground(Color.WHITE);
+        lblLegend1.setVisible(false);
+        lblDay.setVisible(false);
+        lblNight.setVisible(false);
+        lblOther1.setVisible(false);
+        lblLegend2.setVisible(false);
+        lblAtlas.setVisible(false);
+        lblDayVisit.setVisible(false);
+        lblRemoteCamera.setVisible(false);
+        lblVacation.setVisible(false);
+        lblOther2.setVisible(false);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MnuLoadReport2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -432,7 +665,6 @@ public class ReportLocation extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblActiveDays;
     private javax.swing.JLabel lblAtlas;
     private javax.swing.JLabel lblDay;
@@ -440,6 +672,8 @@ public class ReportLocation extends javax.swing.JFrame {
     private javax.swing.JLabel lblDayVisit;
     private javax.swing.JLabel lblFirstVisit;
     private javax.swing.JLabel lblLastVisit;
+    private javax.swing.JLabel lblLegend1;
+    private javax.swing.JLabel lblLegend2;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNight;
     private javax.swing.JLabel lblNightSightings;
@@ -451,8 +685,11 @@ public class ReportLocation extends javax.swing.JFrame {
     private javax.swing.JLabel lblRemoteCamera;
     private javax.swing.JLabel lblVacation;
     private javax.swing.JMenu mnuExtra;
+    private javax.swing.JMenuItem mnuLoadReport1;
     private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
+    private javax.swing.JMenuItem mnuPrintReport;
+    private javax.swing.JMenu mnuReports;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -339,6 +339,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnUpdateSighting.setIcon(resourceMap.getIcon("btnUpdateSighting.icon")); // NOI18N
         btnUpdateSighting.setText(resourceMap.getString("btnUpdateSighting.text")); // NOI18N
         btnUpdateSighting.setToolTipText(resourceMap.getString("btnUpdateSighting.toolTipText")); // NOI18N
+        btnUpdateSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateSighting.setEnabled(!disableEditing);
         btnUpdateSighting.setName("btnUpdateSighting"); // NOI18N
         btnUpdateSighting.addActionListener(new java.awt.event.ActionListener() {
@@ -384,6 +385,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnPreviousImage.setIcon(resourceMap.getIcon("btnPreviousImage.icon")); // NOI18N
         btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
         btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
+        btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -396,6 +398,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnNextImage.setIcon(resourceMap.getIcon("btnNextImage.icon")); // NOI18N
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
         btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
+        btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -408,6 +411,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
+        btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setEnabled(!disableEditing);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
@@ -422,6 +426,7 @@ public class PanelSighting extends javax.swing.JPanel {
         jLabel6.setName("jLabel6"); // NOI18N
         sightingIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 290, 30, -1));
 
+        dtpSightingDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setEnabled(!disableEditing);
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
@@ -512,12 +517,15 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbCertainty.setName("cmbCertainty"); // NOI18N
         sightingIncludes.add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 390, 260, -1));
 
+        lblElementImage.setBackground(resourceMap.getColor("lblElementImage.background")); // NOI18N
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementImage.setText(resourceMap.getString("lblElementImage.text")); // NOI18N
         lblElementImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblElementImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblElementImage.setName("lblElementImage"); // NOI18N
+        lblElementImage.setOpaque(true);
         lblElementImage.setPreferredSize(new java.awt.Dimension(100, 100));
         lblElementImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -526,12 +534,15 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(405, 180, -1, -1));
 
+        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
         lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
         lblImage.setName("lblImage"); // NOI18N
+        lblImage.setOpaque(true);
         lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
         lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -541,6 +552,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, -1));
 
         chkElementTypeFilter.setBackground(resourceMap.getColor("chkElementTypeFilter.background")); // NOI18N
+        chkElementTypeFilter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkElementTypeFilter.setEnabled(!disableEditing);
         chkElementTypeFilter.setName("chkElementTypeFilter"); // NOI18N
         chkElementTypeFilter.addActionListener(new java.awt.event.ActionListener() {
@@ -551,6 +563,7 @@ public class PanelSighting extends javax.swing.JPanel {
         sightingIncludes.add(chkElementTypeFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, -1, 20));
 
         cmbElementType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
+        cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setEnabled(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
         cmbElementType.addActionListener(new java.awt.event.ActionListener() {
@@ -658,6 +671,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
+        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSearch.setEnabled(!disableEditing);
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -681,6 +695,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
+        btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setEnabled(!disableEditing);
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
@@ -694,6 +709,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
+        btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setEnabled(!disableEditing);
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
@@ -777,11 +793,14 @@ public class PanelSighting extends javax.swing.JPanel {
         lblVisit.setName("lblVisit"); // NOI18N
         sightingIncludes.add(lblVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, -1, -1));
 
+        lblLocationImage.setBackground(resourceMap.getColor("lblLocationImage.background")); // NOI18N
         lblLocationImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocationImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblLocationImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblLocationImage.setMaximumSize(new java.awt.Dimension(150, 150));
         lblLocationImage.setMinimumSize(new java.awt.Dimension(150, 150));
         lblLocationImage.setName("lblLocationImage"); // NOI18N
+        lblLocationImage.setOpaque(true);
         lblLocationImage.setPreferredSize(new java.awt.Dimension(100, 100));
         lblLocationImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -802,6 +821,7 @@ public class PanelSighting extends javax.swing.JPanel {
         btnSearchLocation.setIcon(resourceMap.getIcon("btnSearchLocation.icon")); // NOI18N
         btnSearchLocation.setText(resourceMap.getString("btnSearchLocation.text")); // NOI18N
         btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
+        btnSearchLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSearchLocation.setEnabled(!disableEditing);
         btnSearchLocation.setName("btnSearchLocation"); // NOI18N
         btnSearchLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -849,6 +869,7 @@ public class PanelSighting extends javax.swing.JPanel {
         rdbDMS.setBackground(resourceMap.getColor("rdbDMS.background")); // NOI18N
         buttonGroup1.add(rdbDMS);
         rdbDMS.setText(resourceMap.getString("rdbDMS.text")); // NOI18N
+        rdbDMS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbDMS.setName("rdbDMS"); // NOI18N
         rdbDMS.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -860,6 +881,7 @@ public class PanelSighting extends javax.swing.JPanel {
         rdbDD.setBackground(resourceMap.getColor("rdbDD.background")); // NOI18N
         buttonGroup1.add(rdbDD);
         rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
+        rdbDD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbDD.setName("rdbDD"); // NOI18N
         rdbDD.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -895,6 +917,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         btnUseLocationGPS.setBackground(resourceMap.getColor("btnUseLocationGPS.background")); // NOI18N
         btnUseLocationGPS.setText(resourceMap.getString("btnUseLocationGPS.text")); // NOI18N
+        btnUseLocationGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseLocationGPS.setName("btnUseLocationGPS"); // NOI18N
         btnUseLocationGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -905,6 +928,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         btnUsePrevGPS.setBackground(resourceMap.getColor("btnUsePrevGPS.background")); // NOI18N
         btnUsePrevGPS.setText(resourceMap.getString("btnUsePrevGPS.text")); // NOI18N
+        btnUsePrevGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsePrevGPS.setName("btnUsePrevGPS"); // NOI18N
         btnUsePrevGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -989,15 +1013,17 @@ public class PanelSighting extends javax.swing.JPanel {
                     sighting.setLonMinutes(Integer.parseInt(txtLonMinutes.getText()));
                     sighting.setLonSecondsFloat(Float.parseFloat(txtLonSeconds.getText()));
 
-                    // Save values on App to be able to reload them on next Sighting if button pressed
-                    app.setPrevLat(sighting.getLatitude());
-                    app.setPrevLatDeg(""+sighting.getLatDegrees());
-                    app.setPrevLatMin(""+sighting.getLatMinutes());
-                    app.setPrevLatSec(""+sighting.getLatSecondsFloat());
-                    app.setPrevLon(sighting.getLongitude());
-                    app.setPrevLonDeg(""+sighting.getLonDegrees());
-                    app.setPrevLonMin(""+sighting.getLonMinutes());
-                    app.setPrevLonSec(""+sighting.getLonSecondsFloat());
+                    if (evt != null) { // It will be null if the images are uploaded
+                        // Save values on App to be able to reload them on next Sighting if button pressed
+                        app.setPrevLat(sighting.getLatitude());
+                        app.setPrevLatDeg(""+sighting.getLatDegrees());
+                        app.setPrevLatMin(""+sighting.getLatMinutes());
+                        app.setPrevLatSec(""+sighting.getLatSecondsFloat());
+                        app.setPrevLon(sighting.getLongitude());
+                        app.setPrevLonDeg(""+sighting.getLonDegrees());
+                        app.setPrevLonMin(""+sighting.getLonMinutes());
+                        app.setPrevLonSec(""+sighting.getLonSecondsFloat());
+                    }
                 }
                 catch (NumberFormatException e) {
                     txtLatDegrees.setText("0");

@@ -155,6 +155,8 @@ public class Utils {
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
                         // Write Thumbnail
+                        fileInput.close();
+                        fileOutput.close();
                         fileInput = new FileInputStream(fromFile);
                         fileOutput = new FileOutputStream(toFile_Thumbnail);
                         tempBytes = new byte[(int)fromFile.length()];
@@ -323,7 +325,7 @@ public class Utils {
                 inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
             else
             if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.OTHER))
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Other.gif")), inSize));
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
         }
         else {
             inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));

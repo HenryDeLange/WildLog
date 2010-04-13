@@ -76,6 +76,7 @@ public class DBI_db4o implements DBI {
         Db4o.configure().objectClass(Visit.class).objectField("startDate").indexed(true);
         Db4o.configure().objectClass(Visit.class).objectField("endDate").indexed(true);
         Db4o.configure().objectClass(Visit.class).objectField("sightings").indexed(true);
+        Db4o.configure().objectClass(Sighting.class).objectField("sightingCounter").indexed(true);
         Db4o.configure().objectClass(Sighting.class).objectField("date").indexed(true);
         Db4o.configure().objectClass(Sighting.class).objectField("element").indexed(true);
         Db4o.configure().objectClass(Sighting.class).objectField("location").indexed(true);
