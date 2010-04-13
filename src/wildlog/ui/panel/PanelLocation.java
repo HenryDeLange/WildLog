@@ -330,7 +330,7 @@ public class PanelLocation extends javax.swing.JPanel {
         txtDirections.setName("txtDirections"); // NOI18N
         jScrollPane2.setViewportView(txtDirections);
 
-        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 250, 160, 90));
+        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 160, 80));
 
         txtWebsite.setText(locationWL.getWebsite());
         txtWebsite.setName("txtWebsite"); // NOI18N
@@ -343,7 +343,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatDegreesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 30, -1));
+        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, 30, -1));
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
@@ -571,7 +571,7 @@ public class PanelLocation extends javax.swing.JPanel {
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
-        locationIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 250, -1, -1));
+        locationIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, -1));
 
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
@@ -601,7 +601,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatMinutesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 200, 30, -1));
+        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 30, -1));
 
         txtLatSeconds.setText(Float.toString(locationWL.getLatSecondsFloat()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
@@ -611,7 +611,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatSecondsFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 200, 50, -1));
+        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 290, 50, -1));
 
         txtLonDegrees.setText(Integer.toString(locationWL.getLonDegrees()));
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
@@ -620,7 +620,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonDegreesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 30, -1));
+        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(locationWL.getLonMinutes()));
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
@@ -629,7 +629,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonMinutesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 220, 30, -1));
+        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 310, 30, -1));
 
         txtLonSeconds.setText(Float.toString(locationWL.getLonSecondsFloat()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
@@ -639,27 +639,27 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonSecondsFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 220, 50, -1));
+        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 310, 50, -1));
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
         cmbLatitude.setNextFocusableComponent(cmbLongitude);
-        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 90, -1));
+        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 290, 90, -1));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
         cmbLongitude.setNextFocusableComponent(txtLatDegrees);
-        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 220, 90, -1));
+        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 90, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, 20));
+        locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, -1, 20));
 
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
-        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 220, -1, 20));
+        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, -1, 20));
 
         cmbSubAreas.setMaximumRowCount(15);
         cmbSubAreas.setModel(new DefaultComboBoxModel(locationWL.getSubAreas().toArray()));
@@ -770,7 +770,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 rdbDMSItemStateChanged(evt);
             }
         });
-        locationIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 200, -1, -1));
+        locationIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 290, -1, -1));
 
         buttonGroup2.add(rdbDD);
         rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
@@ -780,7 +780,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 rdbDDItemStateChanged(evt);
             }
         });
-        locationIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 220, -1, -1));
+        locationIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 310, -1, -1));
 
         txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
         txtLatDecimal.setName("txtLatDecimal"); // NOI18N
@@ -790,7 +790,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatDecimalFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 200, 130, -1));
+        locationIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, 130, -1));
 
         txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
         txtLonDecimal.setName("txtLonDecimal"); // NOI18N
@@ -800,7 +800,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonDecimalFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 220, 130, -1));
+        locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, 130, -1));
 
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
         btnHTML.setName("btnHTML"); // NOI18N
@@ -811,6 +811,7 @@ public class PanelLocation extends javax.swing.JPanel {
         });
         locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 110, 30));
 
+        btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -818,7 +819,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 btnReportActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 290, 110, 20));
+        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1272,11 +1273,15 @@ public class PanelLocation extends javax.swing.JPanel {
 }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        JFrame report = new ReportLocation(locationWL);
-        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-        report.setPreferredSize(new Dimension(550, 750));
-        report.setLocationRelativeTo(null);
-        report.setVisible(true);
+        if (locationWL.getName() != null) {
+            if (locationWL.getName().length() > 0) {
+                JFrame report = new ReportLocation(locationWL);
+                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
+                report.setPreferredSize(new Dimension(550, 750));
+                report.setLocationRelativeTo(null);
+                report.setVisible(true);
+            }
+        }
     }//GEN-LAST:event_btnReportActionPerformed
 
 

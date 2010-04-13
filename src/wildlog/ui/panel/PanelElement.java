@@ -20,12 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -661,7 +657,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnMapActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 40));
+        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 133, 110, 40));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -732,8 +728,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnHTMLActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 110, 30));
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 218, 110, 30));
 
+        btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -741,7 +738,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnReportActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 20));
+        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 176, 110, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1072,11 +1069,15 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        JFrame report = new ReportElement(element, app);
-        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-        report.setPreferredSize(new Dimension(550, 750));
-        report.setLocationRelativeTo(null);
-        report.setVisible(true);
+        if (element.getPrimaryName() != null) {
+            if (element.getPrimaryName().length() > 0) {
+                JFrame report = new ReportElement(element, app);
+                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
+                report.setPreferredSize(new Dimension(550, 750));
+                report.setLocationRelativeTo(null);
+                report.setVisible(true);
+            }
+        }
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void resizeTables() {

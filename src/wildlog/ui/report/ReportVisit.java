@@ -41,102 +41,16 @@ import wildlog.ui.report.chart.BarChartEntity;
  * @author Henry
  */
 public class ReportVisit extends javax.swing.JFrame {
+    private boolean usePrimaryName = true;
+    private Visit visit;
+    private BarChart chartTime;
 
     /** Creates new form ReportVisit */
     public ReportVisit(Visit inVisit) {
         initComponents();
 
-        // Init report fields
-        lblName.setText(inVisit.getName());
-        lblVisitType.setText(inVisit.getType().toString());
-        lblGameWatching.setText(inVisit.getGameWatchingIntensity().toString());
-        lblNumberOfSightings.setText(Integer.toString(inVisit.getSightings().size()));
-        Set<String> numOfElements = new HashSet<String>();
-        int numDaySightings = 0;
-        int numNightSightings = 0;
-        if (inVisit.getStartDate() != null)
-            lblStartDate.setText(new SimpleDateFormat("dd MMM yyyy").format(inVisit.getStartDate()));
-        else
-            lblStartDate.setText("Unknown");
-        if (inVisit.getEndDate() != null)
-            lblEndDate.setText(new SimpleDateFormat("dd MMM yyyy").format(inVisit.getEndDate()));
-        else
-            lblEndDate.setText("Unknown");
-        long diff = inVisit.getEndDate().getTime() - inVisit.getStartDate().getTime();
-        int activeDays = (int)Math.ceil((double)diff/60/60/24/1000) + 1;
-        lblActiveDays.setText(Integer.toString(activeDays));
-        int verygood = 0;
-        int good = 0;
-        int normal = 0;
-        int bad = 0;
-        int verybad = 0;
-
-        // Add Charts
-        BarChart chartTime = new BarChart(550, 550);
-        for (Sighting sighting : inVisit.getSightings()) {
-            numOfElements.add(sighting.getElement().getPrimaryName());
-            // Time
-            if (sighting.getTimeOfDay() != null) {
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
-                    numNightSightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.EARLY_MORNING) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MORNING)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MIDDAY) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_MORNING) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_AFTERNOON)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.LATE_AFTERNOON)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
-                }
-            }
-            else
-                chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));
-            // Rating
-            if (sighting.getViewRating().equals(ViewRating.VERY_GOOD))
-                verygood++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.GOOD))
-                good++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.NORMAL))
-                normal++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.BAD))
-                bad++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.VERY_BAD))
-                verybad++;
-        }
-
-        this.getContentPane().add(chartTime, new AbsoluteConstraints(0, 150, -1, -1));
-
-        // Wrap up report fields
-        lblDaySightings.setText(Integer.toString(numDaySightings));
-        lblNightSightings.setText(Integer.toString(numNightSightings));
-        lblNumberOfCreatures.setText(Integer.toString(numOfElements.size()));
-        DecimalFormat format = new DecimalFormat("#.###");
-        lblSightingsPerDay.setText(format.format((double)inVisit.getSightings().size()/activeDays));
-        lblCreaturesPerDay.setText(format.format((double)numOfElements.size()/activeDays));
-        lblVeryGood.setText(Integer.toString(verygood));
-        lblGood.setText(Integer.toString(good));
-        lblNormal.setText(Integer.toString(normal));
-        lblBad.setText(Integer.toString(bad));
-        lblVeryBad.setText(Integer.toString(verybad));
-
-        // Setup Frame Look and Feel
-        this.getContentPane().setBackground(Color.WHITE);
+        visit = inVisit;
+        doReport();
     }
 
     /** This method is called from within the constructor to
@@ -190,6 +104,8 @@ public class ReportVisit extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        mnuExtra = new javax.swing.JMenu();
+        mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportVisit.class);
@@ -214,7 +130,7 @@ public class ReportVisit extends javax.swing.JFrame {
 
         lblCreaturesPerDay.setText(resourceMap.getString("lblCreaturesPerDay.text")); // NOI18N
         lblCreaturesPerDay.setName("lblCreaturesPerDay"); // NOI18N
-        getContentPane().add(lblCreaturesPerDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, -1, -1));
+        getContentPane().add(lblCreaturesPerDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 70, -1, -1));
 
         jLabel3.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
@@ -401,6 +317,20 @@ public class ReportVisit extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuPrint);
 
+        mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
+        mnuExtra.setName("mnuExtra"); // NOI18N
+
+        mnuName.setText(resourceMap.getString("mnuName.text")); // NOI18N
+        mnuName.setName("mnuName"); // NOI18N
+        mnuName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuNameActionPerformed(evt);
+            }
+        });
+        mnuExtra.add(mnuName);
+
+        jMenuBar1.add(mnuExtra);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -434,6 +364,138 @@ public class ReportVisit extends javax.swing.JFrame {
             Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
+        usePrimaryName = ! usePrimaryName;
+        doReport();
+        // Re-Draw
+        repaint();
+        setVisible(true);
+    }//GEN-LAST:event_mnuNameActionPerformed
+
+    private void doReport() {
+        // Init report fields
+        lblName.setText(visit.getName());
+        if (visit.getType() != null)
+            lblVisitType.setText(visit.getType().toString());
+        else
+            lblVisitType.setText("Unknown");
+        if (visit.getGameWatchingIntensity() != null)
+            lblGameWatching.setText(visit.getGameWatchingIntensity().toString());
+        else
+            lblGameWatching.setText("Unknown");
+        lblNumberOfSightings.setText(Integer.toString(visit.getSightings().size()));
+        Set<String> numOfElements = new HashSet<String>();
+        int numDaySightings = 0;
+        int numNightSightings = 0;
+        if (visit.getStartDate() != null)
+            lblStartDate.setText(new SimpleDateFormat("dd MMM yyyy").format(visit.getStartDate()));
+        else
+            lblStartDate.setText("Unknown");
+        if (visit.getEndDate() != null)
+            lblEndDate.setText(new SimpleDateFormat("dd MMM yyyy").format(visit.getEndDate()));
+        else
+            lblEndDate.setText("Unknown");
+        long diff = 0;
+        if (visit.getStartDate() != null && visit.getEndDate() != null)
+            diff = visit.getEndDate().getTime() - visit.getStartDate().getTime();
+        int activeDays = (int)Math.ceil((double)diff/60/60/24/1000) + 1;
+        lblActiveDays.setText(Integer.toString(activeDays));
+        int verygood = 0;
+        int good = 0;
+        int normal = 0;
+        int bad = 0;
+        int verybad = 0;
+
+        // Add Charts
+        if (chartTime != null)
+            this.getContentPane().remove(chartTime);
+        chartTime = new BarChart(600, 550);
+        for (Sighting sighting : visit.getSightings()) {
+            numOfElements.add(sighting.getElement().getPrimaryName());
+            // Time
+            if (sighting.getTimeOfDay() != null) {
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+                    if (usePrimaryName)
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
+                    else
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getOtherName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
+                    numNightSightings++;
+                }
+                else
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.EARLY_MORNING) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MORNING)) {
+                    if (usePrimaryName)
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
+                    else
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getOtherName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
+                    numDaySightings++;
+                }
+                else
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MIDDAY) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_MORNING) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_AFTERNOON)) {
+                    if (usePrimaryName)
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
+                    else
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getOtherName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
+                    numDaySightings++;
+                }
+                else
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.LATE_AFTERNOON)) {
+                    if (usePrimaryName)
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
+                    else
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getOtherName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
+                    numDaySightings++;
+                }
+                else
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+                    if (usePrimaryName)
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
+                    else
+                        chartTime.addBar(new BarChartEntity(sighting.getElement().getOtherName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
+                }
+            }
+            else {
+                if (usePrimaryName)
+                    chartTime.addBar(new BarChartEntity(sighting.getElement().getPrimaryName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));
+                else
+                    chartTime.addBar(new BarChartEntity(sighting.getElement().getOtherName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));
+            }
+            // Rating
+            if (sighting.getViewRating().equals(ViewRating.VERY_GOOD))
+                verygood++;
+            else
+            if (sighting.getViewRating().equals(ViewRating.GOOD))
+                good++;
+            else
+            if (sighting.getViewRating().equals(ViewRating.NORMAL))
+                normal++;
+            else
+            if (sighting.getViewRating().equals(ViewRating.BAD))
+                bad++;
+            else
+            if (sighting.getViewRating().equals(ViewRating.VERY_BAD))
+                verybad++;
+        }
+
+        this.getContentPane().add(chartTime, new AbsoluteConstraints(0, 150, -1, -1));
+
+        // Wrap up report fields
+        lblDaySightings.setText(Integer.toString(numDaySightings));
+        lblNightSightings.setText(Integer.toString(numNightSightings));
+        lblNumberOfCreatures.setText(Integer.toString(numOfElements.size()));
+        DecimalFormat format = new DecimalFormat("#.###");
+        lblSightingsPerDay.setText(format.format((double)visit.getSightings().size()/activeDays));
+        lblCreaturesPerDay.setText(format.format((double)numOfElements.size()/activeDays));
+        lblVeryGood.setText(Integer.toString(verygood));
+        lblGood.setText(Integer.toString(good));
+        lblNormal.setText(Integer.toString(normal));
+        lblBad.setText(Integer.toString(bad));
+        lblVeryBad.setText(Integer.toString(verybad));
+
+        // Setup Frame Look and Feel
+        this.getContentPane().setBackground(Color.WHITE);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -477,6 +539,8 @@ public class ReportVisit extends javax.swing.JFrame {
     private javax.swing.JLabel lblVeryBad;
     private javax.swing.JLabel lblVeryGood;
     private javax.swing.JLabel lblVisitType;
+    private javax.swing.JMenu mnuExtra;
+    private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
     // End of variables declaration//GEN-END:variables
 

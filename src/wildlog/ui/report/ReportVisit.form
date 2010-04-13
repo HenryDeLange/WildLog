@@ -24,6 +24,23 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="mnuExtra">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="mnuExtra.text"/>
+            <Property name="name" type="java.lang.String" value="mnuExtra" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuName">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="mnuName.text"/>
+                <Property name="name" type="java.lang.String" value="mnuName" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuNameActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
@@ -91,7 +108,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="320" y="70" width="-1" height="-1"/>
+          <AbsoluteConstraints x="350" y="70" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

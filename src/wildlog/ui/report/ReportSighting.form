@@ -89,29 +89,6 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
-        <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="10" y="30" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblNumberOfVisits">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblNumberOfVisits.text"/>
-        <Property name="name" type="java.lang.String" value="lblNumberOfVisits" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="110" y="30" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
@@ -143,7 +120,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="430" y="30" width="-1" height="-1"/>
+          <AbsoluteConstraints x="210" y="50" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -154,7 +131,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="555" y="30" width="-1" height="-1"/>
+          <AbsoluteConstraints x="330" y="50" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -177,7 +154,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="158" y="50" width="-1" height="-1"/>
+          <AbsoluteConstraints x="160" y="50" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -189,7 +166,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="210" y="50" width="-1" height="-1"/>
+          <AbsoluteConstraints x="10" y="30" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -200,76 +177,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="365" y="50" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel6">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
-        <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="10" y="70" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel9">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel9.text"/>
-        <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="210" y="70" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblFirstVisit">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblFirstVisit.text"/>
-        <Property name="name" type="java.lang.String" value="lblFirstVisit" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="70" y="70" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblLastVisit">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblLastVisit.text"/>
-        <Property name="name" type="java.lang.String" value="lblLastVisit" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="270" y="70" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel12">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel12.text"/>
-        <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="430" y="50" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblActiveDays">
-      <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblActiveDays.text"/>
-        <Property name="name" type="java.lang.String" value="lblActiveDays" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="505" y="50" width="-1" height="-1"/>
+          <AbsoluteConstraints x="160" y="30" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -282,7 +190,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="110" y="700" width="50" height="-1"/>
+          <AbsoluteConstraints x="110" y="700" width="60" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -295,7 +203,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="60" y="700" width="-1" height="-1"/>
+          <AbsoluteConstraints x="60" y="700" width="40" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -319,7 +227,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="170" y="700" width="-1" height="-1"/>
+          <AbsoluteConstraints x="180" y="700" width="70" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -334,55 +242,29 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblRemoteCamera">
+    <Component class="javax.swing.JLabel" name="lblDay1">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblRemoteCamera.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblRemoteCamera.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblRemoteCamera.text"/>
-        <Property name="name" type="java.lang.String" value="lblRemoteCamera" noResource="true"/>
+        <Property name="font" type="java.awt.Font" resourceKey="lblDay1.font"/>
+        <Property name="foreground" type="java.awt.Color" resourceKey="lblDay1.foreground"/>
+        <Property name="text" type="java.lang.String" resourceKey="lblDay1.text"/>
+        <Property name="name" type="java.lang.String" value="lblDay1" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="360" y="700" width="-1" height="-1"/>
+          <AbsoluteConstraints x="370" y="700" width="40" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblDayVisit">
+    <Component class="javax.swing.JLabel" name="lblNight1">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblDayVisit.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblDayVisit.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblDayVisit.text"/>
-        <Property name="name" type="java.lang.String" value="lblDayVisit" noResource="true"/>
+        <Property name="font" type="java.awt.Font" resourceKey="lblNight1.font"/>
+        <Property name="foreground" type="java.awt.Color" resourceKey="lblNight1.foreground"/>
+        <Property name="text" type="java.lang.String" resourceKey="lblNight1.text"/>
+        <Property name="name" type="java.lang.String" value="lblNight1" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="480" y="700" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblVacation">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblVacation.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblVacation.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblVacation.text"/>
-        <Property name="name" type="java.lang.String" value="lblVacation" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="480" y="720" width="-1" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblAtlas">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblAtlas.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblAtlas.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblAtlas.text"/>
-        <Property name="name" type="java.lang.String" value="lblAtlas" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="560" y="700" width="-1" height="-1"/>
+          <AbsoluteConstraints x="420" y="700" width="50" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -395,7 +277,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="380" y="720" width="50" height="-1"/>
+          <AbsoluteConstraints x="490" y="700" width="70" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

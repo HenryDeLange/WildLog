@@ -21,8 +21,6 @@ import KmlGenerator.objects.KmlStyle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jdesktop.application.Action;
@@ -33,11 +31,6 @@ import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -80,6 +73,7 @@ import wildlog.ui.panel.PanelVisit;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
 import wildlog.ui.report.ReportLocation;
+import wildlog.ui.report.ReportSighting;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilPanelGenerator;
@@ -263,7 +257,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         btnRefreshDates = new javax.swing.JButton();
         lblNumberOfImages = new javax.swing.JLabel();
-        btnPrintBrowse = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -556,15 +549,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 15, 80, 50));
 
-        btnPrintBrowse.setText(resourceMap.getString("btnPrintBrowse.text")); // NOI18N
-        btnPrintBrowse.setName("btnPrintBrowse"); // NOI18N
-        btnPrintBrowse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintBrowseActionPerformed(evt);
-            }
-        });
-        tabFoto.add(btnPrintBrowse, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 5, 100, 30));
-
+        btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -572,7 +557,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnReportActionPerformed(evt);
             }
         });
-        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 40, 100, 30));
+        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 5, 100, 65));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1231,6 +1216,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
+        tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_ckbTypeFilterActionPerformed
 
@@ -1244,6 +1231,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         List tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
+        tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -1387,12 +1376,39 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     }//GEN-LAST:event_tabHomeComponentShown
 
     private void tabFotoComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabFotoComponentShown
-        if (!buttonGroup1.isSelected(rdbBrowseLocation.getModel()) && !buttonGroup1.isSelected(rdbBrowseElement.getModel()) && !buttonGroup1.isSelected(rdbBrowseDate.getModel()))
-            rdbBrowseLocation.setSelected(true);
+//        if (!buttonGroup1.isSelected(rdbBrowseLocation.getModel()) && !buttonGroup1.isSelected(rdbBrowseElement.getModel()) && !buttonGroup1.isSelected(rdbBrowseDate.getModel()))
+//            rdbBrowseLocation.setSelected(true);
+        
+        dtpStartDate.setVisible(false);
+        dtpEndDate.setVisible(false);
+        btnRefreshDates.setVisible(false);
+        btnReport.setVisible(false);
+
         rdbBrowseLocationItemStateChanged(null);
         rdbBrowseElementItemStateChanged(null);
         rdbBrowseDateItemStateChanged(null);
+
+        if (!rdbBrowseElement.isSelected() && !rdbBrowseLocation.isSelected() && !rdbBrowseDate.isSelected()) {
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode("Please select a category to display");
+            treBrowsePhoto.setModel(new DefaultTreeModel(root));
+        }
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
+
+        txtPhotoInformation.setText("");
+        lblNumberOfImages.setText("");
+        try {
+            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+            if (imgBrowsePhotos.getImage() != null) {
+                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
+                else
+                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+            }
+        }
+        catch (IOException ex) {
+            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_tabFotoComponentShown
 
     private void btnClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSearchActionPerformed
@@ -1456,6 +1472,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     private void treBrowsePhotoValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treBrowsePhotoValueChanged
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            btnReport.setVisible(false);
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
@@ -1485,6 +1502,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                btnReport.setVisible(true);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
@@ -1515,6 +1533,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                btnReport.setVisible(true);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
@@ -1545,6 +1564,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                btnReport.setVisible(true);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
@@ -1576,6 +1596,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                     }
                 }
             }
+            if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
+                btnReport.setVisible(true);
+            }
             // Maak paar display issues reg
             if (imgBrowsePhotos.getImage() != null) {
                 if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
@@ -1589,28 +1612,34 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     private void rdbBrowseLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseLocationItemStateChanged
         if (rdbBrowseLocation.isSelected()) {
+            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             browseByLocation();
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
+            this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
 }//GEN-LAST:event_rdbBrowseLocationItemStateChanged
 
     private void rdbBrowseElementItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseElementItemStateChanged
         if (rdbBrowseElement.isSelected()) {
+            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             browseByElement();
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
+            this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_rdbBrowseElementItemStateChanged
 
     private void rdbBrowseDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseDateItemStateChanged
         if (rdbBrowseDate.isSelected()) {
+            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             browseByDate();
             dtpStartDate.setVisible(true);
             dtpEndDate.setVisible(true);
             btnRefreshDates.setVisible(true);
+            this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_rdbBrowseDateItemStateChanged
 
@@ -1994,36 +2023,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         }
     }//GEN-LAST:event_tblLocation_EleTabMouseClicked
 
-    private void btnPrintBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintBrowseActionPerformed
-        try {
-            PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setJobName("WildLog Print");
-            pj.setCopies(1);
-            PageFormat format = pj.defaultPage();
-            format.setOrientation(PageFormat.LANDSCAPE);
-            pj.setPrintable(new Printable() {
-                @Override
-                public int print(Graphics pg, PageFormat pf, int pageNum) {
-                    if (pageNum > 0) {
-                        return Printable.NO_SUCH_PAGE;
-                    }
-                    Graphics2D g2 = (Graphics2D) pg;
-                    g2.translate(pf.getImageableX(), pf.getImageableY());
-                    
-                    tabFoto.paint(g2);
-
-                    return Printable.PAGE_EXISTS;
-                }
-            });
-            if (pj.printDialog() == false) {
-                return;
-            }
-            pj.print();
-        } catch (PrinterException ex) {
-            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnPrintBrowseActionPerformed
-
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
@@ -2052,17 +2051,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 report.setLocationRelativeTo(null);
                 report.setVisible(true);
             }
-//            else
-//            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-//                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-//                JFrame report = new ReportVisit(tempVisit);
-//                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-//                report.setPreferredSize(new Dimension(550, 750));
-//                report.setLocationRelativeTo(null);
-//                report.setVisible(true);
-//            }
         }
-    }//GEN-LAST:event_btnReportActionPerformed
+        if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
+            JFrame report = new ReportSighting(dtpStartDate.getDate(), dtpEndDate.getDate(), app);
+            report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
+            report.setPreferredSize(new Dimension(550, 750));
+            report.setLocationRelativeTo(null);
+            report.setVisible(true);
+        }
+}//GEN-LAST:event_btnReportActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -2085,7 +2082,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             }
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
-        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
     }
 
     private void browseByElement() {
@@ -2125,6 +2121,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 DefaultMutableTreeNode tempElementNode = new DefaultMutableTreeNode(tempSighting.getElement());
                 tempSightingNode.add(tempElementNode);
             }
+            btnReport.setVisible(true);
         }
         else {
             root.add(new DefaultMutableTreeNode("Please select dates first"));
@@ -2541,7 +2538,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoLocation_LocTab;
     private javax.swing.JButton btnGoVisit_LocTab;
-    private javax.swing.JButton btnPrintBrowse;
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSearch;

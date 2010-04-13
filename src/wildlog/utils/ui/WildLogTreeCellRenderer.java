@@ -14,9 +14,7 @@
 
 package wildlog.utils.ui;
 
-import java.awt.Color;
 import java.awt.Component;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTree;
@@ -65,6 +63,8 @@ public class WildLogTreeCellRenderer extends DefaultTreeCellRenderer{
             }
             if (expanded || hasFocus)
                 label = new JLabel(value.toString(), new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small.gif")), 0);
+            if (sel)
+                label = new JLabel(value.toString(), new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small Selected.gif")), 0);
             return label;
         }
         else

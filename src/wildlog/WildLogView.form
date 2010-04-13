@@ -468,22 +468,9 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnPrintBrowse">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" resourceKey="btnPrintBrowse.text"/>
-                    <Property name="name" type="java.lang.String" value="btnPrintBrowse" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPrintBrowseActionPerformed"/>
-                  </Events>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="730" y="5" width="100" height="30"/>
-                    </Constraint>
-                  </Constraints>
-                </Component>
                 <Component class="javax.swing.JButton" name="btnReport">
                   <Properties>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnReport.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnReport.text"/>
                     <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
                   </Properties>
@@ -492,7 +479,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="730" y="40" width="100" height="30"/>
+                      <AbsoluteConstraints x="730" y="5" width="100" height="65"/>
                     </Constraint>
                   </Constraints>
                 </Component>
