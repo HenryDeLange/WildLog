@@ -16,6 +16,8 @@ package wildlog.data.dataobjects;
 
 import CsvGenerator.CsvGenerator;
 import java.util.Date;
+import java.util.List;
+import wildlog.WildLogApp;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.utils.UtilsHTML;
@@ -56,19 +58,20 @@ public class Visit implements Comparable<Visit> {
         return 0;
     }
 
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-//        if (fotos != null)
-//            for (int t = 0; t < fotos.size(); t++) {
-//                fotoString = fotoString + fotos.get(t).toHTML();
-//            }
+        List<Foto> fotos = inApp.getDBI().list(new Foto("VISIT-" + name));
+        for (int t = 0; t < fotos.size(); t++) {
+            fotoString = fotoString + fotos.get(t).toHTML();
+        }
         String sightingString = "";
         if (inIsRecursive) {
-            throw new UnsupportedOperationException("Not supported yet.");
-//            if (sightings != null)
-//                for (int t = 0; t < sightings.size(); t++) {
-//                    sightingString = sightingString + sightings.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
-//                }
+            Sighting tempSighting = new Sighting();
+            tempSighting.setVisitName(name);
+            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+            for (int t = 0; t < sightings.size(); t++) {
+                sightingString = sightingString + sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp) + "<br/>";
+            }
         }
 
         String htmlVisit = "";
@@ -87,16 +90,16 @@ public class Visit implements Comparable<Visit> {
         return htmlVisit;
     }
 
-    public void toCSV(CsvGenerator inCSVGenerator) {
-        inCSVGenerator.addData(name);
-        inCSVGenerator.addData(startDate);
-        inCSVGenerator.addData(endDate);
-        inCSVGenerator.addData(description);
-        inCSVGenerator.addData(gameWatchingIntensity);
-        //inCSVGenerator.addData("Sightings");
-        inCSVGenerator.addData(type);
-//        inCSVGenerator.addData(fotos);
-    }
+//    public void toCSV(CsvGenerator inCSVGenerator) {
+//        inCSVGenerator.addData(name);
+//        inCSVGenerator.addData(startDate);
+//        inCSVGenerator.addData(endDate);
+//        inCSVGenerator.addData(description);
+//        inCSVGenerator.addData(gameWatchingIntensity);
+//        //inCSVGenerator.addData("Sightings");
+//        inCSVGenerator.addData(type);
+////        inCSVGenerator.addData(fotos);
+//    }
 
     // GETTERS:
     public String getName() {

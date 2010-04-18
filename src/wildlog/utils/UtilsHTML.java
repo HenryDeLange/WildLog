@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 
@@ -81,14 +82,14 @@ public class UtilsHTML {
         //return null;
     }
 
-    public static void exportHTML(Element inElement) {
+    public static void exportHTML(Element inElement, WildLogApp inApp) {
         File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + inElement.getPrimaryName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inElement.toHTML(true, true).getBytes());
+            fileOutput.write(inElement.toHTML(true, true, inApp).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {
@@ -104,14 +105,14 @@ public class UtilsHTML {
         }
     }
 
-    public static void exportHTML(Location inLocation) {
+    public static void exportHTML(Location inLocation, WildLogApp inApp) {
         File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inLocation.toHTML(true, true).getBytes());
+            fileOutput.write(inLocation.toHTML(true, true, inApp).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {

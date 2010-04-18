@@ -14,9 +14,9 @@
 
 package wildlog.data.dataobjects;
 
-import CsvGenerator.CsvGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.util.List;
+import wildlog.WildLogApp;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -86,12 +86,12 @@ public class Location implements Comparable<Location> {
         return 0;
     }
 
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-//        if (fotos != null)
-//            for (int t = 0; t < fotos.size(); t++) {
-//                fotoString = fotoString + fotos.get(t).toHTML();
-//            }
+        List<Foto> fotos = inApp.getDBI().list(new Foto("LOCATION-" + name));
+        for (int t = 0; t < fotos.size(); t++) {
+            fotoString = fotoString + fotos.get(t).toHTML();
+        }
 //        String subAreasString = "";
 //        if (subAreas != null)
 //            for (int t = 0; t < subAreas.size(); t++) {
@@ -99,11 +99,12 @@ public class Location implements Comparable<Location> {
 //            }
         String visitsString = "";
         if (inIsRecursive) {
-            throw new UnsupportedOperationException("Not supported yet.");
-//            if (visits != null)
-//                for (int t = 0; t < visits.size(); t++) {
-//                    visitsString = visitsString + visits.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
-//                }  
+            Visit tempVisit = new Visit();
+            tempVisit.setLocationName(name);
+            List<Visit> visits = inApp.getDBI().list(tempVisit);
+            for (int t = 0; t < visits.size(); t++) {
+                visitsString = visitsString + visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp) + "<br/>";
+            }
         }
 
         String htmlLocation = "<head><title>" + name + "</title></head>";
@@ -139,43 +140,43 @@ public class Location implements Comparable<Location> {
         return htmlLocation;
     }
 
-    public KmlEntry toKML(int inID) {
+    public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(name);
-        entry.setDescription(this.toHTML(false, true));
+        entry.setDescription(this.toHTML(false, true, inApp));
         entry.setStyle("locationStyle");
         entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
         entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
         return entry;
     }
 
-    public void toCSV(CsvGenerator inCSVGenerator) {
-        inCSVGenerator.addData(name);
-        inCSVGenerator.addData(description);
-        inCSVGenerator.addData(province);
-        inCSVGenerator.addData(rating);
-        inCSVGenerator.addData(gameViewingRating);
-        inCSVGenerator.addData(habitatType);
-//        inCSVGenerator.addData(fotos);
-        //inCSVGenerator.addData("Visits");
-        inCSVGenerator.addData(accommodationType);
-        inCSVGenerator.addData(catering);
-        inCSVGenerator.addData(contactNumbers);
-        inCSVGenerator.addData(website);
-        inCSVGenerator.addData(email);
-        inCSVGenerator.addData(directions);
-        inCSVGenerator.addData(latitude);
-        inCSVGenerator.addData(latDegrees);
-        inCSVGenerator.addData(latMinutes);
-        inCSVGenerator.addData(latSecondsFloat);
-        inCSVGenerator.addData(longitude);
-        inCSVGenerator.addData(lonDegrees);
-        inCSVGenerator.addData(lonMinutes);
-        inCSVGenerator.addData(lonSecondsFloat);
-//        inCSVGenerator.addData(subAreas);
-//        inCSVGenerator.addData(visits);
-    }
+//    public void toCSV(CsvGenerator inCSVGenerator) {
+//        inCSVGenerator.addData(name);
+//        inCSVGenerator.addData(description);
+//        inCSVGenerator.addData(province);
+//        inCSVGenerator.addData(rating);
+//        inCSVGenerator.addData(gameViewingRating);
+//        inCSVGenerator.addData(habitatType);
+////        inCSVGenerator.addData(fotos);
+//        //inCSVGenerator.addData("Visits");
+//        inCSVGenerator.addData(accommodationType);
+//        inCSVGenerator.addData(catering);
+//        inCSVGenerator.addData(contactNumbers);
+//        inCSVGenerator.addData(website);
+//        inCSVGenerator.addData(email);
+//        inCSVGenerator.addData(directions);
+//        inCSVGenerator.addData(latitude);
+//        inCSVGenerator.addData(latDegrees);
+//        inCSVGenerator.addData(latMinutes);
+//        inCSVGenerator.addData(latSecondsFloat);
+//        inCSVGenerator.addData(longitude);
+//        inCSVGenerator.addData(lonDegrees);
+//        inCSVGenerator.addData(lonMinutes);
+//        inCSVGenerator.addData(lonSecondsFloat);
+////        inCSVGenerator.addData(subAreas);
+////        inCSVGenerator.addData(visits);
+//    }
 
 //    public void doUpdate_v2() {
 //        latSecondsFloat = latSeconds;

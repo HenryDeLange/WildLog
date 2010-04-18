@@ -1507,7 +1507,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempLocation.toHTML(false, false));
+                txtPhotoInformation.setText(tempLocation.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
                 if (fotos.size() > 0) {
                     try {
@@ -1539,7 +1539,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempElement.toHTML(false, false));
+                txtPhotoInformation.setText(tempElement.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
                 if (fotos.size() > 0) {
                     try {
@@ -1571,7 +1571,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempVisit.toHTML(false, false));
+                txtPhotoInformation.setText(tempVisit.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
                 if (fotos.size() > 0) {
                     try {
@@ -1603,7 +1603,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                txtPhotoInformation.setText(tempSighting.toHTML(false, false));
+                txtPhotoInformation.setText(tempSighting.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
                 if (fotos.size() > 0) {
                     try {
@@ -2361,11 +2361,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         List<Element> listElements = app.getDBI().list(new Element());
         for (int t = 0; t < listElements.size(); t++) {
-            UtilsHTML.exportHTML(listElements.get(t));
+            UtilsHTML.exportHTML(listElements.get(t), app);
         }
         List<Location> listLocations = app.getDBI().list(new Location());
         for (int t = 0; t < listLocations.size(); t++) {
-            UtilsHTML.exportHTML(listLocations.get(t));
+            UtilsHTML.exportHTML(listLocations.get(t), app);
         }
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
@@ -2451,12 +2451,12 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         // Sightings
         List<Sighting> listSightings = app.getDBI().list(new Sighting());
         for (int t = 0; t < listSightings.size(); t++) {
-            entries.add(listSightings.get(t).toKML(t));
+            entries.add(listSightings.get(t).toKML(t, app));
         }
         // Locations
         List<Location> listLocations = app.getDBI().list(new Location());
         for (int t = 0; t < listLocations.size(); t++) {
-            entries.add(listLocations.get(t).toKML(listSightings.size() + t));
+            entries.add(listLocations.get(t).toKML(listSightings.size() + t, app));
         }
 
         kmlgen.generateFile(entries, styles);
@@ -2480,112 +2480,112 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         File tempFile = new File(path);
         tempFile.mkdirs();
         // Locations
-        CsvGenerator csvGenerator = new CsvGenerator();
-        csvGenerator.addHeader("Name");
-        csvGenerator.addHeader("Description");
-        csvGenerator.addHeader("Province");
-        csvGenerator.addHeader("Rating");
-        csvGenerator.addHeader("Wildlife Viewing Rating");
-        csvGenerator.addHeader("Habitat Type");
-        csvGenerator.addHeader("Photos");
-        csvGenerator.addHeader("Accommodation Type");
-        csvGenerator.addHeader("Catering");
-        csvGenerator.addHeader("Contact Number");
-        csvGenerator.addHeader("Website");
-        csvGenerator.addHeader("Email");
-        csvGenerator.addHeader("Directions");
-        csvGenerator.addHeader("Latitude Indicator");
-        csvGenerator.addHeader("Latitude Degrees");
-        csvGenerator.addHeader("Latitude Minutes");
-        csvGenerator.addHeader("Latitude Seconds");
-        csvGenerator.addHeader("Longitude Indicator");
-        csvGenerator.addHeader("Longitude Degrees");
-        csvGenerator.addHeader("Longitude Minutes");
-        csvGenerator.addHeader("Longitude Seconds");
-        csvGenerator.addHeader("Sub Areas");
-        csvGenerator.addHeader("Visits");
-        List<Location> listLocations = app.getDBI().list(new Location());
-        for (int t = 0; t < listLocations.size(); t++) {
-            listLocations.get(t).toCSV(csvGenerator);
-        }
-        csvGenerator.writeCSV(path + File.separatorChar + "Locations.csv");
-        // Visits
-        csvGenerator = new CsvGenerator();
-        csvGenerator.addHeader("Name");
-        csvGenerator.addHeader("Start Date");
-        csvGenerator.addHeader("End Date");
-        csvGenerator.addHeader("Description");
-        csvGenerator.addHeader("Game Watching Intensity");
-        //csvGenerator.addHeader("Sightings");
-        csvGenerator.addHeader("Type");
-        csvGenerator.addHeader("Photos");
-        List<Visit> listVisits = app.getDBI().list(new Visit());
-        for (int t = 0; t < listVisits.size(); t++) {
-            listVisits.get(t).toCSV(csvGenerator);
-        }
-        csvGenerator.writeCSV(path + File.separatorChar + "Visits.csv");
-        // Sightings
-        csvGenerator = new CsvGenerator();
-        csvGenerator.addHeader("Date");
-        csvGenerator.addHeader("Element Primary Name");
-        csvGenerator.addHeader("Location Name");
-        csvGenerator.addHeader("Time of Day");
-        csvGenerator.addHeader("Weather");
-        csvGenerator.addHeader("Area Type");
-        csvGenerator.addHeader("View Rating");
-        csvGenerator.addHeader("Certainty");
-        csvGenerator.addHeader("Number of Creatures");
-        csvGenerator.addHeader("Details");
-        csvGenerator.addHeader("Photos");
-        csvGenerator.addHeader("Latitude Indicator");
-        csvGenerator.addHeader("Latitude Degrees");
-        csvGenerator.addHeader("Latitude Minutes");
-        csvGenerator.addHeader("Latitude Seconds");
-        csvGenerator.addHeader("Longitude Indicator");
-        csvGenerator.addHeader("Longitude Degree");
-        csvGenerator.addHeader("Longitude Minutes");
-        csvGenerator.addHeader("Longitude Seconds");
-        csvGenerator.addHeader("Sub Area");
-        csvGenerator.addHeader("Sighting Evidence");
-        //csvGenerator.addHeader("Sighting Counter");
-        List<Sighting> listSightings = app.getDBI().list(new Sighting());
-        for (int t = 0; t < listSightings.size(); t++) {
-            listSightings.get(t).toCSV(csvGenerator);
-        }
-        csvGenerator.writeCSV(path + File.separatorChar + "Sightings.csv");
-        // Elements
-        csvGenerator = new CsvGenerator();
-        csvGenerator.addHeader("Primary Name");
-        csvGenerator.addHeader("Other Name");
-        csvGenerator.addHeader("Scientific Name");
-        csvGenerator.addHeader("Reference ID");
-        csvGenerator.addHeader("Description");
-        csvGenerator.addHeader("Nutrition");
-        csvGenerator.addHeader("Water Dependance");
-        csvGenerator.addHeader("Average Male Size");
-        csvGenerator.addHeader("Average Female Size");
-        csvGenerator.addHeader("Size Unit");
-        csvGenerator.addHeader("Average Male Weight");
-        csvGenerator.addHeader("Average Female Weight");
-        csvGenerator.addHeader("Weight Unit");
-        csvGenerator.addHeader("Breeding Duration");
-        csvGenerator.addHeader("Breeding Number");
-        csvGenerator.addHeader("Breeding Age");
-        csvGenerator.addHeader("Wish List Rating");
-        csvGenerator.addHeader("Diagnostic Description");
-        csvGenerator.addHeader("Active Time");
-        csvGenerator.addHeader("Endangered Status");
-        csvGenerator.addHeader("Behaviour Description");
-        csvGenerator.addHeader("Add Frequency");
-        csvGenerator.addHeader("Photos");
-        csvGenerator.addHeader("Type");
-        csvGenerator.addHeader("Feeding Class");
-        csvGenerator.addHeader("Lifespan");
-        List<Element> listElements = app.getDBI().list(new Element());
-        for (int t = 0; t < listElements.size(); t++) {
-            listElements.get(t).toCSV(csvGenerator);
-        }
-        csvGenerator.writeCSV(path + File.separatorChar + "Creatures.csv");
+//        CsvGenerator csvGenerator = new CsvGenerator();
+//        csvGenerator.addHeader("Name");
+//        csvGenerator.addHeader("Description");
+//        csvGenerator.addHeader("Province");
+//        csvGenerator.addHeader("Rating");
+//        csvGenerator.addHeader("Wildlife Viewing Rating");
+//        csvGenerator.addHeader("Habitat Type");
+//        csvGenerator.addHeader("Photos");
+//        csvGenerator.addHeader("Accommodation Type");
+//        csvGenerator.addHeader("Catering");
+//        csvGenerator.addHeader("Contact Number");
+//        csvGenerator.addHeader("Website");
+//        csvGenerator.addHeader("Email");
+//        csvGenerator.addHeader("Directions");
+//        csvGenerator.addHeader("Latitude Indicator");
+//        csvGenerator.addHeader("Latitude Degrees");
+//        csvGenerator.addHeader("Latitude Minutes");
+//        csvGenerator.addHeader("Latitude Seconds");
+//        csvGenerator.addHeader("Longitude Indicator");
+//        csvGenerator.addHeader("Longitude Degrees");
+//        csvGenerator.addHeader("Longitude Minutes");
+//        csvGenerator.addHeader("Longitude Seconds");
+//        csvGenerator.addHeader("Sub Areas");
+//        csvGenerator.addHeader("Visits");
+//        List<Location> listLocations = app.getDBI().list(new Location());
+//        for (int t = 0; t < listLocations.size(); t++) {
+//            listLocations.get(t).toCSV(csvGenerator);
+//        }
+//        csvGenerator.writeCSV(path + File.separatorChar + "Locations.csv");
+//        // Visits
+//        csvGenerator = new CsvGenerator();
+//        csvGenerator.addHeader("Name");
+//        csvGenerator.addHeader("Start Date");
+//        csvGenerator.addHeader("End Date");
+//        csvGenerator.addHeader("Description");
+//        csvGenerator.addHeader("Game Watching Intensity");
+//        //csvGenerator.addHeader("Sightings");
+//        csvGenerator.addHeader("Type");
+//        csvGenerator.addHeader("Photos");
+//        List<Visit> listVisits = app.getDBI().list(new Visit());
+//        for (int t = 0; t < listVisits.size(); t++) {
+//            listVisits.get(t).toCSV(csvGenerator);
+//        }
+//        csvGenerator.writeCSV(path + File.separatorChar + "Visits.csv");
+//        // Sightings
+//        csvGenerator = new CsvGenerator();
+//        csvGenerator.addHeader("Date");
+//        csvGenerator.addHeader("Element Primary Name");
+//        csvGenerator.addHeader("Location Name");
+//        csvGenerator.addHeader("Time of Day");
+//        csvGenerator.addHeader("Weather");
+//        csvGenerator.addHeader("Area Type");
+//        csvGenerator.addHeader("View Rating");
+//        csvGenerator.addHeader("Certainty");
+//        csvGenerator.addHeader("Number of Creatures");
+//        csvGenerator.addHeader("Details");
+//        csvGenerator.addHeader("Photos");
+//        csvGenerator.addHeader("Latitude Indicator");
+//        csvGenerator.addHeader("Latitude Degrees");
+//        csvGenerator.addHeader("Latitude Minutes");
+//        csvGenerator.addHeader("Latitude Seconds");
+//        csvGenerator.addHeader("Longitude Indicator");
+//        csvGenerator.addHeader("Longitude Degree");
+//        csvGenerator.addHeader("Longitude Minutes");
+//        csvGenerator.addHeader("Longitude Seconds");
+//        csvGenerator.addHeader("Sub Area");
+//        csvGenerator.addHeader("Sighting Evidence");
+//        //csvGenerator.addHeader("Sighting Counter");
+//        List<Sighting> listSightings = app.getDBI().list(new Sighting());
+//        for (int t = 0; t < listSightings.size(); t++) {
+//            listSightings.get(t).toCSV(csvGenerator);
+//        }
+//        csvGenerator.writeCSV(path + File.separatorChar + "Sightings.csv");
+//        // Elements
+//        csvGenerator = new CsvGenerator();
+//        csvGenerator.addHeader("Primary Name");
+//        csvGenerator.addHeader("Other Name");
+//        csvGenerator.addHeader("Scientific Name");
+//        csvGenerator.addHeader("Reference ID");
+//        csvGenerator.addHeader("Description");
+//        csvGenerator.addHeader("Nutrition");
+//        csvGenerator.addHeader("Water Dependance");
+//        csvGenerator.addHeader("Average Male Size");
+//        csvGenerator.addHeader("Average Female Size");
+//        csvGenerator.addHeader("Size Unit");
+//        csvGenerator.addHeader("Average Male Weight");
+//        csvGenerator.addHeader("Average Female Weight");
+//        csvGenerator.addHeader("Weight Unit");
+//        csvGenerator.addHeader("Breeding Duration");
+//        csvGenerator.addHeader("Breeding Number");
+//        csvGenerator.addHeader("Breeding Age");
+//        csvGenerator.addHeader("Wish List Rating");
+//        csvGenerator.addHeader("Diagnostic Description");
+//        csvGenerator.addHeader("Active Time");
+//        csvGenerator.addHeader("Endangered Status");
+//        csvGenerator.addHeader("Behaviour Description");
+//        csvGenerator.addHeader("Add Frequency");
+//        csvGenerator.addHeader("Photos");
+//        csvGenerator.addHeader("Type");
+//        csvGenerator.addHeader("Feeding Class");
+//        csvGenerator.addHeader("Lifespan");
+//        List<Element> listElements = app.getDBI().list(new Element());
+//        for (int t = 0; t < listElements.size(); t++) {
+//            listElements.get(t).toCSV(csvGenerator);
+//        }
+//        csvGenerator.writeCSV(path + File.separatorChar + "Creatures.csv");
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
 

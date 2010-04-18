@@ -16,6 +16,8 @@ package wildlog.data.dataobjects;
 
 
 import CsvGenerator.CsvGenerator;
+import java.util.List;
+import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -96,12 +98,12 @@ public class Element implements Comparable<Element> {
         return 0;
     }
 
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-//        if (fotos != null)
-//            for (int t = 0; t < fotos.size(); t++) {
-//                fotoString = fotoString + fotos.get(t).toHTML();
-//            }
+        List<Foto> fotos = inApp.getDBI().list(new Foto("ELEMENT-" + primaryName));
+        for (int t = 0; t < fotos.size(); t++) {
+            fotoString = fotoString + fotos.get(t).toHTML();
+        }
 
         String htmlElement = "<head><title>" + primaryName + "</title></head>";
         htmlElement = htmlElement + "<body>";
@@ -139,34 +141,34 @@ public class Element implements Comparable<Element> {
         return htmlElement;
     }
 
-    public void toCSV(CsvGenerator inCSVGenerator) {
-        inCSVGenerator.addData(primaryName);
-        inCSVGenerator.addData(otherName);
-        inCSVGenerator.addData(scientificName);
-        inCSVGenerator.addData(referenceID);
-        inCSVGenerator.addData(description);
-        inCSVGenerator.addData(nutrition);
-        inCSVGenerator.addData(waterDependance);
-        inCSVGenerator.addData(sizeMaleMin);
-        inCSVGenerator.addData(sizeFemaleMin);
-        inCSVGenerator.addData(sizeUnit);
-        inCSVGenerator.addData(weightMaleMin);
-        inCSVGenerator.addData(weightFemaleMin);
-        inCSVGenerator.addData(weightUnit);
-        inCSVGenerator.addData(breedingDuration);
-        inCSVGenerator.addData(breedingNumber);
-        //inCSVGenerator.addData(breedingAge);
-        inCSVGenerator.addData(wishListRating);
-        inCSVGenerator.addData(diagnosticDescription);
-        inCSVGenerator.addData(activeTime);
-        inCSVGenerator.addData(endangeredStatus);
-        inCSVGenerator.addData(behaviourDescription);
-        inCSVGenerator.addData(addFrequency);
-//        inCSVGenerator.addData(fotos);
-        inCSVGenerator.addData(type);
-        inCSVGenerator.addData(feedingClass);
-        inCSVGenerator.addData(lifespan);
-    }
+//    public void toCSV(CsvGenerator inCSVGenerator) {
+//        inCSVGenerator.addData(primaryName);
+//        inCSVGenerator.addData(otherName);
+//        inCSVGenerator.addData(scientificName);
+//        inCSVGenerator.addData(referenceID);
+//        inCSVGenerator.addData(description);
+//        inCSVGenerator.addData(nutrition);
+//        inCSVGenerator.addData(waterDependance);
+//        inCSVGenerator.addData(sizeMaleMin);
+//        inCSVGenerator.addData(sizeFemaleMin);
+//        inCSVGenerator.addData(sizeUnit);
+//        inCSVGenerator.addData(weightMaleMin);
+//        inCSVGenerator.addData(weightFemaleMin);
+//        inCSVGenerator.addData(weightUnit);
+//        inCSVGenerator.addData(breedingDuration);
+//        inCSVGenerator.addData(breedingNumber);
+//        //inCSVGenerator.addData(breedingAge);
+//        inCSVGenerator.addData(wishListRating);
+//        inCSVGenerator.addData(diagnosticDescription);
+//        inCSVGenerator.addData(activeTime);
+//        inCSVGenerator.addData(endangeredStatus);
+//        inCSVGenerator.addData(behaviourDescription);
+//        inCSVGenerator.addData(addFrequency);
+////        inCSVGenerator.addData(fotos);
+//        inCSVGenerator.addData(type);
+//        inCSVGenerator.addData(feedingClass);
+//        inCSVGenerator.addData(lifespan);
+//    }
     
 
     // GETTERS:

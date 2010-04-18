@@ -14,17 +14,21 @@
 
 package wildlog.data.dataobjects;
 
-import CsvGenerator.CsvGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.util.Date;
+import java.util.List;
+import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
+import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Sighting class
@@ -88,12 +92,12 @@ public class Sighting implements Comparable<Sighting> {
         return 0;
     }
 
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-//        if (fotos != null)
-//            for (int t = 0; t < fotos.size(); t++) {
-//                fotoString = fotoString + fotos.get(t).toHTML();
-//            }
+        List<Foto> fotos = inApp.getDBI().list(new Foto("SIGHTING-" + sightingCounter));
+        for (int t = 0; t < fotos.size(); t++) {
+            fotoString = fotoString + fotos.get(t).toHTML();
+        }
         String htmlSighting = "<H2>Sighting</H2>";
         htmlSighting = htmlSighting + "<b>Date:</b> " + UtilsHTML.formatDate(date, true);
         htmlSighting = htmlSighting + "<br/><b>Element:</b> " + elementName;
@@ -115,116 +119,118 @@ public class Sighting implements Comparable<Sighting> {
         return htmlSighting;
     }
 
-    public KmlEntry toKML(int inID) {
+    public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
-        throw new UnsupportedOperationException("Not yet supported.");
-//        entry.setId(inID);
-//        entry.setName(element.getPrimaryName());
-//        entry.setDescription(this.toHTML(false, true));
-//        if (element.getType() != null) {
-//            if (element.getType().equals(ElementType.ANIMAL)) {
-//                if (element.getFeedingClass() == null)
-//                    entry.setStyle("animalOtherStyle");
-//                else
-//                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
-//                    entry.setStyle("animalCarnivoreStyle");
-//                else
-//                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
-//                    entry.setStyle("animalHerbivoreStyle");
-//                else
-//                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
-//                    entry.setStyle("animalOmnivoreStyle");
-//                else
-//                    entry.setStyle("animalOtherStyle");
-//            }
-//            else
-//            if (element.getType().equals(ElementType.BIRD)) {
-//                if (element.getFeedingClass() == null)
-//                    entry.setStyle("birdOtherStyle");
-//                else
-//                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
-//                    entry.setStyle("birdCarnivoreStyle");
-//                else
-//                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
-//                    entry.setStyle("birdHerbivoreStyle");
-//                else
-//                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
-//                    entry.setStyle("birdOmnivoreStyle");
-//                else
-//                    entry.setStyle("birdOtherStyle");
-//            }
-//            else
-//            if (element.getType().equals(ElementType.PLANT)) {
-//                    entry.setStyle("plantStyle");
-//            }
-//            else {
-//                entry.setStyle("nostyle");
-//            }
-//        }
-//        else {
-//            entry.setStyle("nostyle");
-//        }
-//        if (latitude == null || longitude == null) {
-//            if (location.getLatitude() != null && location.getLongitude() != null) {
-//                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-//                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
-//                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
-//                }
-//            }
-//            else {
-//                entry.setLatitude(0);
-//                entry.setLongitude(0);
-//            }
-//        }
-//        else
-//        if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
-//            if (location.getLatitude() != null && location.getLongitude() != null) {
-//                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-//                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
-//                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
-//                }
-//            }
-//            else {
-//                entry.setLatitude(0);
-//                entry.setLongitude(0);
-//            }
-//        }
-//        else {
-//            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
-//            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
-//        }
-//        return entry;
+        entry.setId(inID);
+        entry.setName(elementName);
+        entry.setDescription(this.toHTML(false, true, inApp));
+        Element element = inApp.getDBI().find(new Element(elementName));
+        if (element.getType() != null) {
+            if (element.getType().equals(ElementType.ANIMAL)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("animalOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("animalCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("animalHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("animalOmnivoreStyle");
+                else
+                    entry.setStyle("animalOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.BIRD)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("birdOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("birdCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("birdHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("birdOmnivoreStyle");
+                else
+                    entry.setStyle("birdOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.PLANT)) {
+                    entry.setStyle("plantStyle");
+            }
+            else {
+                entry.setStyle("nostyle");
+            }
+        }
+        else {
+            entry.setStyle("nostyle");
+        }
+        if (latitude == null || longitude == null) {
+            Location location = inApp.getDBI().find(new Location(locationName));
+            if (location.getLatitude() != null && location.getLongitude() != null) {
+                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
+                }
+            }
+            else {
+                entry.setLatitude(0);
+                entry.setLongitude(0);
+            }
+        }
+        else
+        if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
+            Location location = inApp.getDBI().find(new Location(locationName));
+            if (location.getLatitude() != null && location.getLongitude() != null) {
+                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
+                }
+            }
+            else {
+                entry.setLatitude(0);
+                entry.setLongitude(0);
+            }
+        }
+        else {
+            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
+            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
+        }
+        return entry;
     }
 
-    public void toCSV(CsvGenerator inCSVGenerator) {
-        inCSVGenerator.addData(date);
-//        inCSVGenerator.addData(element.getPrimaryName());
-//        inCSVGenerator.addData(location.getName());
-        inCSVGenerator.addData(timeOfDay);
-        inCSVGenerator.addData(weather);
-        inCSVGenerator.addData(areaType);
-        inCSVGenerator.addData(viewRating);
-        inCSVGenerator.addData(certainty);
-        inCSVGenerator.addData(numberOfElements);
-        inCSVGenerator.addData(details);
-//        inCSVGenerator.addData(fotos);
-        inCSVGenerator.addData(latitude);
-        inCSVGenerator.addData(latDegrees);
-        inCSVGenerator.addData(latMinutes);
-        inCSVGenerator.addData(latSecondsFloat);
-        inCSVGenerator.addData(longitude);
-        inCSVGenerator.addData(lonDegrees);
-        inCSVGenerator.addData(lonMinutes);
-        inCSVGenerator.addData(lonSecondsFloat);
-        inCSVGenerator.addData(subArea);
-        inCSVGenerator.addData(sightingEvidence);
-        //inCSVGenerator.addData(sightingCounter);
-    }
+//    public void toCSV(CsvGenerator inCSVGenerator) {
+//        inCSVGenerator.addData(date);
+////        inCSVGenerator.addData(element.getPrimaryName());
+////        inCSVGenerator.addData(location.getName());
+//        inCSVGenerator.addData(timeOfDay);
+//        inCSVGenerator.addData(weather);
+//        inCSVGenerator.addData(areaType);
+//        inCSVGenerator.addData(viewRating);
+//        inCSVGenerator.addData(certainty);
+//        inCSVGenerator.addData(numberOfElements);
+//        inCSVGenerator.addData(details);
+////        inCSVGenerator.addData(fotos);
+//        inCSVGenerator.addData(latitude);
+//        inCSVGenerator.addData(latDegrees);
+//        inCSVGenerator.addData(latMinutes);
+//        inCSVGenerator.addData(latSecondsFloat);
+//        inCSVGenerator.addData(longitude);
+//        inCSVGenerator.addData(lonDegrees);
+//        inCSVGenerator.addData(lonMinutes);
+//        inCSVGenerator.addData(lonSecondsFloat);
+//        inCSVGenerator.addData(subArea);
+//        inCSVGenerator.addData(sightingEvidence);
+//        //inCSVGenerator.addData(sightingCounter);
+//    }
 
-    public void doUpdate_v2() {
-        latSecondsFloat = latSeconds;
-        lonSecondsFloat = lonSeconds;
-    }
+//    public void doUpdate_v2() {
+//        latSecondsFloat = latSeconds;
+//        lonSecondsFloat = lonSeconds;
+//    }
 
     // GETTERS:
     public Date getDate() {
