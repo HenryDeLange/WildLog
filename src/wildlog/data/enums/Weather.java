@@ -36,4 +36,16 @@ public enum Weather {
         return text;
     }
 
+    public static Weather getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(SUNNY.text)) return SUNNY;
+        if (inText.equalsIgnoreCase(LIGHT_OVERCAST.text)) return LIGHT_OVERCAST;
+        if (inText.equalsIgnoreCase(HEAVY_OVERCAST.text)) return HEAVY_OVERCAST;
+        if (inText.equalsIgnoreCase(MIST.text)) return MIST;
+        if (inText.equalsIgnoreCase(LIGHT_RAIN.text)) return LIGHT_RAIN;
+        if (inText.equalsIgnoreCase(HEAVY_RAIN.text)) return HEAVY_RAIN;
+        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

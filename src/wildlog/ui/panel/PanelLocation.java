@@ -26,19 +26,16 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
@@ -49,6 +46,8 @@ import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
@@ -80,8 +79,9 @@ public class PanelLocation extends javax.swing.JPanel {
         utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
-        if (locationWL.getFotos() != null && locationWL.getFotos().size() > 0) {
-            Utils.setupFoto(locationWL, imageIndex, lblImage, 300, app);
+        List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + locationWL.getName()));
+        if (fotos.size() > 0) {
+            Utils.setupFoto("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
@@ -214,7 +214,6 @@ public class PanelLocation extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel9 = new javax.swing.JLabel();
         txtLatMinutes = new javax.swing.JTextField();
         txtLatSeconds = new javax.swing.JTextField();
         txtLonDegrees = new javax.swing.JTextField();
@@ -224,9 +223,6 @@ public class PanelLocation extends javax.swing.JPanel {
         cmbLongitude = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        cmbSubAreas = new javax.swing.JComboBox();
-        btnAddSubArea = new javax.swing.JButton();
-        btnRemoveSubArea = new javax.swing.JButton();
         btnDeleteImage = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         lblNumberOfVisits = new javax.swing.JLabel();
@@ -330,7 +326,7 @@ public class PanelLocation extends javax.swing.JPanel {
         txtDirections.setName("txtDirections"); // NOI18N
         jScrollPane2.setViewportView(txtDirections);
 
-        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 160, 80));
+        locationIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 200, 160, 140));
 
         txtWebsite.setText(locationWL.getWebsite());
         txtWebsite.setName("txtWebsite"); // NOI18N
@@ -343,7 +339,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatDegreesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, 30, -1));
+        locationIncludes.add(txtLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 300, 30, -1));
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
@@ -355,6 +351,8 @@ public class PanelLocation extends javax.swing.JPanel {
         lstAccommodationType.setModel(new DefaultComboBoxModel(AccommodationType.values()));
         lstAccommodationType.setName("lstAccommodationType"); // NOI18N
         lstAccommodationType.setSelectedIndices(selectedAccommodationTypes());
+        lstAccommodationType.setSelectionBackground(resourceMap.getColor("lstAccommodationType.selectionBackground")); // NOI18N
+        lstAccommodationType.setSelectionForeground(resourceMap.getColor("lstAccommodationType.selectionForeground")); // NOI18N
         lstAccommodationType.setVisibleRowCount(4);
         jScrollPane1.setViewportView(lstAccommodationType);
 
@@ -389,14 +387,6 @@ public class PanelLocation extends javax.swing.JPanel {
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
-        tblVisit.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -421,7 +411,6 @@ public class PanelLocation extends javax.swing.JPanel {
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
         tblElement.setName("tblElement"); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -602,10 +591,6 @@ public class PanelLocation extends javax.swing.JPanel {
         jSeparator1.setName("jSeparator1"); // NOI18N
         locationIncludes.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 22, 690, 20));
 
-        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
-        jLabel9.setName("jLabel9"); // NOI18N
-        locationIncludes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 296, -1, -1));
-
         txtLatMinutes.setText(Integer.toString(locationWL.getLatMinutes()));
         txtLatMinutes.setName("txtLatMinutes"); // NOI18N
         txtLatMinutes.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -613,7 +598,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatMinutesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 30, -1));
+        locationIncludes.add(txtLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 30, -1));
 
         txtLatSeconds.setText(Float.toString(locationWL.getLatSecondsFloat()));
         txtLatSeconds.setName("txtLatSeconds"); // NOI18N
@@ -623,7 +608,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatSecondsFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 290, 50, -1));
+        locationIncludes.add(txtLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 300, 50, -1));
 
         txtLonDegrees.setText(Integer.toString(locationWL.getLonDegrees()));
         txtLonDegrees.setName("txtLonDegrees"); // NOI18N
@@ -632,7 +617,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonDegreesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, 30, -1));
+        locationIncludes.add(txtLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 30, -1));
 
         txtLonMinutes.setText(Integer.toString(locationWL.getLonMinutes()));
         txtLonMinutes.setName("txtLonMinutes"); // NOI18N
@@ -641,7 +626,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonMinutesFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 310, 30, -1));
+        locationIncludes.add(txtLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 320, 30, -1));
 
         txtLonSeconds.setText(Float.toString(locationWL.getLonSecondsFloat()));
         txtLonSeconds.setName("txtLonSeconds"); // NOI18N
@@ -651,56 +636,27 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonSecondsFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 310, 50, -1));
+        locationIncludes.add(txtLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, 50, -1));
 
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
         cmbLatitude.setNextFocusableComponent(cmbLongitude);
-        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 290, 90, -1));
+        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 90, -1));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
         cmbLongitude.setNextFocusableComponent(txtLatDegrees);
-        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 310, 90, -1));
+        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 90, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 290, -1, 20));
+        locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, 20));
 
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
-        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, -1, 20));
-
-        cmbSubAreas.setMaximumRowCount(15);
-        cmbSubAreas.setModel(new DefaultComboBoxModel(locationWL.getSubAreas().toArray()));
-        cmbSubAreas.setName("cmbSubAreas"); // NOI18N
-        locationIncludes.add(cmbSubAreas, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 296, 240, -1));
-
-        btnAddSubArea.setIcon(resourceMap.getIcon("btnAddSubArea.icon")); // NOI18N
-        btnAddSubArea.setText(resourceMap.getString("btnAddSubArea.text")); // NOI18N
-        btnAddSubArea.setToolTipText(resourceMap.getString("btnAddSubArea.toolTipText")); // NOI18N
-        btnAddSubArea.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddSubArea.setName("btnAddSubArea"); // NOI18N
-        btnAddSubArea.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddSubAreaActionPerformed(evt);
-            }
-        });
-        locationIncludes.add(btnAddSubArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 120, -1));
-
-        btnRemoveSubArea.setIcon(resourceMap.getIcon("btnRemoveSubArea.icon")); // NOI18N
-        btnRemoveSubArea.setText(resourceMap.getString("btnRemoveSubArea.text")); // NOI18N
-        btnRemoveSubArea.setToolTipText(resourceMap.getString("btnRemoveSubArea.toolTipText")); // NOI18N
-        btnRemoveSubArea.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnRemoveSubArea.setName("btnRemoveSubArea"); // NOI18N
-        btnRemoveSubArea.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoveSubAreaActionPerformed(evt);
-            }
-        });
-        locationIncludes.add(btnRemoveSubArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 320, 120, -1));
+        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, 20));
 
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
@@ -790,7 +746,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 rdbDMSItemStateChanged(evt);
             }
         });
-        locationIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 290, -1, -1));
+        locationIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, -1, -1));
 
         buttonGroup2.add(rdbDD);
         rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
@@ -801,7 +757,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 rdbDDItemStateChanged(evt);
             }
         });
-        locationIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 310, -1, -1));
+        locationIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 320, -1, -1));
 
         txtLatDecimal.setText(resourceMap.getString("txtLatDecimal.text")); // NOI18N
         txtLatDecimal.setName("txtLatDecimal"); // NOI18N
@@ -811,7 +767,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLatDecimalFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 290, 130, -1));
+        locationIncludes.add(txtLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 300, 130, -1));
 
         txtLonDecimal.setText(resourceMap.getString("txtLonDecimal.text")); // NOI18N
         txtLonDecimal.setName("txtLonDecimal"); // NOI18N
@@ -821,7 +777,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 txtLonDecimalFocusGained(evt);
             }
         });
-        locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 310, 130, -1));
+        locationIncludes.add(txtLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 130, -1));
 
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -901,7 +857,7 @@ public class PanelLocation extends javax.swing.JPanel {
                 locationWL.setAccommodationType(tempList);
 
                 // Save the location
-                if (app.getDBI().createOrUpdate(locationWL) == true) {
+                if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {
                     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
                     txtName.setBackground(resourceMap.getColor("txtName.background"));
                 }
@@ -928,7 +884,7 @@ public class PanelLocation extends javax.swing.JPanel {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = Utils.uploadImage(locationWL, "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
+            imageIndex = Utils.uploadImage("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -936,17 +892,17 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(locationWL, imageIndex, lblImage, 300, app);
+        imageIndex = Utils.previousImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(locationWL, imageIndex, lblImage, 300, app);
+        imageIndex = Utils.nextImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        imageIndex = Utils.setMainImage(locationWL, imageIndex);
+        imageIndex = Utils.setMainImage("LOCATION-" + locationWL.getName(), imageIndex, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
@@ -962,32 +918,39 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(locationWL));
-        tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
         if (locationWL.getLatitude() != null)
             cmbLatitude.setSelectedItem(locationWL.getLatitude());
         if (locationWL.getLongitude() != null)
             cmbLongitude.setSelectedItem(locationWL.getLongitude());
-        if (locationWL.getVisits() != null)
-            lblNumberOfVisits.setText(Integer.toString(locationWL.getVisits().size()));
-        else
-            lblNumberOfVisits.setText("0");
-        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        Visit tempVisit = new Visit();
+        tempVisit.setLocationName(locationWL.getName());
+        List<Visit> visits = app.getDBI().list(tempVisit);
+        lblNumberOfVisits.setText(Integer.toString(visits.size()));
         rdbLocation.setSelected(true);
-        if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
-        // Setup tavle column sizes
+        //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
+
+        if (locationWL.getName() != null) {
+            tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(locationWL));
+            tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
+            // Sort rows for visits
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(0, SortOrder.ASCENDING));
+            tblElement.getRowSorter().setSortKeys(tempList);
+            tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(1, SortOrder.ASCENDING));
+            tblVisit.getRowSorter().setSortKeys(tempList);
+        }
+        else {
+            tblVisit.setModel(new DefaultTableModel(new String[]{"No Visits"}, 0));
+            tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
+        }
+        // Setup table column sizes
         resizeTables();
-        // Sort rows for visits
-        List tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
-        tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(1, SortOrder.ASCENDING));
-        tblVisit.getRowSorter().setSortKeys(tempList);
         // Lat Lon stuff
         txtLatDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText()))));
         txtLonDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText()))));
         rdbDMS.setSelected(true);
+        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
     }//GEN-LAST:event_formComponentShown
 
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
@@ -1003,39 +966,16 @@ public class PanelLocation extends javax.swing.JPanel {
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
         if (tblVisit.getSelectedRowCount() > 0) {
-            final JDialog dialog = new JDialog(new JFrame(), "Delete", true);
-            dialog.setLayout(new AbsoluteLayout());
-            JLabel text = new JLabel("Are you sure you want to delete the Visit(s)?");
-            dialog.add(text, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 1, 350, -1));
-            JButton buttonYes = new JButton("Yes");
-            buttonYes.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    int[] selectedRows = tblVisit.getSelectedRows();
-                    PanelVisit tempPanel = null;
-                    for (int t = 0; t < selectedRows.length; t++) {
-                        tempPanel = utilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-                        parent.remove(tempPanel);
-                        locationWL.getVisits().remove(tempPanel.getVisit());
-                        app.getDBI().createOrUpdate(locationWL);
-                        app.getDBI().delete(tempPanel.getVisit());
-                    }
-                    formComponentShown(null);
-                    dialog.dispose();
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Visit(s)?", "Delete Visit(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+                int[] selectedRows = tblVisit.getSelectedRows();
+                PanelVisit tempPanel = null;
+                for (int t = 0; t < selectedRows.length; t++) {
+                    tempPanel = utilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
+                    parent.remove(tempPanel);
+                    app.getDBI().delete(tempPanel.getVisit());
                 }
-            });
-            dialog.add(buttonYes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 25, 100, -1));
-            JButton buttonNo = new JButton("No");
-            buttonNo.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    dialog.dispose();
-                }
-            });
-            dialog.add(buttonNo, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 25, 100, -1));
-            dialog.setSize(255, 84);
-            dialog.setLocationRelativeTo(this);
-            dialog.setVisible(true);
+                formComponentShown(null);
+            }
         }
     }//GEN-LAST:event_btnDeleteVisitActionPerformed
 
@@ -1050,47 +990,6 @@ public class PanelLocation extends javax.swing.JPanel {
         }
         if (tempPanel != null) parent.setSelectedComponent(tempPanel);
     }//GEN-LAST:event_btnGoElementActionPerformed
-
-    private void btnAddSubAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSubAreaActionPerformed
-        final JDialog dialog = new JDialog(new JFrame(), "Please enter:", true);
-        dialog.setLayout(new AbsoluteLayout());
-        JLabel label = new JLabel("Sub Area:");
-        label.setSize(40, 20);
-        dialog.add(label, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 4, 50, -1));
-        final JTextField textfield = new JTextField();
-        textfield.setSize(120, 20);
-        dialog.add(textfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 2, 150, -1));
-        JButton button = new JButton("Add");
-        button.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                locationWL.getSubAreas().add(textfield.getText());
-                dialog.dispose();
-            }
-        });
-        dialog.setSize(210, 84);
-        dialog.add(button, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 23, 200, -1));
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
-        cmbSubAreas.setModel(new DefaultComboBoxModel(locationWL.getSubAreas().toArray()));
-        btnUpdateActionPerformed(null);
-}//GEN-LAST:event_btnAddSubAreaActionPerformed
-
-    private void btnRemoveSubAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveSubAreaActionPerformed
-        locationWL.getSubAreas().remove(cmbSubAreas.getSelectedItem());
-        // Remove from all sightings
-        if (locationWL.getVisits() != null) {
-            for (int t = 0; t < locationWL.getVisits().size(); t++) {
-                for (int i = 0; i < locationWL.getVisits().get(t).getSightings().size(); i++) {
-                    if (locationWL.getVisits().get(t).getSightings().get(i).getSubArea().equals(cmbSubAreas.getSelectedItem())) {
-                        locationWL.getVisits().get(t).getSightings().get(i).setSubArea("");
-                    }
-                }
-            }
-        }
-        cmbSubAreas.setModel(new DefaultComboBoxModel(locationWL.getSubAreas().toArray()));
-        btnUpdateActionPerformed(null);
-    }//GEN-LAST:event_btnRemoveSubAreaActionPerformed
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         app.getMapFrame().clearPoints();
@@ -1113,31 +1012,35 @@ public class PanelLocation extends javax.swing.JPanel {
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(locationWL, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
+        imageIndex = Utils.removeImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnMapSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingsActionPerformed
         app.getMapFrame().clearPoints();
-        if (locationWL.getVisits() != null) {
-            for (int t = 0; t < locationWL.getVisits().size(); t++) {
-                if (locationWL.getVisits().get(t).getSightings() != null) {
-                    for (int i = 0; i < locationWL.getVisits().get(t).getSightings().size(); i++) {
-                        if (locationWL.getVisits().get(t).getSightings().get(i).getLatitude() != null && locationWL.getVisits().get(t).getSightings().get(i).getLongitude() != null) {
-                            if (!locationWL.getVisits().get(t).getSightings().get(i).getLatitude().equals(Latitudes.NONE) && !locationWL.getVisits().get(t).getSightings().get(i).getLongitude().equals(Longitudes.NONE)) {
-                                float lat = locationWL.getVisits().get(t).getSightings().get(i).getLatDegrees();
-                                lat = lat + locationWL.getVisits().get(t).getSightings().get(i).getLatMinutes()/60f;
-                                lat = lat + (locationWL.getVisits().get(t).getSightings().get(i).getLatSecondsFloat()/60f)/60f;
-                                if (locationWL.getVisits().get(t).getSightings().get(i).getLatitude().equals(Latitudes.SOUTH))
-                                    lat = -1 * lat;
-                                float lon = locationWL.getVisits().get(t).getSightings().get(i).getLonDegrees();
-                                lon = lon + locationWL.getVisits().get(t).getSightings().get(i).getLonMinutes()/60f;
-                                lon = lon + (locationWL.getVisits().get(t).getSightings().get(i).getLonSecondsFloat()/60f)/60f;
-                                if (locationWL.getVisits().get(t).getSightings().get(i).getLongitude().equals(Longitudes.WEST))
-                                    lon = -1 * lon;
-                                app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
-                            }
+        Visit tempVisit = new Visit();
+        tempVisit.setLocationName(locationWL.getName());
+        List<Visit> visits = app.getDBI().list(tempVisit);
+        if (visits != null) {
+            for (int t = 0; t < visits.size(); t++) {
+                Sighting tempSighting = new Sighting();
+                tempSighting.setLocationName(locationWL.getName());
+                List<Sighting> sightings = app.getDBI().list(tempSighting);
+                for (int i = 0; i < sightings.size(); i++) {
+                    if (sightings.get(i).getLatitude() != null && sightings.get(i).getLongitude() != null) {
+                        if (!sightings.get(i).getLatitude().equals(Latitudes.NONE) && !sightings.get(i).getLongitude().equals(Longitudes.NONE)) {
+                            float lat = sightings.get(i).getLatDegrees();
+                            lat = lat + sightings.get(i).getLatMinutes()/60f;
+                            lat = lat + (sightings.get(i).getLatSecondsFloat()/60f)/60f;
+                            if (sightings.get(i).getLatitude().equals(Latitudes.SOUTH))
+                                lat = -1 * lat;
+                            float lon = sightings.get(i).getLonDegrees();
+                            lon = lon + sightings.get(i).getLonMinutes()/60f;
+                            lon = lon + (sightings.get(i).getLonSecondsFloat()/60f)/60f;
+                            if (sightings.get(i).getLongitude().equals(Longitudes.WEST))
+                                lon = -1 * lon;
+                            app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
                         }
                     }
                 }
@@ -1156,7 +1059,7 @@ public class PanelLocation extends javax.swing.JPanel {
             if  (tblVisit.getSelectedRowCount() == 1) {
                 tblElement.setModel(utilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
             }
-            else tblElement.setModel(new DefaultTableModel(new String[]{"No Visit Selected"}, 0));
+            else tblElement.setModel(new DefaultTableModel(new String[]{"Please selected a Visit"}, 0));
         }
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
         // Setup table column sizes
@@ -1202,7 +1105,7 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_txtLonSecondsFocusGained
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        Utils.openImage(locationWL, imageIndex);
+        Utils.openImage("LOCATION-" + locationWL.getName(), imageIndex, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
@@ -1292,13 +1195,13 @@ public class PanelLocation extends javax.swing.JPanel {
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
         UtilsHTML.exportHTML(locationWL);
-        Utils.openImage(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + locationWL.getName() + ".html");
+        Utils.openFile(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + locationWL.getName() + ".html");
 }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (locationWL.getName() != null) {
             if (locationWL.getName().length() > 0) {
-                JFrame report = new ReportLocation(locationWL);
+                JFrame report = new ReportLocation(locationWL, app);
                 report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
                 report.setPreferredSize(new Dimension(550, 750));
                 report.setLocationRelativeTo(null);
@@ -1348,14 +1251,14 @@ public class PanelLocation extends javax.swing.JPanel {
     }
 
     private void setupNumberOfImages() {
-        if (locationWL.getFotos().size() > 0)
-            lblNumberOfImages.setText(imageIndex+1 + " of " + locationWL.getFotos().size());
+        List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + locationWL.getName()));
+        if (fotos.size() > 0)
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else
             lblNumberOfImages.setText("0 of 0");
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddSubArea;
     private javax.swing.JButton btnAddVisit;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteVisit;
@@ -1366,7 +1269,6 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JButton btnMapSightings;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;
-    private javax.swing.JButton btnRemoveSubArea;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdate;
@@ -1380,7 +1282,6 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JComboBox cmbLongitude;
     private javax.swing.JComboBox cmbProvince;
     private javax.swing.JComboBox cmbRating;
-    private javax.swing.JComboBox cmbSubAreas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1398,7 +1299,6 @@ public class PanelLocation extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;

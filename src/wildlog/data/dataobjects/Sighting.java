@@ -16,28 +16,22 @@ package wildlog.data.dataobjects;
 
 import CsvGenerator.CsvGenerator;
 import KmlGenerator.objects.KmlEntry;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
-import wildlog.data.enums.ElementType;
-import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
-import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Sighting class
-public class Sighting implements HasFotos, Comparable<Sighting> {
+public class Sighting implements Comparable<Sighting> {
     private Date date; // must include time
-    private Element element;
-    private Location location;
+//    private Element element;
+//    private Location location;
     private ActiveTimeSpesific timeOfDay; // General description of the time (bv early morning, night, ens) Predefined
     private Weather weather; // Predefined set of possible values
     private AreaType areaType; // In what 'mini-habitat' was the element seen (bv river, open patch, ens) Predefined
@@ -45,7 +39,7 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
     private Certainty certainty; // How sure you are that it was identified correctly
     private int numberOfElements; // How many where present at sighting
     private String details;
-    private List<Foto> fotos; // The difference between this and the Element foto is that Element fotos are the "good" ones, these are more foto records...
+//    private List<Foto> fotos; // The difference between this and the Element foto is that Element fotos are the "good" ones, these are more foto records...
     private Latitudes latitude;
     private int latDegrees;
     private int latMinutes;
@@ -59,6 +53,9 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
     private String subArea;
     private SightingEvidence sightingEvidence;
     private long sightingCounter;
+    private String elementName;
+    private String locationName;
+    private String visitName;
 
 
     // CONSTRUCTORS:
@@ -69,17 +66,17 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         sightingCounter = inSightingCounter;
     }
 
-    public Sighting(Date inDate, Element inElement, Location inLocation, long inSightingCounter) {
-        date = inDate;
-        element = inElement;
-        location = inLocation;
-        sightingCounter = inSightingCounter;
-    }
+//    public Sighting(Date inDate, Element inElement, Location inLocation, long inSightingCounter) {
+//        date = inDate;
+//        element = inElement;
+//        location = inLocation;
+//        sightingCounter = inSightingCounter;
+//    }
 
     // METHIDS:
     @Override
     public String toString() {
-        return location.getName() + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + element.getPrimaryName();
+        return locationName + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + elementName;
     }
 
     @Override
@@ -93,14 +90,14 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
-        if (fotos != null)
-            for (int t = 0; t < fotos.size(); t++) {
-                fotoString = fotoString + fotos.get(t).toHTML();
-            }
+//        if (fotos != null)
+//            for (int t = 0; t < fotos.size(); t++) {
+//                fotoString = fotoString + fotos.get(t).toHTML();
+//            }
         String htmlSighting = "<H2>Sighting</H2>";
         htmlSighting = htmlSighting + "<b>Date:</b> " + UtilsHTML.formatDate(date, true);
-        htmlSighting = htmlSighting + "<br/><b>Element:</b> " + element.getPrimaryName();
-        htmlSighting = htmlSighting + "<br/><b>Location:</b> " + UtilsHTML.formatString(location.getName());
+        htmlSighting = htmlSighting + "<br/><b>Element:</b> " + elementName;
+        htmlSighting = htmlSighting + "<br/><b>Location:</b> " + UtilsHTML.formatString(locationName);
         htmlSighting = htmlSighting + "<br/>";
         htmlSighting = htmlSighting + "<br/><b>Time of Day:</b> " + UtilsHTML.formatString(timeOfDay);
         htmlSighting = htmlSighting + "<br/><b>Weather:</b> " + UtilsHTML.formatString(weather);
@@ -120,88 +117,89 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
 
     public KmlEntry toKML(int inID) {
         KmlEntry entry = new KmlEntry();
-        entry.setId(inID);
-        entry.setName(element.getPrimaryName());
-        entry.setDescription(this.toHTML(false, true));
-        if (element.getType() != null) {
-            if (element.getType().equals(ElementType.ANIMAL)) {
-                if (element.getFeedingClass() == null)
-                    entry.setStyle("animalOtherStyle");
-                else
-                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
-                    entry.setStyle("animalCarnivoreStyle");
-                else
-                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
-                    entry.setStyle("animalHerbivoreStyle");
-                else
-                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
-                    entry.setStyle("animalOmnivoreStyle");
-                else
-                    entry.setStyle("animalOtherStyle");
-            }
-            else
-            if (element.getType().equals(ElementType.BIRD)) {
-                if (element.getFeedingClass() == null)
-                    entry.setStyle("birdOtherStyle");
-                else
-                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
-                    entry.setStyle("birdCarnivoreStyle");
-                else
-                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
-                    entry.setStyle("birdHerbivoreStyle");
-                else
-                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
-                    entry.setStyle("birdOmnivoreStyle");
-                else
-                    entry.setStyle("birdOtherStyle");
-            }
-            else
-            if (element.getType().equals(ElementType.PLANT)) {
-                    entry.setStyle("plantStyle");
-            }
-            else {
-                entry.setStyle("nostyle");
-            }
-        }
-        else {
-            entry.setStyle("nostyle");
-        }
-        if (latitude == null || longitude == null) {
-            if (location.getLatitude() != null && location.getLongitude() != null) {
-                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
-                }
-            }
-            else {
-                entry.setLatitude(0);
-                entry.setLongitude(0);
-            }
-        }
-        else
-        if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
-            if (location.getLatitude() != null && location.getLongitude() != null) {
-                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
-                }
-            }
-            else {
-                entry.setLatitude(0);
-                entry.setLongitude(0);
-            }
-        }
-        else {
-            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
-            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
-        }
-        return entry;
+        throw new UnsupportedOperationException("Not yet supported.");
+//        entry.setId(inID);
+//        entry.setName(element.getPrimaryName());
+//        entry.setDescription(this.toHTML(false, true));
+//        if (element.getType() != null) {
+//            if (element.getType().equals(ElementType.ANIMAL)) {
+//                if (element.getFeedingClass() == null)
+//                    entry.setStyle("animalOtherStyle");
+//                else
+//                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+//                    entry.setStyle("animalCarnivoreStyle");
+//                else
+//                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+//                    entry.setStyle("animalHerbivoreStyle");
+//                else
+//                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+//                    entry.setStyle("animalOmnivoreStyle");
+//                else
+//                    entry.setStyle("animalOtherStyle");
+//            }
+//            else
+//            if (element.getType().equals(ElementType.BIRD)) {
+//                if (element.getFeedingClass() == null)
+//                    entry.setStyle("birdOtherStyle");
+//                else
+//                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+//                    entry.setStyle("birdCarnivoreStyle");
+//                else
+//                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+//                    entry.setStyle("birdHerbivoreStyle");
+//                else
+//                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+//                    entry.setStyle("birdOmnivoreStyle");
+//                else
+//                    entry.setStyle("birdOtherStyle");
+//            }
+//            else
+//            if (element.getType().equals(ElementType.PLANT)) {
+//                    entry.setStyle("plantStyle");
+//            }
+//            else {
+//                entry.setStyle("nostyle");
+//            }
+//        }
+//        else {
+//            entry.setStyle("nostyle");
+//        }
+//        if (latitude == null || longitude == null) {
+//            if (location.getLatitude() != null && location.getLongitude() != null) {
+//                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
+//                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
+//                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
+//                }
+//            }
+//            else {
+//                entry.setLatitude(0);
+//                entry.setLongitude(0);
+//            }
+//        }
+//        else
+//        if (latitude.equals(Latitudes.NONE) || longitude.equals(Longitudes.NONE)) {
+//            if (location.getLatitude() != null && location.getLongitude() != null) {
+//                if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
+//                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
+//                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
+//                }
+//            }
+//            else {
+//                entry.setLatitude(0);
+//                entry.setLongitude(0);
+//            }
+//        }
+//        else {
+//            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
+//            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
+//        }
+//        return entry;
     }
 
     public void toCSV(CsvGenerator inCSVGenerator) {
         inCSVGenerator.addData(date);
-        inCSVGenerator.addData(element.getPrimaryName());
-        inCSVGenerator.addData(location.getName());
+//        inCSVGenerator.addData(element.getPrimaryName());
+//        inCSVGenerator.addData(location.getName());
         inCSVGenerator.addData(timeOfDay);
         inCSVGenerator.addData(weather);
         inCSVGenerator.addData(areaType);
@@ -209,7 +207,7 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         inCSVGenerator.addData(certainty);
         inCSVGenerator.addData(numberOfElements);
         inCSVGenerator.addData(details);
-        inCSVGenerator.addData(fotos);
+//        inCSVGenerator.addData(fotos);
         inCSVGenerator.addData(latitude);
         inCSVGenerator.addData(latDegrees);
         inCSVGenerator.addData(latMinutes);
@@ -233,13 +231,13 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         return date;
     }
 
-    public Element getElement() {
-        return element;
-    }
+//    public Element getElement() {
+//        return element;
+//    }
 
-    public Location getLocation() {
-        return location;
-    }
+//    public Location getLocation() {
+//        return location;
+//    }
 
     public ActiveTimeSpesific getTimeOfDay() {
         return timeOfDay;
@@ -269,11 +267,11 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         return details;
     }
 
-    @Override
-    public List<Foto> getFotos() {
-        if (fotos == null) fotos = new ArrayList<Foto>(1);
-        return fotos;
-    }
+//    @Override
+//    public List<Foto> getFotos() {
+//        if (fotos == null) fotos = new ArrayList<Foto>(1);
+//        return fotos;
+//    }
 
     public int getLatDegrees() {
         return latDegrees;
@@ -325,13 +323,13 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         date = inDate;
     }
 
-    public void setElement(Element inElement) {
-        element = inElement;
-    }
-
-    public void setLocation(Location inLocation) {
-        location = inLocation;
-    }
+//    public void setElement(Element inElement) {
+//        element = inElement;
+//    }
+//
+//    public void setLocation(Location inLocation) {
+//        location = inLocation;
+//    }
 
     public void setTimeOfDay(ActiveTimeSpesific inTimeOfDay) {
         timeOfDay = inTimeOfDay;
@@ -361,10 +359,10 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
         details = inDetails;
     }
 
-    @Override
-    public void setFotos(List<Foto> inFotos) {
-        fotos = inFotos;
-    }
+//    @Override
+//    public void setFotos(List<Foto> inFotos) {
+//        fotos = inFotos;
+//    }
 
     public void setLatDegrees(int inLatDegrees) {
         latDegrees = inLatDegrees;
@@ -409,5 +407,30 @@ public class Sighting implements HasFotos, Comparable<Sighting> {
     public void setSightingCounter(long inSightingCounter) {
         sightingCounter = inSightingCounter;
     }
+
+    public String getElementName() {
+        return elementName;
+    }
+
+    public void setElementName(String elementName) {
+        this.elementName = elementName;
+    }
+
+    public String getLocationName() {
+        return locationName;
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public String getVisitName() {
+        return visitName;
+    }
+
+    public void setVisitName(String visitName) {
+        this.visitName = visitName;
+    }
+
     
 }

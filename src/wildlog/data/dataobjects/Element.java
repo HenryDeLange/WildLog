@@ -16,9 +16,6 @@ package wildlog.data.dataobjects;
 
 
 import CsvGenerator.CsvGenerator;
-import java.util.ArrayList;
-import java.util.List;
-import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -32,20 +29,24 @@ import wildlog.utils.UtilsHTML;
 
 // Foundation for Elements classes
 // Use inheritance for animal, bird, plant, fish, insects, etc
-public class Element implements HasFotos, Comparable<Element> {
+public class Element implements Comparable<Element> {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
     private String description; // HABITAT Discription
     private String nutrition; // What food or soil the element preferes
     private WaterDependancy waterDependance; // How dependant the element is on water
-    private double sizeMaleAverage; // Might later split all "Averages" into min and max
-    private double sizeFemaleAverage; // Measured in centimeters
-    private double weightMaleAverage; // Measusred in kilograms
-    private double weightFemaleAverage;
+    private double sizeMaleMin;
+    private double sizeMaleMax;
+    private double sizeFemaleMin;
+    private double sizeFemaleMax;
+    private double weightMaleMin;
+    private double weightMaleMax;
+    private double weightFemaleMin;
+    private double weightFemaleMax;
     private String breedingDuration; // How long the young is developed and how long it takes to be independant
-    private double breedingNumber; // The number of young produced
-    private String breedingAge; // CURRENTLY NOT USSED!!!
+    private String breedingNumber; // The number of young produced
+    //private String breedingAge; // CURRENTLY NOT USSED!!!
     //private int numberOfSightings; // The number of times a sighting for this element has been recorded (don't need its own variable, can get in other ways)
     private WishRating wishListRating; // How much I wish to see the element
     //private Habitat habitat; // This needs to be improved to be more specific (maybe select from list of habitats, can create new ones)
@@ -54,7 +55,7 @@ public class Element implements HasFotos, Comparable<Element> {
     private EndangeredStatus endangeredStatus; // The official endangered status of the element
     private String behaviourDescription; // Used to describe some unique behaviour
     private AddFrequency addFrequency; // How often the element is added when seen (bv always at any location, usualy only at new locations, sometimes at some locations, once, ... These values should be predefined)
-    private List<Foto> fotos; // An ArrayList of Foto objects
+//    private List<Foto> fotos; // An ArrayList of Foto objects
     //private Foto primaryFoto; // Not needed, the first image in the list will always be the main image...
     private ElementType type; // Animal, Bird, etc
     private FeedingClass feedingClass; // Carnivore, etc (this might need to be implemented on child class when converting to enums)
@@ -71,8 +72,8 @@ public class Element implements HasFotos, Comparable<Element> {
     public Element() {
     }
 
-    public Element(String inEnglishName) {
-        primaryName = inEnglishName;
+    public Element(String inPrimaryName) {
+        primaryName = inPrimaryName;
     }
     
     public Element(ElementType inElementType) {
@@ -97,10 +98,10 @@ public class Element implements HasFotos, Comparable<Element> {
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
-        if (fotos != null)
-            for (int t = 0; t < fotos.size(); t++) {
-                fotoString = fotoString + fotos.get(t).toHTML();
-            }
+//        if (fotos != null)
+//            for (int t = 0; t < fotos.size(); t++) {
+//                fotoString = fotoString + fotos.get(t).toHTML();
+//            }
 
         String htmlElement = "<head><title>" + primaryName + "</title></head>";
         htmlElement = htmlElement + "<body>";
@@ -121,10 +122,14 @@ public class Element implements HasFotos, Comparable<Element> {
         htmlElement = htmlElement + "<br/><b>Identification:</b> " + UtilsHTML.formatString(diagnosticDescription);
         htmlElement = htmlElement + "<br/><b>Habitat:</b> " + UtilsHTML.formatString(description);
         htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + UtilsHTML.formatString(behaviourDescription);
-        htmlElement = htmlElement + "<br/><b>Average Male Size:</b> " + UtilsHTML.formatString(sizeMaleAverage) + " " + UtilsHTML.formatString(sizeUnit);
-        htmlElement = htmlElement + "<br/><b>Average Female Size:</b> " + UtilsHTML.formatString(sizeFemaleAverage) + " " + UtilsHTML.formatString(sizeUnit);
-        htmlElement = htmlElement + "<br/><b>Average Male Weight:</b> " + UtilsHTML.formatString(weightMaleAverage) + " " + UtilsHTML.formatString(weightUnit);
-        htmlElement = htmlElement + "<br/><b>Average Female Weight:</b> " + UtilsHTML.formatString(weightFemaleAverage) + " " + UtilsHTML.formatString(weightUnit);
+        htmlElement = htmlElement + "<br/><b>Minimum Male Size:</b> " + UtilsHTML.formatString(sizeMaleMin) + " " + UtilsHTML.formatString(sizeUnit);
+        htmlElement = htmlElement + "<br/><b>Maximum Male Size:</b> " + UtilsHTML.formatString(sizeMaleMin) + " " + UtilsHTML.formatString(sizeUnit);
+        htmlElement = htmlElement + "<br/><b>Minimum Female Size:</b> " + UtilsHTML.formatString(sizeFemaleMin) + " " + UtilsHTML.formatString(sizeUnit);
+        htmlElement = htmlElement + "<br/><b>Maximum Female Size:</b> " + UtilsHTML.formatString(sizeFemaleMin) + " " + UtilsHTML.formatString(sizeUnit);
+        htmlElement = htmlElement + "<br/><b>Minimum Male Weight:</b> " + UtilsHTML.formatString(weightMaleMin) + " " + UtilsHTML.formatString(weightUnit);
+        htmlElement = htmlElement + "<br/><b>Maximum Male Weight:</b> " + UtilsHTML.formatString(weightMaleMin) + " " + UtilsHTML.formatString(weightUnit);
+        htmlElement = htmlElement + "<br/><b>Minimum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
+        htmlElement = htmlElement + "<br/><b>Maximum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
         htmlElement = htmlElement + "<br/><b>Age:</b> " + UtilsHTML.formatString(lifespan);
         htmlElement = htmlElement + "<br/><b>Breeding Duration:</b> " + UtilsHTML.formatString(breedingDuration);
         htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + UtilsHTML.formatString(breedingNumber);
@@ -142,22 +147,22 @@ public class Element implements HasFotos, Comparable<Element> {
         inCSVGenerator.addData(description);
         inCSVGenerator.addData(nutrition);
         inCSVGenerator.addData(waterDependance);
-        inCSVGenerator.addData(sizeMaleAverage);
-        inCSVGenerator.addData(sizeFemaleAverage);
+        inCSVGenerator.addData(sizeMaleMin);
+        inCSVGenerator.addData(sizeFemaleMin);
         inCSVGenerator.addData(sizeUnit);
-        inCSVGenerator.addData(weightMaleAverage);
-        inCSVGenerator.addData(weightFemaleAverage);
+        inCSVGenerator.addData(weightMaleMin);
+        inCSVGenerator.addData(weightFemaleMin);
         inCSVGenerator.addData(weightUnit);
         inCSVGenerator.addData(breedingDuration);
         inCSVGenerator.addData(breedingNumber);
-        inCSVGenerator.addData(breedingAge);
+        //inCSVGenerator.addData(breedingAge);
         inCSVGenerator.addData(wishListRating);
         inCSVGenerator.addData(diagnosticDescription);
         inCSVGenerator.addData(activeTime);
         inCSVGenerator.addData(endangeredStatus);
         inCSVGenerator.addData(behaviourDescription);
         inCSVGenerator.addData(addFrequency);
-        inCSVGenerator.addData(fotos);
+//        inCSVGenerator.addData(fotos);
         inCSVGenerator.addData(type);
         inCSVGenerator.addData(feedingClass);
         inCSVGenerator.addData(lifespan);
@@ -193,33 +198,33 @@ public class Element implements HasFotos, Comparable<Element> {
         return waterDependance;
     }
 
-    public double getSizeMaleAverage() {
-        return sizeMaleAverage;
+    public double getSizeMaleMin() {
+        return sizeMaleMin;
     }
 
-    public double getSizeFemaleAverage() {
-        return sizeFemaleAverage;
+    public double getSizeFemaleMin() {
+        return sizeFemaleMin;
     }
 
-    public double getWeightMaleAverage() {
-        return weightMaleAverage;
+    public double getWeightMaleMin() {
+        return weightMaleMin;
     }
 
-    public double getWeightFemaleAverage() {
-        return weightFemaleAverage;
+    public double getWeightFemaleMin() {
+        return weightFemaleMin;
     }
 
     public String getBreedingDuration() {
         return breedingDuration;
     }
 
-    public double getBreedingNumber() {
+    public String getBreedingNumber() {
         return breedingNumber;
     }
 
-    public String getBreedingAge() {
-        return breedingAge;
-    }
+//    public String getBreedingAge() {
+//        return breedingAge;
+//    }
 
     public WishRating getWishListRating() {
         return wishListRating;
@@ -241,11 +246,11 @@ public class Element implements HasFotos, Comparable<Element> {
         return endangeredStatus;
     }
 
-    @Override
-    public List<Foto> getFotos() {
-        if (fotos == null) fotos = new ArrayList<Foto>(1);
-        return fotos;
-    }
+//    @Override
+//    public List<Foto> getFotos() {
+//        if (fotos == null) fotos = new ArrayList<Foto>(1);
+//        return fotos;
+//    }
     
     public String getBehaviourDescription() {
         return behaviourDescription;
@@ -309,33 +314,33 @@ public class Element implements HasFotos, Comparable<Element> {
         waterDependance = inWaterDependance;
     }
 
-    public void setSizeMaleAverage(double inSizeMaleAverage) {
-        sizeMaleAverage = inSizeMaleAverage;
+    public void setSizeMaleMin(double inSizeMaleMin) {
+        sizeMaleMin = inSizeMaleMin;
     }
 
-    public void setSizeFemaleAverage(double inSizeFemaleAverage) {
-        sizeFemaleAverage = inSizeFemaleAverage;
+    public void setSizeFemaleMin(double inSizeFemaleMin) {
+        sizeFemaleMin = inSizeFemaleMin;
     }
 
-    public void setWeightMaleAverage(double inWeightMaleAverage) {
-        weightMaleAverage = inWeightMaleAverage;
+    public void setWeightMaleMin(double inWeightMaleMin) {
+        weightMaleMin = inWeightMaleMin;
     }
 
-    public void setWeightFemaleAverage(double inWeightFemaleAverage) {
-        weightFemaleAverage = inWeightFemaleAverage;
+    public void setWeightFemaleMin(double inWeightFemaleMin) {
+        weightFemaleMin = inWeightFemaleMin;
     }
 
     public void setBreedingDuration(String inBreedingDuration) {
         breedingDuration = inBreedingDuration;
     }
 
-    public void setBreedingNumber(double inBreedingNumber) {
+    public void setBreedingNumber(String inBreedingNumber) {
         breedingNumber = inBreedingNumber;
     }
 
-    public void setBreedingAge(String inBreedingAge) {
-        breedingAge = inBreedingAge;
-    }
+//    public void setBreedingAge(String inBreedingAge) {
+//        breedingAge = inBreedingAge;
+//    }
 
     public void setWishListRating(WishRating inWishListRating) {
         wishListRating = inWishListRating;
@@ -365,10 +370,10 @@ public class Element implements HasFotos, Comparable<Element> {
         addFrequency = inAddFrequency;
     }
 
-    @Override
-    public void setFotos(List<Foto> inFotos) {
-        fotos = inFotos;
-    }
+//    @Override
+//    public void setFotos(List<Foto> inFotos) {
+//        fotos = inFotos;
+//    }
     
 //    public void setPrimaryfoto(Foto inFoto) {
 //        primaryFoto = inFoto;
@@ -392,6 +397,38 @@ public class Element implements HasFotos, Comparable<Element> {
 
     public void setLifespan(String inLifespan) {
         lifespan = inLifespan;
+    }
+
+    public double getSizeFemaleMax() {
+        return sizeFemaleMax;
+    }
+
+    public void setSizeFemaleMax(double sizeFemaleMax) {
+        this.sizeFemaleMax = sizeFemaleMax;
+    }
+
+    public double getSizeMaleMax() {
+        return sizeMaleMax;
+    }
+
+    public void setSizeMaleMax(double sizeMaleMax) {
+        this.sizeMaleMax = sizeMaleMax;
+    }
+
+    public double getWeightFemaleMax() {
+        return weightFemaleMax;
+    }
+
+    public void setWeightFemaleMax(double weightFemaleMax) {
+        this.weightFemaleMax = weightFemaleMax;
+    }
+
+    public double getWeightMaleMax() {
+        return weightMaleMax;
+    }
+
+    public void setWeightMaleMax(double weightMaleMax) {
+        this.weightMaleMax = weightMaleMax;
     }
 
 }

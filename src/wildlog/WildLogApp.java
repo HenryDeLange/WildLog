@@ -20,6 +20,7 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import wildlog.data.dbi.DBI;
 import wildlog.data.dbi.DBI_db4o;
+import wildlog.data.dbi.DBI_derby;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrame;
@@ -112,8 +113,9 @@ public class WildLogApp extends SingleFrameApplication {
         dataFolder.mkdirs();
         File imagesFolder = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar);
         imagesFolder.mkdirs();
-        // Might need to add Util folder here with JAR files in... Or installer should do that...
-        dbi = new DBI_db4o();
+
+        System.setProperty("derby.system.home", "/WildLog/Data/");
+        dbi = new DBI_derby();
     }
 
     /**

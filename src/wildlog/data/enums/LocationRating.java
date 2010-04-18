@@ -33,4 +33,13 @@ public enum LocationRating {
         return text;
     }
 
+    public static LocationRating getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
+        if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;
+        if (inText.equalsIgnoreCase(DECENT.text)) return DECENT;
+        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

@@ -43,4 +43,13 @@ public enum AddFrequency {
         return text;
     }
 
+    public static AddFrequency getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
+        if (inText.equalsIgnoreCase(MEDIUM.text)) return MEDIUM;
+        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
+        if (inText.equalsIgnoreCase(VERY_LOW.text)) return VERY_LOW;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

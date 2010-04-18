@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
+import wildlog.WildLogApp;
 import wildlog.WildLogView;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -54,13 +55,19 @@ public class ReportLocation extends javax.swing.JFrame {
     private BarChart chartTime;
     private BarChart chartType;
     private BarChart chartSpecies;
+    private List<Visit> visits;
+    private WildLogApp app;
 
 
     /** Creates new form ReportLocation */
-    public ReportLocation(Location inLocation) {
+    public ReportLocation(Location inLocation, WildLogApp inApp) {
         initComponents();
 
+        app = inApp;
         location = inLocation;
+        Visit tempVisit = new Visit();
+        tempVisit.setLocationName(location.getName());
+        visits = app.getDBI().list(tempVisit);
         doReport1();
     }
 
@@ -380,7 +387,7 @@ public class ReportLocation extends javax.swing.JFrame {
     private void doReport1() {
         // Init report fields
         lblName.setText(location.getName());
-        lblNumberOfVisits.setText(Integer.toString(location.getVisits().size()));
+        lblNumberOfVisits.setText(Integer.toString(visits.size()));
         int numOfSightings = 0;
         Set<String> numOfElements = new HashSet<String>();
         int numDaySightings = 0;
@@ -398,7 +405,7 @@ public class ReportLocation extends javax.swing.JFrame {
             this.getContentPane().remove(chartSpecies);
         chartTime = new BarChart(290, 600);
         chartType = new BarChart(290, 600);
-        for (Visit visit : location.getVisits()) {
+        for (Visit visit : visits) {
             if (visit.getStartDate() != null) {
                 if (firstDate == null)
                     firstDate = visit.getStartDate();
@@ -417,14 +424,17 @@ public class ReportLocation extends javax.swing.JFrame {
                 long diff = visit.getEndDate().getTime() - visit.getStartDate().getTime();
                 activeDays = activeDays + (int)Math.ceil((double)diff/60/60/24/1000) + 1;
             }
-            for (Sighting sighting : visit.getSightings()) {
+            Sighting tempSighting = new Sighting();
+            tempSighting.setVisitName(visit.getName());
+            List<Sighting> sightings = app.getDBI().list(tempSighting);
+            for (Sighting sighting : sightings) {
                 numOfSightings++;
-                numOfElements.add(sighting.getElement().getPrimaryName());
+                numOfElements.add(sighting.getElementName());
                 String nameToUse = "";
                 if (usePrimaryName)
-                    nameToUse = sighting.getElement().getPrimaryName();
+                    nameToUse = sighting.getElementName();
                 else
-                    nameToUse = sighting.getElement().getOtherName();
+                    nameToUse = sighting.getElementName();
                 // Time
                 if (sighting.getTimeOfDay() != null) {
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
@@ -515,7 +525,7 @@ public class ReportLocation extends javax.swing.JFrame {
 
         // Init report fields
         lblName.setText(location.getName());
-        lblNumberOfVisits.setText(Integer.toString(location.getVisits().size()));
+        lblNumberOfVisits.setText(Integer.toString(visits.size()));
         int numOfSightings = 0;
         Set<String> numOfElements = new HashSet<String>();
         int numDaySightings = 0;
@@ -533,8 +543,8 @@ public class ReportLocation extends javax.swing.JFrame {
             this.getContentPane().remove(chartSpecies);
         chartSpecies = new BarChart(590, 650);
         // Get a sorted list of all visits with dates
-        List<Visit> sortedVisits = new ArrayList<Visit>(location.getVisits().size());
-        for (Visit visit : location.getVisits()) {
+        List<Visit> sortedVisits = new ArrayList<Visit>(visits.size());
+        for (Visit visit : visits) {
             if (visit.getStartDate() != null && visit.getEndDate() != null) {
                 if (sortedVisits.size() == 0) {
                     sortedVisits.add(visit);
@@ -560,14 +570,17 @@ public class ReportLocation extends javax.swing.JFrame {
         lastDate = sortedVisits.get(sortedVisits.size()-1).getEndDate();
 
         List<ReportData> tempData = new ArrayList<ReportData>();
-        for (Visit visit : location.getVisits()) {
-            Collections.sort(visit.getSightings());
-            for (Sighting sighting : visit.getSightings()) {
+        for (Visit visit : visits) {
+            Sighting tempSighting = new Sighting();
+            tempSighting.setVisitName(visit.getName());
+            List<Sighting> sightings = app.getDBI().list(tempSighting);
+            Collections.sort(sightings);
+            for (Sighting sighting : sightings) {
                 numOfSightings++;
-                numOfElements.add(sighting.getElement().getPrimaryName());
+                numOfElements.add(sighting.getElementName());
                 //if (!numOfElements.contains(sighting.getElement().getPrimaryName()))
                 //    chartSpecies.addBar(new BarChartEntity(sighting.getElement().getPrimaryName() + "-" + sighting.getDate(), visit.getName(), (numOfElements.size()), Color.yellow));
-                tempData.add(new ReportData(new Date(sighting.getDate().getYear(), sighting.getDate().getMonth(), sighting.getDate().getDate()), numOfElements.size(), sighting.getElement().getPrimaryName()));
+                tempData.add(new ReportData(new Date(sighting.getDate().getYear(), sighting.getDate().getMonth(), sighting.getDate().getDate()), numOfElements.size(), sighting.getElementName()));
 
                 if (sighting.getTimeOfDay() != null) {
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
@@ -589,8 +602,8 @@ public class ReportLocation extends javax.swing.JFrame {
         Set<String> tempSet = new HashSet<String>(numOfElements.size());
         for (ReportData temp : tempData) {
             if (!tempSet.contains(temp.name)) {
-                tempDataCore.add(new ReportData(temp.dateAsDay, tempSet.size(), ""));
                 tempSet.add(temp.name);
+                tempDataCore.add(new ReportData(temp.dateAsDay, tempSet.size(), ""));
             }
         }
 

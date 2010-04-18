@@ -38,7 +38,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
     public PanelMergeElements() {
         initComponents();
         app = (WildLogApp) Application.getInstance();
-        loadLists();
+//        loadLists();
     }
 
     /** This method is called from within the constructor to
@@ -138,45 +138,45 @@ public class PanelMergeElements extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
-            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                Sighting templateSighting = new Sighting();
-                Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
-                Element keepElement = (Element)lstKeepElement.getSelectedValue();
-                templateSighting.setElement(replaceElement);
-                List<Sighting> sightings = app.getDBI().list(templateSighting);
-                for (Sighting tempSighting : sightings) {
-                    tempSighting.setElement(keepElement);
-                    app.getDBI().createOrUpdate(tempSighting);
-                }
-                app.getDBI().delete(replaceElement);
-
-                loadLists();
-                this.setCursor(Cursor.getDefaultCursor());
-            }
+//        if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
+//            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+//                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                Sighting templateSighting = new Sighting();
+//                Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
+//                Element keepElement = (Element)lstKeepElement.getSelectedValue();
+//                templateSighting.setElement(replaceElement);
+//                List<Sighting> sightings = app.getDBI().list(templateSighting);
+//                for (Sighting tempSighting : sightings) {
+//                    tempSighting.setElement(keepElement);
+//                    app.getDBI().createOrUpdate(tempSighting);
+//                }
+//                app.getDBI().delete(replaceElement);
+//
+//                loadLists();
+//                this.setCursor(Cursor.getDefaultCursor());
+//            }
             // Close the window
             //JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
             //dialog.dispose();
-        }
+//        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
 
     // Private Methods
-    private void loadLists() {
-        // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
-        Collections.sort(elements);
-        DefaultListModel replaceModel = new DefaultListModel();
-        DefaultListModel keepModel = new DefaultListModel();
-        for (Element tempElement : elements) {
-            replaceModel.addElement(tempElement);
-            keepModel.addElement(tempElement);
-        }
-
-        lstReplaceElement.setModel(replaceModel);
-        lstKeepElement.setModel(keepModel);
-    }
+//    private void loadLists() {
+//        // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
+//        List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
+//        Collections.sort(elements);
+//        DefaultListModel replaceModel = new DefaultListModel();
+//        DefaultListModel keepModel = new DefaultListModel();
+//        for (Element tempElement : elements) {
+//            replaceModel.addElement(tempElement);
+//            keepModel.addElement(tempElement);
+//        }
+//
+//        lstReplaceElement.setModel(replaceModel);
+//        lstKeepElement.setModel(keepModel);
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;

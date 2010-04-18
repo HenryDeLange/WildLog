@@ -33,4 +33,13 @@ public enum CateringType {
         return text;
     }
 
+    public static CateringType getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(ONLY_SELF_CATERING.text)) return ONLY_SELF_CATERING;
+        if (inText.equalsIgnoreCase(ONLY_NON_CATERING.text)) return ONLY_NON_CATERING;
+        if (inText.equalsIgnoreCase(ALL_CATERING.text)) return ALL_CATERING;
+        if (inText.equalsIgnoreCase(NO_CATERING.text)) return NO_CATERING;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

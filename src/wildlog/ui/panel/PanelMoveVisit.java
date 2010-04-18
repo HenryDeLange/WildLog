@@ -135,38 +135,38 @@ public class PanelMoveVisit extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lstFromLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromLocationMouseReleased
-        DefaultListModel visitModel = new DefaultListModel();
-        if (lstFromLocation.getSelectedIndex() >= 0) {
-            Location tempLocation = (Location)lstFromLocation.getSelectedValue();
-            Collections.sort(tempLocation.getVisits());
-            for (Visit tempVisit : tempLocation.getVisits())
-                visitModel.addElement(tempVisit);
-        }
-        lstVisit.setModel(visitModel);
+//        DefaultListModel visitModel = new DefaultListModel();
+//        if (lstFromLocation.getSelectedIndex() >= 0) {
+//            Location tempLocation = (Location)lstFromLocation.getSelectedValue();
+//            Collections.sort(tempLocation.getVisits());
+//            for (Visit tempVisit : tempLocation.getVisits())
+//                visitModel.addElement(tempVisit);
+//        }
+//        lstVisit.setModel(visitModel);
     }//GEN-LAST:event_lstFromLocationMouseReleased
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                Visit tempVisit = (Visit)lstVisit.getSelectedValue();
-                // Update the Locations
-                Location fromLocation = (Location)lstFromLocation.getSelectedValue();
-                Location toLocation = (Location)lstToLocation.getSelectedValue();
-                fromLocation.getVisits().remove(tempVisit);
-                toLocation.getVisits().add(tempVisit);
-                app.getDBI().createOrUpdate(fromLocation);
-                app.getDBI().createOrUpdate(toLocation);
-                // Update the sightings
-                for (Sighting tempSighting : tempVisit.getSightings()) {
-                    tempSighting.setLocation(toLocation);
-                    app.getDBI().createOrUpdate(tempSighting);
-                }
-                // Reload the lists
-                loadLists();
-                this.setCursor(Cursor.getDefaultCursor());
-            }
-        }
+//        if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
+//            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
+//                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+//                Visit tempVisit = (Visit)lstVisit.getSelectedValue();
+//                // Update the Locations
+//                Location fromLocation = (Location)lstFromLocation.getSelectedValue();
+//                Location toLocation = (Location)lstToLocation.getSelectedValue();
+//                fromLocation.getVisits().remove(tempVisit);
+//                toLocation.getVisits().add(tempVisit);
+//                //app.getDBI().createOrUpdate(fromLocation);
+//                //app.getDBI().createOrUpdate(toLocation);
+//                // Update the sightings
+//                for (Sighting tempSighting : tempVisit.getSightings()) {
+//                    tempSighting.setLocation(toLocation);
+//                    app.getDBI().createOrUpdate(tempSighting);
+//                }
+//                // Reload the lists
+//                loadLists();
+//                this.setCursor(Cursor.getDefaultCursor());
+//            }
+//        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
 

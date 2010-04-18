@@ -16,9 +16,7 @@ package wildlog.data.dataobjects;
 
 import CsvGenerator.CsvGenerator;
 import KmlGenerator.objects.KmlEntry;
-import java.util.ArrayList;
 import java.util.List;
-import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -31,7 +29,7 @@ import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Location class
-public class Location implements HasFotos, Comparable<Location> {
+public class Location implements Comparable<Location> {
     private String name; // Used as index (ID)
     private String description;
     private Province province; // For locations outside south africa the country name must be used
@@ -39,9 +37,9 @@ public class Location implements HasFotos, Comparable<Location> {
     private LocationRating rating;
     private GameViewRating gameViewingRating;
     private Habitat habitatType; // Select from predefined list what the locations habitat is like (bv semi-desert, fynbos, ens)
-    private List<Foto> fotos; // An ArrayList of Foto objects of the location
+//    private List<Foto> fotos; // An ArrayList of Foto objects of the location
     //private Foto primaryFoto; // Primary fotos and maps of the location (String of the path)
-    private List<Visit> visits; // An ArrayList of visit objects
+    //private List<Visit> visits; // An ArrayList of visit objects
     //private ArrayList wantedElements; // An ArrayList of wanted Elements that are possible to see at the location (some are links, others are string). This will be a arraylist of type <Element> and not the derived types
     //private Date accommodationLastUpdated; // This date indicates how old the other information regarding the accommodation is
     private List<AccommodationType> accommodationType; // For example tent, timeshare, ens
@@ -55,14 +53,14 @@ public class Location implements HasFotos, Comparable<Location> {
     private Latitudes latitude;
     private int latDegrees;
     private int latMinutes;
-    private int latSeconds; // Old field not used anymore
+    //private int latSeconds; // Old field not used anymore
     private float latSecondsFloat;
     private Longitudes longitude;
     private int lonDegrees;
     private int lonMinutes;
-    private int lonSeconds;  // Old field not used anymore
+    //private int lonSeconds;  // Old field not used anymore
     private float lonSecondsFloat;
-    private List<String> subAreas;
+    //private List<String> subAreas;
 
     
     // CONSTRUCTORS:
@@ -90,21 +88,24 @@ public class Location implements HasFotos, Comparable<Location> {
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
-        if (fotos != null)
-            for (int t = 0; t < fotos.size(); t++) {
-                fotoString = fotoString + fotos.get(t).toHTML();
-            }
-        String subAreasString = "";
-        if (subAreas != null)
-            for (int t = 0; t < subAreas.size(); t++) {
-                subAreasString = subAreasString + subAreas.get(t);
-            }
+//        if (fotos != null)
+//            for (int t = 0; t < fotos.size(); t++) {
+//                fotoString = fotoString + fotos.get(t).toHTML();
+//            }
+//        String subAreasString = "";
+//        if (subAreas != null)
+//            for (int t = 0; t < subAreas.size(); t++) {
+//                subAreasString = subAreasString + subAreas.get(t);
+//            }
         String visitsString = "";
-        if (inIsRecursive)
-            if (visits != null)
-                for (int t = 0; t < visits.size(); t++) {
-                    visitsString = visitsString + visits.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
-                }
+        if (inIsRecursive) {
+            throw new UnsupportedOperationException("Not supported yet.");
+//            if (visits != null)
+//                for (int t = 0; t < visits.size(); t++) {
+//                    visitsString = visitsString + visits.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
+//                }  
+        }
+
         String htmlLocation = "<head><title>" + name + "</title></head>";
         htmlLocation = htmlLocation + "<body>";
         htmlLocation = htmlLocation + "<H2>Location</H2>";
@@ -129,7 +130,7 @@ public class Location implements HasFotos, Comparable<Location> {
         htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + UtilsHTML.formatString(accommodationType);
         htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
         htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
-        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
+//        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
         if (inIncludeImages)
             htmlLocation = htmlLocation + "</br><b>Photos:</b></br/>" + fotoString;
         if (inIsRecursive)
@@ -156,7 +157,7 @@ public class Location implements HasFotos, Comparable<Location> {
         inCSVGenerator.addData(rating);
         inCSVGenerator.addData(gameViewingRating);
         inCSVGenerator.addData(habitatType);
-        inCSVGenerator.addData(fotos);
+//        inCSVGenerator.addData(fotos);
         //inCSVGenerator.addData("Visits");
         inCSVGenerator.addData(accommodationType);
         inCSVGenerator.addData(catering);
@@ -171,15 +172,15 @@ public class Location implements HasFotos, Comparable<Location> {
         inCSVGenerator.addData(longitude);
         inCSVGenerator.addData(lonDegrees);
         inCSVGenerator.addData(lonMinutes);
-        inCSVGenerator.addData(lonSeconds);
-        inCSVGenerator.addData(subAreas);
-        inCSVGenerator.addData(visits);
+        inCSVGenerator.addData(lonSecondsFloat);
+//        inCSVGenerator.addData(subAreas);
+//        inCSVGenerator.addData(visits);
     }
 
-    public void doUpdate_v2() {
-        latSecondsFloat = latSeconds;
-        lonSecondsFloat = lonSeconds;
-    }
+//    public void doUpdate_v2() {
+//        latSecondsFloat = latSeconds;
+//        lonSecondsFloat = lonSeconds;
+//    }
 
     // GETTERS:
     public String getName() {
@@ -206,20 +207,20 @@ public class Location implements HasFotos, Comparable<Location> {
         return habitatType;
     }
     
-    @Override
-    public List<Foto> getFotos() {
-        if (fotos == null) fotos = new ArrayList<Foto>(1);
-        return fotos;
-    }
+//    @Override
+//    public List<Foto> getFotos() {
+//        if (fotos == null) fotos = new ArrayList<Foto>(1);
+//        return fotos;
+//    }
     
 //    public Foto getPrimaryFoto() {
 //        return primaryFoto;
 //    }
     
-    public List<Visit> getVisits() {
-        if (visits == null) visits = new ArrayList<Visit>();
-        return visits;
-    }
+//    public List<Visit> getVisits() {
+//        if (visits == null) visits = new ArrayList<Visit>();
+//        return visits;
+//    }
     
     public List<AccommodationType> getAccommodationType() {
         return accommodationType;
@@ -277,14 +278,14 @@ public class Location implements HasFotos, Comparable<Location> {
         return longitude;
     }
 
-    public List<String> getSubAreas() {
-        if (subAreas == null) subAreas = new ArrayList<String>();
-        if (subAreas.size() == 0) subAreas.add("None");
-        if (subAreas.size() > 0)
-            if (!subAreas.contains("None"))
-                subAreas.add("None");
-        return subAreas;
-    }
+//    public List<String> getSubAreas() {
+//        if (subAreas == null) subAreas = new ArrayList<String>();
+//        if (subAreas.size() == 0) subAreas.add("None");
+//        if (subAreas.size() > 0)
+//            if (!subAreas.contains("None"))
+//                subAreas.add("None");
+//        return subAreas;
+//    }
 
 
     // SETTERS:
@@ -312,18 +313,18 @@ public class Location implements HasFotos, Comparable<Location> {
         habitatType = inHabitatType;
     }
 
-    @Override
-    public void setFotos(List<Foto> inFotos) {
-        fotos = inFotos;
-    }
+//    @Override
+//    public void setFotos(List<Foto> inFotos) {
+//        fotos = inFotos;
+//    }
     
 //    public void setPrimaryFoto(Foto inFoto) {
 //        primaryFoto = inFoto;
 //    }
     
-    public void setVisits(List<Visit> inVisits) {
-        visits = inVisits;
-    }
+//    public void setVisits(List<Visit> inVisits) {
+//        visits = inVisits;
+//    }
     
     public void setAccommodationType(List<AccommodationType> inAccommodationType) {
         accommodationType = inAccommodationType;
@@ -381,8 +382,8 @@ public class Location implements HasFotos, Comparable<Location> {
         longitude = inLongitude;
     }
 
-    public void setSubAreas(List<String> inSubAreas) {
-        subAreas = inSubAreas;
-    }
+//    public void setSubAreas(List<String> inSubAreas) {
+//        subAreas = inSubAreas;
+//    }
 
 }

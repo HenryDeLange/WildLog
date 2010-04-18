@@ -34,4 +34,11 @@ public enum UnitsSize {
         return text;
     }
 
+    public static UnitsSize getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(METER.text)) return METER;
+        if (inText.equalsIgnoreCase(CENTI_METER.text)) return CENTI_METER;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

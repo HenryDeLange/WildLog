@@ -32,4 +32,12 @@ public enum GameViewRating {
         return text;
     }
 
+    public static GameViewRating getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
+        if (inText.equalsIgnoreCase(MEDIUM.text)) return MEDIUM;
+        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

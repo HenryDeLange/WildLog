@@ -33,4 +33,13 @@ public enum ActiveTime {
         return text;
     }
 
+    public static ActiveTime getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(DAY.text)) return DAY;
+        if (inText.equalsIgnoreCase(NIGHT.text)) return NIGHT;
+        if (inText.equalsIgnoreCase(ALWAYS.text)) return ALWAYS;
+        if (inText.equalsIgnoreCase(DAWN_OR_DUST.text)) return DAWN_OR_DUST;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

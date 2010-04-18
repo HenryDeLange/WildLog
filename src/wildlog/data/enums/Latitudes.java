@@ -39,4 +39,14 @@ public enum Latitudes {
     public String toString() {
         return text;
     }
+
+    public static Latitudes getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(NORTH.text)) return NORTH;
+        if (inText.equalsIgnoreCase(NORTH.key)) return NORTH;
+        if (inText.equalsIgnoreCase(SOUTH.text)) return SOUTH;
+        if (inText.equalsIgnoreCase(SOUTH.key)) return SOUTH;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText.equalsIgnoreCase(NONE.key)) return NONE;
+        return NONE;
+    }
 }

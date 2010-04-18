@@ -14,6 +14,9 @@
 
 package wildlog.data.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public enum AccommodationType {
     CAMPING("Camping"),
@@ -34,6 +37,15 @@ public enum AccommodationType {
     
     public String test() {
         return text;
+    }
+
+    public static List<AccommodationType> getEnumFromText(String inText) {
+        List<AccommodationType> tempList = new ArrayList<AccommodationType>(3);
+        if (inText.contains(CAMPING.text)) tempList.add(CAMPING);
+        if (inText.contains(SMALL_UNIT.text)) tempList.add(SMALL_UNIT);
+        if (inText.contains(BIG_UNIT.text)) tempList.add(BIG_UNIT);
+        if (inText.contains(NONE.text)) tempList.add(NONE);
+        return tempList;
     }
 
 }

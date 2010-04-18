@@ -438,7 +438,7 @@ public class ReportElement extends javax.swing.JFrame {
         else
             lblAddFrequency.setText("Unknown");
         Sighting tempSighting = new Sighting();
-        tempSighting.setElement(element);
+        tempSighting.setElementName(element.getPrimaryName());
         List<Sighting> sightings = app.getDBI().list(tempSighting);
         lblNumberOfSightings.setText(Integer.toString(sightings.size()));
         Set<String> numOfLocations = new HashSet<String>();
@@ -461,7 +461,7 @@ public class ReportElement extends javax.swing.JFrame {
 
         // Visit Type
         Visit tempVisit = new Visit();
-        tempVisit.getSightings().add(tempSighting);
+        tempVisit.setName(tempSighting.getVisitName());
         List<Visit> visits = app.getDBI().list(tempVisit);
         for (Visit visit : visits) {
             if (visit.getType() != null) {
@@ -490,58 +490,58 @@ public class ReportElement extends javax.swing.JFrame {
         chartTime = new BarChart(600, 515);
         for (Sighting sighting : sightings) {
             // Locations
-            numOfLocations.add(sighting.getLocation().getName());
+            numOfLocations.add(sighting.getLocationName());
             // Dates
             if (sighting.getDate() != null) {
                 if (firstDate == null) {
                     firstDate = sighting.getDate();
-                    firstLocation = sighting.getLocation().getName();
+                    firstLocation = sighting.getLocationName();
                 }
                 else
                 if (sighting.getDate().before(firstDate)) {
                     firstDate = sighting.getDate();
-                    firstLocation = sighting.getLocation().getName();
+                    firstLocation = sighting.getLocationName();
                 }
             }
             if (sighting.getDate() != null) {
                 if (lastDate == null) {
                     lastDate = sighting.getDate();
-                    lastLocation = sighting.getLocation().getName();
+                    lastLocation = sighting.getLocationName();
                 }
                 else
                 if (sighting.getDate().after(lastDate)) {
                     lastDate = sighting.getDate();
-                    lastLocation = sighting.getLocation().getName();
+                    lastLocation = sighting.getLocationName();
                 }
             }
             // Time
             if (sighting.getTimeOfDay() != null) {
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
+                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
                     numNightSightings++;
                 }
                 else
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.EARLY_MORNING) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MORNING)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
+                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
                     numDaySightings++;
                 }
                 else
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MIDDAY) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_MORNING)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
+                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
                     numDaySightings++;
                 }
                 else
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.LATE_AFTERNOON)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
+                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
                     numDaySightings++;
                 }
                 else
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
+                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
                 }
             }
             else
-                chartTime.addBar(new BarChartEntity(sighting.getLocation().getName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));
+                chartTime.addBar(new BarChartEntity(sighting.getLocationName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));
             // Rating
             if (sighting.getViewRating().equals(ViewRating.VERY_GOOD))
                 verygood++;

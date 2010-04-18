@@ -50,4 +50,20 @@ public enum Habitat {
         text = inText;
     }
 
+    public static Habitat getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(SUCCULENT_KAROO.text)) return SUCCULENT_KAROO;
+        if (inText.equalsIgnoreCase(NAMA_KAROO.text)) return NAMA_KAROO;
+        if (inText.equalsIgnoreCase(FYNBOS.text)) return FYNBOS;
+        if (inText.equalsIgnoreCase(GRASSLAND.text)) return GRASSLAND;
+        if (inText.equalsIgnoreCase(SAVANNA.text)) return SAVANNA;
+        if (inText.equalsIgnoreCase(THICKET.text)) return THICKET;
+        if (inText.equalsIgnoreCase(FORREST.text)) return FORREST;
+        if (inText.equalsIgnoreCase(WETLAND.text)) return WETLAND;
+        if (inText.equalsIgnoreCase(COASTAL.text)) return COASTAL;
+        if (inText.equalsIgnoreCase(MARINE.text)) return MARINE;
+        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

@@ -33,4 +33,13 @@ public enum Certainty {
         return text;
     }
 
+    public static Certainty getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(SURE.text)) return SURE;
+        if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
+        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
+        if (inText.equalsIgnoreCase(VERY_BAD.text)) return VERY_BAD;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

@@ -40,4 +40,19 @@ public enum AreaType {
         return text;
     }
 
+    public static AreaType getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(OPEN.text)) return OPEN;
+        if (inText.equalsIgnoreCase(THICKET.text)) return THICKET;
+        if (inText.equalsIgnoreCase(LIGHT_COVER.text)) return LIGHT_COVER;
+        if (inText.equalsIgnoreCase(WETLAND.text)) return WETLAND;
+        if (inText.equalsIgnoreCase(RIVER.text)) return RIVER;
+        if (inText.equalsIgnoreCase(DAM.text)) return DAM;
+        if (inText.equalsIgnoreCase(CLIFF.text)) return CLIFF;
+        if (inText.equalsIgnoreCase(MOUNTAIN.text)) return MOUNTAIN;
+        if (inText.equalsIgnoreCase(SAND.text)) return SAND;
+        if (inText.equalsIgnoreCase(HUMANS.text)) return HUMANS;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

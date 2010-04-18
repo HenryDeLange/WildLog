@@ -34,4 +34,11 @@ public enum UnitsWeight {
         return text;
     }
 
+    public static UnitsWeight getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(KILOGRAM.text)) return KILOGRAM;
+        if (inText.equalsIgnoreCase(GRAM.text)) return GRAM;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

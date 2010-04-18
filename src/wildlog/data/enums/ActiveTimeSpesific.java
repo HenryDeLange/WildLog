@@ -37,4 +37,17 @@ public enum ActiveTimeSpesific {
         return text;
     }
 
+    public static ActiveTimeSpesific getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(EARLY_MORNING.text)) return EARLY_MORNING;
+        if (inText.equalsIgnoreCase(MORNING.text)) return MORNING;
+        if (inText.equalsIgnoreCase(MID_MORNING.text)) return MID_MORNING;
+        if (inText.equalsIgnoreCase(MIDDAY.text)) return MIDDAY;
+        if (inText.equalsIgnoreCase(MID_AFTERNOON.text)) return MID_AFTERNOON;
+        if (inText.equalsIgnoreCase(AFTERNOON.text)) return AFTERNOON;
+        if (inText.equalsIgnoreCase(LATE_AFTERNOON.text)) return LATE_AFTERNOON;
+        if (inText.equalsIgnoreCase(DEEP_NIGHT.text)) return DEEP_NIGHT;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

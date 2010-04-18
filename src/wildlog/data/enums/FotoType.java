@@ -35,4 +35,12 @@ public enum FotoType {
         return text;
     }
 
+    public static FotoType getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(IMAGE.text)) return IMAGE;
+        if (inText.equalsIgnoreCase(MOVIE.text)) return MOVIE;
+        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

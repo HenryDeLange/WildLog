@@ -35,9 +35,9 @@ public class SightingWrapper {
     @Override
     public String toString() {
         if (isForLocation)
-            return sighting.getElement().getPrimaryName() + " (" + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900) + ")";
+            return sighting.getElementName() + " (" + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900) + ")";
         else
-            return sighting.getLocation().getName() + " (" + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900) + ")";
+            return sighting.getLocationName() + " (" + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900) + ")";
     }
 
     public Sighting getSighting() {

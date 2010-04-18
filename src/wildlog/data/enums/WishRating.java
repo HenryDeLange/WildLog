@@ -34,4 +34,14 @@ public enum WishRating {
         return text;
     }
 
+    public static WishRating getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(EXCEPTIONAL.text)) return EXCEPTIONAL;
+        if (inText.equalsIgnoreCase(NEED_GOOD_SIGHTING.text)) return NEED_GOOD_SIGHTING;
+        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
+        if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;
+        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

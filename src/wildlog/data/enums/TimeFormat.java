@@ -34,4 +34,13 @@ public enum TimeFormat {
     public String toString() {
         return text;
     }
+
+    public static TimeFormat getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(H24.text)) return H24;
+        if (inText.equalsIgnoreCase(AM.text)) return AM;
+        if (inText.equalsIgnoreCase(PM.text)) return PM;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+    
 }

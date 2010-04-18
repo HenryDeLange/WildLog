@@ -26,19 +26,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Foto;
-import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.dbi.DBI;
 import wildlog.data.enums.FotoType;
 
@@ -114,7 +109,7 @@ public class Utils {
         return resizedImg;
     }
 
-    public static int uploadImage(HasFotos inHasFotos, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Selct nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
@@ -171,10 +166,10 @@ public class Utils {
                         byte[] newBytes = os.toByteArray();
                         fileOutput.write(newBytes);
                         fileOutput.flush();
-                        if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
-                        inHasFotos.getFotos().add(new Foto(toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), FotoType.IMAGE));
                         big.dispose();
-                        setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize, inApp);
+                        inApp.getDBI().createOrUpdate(new Foto(inID, toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), FotoType.IMAGE), false);
+                        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+                        setupFoto(inID, fotos.size()-1, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -205,9 +200,9 @@ public class Utils {
                         fileInput.read(tempBytes);
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
-                        if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
-                        inHasFotos.getFotos().add(new Foto(toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.MOVIE));
-                        setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize, inApp);
+                        inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.MOVIE), false);
+                        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+                        setupFoto(inID, fotos.size()-1, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -236,9 +231,9 @@ public class Utils {
                         fileInput.read(tempBytes);
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
-                        if (inHasFotos.getFotos() == null) inHasFotos.setFotos(new ArrayList<Foto>());
-                        inHasFotos.getFotos().add(new Foto(toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.OTHER));
-                        setupFoto(inHasFotos, inHasFotos.getFotos().size() - 1, inImageLabel, inSize, inApp);
+                        inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.OTHER), false);
+                        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+                        setupFoto(inID, fotos.size()-1, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -256,58 +251,60 @@ public class Utils {
             }
         }
         inComponent.setCursor(Cursor.getDefaultCursor());
-        if (inHasFotos.getFotos().size() - 1 > 0) return inHasFotos.getFotos().size() - 1;
-        else return 0;
+        // return new image index
+        return 0;
     }
 
     // Methods for the buttons on the panels that work with the images
-    public static int previousImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        if (inHasFotos.getFotos().size() > 0) {
+    public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        if (fotos.size() > 0) {
             if (inImageIndex > 0) {
                 inImageIndex = inImageIndex - 1;
             }
             else {
-                inImageIndex = inHasFotos.getFotos().size() - 1;
+                inImageIndex = fotos.size() - 1;
             }
-            setupFoto(inHasFotos, inImageIndex, inImageLabel, inSize, inApp);
+            setupFoto(inID, inImageIndex, inImageLabel, inSize, inApp);
         }
         return inImageIndex;
     }
 
-    public static int nextImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        if (inHasFotos.getFotos().size() > 0) {
-            if (inImageIndex < inHasFotos.getFotos().size() - 1) {
+    public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        if (fotos.size() > 0) {
+            if (inImageIndex < fotos.size() - 1) {
                 inImageIndex = inImageIndex + 1;
             }
             else {
                 inImageIndex = 0;
             }
-            setupFoto(inHasFotos, inImageIndex, inImageLabel, inSize, inApp);
+            setupFoto(inID, inImageIndex, inImageLabel, inSize, inApp);
         }
         return inImageIndex;
     }
 
-    public static int setMainImage(HasFotos inHasFotos, int inImageIndex) {
-        if (inHasFotos.getFotos().size() > 0) {
-            inHasFotos.getFotos().add(0, inHasFotos.getFotos().get(inImageIndex++));
-            inHasFotos.getFotos().remove(inImageIndex);
-            inImageIndex = 0;
+    public static int setMainImage(String inID, int inImageIndex, WildLogApp inApp) {
+        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        for (int t = 0; t < fotos.size(); t++) {
+            if (t != inImageIndex)
+                fotos.get(t).setDefaultFile(false);
+            else
+                fotos.get(t).setDefaultFile(true);
+            inApp.getDBI().createOrUpdate(fotos.get(t), true);
         }
+        inImageIndex = 0;
         return inImageIndex;
     }
 
-    public static int removeImage(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize, WildLogApp inApp) {
-        if (inHasFotos.getFotos().size() > 0) {
-            Foto tempFoto = inHasFotos.getFotos().get(inImageIndex);
-            inHasFotos.getFotos().remove(tempFoto);
+    public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize, WildLogApp inApp) {
+        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        if (fotos.size() > 0) {
+            Foto tempFoto = fotos.get(inImageIndex);
             inDBI.delete(tempFoto);
-            File tempFile = new File(tempFoto.getFileLocation());
-            tempFile.delete();
-            tempFile = new File(tempFoto.getOriginalFotoLocation());
-            tempFile.delete();
-            if (inHasFotos.getFotos().size() >= 1) {
+            if (fotos.size() >= 1) {
                 // Behave like moving back button was pressed
-                inImageIndex = previousImage(inHasFotos, inImageIndex, inImageLabel, inSize, inApp);
+                inImageIndex = previousImage(inID, inImageIndex, inImageLabel, inSize, inApp);
             }
             else {
                 inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
@@ -316,40 +313,45 @@ public class Utils {
         return inImageIndex;
     }
 
-    public static void setupFoto(HasFotos inHasFotos, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        if (inHasFotos.getFotos().get(inImageIndex).getFotoType() != null) {
-            if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.IMAGE))
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inHasFotos.getFotos().get(inImageIndex).getFileLocation()), inSize));
-            else
-            if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.MOVIE))
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
-            else
-            if (inHasFotos.getFotos().get(inImageIndex).getFotoType().equals(FotoType.OTHER))
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
+    public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        if (fotos.size() > inImageIndex) {
+            if (fotos.get(inImageIndex).getFotoType() != null) {
+                if (fotos.get(inImageIndex).getFotoType().equals(FotoType.IMAGE))
+                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation()), inSize));
+                else
+                if (fotos.get(inImageIndex).getFotoType().equals(FotoType.MOVIE))
+                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
+                else
+                if (fotos.get(inImageIndex).getFotoType().equals(FotoType.OTHER))
+                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
+            }
+            else {
+                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+            }
         }
         else {
             inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
         }
     }
 
-    public static void openImage(HasFotos inHasFotos, int inIndex) {
-        if (inHasFotos != null) {
-            if (System.getProperty("os.name").equals("Windows XP")) {
-                try {
-                    if (inHasFotos.getFotos().size() > 0) {
-                        String fileName = inHasFotos.getFotos().get(inIndex).getOriginalFotoLocation();
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
+    public static void openImage(String inID, int inIndex, WildLogApp inApp) {
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            try {
+                List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+                if (fotos.size() > 0) {
+                    String fileName = fotos.get(inIndex).getOriginalFotoLocation();
+                    String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                    Runtime.getRuntime().exec(commands);
                 }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
 
-    public static void openImage(String inPath) {
+    public static void openFile(String inPath) {
         if (inPath != null) {
             if (System.getProperty("os.name").equals("Windows XP")) {
                 try {

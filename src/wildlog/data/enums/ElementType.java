@@ -23,7 +23,8 @@ public enum ElementType {
     FISH("Fish"),
     INSECT("Insect"),
     PLANT("Plant"),
-    OTHER("Other");
+    OTHER("Other"),
+    NONE("None");
     
     private String text;
     
@@ -38,6 +39,19 @@ public enum ElementType {
 
     public void fix(String inText) {
         text = inText;
+    }
+
+    public static ElementType getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(ANIMAL.text)) return ANIMAL;
+        if (inText.equalsIgnoreCase(BIRD.text)) return BIRD;
+        if (inText.equalsIgnoreCase(REPTILE.text)) return REPTILE;
+        if (inText.equalsIgnoreCase(AMPHIBIAN.text)) return AMPHIBIAN;
+        if (inText.equalsIgnoreCase(FISH.text)) return FISH;
+        if (inText.equalsIgnoreCase(INSECT.text)) return INSECT;
+        if (inText.equalsIgnoreCase(PLANT.text)) return PLANT;
+        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
     }
     
 }

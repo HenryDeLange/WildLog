@@ -144,6 +144,66 @@
                     </Constraint>
                   </Constraints>
                 </Component>
+                <Component class="javax.swing.JLabel" name="lblLocations">
+                  <Properties>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="lblLocations.foreground"/>
+                    <Property name="text" type="java.lang.String" resourceKey="lblLocations.text"/>
+                    <Property name="name" type="java.lang.String" value="lblLocations" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="140" y="150" width="-1" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblVisits">
+                  <Properties>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="lblVisits.foreground"/>
+                    <Property name="text" type="java.lang.String" resourceKey="lblVisits.text"/>
+                    <Property name="name" type="java.lang.String" value="lblVisits" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="230" y="150" width="-1" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblSightings">
+                  <Properties>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="lblSightings.foreground"/>
+                    <Property name="text" type="java.lang.String" resourceKey="lblSightings.text"/>
+                    <Property name="name" type="java.lang.String" value="lblSightings" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="300" y="150" width="-1" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JLabel" name="lblCreatures">
+                  <Properties>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="lblCreatures.foreground"/>
+                    <Property name="text" type="java.lang.String" resourceKey="lblCreatures.text"/>
+                    <Property name="name" type="java.lang.String" value="lblCreatures" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="390" y="150" width="-1" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JSeparator" name="jSeparator5">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" resourceKey="jSeparator5.background"/>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="jSeparator5.foreground"/>
+                    <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="130" y="140" width="340" height="10"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="tabFoto">
@@ -426,7 +486,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="520" y="5" width="-1" height="65"/>
+                      <AbsoluteConstraints x="515" y="5" width="-1" height="65"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -445,7 +505,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="660" y="5" width="-1" height="65"/>
+                      <AbsoluteConstraints x="665" y="5" width="-1" height="65"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -498,12 +558,11 @@
                   <Properties>
                     <Property name="font" type="java.awt.Font" resourceKey="lblNumberOfImages.font"/>
                     <Property name="horizontalAlignment" type="int" value="0"/>
-                    <Property name="text" type="java.lang.String" resourceKey="lblNumberOfImages.text"/>
                     <Property name="name" type="java.lang.String" value="lblNumberOfImages" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="578" y="15" width="80" height="50"/>
+                      <AbsoluteConstraints x="578" y="25" width="80" height="40"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -522,6 +581,21 @@
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                       <AbsoluteConstraints x="730" y="5" width="100" height="65"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnDefault">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnDefault.icon"/>
+                    <Property name="text" type="java.lang.String" resourceKey="btnDefault.text"/>
+                    <Property name="name" type="java.lang.String" value="btnDefault" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDefaultActionPerformed"/>
+                  </Events>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="573" y="5" width="90" height="20"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -878,7 +952,7 @@
                         <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                         <Property name="font" type="java.awt.Font" resourceKey="tblElement.font"/>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                          <Connection code="utilTableGenerator.getCompleteElementTable(searchElement, false)" type="code"/>
+                          <Connection code="utilTableGenerator.getCompleteElementTable(searchElement)" type="code"/>
                         </Property>
                         <Property name="autoResizeMode" type="int" value="3"/>
                         <Property name="name" type="java.lang.String" value="tblElement" noResource="true"/>
@@ -997,6 +1071,7 @@
                 </Container>
                 <Component class="javax.swing.JComboBox" name="cmbType">
                   <Properties>
+                    <Property name="maximumRowCount" type="int" value="9"/>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new DefaultComboBoxModel(wildlog.data.enums.ElementType.values())" type="code"/>
                     </Property>
@@ -1271,22 +1346,14 @@
             <Property name="name" type="java.lang.String" value="exportMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="wldExportMenuItem">
+            <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToWld" methodName="exportToWld"/>
+                  <action class="wildlog.WildLogView" id="exportToCSV" methodName="exportToCSV"/>
                 </Property>
-                <Property name="text" type="java.lang.String" resourceKey="wldExportMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="wldExportMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="wldExportNoImagesMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToWLDWithoutImages" methodName="exportToWLDWithoutImages"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="wldExportNoImagesMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="wldExportNoImagesMenuItem" noResource="true"/>
+                <Property name="text" type="java.lang.String" resourceKey="csvExportMenuItem.text"/>
+                <Property name="enabled" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="kmlExportMenuItem">
@@ -1296,15 +1363,6 @@
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="kmlExportMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="kmlExportMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToCSV" methodName="exportToCSV"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="csvExportMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="htmlExportMenuItem1">
@@ -1324,17 +1382,11 @@
             <Property name="name" type="java.lang.String" value="importMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="wldImportMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="importFromWLD" methodName="importFromWLD"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="wldImportMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="wldImportMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="csvImportMenuItem">
               <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="importFromCSV" methodName="importFromCSV"/>
+                </Property>
                 <Property name="text" type="java.lang.String" resourceKey="csvImportMenuItem.text"/>
                 <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="csvImportMenuItem" noResource="true"/>

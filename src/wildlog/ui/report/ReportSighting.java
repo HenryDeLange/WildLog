@@ -275,27 +275,27 @@ public class ReportSighting extends javax.swing.JFrame {
         chartLocations = new BarChart(290, 600);
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(startDate, endDate);
         for (Sighting sighting : sightings) {
-            numOfElements.add(sighting.getElement().getPrimaryName());
+            numOfElements.add(sighting.getElementName());
             String nameToUse = "";
             if (usePrimaryName)
-                nameToUse = sighting.getElement().getPrimaryName();
+                nameToUse = sighting.getElementName();
             else
-                nameToUse = sighting.getElement().getOtherName();
+                nameToUse = sighting.getElementName();
             // Time
             if (sighting.getTimeOfDay() != null) {
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
                     chartElements.addBar(new BarChartEntity(nameToUse, sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
-                    chartLocations.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
+                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
                     numNightSightings++;
                 }
                 else
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
                     chartElements.addBar(new BarChartEntity(nameToUse, sighting.getTimeOfDay().name(), 1,  lblOther1.getForeground()));
-                    chartLocations.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1, lblOther1.getForeground()));
+                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblOther1.getForeground()));
                 }
                 else {
                     chartElements.addBar(new BarChartEntity(nameToUse, sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
-                    chartLocations.addBar(new BarChartEntity(sighting.getLocation().getName(), sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
+                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
                     numDaySightings++;
                 }
             }

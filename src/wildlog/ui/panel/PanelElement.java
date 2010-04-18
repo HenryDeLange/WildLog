@@ -34,6 +34,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
@@ -49,6 +50,7 @@ import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -82,8 +84,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
-        if (element.getFotos().size() > 0) {
-            Utils.setupFoto(element, imageIndex, lblImage, 300, app);
+        List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + element.getPrimaryName()));
+        if (fotos.size() > 0) {
+            Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
@@ -198,10 +201,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         cmbType = new javax.swing.JComboBox();
         cmbWaterDependance = new javax.swing.JComboBox();
         cmbActiveTime = new javax.swing.JComboBox();
-        txtSizeMale = new javax.swing.JTextField();
-        txtSizeFemale = new javax.swing.JTextField();
-        txtWeightMale = new javax.swing.JTextField();
-        txtWeightFemale = new javax.swing.JTextField();
+        txtSizeMaleMin = new javax.swing.JTextField();
+        txtSizeFemaleMin = new javax.swing.JTextField();
+        txtWeightMaleMin = new javax.swing.JTextField();
+        txtWeightFemaleMin = new javax.swing.JTextField();
         txtLifespan = new javax.swing.JTextField();
         txtbreedingDuration = new javax.swing.JTextField();
         txtBreedingNumber = new javax.swing.JTextField();
@@ -233,6 +236,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtReferenceID = new javax.swing.JTextField();
         btnHTML = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
+        txtSizeMaleMax = new javax.swing.JTextField();
+        txtSizeFemaleMax = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtWeightMaleMax = new javax.swing.JTextField();
+        txtWeightFemaleMax = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -335,7 +346,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jScrollPane15.setName("jScrollPane15"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -413,19 +423,19 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         jLabel71.setText(resourceMap.getString("jLabel71.text")); // NOI18N
         jLabel71.setName("jLabel71"); // NOI18N
-        elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 500, -1, -1));
+        elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, -1, -1));
 
         jLabel72.setText(resourceMap.getString("jLabel72.text")); // NOI18N
         jLabel72.setName("jLabel72"); // NOI18N
-        elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, -1, -1));
+        elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, -1, -1));
 
         jLabel73.setText(resourceMap.getString("jLabel73.text")); // NOI18N
         jLabel73.setName("jLabel73"); // NOI18N
-        elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 500, -1, -1));
+        elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 510, -1, -1));
 
         jLabel74.setText(resourceMap.getString("jLabel74.text")); // NOI18N
         jLabel74.setName("jLabel74"); // NOI18N
-        elementIncludes.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 520, -1, -1));
+        elementIncludes.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 540, -1, -1));
 
         jLabel75.setText(resourceMap.getString("jLabel75.text")); // NOI18N
         jLabel75.setName("jLabel75"); // NOI18N
@@ -478,6 +488,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 590, -1));
 
+        cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());
         cmbType.setName("cmbType"); // NOI18N
@@ -493,41 +504,41 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         cmbActiveTime.setName("cmbActiveTime"); // NOI18N
         elementIncludes.add(cmbActiveTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 148, 220, -1));
 
-        txtSizeMale.setText(Double.toString(element.getSizeMaleAverage()));
-        txtSizeMale.setName("txtSizeMale"); // NOI18N
-        txtSizeMale.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtSizeMaleMin.setText(Double.toString(element.getSizeMaleMin()));
+        txtSizeMaleMin.setName("txtSizeMaleMin"); // NOI18N
+        txtSizeMaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSizeMaleFocusGained(evt);
+                txtSizeMaleMinFocusGained(evt);
             }
         });
-        elementIncludes.add(txtSizeMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 496, 110, -1));
+        elementIncludes.add(txtSizeMaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 510, 50, -1));
 
-        txtSizeFemale.setText(Double.toString(element.getSizeFemaleAverage()));
-        txtSizeFemale.setName("txtSizeFemale"); // NOI18N
-        txtSizeFemale.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtSizeFemaleMin.setText(Double.toString(element.getSizeFemaleMin()));
+        txtSizeFemaleMin.setName("txtSizeFemaleMin"); // NOI18N
+        txtSizeFemaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSizeFemaleFocusGained(evt);
+                txtSizeFemaleMinFocusGained(evt);
             }
         });
-        elementIncludes.add(txtSizeFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 520, 110, -1));
+        elementIncludes.add(txtSizeFemaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, 50, -1));
 
-        txtWeightMale.setText(Double.toString(element.getWeightMaleAverage()));
-        txtWeightMale.setName("txtWeightMale"); // NOI18N
-        txtWeightMale.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtWeightMaleMin.setText(Double.toString(element.getWeightMaleMin()));
+        txtWeightMaleMin.setName("txtWeightMaleMin"); // NOI18N
+        txtWeightMaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtWeightMaleFocusGained(evt);
+                txtWeightMaleMinFocusGained(evt);
             }
         });
-        elementIncludes.add(txtWeightMale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 496, 110, -1));
+        elementIncludes.add(txtWeightMaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 510, 50, -1));
 
-        txtWeightFemale.setText(Double.toString(element.getWeightFemaleAverage()));
-        txtWeightFemale.setName("txtWeightFemale"); // NOI18N
-        txtWeightFemale.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtWeightFemaleMin.setText(Double.toString(element.getWeightFemaleMin()));
+        txtWeightFemaleMin.setName("txtWeightFemaleMin"); // NOI18N
+        txtWeightFemaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtWeightFemaleFocusGained(evt);
+                txtWeightFemaleMinFocusGained(evt);
             }
         });
-        elementIncludes.add(txtWeightFemale, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 520, 110, -1));
+        elementIncludes.add(txtWeightFemaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 540, 50, -1));
 
         txtLifespan.setText(element.getLifespan());
         txtLifespan.setName("txtLifespan"); // NOI18N
@@ -547,7 +558,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(txtbreedingDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 172, 150, -1));
 
-        txtBreedingNumber.setText(Double.toString(element.getBreedingNumber()));
+        txtBreedingNumber.setText(element.getBreedingNumber());
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
         txtBreedingNumber.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -631,21 +642,21 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
-        elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 510, -1, 20));
+        elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 530, -1, 20));
 
         cmbSizeUnits.setModel(new DefaultComboBoxModel(UnitsSize.values()));
         cmbSizeUnits.setSelectedItem(element.getSizeUnit());
         cmbSizeUnits.setName("cmbSizeUnits"); // NOI18N
-        elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 510, 70, -1));
+        elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 530, 70, -1));
 
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 510, -1, 20));
+        elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 530, -1, 20));
 
         cmbWeightUnits.setModel(new DefaultComboBoxModel(UnitsWeight.values()));
         cmbWeightUnits.setSelectedItem(element.getWeightUnit());
         cmbWeightUnits.setName("cmbWeightUnits"); // NOI18N
-        elementIncludes.add(cmbWeightUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 510, 70, -1));
+        elementIncludes.add(cmbWeightUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 530, 70, -1));
 
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
@@ -758,6 +769,58 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 176, 110, 40));
 
+        txtSizeMaleMax.setText(Double.toString(element.getSizeMaleMax()));
+        txtSizeMaleMax.setName("txtSizeMaleMax"); // NOI18N
+        txtSizeMaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSizeMaleMaxFocusGained(evt);
+            }
+        });
+        elementIncludes.add(txtSizeMaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 510, 50, -1));
+
+        txtSizeFemaleMax.setText(Double.toString(element.getSizeFemaleMax()));
+        txtSizeFemaleMax.setName("txtSizeFemaleMax"); // NOI18N
+        txtSizeFemaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSizeFemaleMaxFocusGained(evt);
+            }
+        });
+        elementIncludes.add(txtSizeFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 540, 50, -1));
+
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+        elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 490, -1, -1));
+
+        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+        jLabel6.setName("jLabel6"); // NOI18N
+        elementIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 490, -1, -1));
+
+        txtWeightMaleMax.setText(Double.toString(element.getWeightMaleMax()));
+        txtWeightMaleMax.setName("txtWeightMaleMax"); // NOI18N
+        txtWeightMaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtWeightMaleMaxFocusGained(evt);
+            }
+        });
+        elementIncludes.add(txtWeightMaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 510, 50, 20));
+
+        txtWeightFemaleMax.setText(Double.toString(element.getWeightFemaleMax()));
+        txtWeightFemaleMax.setName("txtWeightFemaleMax"); // NOI18N
+        txtWeightFemaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtWeightFemaleMaxFocusGained(evt);
+            }
+        });
+        elementIncludes.add(txtWeightFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, 50, -1));
+
+        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+        jLabel7.setName("jLabel7"); // NOI18N
+        elementIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, -1, -1));
+
+        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+        jLabel8.setName("jLabel8"); // NOI18N
+        elementIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 490, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -785,36 +848,55 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 element.setNutrition(txtNutrition.getText());
                 element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
                 try {
-                    element.setSizeMaleAverage(Double.valueOf(txtSizeMale.getText()));
+                    element.setSizeMaleMin(Double.valueOf(txtSizeMaleMin.getText()));
                 }
                 catch (NumberFormatException e) {
-                    txtSizeMale.setText("");
+                    txtSizeMaleMin.setText("");
                 }
                 try {
-                    element.setSizeFemaleAverage(Double.valueOf(txtSizeFemale.getText()));
+                    element.setSizeFemaleMin(Double.valueOf(txtSizeFemaleMin.getText()));
                 }
                 catch (NumberFormatException e) {
-                    txtSizeFemale.setText("");
+                    txtSizeFemaleMin.setText("");
                 }
                 try {
-                    element.setBreedingNumber(Double.valueOf(txtBreedingNumber.getText()));
+                    element.setSizeMaleMax(Double.valueOf(txtSizeMaleMax.getText()));
                 }
                 catch (NumberFormatException e) {
-                    txtBreedingNumber.setText("");
+                    txtSizeMaleMax.setText("");
                 }
+                try {
+                    element.setSizeFemaleMax(Double.valueOf(txtSizeFemaleMax.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtSizeFemaleMax.setText("");
+                }
+                element.setBreedingNumber(txtBreedingNumber.getText());
                 element.setSizeUnit((UnitsSize)cmbSizeUnits.getSelectedItem());
                 element.setWeightUnit((UnitsWeight)cmbWeightUnits.getSelectedItem());
                 try {
-                    element.setWeightMaleAverage(Double.valueOf(txtWeightMale.getText()));
+                    element.setWeightMaleMin(Double.valueOf(txtWeightMaleMin.getText()));
                 }
                 catch (NumberFormatException e) {
-                    txtWeightMale.setText("");
+                    txtWeightMaleMin.setText("");
                 }
                 try {
-                    element.setWeightFemaleAverage(Double.valueOf(txtWeightFemale.getText()));
+                    element.setWeightFemaleMin(Double.valueOf(txtWeightFemaleMin.getText()));
                 }
                 catch (NumberFormatException e) {
-                    txtWeightFemale.setText("");
+                    txtWeightFemaleMin.setText("");
+                }
+                try {
+                    element.setWeightMaleMax(Double.valueOf(txtWeightMaleMax.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtWeightMaleMax.setText("");
+                }
+                try {
+                    element.setWeightFemaleMax(Double.valueOf(txtWeightFemaleMax.getText()));
+                }
+                catch (NumberFormatException e) {
+                    txtWeightFemaleMax.setText("");
                 }
                 element.setBreedingDuration(txtbreedingDuration.getText());
                 element.setLifespan(txtLifespan.getText());
@@ -829,7 +911,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 element.setFeedingClass((FeedingClass)cmbFeedingClass.getSelectedItem());
 
                 // Save the element
-                if (app.getDBI().createOrUpdate(element) == true) {
+                if (app.getDBI().createOrUpdate(element, oldName) == true) {
                     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
                     txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
                 }
@@ -857,7 +939,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            imageIndex = Utils.uploadImage(element, "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage, 300, app);
+            imageIndex = Utils.uploadImage("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -865,17 +947,17 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = Utils.previousImage(element, imageIndex, lblImage, 300, app);
+        imageIndex = Utils.previousImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = Utils.nextImage(element, imageIndex, lblImage, 300, app);
+        imageIndex = Utils.nextImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        imageIndex = Utils.setMainImage(element, imageIndex);
+        imageIndex = Utils.setMainImage("ELEMENT-" + element.getPrimaryName(), imageIndex, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
@@ -899,10 +981,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 dialog.setSize(965, 625);
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
                 Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
-                Visit tempVisit = new Visit();
-                tempVisit.getSightings().add(sighting);
-                Visit visit = app.getDBI().find(tempVisit);
-                dialog.add(new PanelSighting(sighting, location, visit, element, this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+                dialog.add(new PanelSighting(sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
                 dialog.setLocationRelativeTo(this);
                 ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
                 dialog.setIconImage(icon.getImage());
@@ -919,30 +998,35 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
         if (element.getPrimaryName() != null) {
             Sighting sighting = new Sighting();
-            sighting.setElement(element);
+            sighting.setElementName(element.getPrimaryName());
             lblNumberOfSightings.setText(Integer.toString(app.getDBI().list(sighting).size()));
-            lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
         }
         else {
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
+
+        if (element.getPrimaryName() != null) {
+            tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
+            // Sort rows for Locations
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(0, SortOrder.ASCENDING));
+            tblLocation.getRowSorter().setSortKeys(tempList);
+        }
+        else
+            tblLocation.setModel(new DefaultTableModel(new String[]{"No Locations"}, 0));
         // Setup table column sizes
         resizeTables();
-        // Sort rows for Locations
-        List tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblLocation.getRowSorter().setSortKeys(tempList);
         rdbLocations.setSelected(true);
+        lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         app.getMapFrame().clearPoints();
         Sighting sigting = new Sighting();
-        sigting.setElement(element);
+        sigting.setElementName(element.getPrimaryName());
         List<Sighting> sightingList = app.getDBI().list(sigting);
         boolean foundPosition = false;
         for (int t = 0; t < sightingList.size(); t++) {
@@ -964,15 +1048,16 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             }
             // If the sighting did not have a position use the location's
             if (foundPosition == false) {
-                float lat = sightingList.get(t).getLocation().getLatDegrees();
-                lat = lat + sightingList.get(t).getLocation().getLatMinutes()/60f;
-                lat = lat + (sightingList.get(t).getLocation().getLatSecondsFloat()/60f)/60f;
-                if (sightingList.get(t).getLocation().getLatitude().equals(Latitudes.SOUTH))
+                Location location = app.getDBI().find(new Location(sightingList.get(t).getLocationName()));
+                float lat = location.getLatDegrees();
+                lat = lat + location.getLatMinutes()/60f;
+                lat = lat + (location.getLatSecondsFloat()/60f)/60f;
+                if (location.getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
-                float lon = sightingList.get(t).getLocation().getLonDegrees();
-                lon = lon + sightingList.get(t).getLocation().getLonMinutes()/60f;
-                lon = lon + (sightingList.get(t).getLocation().getLonSecondsFloat()/60f)/60f;
-                if (sightingList.get(t).getLocation().getLongitude().equals(Longitudes.WEST))
+                float lon = location.getLonDegrees();
+                lon = lon + location.getLonMinutes()/60f;
+                lon = lon + (location.getLonSecondsFloat()/60f)/60f;
+                if (location.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
             }
@@ -982,7 +1067,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage(element, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
+        imageIndex = Utils.removeImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -991,7 +1076,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
             Sighting sighting = new Sighting();
-            sighting.setElement(element);
+            sighting.setElementName(element.getPrimaryName());
             final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
@@ -1011,25 +1096,25 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
-    private void txtSizeMaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleFocusGained
-        txtSizeMale.setSelectionStart(0);
-        txtSizeMale.setSelectionEnd(txtSizeMale.getText().length());
-    }//GEN-LAST:event_txtSizeMaleFocusGained
+    private void txtSizeMaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleMinFocusGained
+        txtSizeMaleMin.setSelectionStart(0);
+        txtSizeMaleMin.setSelectionEnd(txtSizeMaleMin.getText().length());
+    }//GEN-LAST:event_txtSizeMaleMinFocusGained
 
-    private void txtSizeFemaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeFemaleFocusGained
-        txtSizeFemale.setSelectionStart(0);
-        txtSizeFemale.setSelectionEnd(txtSizeFemale.getText().length());
-    }//GEN-LAST:event_txtSizeFemaleFocusGained
+    private void txtSizeFemaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeFemaleMinFocusGained
+        txtSizeFemaleMin.setSelectionStart(0);
+        txtSizeFemaleMin.setSelectionEnd(txtSizeFemaleMin.getText().length());
+    }//GEN-LAST:event_txtSizeFemaleMinFocusGained
 
-    private void txtWeightMaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightMaleFocusGained
-        txtWeightMale.setSelectionStart(0);
-        txtWeightMale.setSelectionEnd(txtWeightMale.getText().length());
-    }//GEN-LAST:event_txtWeightMaleFocusGained
+    private void txtWeightMaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightMaleMinFocusGained
+        txtWeightMaleMin.setSelectionStart(0);
+        txtWeightMaleMin.setSelectionEnd(txtWeightMaleMin.getText().length());
+    }//GEN-LAST:event_txtWeightMaleMinFocusGained
 
-    private void txtWeightFemaleFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightFemaleFocusGained
-        txtWeightFemale.setSelectionStart(0);
-        txtWeightFemale.setSelectionEnd(txtWeightFemale.getText().length());
-    }//GEN-LAST:event_txtWeightFemaleFocusGained
+    private void txtWeightFemaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightFemaleMinFocusGained
+        txtWeightFemaleMin.setSelectionStart(0);
+        txtWeightFemaleMin.setSelectionEnd(txtWeightFemaleMin.getText().length());
+    }//GEN-LAST:event_txtWeightFemaleMinFocusGained
 
     private void txtLifespanFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLifespanFocusGained
         txtLifespan.setSelectionStart(0);
@@ -1047,7 +1132,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_txtBreedingNumberFocusGained
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        Utils.openImage(element, imageIndex);
+        Utils.openImage("ELEMENT-" + element.getPrimaryName(), imageIndex, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
@@ -1057,18 +1142,26 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         if (rdbSightings.isSelected()) {
-            tblLocation.setModel(utilTableGenerator.getSightingsForElementTable(element));
-            // Sort rows for Sightings
-            List tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(1, SortOrder.ASCENDING));
-            tblLocation.getRowSorter().setSortKeys(tempList);
+            if (element.getPrimaryName() != null) {
+                tblLocation.setModel(utilTableGenerator.getSightingsForElementTable(element));
+                // Sort rows for Locations
+                List tempList = new ArrayList<SortKey>(1);
+                tempList.add(new SortKey(0, SortOrder.ASCENDING));
+                tblLocation.getRowSorter().setSortKeys(tempList);
+            }
+            else
+                tblLocation.setModel(new DefaultTableModel(new String[]{"No Sightings"}, 0));
         }
         else {
-            tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
-            // Sort rows for Locations
-            List tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblLocation.getRowSorter().setSortKeys(tempList);
+            if (element.getPrimaryName() != null) {
+                tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
+                // Sort rows for Locations
+                List tempList = new ArrayList<SortKey>(1);
+                tempList.add(new SortKey(0, SortOrder.ASCENDING));
+                tblLocation.getRowSorter().setSortKeys(tempList);
+            }
+            else
+                tblLocation.setModel(new DefaultTableModel(new String[]{"No Locations"}, 0));
         }
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
         // Setup table column sizes
@@ -1083,7 +1176,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
         UtilsHTML.exportHTML(element);
-        Utils.openImage(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + element.getPrimaryName() + ".html");
+        Utils.openFile(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + element.getPrimaryName() + ".html");
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
@@ -1097,6 +1190,26 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             }
         }
     }//GEN-LAST:event_btnReportActionPerformed
+
+    private void txtSizeMaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleMaxFocusGained
+        txtSizeMaleMax.setSelectionStart(0);
+        txtSizeMaleMax.setSelectionEnd(txtSizeMaleMax.getText().length());
+    }//GEN-LAST:event_txtSizeMaleMaxFocusGained
+
+    private void txtSizeFemaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeFemaleMaxFocusGained
+        txtSizeFemaleMax.setSelectionStart(0);
+        txtSizeFemaleMax.setSelectionEnd(txtSizeFemaleMax.getText().length());
+    }//GEN-LAST:event_txtSizeFemaleMaxFocusGained
+
+    private void txtWeightMaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightMaleMaxFocusGained
+        txtWeightMaleMax.setSelectionStart(0);
+        txtWeightMaleMax.setSelectionEnd(txtWeightMaleMax.getText().length());
+    }//GEN-LAST:event_txtWeightMaleMaxFocusGained
+
+    private void txtWeightFemaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightFemaleMaxFocusGained
+        txtWeightFemaleMax.setSelectionStart(0);
+        txtWeightFemaleMax.setSelectionEnd(txtWeightFemaleMax.getText().length());
+    }//GEN-LAST:event_txtWeightFemaleMaxFocusGained
 
     private void resizeTables() {
         if (rdbSightings.isSelected()) {
@@ -1132,8 +1245,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }
 
     private void setupNumberOfImages() {
-        if (element.getFotos().size() > 0)
-            lblNumberOfImages.setText(imageIndex+1 + " of " + element.getFotos().size());
+        List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + element.getPrimaryName()));
+        if (fotos.size() > 0)
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else
             lblNumberOfImages.setText("0 of 0");
     }
@@ -1163,6 +1277,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JPanel elementIncludes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel55;
@@ -1170,6 +1285,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
@@ -1179,6 +1295,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
@@ -1187,6 +1304,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel jLabel75;
     private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel77;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
@@ -1214,10 +1332,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JTextField txtPrimaryName;
     private javax.swing.JTextField txtReferenceID;
     private javax.swing.JTextField txtScienceName;
-    private javax.swing.JTextField txtSizeFemale;
-    private javax.swing.JTextField txtSizeMale;
-    private javax.swing.JTextField txtWeightFemale;
-    private javax.swing.JTextField txtWeightMale;
+    private javax.swing.JTextField txtSizeFemaleMax;
+    private javax.swing.JTextField txtSizeFemaleMin;
+    private javax.swing.JTextField txtSizeMaleMax;
+    private javax.swing.JTextField txtSizeMaleMin;
+    private javax.swing.JTextField txtWeightFemaleMax;
+    private javax.swing.JTextField txtWeightFemaleMin;
+    private javax.swing.JTextField txtWeightMaleMax;
+    private javax.swing.JTextField txtWeightMaleMin;
     private javax.swing.JTextField txtbreedingDuration;
     // End of variables declaration//GEN-END:variables
     

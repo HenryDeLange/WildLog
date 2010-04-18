@@ -43,6 +43,7 @@ import wildlog.data.enums.Weather;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Foto;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
@@ -89,8 +90,8 @@ public class PanelSighting extends javax.swing.JPanel {
             // Auto-generated code
             initComponents();
             // Setup Dropdown Boxes
-            if (location != null)
-                cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
+//            if (location != null)
+//                cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
             List tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(0, SortOrder.ASCENDING));
             tblElement.getRowSorter().setSortKeys(tempList);
@@ -140,8 +141,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 }
             }
             if (location != null) {
-                if (location.getFotos().size() > 0)
-                    Utils.setupFoto(location, 0, lblLocationImage, 100, app);
+                List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + location.getName()));
+                if (fotos.size() > 0)
+                    Utils.setupFoto("LOCATION-" + location.getName(), 0, lblLocationImage, 100, app);
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
@@ -149,8 +151,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
             if (element != null) {
-                if (element.getFotos().size() > 0)
-                    Utils.setupFoto(element, 0, lblElementImage, 100, app);
+                List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + element.getPrimaryName()));
+                if (fotos.size() > 0)
+                    Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, lblElementImage, 100, app);
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
@@ -176,6 +179,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtLonDegrees.setText("0");
                 txtLonMinutes.setText("0");
                 txtLonSeconds.setText("0");
+                lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             }
             else {
                 // Setup the Sighting info
@@ -204,10 +208,10 @@ public class PanelSighting extends javax.swing.JPanel {
             cmbCertainty.setSelectedItem(sighting.getCertainty());
             txtDetails.setText(sighting.getDetails());
             cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
-            if (!sighting.getSubArea().equals(""))
-                cmbSubArea.setSelectedItem(sighting.getSubArea());
-            else
-                cmbSubArea.setSelectedItem("None");
+//            if (!sighting.getSubArea().equals(""))
+//                cmbSubArea.setSelectedItem(sighting.getSubArea());
+//            else
+//                cmbSubArea.setSelectedItem("None");
             txtNumberOfElements.setText(Integer.toString(sighting.getNumberOfElements()));
             cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
             cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -221,8 +225,9 @@ public class PanelSighting extends javax.swing.JPanel {
             txtLonMinutes.setText(Integer.toString(sighting.getLonMinutes()));
             txtLonSeconds.setText(Float.toString(sighting.getLonSecondsFloat()));
 
-            if (sighting.getFotos().size() > 0)
-                Utils.setupFoto(sighting, imageIndex, lblImage, 300, app);
+            List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + sighting.getSightingCounter()));
+            if (fotos.size() > 0)
+                Utils.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
             else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             setupNumberOfImages();
@@ -285,8 +290,6 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLonSeconds = new javax.swing.JTextField();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
-        jLabel20 = new javax.swing.JLabel();
-        cmbSubArea = new javax.swing.JComboBox();
         btnDeleteImage = new javax.swing.JButton();
         btnSetMainImage = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -356,7 +359,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
-        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, false));
+        tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
         tblElement.setEnabled(!disableEditing);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -465,7 +468,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
-        sightingIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 420, -1, -1));
+        sightingIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, -1, -1));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setName("jScrollPane2"); // NOI18N
@@ -480,7 +483,7 @@ public class PanelSighting extends javax.swing.JPanel {
         txtDetails.setName("txtDetails"); // NOI18N
         jScrollPane2.setViewportView(txtDetails);
 
-        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 440, 300, 130));
+        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 300, 180));
 
         txtNumberOfElements.setText(String.valueOf(sighting.getNumberOfElements()));
         txtNumberOfElements.setEnabled(!disableEditing);
@@ -562,6 +565,7 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(chkElementTypeFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, -1, 20));
 
+        cmbElementType.setMaximumRowCount(9);
         cmbElementType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setEnabled(false);
@@ -680,16 +684,6 @@ public class PanelSighting extends javax.swing.JPanel {
             }
         });
         sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 235, 90, -1));
-
-        jLabel20.setText(resourceMap.getString("jLabel20.text")); // NOI18N
-        jLabel20.setName("jLabel20"); // NOI18N
-        sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, -1, -1));
-
-        cmbSubArea.setModel(new DefaultComboBoxModel());
-        cmbSubArea.setSelectedItem(sighting.getSubArea());
-        cmbSubArea.setEnabled(!disableEditing);
-        cmbSubArea.setName("cmbSubArea"); // NOI18N
-        sightingIncludes.add(cmbSubArea, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 300, -1));
 
         btnDeleteImage.setBackground(resourceMap.getColor("btnDeleteImage.background")); // NOI18N
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
@@ -964,8 +958,9 @@ public class PanelSighting extends javax.swing.JPanel {
             dtpSightingDate.setBorder(null);
             if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 // Set Location and Element
-                sighting.setLocation(location);
-                sighting.setElement(element);
+                sighting.setLocationName(location.getName());
+                sighting.setElementName(element.getPrimaryName());
+                sighting.setVisitName(visit.getName());
 
                 // Set variables
                 Date date = dtpSightingDate.getDate();
@@ -999,9 +994,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 sighting.setTimeOfDay((ActiveTimeSpesific)cmbTimeOfDay.getSelectedItem());
                 sighting.setViewRating((ViewRating)cmbViewRating.getSelectedItem());
                 sighting.setWeather((Weather)cmbWeather.getSelectedItem());
-                sighting.setSubArea((String)cmbSubArea.getSelectedItem());
+//                sighting.setSubArea((String)cmbSubArea.getSelectedItem());
                 if (tblElement.getSelectedRowCount() > 0)
-                    sighting.setElement(app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(),0))));
+                    sighting.setElementName((String)tblElement.getValueAt(tblElement.getSelectedRow(),0));
                 rdbDMS.setSelected(true);
                 sighting.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
                 sighting.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
@@ -1034,37 +1029,39 @@ public class PanelSighting extends javax.swing.JPanel {
                     txtLonSeconds.setText("0");
                 }
 
-                // Delete from old visit
-                if (oldVisit != null) {
-                    if (!visit.equals(oldVisit)) {
-                        oldVisit.getSightings().remove(sighting);
-                        app.getDBI().createOrUpdate(oldVisit);
+//                // Delete from old visit
+//                if (oldVisit != null) {
+//                    if (!visit.equals(oldVisit)) {
+//                        oldVisit.getSightings().remove(sighting);
+//                        app.getDBI().createOrUpdate(oldVisit, oldVisit.getName());
+//                    }
+//                }
+//
+//                // Setup new Visit
+//                if (visit.getSightings() != null) {
+//                    int index = visit.getSightings().indexOf(sighting);
+//                    if (index != -1)
+//                        visit.getSightings().set(index, sighting);
+//                    else
+//                        visit.getSightings().add(sighting);
+//                }
+//                else {
+//                    visit.setSightings(new ArrayList<Sighting>());
+//                    visit.getSightings().add(sighting);
+//                }
+//
+//                // Add and Save the visit
+//                //if (app.getDBI().isSightingUnique(sighting) == true) {
+//                if (sighting.getSightingCounter() == 0) {
+//                    // Add new
+                    if (app.getDBI().createOrUpdate(sighting) == false) {
+                        JOptionPane.showMessageDialog(this, "Could not save the Sighting", "Error Saving", JOptionPane.ERROR_MESSAGE);
                     }
-                }
-
-                // Setup new Visit
-                if (visit.getSightings() != null) {
-                    int index = visit.getSightings().indexOf(sighting);
-                    if (index != -1)
-                        visit.getSightings().set(index, sighting);
-                    else
-                        visit.getSightings().add(sighting);
-                }
-                else {
-                    visit.setSightings(new ArrayList<Sighting>());
-                    visit.getSightings().add(sighting);
-                }
-
-                // Add and Save the visit
-                //if (app.getDBI().isSightingUnique(sighting) == true) {
-                if (sighting.getSightingCounter() == 0) {
-                    // Add new
-                    app.getDBI().createOrUpdate(sighting);
-                }
-                if (!visit.getSightings().contains(sighting))
-                    visit.getSightings().add(sighting);
-                if (app.getDBI().createOrUpdate(visit) == true) {
-                    // Premare to close dialog
+//                }
+//                if (!visit.getSightings().contains(sighting))
+//                    visit.getSightings().add(sighting);
+//                if (app.getDBI().createOrUpdate(visit, visit.getName()) == true) {
+//                    // Premare to close dialog
                     if (panelToRefresh != null) {
                         panelToRefresh.refreshTableForSightings();
                     }
@@ -1073,10 +1070,10 @@ public class PanelSighting extends javax.swing.JPanel {
                         JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
                         dialog.dispose();
                     }
-                }
-                else {
-                    lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
-                }
+//                }
+//                else {
+//                    lblVisit.setBorder(new LineBorder(Color.RED, 3, true));
+//                }
                 //}
                 //else {
                 //    lblElement.setBorder(new LineBorder(Color.RED, 3, true));
@@ -1108,7 +1105,7 @@ public class PanelSighting extends javax.swing.JPanel {
         if (sighting != null) {
             btnUpdateSightingActionPerformed(null);
             if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
-                imageIndex = Utils.uploadImage(sighting, "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300, app);
+                imageIndex = Utils.uploadImage("SIGHTING-" + sighting.getSightingCounter(), "Sightings"+File.separatorChar+sighting.toString(), this, lblImage, 300, app);
                 setupNumberOfImages();
                 btnUpdateSightingActionPerformed(null);
             }
@@ -1117,7 +1114,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.previousImage(sighting, imageIndex, lblImage, 300, app);
+            imageIndex = Utils.previousImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
             setupNumberOfImages();
         }
     }//GEN-LAST:event_btnPreviousImageActionPerformed
@@ -1126,8 +1123,9 @@ public class PanelSighting extends javax.swing.JPanel {
         if (sighting != null) {
             if (tblElement.getSelectedRowCount() == 1) {
                 element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-                if (element.getFotos().size() > 0)
-                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(element.getFotos().get(0).getFileLocation()), 100));
+                List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + element.getPrimaryName()));
+                if (fotos.size() > 0)
+                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(fotos.get(0).getFileLocation()), 100));
                 else
                     lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
@@ -1136,14 +1134,14 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.nextImage(sighting, imageIndex, lblImage, 300, app);
+            imageIndex = Utils.nextImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
             setupNumberOfImages();
         }
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.removeImage(sighting, imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
+            imageIndex = Utils.removeImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
             setupNumberOfImages();
             btnUpdateSightingActionPerformed(null);
         }
@@ -1151,7 +1149,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
         if (sighting != null) {
-            imageIndex = Utils.setMainImage(sighting, imageIndex);
+            imageIndex = Utils.setMainImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, app);
             setupNumberOfImages();
             btnUpdateSightingActionPerformed(null);
         }
@@ -1169,12 +1167,13 @@ public class PanelSighting extends javax.swing.JPanel {
         if (sighting != null) {
             if (tblLocation.getSelectedRowCount() == 1) {
                 location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
-                if (location != null)
-                    cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
+//                if (location != null)
+//                    cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
                 tblVisit.setModel(utilTableGenerator.getVeryShortVisitTable(location));
                 visit = null;
-                if (location.getFotos().size() > 0)
-                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(location.getFotos().get(0).getFileLocation()), 100));
+                List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + location.getName()));
+                if (fotos.size() > 0)
+                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(fotos.get(0).getFileLocation()), 100));
                 else
                     lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
             }
@@ -1193,7 +1192,7 @@ public class PanelSighting extends javax.swing.JPanel {
             searchElement = new Element();
             if (!cmbElementType.isEnabled())
                 searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, true));
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
             cmbElementType.setEnabled(!cmbElementType.isEnabled());
             txtSearch.setText("");
             // Setup table column sizes
@@ -1210,7 +1209,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         if (sighting != null) {
             searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
-            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, true));
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
             txtSearch.setText("");
             // Setup table column sizes
             resizeTalbes();
@@ -1232,7 +1231,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 if (txtSearch.getText().length() > 0)
                     searchElement.setPrimaryName(txtSearch.getText());
             }
-            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement, true));
+            tblElement.setModel(utilTableGenerator.getShortElementTable(searchElement));
             // Setup table column sizes
             resizeTalbes();
             // Resort the table
@@ -1314,19 +1313,19 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (sighting != null) {
-            Utils.openImage(sighting, imageIndex);
+            Utils.openImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblLocationImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationImageMouseReleased
         if (location != null) {
-            Utils.openImage(location, 0);
+            Utils.openImage("LOCATION-" + location.getName(), 0, app);
         }
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (element != null) {
-            Utils.openImage(element, 0);
+            Utils.openImage("ELEMENT-" + element.getPrimaryName(), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
@@ -1492,12 +1491,11 @@ public class PanelSighting extends javax.swing.JPanel {
     }
 
     private void setupNumberOfImages() {
-        if (sighting != null) {
-            if (sighting.getFotos().size() > 0)
-                lblNumberOfImages.setText(imageIndex+1 + " of " + sighting.getFotos().size());
-            else
-                lblNumberOfImages.setText("0 of 0");
-        }
+        List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + sighting.getSightingCounter()));
+        if (fotos.size() > 0)
+            lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
+        else
+            lblNumberOfImages.setText("0 of 0");
     }
 
     public boolean isDisableEditing() {
@@ -1527,7 +1525,6 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JComboBox cmbEvidence;
     private javax.swing.JComboBox cmbLatitude;
     private javax.swing.JComboBox cmbLongitude;
-    private javax.swing.JComboBox cmbSubArea;
     private javax.swing.JComboBox cmbTimeFormat;
     private javax.swing.JComboBox cmbTimeOfDay;
     private javax.swing.JComboBox cmbViewRating;
@@ -1542,7 +1539,6 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

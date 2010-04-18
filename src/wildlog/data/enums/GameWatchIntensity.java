@@ -34,4 +34,14 @@ public enum GameWatchIntensity {
         return text;
     }
 
+    public static GameWatchIntensity getEnumFromText(String inText) {
+        if (inText.equalsIgnoreCase(VERY_HIGH.text)) return VERY_HIGH;
+        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
+        if (inText.equalsIgnoreCase(MEDIUM.text)) return MEDIUM;
+        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
+        if (inText.equalsIgnoreCase(VERY_LOW.text)) return VERY_LOW;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        return NONE;
+    }
+
 }

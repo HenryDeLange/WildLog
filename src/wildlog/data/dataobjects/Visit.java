@@ -15,24 +15,22 @@
 package wildlog.data.dataobjects;
 
 import CsvGenerator.CsvGenerator;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import wildlog.data.dataobjects.interfaces.HasFotos;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Visit class
-public class Visit implements HasFotos, Comparable<Visit> {
+public class Visit implements Comparable<Visit> {
     private String name; // Used as index (ID)
     private Date startDate;
     private Date endDate;
     private String description;
     private GameWatchIntensity gameWatchingIntensity; // How intensely did we watch game (predefined values)
-    private List<Sighting> sightings; // An ArrayList of sighting objects
+    //private List<Sighting> sightings; // An ArrayList of sighting objects
     private VisitType type; // Vacation, Remote Camera, Bird Atlasing, Other
-    private List<Foto> fotos;
+//    private List<Foto> fotos;
+    private String locationName;
 
 
     // CONSTRUCTORS:
@@ -60,16 +58,18 @@ public class Visit implements HasFotos, Comparable<Visit> {
 
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages) {
         String fotoString = "";
-        if (fotos != null)
-            for (int t = 0; t < fotos.size(); t++) {
-                fotoString = fotoString + fotos.get(t).toHTML();
-            }
+//        if (fotos != null)
+//            for (int t = 0; t < fotos.size(); t++) {
+//                fotoString = fotoString + fotos.get(t).toHTML();
+//            }
         String sightingString = "";
-        if (inIsRecursive)
-            if (sightings != null)
-                for (int t = 0; t < sightings.size(); t++) {
-                    sightingString = sightingString + sightings.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
-                }
+        if (inIsRecursive) {
+            throw new UnsupportedOperationException("Not supported yet.");
+//            if (sightings != null)
+//                for (int t = 0; t < sightings.size(); t++) {
+//                    sightingString = sightingString + sightings.get(t).toHTML(inIsRecursive, inIncludeImages) + "<br/>";
+//                }
+        }
 
         String htmlVisit = "";
         htmlVisit = htmlVisit + "<H2>Visit</H2>";
@@ -95,7 +95,7 @@ public class Visit implements HasFotos, Comparable<Visit> {
         inCSVGenerator.addData(gameWatchingIntensity);
         //inCSVGenerator.addData("Sightings");
         inCSVGenerator.addData(type);
-        inCSVGenerator.addData(fotos);
+//        inCSVGenerator.addData(fotos);
     }
 
     // GETTERS:
@@ -119,20 +119,20 @@ public class Visit implements HasFotos, Comparable<Visit> {
         return gameWatchingIntensity;
     }
 
-    public List<Sighting> getSightings() {
-        if (sightings == null) sightings = new ArrayList<Sighting>();
-        return sightings;
-    }
+//    public List<Sighting> getSightings() {
+//        if (sightings == null) sightings = new ArrayList<Sighting>();
+//        return sightings;
+//    }
     
     public VisitType getType() {
         return type;
     }
 
-    @Override
-    public List<Foto> getFotos() {
-        if (fotos == null) fotos = new ArrayList<Foto>(1);
-        return fotos;
-    }
+//    @Override
+//    public List<Foto> getFotos() {
+//        if (fotos == null) fotos = new ArrayList<Foto>(1);
+//        return fotos;
+//    }
 
     // SETTERS:
     public void setName(String inName) {
@@ -155,17 +155,25 @@ public class Visit implements HasFotos, Comparable<Visit> {
         gameWatchingIntensity = inGameWatchingIntensity;
     }
 
-    public void setSightings(List<Sighting> inSightings) {
-        sightings = inSightings;
-    }
+//    public void setSightings(List<Sighting> inSightings) {
+//        sightings = inSightings;
+//    }
     
     public void setType(VisitType inType) {
         type = inType;
     }
 
-    @Override
-    public void setFotos(List<Foto> inFotos) {
-        fotos = inFotos;
+//    @Override
+//    public void setFotos(List<Foto> inFotos) {
+//        fotos = inFotos;
+//    }
+
+    public String getLocationName() {
+        return locationName;
     }
 
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+    
 }
