@@ -1105,7 +1105,7 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_txtLonSecondsFocusGained
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        Utils.openImage("LOCATION-" + locationWL.getName(), imageIndex, app);
+        Utils.openFile("LOCATION-" + locationWL.getName(), imageIndex, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed

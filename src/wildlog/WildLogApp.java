@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import wildlog.data.dbi.DBI;
-import wildlog.data.dbi.DBI_db4o;
+import wildlog.data.dbi.DBI_h2;
 import wildlog.data.dbi.DBI_derby;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
@@ -114,8 +114,8 @@ public class WildLogApp extends SingleFrameApplication {
         File imagesFolder = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar);
         imagesFolder.mkdirs();
 
-        System.setProperty("derby.system.home", "/WildLog/Data/");
-        dbi = new DBI_derby();
+        //dbi = new DBI_derby();
+        dbi = new DBI_h2();
     }
 
     /**

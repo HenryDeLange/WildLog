@@ -1352,7 +1352,6 @@
                   <action class="wildlog.WildLogView" id="exportToCSV" methodName="exportToCSV"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="csvExportMenuItem.text"/>
-                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -1388,7 +1387,6 @@
                   <action class="wildlog.WildLogView" id="importFromCSV" methodName="importFromCSV"/>
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="csvImportMenuItem.text"/>
-                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="csvImportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
@@ -1419,6 +1417,31 @@
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="moveVisitsMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="moveVisitsMenuItem" noResource="true"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="jMenu2.text"/>
+            <Property name="name" type="java.lang.String" value="jMenu2" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <Menu class="javax.swing.JMenu" name="jMenu1">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="jMenu1.text"/>
+                <Property name="name" type="java.lang.String" value="jMenu1" noResource="true"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuDBConsole">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="wildlog.WildLogView" id="openDBConsole" methodName="openDBConsole"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="mnuDBConsole.text"/>
+                    <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
                   </Properties>
                 </MenuItem>
               </SubComponents>

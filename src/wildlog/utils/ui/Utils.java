@@ -16,6 +16,7 @@ package wildlog.utils.ui;
 
 import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -28,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -169,7 +172,7 @@ public class Utils {
                         big.dispose();
                         inApp.getDBI().createOrUpdate(new Foto(inID, toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), FotoType.IMAGE), false);
                         List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
-                        setupFoto(inID, fotos.size()-1, inImageLabel, inSize, inApp);
+                        setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -202,7 +205,7 @@ public class Utils {
                         fileOutput.flush();
                         inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.MOVIE), false);
                         List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
-                        setupFoto(inID, fotos.size()-1, inImageLabel, inSize, inApp);
+                        setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -233,7 +236,7 @@ public class Utils {
                         fileOutput.flush();
                         inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.OTHER), false);
                         List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
-                        setupFoto(inID, fotos.size()-1, inImageLabel, inSize, inApp);
+                        setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -335,35 +338,78 @@ public class Utils {
         }
     }
 
-    public static void openImage(String inID, int inIndex, WildLogApp inApp) {
-        if (System.getProperty("os.name").equals("Windows XP")) {
+    public static void openFile(String inID, int inIndex, WildLogApp inApp) {
+        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        if (fotos.size() > 0) {
+            String fileName = fotos.get(inIndex).getOriginalFotoLocation();
             try {
-                List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
-                if (fotos.size() > 0) {
-                    String fileName = fotos.get(inIndex).getOriginalFotoLocation();
-                    String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                    Runtime.getRuntime().exec(commands);
-                }
+                Desktop.getDesktop().open(new File(fileName));
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                // Backup Plan - Because of Java 6 bug for avi files
+                try {
+                    String os = System.getProperty("os.name").toLowerCase();
+                    if (os.indexOf("mac") != -1)
+                    {
+                        String[] commands = {"open", "%s", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
+                    else
+                    if ((os.indexOf("windows") != -1 || os.indexOf("nt") != -1) && (os.equals("windows 95") || os.equals("windows 98")))
+                    {
+                        String[] commands = {"command.com", "/C", "start", "%s", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
+                    else
+                    if (os.indexOf("windows") != -1 || os.indexOf("nt") != -1)
+                    {
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
+                        Runtime.getRuntime().exec(commands);
+                    }
+                }
+                catch (IOException e) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
 
     public static void openFile(String inPath) {
         if (inPath != null) {
-            if (System.getProperty("os.name").equals("Windows XP")) {
+            try {
+                Desktop.getDesktop().open(new File(inPath));
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+                // Backup Plan - Because of Java 6 bug for avi files
                 try {
-                    String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath};
-                    Runtime.getRuntime().exec(commands);
+                    String os = System.getProperty("os.name").toLowerCase();
+                    if (os.indexOf("mac") != -1)
+                    {
+                        String[] commands = {"open", "%s", inPath};
+                        Runtime.getRuntime().exec(commands);
+                    }
+                    else
+                    if ((os.indexOf("windows") != -1 || os.indexOf("nt") != -1) && (os.equals("windows 95") || os.equals("windows 98")))
+                    {
+                        String[] commands = {"command.com", "/C", "start", "%s", inPath};
+                        Runtime.getRuntime().exec(commands);
+                    }
+                    else
+                    if (os.indexOf("windows") != -1 || os.indexOf("nt") != -1)
+                    {
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath};
+                        Runtime.getRuntime().exec(commands);
+                    }
                 }
-                catch (IOException ex) {
+                catch (IOException e) {
                     ex.printStackTrace();
                 }
             }
         }
     }
+
 
     public static boolean checkCharacters(final String s) {
         if (s == null) return false;

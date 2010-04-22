@@ -950,21 +950,21 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (System.getProperty("os.name").equals("Windows XP")) {
-            Utils.openImage("VISIT-" + visit.getName(), imageIndex, app);
+            Utils.openFile("VISIT-" + visit.getName(), imageIndex, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (sighting != null) {
             if (sighting.getElementName() != null) {
-                Utils.openImage("ELEMENT-" + app.getDBI().find(new Element(sighting.getElementName())).getPrimaryName(), 0, app);
+                Utils.openFile("ELEMENT-" + app.getDBI().find(new Element(sighting.getElementName())).getPrimaryName(), 0, app);
             }
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
     private void lblSightingImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSightingImageMouseReleased
         if (sighting != null) {
-            Utils.openImage("SIGHTING-" + sighting.getSightingCounter(), imageSightingIndex, app);
+            Utils.openFile("SIGHTING-" + sighting.getSightingCounter(), imageSightingIndex, app);
         }
     }//GEN-LAST:event_lblSightingImageMouseReleased
 

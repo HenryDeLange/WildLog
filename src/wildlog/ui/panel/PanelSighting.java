@@ -1313,19 +1313,19 @@ public class PanelSighting extends javax.swing.JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (sighting != null) {
-            Utils.openImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, app);
+            Utils.openFile("SIGHTING-" + sighting.getSightingCounter(), imageIndex, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblLocationImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationImageMouseReleased
         if (location != null) {
-            Utils.openImage("LOCATION-" + location.getName(), 0, app);
+            Utils.openFile("LOCATION-" + location.getName(), 0, app);
         }
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (element != null) {
-            Utils.openImage("ELEMENT-" + element.getPrimaryName(), 0, app);
+            Utils.openFile("ELEMENT-" + element.getPrimaryName(), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 

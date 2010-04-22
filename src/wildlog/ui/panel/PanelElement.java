@@ -1132,7 +1132,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_txtBreedingNumberFocusGained
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        Utils.openImage("ELEMENT-" + element.getPrimaryName(), imageIndex, app);
+        Utils.openFile("ELEMENT-" + element.getPrimaryName(), imageIndex, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed

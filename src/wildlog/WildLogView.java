@@ -14,7 +14,6 @@
 
 package wildlog;
 
-import CsvGenerator.CsvGenerator;
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import KmlGenerator.objects.KmlStyle;
@@ -318,6 +317,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         advancedMenu = new javax.swing.JMenu();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        mnuDBConsole = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -1053,7 +1055,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         csvExportMenuItem.setAction(actionMap.get("exportToCSV")); // NOI18N
         csvExportMenuItem.setText(resourceMap.getString("csvExportMenuItem.text")); // NOI18N
-        csvExportMenuItem.setEnabled(false);
         csvExportMenuItem.setName("csvExportMenuItem"); // NOI18N
         exportMenu.add(csvExportMenuItem);
 
@@ -1074,7 +1075,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         csvImportMenuItem.setAction(actionMap.get("importFromCSV")); // NOI18N
         csvImportMenuItem.setText(resourceMap.getString("csvImportMenuItem.text")); // NOI18N
-        csvImportMenuItem.setEnabled(false);
         csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
         importMenu.add(csvImportMenuItem);
 
@@ -1097,6 +1097,21 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         importMenu.add(advancedMenu);
 
         menuBar.add(importMenu);
+
+        jMenu2.setText(resourceMap.getString("jMenu2.text")); // NOI18N
+        jMenu2.setName("jMenu2"); // NOI18N
+
+        jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
+        jMenu1.setName("jMenu1"); // NOI18N
+
+        mnuDBConsole.setAction(actionMap.get("openDBConsole")); // NOI18N
+        mnuDBConsole.setText(resourceMap.getString("mnuDBConsole.text")); // NOI18N
+        mnuDBConsole.setName("mnuDBConsole"); // NOI18N
+        jMenu1.add(mnuDBConsole);
+
+        jMenu2.add(jMenu1);
+
+        menuBar.add(jMenu2);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
@@ -1447,14 +1462,14 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-                Utils.openImage("ELEMENT-" + tempElement.getPrimaryName(), 0, app);
+                Utils.openFile("ELEMENT-" + tempElement.getPrimaryName(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblImage_LocTabMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage_LocTabMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-            Utils.openImage("LOCATION-" + tempLocation.getName(), 0, app);
+            Utils.openFile("LOCATION-" + tempLocation.getName(), 0, app);
         }
     }//GEN-LAST:event_lblImage_LocTabMouseReleased
 
@@ -1519,7 +1534,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1551,7 +1566,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1583,7 +1598,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1615,7 +1630,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1783,22 +1798,22 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openImage("LOCATION-" + temp.getName(), imageIndex, app);
+                Utils.openFile("LOCATION-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openImage("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                Utils.openFile("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openImage("VISIT-" + temp.getName(), imageIndex, app);
+                Utils.openFile("VISIT-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openImage("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                Utils.openFile("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
             }
         }
     }//GEN-LAST:event_btnViewImageActionPerformed
@@ -1820,7 +1835,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1852,7 +1867,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1884,7 +1899,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1916,7 +1931,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1959,7 +1974,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -1991,7 +2006,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -2023,7 +2038,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -2055,7 +2070,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                         else
                         if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Other.gif"));
+                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                     }
                     catch (IOException ex) {
                         Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
@@ -2384,11 +2399,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalCarnivore.gif"), new File(path + File.separatorChar + "AnimalCarnivore.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalHerbivore.gif"), new File(path + File.separatorChar + "AnimalHerbivore.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOmnivore.gif"), new File(path + File.separatorChar + "AnimalOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOther.gif"), new File(path + File.separatorChar + "AnimalOther.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOtherFile.gif"), new File(path + File.separatorChar + "AnimalOtherFile.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdCarnivore.gif"), new File(path + File.separatorChar + "BirdCarnivore.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdHerbivore.gif"), new File(path + File.separatorChar + "BirdHerbivore.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOmnivore.gif"), new File(path + File.separatorChar + "BirdOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOther.gif"), new File(path + File.separatorChar + "BirdOther.gif"));
+        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOtherFile.gif"), new File(path + File.separatorChar + "BirdOtherFile.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Plant.gif"), new File(path + File.separatorChar + "Plant.gif"));
         Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Location.gif"), new File(path + File.separatorChar + "Location.gif"));
         // KML Stuff
@@ -2419,7 +2434,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         tempStyle = new KmlStyle();
         tempStyle.setName("animalOtherStyle");
         tempStyle.setIconName("animalOtherIcon");
-        tempStyle.setIconPath("AnimalOther.gif");
+        tempStyle.setIconPath("AnimalOtherFile.gif");
         styles.add(tempStyle);
         tempStyle = new KmlStyle();
         tempStyle.setName("birdCarnivoreStyle");
@@ -2439,7 +2454,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         tempStyle = new KmlStyle();
         tempStyle.setName("birdOtherStyle");
         tempStyle.setIconName("birdOtherIcon");
-        tempStyle.setIconPath("BirdOther.gif");
+        tempStyle.setIconPath("BirdOtherFile.gif");
         styles.add(tempStyle);
         tempStyle = new KmlStyle();
         tempStyle.setName("plantStyle");
@@ -2656,6 +2671,19 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         
     }
 
+    @Action
+    public void openDBConsole() {
+        if (System.getProperty("os.name").equals("Windows XP")) {
+            String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", System.getProperty("user.dir") + "/lib/h2-1.2.133.jar"};
+            try {
+                Runtime.getRuntime().exec(commands);
+            }
+            catch (IOException ex) {
+                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenuItem backupMenuItem;
@@ -2703,6 +2731,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2726,6 +2756,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JMenuItem linkElementsMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem moveVisitsMenuItem;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JRadioButton rdbBrowseDate;
