@@ -14,7 +14,6 @@
 
 package wildlog.data.dataobjects;
 
-import CsvGenerator.CsvGenerator;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;

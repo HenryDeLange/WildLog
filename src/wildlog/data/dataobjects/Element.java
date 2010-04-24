@@ -15,7 +15,6 @@
 package wildlog.data.dataobjects;
 
 
-import CsvGenerator.CsvGenerator;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.enums.ActiveTime;
