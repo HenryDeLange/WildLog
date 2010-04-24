@@ -1355,15 +1355,6 @@
                 <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="kmlExportMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToKML" methodName="exportToKML"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="kmlExportMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="kmlExportMenuItem" noResource="true"/>
-              </Properties>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="htmlExportMenuItem1">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1371,6 +1362,15 @@
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="htmlExportMenuItem1.text"/>
                 <Property name="name" type="java.lang.String" value="htmlExportMenuItem1" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="kmlExportMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="exportToKML" methodName="exportToKML"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="kmlExportMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="kmlExportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>

@@ -131,7 +131,7 @@ public class Element implements Comparable<Element> {
         htmlElement = htmlElement + "<br/><b>Maximum Male Weight:</b> " + UtilsHTML.formatString(weightMaleMin) + " " + UtilsHTML.formatString(weightUnit);
         htmlElement = htmlElement + "<br/><b>Minimum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
         htmlElement = htmlElement + "<br/><b>Maximum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
-        htmlElement = htmlElement + "<br/><b>Age:</b> " + UtilsHTML.formatString(lifespan);
+        htmlElement = htmlElement + "<br/><b>Lifespan:</b> " + UtilsHTML.formatString(lifespan);
         htmlElement = htmlElement + "<br/><b>Breeding Duration:</b> " + UtilsHTML.formatString(breedingDuration);
         htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + UtilsHTML.formatString(breedingNumber);
         if (inIncludeImages)

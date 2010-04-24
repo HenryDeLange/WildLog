@@ -35,6 +35,7 @@ import javax.swing.JFrame;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import wildlog.WildLogApp;
 import wildlog.WildLogView;
+import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -433,8 +434,11 @@ public class ReportLocation extends javax.swing.JFrame {
                 String nameToUse = "";
                 if (usePrimaryName)
                     nameToUse = sighting.getElementName();
-                else
-                    nameToUse = sighting.getElementName();
+                else {
+                    Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
+                    if (tempElement.getOtherName() != null)
+                        nameToUse = tempElement.getOtherName();
+                }
                 // Time
                 if (sighting.getTimeOfDay() != null) {
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {

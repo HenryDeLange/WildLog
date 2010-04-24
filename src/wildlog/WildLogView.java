@@ -310,8 +310,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         csvExportMenuItem = new javax.swing.JMenuItem();
-        kmlExportMenuItem = new javax.swing.JMenuItem();
         htmlExportMenuItem1 = new javax.swing.JMenuItem();
+        kmlExportMenuItem = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         csvImportMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JSeparator();
@@ -1059,15 +1059,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         csvExportMenuItem.setName("csvExportMenuItem"); // NOI18N
         exportMenu.add(csvExportMenuItem);
 
-        kmlExportMenuItem.setAction(actionMap.get("exportToKML")); // NOI18N
-        kmlExportMenuItem.setText(resourceMap.getString("kmlExportMenuItem.text")); // NOI18N
-        kmlExportMenuItem.setName("kmlExportMenuItem"); // NOI18N
-        exportMenu.add(kmlExportMenuItem);
-
         htmlExportMenuItem1.setAction(actionMap.get("exportToHTML")); // NOI18N
         htmlExportMenuItem1.setText(resourceMap.getString("htmlExportMenuItem1.text")); // NOI18N
         htmlExportMenuItem1.setName("htmlExportMenuItem1"); // NOI18N
         exportMenu.add(htmlExportMenuItem1);
+
+        kmlExportMenuItem.setAction(actionMap.get("exportToKML")); // NOI18N
+        kmlExportMenuItem.setText(resourceMap.getString("kmlExportMenuItem.text")); // NOI18N
+        kmlExportMenuItem.setName("kmlExportMenuItem"); // NOI18N
+        exportMenu.add(kmlExportMenuItem);
 
         menuBar.add(exportMenu);
 
