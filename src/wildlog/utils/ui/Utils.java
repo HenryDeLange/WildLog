@@ -305,13 +305,16 @@ public class Utils {
         if (fotos.size() > 0) {
             Foto tempFoto = fotos.get(inImageIndex);
             inDBI.delete(tempFoto);
-            if (fotos.size() >= 1) {
-                // Behave like moving back button was pressed
-                inImageIndex = previousImage(inID, inImageIndex, inImageLabel, inSize, inApp);
+            if (fotos.size() > 1) {
+                inImageIndex--;
+                inImageIndex = nextImage(inID, inImageIndex, inImageLabel, inSize, inApp);
             }
             else {
                 inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
             }
+        }
+        else {
+            inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
         }
         return inImageIndex;
     }
@@ -328,13 +331,16 @@ public class Utils {
                 else
                 if (fotos.get(inImageIndex).getFotoType().equals(FotoType.OTHER))
                     inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
+                inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
             }
             else {
                 inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+                inImageLabel.setToolTipText("");
             }
         }
         else {
             inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+            inImageLabel.setToolTipText("");
         }
     }
 

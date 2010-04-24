@@ -14,10 +14,45 @@
 
 package wildlog.data.dbi;
 
+import java.io.File;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.AccommodationType;
+import wildlog.data.enums.ActiveTime;
+import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.AddFrequency;
+import wildlog.data.enums.AreaType;
+import wildlog.data.enums.CateringType;
+import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.EndangeredStatus;
+import wildlog.data.enums.FeedingClass;
+import wildlog.data.enums.FotoType;
+import wildlog.data.enums.GameViewRating;
+import wildlog.data.enums.GameWatchIntensity;
+import wildlog.data.enums.Habitat;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.LocationRating;
+import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.Province;
+import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.UnitsSize;
+import wildlog.data.enums.UnitsWeight;
+import wildlog.data.enums.ViewRating;
+import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WaterDependancy;
+import wildlog.data.enums.Weather;
+import wildlog.data.enums.WishRating;
 
 /**
  *
@@ -31,7 +66,10 @@ public class DBI_h2 extends DBI_JDBC {
         ResultSet results = null;
         try {
             Class.forName("org.h2.Driver").newInstance();
-            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog");
+            Properties props = new Properties();
+//            props.setProperty("username", "wildlog");
+//            props.setProperty("password", "wildlog");
+            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog", props);
             super.init();
             
             // Create tables
@@ -76,6 +114,226 @@ public class DBI_h2 extends DBI_JDBC {
         }
         catch (SQLException sqle) {
             printSQLException(sqle);
+        }
+    }
+
+    @Override
+    public void doBackup() {
+        Statement state = null;
+        try {
+            state = conn.createStatement();
+            // Backup
+            File dirs = new File(File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+            dirs.mkdirs();
+            // Create a database file backup
+            state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");
+            // Create a SQL dump
+            state.execute("SCRIPT TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - SQL.zip' COMPRESSION ZIP");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+    }
+
+    @Override
+    public void doExportCSV(String inPath) {
+        Statement state = null;
+        try {
+            state = conn.createStatement();
+            // Export Elements
+            state.execute("CALL CSVWRITE('" + inPath + "Elements.csv', 'SELECT * FROM ELEMENTS')");
+            // Export Locations
+            state.execute("CALL CSVWRITE('" + inPath + "Locations.csv', 'SELECT * FROM LOCATIONS')");
+            // Export Visits
+            state.execute("CALL CSVWRITE('" + inPath + "Visits.csv', 'SELECT * FROM VISITS')");
+            // Export Sightings
+            state.execute("CALL CSVWRITE('" + inPath + "Sightings.csv', 'SELECT * FROM SIGHTINGS')");
+            // Export Files
+            state.execute("CALL CSVWRITE('" + inPath + "Files.csv', 'SELECT * FROM FILES')");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+    }
+
+    @Override
+    public void doImportCSV(String inPath, String inPrefix) {
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Export Elements
+            results = state.executeQuery("CALL CSVREAD('" + inPath + "Elements.csv')");
+            while (results.next()) {
+                Element tempElement = new Element();
+
+                tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
+                tempElement.setOtherName(results.getString("OTHERNAME"));
+                tempElement.setScientificName(results.getString("SCIENTIFICNAME"));
+                tempElement.setDescription(results.getString("DESCRIPTION"));
+                tempElement.setNutrition(results.getString("NUTRITION"));
+                tempElement.setWaterDependance(WaterDependancy.getEnumFromText(results.getString("WATERDEPENDANCE")));
+                tempElement.setSizeMaleMin(results.getDouble("SIZEMALEMIN"));
+                tempElement.setSizeMaleMax(results.getDouble("SIZEMALEMAX"));
+                tempElement.setSizeFemaleMin(results.getDouble("SIZEFEMALEMIN"));
+                tempElement.setSizeFemaleMax(results.getDouble("SIZEFEMALEMAX"));
+                tempElement.setSizeUnit(UnitsSize.getEnumFromText(results.getString("SIZEUNIT")));
+                tempElement.setWeightMaleMin(results.getDouble("WEIGHTMALEMIN"));
+                tempElement.setWeightMaleMax(results.getDouble("WEIGHTMALEMAX"));
+                tempElement.setWeightFemaleMin(results.getDouble("WEIGHTFEMALEMIN"));
+                tempElement.setWeightFemaleMax(results.getDouble("WEIGHTFEMALEMAX"));
+                tempElement.setWeightUnit(UnitsWeight.getEnumFromText(results.getString("WEIGHTUNIT")));
+                tempElement.setBreedingDuration(results.getString("BREEDINGDURATION"));
+                tempElement.setBreedingNumber(results.getString("BREEDINGNUMBER"));
+                tempElement.setWishListRating(WishRating.getEnumFromText(results.getString("WISHLISTRATING")));
+                tempElement.setDiagnosticDescription(results.getString("DIAGNOSTICDESCRIPTION"));
+                tempElement.setActiveTime(ActiveTime.getEnumFromText(results.getString("ACTIVETIME")));
+                tempElement.setEndangeredStatus(EndangeredStatus.getEnumFromText(results.getString("ENDANGEREDSTATUS")));
+                tempElement.setBehaviourDescription(results.getString("BEHAVIOURDESCRIPTION"));
+                tempElement.setAddFrequency(AddFrequency.getEnumFromText(results.getString("ADDFREQUENCY")));
+                tempElement.setType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
+                tempElement.setFeedingClass(FeedingClass.getEnumFromText(results.getString("FEEDINGCLASS")));
+                tempElement.setLifespan(results.getString("LIFESPAN"));
+                tempElement.setReferenceID(results.getString("REFERENCEID"));
+
+                createOrUpdate(tempElement, null);
+            }
+            // Export Locations
+            results = state.executeQuery("CALL CSVREAD('" + inPath + "Locations.csv')");
+            while (results.next()) {
+                Location tempLocation = new Location();
+
+                tempLocation.setName(inPrefix + results.getString("NAME"));
+                tempLocation.setDescription(results.getString("DESCRIPTION"));
+                tempLocation.setProvince(Province.getEnumFromText(results.getString("PROVINCE")));
+                tempLocation.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
+                tempLocation.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
+                tempLocation.setHabitatType(Habitat.getEnumFromText(results.getString("HABITATTYPE")));
+                tempLocation.setAccommodationType(AccommodationType.getEnumFromText(results.getString("ACCOMMODATIONTYPE")));
+                tempLocation.setCatering(CateringType.getEnumFromText(results.getString("CATERING")));
+                tempLocation.setContactNumbers(results.getString("CONTACTNUMBERS"));
+                tempLocation.setWebsite(results.getString("WEBSITE"));
+                tempLocation.setEmail(results.getString("EMAIL"));
+                tempLocation.setDirections(results.getString("DIRECTIONS"));
+                tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
+                tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
+                tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
+                tempLocation.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
+                tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
+                tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
+                tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+
+                createOrUpdate(tempLocation, null);
+            }
+            // Export Visits
+            results = state.executeQuery("CALL CSVREAD('" + inPath + "Visits.csv')");
+            while (results.next()) {
+                Visit tempVisit = new Visit();
+
+                tempVisit.setName(inPrefix + results.getString("NAME"));
+                tempVisit.setStartDate(results.getDate("STARTDATE"));
+                tempVisit.setEndDate(results.getDate("ENDDATE"));
+                tempVisit.setDescription(results.getString("DESCRIPTION"));
+                tempVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(results.getString("GAMEWATCHINGINTENSITY")));
+                tempVisit.setType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
+                tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
+
+                createOrUpdate(tempVisit, null);
+            }
+            // Export Sightings
+            results = state.executeQuery("CALL CSVREAD('" + inPath + "Sightings.csv')");
+            while (results.next()) {
+                Sighting tempSighting = new Sighting();
+                
+                tempSighting.setSightingCounter(0);
+                tempSighting.setDate(results.getTimestamp("SIGHTINGDATE"));
+                tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
+                tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
+                tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
+                tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
+                tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
+                tempSighting.setAreaType(AreaType.getEnumFromText(results.getString("AREATYPE")));
+                tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
+                tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
+                tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
+                tempSighting.setDetails(results.getString("DETAILS"));
+                tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
+                tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
+                tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
+                tempSighting.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
+                tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
+                tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
+                tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
+
+                createOrUpdate(tempSighting);
+            }
+            // Export Files
+//            results = state.executeQuery("CALL CSVREAD('" + inPath + "Files.csv')");
+//            while (results.next()) {
+//                Foto tempFoto = new Foto();
+//
+//                tempFoto.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
+//                tempFoto.setFilename(results.getString("FILENAME"));
+//                tempFoto.setFileLocation(results.getString("FILEPATH"));
+//                tempFoto.setOriginalFotoLocation(results.getString("ORIGINALPATH"));
+//                tempFoto.setFotoType(FotoType.getEnumFromText(results.getString("FILETYPE")));
+//                tempFoto.setDate(results.getDate("UPLOADDATE"));
+//                tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
+//
+//                createOrUpdate(tempFoto, false);
+//            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
         }
     }
 

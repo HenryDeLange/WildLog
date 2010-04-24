@@ -26,30 +26,20 @@ import wildlog.data.dataobjects.Visit;
 public interface DBI {
     public void close();
     public void doBackup();
-    //public void exportWLD(boolean inIncludeThumbnails);
-    //public void importWLD();
-
-    //public boolean isSightingUnique(Sighting inSighting);
-    //public void refresh(Object inObject);
+    public void doExportCSV(String inPath);
+    public void doImportCSV(String inPath, String inPrefix);
     
     public Element find(Element inElement);
     public Location find(Location inLocation);
     public Visit find(Visit inVisit);
     public Sighting find(Sighting inSighting);
-    //public Foto find(Foto inFoto);
-    //public MapPoint find(MapPoint inMapPoint);
     
     public List<Element> list(Element inElement);
     public List<Location> list(Location inLocation);
     public List<Visit> list(Visit inVisit);
     public List<Sighting> list(Sighting inSighting);
     public List<Foto> list(Foto inFoto);
-    //public List<MapPoint> list(MapPoint inMapPoint);
 
-    //public List<Element> searchElementOnType(ElementType inType);
-    //public List<Element> searchElementOnPrimaryName(String inPrimaryName);
-    //public List<Element> searchElementOnTypeAndPrimaryName(ElementType inType, String inPrimaryString);
-//    public List<Location> searchLocationOnName(String inName);
     public List<Sighting> searchSightingOnDate(Date inStartDate, Date inEndDate);
     
     public boolean createOrUpdate(Element inElement, String inOldName);
@@ -57,13 +47,11 @@ public interface DBI {
     public boolean createOrUpdate(Visit inVisit, String inOldName);
     public boolean createOrUpdate(Sighting inSighting);
     public boolean createOrUpdate(Foto inFoto, boolean inUpdate);
-    //public boolean createOrUpdate(MapPoint inMapPoint);
     
     public boolean delete(Element inElement);
     public boolean delete(Location inLocation);
     public boolean delete(Visit inVisit);
     public boolean delete(Sighting inSighting);
     public boolean delete(Foto inFoto);
-    //public boolean delete(MapPoint inMapPoint);
 
 }

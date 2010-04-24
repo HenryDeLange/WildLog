@@ -123,8 +123,8 @@ public abstract class DBI_JDBC implements DBI {
                             "   LATMINUTES int,"+
                             "   LATSECONDSFLOAT float(52),"+
                             "   LONGITUDEINDICATOR varchar(10),"+
-                            "   LONDEGREES float(52),"+
-                            "   LONMINUTES float(52),"+
+                            "   LONDEGREES int,"+
+                            "   LONMINUTES int,"+
                             "   LONSECONDSFLOAT float(52)"+
                             ")";
         createVisitsTable = "CREATE TABLE VISITS "+
@@ -140,7 +140,7 @@ public abstract class DBI_JDBC implements DBI {
         createSightingsTable = "CREATE TABLE SIGHTINGS "+
                             "("+
                             "   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,"+
-                            "   SIGHTINGDATE date NOT NULL,"+
+                            "   SIGHTINGDATE timestamp NOT NULL,"+
                             "   ELEMENTNAME varchar(150) NOT NULL,"+
                             "   LOCATIONNAME varchar(150) NOT NULL,"+
                             "   VISITNAME varchar(150) NOT NULL,"+
@@ -159,7 +159,6 @@ public abstract class DBI_JDBC implements DBI {
                             "   LONDEGREES int,"+
                             "   LONMINUTES int,"+
                             "   LONSECONDSFLOAT float(52),"+
-                            "   SUBAREA varchar(50),"+
                             "   SIGHTINGEVIDENCE varchar(50)"+
                             ")";
         createFotosTable = "CREATE TABLE FILES "+
@@ -188,21 +187,6 @@ public abstract class DBI_JDBC implements DBI {
             printSQLException(sqle);
         }
     }
-
-    @Override
-    public void doBackup() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-//    @Override
-//    public void exportWLD(boolean inIncludeThumbnails) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public void importWLD() {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     @Override
     public Element find(Element inElement) {
@@ -305,7 +289,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
                 tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
-                //tempLocation.setSubAreas(results.getString("SUBAREAS"));
             }
 
         }
@@ -417,7 +400,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
                 tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
-                tempSighting.setSubArea(results.getString("SUBAREA"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
             }
 
@@ -449,16 +431,6 @@ public abstract class DBI_JDBC implements DBI {
         }
         return tempSighting;
     }
-
-//    @Override
-//    public Foto find(Foto inFoto) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
-//    @Override
-//    public MapPoint find(MapPoint inMapPoint) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     @Override
     public List<Element> list(Element inElement) {
@@ -574,7 +546,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
                 tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
-                //tempLocation.setSubAreas(results.getString("SUBAREAS"));
                 tempList.add(tempLocation);
             }
 
@@ -707,7 +678,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
                 tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
-                tempSighting.setSubArea(results.getString("SUBAREA"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempList.add(tempSighting);
             }
@@ -794,31 +764,6 @@ public abstract class DBI_JDBC implements DBI {
         }
         return tempList;
     }
-//
-//    @Override
-//    public List<MapPoint> list(MapPoint inMapPoint) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
-//    @Override
-//    public List<Element> searchElementOnType(ElementType inType) {
-//        return list(new Element(inType));
-//    }
-//
-//    @Override
-//    public List<Element> searchElementOnPrimaryName(String inPrimaryName) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-//
-//    @Override
-//    public List<Element> searchElementOnTypeAndPrimaryName(ElementType inType, String inPrimaryString) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
-
-//    @Override
-//    public List<Location> searchLocationOnName(String inName) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     @Override
     public List<Sighting> searchSightingOnDate(Date inStartDate, Date inEndDate) {
@@ -855,7 +800,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
                 tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
-                tempSighting.setSubArea(results.getString("SUBAREA"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempList.add(tempSighting);
             }
@@ -1043,7 +987,6 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "LONDEGREES = " + inLocation.getLonDegrees() + ", ";
                 sql = sql + "LONMINUTES = " + inLocation.getLonMinutes() + ", ";
                 sql = sql + "LONSECONDSFLOAT = " + inLocation.getLonSecondsFloat() + "";
-//                sql = sql + "SUBAREAS = '" + inLocation.getSubAreas() + "'";
                 sql = sql + " WHERE NAME = '" + inOldName + "'";
                 state.executeUpdate(sql);
             }
@@ -1073,7 +1016,6 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "" + inLocation.getLonDegrees() + ", ";
                 sql = sql + "" + inLocation.getLonMinutes() + ", ";
                 sql = sql + "" + inLocation.getLonSecondsFloat() + "";
-//                sql = sql + "'" + inLocation.getSubAreas() + "' ";
                 sql = sql + ")";
                 state.execute(sql);
             }
@@ -1225,7 +1167,6 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "LONDEGREES = " + inSighting.getLonDegrees() + ", ";
                 sql = sql + "LONMINUTES = " + inSighting.getLonMinutes() + ", ";
                 sql = sql + "LONSECONDSFLOAT = " + inSighting.getLonSecondsFloat() + ", ";
-                sql = sql + "SUBAREA = '" + inSighting.getSubArea() + "', ";
                 sql = sql + "SIGHTINGEVIDENCE = '" + inSighting.getSightingEvidence() + "'";
                 sql = sql + " WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
                 state.executeUpdate(sql);
@@ -1237,7 +1178,7 @@ public abstract class DBI_JDBC implements DBI {
                     sightingCounter++;
                     inSighting.setSightingCounter(sightingCounter); // Need to set it for images to upload coorectly
                     // Insert
-                    String sql = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SUBAREA,SIGHTINGEVIDENCE) VALUES (";
+                    String sql = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE) VALUES (";
                     sql = sql + "" + inSighting.getSightingCounter() + ", ";
                     if (inSighting.getDate() != null)
                         sql = sql + "'" + new java.sql.Timestamp(inSighting.getDate().getTime()) + "', ";
@@ -1261,7 +1202,6 @@ public abstract class DBI_JDBC implements DBI {
                     sql = sql + "" + inSighting.getLonDegrees() + ", ";
                     sql = sql + "" + inSighting.getLonMinutes() + ", ";
                     sql = sql + "" + inSighting.getLonSecondsFloat() + ", ";
-                    sql = sql + "'" + inSighting.getSubArea() + "', ";
                     sql = sql + "'" + inSighting.getSightingEvidence() + "'";
                     sql = sql + ")";
                     state.execute(sql);
@@ -1361,11 +1301,6 @@ public abstract class DBI_JDBC implements DBI {
         }
         return true;
     }
-
-//    @Override
-//    public boolean createOrUpdate(MapPoint inMapPoint) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     @Override
     public boolean delete(Element inElement) {
@@ -1594,11 +1529,6 @@ public abstract class DBI_JDBC implements DBI {
         return true;
     }
 
-
-//    @Override
-//    public boolean delete(MapPoint inMapPoint) {
-//        throw new UnsupportedOperationException("Not supported yet.");
-//    }
 
     /**
      * Prints details of an SQLException chain to <code>System.err</code>.

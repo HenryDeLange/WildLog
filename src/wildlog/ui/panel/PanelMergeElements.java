@@ -38,7 +38,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
     public PanelMergeElements() {
         initComponents();
         app = (WildLogApp) Application.getInstance();
-//        loadLists();
+        loadLists();
     }
 
     /** This method is called from within the constructor to
@@ -85,6 +85,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
         jLabel4.setName("jLabel4"); // NOI18N
         elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
+        btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -96,11 +97,6 @@ public class PanelMergeElements extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        lstReplaceElement.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Items" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
 
@@ -108,11 +104,6 @@ public class PanelMergeElements extends javax.swing.JPanel {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        lstKeepElement.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Items" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         lstKeepElement.setName("lstKeepElement"); // NOI18N
         jScrollPane1.setViewportView(lstKeepElement);
 
@@ -127,56 +118,55 @@ public class PanelMergeElements extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 775, Short.MAX_VALUE)
             .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 495, Short.MAX_VALUE)
             .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-//        if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
-//            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-//                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//                Sighting templateSighting = new Sighting();
-//                Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
-//                Element keepElement = (Element)lstKeepElement.getSelectedValue();
-//                templateSighting.setElement(replaceElement);
-//                List<Sighting> sightings = app.getDBI().list(templateSighting);
-//                for (Sighting tempSighting : sightings) {
-//                    tempSighting.setElement(keepElement);
-//                    app.getDBI().createOrUpdate(tempSighting);
-//                }
-//                app.getDBI().delete(replaceElement);
-//
-//                loadLists();
-//                this.setCursor(Cursor.getDefaultCursor());
-//            }
+        if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
+            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
+                Element keepElement = (Element)lstKeepElement.getSelectedValue();
+                Sighting templateSighting = new Sighting();
+                templateSighting.setElementName(replaceElement.getPrimaryName());
+                List<Sighting> sightings = app.getDBI().list(templateSighting);
+                for (Sighting tempSighting : sightings) {
+                    tempSighting.setElementName(keepElement.getPrimaryName());
+                    app.getDBI().createOrUpdate(tempSighting);
+                }
+                app.getDBI().delete(replaceElement);
+                loadLists();
+                this.setCursor(Cursor.getDefaultCursor());
+            }
             // Close the window
             //JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
             //dialog.dispose();
-//        }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Please select two Creatures to merge.", "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
 
     // Private Methods
-//    private void loadLists() {
-//        // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-//        List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
-//        Collections.sort(elements);
-//        DefaultListModel replaceModel = new DefaultListModel();
-//        DefaultListModel keepModel = new DefaultListModel();
-//        for (Element tempElement : elements) {
-//            replaceModel.addElement(tempElement);
-//            keepModel.addElement(tempElement);
-//        }
-//
-//        lstReplaceElement.setModel(replaceModel);
-//        lstKeepElement.setModel(keepModel);
-//    }
+    private void loadLists() {
+        List<Element> elements = app.getDBI().list(new Element());
+        Collections.sort(elements);
+        DefaultListModel replaceModel = new DefaultListModel();
+        DefaultListModel keepModel = new DefaultListModel();
+        for (Element tempElement : elements) {
+            replaceModel.addElement(tempElement);
+            keepModel.addElement(tempElement);
+        }
+
+        lstReplaceElement.setModel(replaceModel);
+        lstKeepElement.setModel(keepModel);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;

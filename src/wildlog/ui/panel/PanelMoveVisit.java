@@ -80,11 +80,6 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        lstFromLocation.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Items" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         lstFromLocation.setName("lstFromLocation"); // NOI18N
         lstFromLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -97,11 +92,6 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        lstVisit.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Items" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         lstVisit.setName("lstVisit"); // NOI18N
         jScrollPane2.setViewportView(lstVisit);
 
@@ -109,16 +99,12 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
-        lstToLocation.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Items" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
         lstToLocation.setName("lstToLocation"); // NOI18N
         jScrollPane3.setViewportView(lstToLocation);
 
         add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 290, 340, 220));
 
+        btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -135,38 +121,45 @@ public class PanelMoveVisit extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lstFromLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromLocationMouseReleased
-//        DefaultListModel visitModel = new DefaultListModel();
-//        if (lstFromLocation.getSelectedIndex() >= 0) {
-//            Location tempLocation = (Location)lstFromLocation.getSelectedValue();
-//            Collections.sort(tempLocation.getVisits());
-//            for (Visit tempVisit : tempLocation.getVisits())
-//                visitModel.addElement(tempVisit);
-//        }
-//        lstVisit.setModel(visitModel);
+        DefaultListModel visitModel = new DefaultListModel();
+        if (lstFromLocation.getSelectedIndex() >= 0) {
+            Location tempLocation = (Location)lstFromLocation.getSelectedValue();
+            Visit temp = new Visit();
+            temp.setLocationName(tempLocation.getName());
+            List<Visit> visits = app.getDBI().list(temp);
+            Collections.sort(visits);
+            for (Visit tempVisit : visits)
+                visitModel.addElement(tempVisit);
+        }
+        lstVisit.setModel(visitModel);
     }//GEN-LAST:event_lstFromLocationMouseReleased
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-//        if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-//            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION) == JOptionPane.OK_OPTION) {
-//                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//                Visit tempVisit = (Visit)lstVisit.getSelectedValue();
-//                // Update the Locations
-//                Location fromLocation = (Location)lstFromLocation.getSelectedValue();
-//                Location toLocation = (Location)lstToLocation.getSelectedValue();
-//                fromLocation.getVisits().remove(tempVisit);
-//                toLocation.getVisits().add(tempVisit);
-//                //app.getDBI().createOrUpdate(fromLocation);
-//                //app.getDBI().createOrUpdate(toLocation);
-//                // Update the sightings
-//                for (Sighting tempSighting : tempVisit.getSightings()) {
-//                    tempSighting.setLocation(toLocation);
-//                    app.getDBI().createOrUpdate(tempSighting);
-//                }
-//                // Reload the lists
-//                loadLists();
-//                this.setCursor(Cursor.getDefaultCursor());
-//            }
-//        }
+        if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
+            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                Location tempLocation = (Location)lstToLocation.getSelectedValue();
+                // Update the Visit
+                Visit tempVisit = (Visit)lstVisit.getSelectedValue();
+                tempVisit.setLocationName(tempLocation.getName());
+                app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
+                // Update the sightings
+                Sighting temp = new Sighting();
+                temp.setVisitName(tempVisit.getName());
+                List<Sighting> sightings = app.getDBI().list(temp);
+                for (Sighting tempSighting : sightings) {
+                    tempSighting.setLocationName(tempLocation.getName());
+                    tempSighting.setVisitName(tempVisit.getName());
+                    app.getDBI().createOrUpdate(tempSighting);
+                }
+                // Reload the lists
+                loadLists();
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Please select a From Location, Visit and To Location.", "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
 
@@ -181,7 +174,6 @@ public class PanelMoveVisit extends javax.swing.JPanel {
             fromLocationModel.addElement(tempLocation);
             toLocationModel.addElement(tempLocation);
         }
-
         lstFromLocation.setModel(fromLocationModel);
         lstToLocation.setModel(toLocationModel);
         lstFromLocationMouseReleased(null);

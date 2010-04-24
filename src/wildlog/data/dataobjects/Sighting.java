@@ -47,14 +47,14 @@ public class Sighting implements Comparable<Sighting> {
     private Latitudes latitude;
     private int latDegrees;
     private int latMinutes;
-    private int latSeconds;  // Old field not used anymore
+    //private int latSeconds;  // Old field not used anymore
     private float latSecondsFloat;
     private Longitudes longitude;
     private int lonDegrees;
     private int lonMinutes;
-    private int lonSeconds;  // Old field not used anymore
+    //private int lonSeconds;  // Old field not used anymore
     private float lonSecondsFloat;
-    private String subArea;
+    //private String subArea;
     private SightingEvidence sightingEvidence;
     private long sightingCounter;
     private String elementName;
@@ -112,7 +112,7 @@ public class Sighting implements Comparable<Sighting> {
         htmlSighting = htmlSighting + "<br/><b>Details:</b> " + UtilsHTML.formatString(details);
         htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
         htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
-        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
+//        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
         htmlSighting = htmlSighting + "<br/><b>Sighting ID:</b> " + UtilsHTML.formatString(sightingCounter);
         if (inIncludeImages)
             htmlSighting = htmlSighting + "</br><b>Photos:</b></br/>" + fotoString;
@@ -311,10 +311,10 @@ public class Sighting implements Comparable<Sighting> {
         return longitude;
     }
 
-    public String getSubArea() {
-        if (subArea == null) subArea = "";
-        return subArea;
-    }
+//    public String getSubArea() {
+//        if (subArea == null) subArea = "";
+//        return subArea;
+//    }
 
     public SightingEvidence getSightingEvidence() {
         return sightingEvidence;
@@ -402,9 +402,9 @@ public class Sighting implements Comparable<Sighting> {
         longitude = inLongitude;
     }
 
-    public void setSubArea(String inSubArea) {
-        subArea = inSubArea;
-    }
+//    public void setSubArea(String inSubArea) {
+//        subArea = inSubArea;
+//    }
 
     public void setSightingEvidence(SightingEvidence inSightingEvidence) {
         sightingEvidence = inSightingEvidence;

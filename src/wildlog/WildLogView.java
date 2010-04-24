@@ -41,6 +41,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -315,8 +316,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         csvImportMenuItem = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JSeparator();
         advancedMenu = new javax.swing.JMenu();
-        linkElementsMenuItem = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
+        linkElementsMenuItem = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
@@ -590,7 +591,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
-        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 25, 80, 40));
+        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 35, 80, 30));
 
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
@@ -611,7 +612,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnDefaultActionPerformed(evt);
             }
         });
-        tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 5, 90, 20));
+        tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 5, 90, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1081,22 +1082,22 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         jSeparator4.setName("jSeparator4"); // NOI18N
         importMenu.add(jSeparator4);
 
+        menuBar.add(importMenu);
+
         advancedMenu.setText(resourceMap.getString("advancedMenu.text")); // NOI18N
         advancedMenu.setName("advancedMenu"); // NOI18N
-
-        linkElementsMenuItem.setAction(actionMap.get("advancedLinkElements")); // NOI18N
-        linkElementsMenuItem.setText(resourceMap.getString("linkElementsMenuItem.text")); // NOI18N
-        linkElementsMenuItem.setName("linkElementsMenuItem"); // NOI18N
-        advancedMenu.add(linkElementsMenuItem);
 
         moveVisitsMenuItem.setAction(actionMap.get("advancedMoveVisits")); // NOI18N
         moveVisitsMenuItem.setText(resourceMap.getString("moveVisitsMenuItem.text")); // NOI18N
         moveVisitsMenuItem.setName("moveVisitsMenuItem"); // NOI18N
         advancedMenu.add(moveVisitsMenuItem);
 
-        importMenu.add(advancedMenu);
+        linkElementsMenuItem.setAction(actionMap.get("advancedLinkElements")); // NOI18N
+        linkElementsMenuItem.setText(resourceMap.getString("linkElementsMenuItem.text")); // NOI18N
+        linkElementsMenuItem.setName("linkElementsMenuItem"); // NOI18N
+        advancedMenu.add(linkElementsMenuItem);
 
-        menuBar.add(importMenu);
+        menuBar.add(advancedMenu);
 
         jMenu2.setText(resourceMap.getString("jMenu2.text")); // NOI18N
         jMenu2.setName("jMenu2"); // NOI18N
@@ -1524,31 +1525,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempLocation.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
-                if (fotos.size() > 0) {
-                    try {
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                setupFile(fotos);
                 btnReport.setVisible(true);
             }
             else
@@ -1556,31 +1533,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempElement.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
-                if (fotos.size() > 0) {
-                    try {
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                setupFile(fotos);
                 btnReport.setVisible(true);
             }
             else
@@ -1588,31 +1541,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempVisit.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
-                if (fotos.size() > 0) {
-                    try {
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                setupFile(fotos);
                 btnReport.setVisible(true);
             }
             else
@@ -1620,42 +1549,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                 txtPhotoInformation.setText(tempSighting.toHTML(false, false, app));
                 List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
-                if (fotos.size() > 0) {
-                    try {
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                setupFile(fotos);
+            }
+            else {
+                setupFile(null);
             }
             if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
                 btnReport.setVisible(true);
             }
             // Maak paar display issues reg
-            if (imgBrowsePhotos.getImage() != null) {
-                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                else
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
-            }
             txtPhotoInformation.getCaret().setDot(0);
         }
     }//GEN-LAST:event_treBrowsePhotoValueChanged
@@ -1823,136 +1725,25 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex--;
-                        if (imageIndex < 0) imageIndex = fotos.size() - 1;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex--;
-                        if (imageIndex < 0) imageIndex = fotos.size() - 1;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex--;
-                        if (imageIndex < 0) imageIndex = fotos.size() - 1;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                 List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex--;
-                        if (imageIndex < 0) imageIndex = fotos.size() - 1;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-            // Scale image
-            if (imgBrowsePhotos.getImage() != null) {
-                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                else
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+                loadPrevFile(fotos);
             }
         }
     }//GEN-LAST:event_btnBrowsePrevActionPerformed
@@ -1962,136 +1753,25 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex++;
-                        if (imageIndex >= fotos.size()) imageIndex = 0;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex++;
-                        if (imageIndex >= fotos.size()) imageIndex = 0;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex++;
-                        if (imageIndex >= fotos.size()) imageIndex = 0;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                 List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
-                if (fotos.size() > imageIndex) {
-                    try {
-                        imageIndex++;
-                        if (imageIndex >= fotos.size()) imageIndex = 0;
-                        lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
-                            imgBrowsePhotos.setImage(new File(fotos.get(imageIndex).getOriginalFotoLocation()));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                        else
-                        if (fotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("0 of 0");
-                    }
-                    catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            }
-            // Scale image
-            if (imgBrowsePhotos.getImage() != null) {
-                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                else
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+                loadNextFile(fotos);
             }
         }
     }//GEN-LAST:event_btnBrowseNextActionPerformed
@@ -2367,7 +2047,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     public void backup() {
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         app.getDBI().doBackup();
-        getApplication().exit();
+        JOptionPane.showMessageDialog(this.getComponent(), "The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder.", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+        //getApplication().exit();
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -2476,15 +2157,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         kmlgen.generateFile(entries, styles);
 
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            try {
-                String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", path + File.separatorChar + "WildLogMarkers.kml"};
-                Runtime.getRuntime().exec(commands);
-            }
-            catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
+        Utils.openFile(path + File.separatorChar + "WildLogMarkers.kml");
+        
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -2494,113 +2168,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV";
         File tempFile = new File(path);
         tempFile.mkdirs();
-        // Locations
-//        CsvGenerator csvGenerator = new CsvGenerator();
-//        csvGenerator.addHeader("Name");
-//        csvGenerator.addHeader("Description");
-//        csvGenerator.addHeader("Province");
-//        csvGenerator.addHeader("Rating");
-//        csvGenerator.addHeader("Wildlife Viewing Rating");
-//        csvGenerator.addHeader("Habitat Type");
-//        csvGenerator.addHeader("Photos");
-//        csvGenerator.addHeader("Accommodation Type");
-//        csvGenerator.addHeader("Catering");
-//        csvGenerator.addHeader("Contact Number");
-//        csvGenerator.addHeader("Website");
-//        csvGenerator.addHeader("Email");
-//        csvGenerator.addHeader("Directions");
-//        csvGenerator.addHeader("Latitude Indicator");
-//        csvGenerator.addHeader("Latitude Degrees");
-//        csvGenerator.addHeader("Latitude Minutes");
-//        csvGenerator.addHeader("Latitude Seconds");
-//        csvGenerator.addHeader("Longitude Indicator");
-//        csvGenerator.addHeader("Longitude Degrees");
-//        csvGenerator.addHeader("Longitude Minutes");
-//        csvGenerator.addHeader("Longitude Seconds");
-//        csvGenerator.addHeader("Sub Areas");
-//        csvGenerator.addHeader("Visits");
-//        List<Location> listLocations = app.getDBI().list(new Location());
-//        for (int t = 0; t < listLocations.size(); t++) {
-//            listLocations.get(t).toCSV(csvGenerator);
-//        }
-//        csvGenerator.writeCSV(path + File.separatorChar + "Locations.csv");
-//        // Visits
-//        csvGenerator = new CsvGenerator();
-//        csvGenerator.addHeader("Name");
-//        csvGenerator.addHeader("Start Date");
-//        csvGenerator.addHeader("End Date");
-//        csvGenerator.addHeader("Description");
-//        csvGenerator.addHeader("Game Watching Intensity");
-//        //csvGenerator.addHeader("Sightings");
-//        csvGenerator.addHeader("Type");
-//        csvGenerator.addHeader("Photos");
-//        List<Visit> listVisits = app.getDBI().list(new Visit());
-//        for (int t = 0; t < listVisits.size(); t++) {
-//            listVisits.get(t).toCSV(csvGenerator);
-//        }
-//        csvGenerator.writeCSV(path + File.separatorChar + "Visits.csv");
-//        // Sightings
-//        csvGenerator = new CsvGenerator();
-//        csvGenerator.addHeader("Date");
-//        csvGenerator.addHeader("Element Primary Name");
-//        csvGenerator.addHeader("Location Name");
-//        csvGenerator.addHeader("Time of Day");
-//        csvGenerator.addHeader("Weather");
-//        csvGenerator.addHeader("Area Type");
-//        csvGenerator.addHeader("View Rating");
-//        csvGenerator.addHeader("Certainty");
-//        csvGenerator.addHeader("Number of Creatures");
-//        csvGenerator.addHeader("Details");
-//        csvGenerator.addHeader("Photos");
-//        csvGenerator.addHeader("Latitude Indicator");
-//        csvGenerator.addHeader("Latitude Degrees");
-//        csvGenerator.addHeader("Latitude Minutes");
-//        csvGenerator.addHeader("Latitude Seconds");
-//        csvGenerator.addHeader("Longitude Indicator");
-//        csvGenerator.addHeader("Longitude Degree");
-//        csvGenerator.addHeader("Longitude Minutes");
-//        csvGenerator.addHeader("Longitude Seconds");
-//        csvGenerator.addHeader("Sub Area");
-//        csvGenerator.addHeader("Sighting Evidence");
-//        //csvGenerator.addHeader("Sighting Counter");
-//        List<Sighting> listSightings = app.getDBI().list(new Sighting());
-//        for (int t = 0; t < listSightings.size(); t++) {
-//            listSightings.get(t).toCSV(csvGenerator);
-//        }
-//        csvGenerator.writeCSV(path + File.separatorChar + "Sightings.csv");
-//        // Elements
-//        csvGenerator = new CsvGenerator();
-//        csvGenerator.addHeader("Primary Name");
-//        csvGenerator.addHeader("Other Name");
-//        csvGenerator.addHeader("Scientific Name");
-//        csvGenerator.addHeader("Reference ID");
-//        csvGenerator.addHeader("Description");
-//        csvGenerator.addHeader("Nutrition");
-//        csvGenerator.addHeader("Water Dependance");
-//        csvGenerator.addHeader("Average Male Size");
-//        csvGenerator.addHeader("Average Female Size");
-//        csvGenerator.addHeader("Size Unit");
-//        csvGenerator.addHeader("Average Male Weight");
-//        csvGenerator.addHeader("Average Female Weight");
-//        csvGenerator.addHeader("Weight Unit");
-//        csvGenerator.addHeader("Breeding Duration");
-//        csvGenerator.addHeader("Breeding Number");
-//        csvGenerator.addHeader("Breeding Age");
-//        csvGenerator.addHeader("Wish List Rating");
-//        csvGenerator.addHeader("Diagnostic Description");
-//        csvGenerator.addHeader("Active Time");
-//        csvGenerator.addHeader("Endangered Status");
-//        csvGenerator.addHeader("Behaviour Description");
-//        csvGenerator.addHeader("Add Frequency");
-//        csvGenerator.addHeader("Photos");
-//        csvGenerator.addHeader("Type");
-//        csvGenerator.addHeader("Feeding Class");
-//        csvGenerator.addHeader("Lifespan");
-//        List<Element> listElements = app.getDBI().list(new Element());
-//        for (int t = 0; t < listElements.size(); t++) {
-//            listElements.get(t).toCSV(csvGenerator);
-//        }
-//        csvGenerator.writeCSV(path + File.separatorChar + "Creatures.csv");
+        app.getDBI().doExportCSV(path + File.separatorChar);
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -2629,6 +2197,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     @Action
     public void advancedLinkElements() {
         tabbedPanel.setSelectedIndex(0);
+        while (tabbedPanel.getTabCount() > 4) {
+            tabbedPanel.remove(4);
+        }
         final JDialog dialog = new JDialog(app.getMainFrame(), "Link Creatures", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(790, 540);
@@ -2649,6 +2220,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     @Action
     public void advancedMoveVisits() {
         tabbedPanel.setSelectedIndex(0);
+        while (tabbedPanel.getTabCount() > 4) {
+            tabbedPanel.remove(4);
+        }
         final JDialog dialog = new JDialog(app.getMainFrame(), "Move Visits", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(750, 560);
@@ -2668,19 +2242,111 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     @Action
     public void importFromCSV() {
-        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select the directory with CSV files");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
+            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            String path = fileChooser.getSelectedFile().getPath() + File.separatorChar;
+            String prefix = JOptionPane.showInputDialog(this.getComponent(), "Provide a prefix to use for the imported data.", "Import CSV Data", JOptionPane.PLAIN_MESSAGE);
+            app.getDBI().doImportCSV(path, prefix);
+            this.getComponent().setCursor(Cursor.getDefaultCursor());
+        }
     }
 
     @Action
     public void openDBConsole() {
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", System.getProperty("user.dir") + "/lib/h2-1.2.133.jar"};
+        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.133.jar");
+    }
+
+    private void loadPrevFile(List<Foto> inFotos) {
+        if (inFotos.size() > imageIndex) {
+            imageIndex--;
+            if (imageIndex < 0) imageIndex = inFotos.size() - 1;
+            setupFile(inFotos);
+        }
+        else {
             try {
-                Runtime.getRuntime().exec(commands);
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                lblNumberOfImages.setText("0 of 0");
+                imgBrowsePhotos.setToolTipText("");
             }
             catch (IOException ex) {
                 Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }
+
+    private void loadNextFile(List<Foto> inFotos) {
+        if (inFotos.size() > imageIndex) {
+            imageIndex++;
+            if (imageIndex >= inFotos.size()) imageIndex = 0;
+            setupFile(inFotos);
+        }
+        else {
+            try {
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                lblNumberOfImages.setText("0 of 0");
+                imgBrowsePhotos.setToolTipText("");
+            }
+            catch (IOException ex) {
+                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    private void setupFile(List<Foto> inFotos) {
+        if (inFotos != null) {
+            if (inFotos.size() > 0) {
+                try {
+                    lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
+                    if (inFotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                        imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation()));
+                    else
+                    if (inFotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                    else
+                    if (inFotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally {
+                    imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
+                }
+            }
+            else {
+                try {
+                    imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                    lblNumberOfImages.setText("0 of 0");
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally {
+                    imgBrowsePhotos.setToolTipText("");
+                }
+            }
+        }
+        else {
+            try {
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                lblNumberOfImages.setText("");
+            }
+            catch (IOException ex) {
+                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            finally {
+                imgBrowsePhotos.setToolTipText("");
+            }
+        }
+        // Scale image
+        if (imgBrowsePhotos.getImage() != null) {
+            if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
+                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
+            else
+                imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
         }
     }
 

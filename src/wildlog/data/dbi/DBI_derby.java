@@ -14,47 +14,11 @@
 
 package wildlog.data.dbi;
 
-import java.io.File;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Properties;
-import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Foto;
-import wildlog.data.dataobjects.Location;
-import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
-import wildlog.data.enums.AccommodationType;
-import wildlog.data.enums.ActiveTime;
-import wildlog.data.enums.ActiveTimeSpesific;
-import wildlog.data.enums.AddFrequency;
-import wildlog.data.enums.AreaType;
-import wildlog.data.enums.CateringType;
-import wildlog.data.enums.Certainty;
-import wildlog.data.enums.ElementType;
-import wildlog.data.enums.EndangeredStatus;
-import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.FotoType;
-import wildlog.data.enums.GameViewRating;
-import wildlog.data.enums.GameWatchIntensity;
-import wildlog.data.enums.Habitat;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.LocationRating;
-import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.Province;
-import wildlog.data.enums.SightingEvidence;
-import wildlog.data.enums.UnitsSize;
-import wildlog.data.enums.UnitsWeight;
-import wildlog.data.enums.ViewRating;
-import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WaterDependancy;
-import wildlog.data.enums.Weather;
-import wildlog.data.enums.WishRating;
 
 /**
  *
@@ -167,7 +131,20 @@ public class DBI_derby extends DBI_JDBC {
         }
     }
 
-     
+    @Override
+    public void doBackup() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void doExportCSV(String inPath) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void doImportCSV(String inPath, String inPrefix) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     
 }

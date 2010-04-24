@@ -562,7 +562,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="578" y="25" width="80" height="40"/>
+                      <AbsoluteConstraints x="578" y="35" width="80" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -595,7 +595,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="573" y="5" width="90" height="20"/>
+                      <AbsoluteConstraints x="573" y="5" width="90" height="-1"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1395,32 +1395,32 @@
                 <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>
               </Properties>
             </MenuItem>
-            <Menu class="javax.swing.JMenu" name="advancedMenu">
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="advancedMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="advancedMenu.text"/>
+            <Property name="name" type="java.lang.String" value="advancedMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
               <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="advancedMenu.text"/>
-                <Property name="name" type="java.lang.String" value="advancedMenu" noResource="true"/>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="advancedMoveVisits" methodName="advancedMoveVisits"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="moveVisitsMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="moveVisitsMenuItem" noResource="true"/>
               </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="linkElementsMenuItem">
-                  <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="advancedLinkElements" methodName="advancedLinkElements"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" resourceKey="linkElementsMenuItem.text"/>
-                    <Property name="name" type="java.lang.String" value="linkElementsMenuItem" noResource="true"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
-                  <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="advancedMoveVisits" methodName="advancedMoveVisits"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" resourceKey="moveVisitsMenuItem.text"/>
-                    <Property name="name" type="java.lang.String" value="moveVisitsMenuItem" noResource="true"/>
-                  </Properties>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="linkElementsMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="advancedLinkElements" methodName="advancedLinkElements"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="linkElementsMenuItem.text"/>
+                <Property name="name" type="java.lang.String" value="linkElementsMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
