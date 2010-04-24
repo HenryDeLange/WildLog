@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -37,7 +36,6 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.FotoType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.Habitat;
@@ -69,7 +67,7 @@ public class DBI_h2 extends DBI_JDBC {
             Properties props = new Properties();
 //            props.setProperty("username", "wildlog");
 //            props.setProperty("password", "wildlog");
-            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog", props);
+            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog;AUTOCOMMIT=ON", props);
             super.init();
             
             // Create tables

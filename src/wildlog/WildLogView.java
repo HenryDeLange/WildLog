@@ -2256,7 +2256,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     @Action
     public void openDBConsole() {
-        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.133.jar");
+        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.134.jar");
     }
 
     private void loadPrevFile(List<Foto> inFotos) {

@@ -68,7 +68,7 @@ public abstract class DBI_JDBC implements DBI {
     protected String createFotosTable;
 
     public DBI_JDBC() {
-        
+
     }
 
     protected void init() {
@@ -174,7 +174,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
    // Methods
-   @Override
+    @Override
     public void close() {
         // Close Connection
         try {
@@ -194,7 +194,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         Element tempElement = null;
         try {
-            String sql = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName() + "'";
+            String sql = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'";
             state = conn.createStatement();
             results = state.executeQuery(sql);
             if (results.next()) {
@@ -264,7 +264,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         Location tempLocation = null;
         try {
-            String sql = "SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName() + "'";
+            String sql = "SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'";
             state = conn.createStatement();
             results = state.executeQuery(sql);
             if (results.next()) {
@@ -326,7 +326,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         Visit tempVisit = null;
         try {
-            String sql = "SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName() + "'";
+            String sql = "SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'";
             state = conn.createStatement();
             results = state.executeQuery(sql);
             if (results.next()) {
@@ -440,13 +440,13 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT * FROM ELEMENTS";
             if (inElement.getPrimaryName() != null && inElement.getType() == null)
-                sql = sql + " WHERE PRIMARYNAME like '%" + inElement.getPrimaryName() + "%'";
+                sql = sql + " WHERE PRIMARYNAME like '%" + inElement.getPrimaryName().replaceAll("'", "''") + "%'";
             else
             if (inElement.getPrimaryName() == null && inElement.getType() != null)
                 sql = sql + " WHERE ELEMENTTYPE = '" + inElement.getType() + "'";
             else
             if (inElement.getPrimaryName() != null && inElement.getType() != null)
-                sql = sql + " WHERE PRIMARYNAME like '%" + inElement.getPrimaryName() + "%' AND ELEMENTTYPE = '" + inElement.getType() + "'";
+                sql = sql + " WHERE PRIMARYNAME like '%" + inElement.getPrimaryName().replaceAll("'", "''") + "%' AND ELEMENTTYPE = '" + inElement.getType() + "'";
 
             state = conn.createStatement();
             results = state.executeQuery(sql);
@@ -520,7 +520,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT * FROM LOCATIONS";
             if (inLocation.getName() != null)
-                sql = sql + " WHERE NAME like '%" + inLocation.getName() + "%'";
+                sql = sql + " WHERE NAME like '%" + inLocation.getName().replaceAll("'", "''") + "%'";
 
             state = conn.createStatement();
             results = state.executeQuery(sql);
@@ -586,10 +586,10 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT * FROM VISITS";
             if (inVisit.getName() != null)
-                sql = sql + " WHERE NAME = '" + inVisit.getName() + "'";
+                sql = sql + " WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'";
             else
             if (inVisit.getLocationName() != null)
-                sql = sql + " WHERE LOCATIONNAME = '" + inVisit.getLocationName() + "'";
+                sql = sql + " WHERE LOCATIONNAME = '" + inVisit.getLocationName().replaceAll("'", "''") + "'";
 
             state = conn.createStatement();
             results = state.executeQuery(sql);
@@ -645,13 +645,13 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
             else
             if (inSighting.getElementName() != null)
-                sql = sql + " WHERE ELEMENTNAME = '" + inSighting.getElementName() + "'";
+                sql = sql + " WHERE ELEMENTNAME = '" + inSighting.getElementName().replaceAll("'", "''") + "'";
             else
             if (inSighting.getLocationName() != null)
-                sql = sql + " WHERE LOCATIONNAME = '" + inSighting.getLocationName() + "'";
+                sql = sql + " WHERE LOCATIONNAME = '" + inSighting.getLocationName().replaceAll("'", "''") + "'";
             else
             if (inSighting.getVisitName() != null)
-                sql = sql + " WHERE VISITNAME = '" + inSighting.getVisitName() + "'";
+                sql = sql + " WHERE VISITNAME = '" + inSighting.getVisitName().replaceAll("'", "''") + "'";
 
             state = conn.createStatement();
             results = state.executeQuery(sql);
@@ -719,7 +719,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT * FROM FILES";
             if (inFoto.getId() != null)
-                sql = sql + " WHERE ID = '" + inFoto.getId() + "'";
+                sql = sql + " WHERE ID = '" + inFoto.getId().replaceAll("'", "''") + "'";
             sql = sql + " ORDER BY ISDEFAULT desc, FILEPATH";
 
             state = conn.createStatement();
@@ -841,21 +841,21 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inOldName != null) {
                 if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName() + "'");
+                    results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
                     if (results.next()) {
                         return false;
                     }
                     else {
-                        state.execute("UPDATE SIGHTINGS SET ELEMENTNAME = '" + inElement.getPrimaryName() + "' WHERE ELEMENTNAME = '" + inOldName + "'");
+                        state.execute("UPDATE SIGHTINGS SET ELEMENTNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "' WHERE ELEMENTNAME = '" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
                 String sql = "UPDATE ELEMENTS SET ";
-                sql = sql + "PRIMARYNAME = '" + inElement.getPrimaryName() + "', ";
-                sql = sql + "OTHERNAME = '" + inElement.getOtherName() + "', ";
-                sql = sql + "SCIENTIFICNAME = '" + inElement.getScientificName() + "', ";
-                sql = sql + "DESCRIPTION = '" + inElement.getDescription() + "', ";
-                sql = sql + "NUTRITION = '" + inElement.getNutrition() + "', ";
+                sql = sql + "PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "', ";
+                sql = sql + "OTHERNAME = '" + inElement.getOtherName().replaceAll("'", "''") + "', ";
+                sql = sql + "SCIENTIFICNAME = '" + inElement.getScientificName().replaceAll("'", "''") + "', ";
+                sql = sql + "DESCRIPTION = '" + inElement.getDescription().replaceAll("'", "''") + "', ";
+                sql = sql + "NUTRITION = '" + inElement.getNutrition().replaceAll("'", "''") + "', ";
                 sql = sql + "WATERDEPENDANCE = '" + inElement.getWaterDependance() + "', ";
                 sql = sql + "SIZEMALEMIN = " + inElement.getSizeMaleMin() + ", ";
                 sql = sql + "SIZEMALEMAX = " + inElement.getSizeMaleMax() + ", ";
@@ -867,32 +867,32 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "WEIGHTFEMALEMIN = " + inElement.getWeightFemaleMin() + ", ";
                 sql = sql + "WEIGHTFEMALEMAX = " + inElement.getWeightFemaleMax() + ", ";
                 sql = sql + "WEIGHTUNIT = '" + inElement.getWeightUnit() + "', ";
-                sql = sql + "BREEDINGDURATION = '" + inElement.getBreedingDuration() + "', ";
-                sql = sql + "BREEDINGNUMBER = '" + inElement.getBreedingNumber() + "', ";
+                sql = sql + "BREEDINGDURATION = '" + inElement.getBreedingDuration().replaceAll("'", "''") + "', ";
+                sql = sql + "BREEDINGNUMBER = '" + inElement.getBreedingNumber().replaceAll("'", "''") + "', ";
                 sql = sql + "WISHLISTRATING = '" + inElement.getWishListRating() + "', ";
-                sql = sql + "DIAGNOSTICDESCRIPTION = '" + inElement.getDiagnosticDescription() + "', ";
+                sql = sql + "DIAGNOSTICDESCRIPTION = '" + inElement.getDiagnosticDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "ACTIVETIME = '" + inElement.getActiveTime() + "', ";
                 sql = sql + "ENDANGEREDSTATUS = '" + inElement.getEndangeredStatus() + "', ";
-                sql = sql + "BEHAVIOURDESCRIPTION = '" + inElement.getBehaviourDescription() + "', ";
+                sql = sql + "BEHAVIOURDESCRIPTION = '" + inElement.getBehaviourDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "ADDFREQUENCY = '" + inElement.getAddFrequency() + "', ";
                 sql = sql + "ELEMENTTYPE = '" + inElement.getType() + "', ";
                 sql = sql + "FEEDINGCLASS = '" + inElement.getFeedingClass() + "', ";
-                sql = sql + "LIFESPAN = '" + inElement.getLifespan() + "', ";
-                sql = sql + "REFERENCEID = '" + inElement.getReferenceID() + "'";
-                sql = sql + " WHERE PRIMARYNAME = '" + inOldName + "'";
+                sql = sql + "LIFESPAN = '" + inElement.getLifespan().replaceAll("'", "''") + "', ";
+                sql = sql + "REFERENCEID = '" + inElement.getReferenceID().replaceAll("'", "''") + "'";
+                sql = sql + " WHERE PRIMARYNAME = '" + inOldName.replaceAll("'", "''") + "'";
                 state.executeUpdate(sql);
             }
             else {
-                results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName() + "'");
+                results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
                 if (results.next())
                     return false;
                 // Insert
                 String sql = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (";
-                sql = sql + "'" + inElement.getPrimaryName() + "', ";
-                sql = sql + "'" + inElement.getOtherName() + "', ";
-                sql = sql + "'" + inElement.getScientificName() + "', ";
-                sql = sql + "'" + inElement.getDescription() + "', ";
-                sql = sql + "'" + inElement.getNutrition() + "', ";
+                sql = sql + "'" + inElement.getPrimaryName().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getOtherName().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getScientificName().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getDescription().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getNutrition().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getWaterDependance() + "', ";
                 sql = sql + "" + inElement.getSizeMaleMin() + ", ";
                 sql = sql + "" + inElement.getSizeMaleMax() + ", ";
@@ -904,18 +904,18 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "" + inElement.getWeightFemaleMin() + ", ";
                 sql = sql + "" + inElement.getWeightFemaleMax() + ", ";
                 sql = sql + "'" + inElement.getWeightUnit() + "', ";
-                sql = sql + "'" + inElement.getBreedingDuration() + "', ";
-                sql = sql + "'" + inElement.getBreedingNumber() + "', ";
+                sql = sql + "'" + inElement.getBreedingDuration().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getBreedingNumber().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getWishListRating() + "', ";
-                sql = sql + "'" + inElement.getDiagnosticDescription() + "', ";
+                sql = sql + "'" + inElement.getDiagnosticDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getActiveTime() + "', ";
                 sql = sql + "'" + inElement.getEndangeredStatus() + "', ";
-                sql = sql + "'" + inElement.getBehaviourDescription() + "', ";
+                sql = sql + "'" + inElement.getBehaviourDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getAddFrequency() + "', ";
                 sql = sql + "'" + inElement.getType() + "', ";
                 sql = sql + "'" + inElement.getFeedingClass() + "', ";
-                sql = sql + "'" + inElement.getLifespan() + "', ";
-                sql = sql + "'" + inElement.getReferenceID() + "'";
+                sql = sql + "'" + inElement.getLifespan().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getReferenceID().replaceAll("'", "''") + "'";
                 sql = sql + ")";
                 state.execute(sql);
             }
@@ -957,28 +957,28 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inOldName != null) {
                 if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName() + "'");
+                    results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
                     if (results.next()) {
                         return false;
                     }
                     else {
-                        state.execute("UPDATE SIGHTINGS SET LOCATIONNAME = '" + inLocation.getName() + "' WHERE LOCATIONNAME = '" + inOldName + "'");
+                        state.execute("UPDATE SIGHTINGS SET LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
                 String sql = "UPDATE LOCATIONS SET ";
-                sql = sql + "NAME = '" + inLocation.getName() + "', ";
-                sql = sql + "DESCRIPTION = '" + inLocation.getDescription() + "', ";
+                sql = sql + "NAME = '" + inLocation.getName().replaceAll("'", "''") + "', ";
+                sql = sql + "DESCRIPTION = '" + inLocation.getDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "PROVINCE = '" + inLocation.getProvince() + "', ";
                 sql = sql + "RATING = '" + inLocation.getRating() + "', ";
                 sql = sql + "GAMEVIEWINGRATING = '" + inLocation.getGameViewingRating() + "', ";
                 sql = sql + "HABITATTYPE = '" + inLocation.getHabitatType() + "', ";
                 sql = sql + "ACCOMMODATIONTYPE = '" + inLocation.getAccommodationType() + "', ";
                 sql = sql + "CATERING = '" + inLocation.getCatering() + "', ";
-                sql = sql + "CONTACTNUMBERS = '" + inLocation.getContactNumbers() + "', ";
-                sql = sql + "WEBSITE = '" + inLocation.getWebsite() + "', ";
-                sql = sql + "EMAIL = '" + inLocation.getEmail() + "', ";
-                sql = sql + "DIRECTIONS = '" + inLocation.getDirections() + "', ";
+                sql = sql + "CONTACTNUMBERS = '" + inLocation.getContactNumbers().replaceAll("'", "''") + "', ";
+                sql = sql + "WEBSITE = '" + inLocation.getWebsite().replaceAll("'", "''") + "', ";
+                sql = sql + "EMAIL = '" + inLocation.getEmail().replaceAll("'", "''") + "', ";
+                sql = sql + "DIRECTIONS = '" + inLocation.getDirections().replaceAll("'", "''") + "', ";
                 sql = sql + "LATITUDEINDICATOR = '" + inLocation.getLatitude() + "', ";
                 sql = sql + "LATDEGREES = " + inLocation.getLatDegrees() + ", ";
                 sql = sql + "LATMINUTES = " + inLocation.getLatMinutes() + ", ";
@@ -987,7 +987,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "LONDEGREES = " + inLocation.getLonDegrees() + ", ";
                 sql = sql + "LONMINUTES = " + inLocation.getLonMinutes() + ", ";
                 sql = sql + "LONSECONDSFLOAT = " + inLocation.getLonSecondsFloat() + "";
-                sql = sql + " WHERE NAME = '" + inOldName + "'";
+                sql = sql + " WHERE NAME = '" + inOldName.replaceAll("'", "''") + "'";
                 state.executeUpdate(sql);
             }
             else {
@@ -996,18 +996,18 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 // Insert
                 String sql = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (";
-                sql = sql + "'" + inLocation.getName() + "', ";
-                sql = sql + "'" + inLocation.getDescription() + "', ";
+                sql = sql + "'" + inLocation.getName().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inLocation.getDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inLocation.getProvince() + "', ";
                 sql = sql + "'" + inLocation.getRating() + "', ";
                 sql = sql + "'" + inLocation.getGameViewingRating() + "', ";
                 sql = sql + "'" + inLocation.getHabitatType() + "', ";
                 sql = sql + "'" + inLocation.getAccommodationType() + "', ";
                 sql = sql + "'" + inLocation.getCatering() + "', ";
-                sql = sql + "'" + inLocation.getContactNumbers() + "', ";
-                sql = sql + "'" + inLocation.getWebsite() + "', ";
-                sql = sql + "'" + inLocation.getEmail() + "', ";
-                sql = sql + "'" + inLocation.getDirections() + "', ";
+                sql = sql + "'" + inLocation.getContactNumbers().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inLocation.getWebsite().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inLocation.getEmail().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inLocation.getDirections().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inLocation.getLatitude() + "', ";
                 sql = sql + "" + inLocation.getLatDegrees() + ", ";
                 sql = sql + "" + inLocation.getLatMinutes() + ", ";
@@ -1057,17 +1057,17 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inOldName != null) {
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName() + "'");
+                    results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
                     if (results.next()) {
                         return false;
                     }
                     else {
-                        state.execute("UPDATE SIGHTINGS SET VISITNAME = '" + inVisit.getName() + "' WHERE VISITNAME = '" + inOldName + "'");
+                        state.execute("UPDATE SIGHTINGS SET VISITNAME = '" + inVisit.getName().replaceAll("'", "''") + "' WHERE VISITNAME = '" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
                 String sql = "UPDATE VISITS SET ";
-                sql = sql + "NAME = '" + inVisit.getName() + "', ";
+                sql = sql + "NAME = '" + inVisit.getName().replaceAll("'", "''") + "', ";
                 if (inVisit.getStartDate() != null)
                     sql = sql + "STARTDATE = '" + new java.sql.Date(inVisit.getStartDate().getTime()) + "', ";
                 else
@@ -1076,20 +1076,20 @@ public abstract class DBI_JDBC implements DBI {
                     sql = sql + "ENDDATE = '" + new java.sql.Date(inVisit.getEndDate().getTime()) + "', ";
                 else
                     sql = sql + "ENDDATE = null, ";
-                sql = sql + "DESCRIPTION = '" + inVisit.getDescription() + "', ";
+                sql = sql + "DESCRIPTION = '" + inVisit.getDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "GAMEWATCHINGINTENSITY = '" + inVisit.getGameWatchingIntensity() + "', ";
                 sql = sql + "VISITTYPE = '" + inVisit.getType() + "', ";
-                sql = sql + "LOCATIONNAME = '" + inVisit.getLocationName() + "'";
-                sql = sql + " WHERE NAME = '" + inOldName + "'";
+                sql = sql + "LOCATIONNAME = '" + inVisit.getLocationName().replaceAll("'", "''") + "'";
+                sql = sql + " WHERE NAME = '" + inOldName.replaceAll("'", "''") + "'";
                 state.executeUpdate(sql);
             }
             else {
-                results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName() + "'");
+                results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
                 if (results.next())
                     return false;
                 // Insert
                 String sql = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (";
-                sql = sql + "'" + inVisit.getName() + "', ";
+                sql = sql + "'" + inVisit.getName().replaceAll("'", "''") + "', ";
                 if (inVisit.getStartDate() != null)
                     sql = sql + "'" + new java.sql.Date(inVisit.getStartDate().getTime()) + "', ";
                 else
@@ -1098,10 +1098,10 @@ public abstract class DBI_JDBC implements DBI {
                     sql = sql + "'" + new java.sql.Date(inVisit.getEndDate().getTime()) + "', ";
                 else
                     sql = sql + "null, ";
-                sql = sql + "'" + inVisit.getDescription() + "', ";
+                sql = sql + "'" + inVisit.getDescription().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inVisit.getGameWatchingIntensity() + "', ";
                 sql = sql + "'" + inVisit.getType() + "', ";
-                sql = sql + "'" + inVisit.getLocationName() + "'";
+                sql = sql + "'" + inVisit.getLocationName().replaceAll("'", "''") + "'";
                 sql = sql + ")";
                 state.execute(sql);
             }
@@ -1149,16 +1149,16 @@ public abstract class DBI_JDBC implements DBI {
                     sql = sql + "SIGHTINGDATE = '" + new java.sql.Timestamp(inSighting.getDate().getTime()) + "', ";
                 else
                     sql = sql + "STARTDATE = null, ";
-                sql = sql + "ELEMENTNAME = '" + inSighting.getElementName() + "', ";
-                sql = sql + "LOCATIONNAME = '" + inSighting.getLocationName() + "', ";
-                sql = sql + "VISITNAME = '" + inSighting.getVisitName() + "', ";
+                sql = sql + "ELEMENTNAME = '" + inSighting.getElementName().replaceAll("'", "''") + "', ";
+                sql = sql + "LOCATIONNAME = '" + inSighting.getLocationName().replaceAll("'", "''") + "', ";
+                sql = sql + "VISITNAME = '" + inSighting.getVisitName().replaceAll("'", "''") + "', ";
                 sql = sql + "TIMEOFDAY = '" + inSighting.getTimeOfDay() + "', ";
                 sql = sql + "WEATHER = '" + inSighting.getWeather() + "', ";
                 sql = sql + "AREATYPE = '" + inSighting.getAreaType() + "', ";
                 sql = sql + "VIEWRATING = '" + inSighting.getViewRating() + "', ";
                 sql = sql + "CERTAINTY = '" + inSighting.getCertainty() + "', ";
                 sql = sql + "NUMBEROFELEMENTS = " + inSighting.getNumberOfElements() + ", ";
-                sql = sql + "DETAILS = '" + inSighting.getDetails() + "', ";
+                sql = sql + "DETAILS = '" + inSighting.getDetails().replaceAll("'", "''") + "', ";
                 sql = sql + "LATITUDEINDICATOR = '" + inSighting.getLatitude() + "', ";
                 sql = sql + "LATDEGREES = " + inSighting.getLatDegrees() + ", ";
                 sql = sql + "LATMINUTES = " + inSighting.getLatMinutes() + ", ";
@@ -1184,16 +1184,16 @@ public abstract class DBI_JDBC implements DBI {
                         sql = sql + "'" + new java.sql.Timestamp(inSighting.getDate().getTime()) + "', ";
                     else
                         sql = sql + "null, ";
-                    sql = sql + "'" + inSighting.getElementName() + "', ";
-                    sql = sql + "'" + inSighting.getLocationName() + "', ";
-                    sql = sql + "'" + inSighting.getVisitName() + "', ";
+                    sql = sql + "'" + inSighting.getElementName().replaceAll("'", "''") + "', ";
+                    sql = sql + "'" + inSighting.getLocationName().replaceAll("'", "''") + "', ";
+                    sql = sql + "'" + inSighting.getVisitName().replaceAll("'", "''") + "', ";
                     sql = sql + "'" + inSighting.getTimeOfDay() + "', ";
                     sql = sql + "'" + inSighting.getWeather() + "', ";
                     sql = sql + "'" + inSighting.getAreaType() + "', ";
                     sql = sql + "'" + inSighting.getViewRating() + "', ";
                     sql = sql + "'" + inSighting.getCertainty() + "', ";
                     sql = sql + "" + inSighting.getNumberOfElements() + ", ";
-                    sql = sql + "'" + inSighting.getDetails() + "', ";
+                    sql = sql + "'" + inSighting.getDetails().replaceAll("'", "''") + "', ";
                     sql = sql + "'" + inSighting.getLatitude() + "', ";
                     sql = sql + "" + inSighting.getLatDegrees() + ", ";
                     sql = sql + "" + inSighting.getLatMinutes() + ", ";
@@ -1247,10 +1247,10 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inUpdate) {
                 String sql = "UPDATE FILES SET ";
-                sql = sql + "ID = '" + inFoto.getId() + "', ";
-                sql = sql + "FILENAME = '" + inFoto.getFilename() + "', ";
-                sql = sql + "FILEPATH = '" + inFoto.getFileLocation() + "', ";
-                sql = sql + "ORIGINALPATH = '" + inFoto.getOriginalFotoLocation() + "', ";
+                sql = sql + "ID = '" + inFoto.getId().replaceAll("'", "''") + "', ";
+                sql = sql + "FILENAME = '" + inFoto.getFilename().replaceAll("'", "''") + "', ";
+                sql = sql + "FILEPATH = '" + inFoto.getFileLocation().replaceAll("'", "''") + "', ";
+                sql = sql + "ORIGINALPATH = '" + inFoto.getOriginalFotoLocation().replaceAll("'", "''") + "', ";
                 sql = sql + "FILETYPE = '" + inFoto.getFotoType() + "',";
                 if (inFoto.getDate() != null)
                     sql = sql + "UPLOADDATE = '" + new java.sql.Date(inFoto.getDate().getTime()) + "',";
@@ -1266,10 +1266,10 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 String sql = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (";
-                sql = sql + "'" + inFoto.getId() + "', ";
-                sql = sql + "'" + inFoto.getFilename() + "', ";
-                sql = sql + "'" + inFoto.getFileLocation() + "', ";
-                sql = sql + "'" + inFoto.getOriginalFotoLocation() + "', ";
+                sql = sql + "'" + inFoto.getId().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inFoto.getFilename().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inFoto.getFileLocation().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inFoto.getOriginalFotoLocation().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inFoto.getFotoType() + "',";
                 if (inFoto.getDate() != null)
                     sql = sql + "'" + new java.sql.Date(inFoto.getDate().getTime()) + "',";
@@ -1309,15 +1309,15 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Delete the Element
             state = conn.createStatement();
-            state.executeUpdate("DELETE FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName() + "'");
+            state.executeUpdate("DELETE FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
             // Delete all Sightings for this element
-            results = state.executeQuery("SELECT * FROM SIGHTINGS WHERE ELEMENTNAME = '" + inElement.getPrimaryName() + "'");
+            results = state.executeQuery("SELECT * FROM SIGHTINGS WHERE ELEMENTNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
             while (results.next()) {
                 Sighting sighting = new Sighting(results.getLong("SIGHTINGCOUNTER"));
                 delete(sighting);
             }
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'ELEMENT-" + inElement.getPrimaryName() + "'");
+            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'ELEMENT-" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
             while (results.next()) {
                 Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
@@ -1359,15 +1359,15 @@ public abstract class DBI_JDBC implements DBI {
         try {
             state = conn.createStatement();
             // Delete Location
-            state.executeUpdate("DELETE FROM LOCATIONS WHERE NAME = '" + inLocation.getName() + "'");
+            state.executeUpdate("DELETE FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
             // Delete Visits for this location
-            results = state.executeQuery("SELECT * FROM VISITS WHERE LOCATIONNAME = '" + inLocation.getName() + "'");
+            results = state.executeQuery("SELECT * FROM VISITS WHERE LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
             while (results.next()) {
                 Visit visit = new Visit(results.getString("NAME"));
                 delete(visit);
             }
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'LOCATION-" + inLocation.getName() + "'");
+            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'LOCATION-" + inLocation.getName().replaceAll("'", "''") + "'");
             while (results.next()) {
                 Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
@@ -1409,15 +1409,15 @@ public abstract class DBI_JDBC implements DBI {
         try {
             state = conn.createStatement();
             // Delete Visit
-            state.executeUpdate("DELETE FROM VISITS WHERE NAME = '" + inVisit.getName() + "'");
+            state.executeUpdate("DELETE FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
             // Delete Sightings for this visit
-            results = state.executeQuery("SELECT * FROM SIGHTINGS WHERE VISITNAME = '" + inVisit.getName() + "'");
+            results = state.executeQuery("SELECT * FROM SIGHTINGS WHERE VISITNAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
             while (results.next()) {
                 Sighting sighting = new Sighting(results.getLong("SIGHTINGCOUNTER"));
                 delete(sighting);
             }
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'VISIT-" + inVisit.getName() + "'");
+            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'VISIT-" + inVisit.getName().replaceAll("'", "''") + "'");
             while (results.next()) {
                 Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
@@ -1503,7 +1503,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             state = conn.createStatement();
             // Delete File from database
-            state.executeUpdate("DELETE FROM FILES WHERE FILEPATH = '" + inFoto.getFileLocation() + "'");
+            state.executeUpdate("DELETE FROM FILES WHERE FILEPATH = '" + inFoto.getFileLocation().replaceAll("'", "''") + "'");
             // Delete the file on the PC
             File tempFile = new File(inFoto.getFileLocation());
             tempFile.delete();
