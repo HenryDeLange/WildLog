@@ -184,7 +184,7 @@ public class DBI_h2 extends DBI_JDBC {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            // Export Elements
+            // Import Elements
             results = state.executeQuery("CALL CSVREAD('" + inPath + "Elements.csv')");
             while (results.next()) {
                 Element tempElement = new Element();
@@ -193,6 +193,7 @@ public class DBI_h2 extends DBI_JDBC {
                 tempElement.setOtherName(results.getString("OTHERNAME"));
                 tempElement.setScientificName(results.getString("SCIENTIFICNAME"));
                 tempElement.setDescription(results.getString("DESCRIPTION"));
+                tempElement.setDistribution(results.getString("DISTRIBUTION"));
                 tempElement.setNutrition(results.getString("NUTRITION"));
                 tempElement.setWaterDependance(WaterDependancy.getEnumFromText(results.getString("WATERDEPENDANCE")));
                 tempElement.setSizeMaleMin(results.getDouble("SIZEMALEMIN"));
@@ -220,7 +221,7 @@ public class DBI_h2 extends DBI_JDBC {
 
                 createOrUpdate(tempElement, null);
             }
-            // Export Locations
+            // Import Locations
             results = state.executeQuery("CALL CSVREAD('" + inPath + "Locations.csv')");
             while (results.next()) {
                 Location tempLocation = new Location();
@@ -248,7 +249,7 @@ public class DBI_h2 extends DBI_JDBC {
 
                 createOrUpdate(tempLocation, null);
             }
-            // Export Visits
+            // Import Visits
             results = state.executeQuery("CALL CSVREAD('" + inPath + "Visits.csv')");
             while (results.next()) {
                 Visit tempVisit = new Visit();
@@ -263,7 +264,7 @@ public class DBI_h2 extends DBI_JDBC {
 
                 createOrUpdate(tempVisit, null);
             }
-            // Export Sightings
+            // Import Sightings
             results = state.executeQuery("CALL CSVREAD('" + inPath + "Sightings.csv')");
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
@@ -292,7 +293,7 @@ public class DBI_h2 extends DBI_JDBC {
 
                 createOrUpdate(tempSighting);
             }
-            // Export Files
+            // TODO: Import Files
 //            results = state.executeQuery("CALL CSVREAD('" + inPath + "Files.csv')");
 //            while (results.next()) {
 //                Foto tempFoto = new Foto();

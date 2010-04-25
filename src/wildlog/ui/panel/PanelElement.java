@@ -244,6 +244,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtWeightFemaleMax = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtDistribution = new javax.swing.JTextArea();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -460,7 +463,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane16.setViewportView(txtDescription);
 
-        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 590, -1));
+        elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 310, 80));
 
         jScrollPane17.setName("jScrollPane17"); // NOI18N
 
@@ -473,7 +476,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
-        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 310, -1));
+        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 310, 80));
 
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
@@ -821,6 +824,23 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jLabel8.setName("jLabel8"); // NOI18N
         elementIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 490, -1, -1));
 
+        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setName("jLabel9"); // NOI18N
+        elementIncludes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, -1, -1));
+
+        jScrollPane2.setName("jScrollPane2"); // NOI18N
+
+        txtDistribution.setColumns(20);
+        txtDistribution.setFont(resourceMap.getFont("txtDistribution.font")); // NOI18N
+        txtDistribution.setLineWrap(true);
+        txtDistribution.setRows(3);
+        txtDistribution.setText(element.getDistribution());
+        txtDistribution.setWrapStyleWord(true);
+        txtDistribution.setName("txtDistribution"); // NOI18N
+        jScrollPane2.setViewportView(txtDistribution);
+
+        elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 340, 270, 60));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -845,6 +865,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 element.setScientificName(txtScienceName.getText());
                 element.setReferenceID(txtReferenceID.getText());
                 element.setDescription(txtDescription.getText());
+                element.setDistribution(txtDistribution.getText());
                 element.setNutrition(txtNutrition.getText());
                 element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
                 try {
@@ -1305,11 +1326,13 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel77;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane16;
     private javax.swing.JScrollPane jScrollPane17;
     private javax.swing.JScrollPane jScrollPane18;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
@@ -1326,6 +1349,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JTextField txtBreedingNumber;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextArea txtDiagnosticDescription;
+    private javax.swing.JTextArea txtDistribution;
     private javax.swing.JTextField txtLifespan;
     private javax.swing.JTextArea txtNutrition;
     private javax.swing.JTextField txtOtherName;

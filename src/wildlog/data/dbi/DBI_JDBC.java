@@ -79,6 +79,7 @@ public abstract class DBI_JDBC implements DBI {
                             "   OTHERNAME varchar(150),"+
                             "   SCIENTIFICNAME varchar(150),"+
                             "   DESCRIPTION longvarchar,"+
+                            "   DISTRIBUTION longvarchar,"+
                             "   NUTRITION longvarchar,"+
                             "   WATERDEPENDANCE varchar(50),"+
                             "   SIZEMALEMIN float(52),"+
@@ -203,6 +204,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempElement.setOtherName(results.getString("OTHERNAME"));
                 tempElement.setScientificName(results.getString("SCIENTIFICNAME"));
                 tempElement.setDescription(results.getString("DESCRIPTION"));
+                tempElement.setDistribution(results.getString("DISTRIBUTION"));
                 tempElement.setNutrition(results.getString("NUTRITION"));
                 tempElement.setWaterDependance(WaterDependancy.getEnumFromText(results.getString("WATERDEPENDANCE")));
                 tempElement.setSizeMaleMin(results.getDouble("SIZEMALEMIN"));
@@ -456,6 +458,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempElement.setOtherName(results.getString("OTHERNAME"));
                 tempElement.setScientificName(results.getString("SCIENTIFICNAME"));
                 tempElement.setDescription(results.getString("DESCRIPTION"));
+                tempElement.setDistribution(results.getString("DISTRIBUTION"));
                 tempElement.setNutrition(results.getString("NUTRITION"));
                 tempElement.setWaterDependance(WaterDependancy.getEnumFromText(results.getString("WATERDEPENDANCE")));
                 tempElement.setSizeMaleMin(results.getDouble("SIZEMALEMIN"));
@@ -855,6 +858,7 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + "OTHERNAME = '" + inElement.getOtherName().replaceAll("'", "''") + "', ";
                 sql = sql + "SCIENTIFICNAME = '" + inElement.getScientificName().replaceAll("'", "''") + "', ";
                 sql = sql + "DESCRIPTION = '" + inElement.getDescription().replaceAll("'", "''") + "', ";
+                sql = sql + "DISTRIBUTION = '" + inElement.getDistribution().replaceAll("'", "''") + "', ";
                 sql = sql + "NUTRITION = '" + inElement.getNutrition().replaceAll("'", "''") + "', ";
                 sql = sql + "WATERDEPENDANCE = '" + inElement.getWaterDependance() + "', ";
                 sql = sql + "SIZEMALEMIN = " + inElement.getSizeMaleMin() + ", ";
@@ -887,11 +891,12 @@ public abstract class DBI_JDBC implements DBI {
                 if (results.next())
                     return false;
                 // Insert
-                String sql = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (";
+                String sql = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (";
                 sql = sql + "'" + inElement.getPrimaryName().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getOtherName().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getScientificName().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getDescription().replaceAll("'", "''") + "', ";
+                sql = sql + "'" + inElement.getDistribution().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getNutrition().replaceAll("'", "''") + "', ";
                 sql = sql + "'" + inElement.getWaterDependance() + "', ";
                 sql = sql + "" + inElement.getSizeMaleMin() + ", ";

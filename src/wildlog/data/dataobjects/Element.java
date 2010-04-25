@@ -34,7 +34,7 @@ public class Element implements Comparable<Element> {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
-    private String description; // HABITAT Discription
+    private String description; // Should rename to HABITAT Discription
     private String nutrition; // What food or soil the element preferes
     private WaterDependancy waterDependance; // How dependant the element is on water
     private double sizeMaleMin;
@@ -67,6 +67,7 @@ public class Element implements Comparable<Element> {
     private UnitsWeight weightUnit;
     private String lifespan;
     private String referenceID;
+    private String distribution;
 
    
     // CONSTRUCTORS:
@@ -122,6 +123,7 @@ public class Element implements Comparable<Element> {
         htmlElement = htmlElement + "<br/><b>Food/Nutrition:</b> " + UtilsHTML.formatString(nutrition);
         htmlElement = htmlElement + "<br/><b>Identification:</b> " + UtilsHTML.formatString(diagnosticDescription);
         htmlElement = htmlElement + "<br/><b>Habitat:</b> " + UtilsHTML.formatString(description);
+        htmlElement = htmlElement + "<br/><b>Distribution:</b> " + UtilsHTML.formatString(distribution);
         htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + UtilsHTML.formatString(behaviourDescription);
         htmlElement = htmlElement + "<br/><b>Minimum Male Size:</b> " + UtilsHTML.formatString(sizeMaleMin) + " " + UtilsHTML.formatString(sizeUnit);
         htmlElement = htmlElement + "<br/><b>Maximum Male Size:</b> " + UtilsHTML.formatString(sizeMaleMin) + " " + UtilsHTML.formatString(sizeUnit);
@@ -430,6 +432,14 @@ public class Element implements Comparable<Element> {
 
     public void setWeightMaleMax(double weightMaleMax) {
         this.weightMaleMax = weightMaleMax;
+    }
+
+    public String getDistribution() {
+        return distribution;
+    }
+
+    public void setDistribution(String distribution) {
+        this.distribution = distribution;
     }
 
 }
