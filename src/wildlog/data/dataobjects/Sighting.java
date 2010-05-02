@@ -159,14 +159,78 @@ public class Sighting implements Comparable<Sighting> {
             }
             else
             if (element.getType().equals(ElementType.PLANT)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("plantOtherStyle");
+                else
+                if (!element.getFeedingClass().equals(FeedingClass.NONE))
                     entry.setStyle("plantStyle");
+                else
+                    entry.setStyle("plantOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.AMPHIBIAN)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("amphibianOtherStyle");
+                else
+                if (!element.getFeedingClass().equals(FeedingClass.NONE))
+                    entry.setStyle("amphibianStyle");
+                else
+                    entry.setStyle("amphibianOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.FISH)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("fishOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("fishCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("fishHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("fishOmnivoreStyle");
+                else
+                    entry.setStyle("fishOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.INSECT)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("insectOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("insectCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("insectHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("insectOmnivoreStyle");
+                else
+                    entry.setStyle("insectOtherStyle");
+            }
+            else
+            if (element.getType().equals(ElementType.REPTILE)) {
+                if (element.getFeedingClass() == null)
+                    entry.setStyle("reptileOtherStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.CARNIVORE))
+                    entry.setStyle("reptileCarnivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.HERBIVORE))
+                    entry.setStyle("reptileHerbivoreStyle");
+                else
+                if (element.getFeedingClass().equals(FeedingClass.OMNIVORE))
+                    entry.setStyle("reptileOmnivoreStyle");
+                else
+                    entry.setStyle("reptileOtherStyle");
             }
             else {
-                entry.setStyle("nostyle");
+                entry.setStyle("otherStyle");
             }
         }
         else {
-            entry.setStyle("nostyle");
+            entry.setStyle("otherStyle");
         }
         if (latitude == null || longitude == null) {
             Location location = inApp.getDBI().find(new Location(locationName));
