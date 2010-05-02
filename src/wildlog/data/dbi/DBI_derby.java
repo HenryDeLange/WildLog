@@ -110,8 +110,15 @@ public class DBI_derby extends DBI_JDBC {
             results = conn.getMetaData().getTables(null, null, "FILES", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createFotosTable.replaceAll("longvarchar", "long varchar"));
+                state.execute(createFilesTable.replaceAll("longvarchar", "long varchar"));
             }
+            results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
+            state = conn.createStatement();
+            if (!results.next()) {
+                state.execute(createWildLogTable.replaceAll("longvarchar", "long varchar"));
+            }
+
+            super.doUpdates();
         }
         catch (ClassNotFoundException cnfe) {
             System.err.println("\nUnable to load the JDBC driver " + "org.apache.derby.jdbc.EmbeddedDriver");

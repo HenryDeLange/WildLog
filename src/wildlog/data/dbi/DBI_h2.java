@@ -67,7 +67,7 @@ public class DBI_h2 extends DBI_JDBC {
             Properties props = new Properties();
 //            props.setProperty("username", "wildlog");
 //            props.setProperty("password", "wildlog");
-            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog;AUTOCOMMIT=ON", props);
+            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
             super.init();
             
             // Create tables
@@ -94,8 +94,15 @@ public class DBI_h2 extends DBI_JDBC {
             results = conn.getMetaData().getTables(null, null, "FILES", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createFotosTable);
+                state.execute(createFilesTable);
             }
+            results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
+            state = conn.createStatement();
+            if (!results.next()) {
+                state.execute(createWildLogTable);
+            }
+
+            super.doUpdates();
         }
         catch (ClassNotFoundException cnfe) {
             System.err.println("\nUnable to load the JDBC driver " + "org.apache.derby.jdbc.EmbeddedDriver");

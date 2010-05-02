@@ -15,6 +15,8 @@
 package wildlog.ui.panel;
 
 import java.awt.Color;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
@@ -25,11 +27,14 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -169,7 +174,7 @@ public class PanelSighting extends javax.swing.JPanel {
             if (treatAsNewSighting) {
                 cmbCertainty.setSelectedItem(Certainty.SURE);
                 cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
-                txtNumberOfElements.setText("");
+                spnNumberOfElements.setValue(0);
                 cmbViewRating.setSelectedItem(ViewRating.NORMAL);
                 //cmbLatitude.setSelectedItem(Latitudes.SOUTH);
                 txtLatDegrees.setText("0");
@@ -190,6 +195,8 @@ public class PanelSighting extends javax.swing.JPanel {
         txtLatDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText()))));
         txtLonDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText()))));
         rdbDMS.setSelected(true);
+
+        fixSelectAllForSpinners(spnNumberOfElements);
     }
 
     public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh, boolean inTreatAsNewSighting, boolean inDisableEditing) {
@@ -212,7 +219,7 @@ public class PanelSighting extends javax.swing.JPanel {
 //                cmbSubArea.setSelectedItem(sighting.getSubArea());
 //            else
 //                cmbSubArea.setSelectedItem("None");
-            txtNumberOfElements.setText(Integer.toString(sighting.getNumberOfElements()));
+            spnNumberOfElements.setValue(sighting.getNumberOfElements());
             cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
             cmbViewRating.setSelectedItem(sighting.getViewRating());
             cmbWeather.setSelectedItem(sighting.getWeather());
@@ -269,7 +276,6 @@ public class PanelSighting extends javax.swing.JPanel {
         jLabel13 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDetails = new javax.swing.JTextArea();
-        txtNumberOfElements = new javax.swing.JTextField();
         cmbWeather = new javax.swing.JComboBox();
         cmbTimeOfDay = new javax.swing.JComboBox();
         cmbViewRating = new javax.swing.JComboBox();
@@ -318,6 +324,7 @@ public class PanelSighting extends javax.swing.JPanel {
         lblSightingID = new javax.swing.JLabel();
         btnUseLocationGPS = new javax.swing.JButton();
         btnUsePrevGPS = new javax.swing.JButton();
+        spnNumberOfElements = new javax.swing.JSpinner();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelSighting.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -484,16 +491,6 @@ public class PanelSighting extends javax.swing.JPanel {
         jScrollPane2.setViewportView(txtDetails);
 
         sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 390, 300, 180));
-
-        txtNumberOfElements.setText(String.valueOf(sighting.getNumberOfElements()));
-        txtNumberOfElements.setEnabled(!disableEditing);
-        txtNumberOfElements.setName("txtNumberOfElements"); // NOI18N
-        txtNumberOfElements.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtNumberOfElementsFocusGained(evt);
-            }
-        });
-        sightingIncludes.add(txtNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 290, 80, -1));
 
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
         cmbWeather.setSelectedItem(sighting.getWeather());
@@ -931,6 +928,11 @@ public class PanelSighting extends javax.swing.JPanel {
         });
         sightingIncludes.add(btnUsePrevGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 363, 130, -1));
 
+        spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnNumberOfElements.setName("spnNumberOfElements"); // NOI18N
+        sightingIncludes.add(spnNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 290, 50, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -983,9 +985,9 @@ public class PanelSighting extends javax.swing.JPanel {
                 sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
                 sighting.setDetails(txtDetails.getText());
                 sighting.setSightingEvidence((SightingEvidence)cmbEvidence.getSelectedItem());
-                if (txtNumberOfElements.getText().length() > 0) {
+                if (spnNumberOfElements.getValue().toString().length() > 0) {
                     try {
-                        sighting.setNumberOfElements(Integer.parseInt(txtNumberOfElements.getText()));
+                        sighting.setNumberOfElements(Integer.parseInt(spnNumberOfElements.getValue().toString()));
                     }
                     catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -1262,13 +1264,6 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSearchLocationActionPerformed
 
-    private void txtNumberOfElementsFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNumberOfElementsFocusGained
-        if (sighting != null) {
-            txtNumberOfElements.setSelectionStart(0);
-            txtNumberOfElements.setSelectionEnd(txtNumberOfElements.getText().length());
-        }
-    }//GEN-LAST:event_txtNumberOfElementsFocusGained
-
     private void txtLatDegreesFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLatDegreesFocusGained
         if (sighting != null) {
             txtLatDegrees.setSelectionStart(0);
@@ -1505,6 +1500,31 @@ public class PanelSighting extends javax.swing.JPanel {
     public void setDisableEditing(boolean disableEditing) {
         this.disableEditing = disableEditing;
     }
+
+    private void fixSelectAllForSpinners(JSpinner inSpinner) {
+        // Fix die bug met spinners se selection
+        ((JSpinner.NumberEditor)inSpinner.getEditor()).getTextField().addFocusListener(
+            new FocusAdapter() {
+            @Override
+                public void focusGained(FocusEvent e) {
+                    if (e.getSource() instanceof JTextComponent) {
+                        final JTextComponent textComponent=((JTextComponent)e.getSource());
+                        SwingUtilities.invokeLater(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textComponent.selectAll();
+                                    }
+                                }
+                        );
+                    }
+                }
+                @Override
+                public void focusLost(FocusEvent e) {
+                }
+            }
+        );
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeleteImage;
@@ -1562,6 +1582,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JRadioButton rdbDD;
     private javax.swing.JRadioButton rdbDMS;
     private javax.swing.JPanel sightingIncludes;
+    private javax.swing.JSpinner spnNumberOfElements;
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTable tblVisit;
@@ -1576,7 +1597,6 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JTextField txtLonMinutes;
     private javax.swing.JTextField txtLonSeconds;
     private javax.swing.JTextField txtMinutes;
-    private javax.swing.JTextField txtNumberOfElements;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSearchLocation;
     // End of variables declaration//GEN-END:variables

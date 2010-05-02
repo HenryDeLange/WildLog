@@ -65,7 +65,8 @@ public abstract class DBI_JDBC implements DBI {
     protected String createLocationsTable;
     protected String createVisitsTable;
     protected String createSightingsTable;
-    protected String createFotosTable;
+    protected String createFilesTable;
+    protected String createWildLogTable;
 
     public DBI_JDBC() {
 
@@ -162,7 +163,7 @@ public abstract class DBI_JDBC implements DBI {
                             "   LONSECONDSFLOAT float(52),"+
                             "   SIGHTINGEVIDENCE varchar(50)"+
                             ")";
-        createFotosTable = "CREATE TABLE FILES "+
+        createFilesTable = "CREATE TABLE FILES "+
                             "("+
                             "   ID varchar(175),"+
                             "   FILENAME varchar(255),"+
@@ -171,6 +172,10 @@ public abstract class DBI_JDBC implements DBI {
                             "   FILETYPE varchar(50),"+
                             "   UPLOADDATE date,"+
                             "   ISDEFAULT smallint"+
+                            ")";
+        createWildLogTable = "CREATE TABLE WILDLOG "+
+                            "("+
+                            "   VERSION int DEFAULT 0"+
                             ")";
     }
 
@@ -1554,6 +1559,114 @@ public abstract class DBI_JDBC implements DBI {
             // for stack traces, refer to derby.log or uncomment this:
             e.printStackTrace(System.err);
             e = e.getNextException();
+        }
+    }
+
+    protected void doUpdates() {
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            results = state.executeQuery("SELECT * FROM WILDLOG");
+            if (!results.next()) {
+                state.executeUpdate("INSERT INTO WILDLOG VALUES (DEFAULT)");
+                results = state.executeQuery("SELECT * FROM WILDLOG");
+            }
+            while (results.next()) {
+                if (results.getInt("VERSION") == 0)
+                    doUpdate1();
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+    }
+
+
+    // Private update methods
+    private void doUpdate1() {
+        // This update recreates the tables with IGNORECASE enabled
+        // This update might only be relevant for H2, but it is the main
+        // supported database...
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Set Ignorecase - Also done when the connection is opened in H2
+            state.execute("SET IGNORECASE TRUE");
+            // Rename old tables
+            state.execute("ALTER TABLE ELEMENTS RENAME TO TEMP_ELEMENTS");
+            state.execute("ALTER TABLE LOCATIONS RENAME TO TEMP_LOCATIONS");
+            state.execute("ALTER TABLE VISITS RENAME TO TEMP_VISITS");
+            state.execute("ALTER TABLE SIGHTINGS RENAME TO TEMP_SIGHTINGS");
+            state.execute("ALTER TABLE FILES RENAME TO TEMP_FILES");
+            // Create new tables
+            state.execute(createElementsTable);
+            state.execute(createLocationsTable);
+            state.execute(createVisitsTable);
+            state.execute(createSightingsTable);
+            state.execute(createFilesTable);
+            // Copy data accross from old tables
+            state.executeUpdate("INSERT INTO ELEMENTS SELECT PRIMARYNAME, OTHERNAME, SCIENTIFICNAME, DESCRIPTION, DISTRIBUTION, NUTRITION, WATERDEPENDANCE, SIZEMALEMIN, SIZEMALEMAX , SIZEFEMALEMIN, SIZEFEMALEMAX, SIZEUNIT, WEIGHTMALEMIN, WEIGHTMALEMAX, WEIGHTFEMALEMIN, WEIGHTFEMALEMAX, WEIGHTUNIT, BREEDINGDURATION, BREEDINGNUMBER, WISHLISTRATING, DIAGNOSTICDESCRIPTION, ACTIVETIME, ENDANGEREDSTATUS, BEHAVIOURDESCRIPTION, ADDFREQUENCY, ELEMENTTYPE, FEEDINGCLASS, LIFESPAN, REFERENCEID FROM TEMP_ELEMENTS");
+            state.executeUpdate("INSERT INTO LOCATIONS SELECT * FROM TEMP_LOCATIONS");
+            state.executeUpdate("INSERT INTO VISITS SELECT * FROM TEMP_VISITS");
+            state.executeUpdate("INSERT INTO SIGHTINGS SELECT * FROM TEMP_SIGHTINGS");
+            state.executeUpdate("INSERT INTO FILES SELECT * FROM TEMP_FILES");
+            // Drop the old tables
+            state.execute("DROP TABLE TEMP_ELEMENTS");
+            state.execute("DROP TABLE TEMP_LOCATIONS");
+            state.execute("DROP TABLE TEMP_VISITS");
+            state.execute("DROP TABLE TEMP_SIGHTINGS");
+            state.execute("DROP TABLE TEMP_FILES");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=1");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
         }
     }
 

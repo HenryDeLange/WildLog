@@ -18,6 +18,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
@@ -30,12 +32,15 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
@@ -94,6 +99,16 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         setupNumberOfImages();
 
         tblLocation.getTableHeader().setReorderingAllowed(false);
+
+
+        fixSelectAllForSpinners(spnSizeMaleMin);
+        fixSelectAllForSpinners(spnSizeMaleMax);
+        fixSelectAllForSpinners(spnSizeFemaleMin);
+        fixSelectAllForSpinners(spnSizeFemaleMax);
+        fixSelectAllForSpinners(spnWeightMaleMin);
+        fixSelectAllForSpinners(spnWeightMaleMax);
+        fixSelectAllForSpinners(spnWeightFemaleMin);
+        fixSelectAllForSpinners(spnWeightFemaleMax);
     }
     
     public Element getElement() {
@@ -201,10 +216,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         cmbType = new javax.swing.JComboBox();
         cmbWaterDependance = new javax.swing.JComboBox();
         cmbActiveTime = new javax.swing.JComboBox();
-        txtSizeMaleMin = new javax.swing.JTextField();
-        txtSizeFemaleMin = new javax.swing.JTextField();
-        txtWeightMaleMin = new javax.swing.JTextField();
-        txtWeightFemaleMin = new javax.swing.JTextField();
         txtLifespan = new javax.swing.JTextField();
         txtbreedingDuration = new javax.swing.JTextField();
         txtBreedingNumber = new javax.swing.JTextField();
@@ -236,17 +247,21 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtReferenceID = new javax.swing.JTextField();
         btnHTML = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
-        txtSizeMaleMax = new javax.swing.JTextField();
-        txtSizeFemaleMax = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        txtWeightMaleMax = new javax.swing.JTextField();
-        txtWeightFemaleMax = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDistribution = new javax.swing.JTextArea();
+        spnSizeMaleMin = new javax.swing.JSpinner();
+        spnSizeMaleMax = new javax.swing.JSpinner();
+        spnSizeFemaleMin = new javax.swing.JSpinner();
+        spnSizeFemaleMax = new javax.swing.JSpinner();
+        spnWeightMaleMin = new javax.swing.JSpinner();
+        spnWeightMaleMax = new javax.swing.JSpinner();
+        spnWeightFemaleMin = new javax.swing.JSpinner();
+        spnWeightFemaleMax = new javax.swing.JSpinner();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -507,42 +522,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         cmbActiveTime.setName("cmbActiveTime"); // NOI18N
         elementIncludes.add(cmbActiveTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 148, 220, -1));
 
-        txtSizeMaleMin.setText(Double.toString(element.getSizeMaleMin()));
-        txtSizeMaleMin.setName("txtSizeMaleMin"); // NOI18N
-        txtSizeMaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSizeMaleMinFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtSizeMaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 510, 50, -1));
-
-        txtSizeFemaleMin.setText(Double.toString(element.getSizeFemaleMin()));
-        txtSizeFemaleMin.setName("txtSizeFemaleMin"); // NOI18N
-        txtSizeFemaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSizeFemaleMinFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtSizeFemaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, 50, -1));
-
-        txtWeightMaleMin.setText(Double.toString(element.getWeightMaleMin()));
-        txtWeightMaleMin.setName("txtWeightMaleMin"); // NOI18N
-        txtWeightMaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtWeightMaleMinFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtWeightMaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 510, 50, -1));
-
-        txtWeightFemaleMin.setText(Double.toString(element.getWeightFemaleMin()));
-        txtWeightFemaleMin.setName("txtWeightFemaleMin"); // NOI18N
-        txtWeightFemaleMin.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtWeightFemaleMinFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtWeightFemaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 540, 50, -1));
-
         txtLifespan.setText(element.getLifespan());
         txtLifespan.setName("txtLifespan"); // NOI18N
         txtLifespan.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -772,24 +751,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 176, 110, 40));
 
-        txtSizeMaleMax.setText(Double.toString(element.getSizeMaleMax()));
-        txtSizeMaleMax.setName("txtSizeMaleMax"); // NOI18N
-        txtSizeMaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSizeMaleMaxFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtSizeMaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 510, 50, -1));
-
-        txtSizeFemaleMax.setText(Double.toString(element.getSizeFemaleMax()));
-        txtSizeFemaleMax.setName("txtSizeFemaleMax"); // NOI18N
-        txtSizeFemaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtSizeFemaleMaxFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtSizeFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 540, 50, -1));
-
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
         elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 490, -1, -1));
@@ -797,24 +758,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
         elementIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 490, -1, -1));
-
-        txtWeightMaleMax.setText(Double.toString(element.getWeightMaleMax()));
-        txtWeightMaleMax.setName("txtWeightMaleMax"); // NOI18N
-        txtWeightMaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtWeightMaleMaxFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtWeightMaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 510, 50, 20));
-
-        txtWeightFemaleMax.setText(Double.toString(element.getWeightFemaleMax()));
-        txtWeightFemaleMax.setName("txtWeightFemaleMax"); // NOI18N
-        txtWeightFemaleMax.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtWeightFemaleMaxFocusGained(evt);
-            }
-        });
-        elementIncludes.add(txtWeightFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, 50, -1));
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
@@ -840,6 +783,54 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         jScrollPane2.setViewportView(txtDistribution);
 
         elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 340, 270, 60));
+
+        spnSizeMaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeMaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnSizeMaleMin.setName("spnSizeMaleMin"); // NOI18N
+        spnSizeMaleMin.setValue(element.getSizeMaleMin());
+        elementIncludes.add(spnSizeMaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 510, 50, -1));
+
+        spnSizeMaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeMaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnSizeMaleMax.setName("spnSizeMaleMax"); // NOI18N
+        spnSizeMaleMax.setValue(element.getSizeMaleMax());
+        elementIncludes.add(spnSizeMaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 510, 50, -1));
+
+        spnSizeFemaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeFemaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnSizeFemaleMin.setName("spnSizeFemaleMin"); // NOI18N
+        spnSizeFemaleMin.setValue(element.getSizeFemaleMin());
+        elementIncludes.add(spnSizeFemaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, 50, -1));
+
+        spnSizeFemaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnSizeFemaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnSizeFemaleMax.setName("spnSizeFemaleMax"); // NOI18N
+        spnSizeFemaleMax.setValue(element.getSizeFemaleMax());
+        elementIncludes.add(spnSizeFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 540, 50, -1));
+
+        spnWeightMaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightMaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnWeightMaleMin.setName("spnWeightMaleMin"); // NOI18N
+        spnWeightMaleMin.setValue(element.getWeightMaleMin());
+        elementIncludes.add(spnWeightMaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 510, 50, -1));
+
+        spnWeightMaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightMaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnWeightMaleMax.setName("spnWeightMaleMax"); // NOI18N
+        spnWeightMaleMax.setValue(element.getWeightMaleMax());
+        elementIncludes.add(spnWeightMaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 510, 50, -1));
+
+        spnWeightFemaleMin.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightFemaleMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnWeightFemaleMin.setName("spnWeightFemaleMin"); // NOI18N
+        spnWeightFemaleMin.setValue(element.getWeightFemaleMin());
+        elementIncludes.add(spnWeightFemaleMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 540, 50, -1));
+
+        spnWeightFemaleMax.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        spnWeightFemaleMax.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnWeightFemaleMax.setName("spnWeightFemaleMax"); // NOI18N
+        spnWeightFemaleMax.setValue(element.getWeightFemaleMax());
+        elementIncludes.add(spnWeightFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, 50, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -869,55 +860,55 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 element.setNutrition(txtNutrition.getText());
                 element.setWaterDependance((WaterDependancy)cmbWaterDependance.getSelectedItem());
                 try {
-                    element.setSizeMaleMin(Double.valueOf(txtSizeMaleMin.getText()));
+                    element.setSizeMaleMin(Double.valueOf(spnSizeMaleMin.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtSizeMaleMin.setText("");
+                    spnSizeMaleMin.setValue("");
                 }
                 try {
-                    element.setSizeFemaleMin(Double.valueOf(txtSizeFemaleMin.getText()));
+                    element.setSizeFemaleMin(Double.valueOf(spnSizeFemaleMin.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtSizeFemaleMin.setText("");
+                    spnSizeFemaleMin.setValue("");
                 }
                 try {
-                    element.setSizeMaleMax(Double.valueOf(txtSizeMaleMax.getText()));
+                    element.setSizeMaleMax(Double.valueOf(spnSizeMaleMax.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtSizeMaleMax.setText("");
+                    spnSizeMaleMax.setValue("");
                 }
                 try {
-                    element.setSizeFemaleMax(Double.valueOf(txtSizeFemaleMax.getText()));
+                    element.setSizeFemaleMax(Double.valueOf(spnSizeFemaleMax.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtSizeFemaleMax.setText("");
+                    spnSizeFemaleMax.setValue("");
                 }
                 element.setBreedingNumber(txtBreedingNumber.getText());
                 element.setSizeUnit((UnitsSize)cmbSizeUnits.getSelectedItem());
                 element.setWeightUnit((UnitsWeight)cmbWeightUnits.getSelectedItem());
                 try {
-                    element.setWeightMaleMin(Double.valueOf(txtWeightMaleMin.getText()));
+                    element.setWeightMaleMin(Double.valueOf(spnWeightMaleMin.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtWeightMaleMin.setText("");
+                    spnWeightMaleMin.setValue("");
                 }
                 try {
-                    element.setWeightFemaleMin(Double.valueOf(txtWeightFemaleMin.getText()));
+                    element.setWeightFemaleMin(Double.valueOf(spnWeightFemaleMin.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtWeightFemaleMin.setText("");
+                    spnWeightFemaleMin.setValue("");
                 }
                 try {
-                    element.setWeightMaleMax(Double.valueOf(txtWeightMaleMax.getText()));
+                    element.setWeightMaleMax(Double.valueOf(spnWeightMaleMax.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtWeightMaleMax.setText("");
+                    spnWeightMaleMax.setValue("");
                 }
                 try {
-                    element.setWeightFemaleMax(Double.valueOf(txtWeightFemaleMax.getText()));
+                    element.setWeightFemaleMax(Double.valueOf(spnWeightFemaleMax.getValue().toString()));
                 }
                 catch (NumberFormatException e) {
-                    txtWeightFemaleMax.setText("");
+                    spnWeightFemaleMax.setValue("");
                 }
                 element.setBreedingDuration(txtbreedingDuration.getText());
                 element.setLifespan(txtLifespan.getText());
@@ -1117,26 +1108,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
-    private void txtSizeMaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleMinFocusGained
-        txtSizeMaleMin.setSelectionStart(0);
-        txtSizeMaleMin.setSelectionEnd(txtSizeMaleMin.getText().length());
-    }//GEN-LAST:event_txtSizeMaleMinFocusGained
-
-    private void txtSizeFemaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeFemaleMinFocusGained
-        txtSizeFemaleMin.setSelectionStart(0);
-        txtSizeFemaleMin.setSelectionEnd(txtSizeFemaleMin.getText().length());
-    }//GEN-LAST:event_txtSizeFemaleMinFocusGained
-
-    private void txtWeightMaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightMaleMinFocusGained
-        txtWeightMaleMin.setSelectionStart(0);
-        txtWeightMaleMin.setSelectionEnd(txtWeightMaleMin.getText().length());
-    }//GEN-LAST:event_txtWeightMaleMinFocusGained
-
-    private void txtWeightFemaleMinFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightFemaleMinFocusGained
-        txtWeightFemaleMin.setSelectionStart(0);
-        txtWeightFemaleMin.setSelectionEnd(txtWeightFemaleMin.getText().length());
-    }//GEN-LAST:event_txtWeightFemaleMinFocusGained
-
     private void txtLifespanFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLifespanFocusGained
         txtLifespan.setSelectionStart(0);
         txtLifespan.setSelectionEnd(txtLifespan.getText().length());
@@ -1212,26 +1183,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
     }//GEN-LAST:event_btnReportActionPerformed
 
-    private void txtSizeMaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeMaleMaxFocusGained
-        txtSizeMaleMax.setSelectionStart(0);
-        txtSizeMaleMax.setSelectionEnd(txtSizeMaleMax.getText().length());
-    }//GEN-LAST:event_txtSizeMaleMaxFocusGained
-
-    private void txtSizeFemaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSizeFemaleMaxFocusGained
-        txtSizeFemaleMax.setSelectionStart(0);
-        txtSizeFemaleMax.setSelectionEnd(txtSizeFemaleMax.getText().length());
-    }//GEN-LAST:event_txtSizeFemaleMaxFocusGained
-
-    private void txtWeightMaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightMaleMaxFocusGained
-        txtWeightMaleMax.setSelectionStart(0);
-        txtWeightMaleMax.setSelectionEnd(txtWeightMaleMax.getText().length());
-    }//GEN-LAST:event_txtWeightMaleMaxFocusGained
-
-    private void txtWeightFemaleMaxFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtWeightFemaleMaxFocusGained
-        txtWeightFemaleMax.setSelectionStart(0);
-        txtWeightFemaleMax.setSelectionEnd(txtWeightFemaleMax.getText().length());
-    }//GEN-LAST:event_txtWeightFemaleMaxFocusGained
-
     private void resizeTables() {
         if (rdbSightings.isSelected()) {
             TableColumn column = null;
@@ -1271,6 +1222,31 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else
             lblNumberOfImages.setText("0 of 0");
+    }
+
+    private void fixSelectAllForSpinners(JSpinner inSpinner) {
+        // Fix die bug met spinners se selection
+        ((JSpinner.NumberEditor)inSpinner.getEditor()).getTextField().addFocusListener(
+            new FocusAdapter() {
+            @Override
+                public void focusGained(FocusEvent e) {
+                    if (e.getSource() instanceof JTextComponent) {
+                        final JTextComponent textComponent=((JTextComponent)e.getSource());
+                        SwingUtilities.invokeLater(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        textComponent.selectAll();
+                                    }
+                                }
+                        );
+                    }
+                }
+                @Override
+                public void focusLost(FocusEvent e) {
+                }
+            }
+        );
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1344,6 +1320,14 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JRadioButton rdbLocations;
     private javax.swing.JRadioButton rdbSightings;
+    private javax.swing.JSpinner spnSizeFemaleMax;
+    private javax.swing.JSpinner spnSizeFemaleMin;
+    private javax.swing.JSpinner spnSizeMaleMax;
+    private javax.swing.JSpinner spnSizeMaleMin;
+    private javax.swing.JSpinner spnWeightFemaleMax;
+    private javax.swing.JSpinner spnWeightFemaleMin;
+    private javax.swing.JSpinner spnWeightMaleMax;
+    private javax.swing.JSpinner spnWeightMaleMin;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTextArea txtBehaviourDescription;
     private javax.swing.JTextField txtBreedingNumber;
@@ -1356,14 +1340,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JTextField txtPrimaryName;
     private javax.swing.JTextField txtReferenceID;
     private javax.swing.JTextField txtScienceName;
-    private javax.swing.JTextField txtSizeFemaleMax;
-    private javax.swing.JTextField txtSizeFemaleMin;
-    private javax.swing.JTextField txtSizeMaleMax;
-    private javax.swing.JTextField txtSizeMaleMin;
-    private javax.swing.JTextField txtWeightFemaleMax;
-    private javax.swing.JTextField txtWeightFemaleMin;
-    private javax.swing.JTextField txtWeightMaleMax;
-    private javax.swing.JTextField txtWeightMaleMin;
     private javax.swing.JTextField txtbreedingDuration;
     // End of variables declaration//GEN-END:variables
     
