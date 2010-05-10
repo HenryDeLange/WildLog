@@ -92,6 +92,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private UtilTableGenerator utilTableGenerator;
     private WildLogApp app;
     private Element searchElement;
+    private Element searchElementBrowseTab;
     private Location searchLocation;
     private int imageIndex = 0;
     
@@ -265,6 +266,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         lblNumberOfImages = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
         btnDefault = new javax.swing.JButton();
+        cmbElementTypesBrowseTab = new javax.swing.JComboBox();
+        chkElementTypeBrowseTab = new javax.swing.JCheckBox();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -615,6 +618,27 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             }
         });
         tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 5, 90, -1));
+
+        cmbElementTypesBrowseTab.setMaximumRowCount(9);
+        cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
+        cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbElementTypesBrowseTab.setEnabled(false);
+        cmbElementTypesBrowseTab.setName("cmbElementTypesBrowseTab"); // NOI18N
+        cmbElementTypesBrowseTab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbElementTypesBrowseTabActionPerformed(evt);
+            }
+        });
+        tabFoto.add(cmbElementTypesBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 210, -1));
+
+        chkElementTypeBrowseTab.setText(resourceMap.getString("chkElementTypeBrowseTab.text")); // NOI18N
+        chkElementTypeBrowseTab.setName("chkElementTypeBrowseTab"); // NOI18N
+        chkElementTypeBrowseTab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkElementTypeBrowseTabActionPerformed(evt);
+            }
+        });
+        tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1434,6 +1458,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         dtpEndDate.setVisible(false);
         btnRefreshDates.setVisible(false);
         btnReport.setVisible(false);
+        cmbElementTypesBrowseTab.setVisible(false);
+        chkElementTypeBrowseTab.setVisible(false);
 
         rdbBrowseLocationItemStateChanged(null);
         rdbBrowseElementItemStateChanged(null);
@@ -1577,6 +1603,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private void rdbBrowseLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseLocationItemStateChanged
         if (rdbBrowseLocation.isSelected()) {
             this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            dtpStartDate.setVisible(false);
+            dtpEndDate.setVisible(false);
+            btnRefreshDates.setVisible(false);
+            cmbElementTypesBrowseTab.setVisible(false);
+            chkElementTypeBrowseTab.setVisible(false);
             btnReport.setVisible(false);
             txtPhotoInformation.setText("");
             try {
@@ -1594,9 +1625,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
             }
             browseByLocation();
-            dtpStartDate.setVisible(false);
-            dtpEndDate.setVisible(false);
-            btnRefreshDates.setVisible(false);
             this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
 }//GEN-LAST:event_rdbBrowseLocationItemStateChanged
@@ -1604,6 +1632,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private void rdbBrowseElementItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseElementItemStateChanged
         if (rdbBrowseElement.isSelected()) {
             this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            dtpStartDate.setVisible(false);
+            dtpEndDate.setVisible(false);
+            btnRefreshDates.setVisible(false);
+            chkElementTypeBrowseTab.setVisible(true);
+            cmbElementTypesBrowseTab.setVisible(true);
             btnReport.setVisible(false);
             txtPhotoInformation.setText("");
             try {
@@ -1621,9 +1654,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
             }
             browseByElement();
-            dtpStartDate.setVisible(false);
-            dtpEndDate.setVisible(false);
-            btnRefreshDates.setVisible(false);
             this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_rdbBrowseElementItemStateChanged
@@ -1631,6 +1661,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private void rdbBrowseDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseDateItemStateChanged
         if (rdbBrowseDate.isSelected()) {
             this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            dtpStartDate.setVisible(true);
+            dtpEndDate.setVisible(true);
+            btnRefreshDates.setVisible(true);
+            cmbElementTypesBrowseTab.setVisible(false);
+            chkElementTypeBrowseTab.setVisible(false);
             btnReport.setVisible(false);
             txtPhotoInformation.setText("");
             try {
@@ -1648,9 +1683,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
             }
             browseByDate();
-            dtpStartDate.setVisible(true);
-            dtpEndDate.setVisible(true);
-            btnRefreshDates.setVisible(true);
             this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_rdbBrowseDateItemStateChanged
@@ -1891,6 +1923,19 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         }
     }//GEN-LAST:event_btnDefaultActionPerformed
 
+    private void chkElementTypeBrowseTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkElementTypeBrowseTabActionPerformed
+        searchElementBrowseTab = new Element();
+        cmbElementTypesBrowseTab.setEnabled(chkElementTypeBrowseTab.isSelected());
+        if (cmbElementTypesBrowseTab.isEnabled())
+            searchElementBrowseTab.setType((ElementType)cmbElementTypesBrowseTab.getSelectedItem());
+        browseByElement();
+    }//GEN-LAST:event_chkElementTypeBrowseTabActionPerformed
+
+    private void cmbElementTypesBrowseTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypesBrowseTabActionPerformed
+        searchElementBrowseTab.setType((ElementType)cmbElementTypesBrowseTab.getSelectedItem());
+        browseByElement();
+    }//GEN-LAST:event_cmbElementTypesBrowseTabActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -1922,8 +1967,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     private void browseByElement() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
+        if (searchElementBrowseTab == null) searchElementBrowseTab = new Element();
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
+        List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElementBrowseTab));
         Collections.sort(elements);
         for (Element tempElement : elements) {
             DefaultMutableTreeNode tempElementNode = new DefaultMutableTreeNode(tempElement);
@@ -2487,7 +2533,9 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JCheckBox chkElementTypeBrowseTab;
     private javax.swing.JCheckBox ckbTypeFilter;
+    private javax.swing.JComboBox cmbElementTypesBrowseTab;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JMenuItem csvExportMenuItem;
     private javax.swing.JMenuItem csvImportMenuItem;

@@ -142,6 +142,12 @@ public class Utils {
                     toDir.mkdirs();
                     File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
                     File toFile_Thumbnail = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                    while (toFile_Original.exists()) {
+                        toFile_Original = new File(toFile_Original.getPath().substring(0, toFile_Original.getPath().length() - 4) + "x" + toFile_Original.getPath().substring(toFile_Original.getPath().length() - 4));
+                    }
+                    while (toFile_Thumbnail.exists()) {
+                        toFile_Thumbnail = new File(toFile_Thumbnail.getPath().substring(0, toFile_Thumbnail.getPath().length() - 4) + "x" + toFile_Thumbnail.getPath().substring(toFile_Thumbnail.getPath().length() - 4));
+                    }
                     FileInputStream fileInput = null;
                     FileOutputStream fileOutput = null;
                     try {
@@ -171,7 +177,6 @@ public class Utils {
                         fileOutput.flush();
                         big.dispose();
                         inApp.getDBI().createOrUpdate(new Foto(inID, toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), FotoType.IMAGE), false);
-                        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -193,6 +198,9 @@ public class Utils {
                     File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Movies" + File.separatorChar + inFolderName);
                     toDir.mkdirs();
                     File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                    while (toFile.exists()) {
+                        toFile = new File(toFile.getPath().substring(0, toFile.getPath().length() - 4) + "x" + toFile.getPath().substring(toFile.getPath().length() - 4));
+                    }
                     FileInputStream fileInput = null;
                     FileOutputStream fileOutput = null;
                     try {
@@ -204,7 +212,6 @@ public class Utils {
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
                         inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.MOVIE), false);
-                        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -224,6 +231,9 @@ public class Utils {
                     File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Other Uploads" + File.separatorChar + inFolderName);
                     toDir.mkdirs();
                     File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
+                    while (toFile.exists()) {
+                        toFile = new File(toFile.getPath().substring(0, toFile.getPath().length() - 4) + "x" + toFile.getPath().substring(toFile.getPath().length() - 4));
+                    }
                     FileInputStream fileInput = null;
                     FileOutputStream fileOutput = null;
                     try {
@@ -235,7 +245,6 @@ public class Utils {
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
                         inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.OTHER), false);
-                        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {

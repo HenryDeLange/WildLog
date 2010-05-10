@@ -25,10 +25,15 @@ import com.bbn.openmap.gui.BasicMapPanel;
 import com.bbn.openmap.gui.MapPanel;
 import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
-import com.bbn.openmap.proj.Mercator;
+import com.bbn.openmap.omGraphics.OMGraphicList;
+import com.bbn.openmap.omGraphics.OMRaster;
+import com.bbn.openmap.plugin.PlugInLayer;
+import com.bbn.openmap.plugin.wms.WMSPlugIn;
+import com.bbn.openmap.proj.Projection;
 import java.awt.Color;
 import java.util.Properties;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
 import wildlog.mapping.layers.PointLayer;
 
@@ -132,15 +137,88 @@ public class MapFrame {
         shapeLayerPropsProtectedLand.put("spatialIndex", "protected_land.ssx");
         shapeLayerProtectedLand.setProperties(shapeLayerPropsProtectedLand);
         shapeLayerProtectedLand.setVisible(true);
-        
+
         // Last on top
         mapHandler.add(shapeLayerBase);
         mapHandler.add(shapeLayerSouthAfrica);
         mapHandler.add(shapeLayerRoads);
         //mapHandler.add(shapeLayerTowns); // Baie punte, so los dit tot ek layers kan aan en af sit met die mapping
         mapHandler.add(shapeLayerProtectedLand);
+        try {
+            OMGraphicList wmsList = new OMGraphicList();
+            wmsList.clear();
+            WMSPlugIn wms = new WMSPlugIn();
+            wms.setWmsServer("wms.cgi");
+            wms.setImageFormat("image/jpeg");
+            wms.setLayers("global_mosaic");
+            wms.setWmsVersion("1.1.1");
+            wms.setStyles("visual");
+            wms.setVendorSpecificNames("EPSG");
+            wms.setVendorSpecificValues("4326");
+            wms.setQueryHeader("http://wms.jpl.nasa.gov/wms.cgi");
+            Projection p = mapPanel.getMapBean().getProjection();
+            String bbox = "undefined";
+            String height = "undefined";
+            String width = "undefined";
+            if (p != null) {
+                bbox = Double.toString(p.getUpperLeft().getLongitude()) + ","
+                        + Double.toString(p.getLowerRight().getLatitude()) + ","
+                        + Double.toString(p.getLowerRight().getLongitude()) + ","
+                        + Double.toString(p.getUpperLeft().getLatitude());
+                height = Integer.toString(p.getHeight());
+                width = Integer.toString(p.getWidth());
+            }
+            String queryString = wms.getQueryHeader() + "?"+ "wms_server="+ wms.getServerName() + "&layers=" + wms.getLayers() + "&service=OGC:WMS" +
+                "&format=image/jpeg" + "&width="+ width +"&height="+ height+"&bbox="+ bbox + "&request=GetMap&srs=EPSG:4326&styles=visual";
+            System.out.println(wms.createQueryString(mapPanel.getMapBean().getProjection()));
+            System.out.println(queryString);
+            java.net.URL url = null;
+            try {
+                System.out.println("Inside URL code");
+                url = new java.net.URL(queryString);
+                java.net.HttpURLConnection urlc =
+                    (java.net.HttpURLConnection)url.openConnection();
+                urlc.setRequestProperty("User-Agent", "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14");
+                System.out.println("Using Proxy: " + urlc.usingProxy());
+                urlc.setDoInput(true);
+                urlc.setDoOutput(true);
+                urlc.setRequestMethod("GET");
+                System.out.println(urlc.getContentType());
+                // text
+                if ( urlc.getContentType().startsWith("text")) {
+                    System.out.println("Inside URL code: Text");
+                    java.io.BufferedReader bin = new java.io.BufferedReader(
+                        new java.io.InputStreamReader(urlc.getInputStream())
+                    );
+                    String st;
+                    String message = "";
+                    while ((st=bin.readLine()) != null) {
+                        message += st;
+                    }
+                // image
+                } else if ( urlc.getContentType().startsWith("image")) {
+                    System.out.println("Inside URL code: Image");
+                    urlc.disconnect();
+                    ImageIcon ii = new ImageIcon(url);
+                    OMRaster image = new OMRaster(0, 0, ii);
+                    wmsList.add(image);
+                } // end if image
+            } catch (java.net.MalformedURLException murle) {
+                System.out.println("Bad URL!");
+            } catch (java.io.IOException ioe) {
+                System.out.println("IO Exception");
+            }
+            wmsList.generate(p);
+            PlugInLayer wmsLayer = new PlugInLayer();
+            wmsLayer.setPlugIn(wms);
+            wmsLayer.setList(wmsList);
+            mapHandler.add(wmsLayer);
+        }
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Unable to load online background.", "Can't Load WMS Layer", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
     }
-
 
     // Public Methods:
     public void showMap() {

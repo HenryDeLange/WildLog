@@ -80,7 +80,7 @@ public class Sighting implements Comparable<Sighting> {
     // METHIDS:
     @Override
     public String toString() {
-        return locationName + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + elementName;
+        return locationName + " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") " + elementName + " [" + sightingCounter + "]";
     }
 
     @Override
