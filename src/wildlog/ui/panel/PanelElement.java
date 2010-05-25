@@ -1167,8 +1167,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_tblLocationMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsHTML.exportHTML(element, app);
-        Utils.openFile(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + element.getPrimaryName() + ".html");
+        Utils.openFile(UtilsHTML.exportHTML(element, app));
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed

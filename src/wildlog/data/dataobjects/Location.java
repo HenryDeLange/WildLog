@@ -15,7 +15,12 @@
 package wildlog.data.dataobjects;
 
 import KmlGenerator.objects.KmlEntry;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.List;
+import javax.imageio.ImageIO;
 import wildlog.WildLogApp;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
@@ -132,8 +137,45 @@ public class Location implements Comparable<Location> {
         htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
         htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
 //        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
-        if (inIncludeImages)
+        if (inIncludeImages) {
+            // Generate image of the map
+            inApp.getMapFrame().clearPoints();
+            if (latitude != null && longitude != null)
+                if (!latitude.equals(Latitudes.NONE) && !longitude.equals(Longitudes.NONE)) {
+                    float lat = latDegrees;
+                    lat = lat + latMinutes/60f;
+                    lat = lat + (latSecondsFloat/60f)/60f;
+                    if (latitude.equals(Latitudes.SOUTH))
+                        lat = -1 * lat;
+                    float lon = lonDegrees;
+                    lon = lon + lonMinutes/60f;
+                    lon = lon + (lonSecondsFloat/60f)/60f;
+                    if (longitude.equals(Longitudes.WEST))
+                        lon = -1 * lon;
+                    inApp.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
+                }
+            inApp.getMapFrame().changeTitle("WildLog Map - Location: " + name);
+            inApp.getMapFrame().showMap(300, 300, 42000000f);
+            inApp.getMapFrame().getFrameForImageDrawing().pack();
+            inApp.getMapFrame().getFrameForImageDrawing().setVisible(false);
+            BufferedImage image = new BufferedImage(inApp.getMapFrame().getFrameForImageDrawing().getContentPane().getWidth(), inApp.getMapFrame().getFrameForImageDrawing().getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics graphics = image.getGraphics();
+            inApp.getMapFrame().getFrameForImageDrawing().getContentPane().printAll(graphics);
+            String folders = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Maps";
+            File temp = new File(folders);
+            temp.mkdirs();
+            String mapPath = folders + File.separatorChar + name + ".jpg";
+            try {
+                ImageIO.write(image, "jpg", new File(mapPath));
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            htmlLocation = htmlLocation + "</br><b>Map:</b></br/><img width='400px' src='" + mapPath + "' />";
+            
+            // Fotos
             htmlLocation = htmlLocation + "</br><b>Photos:</b></br/>" + fotoString;
+        }
         if (inIsRecursive)
             htmlLocation = htmlLocation + "</br><H3>Visits:</H3><hr/>" + visitsString;
         htmlLocation = htmlLocation + "</body>";

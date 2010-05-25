@@ -50,19 +50,19 @@ public class MapFrame {
 
     
     // Constructor:
-    public MapFrame() {
+    public MapFrame(boolean inUseWMS) {
         title = "WildLog Map";
-        initMap();
+        initMap(inUseWMS);
     }
 
-    public MapFrame(String inTitle) {
+    public MapFrame(String inTitle, boolean inUseWMS) {
         title = inTitle;
-        initMap();
+        initMap(inUseWMS);
     }
 
     
     // Private Methods:
-    private void initMap() {
+    private void initMap(boolean inUseWMS) {
         pointLayer = new PointLayer();
         mapPanel = new BasicMapPanel();
         frame = new OpenMapFrame(title);
@@ -144,6 +144,137 @@ public class MapFrame {
         mapHandler.add(shapeLayerRoads);
         //mapHandler.add(shapeLayerTowns); // Baie punte, so los dit tot ek layers kan aan en af sit met die mapping
         mapHandler.add(shapeLayerProtectedLand);
+
+        if (inUseWMS) doWMS();
+    }
+
+    // Public Methods:
+    public void showMap() {
+        try {
+            // Get the default MapBean that the BasicMapPanel created.
+            MapBean mapBean = mapPanel.getMapBean();
+            // Set the map's center and scale
+            mapBean.setCenter(new LatLonPoint(-28.7f, 24.7f));
+            mapBean.setScale(8500000f);
+
+            // Add the points layer.
+            // The LayerHandler will find the Layer in the MapHandler.
+            pointLayer.setVisible(true);
+            mapHandler.add(pointLayer);
+
+
+            /*
+            // Create an OpenMap toolbar
+            ToolPanel toolBar = new ToolPanel();
+            // Create the directional and zoom control tool
+            OMToolSet omts = new OMToolSet();
+            // Buttons to controle behaviour
+            JButton btnMapView = new JButton("Add Point");
+            btnMapView.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    final JDialog dialog = new JDialog(new JFrame(), "Please enter:", true);
+                    dialog.setLayout(new AbsoluteLayout());
+                    JLabel label = new JLabel("Sub Area:");
+                    label.setSize(40, 20);
+                    dialog.add(label, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 4, 50, -1));
+                    final JTextField textfield = new JTextField();
+                    textfield.setSize(120, 20);
+                    dialog.add(textfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 2, 150, -1));
+                    JButton button = new JButton("Add");
+                    button.addActionListener(new java.awt.event.ActionListener() {
+                        @Override
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            //dbi.createOrUpdate(new MapPoint(Latitudes.SOUTH, 27, 0, 0, Longitudes.EAST, 25, 0, 0, "test"));
+                            dialog.dispose();
+                        }
+                    });
+                    dialog.setSize(210, 84);
+                    dialog.add(button, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 23, 200, -1));
+                    dialog.setLocationRelativeTo(frame);
+                    dialog.setVisible(true);
+                    showMap();
+                }
+            });
+            omts.add(btnMapView);
+            // Add the ToolPanel and the OMToolSet to the MapHandler. The OpenMapFrame will find the ToolPanel and attach it
+            // to the top part of its content pane, and the ToolPanel will find the OMToolSet and add it to itself.
+            mapHandler.add(omts);
+            mapHandler.add(toolBar);
+            */
+
+            // Display the frame
+            frame.setSize(950, 700);
+            frame.setLocationRelativeTo(null);
+            frame.setVisible(true);
+
+        } catch (MultipleSoloMapComponentException msmce) {
+            // The MapHandler is only allowed to have one of certain items. These items implement the SoloMapComponent
+            // interface. The MapHandler can have a policy that determines what to do when duplicate instances of the
+            // same type of object are added - replace or ignore.
+            // In this example, this will never happen, since we are controlling that one MapBean, LayerHandler,
+            // MouseDelegator, etc is being added to the MapHandler.
+        }
+        catch (Exception e) {
+            System.out.println("Problem with Mapping...");
+            e.printStackTrace();
+        }
+    }
+
+    public void showMap(int inWidth, int inHeight, float inScale) {
+        try {
+            // Get the default MapBean that the BasicMapPanel created.
+            MapBean mapBean = mapPanel.getMapBean();
+            // Set the map's center and scale
+            mapBean.setCenter(new LatLonPoint(-28.7f, 24.7f));
+            mapBean.setScale(inScale);
+
+            // Add the points layer.
+            // The LayerHandler will find the Layer in the MapHandler.
+            pointLayer.setVisible(true);
+            mapHandler.add(pointLayer);
+
+            // Display the frame
+            frame.setSize(inWidth, inHeight);
+            //frame.setLocationRelativeTo(null);
+            frame.setVisible(false);
+            frame.validate();
+        } catch (MultipleSoloMapComponentException msmce) {
+            // The MapHandler is only allowed to have one of certain items. These items implement the SoloMapComponent
+            // interface. The MapHandler can have a policy that determines what to do when duplicate instances of the
+            // same type of object are added - replace or ignore.
+            // In this example, this will never happen, since we are controlling that one MapBean, LayerHandler,
+            // MouseDelegator, etc is being added to the MapHandler.
+        }
+        catch (Exception e) {
+            System.out.println("Problem with Mapping...");
+            e.printStackTrace();
+        }
+    }
+
+    public void addPoint(float inLat, float inLon, Color inColor) {
+        if (pointLayer == null) pointLayer = new PointLayer();
+        pointLayer.addPoint(inLat, inLon, 5, inColor);
+    }
+
+    public void clearPoints() {
+        mapHandler.remove(pointLayer);
+        pointLayer = new PointLayer();
+    }
+
+    public void changeTitle(String inTitle) {
+        title = inTitle;
+        frame.setTitle(title);
+    }
+
+    public OpenMapFrame getFrameForImageDrawing() {
+        frame.validate();
+        return frame;
+    }
+
+
+    private void doWMS() {
+        // Implement caching of images later
         try {
             OMGraphicList wmsList = new OMGraphicList();
             wmsList.clear();
@@ -217,95 +348,6 @@ public class MapFrame {
         catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Unable to load online background.", "Can't Load WMS Layer", JOptionPane.INFORMATION_MESSAGE);
         }
-        
-    }
-
-    // Public Methods:
-    public void showMap() {
-        try {
-            // Get the default MapBean that the BasicMapPanel created.
-            MapBean mapBean = mapPanel.getMapBean();
-            // Set the map's center and scale
-            mapBean.setCenter(new LatLonPoint(-28.7f, 25.0f));
-            mapBean.setScale(8500000f);
-
-            // Add the points layer.
-            // The LayerHandler will find the Layer in the MapHandler.
-            pointLayer.setVisible(true);
-            mapHandler.add(pointLayer);
-
-
-            /*
-            // Create an OpenMap toolbar
-            ToolPanel toolBar = new ToolPanel();
-            // Create the directional and zoom control tool
-            OMToolSet omts = new OMToolSet();
-            // Buttons to controle behaviour
-            JButton btnMapView = new JButton("Add Point");
-            btnMapView.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    final JDialog dialog = new JDialog(new JFrame(), "Please enter:", true);
-                    dialog.setLayout(new AbsoluteLayout());
-                    JLabel label = new JLabel("Sub Area:");
-                    label.setSize(40, 20);
-                    dialog.add(label, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 4, 50, -1));
-                    final JTextField textfield = new JTextField();
-                    textfield.setSize(120, 20);
-                    dialog.add(textfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 2, 150, -1));
-                    JButton button = new JButton("Add");
-                    button.addActionListener(new java.awt.event.ActionListener() {
-                        @Override
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                            //dbi.createOrUpdate(new MapPoint(Latitudes.SOUTH, 27, 0, 0, Longitudes.EAST, 25, 0, 0, "test"));
-                            dialog.dispose();
-                        }
-                    });
-                    dialog.setSize(210, 84);
-                    dialog.add(button, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 23, 200, -1));
-                    dialog.setLocationRelativeTo(frame);
-                    dialog.setVisible(true);
-                    showMap();
-                }
-            });
-            omts.add(btnMapView);
-            // Add the ToolPanel and the OMToolSet to the MapHandler. The OpenMapFrame will find the ToolPanel and attach it
-            // to the top part of its content pane, and the ToolPanel will find the OMToolSet and add it to itself.
-            mapHandler.add(omts);
-            mapHandler.add(toolBar);
-            */
-
-            // Display the frame
-            frame.setSize(950, 700);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-
-        } catch (MultipleSoloMapComponentException msmce) {
-            // The MapHandler is only allowed to have one of certain items. These items implement the SoloMapComponent
-            // interface. The MapHandler can have a policy that determines what to do when duplicate instances of the
-            // same type of object are added - replace or ignore.
-            // In this example, this will never happen, since we are controlling that one MapBean, LayerHandler,
-            // MouseDelegator, etc is being added to the MapHandler.
-        }
-        catch (Exception e) {
-            System.out.println("Problem with Mapping...");
-            e.printStackTrace();
-        }
-    }
-
-    public void addPoint(float inLat, float inLon, Color inColor) {
-        if (pointLayer == null) pointLayer = new PointLayer();
-        pointLayer.addPoint(inLat, inLon, 5, inColor);
-    }
-
-    public void clearPoints() {
-        mapHandler.remove(pointLayer);
-        pointLayer = new PointLayer();
-    }
-
-    public void changeTitle(String inTitle) {
-        title = inTitle;
-        frame.setTitle(title);
     }
 
 }

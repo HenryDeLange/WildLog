@@ -326,6 +326,8 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         mnuDBConsole = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
+        settingsMenu = new javax.swing.JMenu();
+        chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -1150,6 +1152,20 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         menuBar.add(jMenu2);
 
+        settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
+        settingsMenu.setName("settingsMenu"); // NOI18N
+
+        chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
+        chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
+        chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuUseWMSItemStateChanged(evt);
+            }
+        });
+        settingsMenu.add(chkMnuUseWMS);
+
+        menuBar.add(settingsMenu);
+
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
 
@@ -1936,6 +1952,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         browseByElement();
     }//GEN-LAST:event_cmbElementTypesBrowseTabActionPerformed
 
+    private void chkMnuUseWMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseWMSItemStateChanged
+        app.resetMapFrame();
+        app.setUseWMS(chkMnuUseWMS.isSelected());
+    }//GEN-LAST:event_chkMnuUseWMSItemStateChanged
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -2115,11 +2136,11 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         List<Element> listElements = app.getDBI().list(new Element());
         for (int t = 0; t < listElements.size(); t++) {
-            UtilsHTML.exportHTML(listElements.get(t), app);
+            String path = UtilsHTML.exportHTML(listElements.get(t), app);
         }
         List<Location> listLocations = app.getDBI().list(new Location());
         for (int t = 0; t < listLocations.size(); t++) {
-            UtilsHTML.exportHTML(listLocations.get(t), app);
+            String path = UtilsHTML.exportHTML(listLocations.get(t), app);
         }
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
@@ -2534,6 +2555,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JButton btnZoomOut;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JCheckBox chkElementTypeBrowseTab;
+    private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JCheckBox ckbTypeFilter;
     private javax.swing.JComboBox cmbElementTypesBrowseTab;
     private javax.swing.JComboBox cmbType;
@@ -2592,6 +2614,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JRadioButton rdbBrowseElement;
     private javax.swing.JRadioButton rdbBrowseLocation;
     private javax.swing.JScrollPane scrlElement;
+    private javax.swing.JMenu settingsMenu;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;

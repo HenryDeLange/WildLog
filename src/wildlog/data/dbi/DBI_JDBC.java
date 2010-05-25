@@ -1512,8 +1512,8 @@ public abstract class DBI_JDBC implements DBI {
         Statement state = null;
         try {
             state = conn.createStatement();
-            // Delete File from database
-            state.executeUpdate("DELETE FROM FILES WHERE FILEPATH = '" + inFoto.getFileLocation().replaceAll("'", "''") + "'");
+            // Delete File from database - Note: Do not use FilePath, because it is not unique
+            state.executeUpdate("DELETE FROM FILES WHERE ORIGINALPATH = '" + inFoto.getOriginalFotoLocation().replaceAll("'", "''") + "'");
             // Delete the file on the PC
             File tempFile = new File(inFoto.getFileLocation());
             tempFile.delete();

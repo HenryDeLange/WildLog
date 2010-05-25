@@ -1194,8 +1194,7 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_tblVisitKeyReleased
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsHTML.exportHTML(locationWL, app);
-        Utils.openFile(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + locationWL.getName() + ".html");
+        Utils.openFile(UtilsHTML.exportHTML(locationWL, app));
 }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed

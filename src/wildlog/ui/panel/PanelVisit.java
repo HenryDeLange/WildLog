@@ -56,6 +56,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
+import wildlog.utils.UtilsHTML;
 
 /**
  *
@@ -250,6 +251,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblNumberOfSightingImages = new javax.swing.JLabel();
         lblNumberOfImages = new javax.swing.JLabel();
         btnReport = new javax.swing.JButton();
+        btnChecklist = new javax.swing.JButton();
+        btnHTML = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -304,7 +307,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
         jLabel53.setText(resourceMap.getString("jLabel53.text")); // NOI18N
         jLabel53.setName("jLabel53"); // NOI18N
-        visitIncludes.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, -1, -1));
+        visitIncludes.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 85, -1, -1));
 
         jScrollPane14.setName("jScrollPane14"); // NOI18N
 
@@ -317,16 +320,16 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 310, 90));
+        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 85, 390, 100));
 
         jLabel54.setText(resourceMap.getString("jLabel54.text")); // NOI18N
         jLabel54.setName("jLabel54"); // NOI18N
-        visitIncludes.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 140, -1, -1));
+        visitIncludes.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, -1, -1));
 
         cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
         cmbType.setSelectedItem(visit.getType());
         cmbType.setName("cmbType"); // NOI18N
-        visitIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 160, 190, -1));
+        visitIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 110, -1));
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -334,26 +337,26 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        visitIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 52, -1, -1));
+        visitIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
-        visitIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 90, -1, -1));
+        visitIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, -1, -1));
 
         cmbGameWatchIntensity.setModel(new DefaultComboBoxModel(GameWatchIntensity.values()));
         cmbGameWatchIntensity.setSelectedItem(visit.getGameWatchingIntensity());
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
-        visitIncludes.add(cmbGameWatchIntensity, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 110, 190, -1));
+        visitIncludes.add(cmbGameWatchIntensity, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 70, 110, -1));
 
         dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 200, -1));
+        visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 140, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 52, 200, -1));
+        visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 52, 140, -1));
 
         jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
@@ -653,6 +656,29 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             }
         });
         visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 155, 110, 33));
+
+        btnChecklist.setFont(resourceMap.getFont("btnChecklist.font")); // NOI18N
+        btnChecklist.setIcon(resourceMap.getIcon("btnChecklist.icon")); // NOI18N
+        btnChecklist.setText(resourceMap.getString("btnChecklist.text")); // NOI18N
+        btnChecklist.setToolTipText(resourceMap.getString("btnChecklist.toolTipText")); // NOI18N
+        btnChecklist.setName("btnChecklist"); // NOI18N
+        btnChecklist.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChecklistActionPerformed(evt);
+            }
+        });
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 90, 50));
+
+        btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
+        btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHTML.setName("btnHTML"); // NOI18N
+        btnHTML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHTMLActionPerformed(evt);
+            }
+        });
+        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 158, 110, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -1000,6 +1026,31 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         }
     }//GEN-LAST:event_btnReportActionPerformed
 
+    private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed
+        if (visit.getName() != null) {
+            if (visit.getName().length() > 0) {
+                final JDialog dialog = new JDialog(app.getMainFrame(), "Add New Sightings", true);
+                dialog.setSize(760, 555);
+                dialog.add(new PanelChecklist());
+                dialog.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif")).getImage());
+                ActionListener escListener = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        refreshTableForSightings();
+                        dialog.dispose();
+                    }
+                };
+                dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+                dialog.setLocationRelativeTo(this);
+                dialog.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_btnChecklistActionPerformed
+
+    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
+        Utils.openFile(UtilsHTML.exportHTML(visit, app));
+    }//GEN-LAST:event_btnHTMLActionPerformed
+
 
     private void resizeTables() {
         TableColumn column = null;
@@ -1054,10 +1105,12 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
+    private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteSighting;
     private javax.swing.JButton btnEditSighting;
     private javax.swing.JButton btnGoElement;
+    private javax.swing.JButton btnHTML;
     private javax.swing.JButton btnMapSighting;
     private javax.swing.JButton btnMapVisit;
     private javax.swing.JButton btnNextImage;

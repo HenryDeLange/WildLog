@@ -20,7 +20,6 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import wildlog.data.dbi.DBI;
 import wildlog.data.dbi.DBI_h2;
-import wildlog.data.dbi.DBI_derby;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrame;
@@ -38,6 +37,7 @@ public class WildLogApp extends SingleFrameApplication {
     private String prevLonDeg;
     private String prevLonMin;
     private String prevLonSec;
+    private boolean useWMS = false;
 
     // Getters and Setters
     public Latitudes getPrevLat() {
@@ -176,9 +176,24 @@ public class WildLogApp extends SingleFrameApplication {
     public MapFrame getMapFrame() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
         if (mapFrame == null) {
-            mapFrame = new MapFrame("WildLog Map");
+            mapFrame = new MapFrame("WildLog Map", useWMS);
         }
         return mapFrame;
     }
-    
+
+    public void resetMapFrame() {
+        if (mapFrame != null)
+            mapFrame.getFrameForImageDrawing().setVisible(false);
+
+        mapFrame = null;
+    }
+
+    public boolean isUseWMS() {
+        return useWMS;
+    }
+
+    public void setUseWMS(boolean useWMS) {
+        this.useWMS = useWMS;
+    }
+
 }

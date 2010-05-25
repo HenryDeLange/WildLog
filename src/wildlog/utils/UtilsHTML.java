@@ -23,6 +23,7 @@ import java.util.Date;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Visit;
 
 
 public class UtilsHTML {
@@ -69,7 +70,7 @@ public class UtilsHTML {
                     }
                 }
                 // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
-                return "<img src='../HTML/Images" + inFileLocation.toLowerCase() + "'>";
+                return "<img src='../Images" + inFileLocation.toLowerCase() + "'>";
             //}
             //else {
             //    System.out.println("path is wrong " + inFileLocation);
@@ -82,8 +83,8 @@ public class UtilsHTML {
         //return null;
     }
 
-    public static void exportHTML(Element inElement, WildLogApp inApp) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + inElement.getPrimaryName() + ".html");
+    public static String exportHTML(Element inElement, WildLogApp inApp) {
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Creatures"  + File.separatorChar + inElement.getPrimaryName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -103,10 +104,11 @@ public class UtilsHTML {
                 ex.printStackTrace();
             }
         }
+        return toFile.getPath();
     }
 
-    public static void exportHTML(Location inLocation, WildLogApp inApp) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + inLocation.getName() + ".html");
+    public static String exportHTML(Location inLocation, WildLogApp inApp) {
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Locations"  + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -126,6 +128,31 @@ public class UtilsHTML {
                 ex.printStackTrace();
             }
         }
+        return toFile.getPath();
+    }
+
+    public static String exportHTML(Visit inVisit, WildLogApp inApp) {
+        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Visits" + File.separatorChar + inVisit.getName() + ".html");
+        toFile.mkdirs();
+        FileOutputStream fileOutput = null;
+        try {
+            if (toFile.exists()) toFile.delete();
+            fileOutput = new FileOutputStream(toFile);
+            fileOutput.write(inVisit.toHTML(true, true, inApp).getBytes());
+            fileOutput.flush();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        finally {
+            try {
+                fileOutput.close();
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return toFile.getPath();
     }
 
     public static String formatString(Object inObject) {
