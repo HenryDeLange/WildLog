@@ -20,6 +20,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,7 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeFormat;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.ui.DateCellRenderer;
 
 /**
  *
@@ -64,7 +66,7 @@ import wildlog.utils.LatLonConverter;
 public class PanelSighting extends javax.swing.JPanel {
     private Location location;
     private Visit visit;
-    private Visit oldVisit;
+    //private Visit oldVisit;
     private Element element;
     private Sighting sighting;
     private UtilTableGenerator utilTableGenerator;
@@ -86,7 +88,7 @@ public class PanelSighting extends javax.swing.JPanel {
             app = (WildLogApp) Application.getInstance();
             location = inLocation;
             visit = inVisit;
-            oldVisit = inVisit;
+//            oldVisit = inVisit;
             element = inElement;
             utilTableGenerator = new UtilTableGenerator();
             searchElement = new Element();
@@ -439,6 +441,7 @@ public class PanelSighting extends javax.swing.JPanel {
         dtpSightingDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setEnabled(!disableEditing);
+        dtpSightingDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
         sightingIncludes.add(dtpSightingDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(333, 290, 130, -1));
 
@@ -1477,6 +1480,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 }
                 else if (i == 1) {
                     column.setPreferredWidth(45);
+                    column.setCellRenderer(new DateCellRenderer());
                 }
                 else if (i == 2) {
                     column.setPreferredWidth(25);

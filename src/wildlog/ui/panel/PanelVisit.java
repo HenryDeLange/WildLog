@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,12 +52,12 @@ import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Foto;
-import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.UtilsHTML;
+import wildlog.utils.ui.DateCellRenderer;
 
 /**
  *
@@ -350,11 +351,13 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
         dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setDate(visit.getStartDate());
+        dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
         visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 140, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setDate(visit.getEndDate());
+        dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
         visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 52, 140, -1));
 
@@ -761,26 +764,29 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         sighting = null;
-        Sighting tempSighting = new Sighting();
-        tempSighting.setVisitName(visit.getName());
-        List<Sighting> sightings = app.getDBI().list(tempSighting);
-        lblNumberOfSightings.setText(Integer.toString(sightings.size()));
-        setupNumberOfSightingImages();
-        List<String> allElements = new ArrayList<String>();
-        for (int i = 0; i < sightings.size(); i++) {
-            if (!allElements.contains(sightings.get(i).getElementName()))
-                allElements.add(sightings.get(i).getElementName());
-        }
-        lblNumberOfElements.setText(Integer.toString(allElements.size()));
         if (visit.getName() != null) {
             tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
             // Sort rows for Sightings
             List tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(1, SortOrder.ASCENDING));
             tblSightings.getRowSorter().setSortKeys(tempList);
+            Sighting tempSighting = new Sighting();
+            tempSighting.setVisitName(visit.getName());
+            List<Sighting> sightings = app.getDBI().list(tempSighting);
+            lblNumberOfSightings.setText(Integer.toString(sightings.size()));
+            setupNumberOfSightingImages();
+            List<String> allElements = new ArrayList<String>();
+            for (int i = 0; i < sightings.size(); i++) {
+                if (!allElements.contains(sightings.get(i).getElementName()))
+                    allElements.add(sightings.get(i).getElementName());
+            }
+            lblNumberOfElements.setText(Integer.toString(allElements.size()));
         }
-        else
+        else {
             tblSightings.setModel(new DefaultTableModel(new String[]{"No Sightings"}, 0));
+            lblNumberOfSightings.setText("0");
+            lblNumberOfElements.setText("0");
+        }
         // Setup table column sizes
         resizeTables();
 
@@ -1031,7 +1037,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             if (visit.getName().length() > 0) {
                 final JDialog dialog = new JDialog(app.getMainFrame(), "Add New Sightings", true);
                 dialog.setSize(760, 555);
-                dialog.add(new PanelChecklist());
+                dialog.add(new PanelChecklist(locationForVisit, visit, this));
                 dialog.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif")).getImage());
                 ActionListener escListener = new ActionListener() {
                     @Override
@@ -1061,6 +1067,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
             }
             else if (i == 1) {
                 column.setPreferredWidth(65);
+                column.setCellRenderer(new DateCellRenderer());
             }
             else if (i == 2) {
                 column.setPreferredWidth(55);

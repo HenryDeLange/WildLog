@@ -250,6 +250,9 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
+            <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new SimpleDateFormat(&quot;dd MMM yyyy&quot;)" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="dtpSightingDate" noResource="true"/>
           </Properties>
           <Constraints>

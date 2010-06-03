@@ -1458,6 +1458,23 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="settingsMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="settingsMenu.text"/>
+            <Property name="name" type="java.lang.String" value="settingsMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseWMS">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="chkMnuUseWMS.text"/>
+                <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuUseWMSItemStateChanged"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="jMenu2.text"/>
@@ -1498,23 +1515,6 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="settingsMenu">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="settingsMenu.text"/>
-            <Property name="name" type="java.lang.String" value="settingsMenu" noResource="true"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseWMS">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="chkMnuUseWMS.text"/>
-                <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuUseWMSItemStateChanged"/>
-              </Events>
-            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="helpMenu">

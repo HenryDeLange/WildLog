@@ -922,14 +922,15 @@ public class PanelLocation extends javax.swing.JPanel {
             cmbLatitude.setSelectedItem(locationWL.getLatitude());
         if (locationWL.getLongitude() != null)
             cmbLongitude.setSelectedItem(locationWL.getLongitude());
-        Visit tempVisit = new Visit();
-        tempVisit.setLocationName(locationWL.getName());
-        List<Visit> visits = app.getDBI().list(tempVisit);
-        lblNumberOfVisits.setText(Integer.toString(visits.size()));
+        
         rdbLocation.setSelected(true);
         //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
 
         if (locationWL.getName() != null) {
+            Visit tempVisit = new Visit();
+            tempVisit.setLocationName(locationWL.getName());
+            List<Visit> visits = app.getDBI().list(tempVisit);
+            lblNumberOfVisits.setText(Integer.toString(visits.size()));
             tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(locationWL));
             tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
             // Sort rows for visits
@@ -941,6 +942,7 @@ public class PanelLocation extends javax.swing.JPanel {
             tblVisit.getRowSorter().setSortKeys(tempList);
         }
         else {
+            lblNumberOfVisits.setText("0");
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Visits"}, 0));
             tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
         }
@@ -1052,22 +1054,27 @@ public class PanelLocation extends javax.swing.JPanel {
     }//GEN-LAST:event_btnMapSightingsActionPerformed
 
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
-        if (rdbLocation.isSelected()) {
-            tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
+        if (locationWL.getName() != null) {
+            if (rdbLocation.isSelected()) {
+                tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
+            }
+            else {
+                if  (tblVisit.getSelectedRowCount() == 1) {
+                    tblElement.setModel(utilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
+                }
+                else tblElement.setModel(new DefaultTableModel(new String[]{"Please selected a Visit"}, 0));
+            }
+            lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+            // Setup table column sizes
+            resizeTables();
+            // Sort rows for Element
+            List tempList = new ArrayList<SortKey>(1);
+            tempList.add(new SortKey(0, SortOrder.ASCENDING));
+            tblElement.getRowSorter().setSortKeys(tempList);
         }
         else {
-            if  (tblVisit.getSelectedRowCount() == 1) {
-                tblElement.setModel(utilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
-            }
-            else tblElement.setModel(new DefaultTableModel(new String[]{"Please selected a Visit"}, 0));
+            lblNumberOfElements.setText("0");
         }
-        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
-        // Setup table column sizes
-        resizeTables();
-        // Sort rows for Element
-        List tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_rdbLocationItemStateChanged
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased

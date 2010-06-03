@@ -321,13 +321,13 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         advancedMenu = new javax.swing.JMenu();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
+        settingsMenu = new javax.swing.JMenu();
+        chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
-        settingsMenu = new javax.swing.JMenu();
-        chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
@@ -1127,6 +1127,20 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         menuBar.add(advancedMenu);
 
+        settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
+        settingsMenu.setName("settingsMenu"); // NOI18N
+
+        chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
+        chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
+        chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuUseWMSItemStateChanged(evt);
+            }
+        });
+        settingsMenu.add(chkMnuUseWMS);
+
+        menuBar.add(settingsMenu);
+
         jMenu2.setText(resourceMap.getString("jMenu2.text")); // NOI18N
         jMenu2.setName("jMenu2"); // NOI18N
 
@@ -1151,20 +1165,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         jMenu2.add(jMenu3);
 
         menuBar.add(jMenu2);
-
-        settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
-        settingsMenu.setName("settingsMenu"); // NOI18N
-
-        chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
-        chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
-        chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                chkMnuUseWMSItemStateChanged(evt);
-            }
-        });
-        settingsMenu.add(chkMnuUseWMS);
-
-        menuBar.add(settingsMenu);
 
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N

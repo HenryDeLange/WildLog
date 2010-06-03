@@ -14,15 +14,25 @@
 
 package wildlog.ui.panel;
 
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
+import javax.swing.border.LineBorder;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
+import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 
 /**
  *
@@ -31,12 +41,21 @@ import wildlog.data.enums.ElementType;
 public class PanelChecklist extends javax.swing.JPanel {
      // Variables:
     private WildLogApp app;
+    private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
+    private Location location;
+    private Visit visit;
 
     /** Creates new form PanelMoveVisit */
-    public PanelChecklist() {
+    public PanelChecklist(Location inLocation, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
         initComponents();
         app = (WildLogApp) Application.getInstance();
-        loadLists();
+        loadElementList();
+        location = inLocation;
+        visit = inVisit;
+        panelToRefresh = inPanelToRefresh;
+
+        DefaultListModel sightedModel = new DefaultListModel();
+        lstSightedCreatures.setModel(sightedModel);
     }
 
     /** This method is called from within the constructor to
@@ -78,10 +97,16 @@ public class PanelChecklist extends javax.swing.JPanel {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstFromCreatures.setFont(resourceMap.getFont("lstFromCreatures.font")); // NOI18N
+        lstFromCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstFromCreatures.setName("lstFromCreatures"); // NOI18N
         lstFromCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstFromCreaturesMouseClicked(evt);
+            }
+        });
+        lstFromCreatures.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lstFromCreaturesKeyPressed(evt);
             }
         });
         jScrollPane1.setViewportView(lstFromCreatures);
@@ -91,16 +116,23 @@ public class PanelChecklist extends javax.swing.JPanel {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstSightedCreatures.setFont(resourceMap.getFont("lstSightedCreatures.font")); // NOI18N
+        lstSightedCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstSightedCreatures.setName("lstSightedCreatures"); // NOI18N
         lstSightedCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstSightedCreaturesMouseClicked(evt);
             }
         });
+        lstSightedCreatures.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lstSightedCreaturesKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(lstSightedCreatures);
 
         add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, 350, 350));
 
+        btnConfirm.setBackground(resourceMap.getColor("btnConfirm.background")); // NOI18N
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
         btnConfirm.setName("btnConfirm"); // NOI18N
@@ -117,29 +149,54 @@ public class PanelChecklist extends javax.swing.JPanel {
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, -1, -1));
 
         chkElementType.setText(resourceMap.getString("chkElementType.text")); // NOI18N
+        chkElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkElementType.setName("chkElementType"); // NOI18N
         chkElementType.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 chkElementTypeItemStateChanged(evt);
             }
         });
+        chkElementType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkElementTypeActionPerformed(evt);
+            }
+        });
         add(chkElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
 
         cmbElementType.setMaximumRowCount(9);
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
+        cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setEnabled(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
+        cmbElementType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbElementTypeActionPerformed(evt);
+            }
+        });
         add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 310, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchKeyPressed(evt);
+            }
+        });
         add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 230, -1));
 
         btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
+        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSearch.setName("btnSearch"); // NOI18N
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
         add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, 100, -1));
 
+        dtpDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        dtpDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpDate.setName("dtpDate"); // NOI18N
         add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 130, 140, -1));
 
@@ -155,25 +212,53 @@ public class PanelChecklist extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        // Save sightings here
+        if (dtpDate.getDate() != null) {
+            dtpDate.setBorder(null);
+            for (int t = 0; t < lstSightedCreatures.getModel().getSize(); t++) {
+                String elementName = lstSightedCreatures.getModel().getElementAt(t).toString();
+                Sighting tempSighting = new Sighting();
+                tempSighting.setElementName(elementName);
+                tempSighting.setLocationName(location.getName());
+                tempSighting.setVisitName(visit.getName());
+                tempSighting.setDate(dtpDate.getDate());
+                tempSighting.setCertainty(Certainty.SURE);
+                app.getDBI().createOrUpdate(tempSighting);
+            }
+
+            if (panelToRefresh != null) {
+                panelToRefresh.refreshTableForSightings();
+            }
+            // Close the dialog - (Evt is null if the Image Upload calls save method...)
+            if (evt != null) {
+                JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
+                dialog.dispose();
+            }
+        }
+        else {
+            dtpDate.setBorder(new LineBorder(Color.RED));
+        }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
     private void lstFromCreaturesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromCreaturesMouseClicked
-        if (evt.getClickCount() == 2) {
-            String temp = lstFromCreatures.getSelectedValue().toString();
+        if (evt == null || evt.getClickCount() == 2) {
+            Element temp = (Element)lstFromCreatures.getSelectedValue();
             DefaultListModel model = (DefaultListModel)lstSightedCreatures.getModel();
-            if (!model.contains(temp)) {
-                model.addElement(temp);
+            if (temp != null) {
+                if (!model.contains(temp.toString())) {
+                    model.addElement(temp.toString());
+                }
             }
         }
     }//GEN-LAST:event_lstFromCreaturesMouseClicked
 
     private void lstSightedCreaturesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstSightedCreaturesMouseClicked
-        if (evt.getClickCount() == 2) {
-            String temp = lstSightedCreatures.getSelectedValue().toString();
-            DefaultListModel model = (DefaultListModel)lstSightedCreatures.getModel();
-            if (model.contains(temp)) {
-                model.removeElement(temp);
+        if (evt == null || evt.getClickCount() == 2) {
+            if (lstSightedCreatures.getSelectedIndex() >= 0) {
+                String temp = lstSightedCreatures.getSelectedValue().toString();
+                DefaultListModel model = (DefaultListModel)lstSightedCreatures.getModel();
+                if (model.contains(temp)) {
+                    model.removeElement(temp);
+                }
             }
         }
     }//GEN-LAST:event_lstSightedCreaturesMouseClicked
@@ -182,19 +267,49 @@ public class PanelChecklist extends javax.swing.JPanel {
         cmbElementType.setEnabled(chkElementType.isSelected());
     }//GEN-LAST:event_chkElementTypeItemStateChanged
 
+    private void chkElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkElementTypeActionPerformed
+        loadElementList();
+    }//GEN-LAST:event_chkElementTypeActionPerformed
+
+    private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
+        loadElementList();
+    }//GEN-LAST:event_cmbElementTypeActionPerformed
+
+    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnSearchActionPerformed(null);
+    }//GEN-LAST:event_txtSearchKeyPressed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        loadElementList();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void lstFromCreaturesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstFromCreaturesKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            lstFromCreaturesMouseClicked(null);
+    }//GEN-LAST:event_lstFromCreaturesKeyPressed
+
+    private void lstSightedCreaturesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstSightedCreaturesKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            lstSightedCreaturesMouseClicked(null);
+    }//GEN-LAST:event_lstSightedCreaturesKeyPressed
+
 
     // Private Methods
-    private void loadLists() {
+    private void loadElementList() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
+        Element searchElement = new Element();
+        if (chkElementType.isSelected())
+            searchElement.setType((ElementType)cmbElementType.getSelectedItem());
+        if (txtSearch.getText().length() > 0)
+            searchElement.setPrimaryName(txtSearch.getText());
+        List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElement));
         Collections.sort(elements);
         DefaultListModel fromModel = new DefaultListModel();
-        DefaultListModel sightedModel = new DefaultListModel();
         for (Element tempElement : elements) {
             fromModel.addElement(tempElement);
         }
         lstFromCreatures.setModel(fromModel);
-        lstSightedCreatures.setModel(sightedModel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -63,10 +63,12 @@
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
               <StringArray count="0"/>
             </Property>
+            <Property name="selectionMode" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="lstFromCreatures" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstFromCreaturesMouseClicked"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="lstFromCreaturesKeyPressed"/>
           </Events>
         </Component>
       </SubComponents>
@@ -92,16 +94,19 @@
             <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
               <StringArray count="0"/>
             </Property>
+            <Property name="selectionMode" type="int" value="0"/>
             <Property name="name" type="java.lang.String" value="lstSightedCreatures" noResource="true"/>
           </Properties>
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lstSightedCreaturesMouseClicked"/>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="lstSightedCreaturesKeyPressed"/>
           </Events>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JButton" name="btnConfirm">
       <Properties>
+        <Property name="background" type="java.awt.Color" resourceKey="btnConfirm.background"/>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnConfirm.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnConfirm.text"/>
         <Property name="name" type="java.lang.String" value="btnConfirm" noResource="true"/>
@@ -130,10 +135,14 @@
     <Component class="javax.swing.JCheckBox" name="chkElementType">
       <Properties>
         <Property name="text" type="java.lang.String" resourceKey="chkElementType.text"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="chkElementType" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkElementTypeItemStateChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="chkElementTypeActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -147,9 +156,15 @@
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new DefaultComboBoxModel(ElementType.values())" type="code"/>
         </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="cmbElementType" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbElementTypeActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="40" y="30" width="310" height="-1"/>
@@ -161,6 +176,9 @@
         <Property name="text" type="java.lang.String" resourceKey="txtSearch.text"/>
         <Property name="name" type="java.lang.String" value="txtSearch" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtSearchKeyPressed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="60" width="230" height="-1"/>
@@ -171,8 +189,14 @@
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnSearch.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnSearch.text"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="250" y="60" width="100" height="-1"/>
@@ -181,6 +205,12 @@
     </Component>
     <Component class="org.jdesktop.swingx.JXDatePicker" name="dtpDate">
       <Properties>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="new SimpleDateFormat(&quot;dd MMM yyyy&quot;)" type="code"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="dtpDate" noResource="true"/>
       </Properties>
       <Constraints>

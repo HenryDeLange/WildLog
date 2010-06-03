@@ -1,0 +1,1 @@
+SwingX is licensed uder the LGPL (http://www.gnu.org/copyleft/lesser.html)

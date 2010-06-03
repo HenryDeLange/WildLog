@@ -334,6 +334,7 @@ public class Sighting implements Comparable<Sighting> {
     }
 
     public String getDetails() {
+        if (details == null) details = "";
         return details;
     }
 
