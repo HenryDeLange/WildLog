@@ -15,13 +15,10 @@
 package wildlog.data.dataobjects;
 
 import KmlGenerator.objects.KmlEntry;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.List;
-import javax.imageio.ImageIO;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
@@ -34,7 +31,7 @@ import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Location class
-public class Location implements Comparable<Location> {
+public class Location implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML {
     private String name; // Used as index (ID)
     private String description;
     private Province province; // For locations outside south africa the country name must be used
@@ -91,6 +88,7 @@ public class Location implements Comparable<Location> {
         return 0;
     }
 
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
         List<Foto> fotos = inApp.getDBI().list(new Foto("LOCATION-" + name));
@@ -139,7 +137,12 @@ public class Location implements Comparable<Location> {
 //        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
         if (inIncludeImages) {
             // Generate image of the map
-            inApp.getMapFrame().clearPoints();
+            /**
+* *********************************************************
+             * Die code werk halfpad. Dit generate die image, maar die map word
+             * deur mekaar as mens rond speel met die map zoom en dan HTML
+             * generate...
+            inApp.getMapOffline().clearPoints();
             if (latitude != null && longitude != null)
                 if (!latitude.equals(Latitudes.NONE) && !longitude.equals(Longitudes.NONE)) {
                     float lat = latDegrees;
@@ -152,15 +155,15 @@ public class Location implements Comparable<Location> {
                     lon = lon + (lonSecondsFloat/60f)/60f;
                     if (longitude.equals(Longitudes.WEST))
                         lon = -1 * lon;
-                    inApp.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
+                    inApp.getMapOffline().addPoint(lat, lon, new Color(70, 120, 190));
                 }
-            inApp.getMapFrame().changeTitle("WildLog Map - Location: " + name);
-            inApp.getMapFrame().showMap(300, 300, 42000000f);
-            inApp.getMapFrame().getFrameForImageDrawing().pack();
-            inApp.getMapFrame().getFrameForImageDrawing().setVisible(false);
-            BufferedImage image = new BufferedImage(inApp.getMapFrame().getFrameForImageDrawing().getContentPane().getWidth(), inApp.getMapFrame().getFrameForImageDrawing().getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
+            inApp.getMapOffline().changeTitle("WildLog Map - Location: " + name);
+            inApp.getMapOffline().showMap(300, 300, 42000000f);
+            inApp.getMapOffline().getFrameForImageDrawing().pack();
+            inApp.getMapOffline().getFrameForImageDrawing().setVisible(false);
+            BufferedImage image = new BufferedImage(inApp.getMapOffline().getFrameForImageDrawing().getContentPane().getWidth(), inApp.getMapOffline().getFrameForImageDrawing().getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics graphics = image.getGraphics();
-            inApp.getMapFrame().getFrameForImageDrawing().getContentPane().printAll(graphics);
+            inApp.getMapOffline().getFrameForImageDrawing().getContentPane().printAll(graphics);
             String folders = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Maps";
             File temp = new File(folders);
             temp.mkdirs();
@@ -171,17 +174,18 @@ public class Location implements Comparable<Location> {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            htmlLocation = htmlLocation + "</br><b>Map:</b></br/><img width='400px' src='" + mapPath + "' />";
-            
+            htmlLocation = htmlLocation + "<br/><b>Map:</b><br/><img width='400px' src='" + mapPath + "' />";
+            */
             // Fotos
-            htmlLocation = htmlLocation + "</br><b>Photos:</b></br/>" + fotoString;
+            htmlLocation = htmlLocation + "<br/><b>Photos:</b><br/>" + fotoString;
         }
         if (inIsRecursive)
-            htmlLocation = htmlLocation + "</br><H3>Visits:</H3><hr/>" + visitsString;
+            htmlLocation = htmlLocation + "<br/><H3>Visits:</H3><hr/>" + visitsString;
         htmlLocation = htmlLocation + "</body>";
         return htmlLocation;
     }
 
+    @Override
     public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);

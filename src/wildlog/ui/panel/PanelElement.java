@@ -14,6 +14,8 @@
 
 package wildlog.ui.panel;
 
+import KmlGenerator.KmlGenerator;
+import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -63,9 +65,11 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
+import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
 import wildlog.utils.UtilsHTML;
+import wildlog.utils.ui.UtilMapGenerator;
 
 
 /**
@@ -245,8 +249,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         rdbSightings = new javax.swing.JRadioButton();
         jLabel2 = new javax.swing.JLabel();
         txtReferenceID = new javax.swing.JTextField();
-        btnHTML = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
+        btnHTML = new javax.swing.JButton();
+        btnKML = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -433,7 +438,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
 
         jLabel69.setText(resourceMap.getString("jLabel69.text")); // NOI18N
         jLabel69.setName("jLabel69"); // NOI18N
-        elementIncludes.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 230, -1, -1));
+        elementIncludes.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 410, -1, -1));
 
         jLabel70.setText(resourceMap.getString("jLabel70.text")); // NOI18N
         jLabel70.setName("jLabel70"); // NOI18N
@@ -504,7 +509,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
         jScrollPane18.setViewportView(txtBehaviourDescription);
 
-        elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 590, -1));
+        elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 310, 80));
 
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
@@ -663,7 +668,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnMapActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 133, 110, 40));
+        elementIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 40));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -676,7 +681,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtNutrition.setName("txtNutrition"); // NOI18N
         jScrollPane1.setViewportView(txtNutrition);
 
-        elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 250, 270, 60));
+        elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 270, 60));
 
         btnAddSighting.setFont(resourceMap.getFont("btnAddSighting.font")); // NOI18N
         btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
@@ -689,7 +694,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnAddSightingActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 110, 40));
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 40));
 
         lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -729,17 +734,6 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         txtReferenceID.setName("txtReferenceID"); // NOI18N
         elementIncludes.add(txtReferenceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 76, 80, -1));
 
-        btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
-        btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
-        btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnHTML.setName("btnHTML"); // NOI18N
-        btnHTML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnHTMLActionPerformed(evt);
-            }
-        });
-        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 218, 110, 30));
-
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -749,23 +743,45 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 btnReportActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 176, 110, 40));
+        elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 200, 110, 40));
+
+        btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
+        btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHTML.setName("btnHTML"); // NOI18N
+        btnHTML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHTMLActionPerformed(evt);
+            }
+        });
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 110, 30));
+
+        btnKML.setIcon(resourceMap.getIcon("btnKML.icon")); // NOI18N
+        btnKML.setText(resourceMap.getString("btnKML.text")); // NOI18N
+        btnKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnKML.setName("btnKML"); // NOI18N
+        btnKML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKMLActionPerformed(evt);
+            }
+        });
+        elementIncludes.add(btnKML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 290, 110, 30));
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 490, -1, -1));
+        elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 495, -1, -1));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
-        elementIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 490, -1, -1));
+        elementIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 495, -1, -1));
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
-        elementIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 490, -1, -1));
+        elementIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 495, -1, -1));
 
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
-        elementIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 490, -1, -1));
+        elementIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 495, -1, -1));
 
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
@@ -1036,7 +1052,10 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
-        app.getMapFrame().clearPoints();
+        // Clear old points
+        UtilMapGenerator.clearMap(app);
+        
+        // Load points
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
         List<Sighting> sightingList = app.getDBI().list(sigting);
@@ -1055,7 +1074,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 lon = lon + (sightingList.get(t).getLonSecondsFloat()/60f)/60f;
                 if (sightingList.get(t).getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
-                app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
+                UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sightingList.get(t), app);
                 foundPosition = true;
             }
             // If the sighting did not have a position use the location's
@@ -1071,11 +1090,20 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 lon = lon + (location.getLonSecondsFloat()/60f)/60f;
                 if (location.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
-                app.getMapFrame().addPoint(lat, lon, new Color(70, 120, 190));
+                UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightingList.get(t), app);
             }
         }
-        app.getMapFrame().changeTitle("WildLog Map - Creature: " + element.getPrimaryName());
-        app.getMapFrame().showMap();
+        
+        // Open Map
+        if (app.isUseOnlineMap()) {
+            app.getMapOnline().setTitle("WildLog Map - Online: " + element.getPrimaryName());
+            app.getMapOnline().setLocationRelativeTo(this);
+            app.getMapOnline().showMap(Color.yellow);
+        }
+        else {
+            app.getMapOffline().changeTitle("WildLog Map - Offline: " + element.getPrimaryName());
+            app.getMapOffline().showMap();
+        }
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
@@ -1182,6 +1210,34 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
     }//GEN-LAST:event_btnReportActionPerformed
 
+    private void btnKMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKMLActionPerformed
+        // First export to HTML
+        UtilsHTML.exportHTML(element, app);
+        // Nou doen die KML deel
+        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
+        File tempFile = new File(path);
+        tempFile.mkdirs();
+        // Make sure icons exist in the KML folder
+        KmlUtil.copyKmlIcons(app, path);
+        // KML Stuff
+        KmlGenerator kmlgen = new KmlGenerator();
+        String finalPath = path + File.separatorChar + "WildLogMarkers - Creature (" + element.getPrimaryName() + ").kml";
+        kmlgen.setKmlPath(finalPath);
+        // Get entries for Sightings and Locations
+        List<KmlEntry> entries = new ArrayList<KmlEntry>();
+        // Sightings
+        Sighting tempSighting = new Sighting();
+        tempSighting.setElementName(element.getPrimaryName());
+        List<Sighting> listSightings = app.getDBI().list(tempSighting);
+        for (int t = 0; t < listSightings.size(); t++) {
+            entries.add(listSightings.get(t).toKML(t, app));
+        }
+        // Generate KML
+        kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
+        // Try to open the Kml file
+        Utils.openFile(finalPath);
+    }//GEN-LAST:event_btnKMLActionPerformed
+
     private void resizeTables() {
         if (rdbSightings.isSelected()) {
             TableColumn column = null;
@@ -1253,6 +1309,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnHTML;
+    private javax.swing.JButton btnKML;
     private javax.swing.JButton btnMap;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;

@@ -17,6 +17,7 @@ package wildlog.data.dataobjects;
 
 import java.util.List;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -30,7 +31,7 @@ import wildlog.utils.UtilsHTML;
 
 // Foundation for Elements classes
 // Use inheritance for animal, bird, plant, fish, insects, etc
-public class Element implements Comparable<Element> {
+public class Element implements Comparable<Element>, DataObjectWithHTML {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
@@ -98,6 +99,7 @@ public class Element implements Comparable<Element> {
         return 0;
     }
 
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
         List<Foto> fotos = inApp.getDBI().list(new Foto("ELEMENT-" + primaryName));
@@ -134,10 +136,20 @@ public class Element implements Comparable<Element> {
         htmlElement = htmlElement + "<br/><b>Minimum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
         htmlElement = htmlElement + "<br/><b>Maximum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
         htmlElement = htmlElement + "<br/><b>Lifespan:</b> " + UtilsHTML.formatString(lifespan);
-        htmlElement = htmlElement + "<br/><b>Breeding Duration:</b> " + UtilsHTML.formatString(breedingDuration);
+        htmlElement = htmlElement + "<br/><b>Breeding:</b> " + UtilsHTML.formatString(breedingDuration);
         htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + UtilsHTML.formatString(breedingNumber);
         if (inIncludeImages)
-            htmlElement = htmlElement + "</br><b>Photos:</b></br/>" + fotoString;
+            htmlElement = htmlElement + "<br/><b>Photos:</b><br/>" + fotoString;
+        if (inIsRecursive) {
+            htmlElement = htmlElement + "<br/><H2>Sightings:</H2>";
+            Sighting tempSighting = new Sighting();
+            tempSighting.setElementName(primaryName);
+            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+            for (Sighting temp : sightings) {
+                htmlElement = htmlElement + "<br/>" + temp.toHTML(false, inIncludeImages, inApp);
+            }
+        }
+
         htmlElement = htmlElement + "</body>";
         return htmlElement;
     }

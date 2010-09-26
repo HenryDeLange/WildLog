@@ -16,7 +16,6 @@ package wildlog;
 
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
-import KmlGenerator.objects.KmlStyle;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -65,6 +64,7 @@ import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.FotoType;
+import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.PanelElement;
 import wildlog.ui.panel.PanelLocation;
 import wildlog.ui.panel.PanelMergeElements;
@@ -116,6 +116,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         ResourceMap resourceMap = getResourceMap();
         int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
         messageTimer = new Timer(messageTimeout, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 statusMessageLabel.setText("");
             }
@@ -126,6 +127,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
                 busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
@@ -138,6 +140,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
                 if ("started".equals(propertyName)) {
@@ -1130,6 +1133,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
         settingsMenu.setName("settingsMenu"); // NOI18N
 
+        chkMnuUseWMS.setSelected(true);
         chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
         chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
         chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
@@ -1953,8 +1957,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     }//GEN-LAST:event_cmbElementTypesBrowseTabActionPerformed
 
     private void chkMnuUseWMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseWMSItemStateChanged
-        app.resetMapFrame();
-        app.setUseWMS(chkMnuUseWMS.isSelected());
+        app.setUseOnlineMap(chkMnuUseWMS.isSelected());
     }//GEN-LAST:event_chkMnuUseWMSItemStateChanged
 
     private void browseByLocation() {
@@ -2149,175 +2152,17 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     public void exportToKML() {
         // First do the HTML export to generate the Images in the right place
         exportToHTML();
-
-        // Then do KML export
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        // Then do KML export
         String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
         File tempFile = new File(path);
         tempFile.mkdirs();
         // Make sure icons exist in the KML folder
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalCarnivore.gif"), new File(path + File.separatorChar + "AnimalCarnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalHerbivore.gif"), new File(path + File.separatorChar + "AnimalHerbivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOmnivore.gif"), new File(path + File.separatorChar + "AnimalOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AnimalOther.gif"), new File(path + File.separatorChar + "AnimalOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdCarnivore.gif"), new File(path + File.separatorChar + "BirdCarnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdHerbivore.gif"), new File(path + File.separatorChar + "BirdHerbivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOmnivore.gif"), new File(path + File.separatorChar + "BirdOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/BirdOther.gif"), new File(path + File.separatorChar + "BirdOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Plant.gif"), new File(path + File.separatorChar + "Plant.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/PlantOther.gif"), new File(path + File.separatorChar + "PlantOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Amphibian.gif"), new File(path + File.separatorChar + "Amphibian.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/AmphibianOther.gif"), new File(path + File.separatorChar + "AmphibianOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/FishCarnivore.gif"), new File(path + File.separatorChar + "FishCarnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/FishHerbivore.gif"), new File(path + File.separatorChar + "FishHerbivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/FishOmnivore.gif"), new File(path + File.separatorChar + "FishOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/FishOther.gif"), new File(path + File.separatorChar + "FishOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/InsectCarnivore.gif"), new File(path + File.separatorChar + "InsectCarnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/InsectHerbivore.gif"), new File(path + File.separatorChar + "InsectHerbivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/InsectOmnivore.gif"), new File(path + File.separatorChar + "InsectOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/InsectOther.gif"), new File(path + File.separatorChar + "InsectOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/ReptileCarnivore.gif"), new File(path + File.separatorChar + "ReptileCarnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/ReptileHerbivore.gif"), new File(path + File.separatorChar + "ReptileHerbivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/ReptileOmnivore.gif"), new File(path + File.separatorChar + "ReptileOmnivore.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/ReptileOther.gif"), new File(path + File.separatorChar + "ReptileOther.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Other.gif"), new File(path + File.separatorChar + "Other.gif"));
-        Utils.copyFile(app.getClass().getResourceAsStream("resources/mapping/Location.gif"), new File(path + File.separatorChar + "Location.gif"));
+        KmlUtil.copyKmlIcons(app, path);
         // KML Stuff
         KmlGenerator kmlgen = new KmlGenerator();
         kmlgen.setKmlPath(path + File.separatorChar + "WildLogMarkers.kml");
-
-        List<KmlStyle> styles = new ArrayList<KmlStyle>();
-        KmlStyle tempStyle = new KmlStyle();
-        tempStyle.setName("locationStyle");
-        tempStyle.setIconName("locationIcon");
-        tempStyle.setIconPath("Location.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("animalCarnivoreStyle");
-        tempStyle.setIconName("animalCarnivoreIcon");
-        tempStyle.setIconPath("AnimalCarnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("animalHerbivoreStyle");
-        tempStyle.setIconName("animalHerbivoreIcon");
-        tempStyle.setIconPath("AnimalHerbivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("animalOmnivoreStyle");
-        tempStyle.setIconName("animalOmnivoreIcon");
-        tempStyle.setIconPath("AnimalOmnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("animalOtherStyle");
-        tempStyle.setIconName("animalOtherIcon");
-        tempStyle.setIconPath("AnimalOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("birdCarnivoreStyle");
-        tempStyle.setIconName("birdCarnivoreIcon");
-        tempStyle.setIconPath("BirdCarnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("birdHerbivoreStyle");
-        tempStyle.setIconName("birdHerbivoreIcon");
-        tempStyle.setIconPath("BirdHerbivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("birdOmnivoreStyle");
-        tempStyle.setIconName("birdOmnivoreIcon");
-        tempStyle.setIconPath("BirdOmnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("birdOtherStyle");
-        tempStyle.setIconName("birdOtherIcon");
-        tempStyle.setIconPath("BirdOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("plantStyle");
-        tempStyle.setIconName("plantIcon");
-        tempStyle.setIconPath("Plant.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("plantOtherStyle");
-        tempStyle.setIconName("plantOtherIcon");
-        tempStyle.setIconPath("PlantOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("amphibianStyle");
-        tempStyle.setIconName("amphibianIcon");
-        tempStyle.setIconPath("Amphibian.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("amphibianOtherStyle");
-        tempStyle.setIconName("amphibianOtherIcon");
-        tempStyle.setIconPath("AmphibianOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("fishCarnivoreStyle");
-        tempStyle.setIconName("fishCarnivoreIcon");
-        tempStyle.setIconPath("FishCarnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("fishHerbivoreStyle");
-        tempStyle.setIconName("fishHerbivoreIcon");
-        tempStyle.setIconPath("FishHerbivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("fishOmnivoreStyle");
-        tempStyle.setIconName("fishOmnivoreIcon");
-        tempStyle.setIconPath("FishOmnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("fishOtherStyle");
-        tempStyle.setIconName("fishOtherIcon");
-        tempStyle.setIconPath("FishOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("insectCarnivoreStyle");
-        tempStyle.setIconName("insectCarnivoreIcon");
-        tempStyle.setIconPath("InsectCarnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("insectHerbivoreStyle");
-        tempStyle.setIconName("insectHerbivoreIcon");
-        tempStyle.setIconPath("InsectHerbivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("insectOmnivoreStyle");
-        tempStyle.setIconName("insectOmnivoreIcon");
-        tempStyle.setIconPath("InsectOmnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("insectOtherStyle");
-        tempStyle.setIconName("insectOtherIcon");
-        tempStyle.setIconPath("InsectOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("reptileCarnivoreStyle");
-        tempStyle.setIconName("reptileCarnivoreIcon");
-        tempStyle.setIconPath("ReptileCarnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("reptileHerbivoreStyle");
-        tempStyle.setIconName("reptileHerbivoreIcon");
-        tempStyle.setIconPath("ReptileHerbivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("reptileOmnivoreStyle");
-        tempStyle.setIconName("reptileOmnivoreIcon");
-        tempStyle.setIconPath("ReptileOmnivore.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("reptileOtherStyle");
-        tempStyle.setIconName("reptileOtherIcon");
-        tempStyle.setIconPath("ReptileOther.gif");
-        styles.add(tempStyle);
-        tempStyle = new KmlStyle();
-        tempStyle.setName("otherStyle");
-        tempStyle.setIconName("otherIcon");
-        tempStyle.setIconPath("Other.gif");
-        styles.add(tempStyle);
-
+        // Get entries for Sightings and Locations
         List<KmlEntry> entries = new ArrayList<KmlEntry>();
         // Sightings
         List<Sighting> listSightings = app.getDBI().list(new Sighting());
@@ -2329,11 +2174,10 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         for (int t = 0; t < listLocations.size(); t++) {
             entries.add(listLocations.get(t).toKML(listSightings.size() + t, app));
         }
-
-        kmlgen.generateFile(entries, styles);
-
+        // Generate KML
+        kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
+        // Try to open the Kml file
         Utils.openFile(path + File.separatorChar + "WildLogMarkers.kml");
-        
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -2431,7 +2275,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     @Action
     public void openDBConsole() {
-        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.134.jar");
+        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.143.jar");
     }
 
     private void loadPrevFile(List<Foto> inFotos) {

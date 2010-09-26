@@ -1,0 +1,133 @@
+package wildlog.mapping.layers;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.swing.JTextPane;
+import org.jdesktop.swingx.JXMapKit;
+import org.jdesktop.swingx.JXMapViewer;
+import org.jdesktop.swingx.mapviewer.GeoPosition;
+import org.jdesktop.swingx.mapviewer.Waypoint;
+import org.jdesktop.swingx.mapviewer.WaypointPainter;
+import org.jdesktop.swingx.mapviewer.WaypointRenderer;
+import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.mapping.other.WildLogScrollPanel;
+
+/**
+ *
+ * @author Henry
+ */
+public class MapOnlinePointLayer {
+    class MapPoint {
+        public float latitude;
+        public float longitude;
+        public DataObjectWithHTML objectWithHTML;
+    }
+    final private JXMapKit map;
+    private List<MapPoint> points = new ArrayList<MapPoint>();
+    
+    public MapOnlinePointLayer(JXMapKit inMap) {
+        map = inMap;
+    }
+
+    public void clearPoints() {
+        points.clear();
+        map.getMainMap().setOverlayPainter(null);
+//        for (MouseListener mouse : map.getMainMap().getMouseListeners())
+//            if (mouse instanceof WildLogMapMouseListener)
+//                map.getMainMap().removeMouseListener(mouse);
+    }
+
+    public void addPoint(final Float inLatitude, final Float inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
+        MapPoint point = new MapPoint();
+        point.latitude = inLatitude;
+        point.longitude = inLongitude;
+        point.objectWithHTML = inObjectWithHTML;
+        points.add(point);
+    }
+
+    public void showPopup(MouseEvent inEvent, WildLogApp inApp) {
+        for (MapPoint point : points) {
+            GeoPosition gp = new GeoPosition(point.latitude, point.longitude);
+            //convert to world bitmap
+            Point2D gp_pt = map.getMainMap().getTileFactory().geoToPixel(gp, map.getMainMap().getZoom());
+            //convert to screen
+            Rectangle rect = map.getMainMap().getViewportBounds();
+            Point converted_gp_pt = new Point((int)gp_pt.getX()-rect.x, (int)gp_pt.getY()-rect.y);
+            //check if near the mouse
+            if(converted_gp_pt.distance(inEvent.getPoint()) < 10) {
+                WildLogScrollPanel scrollPane = null;
+                boolean foundScrollPane = false;
+                for (Component comp : map.getMainMap().getComponents()) {
+                    if (comp instanceof WildLogScrollPanel) {
+                        scrollPane = (WildLogScrollPanel)comp;
+                        JTextPane textPane = (JTextPane)scrollPane.getViewport().getComponent(0);
+                        textPane.setText(point.objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src='", "<img src='file:\\\\"));
+                        foundScrollPane = true;
+                        break;
+                    }
+                }
+                if (!foundScrollPane) {
+                    JTextPane textPane = new JTextPane();
+                    textPane.setEditable(false);
+                    textPane.setContentType("text/html");
+                    textPane.setPreferredSize(new Dimension(300, 300));
+                    scrollPane = new WildLogScrollPanel(textPane);
+                    map.getMainMap().add(scrollPane);
+                    textPane.setText(point.objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src='", "<img src='file:\\\\"));
+                }
+                scrollPane.setLocation(new Point(15, 15));
+                scrollPane.setVisible(true);
+                break;
+            } 
+            else {
+                WildLogScrollPanel scrollPane = null;
+                for (Component comp : map.getMainMap().getComponents()) {
+                    if (comp instanceof WildLogScrollPanel) {
+                        scrollPane = (WildLogScrollPanel)comp;
+                        break;
+                    }
+                }
+                if (scrollPane != null)
+                    scrollPane.setVisible(false);
+            }
+        }
+    }
+
+    public void loadPoints(final Color inColor) {
+        //create a Set of waypoints
+        Set<Waypoint> waypoints = new HashSet<Waypoint>(points.size());
+        for (MapPoint point : points) {
+            waypoints.add(new Waypoint(point.latitude, point.longitude));
+        }
+
+        //create a WaypointPainter to draw the points
+        WaypointPainter painter = new WaypointPainter();
+        painter.setWaypoints(waypoints);
+        /* Optionele point painter. Ek kan dalk die WayPoint class extend en 'n
+         * custom ElementType filed by sit om die punte ander kleure te gee.
+         */
+        painter.setRenderer(new WaypointRenderer() {
+            @Override
+            public boolean paintWaypoint(Graphics2D g, JXMapViewer map, Waypoint wp) {
+                g.setColor(inColor);
+                g.fillRect(-10,-10,+10,+10);
+                g.setColor(Color.BLACK);
+                g.drawRect(-10,-10,+10,+10);
+                return true;
+            }
+        });
+        map.getMainMap().setOverlayPainter(painter);
+    }
+    
+}

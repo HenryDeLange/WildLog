@@ -65,8 +65,8 @@ public class DBI_h2 extends DBI_JDBC {
         try {
             Class.forName("org.h2.Driver").newInstance();
             Properties props = new Properties();
-//            props.setProperty("username", "wildlog");
-//            props.setProperty("password", "wildlog");
+            props.setProperty("USER", "wildlog");
+            props.setProperty("PASSWORD", "wildlog");
             conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
             super.init();
             

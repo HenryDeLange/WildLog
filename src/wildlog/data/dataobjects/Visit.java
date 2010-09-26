@@ -17,12 +17,13 @@ package wildlog.data.dataobjects;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Visit class
-public class Visit implements Comparable<Visit> {
+public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     private String name; // Used as index (ID)
     private Date startDate;
     private Date endDate;
@@ -57,6 +58,7 @@ public class Visit implements Comparable<Visit> {
         return 0;
     }
 
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
         List<Foto> fotos = inApp.getDBI().list(new Foto("VISIT-" + name));
@@ -83,9 +85,9 @@ public class Visit implements Comparable<Visit> {
         htmlVisit = htmlVisit + "<br/><b>Type:</b> " + UtilsHTML.formatString(type);
         htmlVisit = htmlVisit + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
         if (inIncludeImages)
-            htmlVisit = htmlVisit + "<br/><b>Photos:</b></br/>" + fotoString;
+            htmlVisit = htmlVisit + "<br/><b>Photos:</b><br/>" + fotoString;
         if (inIsRecursive)
-            htmlVisit = htmlVisit + "</br><H3>Sightings:</H3>" + sightingString;
+            htmlVisit = htmlVisit + "<br/><H3>Sightings:</H3>" + sightingString;
         return htmlVisit;
     }
 

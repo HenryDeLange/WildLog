@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.1" encoding="UTF-8" ?>
 
 <Form version="1.7" maxVersion="1.7">
   <NonVisualComponents>
@@ -1466,6 +1466,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseWMS">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" resourceKey="chkMnuUseWMS.text"/>
                 <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
               </Properties>

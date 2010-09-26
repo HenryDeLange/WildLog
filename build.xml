@@ -13,6 +13,7 @@
     <import file="nbproject/profiler-build-impl.xml"/>
     <import file="nbproject/profiler-build-impl.xml"/>
     <import file="nbproject/profiler-build-impl.xml"/>
+    <import file="nbproject/profiler-build-impl.xml"/>
     <target name="-post-jar">
         <copy file="Mapping Data/protected_land.shp" flatten="true" todir="${dist.dir}"/>
         <copy file="Mapping Data/provinces.shp" flatten="true" todir="${dist.dir}"/>

@@ -18,6 +18,8 @@ import KmlGenerator.objects.KmlEntry;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
@@ -32,7 +34,7 @@ import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Sighting class
-public class Sighting implements Comparable<Sighting> {
+public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
     private Date date; // must include time
 //    private Element element;
 //    private Location location;
@@ -92,6 +94,7 @@ public class Sighting implements Comparable<Sighting> {
         return 0;
     }
 
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
         List<Foto> fotos = inApp.getDBI().list(new Foto("SIGHTING-" + sightingCounter));
@@ -115,10 +118,11 @@ public class Sighting implements Comparable<Sighting> {
 //        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
         htmlSighting = htmlSighting + "<br/><b>Sighting ID:</b> " + UtilsHTML.formatString(sightingCounter);
         if (inIncludeImages)
-            htmlSighting = htmlSighting + "</br><b>Photos:</b></br/>" + fotoString;
+            htmlSighting = htmlSighting + "<br/><b>Photos:</b><br/>" + fotoString;
         return htmlSighting;
     }
 
+    @Override
     public KmlEntry toKML(int inID, WildLogApp inApp) {
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);

@@ -47,6 +47,7 @@ public class MovieFilter extends FileFilter {
         String extension = Utils.getExtension(f);
         if (extension != null) {
             if (extension.equalsIgnoreCase("avi") ||
+                extension.equalsIgnoreCase("asf") ||
                 extension.equalsIgnoreCase("mpg") ||
                 extension.equalsIgnoreCase("mpeg")) {
                     return true;
