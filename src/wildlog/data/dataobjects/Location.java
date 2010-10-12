@@ -1,17 +1,3 @@
-/*
- * Location.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dataobjects;
 
 import KmlGenerator.objects.KmlEntry;
@@ -91,7 +77,7 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-        List<Foto> fotos = inApp.getDBI().list(new Foto("LOCATION-" + name));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("LOCATION-" + name));
         for (int t = 0; t < fotos.size(); t++) {
             fotoString = fotoString + fotos.get(t).toHTML();
         }

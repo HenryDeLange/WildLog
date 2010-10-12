@@ -1,17 +1,3 @@
-/*
- * DBI_JDBC.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dbi;
 
 import java.io.File;
@@ -23,10 +9,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -37,7 +23,7 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.FotoType;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.Habitat;
@@ -720,10 +706,10 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public List<Foto> list(Foto inFoto) {
+    public List<WildLogFile> list(WildLogFile inFoto) {
         Statement state = null;
         ResultSet results = null;
-        List<Foto> tempList = new ArrayList<Foto>();
+        List<WildLogFile> tempList = new ArrayList<WildLogFile>();
         try {
             String sql = "SELECT * FROM FILES";
             if (inFoto.getId() != null)
@@ -733,12 +719,12 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             results = state.executeQuery(sql);
             while (results.next()) {
-                Foto tempFoto = new Foto();
+                WildLogFile tempFoto = new WildLogFile();
                 tempFoto.setId(results.getString("ID"));
                 tempFoto.setFilename(results.getString("FILENAME"));
                 tempFoto.setFileLocation(results.getString("FILEPATH"));
                 tempFoto.setOriginalFotoLocation(results.getString("ORIGINALPATH"));
-                tempFoto.setFotoType(FotoType.getEnumFromText(results.getString("FILETYPE")));
+                tempFoto.setFotoType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
                 tempFoto.setDate(results.getDate("UPLOADDATE"));
                 tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
                 tempList.add(tempFoto);
@@ -855,6 +841,7 @@ public abstract class DBI_JDBC implements DBI {
                     }
                     else {
                         state.execute("UPDATE SIGHTINGS SET ELEMENTNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "' WHERE ELEMENTNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE FILES SET ID = '" + "ELEMENT-" + inElement.getPrimaryName().replaceAll("'", "''") + "' WHERE ID = '" + "ELEMENT-" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
@@ -973,6 +960,8 @@ public abstract class DBI_JDBC implements DBI {
                     }
                     else {
                         state.execute("UPDATE SIGHTINGS SET LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE VISITS SET LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE FILES SET ID = '" + "LOCATION-" + inLocation.getName().replaceAll("'", "''") + "' WHERE ID = '" + "LOCATION-" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
@@ -1001,7 +990,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.executeUpdate(sql);
             }
             else {
-                results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName() + "'");
+                results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
                 if (results.next())
                     return false;
                 // Insert
@@ -1073,6 +1062,7 @@ public abstract class DBI_JDBC implements DBI {
                     }
                     else {
                         state.execute("UPDATE SIGHTINGS SET VISITNAME = '" + inVisit.getName().replaceAll("'", "''") + "' WHERE VISITNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE FILES SET ID = '" + "VISIT-" + inVisit.getName().replaceAll("'", "''") + "' WHERE ID = '" + "VISIT-" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
@@ -1250,7 +1240,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public boolean createOrUpdate(Foto inFoto, boolean inUpdate) {
+    public boolean createOrUpdate(WildLogFile inFoto, boolean inUpdate) {
         // Note: mens kan nie fotos update nie
         Statement state = null;
         try {
@@ -1329,7 +1319,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'ELEMENT-" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
             while (results.next()) {
-                Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
+                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
             }
         }
@@ -1379,7 +1369,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'LOCATION-" + inLocation.getName().replaceAll("'", "''") + "'");
             while (results.next()) {
-                Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
+                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
             }
         }
@@ -1429,7 +1419,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'VISIT-" + inVisit.getName().replaceAll("'", "''") + "'");
             while (results.next()) {
-                Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
+                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
             }
         }
@@ -1473,7 +1463,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Fotos
             results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'SIGHTING-" + inSighting.getSightingCounter() + "'");
             while (results.next()) {
-                Foto file = new Foto(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), FotoType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
+                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
                 delete(file);
             }
         }
@@ -1507,7 +1497,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public boolean delete(Foto inFoto) {
+    public boolean delete(WildLogFile inFoto) {
         // Note: this method only deletes one file at a time
         Statement state = null;
         try {

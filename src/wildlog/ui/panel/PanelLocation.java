@@ -1,23 +1,8 @@
-/*
- * PanelLocation.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.ui.panel;
 
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,9 +34,9 @@ import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
@@ -84,7 +69,7 @@ public class PanelLocation extends javax.swing.JPanel {
         utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
-        List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + locationWL.getName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
         if (fotos.size() > 0) {
             Utils.setupFoto("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         }
@@ -1331,7 +1316,7 @@ public class PanelLocation extends javax.swing.JPanel {
     }
 
     private void setupNumberOfImages() {
-        List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + locationWL.getName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
         if (fotos.size() > 0)
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else

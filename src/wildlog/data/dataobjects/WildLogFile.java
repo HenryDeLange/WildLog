@@ -1,29 +1,14 @@
-/*
- * Foto.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dataobjects;
 
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import wildlog.utils.UtilsHTML;
-import wildlog.data.enums.FotoType;
+import wildlog.data.enums.WildLogFileType;
 
 
 // Foundation for the Foto class
-// NOTE: that the actual files are not deleted currently...
-public class Foto {
+public class WildLogFile {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
     private String filename; // Automatically made from file name
     //private String description;
@@ -31,19 +16,19 @@ public class Foto {
     private String originalFotoLocation;
     //private FotoRating rating;
     private Date date;
-    private FotoType fotoType;
+    private WildLogFileType fotoType;
     private boolean defaultFile = false;
 
 
     // CONSTRUCTORS:
-    public Foto() {
+    public WildLogFile() {
     }
 
-    public Foto(String inID) {
+    public WildLogFile(String inID) {
         id = inID;
     }
     
-    public Foto(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, FotoType inFotoType) {
+    public WildLogFile(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, WildLogFileType inFotoType) {
         id = inID;
         filename = inName;
         fileLocation = inFileLocation;
@@ -52,7 +37,7 @@ public class Foto {
         fotoType = inFotoType;
     }
 
-    public Foto(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, FotoType inFotoType, Date inDate) {
+    public WildLogFile(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, WildLogFileType inFotoType, Date inDate) {
         id = inID;
         filename = inName;
         fileLocation = inFileLocation;
@@ -68,14 +53,14 @@ public class Foto {
     }
 
     public String toHTML() {
-        if (fotoType.equals(FotoType.IMAGE))
+        if (fotoType.equals(WildLogFileType.IMAGE))
             // Moet die getter hier gebruik want ek wil die File().exists() doen...
             return UtilsHTML.generateHTMLImages(getFileLocation());
         else
-        if (fotoType.equals(FotoType.MOVIE))
+        if (fotoType.equals(WildLogFileType.MOVIE))
             return "[Movie]";
         else
-        if (fotoType.equals(FotoType.OTHER))
+        if (fotoType.equals(WildLogFileType.OTHER))
             return "[Other File]";
         else
             return "";
@@ -110,7 +95,7 @@ public class Foto {
             return originalFotoLocation;
     }
 
-    public FotoType getFotoType() {
+    public WildLogFileType getFotoType() {
         return fotoType;
     }
 
@@ -135,7 +120,7 @@ public class Foto {
         originalFotoLocation = inOriginalFotoLocation;
     }
 
-    public void setFotoType(FotoType inFotoType) {
+    public void setFotoType(WildLogFileType inFotoType) {
         fotoType = inFotoType;
     }
 

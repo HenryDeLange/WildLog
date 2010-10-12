@@ -1,23 +1,9 @@
-/*
- * DBI.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dbi;
 
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -38,7 +24,7 @@ public interface DBI {
     public List<Location> list(Location inLocation);
     public List<Visit> list(Visit inVisit);
     public List<Sighting> list(Sighting inSighting);
-    public List<Foto> list(Foto inFoto);
+    public List<WildLogFile> list(WildLogFile inFoto);
 
     public List<Sighting> searchSightingOnDate(Date inStartDate, Date inEndDate);
     
@@ -46,12 +32,12 @@ public interface DBI {
     public boolean createOrUpdate(Location inLocation, String inOldName);
     public boolean createOrUpdate(Visit inVisit, String inOldName);
     public boolean createOrUpdate(Sighting inSighting);
-    public boolean createOrUpdate(Foto inFoto, boolean inUpdate);
+    public boolean createOrUpdate(WildLogFile inFoto, boolean inUpdate);
     
     public boolean delete(Element inElement);
     public boolean delete(Location inLocation);
     public boolean delete(Visit inVisit);
     public boolean delete(Sighting inSighting);
-    public boolean delete(Foto inFoto);
+    public boolean delete(WildLogFile inFoto);
 
 }

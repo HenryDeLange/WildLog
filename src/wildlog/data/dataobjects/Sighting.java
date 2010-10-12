@@ -97,7 +97,7 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-        List<Foto> fotos = inApp.getDBI().list(new Foto("SIGHTING-" + sightingCounter));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("SIGHTING-" + sightingCounter));
         for (int t = 0; t < fotos.size(); t++) {
             fotoString = fotoString + fotos.get(t).toHTML();
         }

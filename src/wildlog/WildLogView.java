@@ -1,17 +1,3 @@
-/*
- * WildLogView.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog;
 
 import KmlGenerator.KmlGenerator;
@@ -48,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -56,14 +43,14 @@ import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
-import wildlog.data.enums.FotoType;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.PanelElement;
 import wildlog.ui.panel.PanelLocation;
@@ -271,6 +258,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         btnDefault = new javax.swing.JButton();
         cmbElementTypesBrowseTab = new javax.swing.JComboBox();
         chkElementTypeBrowseTab = new javax.swing.JCheckBox();
+        jButton1 = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -310,17 +298,15 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         lblSearchResults = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
-        jSeparator3 = new javax.swing.JSeparator();
-        backupMenuItem = new javax.swing.JMenuItem();
-        jSeparator2 = new javax.swing.JSeparator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        backupMenuItem = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         csvExportMenuItem = new javax.swing.JMenuItem();
         htmlExportMenuItem1 = new javax.swing.JMenuItem();
         kmlExportMenuItem = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         csvImportMenuItem = new javax.swing.JMenuItem();
-        jSeparator4 = new javax.swing.JSeparator();
         advancedMenu = new javax.swing.JMenu();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
@@ -533,7 +519,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         btnZoomIn.setText(resourceMap.getString("btnZoomIn.text")); // NOI18N
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setName("btnZoomIn"); // NOI18N
-        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 80, 30));
+        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(827, 40, 90, 30));
 
         btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
         btnZoomOut.setBackground(resourceMap.getColor("btnZoomOut.background")); // NOI18N
@@ -541,7 +527,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         btnZoomOut.setText(resourceMap.getString("btnZoomOut.text")); // NOI18N
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setName("btnZoomOut"); // NOI18N
-        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 40, 80, 30));
+        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(925, 40, 90, 30));
 
         btnViewImage.setBackground(resourceMap.getColor("btnViewImage.background")); // NOI18N
         btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
@@ -552,7 +538,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 5, 170, 30));
+        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(827, 5, 120, 30));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -589,6 +575,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         btnRefreshDates.setBackground(resourceMap.getColor("btnRefreshDates.background")); // NOI18N
         btnRefreshDates.setIcon(resourceMap.getIcon("btnRefreshDates.icon")); // NOI18N
         btnRefreshDates.setText(resourceMap.getString("btnRefreshDates.text")); // NOI18N
+        btnRefreshDates.setToolTipText(resourceMap.getString("btnRefreshDates.toolTipText")); // NOI18N
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRefreshDates.setName("btnRefreshDates"); // NOI18N
         btnRefreshDates.addActionListener(new java.awt.event.ActionListener() {
@@ -612,7 +599,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
                 btnReportActionPerformed(evt);
             }
         });
-        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 5, 100, 65));
+        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 100, 65));
 
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
         btnDefault.setText(resourceMap.getString("btnDefault.text")); // NOI18N
@@ -644,6 +631,13 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             }
         });
         tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+
+        jButton1.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
+        jButton1.setIcon(resourceMap.getIcon("jButton1.icon")); // NOI18N
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setToolTipText(resourceMap.getString("jButton1.toolTipText")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        tabFoto.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 5, 65, 30));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1064,23 +1058,22 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
-        jSeparator3.setName("jSeparator3"); // NOI18N
-        fileMenu.add(jSeparator3);
-
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getActionMap(WildLogView.class, this);
-        backupMenuItem.setAction(actionMap.get("backup")); // NOI18N
-        backupMenuItem.setText(resourceMap.getString("backupMenuItem.text")); // NOI18N
-        backupMenuItem.setName("backupMenuItem"); // NOI18N
-        fileMenu.add(backupMenuItem);
-
-        jSeparator2.setName("jSeparator2"); // NOI18N
-        fileMenu.add(jSeparator2);
-
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+
+        jMenu4.setText(resourceMap.getString("jMenu4.text")); // NOI18N
+        jMenu4.setName("jMenu4"); // NOI18N
+
+        backupMenuItem.setAction(actionMap.get("backup")); // NOI18N
+        backupMenuItem.setText(resourceMap.getString("backupMenuItem.text")); // NOI18N
+        backupMenuItem.setName("backupMenuItem"); // NOI18N
+        jMenu4.add(backupMenuItem);
+
+        menuBar.add(jMenu4);
 
         exportMenu.setText(resourceMap.getString("exportMenu.text")); // NOI18N
         exportMenu.setName("exportMenu"); // NOI18N
@@ -1109,9 +1102,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         csvImportMenuItem.setText(resourceMap.getString("csvImportMenuItem.text")); // NOI18N
         csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
         importMenu.add(csvImportMenuItem);
-
-        jSeparator4.setName("jSeparator4"); // NOI18N
-        importMenu.add(jSeparator4);
 
         menuBar.add(importMenu);
 
@@ -1153,6 +1143,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         mnuDBConsole.setAction(actionMap.get("openDBConsole")); // NOI18N
         mnuDBConsole.setText(resourceMap.getString("mnuDBConsole.text")); // NOI18N
+        mnuDBConsole.setToolTipText(resourceMap.getString("mnuDBConsole.toolTipText")); // NOI18N
         mnuDBConsole.setName("mnuDBConsole"); // NOI18N
         jMenu1.add(mnuDBConsole);
 
@@ -1163,6 +1154,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
         mnuOpenMapApp.setAction(actionMap.get("openOpenMapApp")); // NOI18N
         mnuOpenMapApp.setText(resourceMap.getString("mnuOpenMapApp.text")); // NOI18N
+        mnuOpenMapApp.setToolTipText(resourceMap.getString("mnuOpenMapApp.toolTipText")); // NOI18N
         mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
         jMenu3.add(mnuOpenMapApp);
 
@@ -1393,7 +1385,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         if (tblElement.getSelectedRowCount() == 1) {
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-            List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
             if (fotos.size() > 0)
                 Utils.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, 300, app);
             else
@@ -1417,7 +1409,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         if (tblLocation.getSelectedRowCount() == 1) {
             // Get Image
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-            List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
             if (fotos.size() > 0)
                 Utils.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, 300, app);
             else
@@ -1582,7 +1574,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempLocation.toHTML(false, false, app));
-                List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
             }
@@ -1590,7 +1582,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempElement.toHTML(false, false, app));
-                List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
             }
@@ -1598,7 +1590,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtPhotoInformation.setText(tempVisit.toHTML(false, false, app));
-                List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
             }
@@ -1606,7 +1598,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                 txtPhotoInformation.setText(tempSighting.toHTML(false, false, app));
-                List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                 setupFile(fotos);
             }
             else {
@@ -1788,25 +1780,25 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
                 loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
                 loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
                 loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                 loadPrevFile(fotos);
             }
         }
@@ -1816,25 +1808,25 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<Foto> fotos = app.getDBI().list(new Foto("LOCATION-" + tempLocation.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
                 loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + tempElement.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
                 loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + tempVisit.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
                 loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + tempSighting.getSightingCounter()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                 loadNextFile(fotos);
             }
         }
@@ -2136,49 +2128,70 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
 
     @Action
     public void exportToHTML() {
-        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        List<Element> listElements = app.getDBI().list(new Element());
-        for (int t = 0; t < listElements.size(); t++) {
-            String path = UtilsHTML.exportHTML(listElements.get(t), app);
-        }
-        List<Location> listLocations = app.getDBI().list(new Location());
-        for (int t = 0; t < listLocations.size(); t++) {
-            String path = UtilsHTML.exportHTML(listLocations.get(t), app);
-        }
-        this.getComponent().setCursor(Cursor.getDefaultCursor());
+        exportToHTML(true);
+    }
+
+    public void exportToHTML(final boolean inShowDialog) {
+        if (inShowDialog)
+            JOptionPane.showMessageDialog(this.getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+        new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    UtilsHTML.exportHTML(listElements.get(t), app);
+                }
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    UtilsHTML.exportHTML(listLocations.get(t), app);
+                }
+                //if (inShowDialog)
+                    JOptionPane.showMessageDialog(null, "Done: You can view the files under \\WildLog\\HTML.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                return null;
+            }
+        }.execute();
     }
 
     @Action
     public void exportToKML() {
+// TODO: register the workers as instance variables and then use the wait() and notify()
+// calls to only start the KML after HTMLis done... But since it goes reasonabily fast
+// currently it can run concurrently for now
         // First do the HTML export to generate the Images in the right place
-        exportToHTML();
-        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        // Then do KML export
-        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
-        File tempFile = new File(path);
-        tempFile.mkdirs();
-        // Make sure icons exist in the KML folder
-        KmlUtil.copyKmlIcons(app, path);
-        // KML Stuff
-        KmlGenerator kmlgen = new KmlGenerator();
-        kmlgen.setKmlPath(path + File.separatorChar + "WildLogMarkers.kml");
-        // Get entries for Sightings and Locations
-        List<KmlEntry> entries = new ArrayList<KmlEntry>();
-        // Sightings
-        List<Sighting> listSightings = app.getDBI().list(new Sighting());
-        for (int t = 0; t < listSightings.size(); t++) {
-            entries.add(listSightings.get(t).toKML(t, app));
-        }
-        // Locations
-        List<Location> listLocations = app.getDBI().list(new Location());
-        for (int t = 0; t < listLocations.size(); t++) {
-            entries.add(listLocations.get(t).toKML(listSightings.size() + t, app));
-        }
-        // Generate KML
-        kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
-        // Try to open the Kml file
-        Utils.openFile(path + File.separatorChar + "WildLogMarkers.kml");
-        this.getComponent().setCursor(Cursor.getDefaultCursor());
+        exportToHTML(false);
+        JOptionPane.showMessageDialog(this.getComponent(), "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.", "Generating KML", JOptionPane.INFORMATION_MESSAGE);
+        new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                // Then do KML export
+                String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
+                File tempFile = new File(path);
+                tempFile.mkdirs();
+                // Make sure icons exist in the KML folder
+                KmlUtil.copyKmlIcons(app, path);
+                // KML Stuff
+                KmlGenerator kmlgen = new KmlGenerator();
+                kmlgen.setKmlPath(path + File.separatorChar + "WildLogMarkers.kml");
+                // Get entries for Sightings and Locations
+                List<KmlEntry> entries = new ArrayList<KmlEntry>();
+                // Sightings
+                List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                for (int t = 0; t < listSightings.size(); t++) {
+                    entries.add(listSightings.get(t).toKML(t, app));
+                }
+                // Locations
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    entries.add(listLocations.get(t).toKML(listSightings.size() + t, app));
+                }
+                // Generate KML
+                kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
+                // Try to open the Kml file
+                JOptionPane.showMessageDialog(null, "Done: The KML file will automatically be opened.", "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
+                Utils.openFile(path + File.separatorChar + "WildLogMarkers.kml");
+                return null;
+            }
+        }.execute();
     }
 
     @Action
@@ -2278,7 +2291,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.143.jar");
     }
 
-    private void loadPrevFile(List<Foto> inFotos) {
+    private void loadPrevFile(List<WildLogFile> inFotos) {
         if (inFotos.size() > imageIndex) {
             imageIndex--;
             if (imageIndex < 0) imageIndex = inFotos.size() - 1;
@@ -2296,7 +2309,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         }
     }
 
-    private void loadNextFile(List<Foto> inFotos) {
+    private void loadNextFile(List<WildLogFile> inFotos) {
         if (inFotos.size() > imageIndex) {
             imageIndex++;
             if (imageIndex >= inFotos.size()) imageIndex = 0;
@@ -2314,18 +2327,18 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
         }
     }
 
-    private void setupFile(List<Foto> inFotos) {
+    private void setupFile(List<WildLogFile> inFotos) {
         if (inFotos != null) {
             if (inFotos.size() > 0) {
                 try {
                     lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
-                    if (inFotos.get(imageIndex).getFotoType().equals(FotoType.IMAGE))
+                    if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.IMAGE))
                         imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation()));
                     else
-                    if (inFotos.get(imageIndex).getFotoType().equals(FotoType.MOVIE))
+                    if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.MOVIE))
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
                     else
-                    if (inFotos.get(imageIndex).getFotoType().equals(FotoType.OTHER))
+                    if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.OTHER))
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                 }
                 catch (IOException ex) {
@@ -2411,6 +2424,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JMenuItem htmlExportMenuItem1;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
     private javax.swing.JMenu importMenu;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2427,6 +2441,7 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2434,9 +2449,6 @@ public class WildLogView extends FrameView implements PanelNeedsRefreshWhenSight
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblCreatures;

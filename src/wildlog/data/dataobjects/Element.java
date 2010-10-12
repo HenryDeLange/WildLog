@@ -1,19 +1,4 @@
-/*
- * Element.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dataobjects;
-
 
 import java.util.List;
 import wildlog.WildLogApp;
@@ -102,7 +87,7 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-        List<Foto> fotos = inApp.getDBI().list(new Foto("ELEMENT-" + primaryName));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("ELEMENT-" + primaryName));
         for (int t = 0; t < fotos.size(); t++) {
             fotoString = fotoString + fotos.get(t).toHTML();
         }

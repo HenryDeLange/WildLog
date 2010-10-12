@@ -61,7 +61,7 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
         String fotoString = "";
-        List<Foto> fotos = inApp.getDBI().list(new Foto("VISIT-" + name));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("VISIT-" + name));
         for (int t = 0; t < fotos.size(); t++) {
             fotoString = fotoString + fotos.get(t).toHTML();
         }

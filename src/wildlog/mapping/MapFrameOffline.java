@@ -1,17 +1,3 @@
-/*
- * MapFrame.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.mapping;
 
 import com.bbn.openmap.LatLonPoint;
@@ -25,15 +11,9 @@ import com.bbn.openmap.gui.BasicMapPanel;
 import com.bbn.openmap.gui.MapPanel;
 import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
-import com.bbn.openmap.omGraphics.OMGraphicList;
-import com.bbn.openmap.omGraphics.OMRaster;
-import com.bbn.openmap.plugin.PlugInLayer;
-import com.bbn.openmap.plugin.wms.WMSPlugIn;
-import com.bbn.openmap.proj.Projection;
 import java.awt.Color;
 import java.util.Properties;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
 import wildlog.mapping.layers.MapOfflinePointLayer;
 

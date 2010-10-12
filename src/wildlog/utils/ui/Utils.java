@@ -1,17 +1,3 @@
-/*
- * Utils.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.utils.ui;
 
 import java.awt.Component;
@@ -36,9 +22,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dbi.DBI;
-import wildlog.data.enums.FotoType;
+import wildlog.data.enums.WildLogFileType;
 
 /* Utils.java is used by FileChooserDemo2.java. */
 public class Utils {
@@ -176,7 +162,7 @@ public class Utils {
                         fileOutput.write(newBytes);
                         fileOutput.flush();
                         big.dispose();
-                        inApp.getDBI().createOrUpdate(new Foto(inID, toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), FotoType.IMAGE), false);
+                        inApp.getDBI().createOrUpdate(new WildLogFile(inID, toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), WildLogFileType.IMAGE), false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -211,7 +197,7 @@ public class Utils {
                         fileInput.read(tempBytes);
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
-                        inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.MOVIE), false);
+                        inApp.getDBI().createOrUpdate(new WildLogFile(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), WildLogFileType.MOVIE), false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -244,7 +230,7 @@ public class Utils {
                         fileInput.read(tempBytes);
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
-                        inApp.getDBI().createOrUpdate(new Foto(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), FotoType.OTHER), false);
+                        inApp.getDBI().createOrUpdate(new WildLogFile(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), WildLogFileType.OTHER), false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -269,7 +255,7 @@ public class Utils {
 
     // Methods for the buttons on the panels that work with the images
     public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
             if (inImageIndex > 0) {
                 inImageIndex = inImageIndex - 1;
@@ -283,7 +269,7 @@ public class Utils {
     }
 
     public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
             if (inImageIndex < fotos.size() - 1) {
                 inImageIndex = inImageIndex + 1;
@@ -297,7 +283,7 @@ public class Utils {
     }
 
     public static int setMainImage(String inID, int inImageIndex, WildLogApp inApp) {
-        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         for (int t = 0; t < fotos.size(); t++) {
             if (t != inImageIndex)
                 fotos.get(t).setDefaultFile(false);
@@ -310,9 +296,9 @@ public class Utils {
     }
 
     public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize, WildLogApp inApp) {
-        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            Foto tempFoto = fotos.get(inImageIndex);
+            WildLogFile tempFoto = fotos.get(inImageIndex);
             inDBI.delete(tempFoto);
             if (fotos.size() > 1) {
                 inImageIndex--;
@@ -329,16 +315,16 @@ public class Utils {
     }
 
     public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > inImageIndex) {
             if (fotos.get(inImageIndex).getFotoType() != null) {
-                if (fotos.get(inImageIndex).getFotoType().equals(FotoType.IMAGE))
+                if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
                     inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation()), inSize));
                 else
-                if (fotos.get(inImageIndex).getFotoType().equals(FotoType.MOVIE))
+                if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
                     inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
                 else
-                if (fotos.get(inImageIndex).getFotoType().equals(FotoType.OTHER))
+                if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.OTHER))
                     inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
                 inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
             }
@@ -354,7 +340,7 @@ public class Utils {
     }
 
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
-        List<Foto> fotos = inApp.getDBI().list(new Foto(inID));
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
             String fileName = fotos.get(inIndex).getOriginalFotoLocation();
             try {
@@ -445,7 +431,7 @@ public class Utils {
             if (c == '&' || c == '@') continue;
             if (c == '#' || c == ';') continue;
             if (c == '+' || c == '=') continue;
-            if (c == '`' || c == '\'') continue;
+            if (c == '`' /*|| c == '\''*/) continue; // Die ' gee probleme met saving en file loading
             return false;
         }
         return true;

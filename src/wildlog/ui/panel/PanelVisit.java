@@ -1,17 +1,3 @@
-/*
- * PanelVisit.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.ui.panel;
 
 import KmlGenerator.KmlGenerator;
@@ -53,7 +39,7 @@ import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Foto;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.kml.util.KmlUtil;
@@ -89,7 +75,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         utilPanelGenerator = new UtilPanelGenerator();
         initComponents();
         imageIndex = 0;
-        List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + visit.getName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
         if (fotos.size() > 0) {
             Utils.setupFoto("VISIT-" + visit.getName(), imageIndex, lblImage, 300, app);
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
@@ -172,7 +158,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         if (sighting != null) {
             if (sighting.getElementName() != null) {
                 Element temp = app.getDBI().find(new Element(sighting.getElementName()));
-                List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + temp.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + temp.getPrimaryName()));
                 if (fotos.size() > 0)
                     Utils.setupFoto("ELEMENT-" + temp.getPrimaryName(), 0, lblElementImage, 150, app);
                 else
@@ -182,7 +168,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
                 lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
             }
             imageSightingIndex = 0;
-            List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + sighting.getSightingCounter()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
             if (fotos.size() > 0 ) {
                 Utils.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageSightingIndex, lblSightingImage, 150, app);
             }
@@ -1155,7 +1141,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }
 
     private void setupNumberOfImages() {
-        List<Foto> fotos = app.getDBI().list(new Foto("VISIT-" + visit.getName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
         if (fotos.size() > 0)
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else
@@ -1164,7 +1150,7 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void setupNumberOfSightingImages() {
         if (sighting != null) {
-            List<Foto> fotos = app.getDBI().list(new Foto("SIGHTING-" + sighting.getSightingCounter()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
             if (fotos.size() > 0)
                 lblNumberOfSightingImages.setText(imageSightingIndex+1 + " of " + fotos.size());
             else

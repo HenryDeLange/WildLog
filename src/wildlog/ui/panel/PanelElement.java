@@ -1,17 +1,3 @@
-/*
- * PanelElement.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.ui.panel;
 
 import KmlGenerator.KmlGenerator;
@@ -57,10 +43,10 @@ import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Foto;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
@@ -93,7 +79,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
-        List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + element.getPrimaryName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
         if (fotos.size() > 0) {
             Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         }
@@ -1272,7 +1258,7 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     }
 
     private void setupNumberOfImages() {
-        List<Foto> fotos = app.getDBI().list(new Foto("ELEMENT-" + element.getPrimaryName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
         if (fotos.size() > 0)
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else
