@@ -623,6 +623,7 @@
                 </Component>
                 <Component class="javax.swing.JCheckBox" name="chkElementTypeBrowseTab">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" resourceKey="chkElementTypeBrowseTab.background"/>
                     <Property name="text" type="java.lang.String" resourceKey="chkElementTypeBrowseTab.text"/>
                     <Property name="name" type="java.lang.String" value="chkElementTypeBrowseTab" noResource="true"/>
                   </Properties>

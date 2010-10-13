@@ -19,6 +19,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -1007,6 +1008,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
                 };
                 dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
                 dialog.setVisible(true);
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Sorry you can't view multiple Sightings at once.", "Viewing Multiple Sightings", JOptionPane.WARNING_MESSAGE);
             }
         }
     }//GEN-LAST:event_btnGoLocationActionPerformed

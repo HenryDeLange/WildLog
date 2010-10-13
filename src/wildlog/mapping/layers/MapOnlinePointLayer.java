@@ -2,7 +2,6 @@ package wildlog.mapping.layers;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -35,6 +34,8 @@ public class MapOnlinePointLayer {
     }
     final private JXMapKit map;
     private List<MapPoint> points = new ArrayList<MapPoint>();
+    private List<MapPoint> clickedPoints = new ArrayList<MapPoint>();
+    private int clickedPointIndex = -1;
     
     public MapOnlinePointLayer(JXMapKit inMap) {
         map = inMap;
@@ -42,6 +43,7 @@ public class MapOnlinePointLayer {
 
     public void clearPoints() {
         points.clear();
+        clickedPoints.clear();
         map.getMainMap().setOverlayPainter(null);
 //        for (MouseListener mouse : map.getMainMap().getMouseListeners())
 //            if (mouse instanceof WildLogMapMouseListener)
@@ -56,7 +58,8 @@ public class MapOnlinePointLayer {
         points.add(point);
     }
 
-    public void showPopup(MouseEvent inEvent, WildLogApp inApp) {
+    public int showPopup(MouseEvent inEvent, WildLogApp inApp) {
+        clickedPoints.clear();
         for (MapPoint point : points) {
             GeoPosition gp = new GeoPosition(point.latitude, point.longitude);
             //convert to world bitmap
@@ -65,30 +68,8 @@ public class MapOnlinePointLayer {
             Rectangle rect = map.getMainMap().getViewportBounds();
             Point converted_gp_pt = new Point((int)gp_pt.getX()-rect.x, (int)gp_pt.getY()-rect.y);
             //check if near the mouse
-            if(converted_gp_pt.distance(inEvent.getPoint()) < 10) {
-                WildLogScrollPanel scrollPane = null;
-                boolean foundScrollPane = false;
-                for (Component comp : map.getMainMap().getComponents()) {
-                    if (comp instanceof WildLogScrollPanel) {
-                        scrollPane = (WildLogScrollPanel)comp;
-                        JTextPane textPane = (JTextPane)scrollPane.getViewport().getComponent(0);
-                        textPane.setText(point.objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src='", "<img src='file:\\\\"));
-                        foundScrollPane = true;
-                        break;
-                    }
-                }
-                if (!foundScrollPane) {
-                    JTextPane textPane = new JTextPane();
-                    textPane.setEditable(false);
-                    textPane.setContentType("text/html");
-                    textPane.setPreferredSize(new Dimension(300, 300));
-                    scrollPane = new WildLogScrollPanel(textPane);
-                    map.getMainMap().add(scrollPane);
-                    textPane.setText(point.objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src='", "<img src='file:\\\\"));
-                }
-                scrollPane.setLocation(new Point(15, 15));
-                scrollPane.setVisible(true);
-                break;
+            if(converted_gp_pt.distance(inEvent.getPoint()) < 12) {
+                clickedPoints.add(point);
             } 
             else {
                 WildLogScrollPanel scrollPane = null;
@@ -101,6 +82,41 @@ public class MapOnlinePointLayer {
                 if (scrollPane != null)
                     scrollPane.setVisible(false);
             }
+        }
+        if (clickedPoints.size() > 0) {
+            clickedPointIndex = -1;
+            loadNextClickedPoint(inApp);
+        }
+        return clickedPoints.size();
+    }
+
+    public void loadNextClickedPoint(WildLogApp inApp) {
+        clickedPointIndex++;
+        if (clickedPointIndex >= clickedPoints.size())
+            clickedPointIndex = 0;
+        loadClickedPoint(inApp);
+    }
+
+    public void loadPrevClickedPoint(WildLogApp inApp) {
+        clickedPointIndex--;
+        if (clickedPointIndex < 0)
+            clickedPointIndex = clickedPoints.size()-1;
+        loadClickedPoint(inApp);
+    }
+
+    private void loadClickedPoint(WildLogApp inApp) {
+        if (clickedPointIndex >= 0 && clickedPointIndex < clickedPoints.size()) {
+            WildLogScrollPanel scrollPane = null;
+            for (Component comp : map.getMainMap().getComponents()) {
+                if (comp instanceof WildLogScrollPanel) {
+                    scrollPane = (WildLogScrollPanel)comp;
+                    JTextPane textPane = (JTextPane)scrollPane.getViewport().getComponent(0);
+                    textPane.setText("Showing " + (clickedPointIndex+1) + " of " + clickedPoints.size() + "<br/>" + clickedPoints.get(clickedPointIndex).objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src='", "<img src='file:\\\\"));
+                    break;
+                }
+            }
+            scrollPane.setLocation(new Point(50, 15));
+            scrollPane.setVisible(true);
         }
     }
 

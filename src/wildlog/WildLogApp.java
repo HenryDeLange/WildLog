@@ -200,24 +200,40 @@ public class WildLogApp extends SingleFrameApplication {
             mapOnline.setZoom(12);
             mapOnlineFrame.add(mapOnline, new AbsoluteConstraints(0, 0, -1, -1), 0);
 
-            JButton btnLoadNASA1 = new JButton("NASA: Blue Marble");
-            btnLoadNASA1.addActionListener(new ActionListener() {
+            // Add buttons
+            final WildLogApp app = this;
+            JButton btnPrevMapPoint = new JButton("Prev");
+            btnPrevMapPoint.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    WMSService wms = new WMSService();
-                    wms.setLayer("BMNG");
-                    //wms.setLayer("global_mosaic");
-                    //wms.setLayer("daily_planet");
-                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-                    TileFactory fact = new WMSTileFactory(wms);
-                    mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
-                    mapOnline.setZoom(13);
+                    mapOnlineFrame.getPointLayer().loadPrevClickedPoint(app);
                 }
             });
-            btnLoadNASA1.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadNASA1, new AbsoluteConstraints(0, 500, -1, -1));
+            btnPrevMapPoint.setPreferredSize(new Dimension(70, 25));
+            mapOnlineFrame.add(btnPrevMapPoint, new AbsoluteConstraints(0, 500, -1, -1));
 
+            JButton btnNextMapPoint = new JButton("Next");
+            btnNextMapPoint.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mapOnlineFrame.getPointLayer().loadNextClickedPoint(app);
+                }
+            });
+            btnNextMapPoint.setPreferredSize(new Dimension(70, 25));
+            mapOnlineFrame.add(btnNextMapPoint, new AbsoluteConstraints(70, 500, -1, -1));
+
+            JButton btnLoadOpenStreetMap = new JButton("Open Street Map");
+            btnLoadOpenStreetMap.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mapOnline.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
+                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+                    mapOnline.setZoom(12);
+                }
+            });
+            btnLoadOpenStreetMap.setPreferredSize(new Dimension(150, 25));
+            mapOnlineFrame.add(btnLoadOpenStreetMap, new AbsoluteConstraints(150, 500, -1, -1));
+            
             JButton btnLoadNASA2 = new JButton("NASA: Mosaic");
             btnLoadNASA2.addActionListener(new ActionListener() {
                 @Override
@@ -234,7 +250,25 @@ public class WildLogApp extends SingleFrameApplication {
                 }
             });
             btnLoadNASA2.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadNASA2, new AbsoluteConstraints(150, 500, -1, -1));
+            mapOnlineFrame.add(btnLoadNASA2, new AbsoluteConstraints(300, 500, -1, -1));
+
+            JButton btnLoadNASA1 = new JButton("NASA: Blue Marble");
+            btnLoadNASA1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    WMSService wms = new WMSService();
+                    wms.setLayer("BMNG");
+                    //wms.setLayer("global_mosaic");
+                    //wms.setLayer("daily_planet");
+                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
+                    TileFactory fact = new WMSTileFactory(wms);
+                    mapOnline.setTileFactory(fact);
+                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+                    mapOnline.setZoom(13);
+                }
+            });
+            btnLoadNASA1.setPreferredSize(new Dimension(150, 25));
+            mapOnlineFrame.add(btnLoadNASA1, new AbsoluteConstraints(450, 500, -1, -1));
 
             JButton btnLoadNASA3 = new JButton("NASA: Daily Planet");
             btnLoadNASA3.addActionListener(new ActionListener() {
@@ -252,19 +286,8 @@ public class WildLogApp extends SingleFrameApplication {
                 }
             });
             btnLoadNASA3.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadNASA3, new AbsoluteConstraints(300, 500, -1, -1));
+            mapOnlineFrame.add(btnLoadNASA3, new AbsoluteConstraints(600, 500, -1, -1));
 
-            JButton btnLoadOpenStreetMap = new JButton("Open Street Map");
-            btnLoadOpenStreetMap.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    mapOnline.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
-                    mapOnline.setZoom(12);
-                }
-            });
-            btnLoadOpenStreetMap.setPreferredSize(new Dimension(200, 25));
-            mapOnlineFrame.add(btnLoadOpenStreetMap, new AbsoluteConstraints(550, 500, -1, -1));
             mapOnlineFrame.pack();
         }
         return mapOnlineFrame;

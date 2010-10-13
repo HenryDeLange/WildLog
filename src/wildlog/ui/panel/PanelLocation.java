@@ -1039,11 +1039,11 @@ public class PanelLocation extends javax.swing.JPanel {
         UtilMapGenerator.clearMap(app);
 
         // Load points
-        Visit tempVisit = new Visit();
-        tempVisit.setLocationName(locationWL.getName());
-        List<Visit> visits = app.getDBI().list(tempVisit);
-        if (visits != null) {
-            for (int t = 0; t < visits.size(); t++) {
+//        Visit tempVisit = new Visit();
+//        tempVisit.setLocationName(locationWL.getName());
+//        List<Visit> visits = app.getDBI().list(tempVisit);
+//        if (visits != null) {
+//            for (int t = 0; t < visits.size(); t++) {
                 Sighting tempSighting = new Sighting();
                 tempSighting.setLocationName(locationWL.getName());
                 List<Sighting> sightings = app.getDBI().list(tempSighting);
@@ -1064,8 +1064,8 @@ public class PanelLocation extends javax.swing.JPanel {
                         }
                     }
                 }
-            }
-        }
+//            }
+//        }
 
         // Open Map
         if (app.isUseOnlineMap()) {
