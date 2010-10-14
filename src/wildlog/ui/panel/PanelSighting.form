@@ -125,9 +125,6 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="font" type="java.awt.Font" resourceKey="tblElement.font"/>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="UtilTableGenerator.getShortElementTable(searchElement)" type="code"/>
-                </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="!disableEditing" type="code"/>
                 </Property>
@@ -899,9 +896,6 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="font" type="java.awt.Font" resourceKey="tblLocation.font"/>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="UtilTableGenerator.getShortLocationTable(searchLocation, false)" type="code"/>
-                </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="!disableEditing" type="code"/>
                 </Property>
@@ -936,9 +930,6 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="font" type="java.awt.Font" resourceKey="tblVisit.font"/>
-                <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="new DefaultTableModel()" type="code"/>
-                </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="!disableEditing" type="code"/>
                 </Property>

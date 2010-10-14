@@ -23,10 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.RowSorter.SortKey;
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
@@ -47,7 +44,6 @@ import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.UtilsHTML;
-import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilMapGenerator;
 
 /**
@@ -115,6 +111,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         return true;
     }
     
+    @Override
     public void setupTabHeader() {
         JPanel tabHeader = new JPanel();
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif"))));
@@ -759,11 +756,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         sighting = null;
         if (visit.getName() != null) {
-            tblSightings.setModel(UtilTableGenerator.getCompleteSightingTable(visit));
-            // Sort rows for Sightings
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(1, SortOrder.ASCENDING));
-            tblSightings.getRowSorter().setSortKeys(tempList);
+            UtilTableGenerator.setupCompleteSightingTable(tblSightings, visit);
             Sighting tempSighting = new Sighting();
             tempSighting.setVisitName(visit.getName());
             List<Sighting> sightings = app.getDBI().list(tempSighting);
@@ -781,8 +774,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
-        // Setup table column sizes
-        resizeTables();
 
         if (visit.getName() != null)
             lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
@@ -1099,35 +1090,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         Utils.openFile(finalPath);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-
-    private void resizeTables() {
-        TableColumn column = null;
-        for (int i = 0; i < tblSightings.getColumnModel().getColumnCount(); i++) {
-            column = tblSightings.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(170);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(65);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(55);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(70);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(10);
-            }
-            else if (i == 6) {
-                column.setPreferredWidth(10);
-            }
-        }
-    }
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));

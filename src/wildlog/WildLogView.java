@@ -32,11 +32,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
-import javax.swing.RowSorter.SortKey;
-import javax.swing.SortOrder;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -63,7 +60,6 @@ import wildlog.ui.report.ReportElement;
 import wildlog.ui.report.ReportLocation;
 import wildlog.ui.report.ReportSighting;
 import wildlog.ui.report.ReportVisit;
-import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -158,8 +154,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         setupTabHeaderLocation();
         setupTabHeaderElement();
 
-        // Preventing the moving of table columns (this breaks the hardcoded place where the IDs are
-        // expected for database lookup...
+        // Prevent reordering of the tables' columns
         tblElement.getTableHeader().setReorderingAllowed(false);
         tblElement_LocTab.getTableHeader().setReorderingAllowed(false);
         tblLocation.getTableHeader().setReorderingAllowed(false);
@@ -654,7 +649,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
-        tblLocation.setModel(UtilTableGenerator.getCompleteLocationTable(searchLocation));
+        tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -691,7 +686,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
-        tblVisit.setModel(UtilTableGenerator.getCompleteVisitTable(new Location()));
+        tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -763,7 +758,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblElement_LocTab.setAutoCreateRowSorter(true);
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
-        tblElement_LocTab.setModel(UtilTableGenerator.getElementsForLocationTable(new Location()));
+        tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
         tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -833,7 +828,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
-        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -904,7 +899,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblLocation_EleTab.setAutoCreateRowSorter(true);
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
-        tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
+        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1241,15 +1236,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 }//GEN-LAST:event_btnAddElementActionPerformed
 
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
-        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
+        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-        // Setup the table column sizes
-        resizeTalbes_Element();
-        // Sort rows for Element
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
 }//GEN-LAST:event_tabElementComponentShown
 
@@ -1274,16 +1263,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_btnAddLocationActionPerformed
 
     private void tabLocationComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabLocationComponentShown
-        tblLocation.setModel(UtilTableGenerator.getCompleteLocationTable(searchLocation));
+        UtilTableGenerator.setupCompleteLocationTable(tblLocation, searchLocation);
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-        // Setup Column width for tables:
-        resizeTables_Location();
-        // Sort location rows
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblLocation.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tabLocationComponentShown
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
@@ -1299,31 +1282,19 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         searchElement = new Element();
         if (!cmbType.isEnabled())
             searchElement.setType((ElementType)cmbType.getSelectedItem());
-        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
+        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         cmbType.setEnabled(!cmbType.isEnabled());
         txtSearch.setText("");
-        // Setup table column sizes
-        resizeTalbes_Element();
-        // Sort rows for Element
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
-        tblLocation_EleTab.setModel(new DefaultTableModel());
+        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_ckbTypeFilterActionPerformed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element((ElementType)cmbType.getSelectedItem());
-        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
+        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         txtSearch.setText("");
-        // Setup talbe column sizes
-        resizeTalbes_Element();
-        // Sort rows for Element
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
-        tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
+        UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
@@ -1377,18 +1348,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             // Get Locations
-            tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(tempElement));
+            UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, tempElement);
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
+            UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
         }
-        // Setup table column sizes
-        resizeTalbes_Element();
-        // Sort rows for locations
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblLocation_EleTab.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
@@ -1401,23 +1366,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
                 lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             // Get Visits
-            tblVisit.setModel(UtilTableGenerator.getShortVisitTable(tempLocation));
+            UtilTableGenerator.setupShortVisitTable(tblVisit, tempLocation);
             // Get All Elements seen
-            tblElement_LocTab.setModel(UtilTableGenerator.getElementsForLocationTable(tempLocation));
+            UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, tempLocation);
         }
         else {
             lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            tblVisit.setModel(UtilTableGenerator.getShortVisitTable(new Location()));
-            tblElement_LocTab.setModel(UtilTableGenerator.getElementsForLocationTable(new Location()));
+            UtilTableGenerator.setupShortVisitTable(tblVisit, new Location());
+            UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, new Location());
         }
-        resizeTables_Location();
-        // Sort rows for visits and elements
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement_LocTab.getRowSorter().setSortKeys(tempList);
-        tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(1, SortOrder.ASCENDING));
-        tblVisit.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tblLocationMouseReleased
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
@@ -1428,16 +1385,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             if (txtSearch.getText().length() > 0)
                 searchElement.setPrimaryName(txtSearch.getText());
         }
-        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
-        // Setup talbe column sizes
-        resizeTalbes_Element();
-        // Sort rows for Element
-        List<SortKey> tempList = new ArrayList<SortKey>(1);
-        tempList.add(new SortKey(0, SortOrder.ASCENDING));
-        tblElement.getRowSorter().setSortKeys(tempList);
+        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         // Reset the Image and Location table
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-        tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
+        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -1491,7 +1442,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         txtSearch.setText("");
         cmbType.setEnabled(false);
         searchElement = new Element();
-        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         // Reset everything
         tabElementComponentShown(null);
     }//GEN-LAST:event_btnClearSearchActionPerformed
@@ -2005,96 +1955,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             root.add(new DefaultMutableTreeNode("Please select dates first"));
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
-    }
-
-    private void resizeTables_Location() {
-        TableColumn column = null;
-        for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
-            column = tblLocation.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(200);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(40);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(22);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(22);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(100);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(140);
-            }
-        }
-        for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
-            column = tblVisit.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(110);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(40);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(30);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(13);
-            }
-        }
-        for (int i = 0; i < tblElement_LocTab.getColumnModel().getColumnCount(); i++) {
-            column = tblElement_LocTab.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(150);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(50);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(50);
-            }
-        }
-    }
-
-    private void resizeTalbes_Element() {
-        TableColumn column = null;
-        for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
-            column = tblElement.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(200);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(180);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(50);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(50);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(150);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(80);
-            }
-        }
-        for (int i = 0; i < tblLocation_EleTab.getColumnModel().getColumnCount(); i++) {
-            column = tblLocation_EleTab.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(110);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(30);
-            }
-        }
     }
 
     @Action

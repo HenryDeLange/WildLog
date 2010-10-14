@@ -7,6 +7,7 @@ import javax.swing.JTable;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -23,7 +24,8 @@ public final class UtilTableGenerator {
     
 
     // METHODS:
-    public static DefaultTableModel getCompleteElementTable(Element inElement) {
+    public static void setupCompleteElementTable(JTable inTable, Element inElement) {
+        // Load data
         String[] columnNames = {
                                 "Primary Name",
                                 "Other Name",
@@ -46,16 +48,43 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = tempElement.getWishListRating();
             tempTable[t][i++] = tempElement.getAddFrequency();
         }
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(200);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(180);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(50);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(50);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(80);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
 
-    public static DefaultTableModel getShortElementTable(Element inElement) {
+    public static void setupShortElementTable(JTable inTable, Element inElement) {
+        // Load data
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
@@ -78,10 +107,27 @@ public final class UtilTableGenerator {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+                column = inTable.getColumnModel().getColumn(i);
+                if (i == 0) {
+                    column.setPreferredWidth(150);
+                }
+                else if (i == 1) {
+                    column.setPreferredWidth(25);
+                }
+                else if (i == 2) {
+                    column.setPreferredWidth(40);
+                }
+            }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
     
-    public static DefaultTableModel getCompleteLocationTable(Location inLocation) {
+    public static void setupCompleteLocationTable(JTable inTable, Location inLocation) {
+        // Load data
         String[] columnNames = {
                                 "Name",
                                 "Province",
@@ -102,16 +148,43 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = tempLocation.getAccommodationType();
             tempTable[t][i++] = tempLocation.getCatering();
         }
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(200);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(40);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(22);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(22);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(140);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
     
-    public static DefaultTableModel getCompleteVisitTable(Location inLocation) {
+    public static void setupCompleteVisitTable(JTable inTable, Location inLocation) {
+        // Load data
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
@@ -140,6 +213,7 @@ public final class UtilTableGenerator {
             }
         }
         else tempTable = new Object[0][0];
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -156,10 +230,38 @@ public final class UtilTableGenerator {
                 return Object.class;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(160);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(45);
+                column.setCellRenderer(new DateCellRenderer());
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(45);
+                column.setCellRenderer(new DateCellRenderer());
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(75);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(30);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(30);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 1);
     }
 
-    public static DefaultTableModel getShortVisitTable(Location inLocation) {
+    public static void setupShortVisitTable(JTable inTable, Location inLocation) {
+        // Load data
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
@@ -184,6 +286,7 @@ public final class UtilTableGenerator {
             }
         }
         else tempTable = new Object[0][0];
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -200,10 +303,31 @@ public final class UtilTableGenerator {
                 return Object.class;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(110);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(40);
+                column.setCellRenderer(new DateCellRenderer());
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(30);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(13);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 1);
     }
 
-    public static DefaultTableModel getVeryShortVisitTable(Location inLocation) {
+    public static void setupVeryShortVisitTable(JTable inTable, Location inLocation) {
+        // Load data
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
@@ -224,6 +348,7 @@ public final class UtilTableGenerator {
             }
         }
         else tempTable = new Object[0][0];
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -237,10 +362,28 @@ public final class UtilTableGenerator {
                 return Object.class;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(45);
+                column.setCellRenderer(new DateCellRenderer());
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(25);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 1);
     }
     
-    public static DefaultTableModel getCompleteSightingTable(Visit inVisit) {
+    public static void setupCompleteSightingTable(JTable inTable, Visit inVisit) {
+        // Load data
         String[] columnNames = {
                                 "Primary Name",
                                 "Date",
@@ -274,6 +417,7 @@ public final class UtilTableGenerator {
             }
         }
         else tempTable = new Object[0][0];
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -287,10 +431,40 @@ public final class UtilTableGenerator {
                 return Object.class;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(170);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(65);
+                column.setCellRenderer(new DateCellRenderer());
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(55);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(70);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(10);
+            }
+            else if (i == 6) {
+                column.setPreferredWidth(10);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 1);
     }
 
-    public static DefaultTableModel getElementsForVisitTable(Visit inVisit) {
+    public static void setupElementsForVisitTable(JTable inTable, Visit inVisit) {
+        // Load data
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
@@ -313,16 +487,43 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = tempElement.getType();
             tempTable[t][i++] = tempElement.getFeedingClass();
         }
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(200);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(40);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(22);
+            }
+            else if (i == 3) {
+                column.setPreferredWidth(22);
+            }
+            else if (i == 4) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 5) {
+                column.setPreferredWidth(140);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
 
-    public static DefaultTableModel getElementsForLocationTable(Location inLocation) {
+    public static void setupElementsForLocationTable(JTable inTable, Location inLocation) {
+        // Load data
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
@@ -345,16 +546,34 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = tempElement.getType();
             tempTable[t][i++] = tempElement.getFeedingClass();
         }
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(110);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(30);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
 
-    public static DefaultTableModel getLocationsForElementTable(Element inElement) {
+    public static void setupLocationsForElementTable(JTable inTable, Element inElement) {
+        // Load data
         String[] columnNames = {
                                 "Name",
                                 "Province",
@@ -378,16 +597,34 @@ public final class UtilTableGenerator {
                 tempTable[t][i++] = tempLocation.getGameViewingRating();
             }
         }
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(100);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(35);
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(35);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
 
-    public static DefaultTableModel getShortLocationTable(Location inLocation, boolean inUseSearch) {
+    public static void setupShortLocationTable(JTable inTable, Location inLocation) {
+        // Load data
         String[] columnNames = {
                                 "Name",
                                 "Province"
@@ -402,16 +639,31 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = tempLocation.getName();
             tempTable[t][i++] = tempLocation.getProvince();
         }
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(150);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(30);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 0);
     }
 
-    public static DefaultTableModel getSightingsForElementTable(Element inElement) {
+    public static void setupSightingsForElementTable(JTable inTable, Element inElement) {
+        // Load data
         String[] columnNames = {
                                 "Location",
                                 "Date",
@@ -432,6 +684,7 @@ public final class UtilTableGenerator {
             }
         }
         else tempTable = new Object[0][0];
+        // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -445,32 +698,31 @@ public final class UtilTableGenerator {
                 return Object.class;
             }
         };
-        return table;
+        inTable.setModel(table);
+        // Resize the columns
+        TableColumn column = null;
+        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
+            column = inTable.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(135);
+            }
+            else if (i == 1) {
+                column.setPreferredWidth(75);
+                column.setCellRenderer(new DateCellRenderer());
+            }
+            else if (i == 2) {
+                column.setPreferredWidth(5);
+            }
+        }
+        // Setup sorting
+        setupRowSorter(inTable, 1);
     }
 
 
-    public static void setupRowSorter(JTable inTable, int inColumn) {
+    private static void setupRowSorter(JTable inTable, int inColumn) {
         List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(inColumn, SortOrder.ASCENDING));
         inTable.getRowSorter().setSortKeys(tempList);
     }
-
-    // Private Methods
-/* Not used anymore
-    private String getMonth(int inMonth) {
-        if (inMonth == 0) return "Jan";
-        if (inMonth == 1) return "Feb";
-        if (inMonth == 2) return "Mar";
-        if (inMonth == 3) return "Apr";
-        if (inMonth == 4) return "May";
-        if (inMonth == 5) return "Jun";
-        if (inMonth == 6) return "Jul";
-        if (inMonth == 7) return "Aug";
-        if (inMonth == 8) return "Sep";
-        if (inMonth == 9) return "Oct";
-        if (inMonth == 10) return "Nov";
-        if (inMonth == 11) return "Dec";
-        return "";
-    }
-*/
+   
 }

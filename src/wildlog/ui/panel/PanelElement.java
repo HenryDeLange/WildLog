@@ -24,11 +24,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.RowSorter.SortKey;
-import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
@@ -1020,16 +1017,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
 
         if (element.getPrimaryName() != null) {
-            tblLocation.setModel(UtilTableGenerator.getLocationsForElementTable(element));
-            // Sort rows for Locations
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblLocation.getRowSorter().setSortKeys(tempList);
+            UtilTableGenerator.setupLocationsForElementTable(tblLocation, element);
         }
         else
             tblLocation.setModel(new DefaultTableModel(new String[]{"No Locations"}, 0));
-        // Setup table column sizes
-        resizeTables();
         rdbLocations.setSelected(true);
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
     }//GEN-LAST:event_formComponentShown
@@ -1146,29 +1137,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
-                tblLocation.setModel(UtilTableGenerator.getSightingsForElementTable(element));
-                // Sort rows for Locations
-                List<SortKey> tempList = new ArrayList<SortKey>(1);
-                tempList.add(new SortKey(0, SortOrder.ASCENDING));
-                tblLocation.getRowSorter().setSortKeys(tempList);
+                UtilTableGenerator.setupSightingsForElementTable(tblLocation, element);
             }
             else
                 tblLocation.setModel(new DefaultTableModel(new String[]{"No Sightings"}, 0));
         }
         else {
             if (element.getPrimaryName() != null) {
-                tblLocation.setModel(UtilTableGenerator.getLocationsForElementTable(element));
-                // Sort rows for Locations
-                List<SortKey> tempList = new ArrayList<SortKey>(1);
-                tempList.add(new SortKey(0, SortOrder.ASCENDING));
-                tblLocation.getRowSorter().setSortKeys(tempList);
+                UtilTableGenerator.setupLocationsForElementTable(tblLocation, element);
             }
             else
                 tblLocation.setModel(new DefaultTableModel(new String[]{"No Locations"}, 0));
         }
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
-        // Setup table column sizes
-        resizeTables();
     }//GEN-LAST:event_rdbSightingsItemStateChanged
 
     private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
@@ -1221,38 +1202,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         Utils.openFile(finalPath);
     }//GEN-LAST:event_btnKMLActionPerformed
 
-    private void resizeTables() {
-        if (rdbSightings.isSelected()) {
-            TableColumn column = null;
-            for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
-                column = tblLocation.getColumnModel().getColumn(i);
-                if (i == 0) {
-                    column.setPreferredWidth(135);
-                }
-                else if (i == 1) {
-                    column.setPreferredWidth(75);
-                }
-                else if (i == 2) {
-                    column.setPreferredWidth(5);
-                }
-            }
-        }
-        else {
-            TableColumn column = null;
-            for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
-                column = tblLocation.getColumnModel().getColumn(i);
-                if (i == 0) {
-                    column.setPreferredWidth(100);
-                }
-                else if (i == 1) {
-                    column.setPreferredWidth(35);
-                }
-                else if (i == 2) {
-                    column.setPreferredWidth(35);
-                }
-            }
-        }
-    }
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));

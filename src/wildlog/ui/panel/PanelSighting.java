@@ -14,7 +14,6 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -24,12 +23,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
-import javax.swing.RowSorter.SortKey;
-import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
@@ -52,7 +48,6 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeFormat;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.utils.LatLonConverter;
-import wildlog.utils.ui.DateCellRenderer;
 
 /**
  *
@@ -92,10 +87,9 @@ public class PanelSighting extends javax.swing.JPanel {
             // Setup Dropdown Boxes
 //            if (location != null)
 //                cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblElement.getRowSorter().setSortKeys(tempList);
-            tblLocation.getRowSorter().setSortKeys(tempList);
+            UtilTableGenerator.setupShortElementTable(tblElement, new Element());
+            UtilTableGenerator.setupShortLocationTable(tblLocation, new Location());
+            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Location"}, 0));
             // Setup default values for tables
             if (location != null) {
                 int select = -1;
@@ -123,11 +117,7 @@ public class PanelSighting extends javax.swing.JPanel {
             }
             if (location != null && visit != null) {
                 // Build the table
-                tblVisit.setModel(UtilTableGenerator.getVeryShortVisitTable(location));
-                // Sort the table
-                tempList = new ArrayList<SortKey>(1);
-                tempList.add(new SortKey(1, SortOrder.ASCENDING));
-                tblVisit.getRowSorter().setSortKeys(tempList);
+                UtilTableGenerator.setupVeryShortVisitTable(tblVisit, location);
                 // Select the visit
                 int select = -1;
                 for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
@@ -164,7 +154,6 @@ public class PanelSighting extends javax.swing.JPanel {
             tblElement.getTableHeader().setReorderingAllowed(false);
             tblLocation.getTableHeader().setReorderingAllowed(false);
             tblVisit.getTableHeader().setReorderingAllowed(false);
-            resizeTalbes();
             // Setup default values for input fields
             if (treatAsNewSighting) {
                 cmbCertainty.setSelectedItem(Certainty.SURE);
@@ -362,7 +351,6 @@ public class PanelSighting extends javax.swing.JPanel {
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
-        tblElement.setModel(UtilTableGenerator.getShortElementTable(searchElement));
         tblElement.setEnabled(!disableEditing);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -721,7 +709,6 @@ public class PanelSighting extends javax.swing.JPanel {
 
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
-        tblLocation.setModel(UtilTableGenerator.getShortLocationTable(searchLocation, false));
         tblLocation.setEnabled(!disableEditing);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -743,7 +730,6 @@ public class PanelSighting extends javax.swing.JPanel {
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
-        tblVisit.setModel(new DefaultTableModel());
         tblVisit.setEnabled(!disableEditing);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -1187,7 +1173,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
 //                if (location != null)
 //                    cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
-                tblVisit.setModel(UtilTableGenerator.getVeryShortVisitTable(location));
+                UtilTableGenerator.setupVeryShortVisitTable(tblVisit, location);
                 visit = null;
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + location.getName()));
                 if (fotos.size() > 0)
@@ -1198,10 +1184,6 @@ public class PanelSighting extends javax.swing.JPanel {
             else {
 
             }
-            resizeTalbes();
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(1, SortOrder.ASCENDING));
-            tblVisit.getRowSorter().setSortKeys(tempList);
         }
 }//GEN-LAST:event_tblLocationMouseReleased
 
@@ -1210,15 +1192,9 @@ public class PanelSighting extends javax.swing.JPanel {
             searchElement = new Element();
             if (!cmbElementType.isEnabled())
                 searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-            tblElement.setModel(UtilTableGenerator.getShortElementTable(searchElement));
+            UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
             cmbElementType.setEnabled(!cmbElementType.isEnabled());
             txtSearch.setText("");
-            // Setup table column sizes
-            resizeTalbes();
-            // Resort the table
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblElement.getRowSorter().setSortKeys(tempList);
             // Clear Images
             lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
         }
@@ -1227,14 +1203,8 @@ public class PanelSighting extends javax.swing.JPanel {
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         if (sighting != null) {
             searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
-            tblElement.setModel(UtilTableGenerator.getShortElementTable(searchElement));
+            UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
             txtSearch.setText("");
-            // Setup table column sizes
-            resizeTalbes();
-            // Resort the table
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblElement.getRowSorter().setSortKeys(tempList);
             // Clear Images
             lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
         }
@@ -1249,13 +1219,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 if (txtSearch.getText().length() > 0)
                     searchElement.setPrimaryName(txtSearch.getText());
             }
-            tblElement.setModel(UtilTableGenerator.getShortElementTable(searchElement));
-            // Setup table column sizes
-            resizeTalbes();
-            // Resort the table
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblElement.getRowSorter().setSortKeys(tempList);
+            UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
             // Clear Images
             lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
         }
@@ -1268,15 +1232,10 @@ public class PanelSighting extends javax.swing.JPanel {
                 if (txtSearchLocation.getText().length() > 0)
                     searchLocation.setName(txtSearchLocation.getText());
             }
-            tblLocation.setModel(UtilTableGenerator.getShortLocationTable(searchLocation, true));
-            // Setup table column sizes
-            resizeTalbes();
-            // Resort the table
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblLocation.getRowSorter().setSortKeys(tempList);
+            UtilTableGenerator.setupShortLocationTable(tblLocation, searchLocation);
             // Clear Images
             lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Location"}, 0));
         }
     }//GEN-LAST:event_btnSearchLocationActionPerformed
 
@@ -1501,46 +1460,6 @@ public class PanelSighting extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
-
-    private void resizeTalbes() {
-        if (sighting != null) {
-            TableColumn column = null;
-            for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
-                column = tblElement.getColumnModel().getColumn(i);
-                if (i == 0) {
-                    column.setPreferredWidth(150);
-                }
-                else if (i == 1) {
-                    column.setPreferredWidth(25);
-                }
-                else if (i == 2) {
-                    column.setPreferredWidth(40);
-                }
-            }
-            for (int i = 0; i < tblLocation.getColumnModel().getColumnCount(); i++) {
-                column = tblLocation.getColumnModel().getColumn(i);
-                if (i == 0) {
-                    column.setPreferredWidth(150);
-                }
-                else if (i == 1) {
-                    column.setPreferredWidth(30);
-                }
-            }
-            for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
-                column = tblVisit.getColumnModel().getColumn(i);
-                if (i == 0) {
-                    column.setPreferredWidth(100);
-                }
-                else if (i == 1) {
-                    column.setPreferredWidth(45);
-                    column.setCellRenderer(new DateCellRenderer());
-                }
-                else if (i == 2) {
-                    column.setPreferredWidth(25);
-                }
-            }
-        }
-    }
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));

@@ -19,10 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.RowSorter.SortKey;
-import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
@@ -45,7 +42,6 @@ import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.report.ReportLocation;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
-import wildlog.utils.ui.DateCellRenderer;
 import wildlog.utils.ui.UtilMapGenerator;
 
 
@@ -926,23 +922,14 @@ public class PanelLocation extends PanelCanSetupHeader {
             tempVisit.setLocationName(locationWL.getName());
             List<Visit> visits = app.getDBI().list(tempVisit);
             lblNumberOfVisits.setText(Integer.toString(visits.size()));
-            tblVisit.setModel(UtilTableGenerator.getCompleteVisitTable(locationWL));
-            tblElement.setModel(UtilTableGenerator.getElementsForLocationTable(locationWL));
-            // Sort rows for visits
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblElement.getRowSorter().setSortKeys(tempList);
-            tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(1, SortOrder.ASCENDING));
-            tblVisit.getRowSorter().setSortKeys(tempList);
+            UtilTableGenerator.setupCompleteVisitTable(tblVisit, locationWL);
+            UtilTableGenerator.setupElementsForLocationTable(tblElement, locationWL);
         }
         else {
             lblNumberOfVisits.setText("0");
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Visits"}, 0));
             tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
         }
-        // Setup table column sizes
-        resizeTables();
         // Lat Lon stuff
         txtLatDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), Integer.parseInt(txtLatDegrees.getText()), Integer.parseInt(txtLatMinutes.getText()), Float.parseFloat(txtLatSeconds.getText()))));
         txtLonDecimal.setText(Double.toString(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), Integer.parseInt(txtLonDegrees.getText()), Integer.parseInt(txtLonMinutes.getText()), Float.parseFloat(txtLonSeconds.getText()))));
@@ -1069,21 +1056,15 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
         if (locationWL.getName() != null) {
             if (rdbLocation.isSelected()) {
-                tblElement.setModel(UtilTableGenerator.getElementsForLocationTable(locationWL));
+                UtilTableGenerator.setupElementsForLocationTable(tblElement, locationWL);
             }
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
-                    tblElement.setModel(UtilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
+                    UtilTableGenerator.setupElementsForVisitTable(tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0))));
                 }
-                else tblElement.setModel(new DefaultTableModel(new String[]{"Please selected a Visit"}, 0));
+                else tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Visit"}, 0));
             }
             lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
-            // Setup table column sizes
-            resizeTables();
-            // Sort rows for Element
-            List<SortKey> tempList = new ArrayList<SortKey>(1);
-            tempList.add(new SortKey(0, SortOrder.ASCENDING));
-            tblElement.getRowSorter().setSortKeys(tempList);
         }
         else {
             lblNumberOfElements.setText("0");
@@ -1261,46 +1242,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         // Try to open the Kml file
         Utils.openFile(finalPath);
     }//GEN-LAST:event_btnKmlActionPerformed
-
-
-    private void resizeTables() {
-        TableColumn column = null;
-        for (int i = 0; i < tblVisit.getColumnModel().getColumnCount(); i++) {
-            column = tblVisit.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(160);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(45);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(45);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(75);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(30);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(30);
-            }
-        }
-        for (int i = 0; i < tblElement.getColumnModel().getColumnCount(); i++) {
-            column = tblElement.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(150);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(50);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(50);
-            }
-        }
-    }
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
