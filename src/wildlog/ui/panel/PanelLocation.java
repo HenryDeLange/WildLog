@@ -41,6 +41,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.kml.util.KmlUtil;
+import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.report.ReportLocation;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
@@ -52,21 +53,15 @@ import wildlog.utils.ui.UtilMapGenerator;
  *
  * @author  henry.delange
  */
-public class PanelLocation extends javax.swing.JPanel {
+public class PanelLocation extends PanelCanSetupHeader {
     // location is already used in this component... Have problem with getLocation()...
     private Location locationWL;
-    private JTabbedPane parent;
-    private int imageIndex;
-    private UtilPanelGenerator utilPanelGenerator;
-    private UtilTableGenerator utilTableGenerator;
-    private WildLogApp app;
+    
     
     /** Creates new form PanelLocation */
     public PanelLocation(Location inLocation) {
         app = (WildLogApp) Application.getInstance();
         locationWL = inLocation;
-        utilPanelGenerator = new UtilPanelGenerator();
-        utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
@@ -102,8 +97,8 @@ public class PanelLocation extends javax.swing.JPanel {
         return true;
     }
     
+    @Override
     public void setupTabHeader() {
-        parent = (JTabbedPane) getParent();
         JPanel tabHeader = new JPanel();
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Location.gif"))));
         if (locationWL.getName() != null) tabHeader.add(new JLabel(locationWL.getName() + " "));
@@ -121,12 +116,11 @@ public class PanelLocation extends javax.swing.JPanel {
         });
         tabHeader.add(btnClose);
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        parent.setTabComponentAt(parent.indexOfComponent(this), tabHeader);
+        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
     
-    public void closeTab() {
-        parent = (JTabbedPane) getParent();
-        if (parent != null) parent.remove(this);
+    private void closeTab() {
+        ((JTabbedPane)getParent()).remove(this);
     }
     
     // Need to look again later at listbox and how I use it...
@@ -913,10 +907,8 @@ public class PanelLocation extends javax.swing.JPanel {
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            PanelVisit tempPanel = utilPanelGenerator.getNewVisitPanel(locationWL);
-            parent.add(tempPanel);
-            tempPanel.setupTabHeader();
-            parent.setSelectedComponent(tempPanel);
+            PanelVisit tempPanel = UtilPanelGenerator.getNewVisitPanel(locationWL);
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
         }
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
@@ -934,10 +926,10 @@ public class PanelLocation extends javax.swing.JPanel {
             tempVisit.setLocationName(locationWL.getName());
             List<Visit> visits = app.getDBI().list(tempVisit);
             lblNumberOfVisits.setText(Integer.toString(visits.size()));
-            tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(locationWL));
-            tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
+            tblVisit.setModel(UtilTableGenerator.getCompleteVisitTable(locationWL));
+            tblElement.setModel(UtilTableGenerator.getElementsForLocationTable(locationWL));
             // Sort rows for visits
-            List tempList = new ArrayList<SortKey>(1);
+            List<SortKey> tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(0, SortOrder.ASCENDING));
             tblElement.getRowSorter().setSortKeys(tempList);
             tempList = new ArrayList<SortKey>(1);
@@ -962,11 +954,9 @@ public class PanelLocation extends javax.swing.JPanel {
         int[] selectedRows = tblVisit.getSelectedRows();
         PanelVisit tempPanel = null;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-            parent.add(tempPanel);
-            tempPanel.setupTabHeader();
+            tempPanel = UtilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
         }
-        if (tempPanel != null) parent.setSelectedComponent(tempPanel);
     }//GEN-LAST:event_btnGoVisitActionPerformed
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
@@ -975,8 +965,8 @@ public class PanelLocation extends javax.swing.JPanel {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 PanelVisit tempPanel = null;
                 for (int t = 0; t < selectedRows.length; t++) {
-                    tempPanel = utilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-                    parent.remove(tempPanel);
+                    tempPanel = UtilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
+                    ((JTabbedPane)getParent()).remove(tempPanel);
                     app.getDBI().delete(tempPanel.getVisit());
                 }
                 formComponentShown(null);
@@ -988,12 +978,9 @@ public class PanelLocation extends javax.swing.JPanel {
         int[] selectedRows = tblElement.getSelectedRows();
         PanelElement tempPanel = null;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
-            parent = (JTabbedPane) getParent();
-            parent.add(tempPanel);
-            tempPanel.setupTabHeader();
+            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
         }
-        if (tempPanel != null) parent.setSelectedComponent(tempPanel);
     }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
@@ -1082,11 +1069,11 @@ public class PanelLocation extends javax.swing.JPanel {
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
         if (locationWL.getName() != null) {
             if (rdbLocation.isSelected()) {
-                tblElement.setModel(utilTableGenerator.getElementsForLocationTable(locationWL));
+                tblElement.setModel(UtilTableGenerator.getElementsForLocationTable(locationWL));
             }
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
-                    tblElement.setModel(utilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
+                    tblElement.setModel(UtilTableGenerator.getElementsForVisitTable(app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0)))));
                 }
                 else tblElement.setModel(new DefaultTableModel(new String[]{"Please selected a Visit"}, 0));
             }
@@ -1094,7 +1081,7 @@ public class PanelLocation extends javax.swing.JPanel {
             // Setup table column sizes
             resizeTables();
             // Sort rows for Element
-            List tempList = new ArrayList<SortKey>(1);
+            List<SortKey> tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(0, SortOrder.ASCENDING));
             tblElement.getRowSorter().setSortKeys(tempList);
         }

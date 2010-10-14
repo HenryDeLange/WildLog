@@ -1,5 +1,7 @@
 package wildlog.utils.ui;
 
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import wildlog.ui.panel.*;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
@@ -7,44 +9,46 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dbi.DBI;
 import wildlog.WildLogApp;
+import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 
 
-public class UtilPanelGenerator {
-    private DBI dbi;
-    
-    // CONSTRUCTOR:
-    public UtilPanelGenerator() {
-        WildLogApp app = (WildLogApp) Application.getInstance();
-        dbi = app.getDBI();
-    }
+public final class UtilPanelGenerator {
+    private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
     
     // METHODS:
-    public PanelElement getNewElementPanel() {
+    public static PanelElement getNewElementPanel() {
         return new PanelElement(new Element());
     }
     
-    public PanelElement getElementPanel(String inPrimaryName) {
+    public static PanelElement getElementPanel(String inPrimaryName) {
         Element tempElement = dbi.find(new Element(inPrimaryName));
         return new PanelElement(tempElement);
     }
     
-    public PanelLocation getNewLocationPanel() {
+    public static PanelLocation getNewLocationPanel() {
         return new PanelLocation(new Location());
     }
     
-    public PanelLocation getLocationPanel(String inName) {
+    public static PanelLocation getLocationPanel(String inName) {
         Location tempLocation = dbi.find(new Location(inName));
         return new PanelLocation(tempLocation);
     }
     
-    public PanelVisit getNewVisitPanel(Location inLocation) {
+    public static PanelVisit getNewVisitPanel(Location inLocation) {
         return new PanelVisit(inLocation, new Visit());
     }
     
-    public PanelVisit getVisitPanel(Location inLocation, String inName) {
+    public static PanelVisit getVisitPanel(Location inLocation, String inName) {
         Visit tempVisit = dbi.find(new Visit(inName));
         return new PanelVisit(inLocation, tempVisit);
     }
 
+    public static void addPanelAsTab(PanelCanSetupHeader inPanel, JTabbedPane inTabPane) {
+        if (inPanel != null && inTabPane != null) {
+            inTabPane.add(inPanel);
+            inPanel.setupTabHeader();
+            inTabPane.setSelectedComponent(inPanel);
+        }
+    }
 
 }

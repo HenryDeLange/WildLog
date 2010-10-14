@@ -75,8 +75,6 @@ import wildlog.utils.ui.WildLogTreeCellRenderer;
 public final class WildLogView extends FrameView implements PanelNeedsRefreshWhenSightingAdded {
     
     // This section contains all the custom initializations that needs to happen...
-    private UtilPanelGenerator utilPanelGenerator;
-    private UtilTableGenerator utilTableGenerator;
     private WildLogApp app;
     private Element searchElement;
     private Element searchElementBrowseTab;
@@ -84,8 +82,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private int imageIndex = 0;
     
     private void init() {
-        utilPanelGenerator = new UtilPanelGenerator();
-        utilTableGenerator = new UtilTableGenerator();
         app = (WildLogApp) Application.getInstance();
         searchElement = new Element();
         searchLocation = new Location();
@@ -658,7 +654,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
-        tblLocation.setModel(utilTableGenerator.getCompleteLocationTable(searchLocation));
+        tblLocation.setModel(UtilTableGenerator.getCompleteLocationTable(searchLocation));
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -695,7 +691,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
-        tblVisit.setModel(utilTableGenerator.getCompleteVisitTable(new Location()));
+        tblVisit.setModel(UtilTableGenerator.getCompleteVisitTable(new Location()));
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -767,7 +763,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblElement_LocTab.setAutoCreateRowSorter(true);
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
-        tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(new Location()));
+        tblElement_LocTab.setModel(UtilTableGenerator.getElementsForLocationTable(new Location()));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
         tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -837,7 +833,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -908,7 +904,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         tblLocation_EleTab.setAutoCreateRowSorter(true);
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
-        tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+        tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1221,11 +1217,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             int[] selectedRows = tblVisit.getSelectedRows();
             PanelVisit tempPanel = null;
             for (int t = 0; t < selectedRows.length; t++) {
-                tempPanel = utilPanelGenerator.getVisitPanel(tempLocation, (String)tblVisit.getValueAt(selectedRows[t], 0));
-                tabbedPanel.add(tempPanel);
-                tempPanel.setupTabHeader();
+                tempPanel = UtilPanelGenerator.getVisitPanel(tempLocation, (String)tblVisit.getValueAt(selectedRows[t], 0));
+                UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
+//                tabbedPanel.add(tempPanel);
+//                tempPanel.setupTabHeader();
             }
-            if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
+//            if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
         }
 }//GEN-LAST:event_btnGoVisit_LocTabActionPerformed
 
@@ -1233,28 +1230,24 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         int[] selectedRows = tblElement.getSelectedRows();
         PanelElement tempPanel = null;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
-            tabbedPanel.add(tempPanel);
-            tempPanel.setupTabHeader();
+            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
-        if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
 }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnAddElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddElementActionPerformed
-        PanelElement tempPanel = utilPanelGenerator.getNewElementPanel();
-        tabbedPanel.add(tempPanel);
-        tempPanel.setupTabHeader();
-        tabbedPanel.setSelectedComponent(tempPanel);
+        PanelElement tempPanel = UtilPanelGenerator.getNewElementPanel();
+        UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
 }//GEN-LAST:event_btnAddElementActionPerformed
 
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         // Setup the table column sizes
         resizeTalbes_Element();
         // Sort rows for Element
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
@@ -1266,7 +1259,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 int[] selectedRows = tblElement.getSelectedRows();
                 PanelElement tempPanel = null;
                 for (int t = 0; t < selectedRows.length; t++) {
-                    tempPanel = utilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+                    tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
                     tabbedPanel.remove(tempPanel);
                     app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
                 }
@@ -1276,21 +1269,19 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_btnDeleteElementActionPerformed
 
     private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
-        PanelLocation tempPanel = utilPanelGenerator.getNewLocationPanel();
-        tabbedPanel.add(tempPanel);
-        tempPanel.setupTabHeader();
-        tabbedPanel.setSelectedComponent(tempPanel);
+        PanelLocation tempPanel = UtilPanelGenerator.getNewLocationPanel();
+        UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
     }//GEN-LAST:event_btnAddLocationActionPerformed
 
     private void tabLocationComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabLocationComponentShown
-        tblLocation.setModel(utilTableGenerator.getCompleteLocationTable(searchLocation));
+        tblLocation.setModel(UtilTableGenerator.getCompleteLocationTable(searchLocation));
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         // Setup Column width for tables:
         resizeTables_Location();
         // Sort location rows
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblLocation.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tabLocationComponentShown
@@ -1299,24 +1290,22 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         int[] selectedRows = tblLocation.getSelectedRows();
         PanelLocation tempPanel = null;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
-            tabbedPanel.add(tempPanel);
-            tempPanel.setupTabHeader();
+            tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
-        if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
 
     private void ckbTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbTypeFilterActionPerformed
         searchElement = new Element();
         if (!cmbType.isEnabled())
             searchElement.setType((ElementType)cmbType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         cmbType.setEnabled(!cmbType.isEnabled());
         txtSearch.setText("");
         // Setup table column sizes
         resizeTalbes_Element();
         // Sort rows for Element
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
         tblLocation_EleTab.setModel(new DefaultTableModel());
@@ -1326,15 +1315,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element((ElementType)cmbType.getSelectedItem());
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         txtSearch.setText("");
         // Setup talbe column sizes
         resizeTalbes_Element();
         // Sort rows for Element
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
-        tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+        tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
@@ -1343,22 +1332,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         int[] selectedRows = tblElement_LocTab.getSelectedRows();
         PanelElement tempPanel = null;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getElementPanel((String)tblElement_LocTab.getValueAt(selectedRows[t], 0));
-            tabbedPanel.add(tempPanel);
-            tempPanel.setupTabHeader();
+            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement_LocTab.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
-        if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
     }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
         int[] selectedRows = tblLocation_EleTab.getSelectedRows();
         PanelLocation tempPanel = null;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = utilPanelGenerator.getLocationPanel((String)tblLocation_EleTab.getValueAt(selectedRows[t], 0));
-            tabbedPanel.add(tempPanel);
-            tempPanel.setupTabHeader();
+            tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation_EleTab.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
-        if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
@@ -1371,10 +1356,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     tempVisit.setLocationName(tempLocation.getName());
                     List<Visit> visits = app.getDBI().list(tempVisit);
                     for (int i = 0; i < visits.size(); i++) {
-                        PanelVisit tempPanel = utilPanelGenerator.getVisitPanel(tempLocation, visits.get(i).getName());
+                        PanelVisit tempPanel = UtilPanelGenerator.getVisitPanel(tempLocation, visits.get(i).getName());
                         tabbedPanel.remove(tempPanel);
                     }
-                    tabbedPanel.remove(utilPanelGenerator.getLocationPanel(tempLocation.getName()));
+                    tabbedPanel.remove(UtilPanelGenerator.getLocationPanel(tempLocation.getName()));
                     app.getDBI().delete(tempLocation);
                 }
                 tabLocationComponentShown(null);
@@ -1392,16 +1377,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
                 lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             // Get Locations
-            tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(tempElement));
+            tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(tempElement));
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+            tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
         }
         // Setup table column sizes
         resizeTalbes_Element();
         // Sort rows for locations
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblLocation_EleTab.getRowSorter().setSortKeys(tempList);
     }//GEN-LAST:event_tblElementMouseReleased
@@ -1416,18 +1401,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
                 lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
             // Get Visits
-            tblVisit.setModel(utilTableGenerator.getShortVisitTable(tempLocation));
+            tblVisit.setModel(UtilTableGenerator.getShortVisitTable(tempLocation));
             // Get All Elements seen
-            tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(tempLocation));
+            tblElement_LocTab.setModel(UtilTableGenerator.getElementsForLocationTable(tempLocation));
         }
         else {
             lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            tblVisit.setModel(utilTableGenerator.getShortVisitTable(new Location()));
-            tblElement_LocTab.setModel(utilTableGenerator.getElementsForLocationTable(new Location()));
+            tblVisit.setModel(UtilTableGenerator.getShortVisitTable(new Location()));
+            tblElement_LocTab.setModel(UtilTableGenerator.getElementsForLocationTable(new Location()));
         }
         resizeTables_Location();
         // Sort rows for visits and elements
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement_LocTab.getRowSorter().setSortKeys(tempList);
         tempList = new ArrayList<SortKey>(1);
@@ -1443,16 +1428,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             if (txtSearch.getText().length() > 0)
                 searchElement.setPrimaryName(txtSearch.getText());
         }
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         // Setup talbe column sizes
         resizeTalbes_Element();
         // Sort rows for Element
-        List tempList = new ArrayList<SortKey>(1);
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(0, SortOrder.ASCENDING));
         tblElement.getRowSorter().setSortKeys(tempList);
         // Reset the Image and Location table
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-        tblLocation_EleTab.setModel(utilTableGenerator.getLocationsForElementTable(new Element()));
+        tblLocation_EleTab.setModel(UtilTableGenerator.getLocationsForElementTable(new Element()));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -1506,7 +1491,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         txtSearch.setText("");
         cmbType.setEnabled(false);
         searchElement = new Element();
-        tblElement.setModel(utilTableGenerator.getCompleteElementTable(searchElement));
+        tblElement.setModel(UtilTableGenerator.getCompleteElementTable(searchElement));
         // Reset everything
         tabElementComponentShown(null);
     }//GEN-LAST:event_btnClearSearchActionPerformed
@@ -1704,26 +1689,20 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                PanelLocation tempPanel = utilPanelGenerator.getLocationPanel(tempLocation.getName());
-                tabbedPanel.add(tempPanel);
-                tempPanel.setupTabHeader();
-                tabbedPanel.setSelectedComponent(tempPanel);
+                PanelLocation tempPanel = UtilPanelGenerator.getLocationPanel(tempLocation.getName());
+                UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                PanelElement tempPanel = utilPanelGenerator.getElementPanel(tempElement.getPrimaryName());
-                tabbedPanel.add(tempPanel);
-                tempPanel.setupTabHeader();
-                tabbedPanel.setSelectedComponent(tempPanel);
+                PanelElement tempPanel = UtilPanelGenerator.getElementPanel(tempElement.getPrimaryName());
+                UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                PanelVisit tempPanel = utilPanelGenerator.getVisitPanel(app.getDBI().find(new Location(tempVisit.getLocationName())), tempVisit.getName());
-                tabbedPanel.add(tempPanel);
-                tempPanel.setupTabHeader();
-                tabbedPanel.setSelectedComponent(tempPanel);
+                PanelVisit tempPanel = UtilPanelGenerator.getVisitPanel(app.getDBI().find(new Location(tempVisit.getLocationName())), tempVisit.getName());
+                UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {

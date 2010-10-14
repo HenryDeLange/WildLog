@@ -86,88 +86,58 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
-        String fotoString = "";
+        StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("ELEMENT-" + primaryName));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString = fotoString + fotos.get(t).toHTML();
+            fotoString.append(fotos.get(t).toHTML());
         }
-
-        String htmlElement = "<head><title>" + primaryName + "</title></head>";
-        htmlElement = htmlElement + "<body>";
-        htmlElement = htmlElement + "<H2>Creature</H2>";
-        htmlElement = htmlElement + "<b>Primary Name:</b> " + primaryName;
-        htmlElement = htmlElement + "<br/><b>Other Name:</b> " + UtilsHTML.formatString(otherName);
-        htmlElement = htmlElement + "<br/><b>Scientific Name:</b> <i>" + UtilsHTML.formatString(scientificName) + "</i>";
-        htmlElement = htmlElement + "<br/><b>Reference ID:</b> " + UtilsHTML.formatString(referenceID);
-        htmlElement = htmlElement + "<br/>";
-        htmlElement = htmlElement + "<br/><b>Type:</b> " + UtilsHTML.formatString(type);
-        htmlElement = htmlElement + "<br/><b>Feeding Class:</b> " + UtilsHTML.formatString(feedingClass);
-        htmlElement = htmlElement + "<br/><b>Add Frequency:</b> " + UtilsHTML.formatString(addFrequency);
-        htmlElement = htmlElement + "<br/><b>Wish Rating:</b> " + UtilsHTML.formatString(wishListRating);
-        htmlElement = htmlElement + "<br/><b>Active Time:</b> " + UtilsHTML.formatString(activeTime);
-        htmlElement = htmlElement + "<br/><b>Endangered Status:</b> " + UtilsHTML.formatString(endangeredStatus);
-        htmlElement = htmlElement + "<br/><b>Water Dependance:</b> " + UtilsHTML.formatString(waterDependance);
-        htmlElement = htmlElement + "<br/><b>Food/Nutrition:</b> " + UtilsHTML.formatString(nutrition);
-        htmlElement = htmlElement + "<br/><b>Identification:</b> " + UtilsHTML.formatString(diagnosticDescription);
-        htmlElement = htmlElement + "<br/><b>Habitat:</b> " + UtilsHTML.formatString(description);
-        htmlElement = htmlElement + "<br/><b>Distribution:</b> " + UtilsHTML.formatString(distribution);
-        htmlElement = htmlElement + "<br/><b>Behaviour:</b> " + UtilsHTML.formatString(behaviourDescription);
-        htmlElement = htmlElement + "<br/><b>Minimum Male Size:</b> " + UtilsHTML.formatString(sizeMaleMin) + " " + UtilsHTML.formatString(sizeUnit);
-        htmlElement = htmlElement + "<br/><b>Maximum Male Size:</b> " + UtilsHTML.formatString(sizeMaleMin) + " " + UtilsHTML.formatString(sizeUnit);
-        htmlElement = htmlElement + "<br/><b>Minimum Female Size:</b> " + UtilsHTML.formatString(sizeFemaleMin) + " " + UtilsHTML.formatString(sizeUnit);
-        htmlElement = htmlElement + "<br/><b>Maximum Female Size:</b> " + UtilsHTML.formatString(sizeFemaleMin) + " " + UtilsHTML.formatString(sizeUnit);
-        htmlElement = htmlElement + "<br/><b>Minimum Male Weight:</b> " + UtilsHTML.formatString(weightMaleMin) + " " + UtilsHTML.formatString(weightUnit);
-        htmlElement = htmlElement + "<br/><b>Maximum Male Weight:</b> " + UtilsHTML.formatString(weightMaleMin) + " " + UtilsHTML.formatString(weightUnit);
-        htmlElement = htmlElement + "<br/><b>Minimum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
-        htmlElement = htmlElement + "<br/><b>Maximum Female Weight:</b> " + UtilsHTML.formatString(weightFemaleMin) + " " + UtilsHTML.formatString(weightUnit);
-        htmlElement = htmlElement + "<br/><b>Lifespan:</b> " + UtilsHTML.formatString(lifespan);
-        htmlElement = htmlElement + "<br/><b>Breeding:</b> " + UtilsHTML.formatString(breedingDuration);
-        htmlElement = htmlElement + "<br/><b>Breeding Number:</b> " + UtilsHTML.formatString(breedingNumber);
+        StringBuilder htmlElement = new StringBuilder("<head><title>" + primaryName + "</title></head>");
+        htmlElement.append("<body>");
+        htmlElement.append("<H2>Creature</H2>");
+        htmlElement.append("<b>Primary Name:</b> ").append(primaryName);
+        htmlElement.append("<br/><b>Other Name:</b> ").append(UtilsHTML.formatString(otherName));
+        htmlElement.append("<br/><b>Scientific Name:</b> <i>").append(UtilsHTML.formatString(scientificName)).append("</i>");
+        htmlElement.append("<br/><b>Reference ID:</b> ").append(UtilsHTML.formatString(referenceID));
+        htmlElement.append("<br/>");
+        htmlElement.append("<br/><b>Type:</b> ").append(UtilsHTML.formatString(type));
+        htmlElement.append("<br/><b>Feeding Class:</b> ").append(UtilsHTML.formatString(feedingClass));
+        htmlElement.append("<br/><b>Add Frequency:</b> ").append(UtilsHTML.formatString(addFrequency));
+        htmlElement.append("<br/><b>Wish Rating:</b> ").append(UtilsHTML.formatString(wishListRating));
+        htmlElement.append("<br/><b>Active Time:</b> ").append(UtilsHTML.formatString(activeTime));
+        htmlElement.append("<br/><b>Endangered Status:</b> ").append(UtilsHTML.formatString(endangeredStatus));
+        htmlElement.append("<br/><b>Water Dependance:</b> ").append(UtilsHTML.formatString(waterDependance));
+        htmlElement.append("<br/><b>Food/Nutrition:</b> ").append(UtilsHTML.formatString(nutrition));
+        htmlElement.append("<br/><b>Identification:</b> ").append(UtilsHTML.formatString(diagnosticDescription));
+        htmlElement.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(description));
+        htmlElement.append("<br/><b>Distribution:</b> ").append(UtilsHTML.formatString(distribution));
+        htmlElement.append("<br/><b>Behaviour:</b> ").append(UtilsHTML.formatString(behaviourDescription));
+        htmlElement.append("<br/><b>Minimum Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Maximum Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Minimum Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Maximum Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Minimum Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Maximum Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Minimum Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Maximum Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Lifespan:</b> ").append(UtilsHTML.formatString(lifespan));
+        htmlElement.append("<br/><b>Breeding:</b> ").append(UtilsHTML.formatString(breedingDuration));
+        htmlElement.append("<br/><b>Breeding Number:</b> ").append(UtilsHTML.formatString(breedingNumber));
         if (inIncludeImages)
-            htmlElement = htmlElement + "<br/><b>Photos:</b><br/>" + fotoString;
+            htmlElement.append("<br/><b>Photos:</b><br/>").append(fotoString);
         if (inIsRecursive) {
-            htmlElement = htmlElement + "<br/><H2>Sightings:</H2>";
+            htmlElement.append("<br/><H2>Sightings:</H2>");
             Sighting tempSighting = new Sighting();
             tempSighting.setElementName(primaryName);
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
             for (Sighting temp : sightings) {
-                htmlElement = htmlElement + "<br/>" + temp.toHTML(false, inIncludeImages, inApp);
+                htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp));
             }
         }
 
-        htmlElement = htmlElement + "</body>";
-        return htmlElement;
+        htmlElement.append("</body>");
+        return htmlElement.toString();
     }
 
-//    public void toCSV(CsvGenerator inCSVGenerator) {
-//        inCSVGenerator.addData(primaryName);
-//        inCSVGenerator.addData(otherName);
-//        inCSVGenerator.addData(scientificName);
-//        inCSVGenerator.addData(referenceID);
-//        inCSVGenerator.addData(description);
-//        inCSVGenerator.addData(nutrition);
-//        inCSVGenerator.addData(waterDependance);
-//        inCSVGenerator.addData(sizeMaleMin);
-//        inCSVGenerator.addData(sizeFemaleMin);
-//        inCSVGenerator.addData(sizeUnit);
-//        inCSVGenerator.addData(weightMaleMin);
-//        inCSVGenerator.addData(weightFemaleMin);
-//        inCSVGenerator.addData(weightUnit);
-//        inCSVGenerator.addData(breedingDuration);
-//        inCSVGenerator.addData(breedingNumber);
-//        //inCSVGenerator.addData(breedingAge);
-//        inCSVGenerator.addData(wishListRating);
-//        inCSVGenerator.addData(diagnosticDescription);
-//        inCSVGenerator.addData(activeTime);
-//        inCSVGenerator.addData(endangeredStatus);
-//        inCSVGenerator.addData(behaviourDescription);
-//        inCSVGenerator.addData(addFrequency);
-////        inCSVGenerator.addData(fotos);
-//        inCSVGenerator.addData(type);
-//        inCSVGenerator.addData(feedingClass);
-//        inCSVGenerator.addData(lifespan);
-//    }
-    
 
     // GETTERS:
     public String getPrimaryName() {

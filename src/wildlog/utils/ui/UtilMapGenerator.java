@@ -8,7 +8,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
  *
  * @author Henry
  */
-public class UtilMapGenerator {
+public final class UtilMapGenerator {
 
     public static void addPoint(final Float inLatitude, final Float inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
         if (inApp.isUseOnlineMap()) {

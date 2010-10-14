@@ -1,17 +1,3 @@
-/*
- * Visit.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dataobjects;
 
 import java.util.Date;
@@ -60,47 +46,37 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
-        String fotoString = "";
+        StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("VISIT-" + name));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString = fotoString + fotos.get(t).toHTML();
+            fotoString.append(fotos.get(t).toHTML());
         }
-        String sightingString = "";
+        StringBuilder sightingString = new StringBuilder();
         if (inIsRecursive) {
             Sighting tempSighting = new Sighting();
             tempSighting.setVisitName(name);
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
             for (int t = 0; t < sightings.size(); t++) {
-                sightingString = sightingString + sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp) + "<br/>";
+                sightingString.append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp)).append("<br/>");
             }
         }
 
-        String htmlVisit = "";
-        htmlVisit = htmlVisit + "<H2>Visit</H2>";
-        htmlVisit = htmlVisit + "<b>Visit:</b> " + name;
-        htmlVisit = htmlVisit + "<br/>";
-        htmlVisit = htmlVisit + "<br/><b>Start Date:</b> " + UtilsHTML.formatDate(startDate, false);
-        htmlVisit = htmlVisit + "<br/><b>End Date:</b> " + UtilsHTML.formatDate(endDate, false);
-        htmlVisit = htmlVisit + "<br/><b>Game Watching:</b> " + UtilsHTML.formatString(gameWatchingIntensity);
-        htmlVisit = htmlVisit + "<br/><b>Type:</b> " + UtilsHTML.formatString(type);
-        htmlVisit = htmlVisit + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
+        StringBuilder htmlVisit = new StringBuilder();
+        htmlVisit.append("<H2>Visit</H2>");
+        htmlVisit.append("<b>Visit:</b> ").append(name);
+        htmlVisit.append("<br/>");
+        htmlVisit.append("<br/><b>Start Date:</b> ").append(UtilsHTML.formatDate(startDate, false));
+        htmlVisit.append("<br/><b>End Date:</b> ").append(UtilsHTML.formatDate(endDate, false));
+        htmlVisit.append("<br/><b>Game Watching:</b> ").append(UtilsHTML.formatString(gameWatchingIntensity));
+        htmlVisit.append("<br/><b>Type:</b> ").append(UtilsHTML.formatString(type));
+        htmlVisit.append("<br/><b>Description:</b> ").append(UtilsHTML.formatString(description));
         if (inIncludeImages)
-            htmlVisit = htmlVisit + "<br/><b>Photos:</b><br/>" + fotoString;
+            htmlVisit.append("<br/><b>Photos:</b><br/>").append(fotoString);
         if (inIsRecursive)
-            htmlVisit = htmlVisit + "<br/><H3>Sightings:</H3>" + sightingString;
-        return htmlVisit;
+            htmlVisit.append("<br/><H3>Sightings:</H3>").append(sightingString);
+        return htmlVisit.toString();
     }
 
-//    public void toCSV(CsvGenerator inCSVGenerator) {
-//        inCSVGenerator.addData(name);
-//        inCSVGenerator.addData(startDate);
-//        inCSVGenerator.addData(endDate);
-//        inCSVGenerator.addData(description);
-//        inCSVGenerator.addData(gameWatchingIntensity);
-//        //inCSVGenerator.addData("Sightings");
-//        inCSVGenerator.addData(type);
-////        inCSVGenerator.addData(fotos);
-//    }
 
     // GETTERS:
     public String getName() {

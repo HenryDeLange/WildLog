@@ -7,7 +7,7 @@ import wildlog.data.enums.Longitudes;
  *
  * @author DeLange
  */
-public class LatLonConverter {
+public final class LatLonConverter {
 
     public static double getDecimalDegree(Latitudes inLatitudes, int inDegrees, int inMinutes, float inSeconds) {
         if (inLatitudes != null) {

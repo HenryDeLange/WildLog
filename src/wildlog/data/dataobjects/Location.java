@@ -76,51 +76,51 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
-        String fotoString = "";
+        StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("LOCATION-" + name));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString = fotoString + fotos.get(t).toHTML();
+            fotoString.append(fotos.get(t).toHTML());
         }
 //        String subAreasString = "";
 //        if (subAreas != null)
 //            for (int t = 0; t < subAreas.size(); t++) {
 //                subAreasString = subAreasString + subAreas.get(t);
 //            }
-        String visitsString = "";
+        StringBuilder visitsString = new StringBuilder();
         if (inIsRecursive) {
             Visit tempVisit = new Visit();
             tempVisit.setLocationName(name);
             List<Visit> visits = inApp.getDBI().list(tempVisit);
             for (int t = 0; t < visits.size(); t++) {
-                visitsString = visitsString + visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp) + "<br/>";
+                visitsString.append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp)).append("<br/>");
             }
         }
 
-        String htmlLocation = "<head><title>" + name + "</title></head>";
-        htmlLocation = htmlLocation + "<body>";
-        htmlLocation = htmlLocation + "<H2>Location</H2>";
-        htmlLocation = htmlLocation + "<b>Name:</b> " + name;
-        htmlLocation = htmlLocation + "<br/>";
-        htmlLocation = htmlLocation + "<br/><b>Province:</b> " + UtilsHTML.formatString(province);
-        htmlLocation = htmlLocation + "<br/><b>Rating:</b> " + UtilsHTML.formatString(rating);
-        htmlLocation = htmlLocation + "<br/><b>Game View Rating:</b> " + UtilsHTML.formatString(gameViewingRating);
-        htmlLocation = htmlLocation + "<br/><b>Habitat:</b> " + UtilsHTML.formatString(habitatType);
-        htmlLocation = htmlLocation + "<br/><b>Description:</b> " + UtilsHTML.formatString(description);
-        htmlLocation = htmlLocation + "<br/><b>Directions:</b> " + UtilsHTML.formatString(directions);
+        StringBuilder htmlLocation = new StringBuilder("<head><title>" + name + "</title></head>");
+        htmlLocation.append("<body>");
+        htmlLocation.append("<H2>Location</H2>");
+        htmlLocation.append("<b>Name:</b> ").append(name);
+        htmlLocation.append("<br/>");
+        htmlLocation.append("<br/><b>Province:</b> ").append(UtilsHTML.formatString(province));
+        htmlLocation.append("<br/><b>Rating:</b> ").append(UtilsHTML.formatString(rating));
+        htmlLocation.append("<br/><b>Game View Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
+        htmlLocation.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(habitatType));
+        htmlLocation.append("<br/><b>Description:</b> ").append(UtilsHTML.formatString(description));
+        htmlLocation.append("<br/><b>Directions:</b> ").append(UtilsHTML.formatString(directions));
         if (website != null)
             if (website.length() > 0)
-                htmlLocation = htmlLocation + "<br/><b>Website:</b> <a href=\"" + UtilsHTML.formatString(website) + "\">Link</a>";
+                htmlLocation.append("<br/><b>Website:</b> <a href=\"").append(UtilsHTML.formatString(website)).append("\">Link</a>");
             else
-                htmlLocation = htmlLocation + "<br/><b>Website:</b> " + UtilsHTML.formatString(website);
+                htmlLocation.append("<br/><b>Website:</b> ").append(UtilsHTML.formatString(website));
         else
-            htmlLocation = htmlLocation + "<br/><b>Website:</b> " + UtilsHTML.formatString(website);
-        htmlLocation = htmlLocation + "<br/><b>Email:</b> " + UtilsHTML.formatString(email);
-        htmlLocation = htmlLocation + "<br/><b>Contact Number:</b> " + UtilsHTML.formatString(contactNumbers);
-        htmlLocation = htmlLocation + "<br/><b>Catering:</b> " + UtilsHTML.formatString(catering);
-        htmlLocation = htmlLocation + "<br/><b>Accomodation:</b> " + UtilsHTML.formatString(accommodationType);
-        htmlLocation = htmlLocation + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
-        htmlLocation = htmlLocation + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
-//        htmlLocation = htmlLocation + "<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
+            htmlLocation.append("<br/><b>Website:</b> ").append(UtilsHTML.formatString(website));
+        htmlLocation.append("<br/><b>Email:</b> ").append(UtilsHTML.formatString(email));
+        htmlLocation.append("<br/><b>Contact Number:</b> ").append(UtilsHTML.formatString(contactNumbers));
+        htmlLocation.append("<br/><b>Catering:</b> ").append(UtilsHTML.formatString(catering));
+        htmlLocation.append("<br/><b>Accomodation:</b> ").append(UtilsHTML.formatString(accommodationType));
+        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
+        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
+//        htmlLocation.append("<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
         if (inIncludeImages) {
             // Generate image of the map
             /**
@@ -160,15 +160,15 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
             catch (Exception e) {
                 e.printStackTrace();
             }
-            htmlLocation = htmlLocation + "<br/><b>Map:</b><br/><img width='400px' src='" + mapPath + "' />";
+            htmlLocation.append("<br/><b>Map:</b><br/><img width='400px' src='" + mapPath + "' />";
             */
             // Fotos
-            htmlLocation = htmlLocation + "<br/><b>Photos:</b><br/>" + fotoString;
+            htmlLocation.append("<br/><b>Photos:</b><br/>").append(fotoString);
         }
         if (inIsRecursive)
-            htmlLocation = htmlLocation + "<br/><H3>Visits:</H3><hr/>" + visitsString;
-        htmlLocation = htmlLocation + "</body>";
-        return htmlLocation;
+            htmlLocation.append("<br/><H3>Visits:</H3><br/>").append(visitsString);
+        htmlLocation.append("</body>");
+        return htmlLocation.toString();
     }
 
     @Override
@@ -183,37 +183,6 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
         return entry;
     }
 
-//    public void toCSV(CsvGenerator inCSVGenerator) {
-//        inCSVGenerator.addData(name);
-//        inCSVGenerator.addData(description);
-//        inCSVGenerator.addData(province);
-//        inCSVGenerator.addData(rating);
-//        inCSVGenerator.addData(gameViewingRating);
-//        inCSVGenerator.addData(habitatType);
-////        inCSVGenerator.addData(fotos);
-//        //inCSVGenerator.addData("Visits");
-//        inCSVGenerator.addData(accommodationType);
-//        inCSVGenerator.addData(catering);
-//        inCSVGenerator.addData(contactNumbers);
-//        inCSVGenerator.addData(website);
-//        inCSVGenerator.addData(email);
-//        inCSVGenerator.addData(directions);
-//        inCSVGenerator.addData(latitude);
-//        inCSVGenerator.addData(latDegrees);
-//        inCSVGenerator.addData(latMinutes);
-//        inCSVGenerator.addData(latSecondsFloat);
-//        inCSVGenerator.addData(longitude);
-//        inCSVGenerator.addData(lonDegrees);
-//        inCSVGenerator.addData(lonMinutes);
-//        inCSVGenerator.addData(lonSecondsFloat);
-////        inCSVGenerator.addData(subAreas);
-////        inCSVGenerator.addData(visits);
-//    }
-
-//    public void doUpdate_v2() {
-//        latSecondsFloat = latSeconds;
-//        lonSecondsFloat = lonSeconds;
-//    }
 
     // GETTERS:
     public String getName() {

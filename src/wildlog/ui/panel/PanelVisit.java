@@ -43,6 +43,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.kml.util.KmlUtil;
+import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.UtilsHTML;
@@ -53,16 +54,11 @@ import wildlog.utils.ui.UtilMapGenerator;
  *
  * @author  henry.delange
  */
-public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshWhenSightingAdded {
+public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenSightingAdded {
     private Visit visit;
     private Location locationForVisit;
     private Sighting sighting;
-    private JTabbedPane parent;
-    private UtilTableGenerator utilTableGenerator;
-    private UtilPanelGenerator utilPanelGenerator;
-    private int imageIndex;
     private int imageSightingIndex;
-    private WildLogApp app;
     
     /** Creates new form PanelVisit */
     public PanelVisit(Location inLocation, Visit inVisit) {
@@ -71,8 +67,6 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         visit = inVisit;
         sighting = new Sighting();
         //sighting.setLocation(locationForVisit);
-        utilTableGenerator = new UtilTableGenerator();
-        utilPanelGenerator = new UtilPanelGenerator();
         initComponents();
         imageIndex = 0;
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
@@ -122,7 +116,6 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
     }
     
     public void setupTabHeader() {
-        parent = (JTabbedPane) getParent();
         JPanel tabHeader = new JPanel();
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif"))));
         if (visit.getName() != null) tabHeader.add(new JLabel(visit.getName() + " "));
@@ -140,12 +133,11 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         });
         tabHeader.add(btnClose);
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        parent.setTabComponentAt(parent.indexOfComponent(this), tabHeader);
+        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
     
     public void closeTab() {
-        parent = (JTabbedPane) getParent();
-        if (parent != null) parent.remove(this);
+        ((JTabbedPane)getParent()).remove(this);
     }
 
     @Override
@@ -767,9 +759,9 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
         lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         sighting = null;
         if (visit.getName() != null) {
-            tblSightings.setModel(utilTableGenerator.getCompleteSightingTable(visit));
+            tblSightings.setModel(UtilTableGenerator.getCompleteSightingTable(visit));
             // Sort rows for Sightings
-            List tempList = new ArrayList<SortKey>(1);
+            List<SortKey> tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(1, SortOrder.ASCENDING));
             tblSightings.getRowSorter().setSortKeys(tempList);
             Sighting tempSighting = new Sighting();
@@ -944,11 +936,8 @@ public class PanelVisit extends javax.swing.JPanel implements PanelNeedsRefreshW
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         if (sighting != null) {
-            PanelElement tempPanel = utilPanelGenerator.getElementPanel(sighting.getElementName());
-            parent = (JTabbedPane) getParent();
-            parent.add(tempPanel);
-            tempPanel.setupTabHeader();
-            parent.setSelectedComponent(tempPanel);
+            PanelElement tempPanel = UtilPanelGenerator.getElementPanel(sighting.getElementName());
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 

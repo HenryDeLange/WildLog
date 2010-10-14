@@ -11,7 +11,7 @@ import wildlog.utils.ui.Utils;
  *
  * @author Henry
  */
-public class KmlUtil {
+public final class KmlUtil {
 
     public static List<KmlStyle> getKmlStyles() {
         List<KmlStyle> styles = new ArrayList<KmlStyle>();

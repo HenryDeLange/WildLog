@@ -26,8 +26,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dbi.DBI;
 import wildlog.data.enums.WildLogFileType;
 
-/* Utils.java is used by FileChooserDemo2.java. */
-public class Utils {
+public final class Utils {
     protected final static String jpeg = "jpeg";
     protected final static String jpg = "jpg";
     protected final static String gif = "gif";
@@ -37,9 +36,7 @@ public class Utils {
     private static final int THUMBNAIL_SIZE = 300;
     private static String lastFilePath = "";
 
-    /*
-     * Get the extension of a file.
-     */
+    /** Get the extension of a file. */
     public static String getExtension(File f) {
         String ext = null;
         String s = f.getName();

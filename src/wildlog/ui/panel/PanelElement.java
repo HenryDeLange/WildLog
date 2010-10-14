@@ -53,6 +53,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.mapping.kml.util.KmlUtil;
+import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
 import wildlog.utils.UtilsHTML;
@@ -63,21 +64,14 @@ import wildlog.utils.ui.UtilMapGenerator;
  *
  * @author  henry.delange
  */
-public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefreshWhenSightingAdded {
+public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenSightingAdded {
     // Variables:
     private Element element;
-    private JTabbedPane parent;
-    private int imageIndex;
-    private UtilPanelGenerator utilPanelGenerator;
-    private UtilTableGenerator utilTableGenerator;
-    private WildLogApp app;
     
     /** Creates new form PanelElement */
     public PanelElement(Element inElement) {
         app = (WildLogApp) Application.getInstance();
         element = inElement;
-        utilPanelGenerator = new UtilPanelGenerator();
-        utilTableGenerator = new UtilTableGenerator();
         initComponents();
         imageIndex = 0;
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
@@ -121,8 +115,8 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         return true;
     }
     
+    @Override
     public void setupTabHeader() {
-        parent = (JTabbedPane) getParent();
         JPanel tabHeader = new JPanel();
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif"))));
         if (element.getPrimaryName() != null) tabHeader.add(new JLabel(element.getPrimaryName() + " "));
@@ -140,12 +134,11 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         });
         tabHeader.add(btnClose);
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        parent.setTabComponentAt(parent.indexOfComponent(this), tabHeader);
+        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
     
-    public void closeTab() {
-        parent = (JTabbedPane) getParent();
-        if (parent != null) parent.remove(this);
+    private void closeTab() {
+        ((JTabbedPane)getParent()).remove(this);
     }
 
     @Override
@@ -982,12 +975,12 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
             int[] selectedRows = tblLocation.getSelectedRows();
             PanelLocation tempPanel = null;
             for (int t = 0; t < selectedRows.length; t++) {
-                tempPanel = utilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
-                parent = (JTabbedPane) getParent();
-                parent.add(tempPanel);
-                tempPanel.setupTabHeader();
+                tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
+                UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+//                parent.add(tempPanel);
+//                tempPanel.setupTabHeader();
             }
-            if (tempPanel != null) parent.setSelectedComponent(tempPanel);
+//            if (tempPanel != null) parent.setSelectedComponent(tempPanel);
         }
         else {
             if (tblLocation.getSelectedRowCount() == 1) {
@@ -1027,9 +1020,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
 
         if (element.getPrimaryName() != null) {
-            tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
+            tblLocation.setModel(UtilTableGenerator.getLocationsForElementTable(element));
             // Sort rows for Locations
-            List tempList = new ArrayList<SortKey>(1);
+            List<SortKey> tempList = new ArrayList<SortKey>(1);
             tempList.add(new SortKey(0, SortOrder.ASCENDING));
             tblLocation.getRowSorter().setSortKeys(tempList);
         }
@@ -1153,9 +1146,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
-                tblLocation.setModel(utilTableGenerator.getSightingsForElementTable(element));
+                tblLocation.setModel(UtilTableGenerator.getSightingsForElementTable(element));
                 // Sort rows for Locations
-                List tempList = new ArrayList<SortKey>(1);
+                List<SortKey> tempList = new ArrayList<SortKey>(1);
                 tempList.add(new SortKey(0, SortOrder.ASCENDING));
                 tblLocation.getRowSorter().setSortKeys(tempList);
             }
@@ -1164,9 +1157,9 @@ public class PanelElement extends javax.swing.JPanel implements PanelNeedsRefres
         }
         else {
             if (element.getPrimaryName() != null) {
-                tblLocation.setModel(utilTableGenerator.getLocationsForElementTable(element));
+                tblLocation.setModel(UtilTableGenerator.getLocationsForElementTable(element));
                 // Sort rows for Locations
-                List tempList = new ArrayList<SortKey>(1);
+                List<SortKey> tempList = new ArrayList<SortKey>(1);
                 tempList.add(new SortKey(0, SortOrder.ASCENDING));
                 tblLocation.getRowSorter().setSortKeys(tempList);
             }

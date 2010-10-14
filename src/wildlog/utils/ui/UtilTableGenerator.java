@@ -3,6 +3,9 @@ package wildlog.utils.ui;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.RowSorter.SortKey;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
@@ -15,17 +18,12 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
-public class UtilTableGenerator {
-    private DBI dbi;
+public final class UtilTableGenerator {
+    private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
     
-    // CONSTRUCTOR:
-    public UtilTableGenerator() {
-        WildLogApp app = (WildLogApp) Application.getInstance();
-        dbi = app.getDBI();
-    }
-    
+
     // METHODS:
-    public DefaultTableModel getCompleteElementTable(Element inElement) {
+    public static DefaultTableModel getCompleteElementTable(Element inElement) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Other Name",
@@ -57,7 +55,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getShortElementTable(Element inElement) {
+    public static DefaultTableModel getShortElementTable(Element inElement) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
@@ -83,7 +81,7 @@ public class UtilTableGenerator {
         return table;
     }
     
-    public DefaultTableModel getCompleteLocationTable(Location inLocation) {
+    public static DefaultTableModel getCompleteLocationTable(Location inLocation) {
         String[] columnNames = {
                                 "Name",
                                 "Province",
@@ -113,7 +111,7 @@ public class UtilTableGenerator {
         return table;
     }
     
-    public DefaultTableModel getCompleteVisitTable(Location inLocation) {
+    public static DefaultTableModel getCompleteVisitTable(Location inLocation) {
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
@@ -161,7 +159,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getShortVisitTable(Location inLocation) {
+    public static DefaultTableModel getShortVisitTable(Location inLocation) {
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
@@ -205,7 +203,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getVeryShortVisitTable(Location inLocation) {
+    public static DefaultTableModel getVeryShortVisitTable(Location inLocation) {
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
@@ -242,7 +240,7 @@ public class UtilTableGenerator {
         return table;
     }
     
-    public DefaultTableModel getCompleteSightingTable(Visit inVisit) {
+    public static DefaultTableModel getCompleteSightingTable(Visit inVisit) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Date",
@@ -292,7 +290,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getElementsForVisitTable(Visit inVisit) {
+    public static DefaultTableModel getElementsForVisitTable(Visit inVisit) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
@@ -324,7 +322,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getElementsForLocationTable(Location inLocation) {
+    public static DefaultTableModel getElementsForLocationTable(Location inLocation) {
         String[] columnNames = {
                                 "Primary Name",
                                 "Type",
@@ -356,7 +354,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getLocationsForElementTable(Element inElement) {
+    public static DefaultTableModel getLocationsForElementTable(Element inElement) {
         String[] columnNames = {
                                 "Name",
                                 "Province",
@@ -389,7 +387,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getShortLocationTable(Location inLocation, boolean inUseSearch) {
+    public static DefaultTableModel getShortLocationTable(Location inLocation, boolean inUseSearch) {
         String[] columnNames = {
                                 "Name",
                                 "Province"
@@ -413,7 +411,7 @@ public class UtilTableGenerator {
         return table;
     }
 
-    public DefaultTableModel getSightingsForElementTable(Element inElement) {
+    public static DefaultTableModel getSightingsForElementTable(Element inElement) {
         String[] columnNames = {
                                 "Location",
                                 "Date",
@@ -448,6 +446,13 @@ public class UtilTableGenerator {
             }
         };
         return table;
+    }
+
+
+    public static void setupRowSorter(JTable inTable, int inColumn) {
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(inColumn, SortOrder.ASCENDING));
+        inTable.getRowSorter().setSortKeys(tempList);
     }
 
     // Private Methods

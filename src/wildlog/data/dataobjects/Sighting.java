@@ -1,17 +1,3 @@
-/*
- * Sighting.java is part of WildLog
- *
- * Copyright (C) 2009 Henry James de Lange
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 package wildlog.data.dataobjects;
 
 import KmlGenerator.objects.KmlEntry;
@@ -96,30 +82,30 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
-        String fotoString = "";
+        StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("SIGHTING-" + sightingCounter));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString = fotoString + fotos.get(t).toHTML();
+            fotoString.append(fotos.get(t).toHTML());
         }
-        String htmlSighting = "<H2>Sighting</H2>";
-        htmlSighting = htmlSighting + "<b>Date:</b> " + UtilsHTML.formatDate(date, true);
-        htmlSighting = htmlSighting + "<br/><b>Element:</b> " + elementName;
-        htmlSighting = htmlSighting + "<br/><b>Location:</b> " + UtilsHTML.formatString(locationName);
-        htmlSighting = htmlSighting + "<br/>";
-        htmlSighting = htmlSighting + "<br/><b>Time of Day:</b> " + UtilsHTML.formatString(timeOfDay);
-        htmlSighting = htmlSighting + "<br/><b>Weather:</b> " + UtilsHTML.formatString(weather);
-        htmlSighting = htmlSighting + "<br/><b>Area Type:</b> " + UtilsHTML.formatString(areaType);
-        htmlSighting = htmlSighting + "<br/><b>View Rating:</b> " + UtilsHTML.formatString(viewRating);
-        htmlSighting = htmlSighting + "<br/><b>Certainty:</b> " + UtilsHTML.formatString(certainty);
-        htmlSighting = htmlSighting + "<br/><b>Number of Creatures:</b> " + UtilsHTML.formatString(numberOfElements);
-        htmlSighting = htmlSighting + "<br/><b>Details:</b> " + UtilsHTML.formatString(details);
-        htmlSighting = htmlSighting + "<br/><b>Latitude:</b> " + latitude + " " + latDegrees + " " + latMinutes + " " + latSecondsFloat;
-        htmlSighting = htmlSighting + "<br/><b>Longitude:</b> " + longitude + " " + lonDegrees + " " + lonMinutes + " " + lonSecondsFloat;
-//        htmlSighting = htmlSighting + "<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea);
-        htmlSighting = htmlSighting + "<br/><b>Sighting ID:</b> " + UtilsHTML.formatString(sightingCounter);
+        StringBuilder htmlSighting = new StringBuilder("<H2>Sighting</H2>");
+        htmlSighting.append("<b>Date:</b> ").append(UtilsHTML.formatDate(date, true));
+        htmlSighting.append("<br/><b>Element:</b> ").append(elementName);
+        htmlSighting.append("<br/><b>Location:</b> ").append(UtilsHTML.formatString(locationName));
+        htmlSighting.append("<br/>");
+        htmlSighting.append("<br/><b>Time of Day:</b> ").append(UtilsHTML.formatString(timeOfDay));
+        htmlSighting.append("<br/><b>Weather:</b> ").append(UtilsHTML.formatString(weather));
+        htmlSighting.append("<br/><b>Area Type:</b> ").append(UtilsHTML.formatString(areaType));
+        htmlSighting.append("<br/><b>View Rating:</b> ").append(UtilsHTML.formatString(viewRating));
+        htmlSighting.append("<br/><b>Certainty:</b> ").append(UtilsHTML.formatString(certainty));
+        htmlSighting.append("<br/><b>Number of Creatures:</b> ").append(UtilsHTML.formatString(numberOfElements));
+        htmlSighting.append("<br/><b>Details:</b> ").append(UtilsHTML.formatString(details));
+        htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
+        htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
+//        htmlSighting.append("<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea));
+        htmlSighting.append("<br/><b>Sighting ID:</b> ").append(UtilsHTML.formatString(sightingCounter));
         if (inIncludeImages)
-            htmlSighting = htmlSighting + "<br/><b>Photos:</b><br/>" + fotoString;
-        return htmlSighting;
+            htmlSighting.append("<br/><b>Photos:</b><br/>").append(fotoString);
+        return htmlSighting.toString();
     }
 
     @Override
@@ -270,35 +256,6 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         return entry;
     }
 
-//    public void toCSV(CsvGenerator inCSVGenerator) {
-//        inCSVGenerator.addData(date);
-////        inCSVGenerator.addData(element.getPrimaryName());
-////        inCSVGenerator.addData(location.getName());
-//        inCSVGenerator.addData(timeOfDay);
-//        inCSVGenerator.addData(weather);
-//        inCSVGenerator.addData(areaType);
-//        inCSVGenerator.addData(viewRating);
-//        inCSVGenerator.addData(certainty);
-//        inCSVGenerator.addData(numberOfElements);
-//        inCSVGenerator.addData(details);
-////        inCSVGenerator.addData(fotos);
-//        inCSVGenerator.addData(latitude);
-//        inCSVGenerator.addData(latDegrees);
-//        inCSVGenerator.addData(latMinutes);
-//        inCSVGenerator.addData(latSecondsFloat);
-//        inCSVGenerator.addData(longitude);
-//        inCSVGenerator.addData(lonDegrees);
-//        inCSVGenerator.addData(lonMinutes);
-//        inCSVGenerator.addData(lonSecondsFloat);
-//        inCSVGenerator.addData(subArea);
-//        inCSVGenerator.addData(sightingEvidence);
-//        //inCSVGenerator.addData(sightingCounter);
-//    }
-
-//    public void doUpdate_v2() {
-//        latSecondsFloat = latSeconds;
-//        lonSecondsFloat = lonSeconds;
-//    }
 
     // GETTERS:
     public Date getDate() {
