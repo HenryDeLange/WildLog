@@ -254,6 +254,7 @@
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="rdbBrowseLocation.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="rdbBrowseLocation.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -275,6 +276,7 @@
                       <ComponentRef name="buttonGroup1"/>
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="rdbBrowseElement.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="rdbBrowseElement.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -401,6 +403,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnGoBrowseSelection.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnGoBrowseSelection.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnGoBrowseSelection.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnGoBrowseSelection.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -423,6 +426,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnZoomIn.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnZoomIn.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnZoomIn.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnZoomIn.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -442,6 +446,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnZoomOut.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnZoomOut.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnZoomOut.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnZoomOut.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -457,6 +462,7 @@
                   <Properties>
                     <Property name="background" type="java.awt.Color" resourceKey="btnViewImage.background"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnViewImage.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnViewImage.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -476,6 +482,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnBrowsePrev.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnBrowsePrev.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnBrowsePrev.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnBrowsePrev.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -495,6 +502,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnBrowseNext.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnBrowseNext.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnBrowseNext.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnBrowseNext.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -571,6 +579,7 @@
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnReport.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnReport.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnReport.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -589,6 +598,7 @@
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnDefault.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnDefault.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnDefault.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="btnDefault" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1247,6 +1257,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnSearch.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnSearch.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnSearch.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnSearch.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -1302,6 +1313,7 @@
                     <Property name="background" type="java.awt.Color" resourceKey="btnClearSearch.background"/>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnClearSearch.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnClearSearch.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnClearSearch.toolTipText"/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>

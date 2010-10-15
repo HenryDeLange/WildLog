@@ -11,7 +11,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -688,12 +690,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         buttonGroup1.add(rdbLocations);
         rdbLocations.setSelected(true);
         rdbLocations.setText(resourceMap.getString("rdbLocations.text")); // NOI18N
+        rdbLocations.setToolTipText(resourceMap.getString("rdbLocations.toolTipText")); // NOI18N
         rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbLocations.setName("rdbLocations"); // NOI18N
         elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, -1));
 
         buttonGroup1.add(rdbSightings);
         rdbSightings.setText(resourceMap.getString("rdbSightings.text")); // NOI18N
+        rdbSightings.setToolTipText(resourceMap.getString("rdbSightings.toolTipText")); // NOI18N
         rdbSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSightings.setName("rdbSightings"); // NOI18N
         rdbSightings.addItemListener(new java.awt.event.ItemListener() {
@@ -713,6 +717,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -724,6 +729,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
         btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
@@ -735,6 +741,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnKML.setIcon(resourceMap.getIcon("btnKML.icon")); // NOI18N
         btnKML.setText(resourceMap.getString("btnKML.text")); // NOI18N
+        btnKML.setToolTipText(resourceMap.getString("btnKML.toolTipText")); // NOI18N
         btnKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnKML.setName("btnKML"); // NOI18N
         btnKML.addActionListener(new java.awt.event.ActionListener() {
@@ -1188,13 +1195,17 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         String finalPath = path + File.separatorChar + "WildLogMarkers - Creature (" + element.getPrimaryName() + ").kml";
         kmlgen.setKmlPath(finalPath);
         // Get entries for Sightings and Locations
-        List<KmlEntry> entries = new ArrayList<KmlEntry>();
+        Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
         // Sightings
         Sighting tempSighting = new Sighting();
         tempSighting.setElementName(element.getPrimaryName());
         List<Sighting> listSightings = app.getDBI().list(tempSighting);
         for (int t = 0; t < listSightings.size(); t++) {
-            entries.add(listSightings.get(t).toKML(t, app));
+            String key = listSightings.get(t).getLocationName();
+            if (!entries.containsKey(key)) {
+                entries.put(key, new ArrayList<KmlEntry>());
+             }
+            entries.get(key).add(listSightings.get(t).toKML(t, app));
         }
         // Generate KML
         kmlgen.generateFile(entries, KmlUtil.getKmlStyles());

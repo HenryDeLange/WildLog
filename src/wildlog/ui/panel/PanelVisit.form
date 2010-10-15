@@ -832,6 +832,7 @@
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnReport.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnReport.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnReport.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -859,7 +860,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="530" width="90" height="50"/>
+              <AbsoluteConstraints x="0" y="530" width="95" height="50"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -867,6 +868,7 @@
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnHTML.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnHTML.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnHTML.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -885,6 +887,7 @@
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="jButton1.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="jButton1.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="jButton1.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>

@@ -121,6 +121,7 @@ public class PanelChecklist extends javax.swing.JPanel {
         btnConfirm.setBackground(resourceMap.getColor("btnConfirm.background")); // NOI18N
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
+        btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -172,6 +173,7 @@ public class PanelChecklist extends javax.swing.JPanel {
 
         btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
+        btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
         btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {

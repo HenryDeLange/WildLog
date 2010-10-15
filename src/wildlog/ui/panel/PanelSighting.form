@@ -424,7 +424,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="360" y="320" width="170" height="20"/>
+              <AbsoluteConstraints x="340" y="320" width="190" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1100,7 +1100,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="530" y="320" width="20" height="-1"/>
+              <AbsoluteConstraints x="532" y="320" width="20" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1116,7 +1116,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="560" y="320" width="20" height="-1"/>
+              <AbsoluteConstraints x="558" y="320" width="20" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1128,7 +1128,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="550" y="320" width="10" height="20"/>
+              <AbsoluteConstraints x="553" y="320" width="10" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1158,6 +1158,7 @@
               <ComponentRef name="buttonGroup1"/>
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="rdbDMS.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="rdbDMS.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -1179,6 +1180,7 @@
               <ComponentRef name="buttonGroup1"/>
             </Property>
             <Property name="text" type="java.lang.String" resourceKey="rdbDD.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="rdbDD.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -1243,6 +1245,7 @@
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnUseLocationGPS.background"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUseLocationGPS.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnUseLocationGPS.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -1261,6 +1264,7 @@
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnUsePrevGPS.background"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUsePrevGPS.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnUsePrevGPS.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>

@@ -92,6 +92,7 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
+        btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

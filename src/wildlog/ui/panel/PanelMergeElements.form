@@ -86,8 +86,7 @@
         <Component class="javax.swing.JButton" name="btnConfirm">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnConfirm.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnConfirm.text"/>
-            <Property name="name" type="java.lang.String" value="btnConfirm" noResource="true"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnConfirm.toolTipText"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnConfirmActionPerformed"/>
@@ -150,7 +149,6 @@
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel5.font"/>
             <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
             <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
           </Properties>

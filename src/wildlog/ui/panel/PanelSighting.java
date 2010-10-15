@@ -488,7 +488,7 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
-        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 320, 170, 20));
+        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, 190, 20));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -818,7 +818,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtHoursFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 320, 20, -1));
+        sightingIncludes.add(txtHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(532, 320, 20, -1));
 
         txtMinutes.setEnabled(!disableEditing);
         txtMinutes.setName("txtMinutes"); // NOI18N
@@ -827,12 +827,12 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtMinutesFocusGained(evt);
             }
         });
-        sightingIncludes.add(txtMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 320, 20, -1));
+        sightingIncludes.add(txtMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(558, 320, 20, -1));
 
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        sightingIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 320, 10, 20));
+        sightingIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(553, 320, 10, 20));
 
         cmbTimeFormat.setModel(new DefaultComboBoxModel(TimeFormat.values()));
         cmbTimeFormat.setSelectedIndex(0);
@@ -843,6 +843,7 @@ public class PanelSighting extends javax.swing.JPanel {
         rdbDMS.setBackground(resourceMap.getColor("rdbDMS.background")); // NOI18N
         buttonGroup1.add(rdbDMS);
         rdbDMS.setText(resourceMap.getString("rdbDMS.text")); // NOI18N
+        rdbDMS.setToolTipText(resourceMap.getString("rdbDMS.toolTipText")); // NOI18N
         rdbDMS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbDMS.setName("rdbDMS"); // NOI18N
         rdbDMS.addItemListener(new java.awt.event.ItemListener() {
@@ -855,6 +856,7 @@ public class PanelSighting extends javax.swing.JPanel {
         rdbDD.setBackground(resourceMap.getColor("rdbDD.background")); // NOI18N
         buttonGroup1.add(rdbDD);
         rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
+        rdbDD.setToolTipText(resourceMap.getString("rdbDD.toolTipText")); // NOI18N
         rdbDD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbDD.setName("rdbDD"); // NOI18N
         rdbDD.addItemListener(new java.awt.event.ItemListener() {
@@ -891,6 +893,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         btnUseLocationGPS.setBackground(resourceMap.getColor("btnUseLocationGPS.background")); // NOI18N
         btnUseLocationGPS.setText(resourceMap.getString("btnUseLocationGPS.text")); // NOI18N
+        btnUseLocationGPS.setToolTipText(resourceMap.getString("btnUseLocationGPS.toolTipText")); // NOI18N
         btnUseLocationGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseLocationGPS.setName("btnUseLocationGPS"); // NOI18N
         btnUseLocationGPS.addActionListener(new java.awt.event.ActionListener() {
@@ -902,6 +905,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         btnUsePrevGPS.setBackground(resourceMap.getColor("btnUsePrevGPS.background")); // NOI18N
         btnUsePrevGPS.setText(resourceMap.getString("btnUsePrevGPS.text")); // NOI18N
+        btnUsePrevGPS.setToolTipText(resourceMap.getString("btnUsePrevGPS.toolTipText")); // NOI18N
         btnUsePrevGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsePrevGPS.setName("btnUsePrevGPS"); // NOI18N
         btnUsePrevGPS.addActionListener(new java.awt.event.ActionListener() {

@@ -71,8 +71,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
         elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
-        btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
-        btnConfirm.setName("btnConfirm"); // NOI18N
+        btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -94,7 +93,6 @@ public class PanelMergeElements extends javax.swing.JPanel {
 
         elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 250, 400));
 
-        jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
         elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 760, -1));

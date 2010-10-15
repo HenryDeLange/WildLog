@@ -136,6 +136,7 @@
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnConfirm.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnConfirm.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnConfirm.toolTipText"/>
         <Property name="name" type="java.lang.String" value="btnConfirm" noResource="true"/>
       </Properties>
       <Events>

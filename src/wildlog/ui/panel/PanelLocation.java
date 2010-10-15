@@ -10,7 +10,9 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -691,6 +693,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         buttonGroup1.add(rdbLocation);
         rdbLocation.setSelected(true);
         rdbLocation.setText(resourceMap.getString("rdbLocation.text")); // NOI18N
+        rdbLocation.setToolTipText(resourceMap.getString("rdbLocation.toolTipText")); // NOI18N
         rdbLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbLocation.setName("rdbLocation"); // NOI18N
         rdbLocation.addItemListener(new java.awt.event.ItemListener() {
@@ -702,6 +705,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         buttonGroup1.add(rdbVisit);
         rdbVisit.setText(resourceMap.getString("rdbVisit.text")); // NOI18N
+        rdbVisit.setToolTipText(resourceMap.getString("rdbVisit.toolTipText")); // NOI18N
         rdbVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbVisit.setName("rdbVisit"); // NOI18N
         locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
@@ -762,6 +766,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -773,6 +778,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
         btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
@@ -784,6 +790,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnKml.setIcon(resourceMap.getIcon("btnKml.icon")); // NOI18N
         btnKml.setText(resourceMap.getString("btnKml.text")); // NOI18N
+        btnKml.setToolTipText(resourceMap.getString("btnKml.toolTipText")); // NOI18N
         btnKml.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnKml.setName("btnKml"); // NOI18N
         btnKml.addActionListener(new java.awt.event.ActionListener() {
@@ -1224,18 +1231,26 @@ public class PanelLocation extends PanelCanSetupHeader {
         String finalPath = path + File.separatorChar + "WildLogMarkers - Location (" + locationWL.getName() + ").kml";
         kmlgen.setKmlPath(finalPath);
         // Get entries for Sightings and Locations
-        List<KmlEntry> entries = new ArrayList<KmlEntry>();
+        Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
         // Sightings
         Sighting tempSighting = new Sighting();
         tempSighting.setLocationName(locationWL.getName());
         List<Sighting> listSightings = app.getDBI().list(tempSighting);
         for (int t = 0; t < listSightings.size(); t++) {
-            entries.add(listSightings.get(t).toKML(t, app));
+            String key = listSightings.get(t).getElementName();
+            if (!entries.containsKey(key)) {
+                entries.put(key, new ArrayList<KmlEntry>());
+             }
+            entries.get(key).add(listSightings.get(t).toKML(t, app));
         }
         // Locations
         List<Location> listLocations = app.getDBI().list(new Location(locationWL.getName()));
         for (int t = 0; t < listLocations.size(); t++) {
-            entries.add(listLocations.get(t).toKML(listSightings.size() + t, app));
+            String key = listLocations.get(t).getName();
+            if (!entries.containsKey(key)) {
+                entries.put(key, new ArrayList<KmlEntry>());
+             }
+            entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
         }
         // Generate KML
         kmlgen.generateFile(entries, KmlUtil.getKmlStyles());

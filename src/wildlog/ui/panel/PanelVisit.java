@@ -11,7 +11,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -631,6 +633,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
+        btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
@@ -650,10 +653,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnChecklistActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 90, 50));
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 530, 95, 50));
 
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
         btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
+        btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
@@ -665,6 +669,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         jButton1.setIcon(resourceMap.getIcon("jButton1.icon")); // NOI18N
         jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setToolTipText(resourceMap.getString("jButton1.toolTipText")); // NOI18N
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setName("jButton1"); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -1074,16 +1079,24 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         String finalPath = path + File.separatorChar + "WildLogMarkers - Visit (" + visit.getName() + ").kml";
         kmlgen.setKmlPath(finalPath);
         // Get entries for Sightings and Locations
-        List<KmlEntry> entries = new ArrayList<KmlEntry>();
+        Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
         // Sightings
         Sighting tempSighting = new Sighting();
         tempSighting.setVisitName(visit.getName());
         List<Sighting> listSightings = app.getDBI().list(tempSighting);
         for (int t = 0; t < listSightings.size(); t++) {
-            entries.add(listSightings.get(t).toKML(t, app));
+            String key = listSightings.get(t).getElementName();
+            if (!entries.containsKey(key)) {
+                entries.put(key, new ArrayList<KmlEntry>());
+             }
+            entries.get(key).add(listSightings.get(t).toKML(t, app));
         }
         // Location
-        entries.add(app.getDBI().find(new Location(visit.getLocationName())).toKML(listSightings.size()+1, app));
+        String key = visit.getLocationName();
+        if (!entries.containsKey(key)) {
+            entries.put(key, new ArrayList<KmlEntry>());
+         }
+        entries.get(key).add(app.getDBI().find(new Location(visit.getLocationName())).toKML(listSightings.size()+1, app));
         // Generate KML
         kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
         // Try to open the Kml file
