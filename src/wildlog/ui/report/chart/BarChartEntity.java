@@ -6,7 +6,7 @@ import java.awt.Color;
  *
  * @author DeLangeH
  */
-public class BarChartEntity implements Comparable<BarChartEntity> {
+public final class BarChartEntity implements Comparable<BarChartEntity> {
     // Variables
     private Color color;
     private int value;

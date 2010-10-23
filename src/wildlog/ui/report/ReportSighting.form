@@ -24,6 +24,32 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="mnuReports">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="mnuReports.text"/>
+            <Property name="name" type="java.lang.String" value="mnuReports" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSightingsByElements">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="mnuSightingsByElements.text"/>
+                <Property name="name" type="java.lang.String" value="mnuSightingsByElements" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSightingsByElementsActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSightingsByLocations">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="mnuSightingsByLocations.text"/>
+                <Property name="name" type="java.lang.String" value="mnuSightingsByLocations" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSightingsByLocationsActionPerformed"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="mnuExtra">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="mnuExtra.text"/>
@@ -190,7 +216,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="110" y="700" width="60" height="-1"/>
+          <AbsoluteConstraints x="110" y="705" width="60" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -203,7 +229,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="60" y="700" width="40" height="-1"/>
+          <AbsoluteConstraints x="60" y="705" width="40" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -214,7 +240,7 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="10" y="700" width="-1" height="-1"/>
+          <AbsoluteConstraints x="10" y="705" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -227,59 +253,37 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="180" y="700" width="70" height="-1"/>
+          <AbsoluteConstraints x="180" y="705" width="70" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel13">
+    <Container class="javax.swing.JScrollPane" name="scrReport">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel13.text"/>
-        <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="null"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="scrReport" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="310" y="700" width="-1" height="-1"/>
+          <AbsoluteConstraints x="0" y="70" width="600" height="630"/>
         </Constraint>
       </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDay1">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblDay1.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblDay1.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblDay1.text"/>
-        <Property name="name" type="java.lang.String" value="lblDay1" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="370" y="700" width="40" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblNight1">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblNight1.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblNight1.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblNight1.text"/>
-        <Property name="name" type="java.lang.String" value="lblNight1" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="420" y="700" width="50" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblOther2">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblOther2.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblOther2.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblOther2.text"/>
-        <Property name="name" type="java.lang.String" value="lblOther2" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="490" y="700" width="70" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="pnlScrollPane">
+          <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="pnlScrollPane.background"/>
+            <Property name="name" type="java.lang.String" value="pnlScrollPane" noResource="true"/>
+          </Properties>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+            <Property name="alignment" type="int" value="0"/>
+            <Property name="verticalGap" type="int" value="0"/>
+          </Layout>
+        </Container>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

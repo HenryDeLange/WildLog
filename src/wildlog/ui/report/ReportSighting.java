@@ -1,6 +1,7 @@
 package wildlog.ui.report;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -14,7 +15,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import wildlog.WildLogApp;
 import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
@@ -29,6 +29,8 @@ import wildlog.ui.report.chart.BarChartEntity;
  */
 public class ReportSighting extends javax.swing.JFrame {
     private boolean usePrimaryName = true;
+    private boolean viewReport1 = true;
+    private boolean viewReport2 = false;
     private Date startDate;
     private Date endDate;
     private BarChart chartElements;
@@ -43,7 +45,7 @@ public class ReportSighting extends javax.swing.JFrame {
         startDate = inStartDate;
         endDate = inEndDate;
         app = inApp;
-        doReport();
+        doReport1();
     }
 
     /** This method is called from within the constructor to
@@ -68,13 +70,14 @@ public class ReportSighting extends javax.swing.JFrame {
         lblDay = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         lblOther1 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        lblDay1 = new javax.swing.JLabel();
-        lblNight1 = new javax.swing.JLabel();
-        lblOther2 = new javax.swing.JLabel();
+        scrReport = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        mnuReports = new javax.swing.JMenu();
+        mnuSightingsByElements = new javax.swing.JMenuItem();
+        mnuSightingsByLocations = new javax.swing.JMenuItem();
         mnuExtra = new javax.swing.JMenu();
         mnuName = new javax.swing.JMenuItem();
 
@@ -134,45 +137,33 @@ public class ReportSighting extends javax.swing.JFrame {
         lblNight.setForeground(resourceMap.getColor("lblNight.foreground")); // NOI18N
         lblNight.setText(resourceMap.getString("lblNight.text")); // NOI18N
         lblNight.setName("lblNight"); // NOI18N
-        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 700, 60, -1));
+        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 705, 60, -1));
 
         lblDay.setFont(resourceMap.getFont("lblDay.font")); // NOI18N
         lblDay.setForeground(resourceMap.getColor("lblDay.foreground")); // NOI18N
         lblDay.setText(resourceMap.getString("lblDay.text")); // NOI18N
         lblDay.setName("lblDay"); // NOI18N
-        getContentPane().add(lblDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 700, 40, -1));
+        getContentPane().add(lblDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 705, 40, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 700, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 705, -1, -1));
 
         lblOther1.setFont(resourceMap.getFont("lblOther1.font")); // NOI18N
         lblOther1.setForeground(resourceMap.getColor("lblOther1.foreground")); // NOI18N
         lblOther1.setText(resourceMap.getString("lblOther1.text")); // NOI18N
         lblOther1.setName("lblOther1"); // NOI18N
-        getContentPane().add(lblOther1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 700, 70, -1));
+        getContentPane().add(lblOther1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 705, 70, -1));
 
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
-        jLabel13.setName("jLabel13"); // NOI18N
-        getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 700, -1, -1));
+        scrReport.setBorder(null);
+        scrReport.setName("scrReport"); // NOI18N
 
-        lblDay1.setFont(resourceMap.getFont("lblDay1.font")); // NOI18N
-        lblDay1.setForeground(resourceMap.getColor("lblDay1.foreground")); // NOI18N
-        lblDay1.setText(resourceMap.getString("lblDay1.text")); // NOI18N
-        lblDay1.setName("lblDay1"); // NOI18N
-        getContentPane().add(lblDay1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 700, 40, -1));
+        pnlScrollPane.setBackground(resourceMap.getColor("pnlScrollPane.background")); // NOI18N
+        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        scrReport.setViewportView(pnlScrollPane);
 
-        lblNight1.setFont(resourceMap.getFont("lblNight1.font")); // NOI18N
-        lblNight1.setForeground(resourceMap.getColor("lblNight1.foreground")); // NOI18N
-        lblNight1.setText(resourceMap.getString("lblNight1.text")); // NOI18N
-        lblNight1.setName("lblNight1"); // NOI18N
-        getContentPane().add(lblNight1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 700, 50, -1));
-
-        lblOther2.setFont(resourceMap.getFont("lblOther2.font")); // NOI18N
-        lblOther2.setForeground(resourceMap.getColor("lblOther2.foreground")); // NOI18N
-        lblOther2.setText(resourceMap.getString("lblOther2.text")); // NOI18N
-        lblOther2.setName("lblOther2"); // NOI18N
-        getContentPane().add(lblOther2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 700, 70, -1));
+        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 600, 630));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -189,6 +180,29 @@ public class ReportSighting extends javax.swing.JFrame {
         mnuPrint.add(jMenuItem1);
 
         jMenuBar1.add(mnuPrint);
+
+        mnuReports.setText(resourceMap.getString("mnuReports.text")); // NOI18N
+        mnuReports.setName("mnuReports"); // NOI18N
+
+        mnuSightingsByElements.setText(resourceMap.getString("mnuSightingsByElements.text")); // NOI18N
+        mnuSightingsByElements.setName("mnuSightingsByElements"); // NOI18N
+        mnuSightingsByElements.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSightingsByElementsActionPerformed(evt);
+            }
+        });
+        mnuReports.add(mnuSightingsByElements);
+
+        mnuSightingsByLocations.setText(resourceMap.getString("mnuSightingsByLocations.text")); // NOI18N
+        mnuSightingsByLocations.setName("mnuSightingsByLocations"); // NOI18N
+        mnuSightingsByLocations.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSightingsByLocationsActionPerformed(evt);
+            }
+        });
+        mnuReports.add(mnuSightingsByLocations);
+
+        jMenuBar1.add(mnuReports);
 
         mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
         mnuExtra.setName("mnuExtra"); // NOI18N
@@ -240,13 +254,42 @@ public class ReportSighting extends javax.swing.JFrame {
 
     private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
         usePrimaryName = ! usePrimaryName;
-        doReport();
+        if (viewReport1) {
+            doReport1();
+            // Re-Draw
+            repaint();
+            setVisible(true);
+        }
+        else
+        if (viewReport2) {
+            doReport2();
+            // Re-Draw
+            repaint();
+            setVisible(true);
+        }
+    }//GEN-LAST:event_mnuNameActionPerformed
+
+    private void mnuSightingsByElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSightingsByElementsActionPerformed
+        viewReport1 = true;
+        viewReport2 = false;
+        usePrimaryName = true;
+        doReport1();
         // Re-Draw
         repaint();
         setVisible(true);
-    }//GEN-LAST:event_mnuNameActionPerformed
+    }//GEN-LAST:event_mnuSightingsByElementsActionPerformed
 
-    private void doReport() {
+    private void mnuSightingsByLocationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSightingsByLocationsActionPerformed
+        viewReport1 = false;
+        viewReport2 = true;
+        usePrimaryName = true;
+        doReport2();
+        // Re-Draw
+        repaint();
+        setVisible(true);
+    }//GEN-LAST:event_mnuSightingsByLocationsActionPerformed
+
+    private void doReport1() {
         // Init report fields
         lblName.setText("Sightings for " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
         Set<String> numOfElements = new HashSet<String>();
@@ -255,11 +298,10 @@ public class ReportSighting extends javax.swing.JFrame {
 
         // Add Charts
         if (chartElements != null)
-            this.getContentPane().remove(chartElements);
+            pnlScrollPane.remove(chartElements);
         if (chartLocations != null)
-            this.getContentPane().remove(chartLocations);
-        chartElements = new BarChart(280, 600);
-        chartLocations = new BarChart(290, 600);
+            pnlScrollPane.remove(chartLocations);
+        chartElements = new BarChart(580, 630);
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(startDate, endDate);
         for (Sighting sighting : sightings) {
             numOfElements.add(sighting.getElementName());
@@ -275,17 +317,14 @@ public class ReportSighting extends javax.swing.JFrame {
             if (sighting.getTimeOfDay() != null) {
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
                     chartElements.addBar(new BarChartEntity(nameToUse, sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
-                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
                     numNightSightings++;
                 }
                 else
                 if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
                     chartElements.addBar(new BarChartEntity(nameToUse, sighting.getTimeOfDay().name(), 1,  lblOther1.getForeground()));
-                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblOther1.getForeground()));
                 }
                 else {
                     chartElements.addBar(new BarChartEntity(nameToUse, sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
-                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
                     numDaySightings++;
                 }
             }
@@ -293,8 +332,58 @@ public class ReportSighting extends javax.swing.JFrame {
                 chartElements.addBar(new BarChartEntity(nameToUse, ActiveTimeSpesific.NONE.name(), 1, lblOther1.getForeground()));
         }
 
-        this.getContentPane().add(chartElements, new AbsoluteConstraints(0, 100, -1, -1));
-        this.getContentPane().add(chartLocations, new AbsoluteConstraints(290, 100, -1, -1));
+        pnlScrollPane.add(chartElements);
+        chartElements.paintComponent(pnlScrollPane.getGraphics());
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartElements.getChartHeight()));
+
+        // Wrap up report fields
+        lblNumberOfSightings.setText(Integer.toString(sightings.size()));
+        lblNumberOfElements.setText(Integer.toString(numOfElements.size()));
+        lblDaySightings.setText(Integer.toString(numDaySightings));
+        lblNightSightings.setText(Integer.toString(numNightSightings));
+
+        // Setup Frame Look and Feel
+        this.getContentPane().setBackground(Color.WHITE);
+    }
+
+    private void doReport2() {
+        // Init report fields
+        lblName.setText("Sightings for " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
+        Set<String> numOfElements = new HashSet<String>();
+        int numDaySightings = 0;
+        int numNightSightings = 0;
+
+        // Add Charts
+        if (chartElements != null)
+            pnlScrollPane.remove(chartElements);
+        if (chartLocations != null)
+            pnlScrollPane.remove(chartLocations);
+        chartLocations = new BarChart(580, 630);
+        List<Sighting> sightings = app.getDBI().searchSightingOnDate(startDate, endDate);
+        for (Sighting sighting : sightings) {
+            numOfElements.add(sighting.getElementName());
+            // Time
+            if (sighting.getTimeOfDay() != null) {
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
+                    numNightSightings++;
+                }
+                else
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblOther1.getForeground()));
+                }
+                else {
+                    chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblDay.getForeground()));
+                    numDaySightings++;
+                }
+            }
+            else
+                chartLocations.addBar(new BarChartEntity(sighting.getLocationName(), ActiveTimeSpesific.NONE.name(), 1, lblOther1.getForeground()));
+        }
+
+        pnlScrollPane.add(chartLocations);
+        chartLocations.paintComponent(pnlScrollPane.getGraphics());
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartLocations.getChartHeight()));
 
         // Wrap up report fields
         lblNumberOfSightings.setText(Integer.toString(sightings.size()));
@@ -308,7 +397,6 @@ public class ReportSighting extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -316,19 +404,21 @@ public class ReportSighting extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblDay;
-    private javax.swing.JLabel lblDay1;
     private javax.swing.JLabel lblDaySightings;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNight;
-    private javax.swing.JLabel lblNight1;
     private javax.swing.JLabel lblNightSightings;
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblOther1;
-    private javax.swing.JLabel lblOther2;
     private javax.swing.JMenu mnuExtra;
     private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
+    private javax.swing.JMenu mnuReports;
+    private javax.swing.JMenuItem mnuSightingsByElements;
+    private javax.swing.JMenuItem mnuSightingsByLocations;
+    private javax.swing.JPanel pnlScrollPane;
+    private javax.swing.JScrollPane scrReport;
     // End of variables declaration//GEN-END:variables
 
 }

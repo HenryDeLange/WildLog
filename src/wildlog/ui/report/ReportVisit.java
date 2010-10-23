@@ -1,6 +1,7 @@
 package wildlog.ui.report;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -92,6 +93,8 @@ public class ReportVisit extends javax.swing.JFrame {
         jLabel31 = new javax.swing.JLabel();
         lblVeryBad = new javax.swing.JLabel();
         lblOther = new javax.swing.JLabel();
+        scrReport = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -190,29 +193,29 @@ public class ReportVisit extends javax.swing.JFrame {
         lblNight.setForeground(resourceMap.getColor("lblNight.foreground")); // NOI18N
         lblNight.setText(resourceMap.getString("lblNight.text")); // NOI18N
         lblNight.setName("lblNight"); // NOI18N
-        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 700, 60, -1));
+        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 705, 60, -1));
 
         lblMidDay.setFont(resourceMap.getFont("lblMidDay.font")); // NOI18N
         lblMidDay.setForeground(resourceMap.getColor("lblMidDay.foreground")); // NOI18N
         lblMidDay.setText(resourceMap.getString("lblMidDay.text")); // NOI18N
         lblMidDay.setName("lblMidDay"); // NOI18N
-        getContentPane().add(lblMidDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 700, 70, -1));
+        getContentPane().add(lblMidDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 705, 70, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 700, -1, -1));
+        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 705, -1, -1));
 
         lblMorning.setFont(resourceMap.getFont("lblMorning.font")); // NOI18N
         lblMorning.setForeground(resourceMap.getColor("lblMorning.foreground")); // NOI18N
         lblMorning.setText(resourceMap.getString("lblMorning.text")); // NOI18N
         lblMorning.setName("lblMorning"); // NOI18N
-        getContentPane().add(lblMorning, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 700, 70, -1));
+        getContentPane().add(lblMorning, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 705, 70, -1));
 
         lblAfternoon.setFont(resourceMap.getFont("lblAfternoon.font")); // NOI18N
         lblAfternoon.setForeground(resourceMap.getColor("lblAfternoon.foreground")); // NOI18N
         lblAfternoon.setText(resourceMap.getString("lblAfternoon.text")); // NOI18N
         lblAfternoon.setName("lblAfternoon"); // NOI18N
-        getContentPane().add(lblAfternoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 700, 90, -1));
+        getContentPane().add(lblAfternoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 705, 90, -1));
 
         jLabel19.setFont(resourceMap.getFont("jLabel19.font")); // NOI18N
         jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
@@ -290,7 +293,17 @@ public class ReportVisit extends javax.swing.JFrame {
         lblOther.setForeground(resourceMap.getColor("lblOther.foreground")); // NOI18N
         lblOther.setText(resourceMap.getString("lblOther.text")); // NOI18N
         lblOther.setName("lblOther"); // NOI18N
-        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 700, 70, -1));
+        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 705, 70, -1));
+
+        scrReport.setBorder(null);
+        scrReport.setName("scrReport"); // NOI18N
+
+        pnlScrollPane.setBackground(resourceMap.getColor("pnlScrollPane.background")); // NOI18N
+        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        scrReport.setViewportView(pnlScrollPane);
+
+        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 600, 550));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -403,8 +416,8 @@ public class ReportVisit extends javax.swing.JFrame {
 
         // Add Charts
         if (chartTime != null)
-            this.getContentPane().remove(chartTime);
-        chartTime = new BarChart(600, 550);
+            pnlScrollPane.remove(chartTime);
+        chartTime = new BarChart(580, 550);
         for (Sighting sighting : sightings) {
             numOfElements.add(sighting.getElementName());
             // Time
@@ -471,7 +484,9 @@ public class ReportVisit extends javax.swing.JFrame {
                 verybad++;
         }
 
-        this.getContentPane().add(chartTime, new AbsoluteConstraints(0, 150, -1, -1));
+        pnlScrollPane.add(chartTime);
+        chartTime.paintComponent(pnlScrollPane.getGraphics());
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartTime.getChartHeight()));
 
         // Wrap up report fields
         lblDaySightings.setText(Integer.toString(numDaySightings));
@@ -536,6 +551,8 @@ public class ReportVisit extends javax.swing.JFrame {
     private javax.swing.JMenu mnuExtra;
     private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
+    private javax.swing.JPanel pnlScrollPane;
+    private javax.swing.JScrollPane scrReport;
     // End of variables declaration//GEN-END:variables
 
 }

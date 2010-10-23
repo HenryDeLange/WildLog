@@ -1,6 +1,7 @@
 package wildlog.ui.report;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -18,7 +19,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import wildlog.WildLogApp;
 import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
@@ -38,6 +38,7 @@ public class ReportLocation extends javax.swing.JFrame {
     private boolean usePrimaryName = true;
     private boolean viewReport1 = true;
     private boolean viewReport2 = false;
+    private boolean viewReport3 = false;
     private Location location;
     private BarChart chartTime;
     private BarChart chartType;
@@ -94,12 +95,15 @@ public class ReportLocation extends javax.swing.JFrame {
         lblVacation = new javax.swing.JLabel();
         lblAtlas = new javax.swing.JLabel();
         lblOther2 = new javax.swing.JLabel();
+        scrReport = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
         mnuReports = new javax.swing.JMenu();
         mnuLoadReport1 = new javax.swing.JMenuItem();
-        MnuLoadReport2 = new javax.swing.JMenuItem();
+        mnuLoadReport2 = new javax.swing.JMenuItem();
+        mnuLoadReport3 = new javax.swing.JMenuItem();
         mnuExtra = new javax.swing.JMenu();
         mnuName = new javax.swing.JMenuItem();
 
@@ -247,6 +251,16 @@ public class ReportLocation extends javax.swing.JFrame {
         lblOther2.setName("lblOther2"); // NOI18N
         getContentPane().add(lblOther2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 720, 50, -1));
 
+        scrReport.setBorder(null);
+        scrReport.setName("scrReport"); // NOI18N
+
+        pnlScrollPane.setBackground(resourceMap.getColor("pnlScrollPane.background")); // NOI18N
+        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        scrReport.setViewportView(pnlScrollPane);
+
+        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 600, 605));
+
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
         mnuPrint.setText(resourceMap.getString("mnuPrint.text")); // NOI18N
@@ -275,14 +289,22 @@ public class ReportLocation extends javax.swing.JFrame {
         });
         mnuReports.add(mnuLoadReport1);
 
-        MnuLoadReport2.setText(resourceMap.getString("MnuLoadReport2.text")); // NOI18N
-        MnuLoadReport2.setName("MnuLoadReport2"); // NOI18N
-        MnuLoadReport2.addActionListener(new java.awt.event.ActionListener() {
+        mnuLoadReport2.setText(resourceMap.getString("mnuLoadReport2.text")); // NOI18N
+        mnuLoadReport2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MnuLoadReport2ActionPerformed(evt);
+                mnuLoadReport2ActionPerformed(evt);
             }
         });
-        mnuReports.add(MnuLoadReport2);
+        mnuReports.add(mnuLoadReport2);
+
+        mnuLoadReport3.setText(resourceMap.getString("mnuLoadReport3.text")); // NOI18N
+        mnuLoadReport3.setName("mnuLoadReport3"); // NOI18N
+        mnuLoadReport3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuLoadReport3ActionPerformed(evt);
+            }
+        });
+        mnuReports.add(mnuLoadReport3);
 
         jMenuBar1.add(mnuReports);
 
@@ -349,11 +371,19 @@ public class ReportLocation extends javax.swing.JFrame {
             repaint();
             setVisible(true);
         }
+        else
+        if (viewReport3) {
+            doReport3();
+            // Re-Draw
+            repaint();
+            setVisible(true);
+        }
     }//GEN-LAST:event_mnuNameActionPerformed
 
     private void mnuLoadReport1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoadReport1ActionPerformed
         viewReport1 = true;
         viewReport2 = false;
+        viewReport3 = false;
         usePrimaryName = true;
         doReport1();
         // Re-Draw
@@ -361,15 +391,27 @@ public class ReportLocation extends javax.swing.JFrame {
         setVisible(true);
     }//GEN-LAST:event_mnuLoadReport1ActionPerformed
 
-    private void MnuLoadReport2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnuLoadReport2ActionPerformed
+    private void mnuLoadReport2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoadReport2ActionPerformed
         viewReport1 = false;
         viewReport2 = true;
+        viewReport3 = false;
         usePrimaryName = true;
         doReport2();
         // Re-Draw
         repaint();
         setVisible(true);
-    }//GEN-LAST:event_MnuLoadReport2ActionPerformed
+    }//GEN-LAST:event_mnuLoadReport2ActionPerformed
+
+    private void mnuLoadReport3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuLoadReport3ActionPerformed
+        viewReport1 = false;
+        viewReport2 = false;
+        viewReport3 = true;
+        usePrimaryName = true;
+        doReport3();
+        // Re-Draw
+        repaint();
+        setVisible(true);
+    }//GEN-LAST:event_mnuLoadReport3ActionPerformed
 
     private void doReport1() {
         // Init report fields
@@ -385,13 +427,12 @@ public class ReportLocation extends javax.swing.JFrame {
 
         // Add Charts
         if (chartTime != null)
-            this.getContentPane().remove(chartTime);
+            pnlScrollPane.remove(chartTime);
         if (chartType != null)
-            this.getContentPane().remove(chartType);
+            pnlScrollPane.remove(chartType);
         if (chartSpecies != null)
-            this.getContentPane().remove(chartSpecies);
-        chartTime = new BarChart(290, 600);
-        chartType = new BarChart(290, 600);
+            pnlScrollPane.remove(chartSpecies);
+        chartTime = new BarChart(580, 600);
         for (Visit visit : visits) {
             if (visit.getStartDate() != null) {
                 if (firstDate == null)
@@ -442,29 +483,12 @@ public class ReportLocation extends javax.swing.JFrame {
                 }
                 else
                     chartTime.addBar(new BarChartEntity(nameToUse, ActiveTimeSpesific.NONE.name(), 1, lblOther1.getForeground()));
-                // Type
-                if (visit.getType() != null) {
-                    if (visit.getType().equals(VisitType.REMOTE_CAMERA))
-                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblRemoteCamera.getForeground()));
-                    else
-                    if (visit.getType().equals(VisitType.DAY_VISIT))
-                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblDayVisit.getForeground()));
-                    else
-                    if (visit.getType().equals(VisitType.VACATION))
-                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblVacation.getForeground()));
-                    else
-                    if (visit.getType().equals(VisitType.BIRD_ATLASSING))
-                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblAtlas.getForeground()));
-                    else
-                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblOther2.getForeground()));
-                }
-                else
-                    chartType.addBar(new BarChartEntity(nameToUse, VisitType.NONE.name(), 1, lblOther2.getForeground()));
             }
         }
 
-        this.getContentPane().add(chartTime, new AbsoluteConstraints(0, 100, -1, -1));
-        this.getContentPane().add(chartType, new AbsoluteConstraints(290, 100, -1, -1));
+        pnlScrollPane.add(chartTime);
+        chartTime.paintComponent(pnlScrollPane.getGraphics());
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartTime.getChartHeight()));
 
         // Wrap up report fields
         lblNumberOfSightings.setText(Integer.toString(numOfSightings));
@@ -496,6 +520,113 @@ public class ReportLocation extends javax.swing.JFrame {
     }
 
     private void doReport2() {
+        // Init report fields
+        lblName.setText(location.getName());
+        lblNumberOfVisits.setText(Integer.toString(visits.size()));
+        int numOfSightings = 0;
+        Set<String> numOfElements = new HashSet<String>();
+        int numDaySightings = 0;
+        int numNightSightings = 0;
+        Date firstDate = null;
+        Date lastDate = null;
+        int activeDays = 0;
+
+        // Add Charts
+        if (chartTime != null)
+            pnlScrollPane.remove(chartTime);
+        if (chartType != null)
+            pnlScrollPane.remove(chartType);
+        if (chartSpecies != null)
+            pnlScrollPane.remove(chartSpecies);
+        chartType = new BarChart(580, 600);
+        for (Visit visit : visits) {
+            if (visit.getStartDate() != null) {
+                if (firstDate == null)
+                    firstDate = visit.getStartDate();
+                else
+                if (visit.getStartDate().before(firstDate))
+                    firstDate = visit.getStartDate();
+            }
+            if (visit.getEndDate() != null) {
+                if (lastDate == null)
+                    lastDate = visit.getEndDate();
+                else
+                if (visit.getEndDate().after(lastDate))
+                    lastDate = visit.getEndDate();
+            }
+            if (visit.getStartDate() != null && visit.getEndDate() != null) {
+                long diff = visit.getEndDate().getTime() - visit.getStartDate().getTime();
+                activeDays = activeDays + (int)Math.ceil((double)diff/60/60/24/1000) + 1;
+            }
+            Sighting tempSighting = new Sighting();
+            tempSighting.setVisitName(visit.getName());
+            List<Sighting> sightings = app.getDBI().list(tempSighting);
+            for (Sighting sighting : sightings) {
+                numOfSightings++;
+                numOfElements.add(sighting.getElementName());
+                String nameToUse = "";
+                if (usePrimaryName)
+                    nameToUse = sighting.getElementName();
+                else {
+                    Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
+                    if (tempElement.getOtherName() != null)
+                        nameToUse = tempElement.getOtherName();
+                }
+                // Type
+                if (visit.getType() != null) {
+                    if (visit.getType().equals(VisitType.REMOTE_CAMERA))
+                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblRemoteCamera.getForeground()));
+                    else
+                    if (visit.getType().equals(VisitType.DAY_VISIT))
+                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblDayVisit.getForeground()));
+                    else
+                    if (visit.getType().equals(VisitType.VACATION))
+                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblVacation.getForeground()));
+                    else
+                    if (visit.getType().equals(VisitType.BIRD_ATLASSING))
+                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblAtlas.getForeground()));
+                    else
+                        chartType.addBar(new BarChartEntity(nameToUse, visit.getType().name(), 1, lblOther2.getForeground()));
+                }
+                else
+                    chartType.addBar(new BarChartEntity(nameToUse, VisitType.NONE.name(), 1, lblOther2.getForeground()));
+            }
+        }
+
+        pnlScrollPane.add(chartType);
+        chartType.paintComponent(pnlScrollPane.getGraphics());
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartType.getChartHeight()));
+
+        // Wrap up report fields
+        lblNumberOfSightings.setText(Integer.toString(numOfSightings));
+        lblNumberOfElements.setText(Integer.toString(numOfElements.size()));
+        lblDaySightings.setText(Integer.toString(numDaySightings));
+        lblNightSightings.setText(Integer.toString(numNightSightings));
+        if (firstDate != null)
+            lblFirstVisit.setText(new SimpleDateFormat("dd MMM yyyy").format(firstDate));
+        else
+            lblFirstVisit.setText("Unknown");
+        if (lastDate != null)
+            lblLastVisit.setText(new SimpleDateFormat("dd MMM yyyy").format(lastDate));
+        else
+            lblLastVisit.setText("Unknown");
+        lblActiveDays.setText(Integer.toString(activeDays));
+
+        // Setup Frame Look and Feel
+        this.getContentPane().setBackground(Color.WHITE);
+        lblLegend1.setVisible(true);
+        lblDay.setVisible(true);
+        lblNight.setVisible(true);
+        lblOther1.setVisible(true);
+        lblLegend2.setVisible(true);
+        lblAtlas.setVisible(true);
+        lblDayVisit.setVisible(true);
+        lblRemoteCamera.setVisible(true);
+        lblVacation.setVisible(true);
+        lblOther2.setVisible(true);
+    }
+
+    private void doReport3() {
         class ReportData implements Comparable<ReportData> {
             public Date dateAsDay;
             public int creatureCount;
@@ -526,17 +657,17 @@ public class ReportLocation extends javax.swing.JFrame {
 
         // Add Charts
         if (chartTime != null)
-            this.getContentPane().remove(chartTime);
+            pnlScrollPane.remove(chartTime);
         if (chartType != null)
-            this.getContentPane().remove(chartType);
+            pnlScrollPane.remove(chartType);
         if (chartSpecies != null)
-            this.getContentPane().remove(chartSpecies);
-        chartSpecies = new BarChart(590, 650);
+            pnlScrollPane.remove(chartSpecies);
+        chartSpecies = new BarChart(580, 600);
         // Get a sorted list of all visits with dates
         List<Visit> sortedVisits = new ArrayList<Visit>(visits.size());
         for (Visit visit : visits) {
             if (visit.getStartDate() != null && visit.getEndDate() != null) {
-                if (sortedVisits.size() == 0) {
+                if (sortedVisits.isEmpty()) {
                     sortedVisits.add(visit);
                 }
                 else {
@@ -556,77 +687,85 @@ public class ReportLocation extends javax.swing.JFrame {
                 activeDays = activeDays + (int)Math.ceil((double)diff/60/60/24/1000) + 1;
             }
         }
-        firstDate = sortedVisits.get(0).getStartDate();
-        lastDate = sortedVisits.get(sortedVisits.size()-1).getEndDate();
+        if (!sortedVisits.isEmpty()) {
+            firstDate = sortedVisits.get(0).getStartDate();
+            lastDate = sortedVisits.get(sortedVisits.size()-1).getEndDate();
 
-        List<ReportData> tempData = new ArrayList<ReportData>();
-        for (Visit visit : visits) {
-            Sighting tempSighting = new Sighting();
-            tempSighting.setVisitName(visit.getName());
-            List<Sighting> sightings = app.getDBI().list(tempSighting);
-            Collections.sort(sightings);
-            for (Sighting sighting : sightings) {
-                numOfSightings++;
-                numOfElements.add(sighting.getElementName());
-                //if (!numOfElements.contains(sighting.getElement().getPrimaryName()))
-                //    chartSpecies.addBar(new BarChartEntity(sighting.getElement().getPrimaryName() + "-" + sighting.getDate(), visit.getName(), (numOfElements.size()), Color.yellow));
-                tempData.add(new ReportData(new Date(sighting.getDate().getYear(), sighting.getDate().getMonth(), sighting.getDate().getDate()), numOfElements.size(), sighting.getElementName()));
+            List<ReportData> tempData = new ArrayList<ReportData>();
+            for (Visit visit : visits) {
+                Sighting tempSighting = new Sighting();
+                tempSighting.setVisitName(visit.getName());
+                List<Sighting> sightings = app.getDBI().list(tempSighting);
+                Collections.sort(sightings);
+                for (Sighting sighting : sightings) {
+                    numOfSightings++;
+                    numOfElements.add(sighting.getElementName());
+                    //if (!numOfElements.contains(sighting.getElement().getPrimaryName()))
+                    //    chartSpecies.addBar(new BarChartEntity(sighting.getElement().getPrimaryName() + "-" + sighting.getDate(), visit.getName(), (numOfElements.size()), Color.yellow));
+                    tempData.add(new ReportData(new Date(sighting.getDate().getYear(), sighting.getDate().getMonth(), sighting.getDate().getDate()), numOfElements.size(), sighting.getElementName()));
 
-                if (sighting.getTimeOfDay() != null) {
-                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
-                        numNightSightings++;
-                    }
-                    else
-                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                        // Do nothing
-                    }
-                    else {
-                        numDaySightings++;
+                    if (sighting.getTimeOfDay() != null) {
+                        if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+                            numNightSightings++;
+                        }
+                        else
+                        if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+                            // Do nothing
+                        }
+                        else {
+                            numDaySightings++;
+                        }
                     }
                 }
             }
-        }
 
-        List<ReportData> tempDataCore = new ArrayList<ReportData>(numOfElements.size());
-        Collections.sort(tempData);
-        Set<String> tempSet = new HashSet<String>(numOfElements.size());
-        for (ReportData temp : tempData) {
-            if (!tempSet.contains(temp.name)) {
-                tempSet.add(temp.name);
-                tempDataCore.add(new ReportData(temp.dateAsDay, tempSet.size(), ""));
-            }
-        }
-
-        final double ROWS = 35.0;
-        int interval = 1;
-        int days = (int)((lastDate.getTime() - firstDate.getTime())/60/60/24/1000);
-        if (days > ROWS)
-            interval = (int)Math.ceil(days/ROWS);
-        int count = 0;
-        Map<Date, Integer> finalChartData = new HashMap<Date, Integer>((int)ROWS);
-        int maxCreatures = 0;
-        for (int t = 0; t < days; t++) {
-            for (ReportData data : tempDataCore) {
-                if (data.dateAsDay.equals(new Date(firstDate.getTime() + (long)t*60*60*24*1000))) {
-                    maxCreatures = data.creatureCount;
+            List<ReportData> tempDataCore = new ArrayList<ReportData>(numOfElements.size());
+            Collections.sort(tempData);
+            Set<String> tempSet = new HashSet<String>(numOfElements.size());
+            for (ReportData temp : tempData) {
+                if (!tempSet.contains(temp.name)) {
+                    tempSet.add(temp.name);
+                    tempDataCore.add(new ReportData(temp.dateAsDay, tempSet.size(), ""));
                 }
             }
-            if (count >= interval) {
-                finalChartData.put(new Date(firstDate.getTime() + (long)t*60*60*24*1000), maxCreatures);
-                count = 0;
+
+            final double ROWS = 35.0;
+            int interval = 1;
+            int days = (int)((lastDate.getTime() - firstDate.getTime())/60/60/24/1000);
+            if (days > ROWS)
+                interval = (int)Math.ceil(days/ROWS);
+            int count = 0;
+            Map<Date, Integer> finalChartData = new HashMap<Date, Integer>((int)ROWS);
+            int maxCreatures = 0;
+            for (int t = 0; t < days; t++) {
+                for (ReportData data : tempDataCore) {
+                    if (data.dateAsDay.equals(new Date(firstDate.getTime() + (long)t*60*60*24*1000))) {
+                        maxCreatures = data.creatureCount;
+                    }
+                }
+                if (count >= interval) {
+                    finalChartData.put(new Date(firstDate.getTime() + (long)t*60*60*24*1000), maxCreatures);
+                    count = 0;
+                }
+                count++;
             }
-            count++;
+            if (count < interval && count > 0) {
+                finalChartData.put(lastDate, maxCreatures);
+            }
+
+            for (Date temp : finalChartData.keySet()) {
+                chartSpecies.addBar(new BarChartEntity(temp, "", finalChartData.get(temp), new Color(125, 198, 48)));
+            }
+
         }
-        if (count < interval && count > 0) {
-            finalChartData.put(lastDate, maxCreatures);
+        else {
+            firstDate = null;
+            lastDate = null;
         }
 
-        for (Date temp : finalChartData.keySet()) {
-            chartSpecies.addBar(new BarChartEntity(temp, "", finalChartData.get(temp), new Color(125, 198, 48)));
-        }
-
-
-        this.getContentPane().add(chartSpecies, new AbsoluteConstraints(0, 90, -1, -1));
+        pnlScrollPane.add(chartSpecies);
+        chartSpecies.paintComponent(pnlScrollPane.getGraphics());
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartSpecies.getChartHeight()));
 
         // Wrap up report fields
         lblNumberOfSightings.setText(Integer.toString(numOfSightings));
@@ -658,7 +797,6 @@ public class ReportLocation extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenuItem MnuLoadReport2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
@@ -689,10 +827,14 @@ public class ReportLocation extends javax.swing.JFrame {
     private javax.swing.JLabel lblVacation;
     private javax.swing.JMenu mnuExtra;
     private javax.swing.JMenuItem mnuLoadReport1;
+    private javax.swing.JMenuItem mnuLoadReport2;
+    private javax.swing.JMenuItem mnuLoadReport3;
     private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
     private javax.swing.JMenuItem mnuPrintReport;
     private javax.swing.JMenu mnuReports;
+    private javax.swing.JPanel pnlScrollPane;
+    private javax.swing.JScrollPane scrReport;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -15,6 +15,11 @@ import javax.swing.JPanel;
 
 public class BarChart extends JPanel {
         // Variables
+        private static final int MIN_BAR_SIZE = 20;
+        private static final int LABEL_BUFFER = 102;
+        private static final int TOTAL_BUFFER = 20;
+        private static final int SCALE_BUFFER = 10;
+        private static final int BAR_HEIGHT_BUFFER = 5;
 	private List<BarChartEntity> bars = new ArrayList<BarChartEntity>();
         private int chartWidth;
         private int chartHeight;
@@ -33,7 +38,7 @@ public class BarChart extends JPanel {
 	}
 
 	@Override
-	protected void paintComponent(Graphics g) {
+	public void paintComponent(Graphics g) {
             if (bars.size() > 0) {
                 if (bars.get(0).getBarName() instanceof Date)
                     Collections.sort(bars, Collections.reverseOrder());
@@ -58,7 +63,7 @@ public class BarChart extends JPanel {
                 List<String> unsortedList = new ArrayList<String>(chartMaxValues.keySet());
                 List<String> sortOrder = new ArrayList<String>(unsortedList.size());
                 for (int t = 0; t < unsortedList.size(); t++) {
-                    if (sortOrder.size() == 0) {
+                    if (sortOrder.isEmpty()) {
                         sortOrder.add(unsortedList.get(t));
                     }
                     else {
@@ -81,11 +86,9 @@ public class BarChart extends JPanel {
                 }
 
                 // Paint bars and labels
-                final int labelsBuffer = 102;
-                final int totalsBuffer = 15;
-                //final int scaleBuffer = 20;
-                final int scaleBuffer = 10;
-                int barHeight = ((chartHeight - scaleBuffer) / chartMaxValues.size()) - 5;
+                int barHeight = ((chartHeight - SCALE_BUFFER) / chartMaxValues.size()) - BAR_HEIGHT_BUFFER;
+                if (barHeight < MIN_BAR_SIZE)
+                    barHeight = MIN_BAR_SIZE;
                 Map<String, BarChartCoordinate> chartCoords = new LinkedHashMap<String, BarChartCoordinate>();
                 for (BarChartEntity entity : bars) {
                     String entityName = entity.getBarName().toString();
@@ -93,16 +96,16 @@ public class BarChart extends JPanel {
                         entityName = new SimpleDateFormat("dd MMM yyyy").format(entity.getBarName());
                     // Setup
                     int value = entity.getValue();
-                    int barWidth = (int)((chartWidth - (labelsBuffer + totalsBuffer)) * ((double)value / max));
+                    int barWidth = (int)((chartWidth - (LABEL_BUFFER + TOTAL_BUFFER)) * ((double)value / max));
                     BarChartCoordinate coord = chartCoords.get(entityName);
                     if (coord == null) {
-                        coord = new BarChartCoordinate(labelsBuffer, (barHeight + 5) * chartSortOrder.get(entityName) + 5);
+                        coord = new BarChartCoordinate(LABEL_BUFFER, (barHeight + BAR_HEIGHT_BUFFER) * chartSortOrder.get(entityName) + BAR_HEIGHT_BUFFER);
                         // Labels
                         g.setColor(Color.BLACK);
                         String label = entityName;
                         if (label.length() > 17)
                             label = label.substring(0, 15) + "..";
-                        g.drawString(label, 5, coord.getY() + barHeight/2 + 5);
+                        g.drawString(label, BAR_HEIGHT_BUFFER, coord.getY() + barHeight/2 + BAR_HEIGHT_BUFFER);
                     }
 
                     // Draw Bars
@@ -125,6 +128,9 @@ public class BarChart extends JPanel {
                     coord.setX(coord.getX() + barWidth);
                     chartCoords.put(entityName, coord);
                 }
+                // Get the new height
+                if ((barHeight + BAR_HEIGHT_BUFFER) * chartCoords.size() + BAR_HEIGHT_BUFFER > chartHeight)
+                    chartHeight = (barHeight + BAR_HEIGHT_BUFFER) * chartCoords.size() + BAR_HEIGHT_BUFFER;
                 // Paint totals
                 for (BarChartEntity entity : bars) {
                     String entityName = entity.getBarName().toString();
@@ -133,16 +139,20 @@ public class BarChart extends JPanel {
                     BarChartCoordinate coord = chartCoords.get(entityName);
                     if (coord != null) {
                         g.setColor(Color.BLACK);
-                        g.drawString(chartMaxValues.get(entityName).toString(), coord.getX() + 3, coord.getY() + barHeight/2 + 5);
+                        g.drawString(chartMaxValues.get(entityName).toString(), coord.getX() + 3, coord.getY() + barHeight/2 + BAR_HEIGHT_BUFFER);
                         chartCoords.remove(entityName);
                     }
                 }
             }
-
 	}
 
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(chartWidth, chartHeight);
-	}
+    @Override
+    public Dimension getPreferredSize() {
+        return new Dimension(chartWidth, chartHeight);
+    }
+
+    public int getChartHeight() {
+        return chartHeight;
+    }
+
 }

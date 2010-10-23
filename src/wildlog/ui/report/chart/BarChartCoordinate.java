@@ -4,7 +4,7 @@ package wildlog.ui.report.chart;
  *
  * @author DeLangeH
  */
-public class BarChartCoordinate {
+public final class BarChartCoordinate {
     // Variables
     private int x;
     private int y;
