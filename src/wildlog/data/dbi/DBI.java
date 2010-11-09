@@ -7,6 +7,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogOptions;
 
 
 public interface DBI {
@@ -19,6 +20,7 @@ public interface DBI {
     public Location find(Location inLocation);
     public Visit find(Visit inVisit);
     public Sighting find(Sighting inSighting);
+    public WildLogOptions find(WildLogOptions inWildLogOptions);
     
     public List<Element> list(Element inElement);
     public List<Location> list(Location inLocation);
@@ -33,6 +35,7 @@ public interface DBI {
     public boolean createOrUpdate(Visit inVisit, String inOldName);
     public boolean createOrUpdate(Sighting inSighting);
     public boolean createOrUpdate(WildLogFile inFoto, boolean inUpdate);
+    public boolean createOrUpdate(WildLogOptions inWildLogOptions);
     
     public boolean delete(Element inElement);
     public boolean delete(Location inLocation);

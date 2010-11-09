@@ -1,8 +1,15 @@
 package wildlog.utils.ui;
 
+import com.drew.imaging.jpeg.JpegMetadataReader;
+import com.drew.imaging.jpeg.JpegProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.Tag;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -14,51 +21,45 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dbi.DBI;
 import wildlog.data.enums.WildLogFileType;
 
 public final class Utils {
-    protected final static String jpeg = "jpeg";
-    protected final static String jpg = "jpg";
-    protected final static String gif = "gif";
-    protected final static String tiff = "tiff";
-    protected final static String tif = "tif";
-    protected final static String png = "png";
+    public final static String jpeg = "jpeg";
+    public final static String jpg = "jpg";
+    public final static String gif = "gif";
+    public final static String tiff = "tiff";
+    public final static String tif = "tif";
+    public final static String png = "png";
     private static final int THUMBNAIL_SIZE = 300;
     private static String lastFilePath = "";
 
     /** Get the extension of a file. */
-    public static String getExtension(File f) {
+    public static String getExtension(File inFile) {
         String ext = null;
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-
-        if (i > 0 &&  i < s.length() - 1) {
-            ext = s.substring(i+1).toLowerCase();
+        int i = inFile.getName().lastIndexOf('.');
+        if (i > 0 &&  i < inFile.getName().length() - 1) {
+            ext = inFile.getName().substring(i+1).toLowerCase();
         }
         return ext;
     }
 
-    /** Returns an ImageIcon, or null if the path was invalid. */
-    protected static ImageIcon createImageIcon(String path) {
-        java.net.URL imgURL = Utils.class.getResource(path);
-        if (imgURL != null) {
-            return new ImageIcon(imgURL);
-        } else {
-            System.err.println("Couldn't find file: " + path);
-            return null;
-        }
-    }
-    
     public static ImageIcon getScaledIcon(ImageIcon inIcon, int inSize) {
         int finalHeight = inSize;
         int finalWidth = inSize;
@@ -86,7 +87,7 @@ public final class Utils {
         return inIcon;
     }
     
-    private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
+    public static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
         BufferedImage resizedImg = new BufferedImage(inWidth, inHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = resizedImg.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -97,11 +98,10 @@ public final class Utils {
 
     public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-//        // Native File Upload Window. Het Thumbnails, maar het nie Multi Selct nie :(
+//        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
 //        d.setDirectory(lastFilePath);
 //        d.setVisible(true);
-        
         JFileChooser fileChooser;
         if (lastFilePath.length() > 0)
             fileChooser = new JFileChooser(lastFilePath);
@@ -340,36 +340,7 @@ public final class Utils {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
             String fileName = fotos.get(inIndex).getOriginalFotoLocation();
-            try {
-                Desktop.getDesktop().open(new File(fileName));
-            }
-            catch (IOException ex) {
-                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
-                // Backup Plan - Because of Java 6 bug for avi files
-                try {
-                    String os = System.getProperty("os.name").toLowerCase();
-                    if (os.indexOf("mac") != -1)
-                    {
-                        String[] commands = {"open", "%s", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-                    else
-                    if ((os.indexOf("windows") != -1 || os.indexOf("nt") != -1) && (os.equals("windows 95") || os.equals("windows 98")))
-                    {
-                        String[] commands = {"command.com", "/C", "start", "%s", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-                    else
-                    if (os.indexOf("windows") != -1 || os.indexOf("nt") != -1)
-                    {
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", fileName};
-                        Runtime.getRuntime().exec(commands);
-                    }
-                }
-                catch (IOException e) {
-                    ex.printStackTrace();
-                }
-            }
+            openFile(fileName);
         }
     }
 
@@ -467,5 +438,60 @@ public final class Utils {
         }
     }
 
+    public static void showExifPopup(File inFile) {
+        if (inFile != null) {
+            if (inFile.exists()) {
+                JFrame frame = new JFrame("EXIF Meta Data: " + inFile.getPath());
+                JTextPane txtPane = new JTextPane();
+                txtPane.setContentType("text/html");
+                txtPane.setEditable(false);
+                String temp = "";
+                try {
+                    Metadata meta = JpegMetadataReader.readMetadata(inFile);
+                    Iterator directories = meta.getDirectoryIterator();
+                    breakAllWhiles: while (directories.hasNext()) {
+                        Directory directory = (Directory)directories.next();
+                        Iterator tags = directory.getTagIterator();
+                        while (tags.hasNext()) {
+                            Tag tag = (Tag)tags.next();
+                            try {
+                                String name = tag.getTagName();
+                                String description = tag.getDescription();
+                                temp = temp + "<b>" + name + ":</b> " + description + "<br/>";
+                            }
+                            catch (MetadataException ex) {
+                                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                    txtPane.setText(temp);
+                    JScrollPane scroll = new JScrollPane(txtPane);
+                    scroll.setPreferredSize(new Dimension(500, 750));
+                    frame.getContentPane().add(scroll);
+                    //frame.setLocationRelativeTo(((WildLogApp)Application.getInstance()).getMainView().getComponent());
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+                catch (JpegProcessingException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Could not process the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Could not access the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Could not access the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void showExifPopup(String inID, int inIndex, WildLogApp inApp) {
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
+        if (fotos.size() > 0) {
+            String fileName = fotos.get(inIndex).getOriginalFotoLocation();
+            showExifPopup(new File(fileName));
+        }
+    }
 
 }

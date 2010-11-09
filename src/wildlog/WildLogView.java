@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -46,9 +47,13 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
+import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.PanelElement;
@@ -62,6 +67,8 @@ import wildlog.ui.report.ReportElement;
 import wildlog.ui.report.ReportLocation;
 import wildlog.ui.report.ReportSighting;
 import wildlog.ui.report.ReportVisit;
+import wildlog.utils.AstroUtils;
+import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -251,7 +258,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnDefault = new javax.swing.JButton();
         cmbElementTypesBrowseTab = new javax.swing.JComboBox();
         chkElementTypeBrowseTab = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        btnRotate = new javax.swing.JButton();
+        btnViewEXIF = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -291,6 +299,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblSearchResults = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         backupMenuItem = new javax.swing.JMenuItem();
@@ -301,17 +311,19 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         importMenu = new javax.swing.JMenu();
         csvImportMenuItem = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
-        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
         javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
         statusMessageLabel = new javax.swing.JLabel();
@@ -516,7 +528,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomIn.setToolTipText(resourceMap.getString("btnZoomIn.toolTipText")); // NOI18N
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setName("btnZoomIn"); // NOI18N
-        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(827, 40, 90, 30));
+        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 40, 80, 30));
 
         btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
         btnZoomOut.setBackground(resourceMap.getColor("btnZoomOut.background")); // NOI18N
@@ -525,7 +537,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomOut.setToolTipText(resourceMap.getString("btnZoomOut.toolTipText")); // NOI18N
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setName("btnZoomOut"); // NOI18N
-        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(925, 40, 90, 30));
+        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(935, 40, 80, 30));
 
         btnViewImage.setBackground(resourceMap.getColor("btnViewImage.background")); // NOI18N
         btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
@@ -537,7 +549,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(827, 5, 120, 30));
+        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 45, 120, 25));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -601,7 +613,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnReportActionPerformed(evt);
             }
         });
-        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 100, 65));
+        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 120, 40));
 
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
         btnDefault.setText(resourceMap.getString("btnDefault.text")); // NOI18N
@@ -636,12 +648,24 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
 
-        jButton1.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
-        jButton1.setIcon(resourceMap.getIcon("jButton1.icon")); // NOI18N
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setToolTipText(resourceMap.getString("jButton1.toolTipText")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
-        tabFoto.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 5, 65, 30));
+        btnRotate.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
+        btnRotate.setIcon(resourceMap.getIcon("btnRotate.icon")); // NOI18N
+        btnRotate.setText(resourceMap.getString("btnRotate.text")); // NOI18N
+        btnRotate.setToolTipText(resourceMap.getString("btnRotate.toolTipText")); // NOI18N
+        btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRotate.setName("btnRotate"); // NOI18N
+        tabFoto.add(btnRotate, new org.netbeans.lib.awtextra.AbsoluteConstraints(935, 5, 80, 30));
+
+        btnViewEXIF.setText(resourceMap.getString("btnViewEXIF.text")); // NOI18N
+        btnViewEXIF.setToolTipText(resourceMap.getString("btnViewEXIF.toolTipText")); // NOI18N
+        btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewEXIF.setName("btnViewEXIF"); // NOI18N
+        btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewEXIFActionPerformed(evt);
+            }
+        });
+        tabFoto.add(btnViewEXIF, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 5, 80, 30));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1064,7 +1088,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
+        helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
+        helpMenu.setName("helpMenu"); // NOI18N
+
         javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getActionMap(WildLogView.class, this);
+        aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
+        aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
+        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
+        helpMenu.add(aboutMenuItem);
+
+        fileMenu.add(helpMenu);
+
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -1082,7 +1116,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         menuBar.add(jMenu4);
 
         exportMenu.setText(resourceMap.getString("exportMenu.text")); // NOI18N
-        exportMenu.setName("exportMenu"); // NOI18N
 
         csvExportMenuItem.setAction(actionMap.get("exportToCSV")); // NOI18N
         csvExportMenuItem.setText(resourceMap.getString("csvExportMenuItem.text")); // NOI18N
@@ -1112,7 +1145,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         menuBar.add(importMenu);
 
         advancedMenu.setText(resourceMap.getString("advancedMenu.text")); // NOI18N
-        advancedMenu.setName("advancedMenu"); // NOI18N
+
+        jMenuItem3.setAction(actionMap.get("calculateSunAndMoon")); // NOI18N
+        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
+        jMenuItem3.setName("jMenuItem3"); // NOI18N
+        advancedMenu.add(jMenuItem3);
 
         moveVisitsMenuItem.setAction(actionMap.get("advancedMoveVisits")); // NOI18N
         moveVisitsMenuItem.setText(resourceMap.getString("moveVisitsMenuItem.text")); // NOI18N
@@ -1129,6 +1166,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
         settingsMenu.setName("settingsMenu"); // NOI18N
 
+        jMenu5.setText(resourceMap.getString("jMenu5.text")); // NOI18N
+        jMenu5.setName("jMenu5"); // NOI18N
+
         chkMnuUseWMS.setSelected(true);
         chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
         chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
@@ -1137,12 +1177,25 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 chkMnuUseWMSItemStateChanged(evt);
             }
         });
-        settingsMenu.add(chkMnuUseWMS);
+        jMenu5.add(chkMnuUseWMS);
+
+        jMenuItem4.setAction(actionMap.get("setupMapStartLocation")); // NOI18N
+        jMenuItem4.setText(resourceMap.getString("jMenuItem4.text")); // NOI18N
+        jMenuItem4.setName("jMenuItem4"); // NOI18N
+        jMenu5.add(jMenuItem4);
+
+        settingsMenu.add(jMenu5);
 
         menuBar.add(settingsMenu);
 
         jMenu2.setText(resourceMap.getString("jMenu2.text")); // NOI18N
         jMenu2.setName("jMenu2"); // NOI18N
+
+        jMenuItem1.setAction(actionMap.get("exifReader")); // NOI18N
+        jMenuItem1.setAction(actionMap.get("exifReader")); // NOI18N
+        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenu2.add(jMenuItem1);
 
         jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
         jMenu1.setName("jMenu1"); // NOI18N
@@ -1167,16 +1220,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jMenu2.add(jMenu3);
 
         menuBar.add(jMenu2);
-
-        helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
-        helpMenu.setName("helpMenu"); // NOI18N
-
-        aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
-        aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
-        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
-        helpMenu.add(aboutMenuItem);
-
-        menuBar.add(helpMenu);
 
         statusPanel.setName("statusPanel"); // NOI18N
 
@@ -1366,7 +1409,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
         else {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
+            tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         }
     }//GEN-LAST:event_tblElementMouseReleased
 
@@ -1386,8 +1429,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
         else {
             lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
-            UtilTableGenerator.setupShortVisitTable(tblVisit, new Location());
-            UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, new Location());
+            tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
+            tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         }
     }//GEN-LAST:event_tblLocationMouseReleased
 
@@ -1896,6 +1939,30 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         app.setUseOnlineMap(chkMnuUseWMS.isSelected());
     }//GEN-LAST:event_chkMnuUseWMSItemStateChanged
 
+    private void btnViewEXIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEXIFActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                Utils.showExifPopup("LOCATION-" + temp.getName(), imageIndex, app);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                Utils.showExifPopup("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                Utils.showExifPopup("VISIT-" + temp.getName(), imageIndex, app);
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                Utils.showExifPopup("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+            }
+        }
+    }//GEN-LAST:event_btnViewEXIFActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -2229,6 +2296,76 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 //            }
 //        }.execute();
     }
+
+    @Action
+    public void calculateSunAndMoon() {
+        if (JOptionPane.showConfirmDialog(this.getComponent(), "Please backup your data before proceding. This will replace the Sun and Moon information for all your Sightings with the auto generated values.", "Calculate Sun and Moon Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+            List<Sighting> sightings = app.getDBI().list(new Sighting());
+            for (Sighting sighting : sightings) {
+                sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
+                double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsFloat());
+                double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsFloat());
+                if (lat != 0 && lon != 0) {
+                    sighting.setMoonlight(AstroUtils.getMoonlight(sighting.getDate(), lat, lon));
+                    sighting.setTimeOfDay(AstroUtils.getSunCategory(sighting.getDate(), lat, lon));
+                }
+                app.getDBI().createOrUpdate(sighting);
+            }
+        }
+    }
+
+    @Action
+    public void setupMapStartLocation() {
+        WildLogOptions options = app.getDBI().find(new WildLogOptions());
+        String inputLat = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Latitude to use for the map. (As decimal degrees.)", options.getDefaultLatitude());
+        if (inputLat != null) {
+            try {
+                options.setDefaultLatitude(Double.parseDouble(inputLat));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        String inputLon = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Longitude to use for the map. (As decimal degrees.)", options.getDefaultLongitude());
+        if (inputLon != null) {
+            try {
+                options.setDefaultLongitude(Double.parseDouble(inputLon));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        app.getDBI().createOrUpdate(options);
+    }
+
+    @Action
+    public void exifReader() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+                String extension = Utils.getExtension(f);
+                if (extension != null) {
+                    if (extension.equalsIgnoreCase(Utils.jpeg) ||
+                        extension.equalsIgnoreCase(Utils.jpg)) {
+                            return true;
+                    }
+                }
+                return false;
+            }
+            @Override
+            public String getDescription() {
+                return "JPG Images";
+            }
+        });
+        int result = fileChooser.showOpenDialog(this.getComponent());
+        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
+            Utils.showExifPopup(fileChooser.getSelectedFile());
+        }
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2250,7 +2387,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnGoVisit_LocTab;
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnReport;
+    private javax.swing.JButton btnRotate;
     private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnViewEXIF;
     private javax.swing.JButton btnViewImage;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
@@ -2268,7 +2407,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem htmlExportMenuItem1;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
     private javax.swing.JMenu importMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2286,6 +2424,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

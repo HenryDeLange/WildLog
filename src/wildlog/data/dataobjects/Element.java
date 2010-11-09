@@ -8,6 +8,7 @@ import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
+import wildlog.data.enums.SizeType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
@@ -54,6 +55,7 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     private String lifespan;
     private String referenceID;
     private String distribution;
+    private SizeType sizeType;
 
    
     // CONSTRUCTORS:
@@ -111,6 +113,7 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         htmlElement.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(description));
         htmlElement.append("<br/><b>Distribution:</b> ").append(UtilsHTML.formatString(distribution));
         htmlElement.append("<br/><b>Behaviour:</b> ").append(UtilsHTML.formatString(behaviourDescription));
+        htmlElement.append("<br/><b>Size Type:</b> ").append(UtilsHTML.formatString(sizeType));
         htmlElement.append("<br/><b>Minimum Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
         htmlElement.append("<br/><b>Maximum Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
         htmlElement.append("<br/><b>Minimum Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
@@ -373,40 +376,50 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         return sizeFemaleMax;
     }
 
-    public void setSizeFemaleMax(double sizeFemaleMax) {
-        this.sizeFemaleMax = sizeFemaleMax;
+    public void setSizeFemaleMax(double inSizeFemaleMax) {
+        sizeFemaleMax = inSizeFemaleMax;
     }
 
     public double getSizeMaleMax() {
         return sizeMaleMax;
     }
 
-    public void setSizeMaleMax(double sizeMaleMax) {
-        this.sizeMaleMax = sizeMaleMax;
+    public void setSizeMaleMax(double inSizeMaleMax) {
+        sizeMaleMax = inSizeMaleMax;
     }
 
     public double getWeightFemaleMax() {
         return weightFemaleMax;
     }
 
-    public void setWeightFemaleMax(double weightFemaleMax) {
-        this.weightFemaleMax = weightFemaleMax;
+    public void setWeightFemaleMax(double inWeightFemaleMax) {
+        weightFemaleMax = inWeightFemaleMax;
     }
 
     public double getWeightMaleMax() {
         return weightMaleMax;
     }
 
-    public void setWeightMaleMax(double weightMaleMax) {
-        this.weightMaleMax = weightMaleMax;
+    public void setWeightMaleMax(double inWeightMaleMax) {
+        weightMaleMax = inWeightMaleMax;
     }
 
     public String getDistribution() {
         return distribution;
     }
 
-    public void setDistribution(String distribution) {
-        this.distribution = distribution;
+    public void setDistribution(String inDistribution) {
+        distribution = inDistribution;
     }
+
+    public SizeType getSizeType() {
+        return sizeType;
+    }
+
+    public void setSizeType(SizeType inSizeType) {
+        sizeType = inSizeType;
+    }
+
+
 
 }

@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Location;
@@ -42,6 +45,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.report.ReportLocation;
+import wildlog.utils.AstroUtils;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
@@ -221,6 +225,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnReport = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
         btnKml = new javax.swing.JButton();
+        btnSunAndMoon = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -800,6 +805,16 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
         locationIncludes.add(btnKml, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 290, 110, 30));
 
+        btnSunAndMoon.setText(resourceMap.getString("btnSunAndMoon.text")); // NOI18N
+        btnSunAndMoon.setToolTipText(resourceMap.getString("btnSunAndMoon.toolTipText")); // NOI18N
+        btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
+        btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSunAndMoonActionPerformed(evt);
+            }
+        });
+        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 323, 110, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -1258,6 +1273,20 @@ public class PanelLocation extends PanelCanSetupHeader {
         Utils.openFile(finalPath);
     }//GEN-LAST:event_btnKmlActionPerformed
 
+    private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
+        double lat = LatLonConverter.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSecondsFloat());
+        double lon = LatLonConverter.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSecondsFloat());
+        if (lat != 0 && lon != 0) {
+            String temp = "Curent Moon Phase: " + AstroUtils.getMoonPhase(Calendar.getInstance().getTime()) + " % Full " + System.getProperty("line.separator");
+            temp = temp + "Current Moonlight: " + AstroUtils.getMoonlight(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Sunlight: " + AstroUtils.getSunCategory(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            JOptionPane.showMessageDialog(this, temp, "Sun and Moon Information for " + locationWL.getName(), JOptionPane.INFORMATION_MESSAGE);
+        }
+        else {
+            JOptionPane.showMessageDialog(this, "Please specify the GPS co-ordinates.", "Sun and Moon Information for " + locationWL.getName(), JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSunAndMoonActionPerformed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
         if (fotos.size() > 0)
@@ -1280,6 +1309,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
+    private javax.swing.JButton btnSunAndMoon;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.ButtonGroup buttonGroup1;

@@ -88,19 +88,19 @@ public class DBI_h2 extends DBI_JDBC {
                 state.execute(createWildLogTable);
             }
 
-            super.doUpdates();
+            super.doUpdates(); // This also creates the WildLogOptions row the first time
         }
         catch (ClassNotFoundException cnfe) {
-            System.err.println("\nUnable to load the JDBC driver " + "org.apache.derby.jdbc.EmbeddedDriver");
+            System.err.println("\nUnable to load the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
             System.err.println("Please check your CLASSPATH.");
             cnfe.printStackTrace(System.err);
         }
         catch (InstantiationException ie) {
-            System.err.println("\nUnable to instantiate the JDBC driver " + "org.apache.derby.jdbc.EmbeddedDriver");
+            System.err.println("\nUnable to instantiate the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
             ie.printStackTrace(System.err);
         }
         catch (IllegalAccessException iae) {
-            System.err.println("\nNot allowed to access the JDBC driver " + "org.apache.derby.jdbc.EmbeddedDriver");
+            System.err.println("\nNot allowed to access the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
             iae.printStackTrace(System.err);
         }
         catch (SQLException sqle) {

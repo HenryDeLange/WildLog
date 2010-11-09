@@ -27,16 +27,16 @@ public class MapFrameOffline {
     // Create a Swing frame. The OpenMapFrame knows how to use the MapHandler to locate and place certain objects.
     private OpenMapFrame frame;
     private MapHandler mapHandler;
+    private double defaultLatitude;
+    private double defaultLongitude;
+
 
     
     // Constructor:
-    public MapFrameOffline(/*boolean inUseWMS*/) {
-        title = "WildLog Map";
-        initMap(/*inUseWMS*/);
-    }
-
-    public MapFrameOffline(String inTitle/*, boolean inUseWMS*/) {
+    public MapFrameOffline(String inTitle, double inDefaultLatitude, double inDefaultLongitude/*, boolean inUseWMS*/) {
         title = inTitle;
+        defaultLatitude = inDefaultLatitude;
+        defaultLongitude = inDefaultLongitude;
         initMap(/*inUseWMS*/);
     }
 
@@ -134,7 +134,7 @@ public class MapFrameOffline {
             // Get the default MapBean that the BasicMapPanel created.
             MapBean mapBean = mapPanel.getMapBean();
             // Set the map's center and scale
-            mapBean.setCenter(new LatLonPoint(-28.7f, 24.7f));
+            mapBean.setCenter(new LatLonPoint(defaultLatitude, defaultLongitude));
             mapBean.setScale(8500000f);
 
             // Add the points layer.

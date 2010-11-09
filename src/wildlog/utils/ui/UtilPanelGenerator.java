@@ -1,6 +1,5 @@
 package wildlog.utils.ui;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import wildlog.ui.panel.*;
 import org.jdesktop.application.Application;

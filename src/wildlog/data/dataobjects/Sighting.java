@@ -13,6 +13,7 @@ import wildlog.data.enums.ElementType;
 import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
@@ -48,6 +49,8 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     private String elementName;
     private String locationName;
     private String visitName;
+    private int moonPhase;
+    private Moonlight moonlight;
 
 
     // CONSTRUCTORS:
@@ -98,10 +101,11 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         htmlSighting.append("<br/><b>View Rating:</b> ").append(UtilsHTML.formatString(viewRating));
         htmlSighting.append("<br/><b>Certainty:</b> ").append(UtilsHTML.formatString(certainty));
         htmlSighting.append("<br/><b>Number of Creatures:</b> ").append(UtilsHTML.formatString(numberOfElements));
+        htmlSighting.append("<br/><b>Moon Phase:</b> ").append(UtilsHTML.formatString(moonPhase)).append(" % Full");
+        htmlSighting.append("<br/><b>Moonlight:</b> ").append(UtilsHTML.formatString(moonlight));
         htmlSighting.append("<br/><b>Details:</b> ").append(UtilsHTML.formatString(details));
         htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
         htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
-//        htmlSighting.append("<br/><b>Sub Area:</b> " + UtilsHTML.formatString(subArea));
         htmlSighting.append("<br/><b>Sighting ID:</b> ").append(UtilsHTML.formatString(sightingCounter));
         if (inIncludeImages)
             htmlSighting.append("<br/><b>Photos:</b><br/>").append(fotoString);
@@ -444,25 +448,40 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         return elementName;
     }
 
-    public void setElementName(String elementName) {
-        this.elementName = elementName;
+    public void setElementName(String inElementName) {
+        elementName = inElementName;
     }
 
     public String getLocationName() {
         return locationName;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setLocationName(String inLocationName) {
+        locationName = inLocationName;
     }
 
     public String getVisitName() {
         return visitName;
     }
 
-    public void setVisitName(String visitName) {
-        this.visitName = visitName;
+    public void setVisitName(String inVisitName) {
+        visitName = inVisitName;
     }
 
+    public int getMoonPhase() {
+        return moonPhase;
+    }
+
+    public void setMoonPhase(int inMoonPhase) {
+        moonPhase = inMoonPhase;
+    }
+
+    public Moonlight getMoonlight() {
+        return moonlight;
+    }
+
+    public void setMoonlight(Moonlight inMoonlight) {
+        moonlight = inMoonlight;
+    }
     
 }

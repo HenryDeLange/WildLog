@@ -13,6 +13,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -30,8 +31,10 @@ import wildlog.data.enums.Habitat;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.Province;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.SizeType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.ViewRating;
@@ -60,109 +63,114 @@ public abstract class DBI_JDBC implements DBI {
 
     protected void init() {
         // Create tables
-        createElementsTable = "CREATE TABLE ELEMENTS "+
-                            "("+
-                            "   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,"+
-                            "   OTHERNAME varchar(150),"+
-                            "   SCIENTIFICNAME varchar(150),"+
-                            "   DESCRIPTION longvarchar,"+
-                            "   DISTRIBUTION longvarchar,"+
-                            "   NUTRITION longvarchar,"+
-                            "   WATERDEPENDANCE varchar(50),"+
-                            "   SIZEMALEMIN float(52),"+
-                            "   SIZEMALEMAX float(52),"+
-                            "   SIZEFEMALEMIN float(52),"+
-                            "   SIZEFEMALEMAX float(52),"+
-                            "   SIZEUNIT varchar(10),"+
-                            "   WEIGHTMALEMIN float(52),"+
-                            "   WEIGHTMALEMAX float(52),"+
-                            "   WEIGHTFEMALEMIN float(52),"+
-                            "   WEIGHTFEMALEMAX float(52),"+
-                            "   WEIGHTUNIT varchar(10),"+
-                            "   BREEDINGDURATION varchar(50),"+
-                            "   BREEDINGNUMBER varchar(50),"+
-                            "   WISHLISTRATING varchar(50),"+
-                            "   DIAGNOSTICDESCRIPTION longvarchar,"+
-                            "   ACTIVETIME varchar(50),"+
-                            "   ENDANGEREDSTATUS varchar(35),"+
-                            "   BEHAVIOURDESCRIPTION longvarchar,"+
-                            "   ADDFREQUENCY varchar(50),"+
-                            "   ELEMENTTYPE varchar(50),"+
-                            "   FEEDINGCLASS varchar(50),"+
-                            "   LIFESPAN varchar(50),"+
-                            "   REFERENCEID varchar(50)"+
-                            ")";
-        createLocationsTable = "CREATE TABLE LOCATIONS "+
-                            "("+
-                            "   NAME varchar(150) PRIMARY KEY NOT NULL,"+
-                            "   DESCRIPTION longvarchar,"+
-                            "   PROVINCE varchar(35),"+
-                            "   RATING varchar(50),"+
-                            "   GAMEVIEWINGRATING varchar(50),"+
-                            "   HABITATTYPE varchar(50),"+
-                            "   ACCOMMODATIONTYPE varchar(150),"+
-                            "   CATERING varchar(50),"+
-                            "   CONTACTNUMBERS varchar(50),"+
-                            "   WEBSITE varchar(100),"+
-                            "   EMAIL varchar(100),"+
-                            "   DIRECTIONS longvarchar,"+
-                            "   LATITUDEINDICATOR varchar(10),"+
-                            "   LATDEGREES int,"+
-                            "   LATMINUTES int,"+
-                            "   LATSECONDSFLOAT float(52),"+
-                            "   LONGITUDEINDICATOR varchar(10),"+
-                            "   LONDEGREES int,"+
-                            "   LONMINUTES int,"+
-                            "   LONSECONDSFLOAT float(52)"+
-                            ")";
-        createVisitsTable = "CREATE TABLE VISITS "+
-                            "("+
-                            "   NAME varchar(150) PRIMARY KEY NOT NULL,"+
-                            "   STARTDATE date,"+
-                            "   ENDDATE date,"+
-                            "   DESCRIPTION longvarchar,"+
-                            "   GAMEWATCHINGINTENSITY varchar(50),"+
-                            "   VISITTYPE varchar(50),"+
-                            "   LOCATIONNAME varchar(150)"+
-                            ")";
-        createSightingsTable = "CREATE TABLE SIGHTINGS "+
-                            "("+
-                            "   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,"+
-                            "   SIGHTINGDATE timestamp NOT NULL,"+
-                            "   ELEMENTNAME varchar(150) NOT NULL,"+
-                            "   LOCATIONNAME varchar(150) NOT NULL,"+
-                            "   VISITNAME varchar(150) NOT NULL,"+
-                            "   TIMEOFDAY varchar(50),"+
-                            "   WEATHER varchar(50),"+
-                            "   AREATYPE varchar(50),"+
-                            "   VIEWRATING varchar(50),"+
-                            "   CERTAINTY varchar(50),"+
-                            "   NUMBEROFELEMENTS int,"+
-                            "   DETAILS longvarchar,"+
-                            "   LATITUDEINDICATOR varchar(10),"+
-                            "   LATDEGREES int,"+
-                            "   LATMINUTES int,"+
-                            "   LATSECONDSFLOAT float(52),"+
-                            "   LONGITUDEINDICATOR varchar(10),"+
-                            "   LONDEGREES int,"+
-                            "   LONMINUTES int,"+
-                            "   LONSECONDSFLOAT float(52),"+
-                            "   SIGHTINGEVIDENCE varchar(50)"+
-                            ")";
-        createFilesTable = "CREATE TABLE FILES "+
-                            "("+
-                            "   ID varchar(175),"+
-                            "   FILENAME varchar(255),"+
-                            "   FILEPATH varchar(500),"+
-                            "   ORIGINALPATH varchar(500),"+
-                            "   FILETYPE varchar(50),"+
-                            "   UPLOADDATE date,"+
-                            "   ISDEFAULT smallint"+
-                            ")";
-        createWildLogTable = "CREATE TABLE WILDLOG "+
-                            "("+
-                            "   VERSION int DEFAULT 0"+
-                            ")";
+        createElementsTable = new StringBuilder("CREATE TABLE ELEMENTS ")
+                            .append("(")
+                            .append("   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,")
+                            .append("   OTHERNAME varchar(150),")
+                            .append("   SCIENTIFICNAME varchar(150),")
+                            .append("   DESCRIPTION longvarchar,")
+                            .append("   DISTRIBUTION longvarchar,")
+                            .append("   NUTRITION longvarchar,")
+                            .append("   WATERDEPENDANCE varchar(50),")
+                            .append("   SIZEMALEMIN float(52),")
+                            .append("   SIZEMALEMAX float(52),")
+                            .append("   SIZEFEMALEMIN float(52),")
+                            .append("   SIZEFEMALEMAX float(52),")
+                            .append("   SIZEUNIT varchar(10),")
+                            .append("   SIZETYPE varchar(50),")
+                            .append("   WEIGHTMALEMIN float(52),")
+                            .append("   WEIGHTMALEMAX float(52),")
+                            .append("   WEIGHTFEMALEMIN float(52),")
+                            .append("   WEIGHTFEMALEMAX float(52),")
+                            .append("   WEIGHTUNIT varchar(10),")
+                            .append("   BREEDINGDURATION varchar(50),")
+                            .append("   BREEDINGNUMBER varchar(50),")
+                            .append("   WISHLISTRATING varchar(50),")
+                            .append("   DIAGNOSTICDESCRIPTION longvarchar,")
+                            .append("   ACTIVETIME varchar(50),")
+                            .append("   ENDANGEREDSTATUS varchar(35),")
+                            .append("   BEHAVIOURDESCRIPTION longvarchar,")
+                            .append("   ADDFREQUENCY varchar(50),")
+                            .append("   ELEMENTTYPE varchar(50),")
+                            .append("   FEEDINGCLASS varchar(50),")
+                            .append("   LIFESPAN varchar(50),")
+                            .append("   REFERENCEID varchar(50)")
+                            .append(")").toString();
+        createLocationsTable = new StringBuilder("CREATE TABLE LOCATIONS ")
+                            .append("(")
+                            .append("   NAME varchar(150) PRIMARY KEY NOT NULL,")
+                            .append("   DESCRIPTION longvarchar,")
+                            .append("   PROVINCE varchar(35),")
+                            .append("   RATING varchar(50),")
+                            .append("   GAMEVIEWINGRATING varchar(50),")
+                            .append("   HABITATTYPE varchar(50),")
+                            .append("   ACCOMMODATIONTYPE varchar(150),")
+                            .append("   CATERING varchar(50),")
+                            .append("   CONTACTNUMBERS varchar(50),")
+                            .append("   WEBSITE varchar(100),")
+                            .append("   EMAIL varchar(100),")
+                            .append("   DIRECTIONS longvarchar,")
+                            .append("   LATITUDEINDICATOR varchar(10),")
+                            .append("   LATDEGREES int,")
+                            .append("   LATMINUTES int,")
+                            .append("   LATSECONDSFLOAT float(52),")
+                            .append("   LONGITUDEINDICATOR varchar(10),")
+                            .append("   LONDEGREES int,")
+                            .append("   LONMINUTES int,")
+                            .append("   LONSECONDSFLOAT float(52)")
+                            .append(")").toString();
+        createVisitsTable = new StringBuilder("CREATE TABLE VISITS ")
+                            .append("(")
+                            .append("   NAME varchar(150) PRIMARY KEY NOT NULL,")
+                            .append("   STARTDATE date,")
+                            .append("   ENDDATE date,")
+                            .append("   DESCRIPTION longvarchar,")
+                            .append("   GAMEWATCHINGINTENSITY varchar(50),")
+                            .append("   VISITTYPE varchar(50),")
+                            .append("   LOCATIONNAME varchar(150)")
+                            .append(")").toString();
+        createSightingsTable = new StringBuilder("CREATE TABLE SIGHTINGS ")
+                            .append("(")
+                            .append("   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,")
+                            .append("   SIGHTINGDATE timestamp NOT NULL,")
+                            .append("   ELEMENTNAME varchar(150) NOT NULL,")
+                            .append("   LOCATIONNAME varchar(150) NOT NULL,")
+                            .append("   VISITNAME varchar(150) NOT NULL,")
+                            .append("   TIMEOFDAY varchar(50),")
+                            .append("   WEATHER varchar(50),")
+                            .append("   AREATYPE varchar(50),")
+                            .append("   VIEWRATING varchar(50),")
+                            .append("   CERTAINTY varchar(50),")
+                            .append("   NUMBEROFELEMENTS int,")
+                            .append("   DETAILS longvarchar,")
+                            .append("   LATITUDEINDICATOR varchar(10),")
+                            .append("   LATDEGREES int,")
+                            .append("   LATMINUTES int,")
+                            .append("   LATSECONDSFLOAT float(52),")
+                            .append("   LONGITUDEINDICATOR varchar(10),")
+                            .append("   LONDEGREES int,")
+                            .append("   LONMINUTES int,")
+                            .append("   LONSECONDSFLOAT float(52),")
+                            .append("   SIGHTINGEVIDENCE varchar(50),")
+                            .append("   MOONLIGHT varchar(50),")
+                            .append("   MOONPHASE int")
+                            .append(")").toString();
+        createFilesTable = new StringBuilder("CREATE TABLE FILES ")
+                            .append("(")
+                            .append("   ID varchar(175),")
+                            .append("   FILENAME varchar(255),")
+                            .append("   FILEPATH varchar(500),")
+                            .append("   ORIGINALPATH varchar(500),")
+                            .append("   FILETYPE varchar(50),")
+                            .append("   UPLOADDATE date,")
+                            .append("   ISDEFAULT smallint")
+                            .append(")").toString();
+        createWildLogTable = new StringBuilder("CREATE TABLE WILDLOG ")
+                            .append("(")
+                            .append("   VERSION int DEFAULT 2,")
+                            .append("   DEFAULTLATITUDE float(52) DEFAULT -28.7,")
+                            .append("   DEFAULTLONGITUDE float(52) DEFAULT 24.7")
+                            .append(")").toString();
     }
 
    // Methods
@@ -203,6 +211,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempElement.setSizeFemaleMin(results.getDouble("SIZEFEMALEMIN"));
                 tempElement.setSizeFemaleMax(results.getDouble("SIZEFEMALEMAX"));
                 tempElement.setSizeUnit(UnitsSize.getEnumFromText(results.getString("SIZEUNIT")));
+                tempElement.setSizeType(SizeType.getEnumFromText(results.getString("SIZETYPE")));
                 tempElement.setWeightMaleMin(results.getDouble("WEIGHTMALEMIN"));
                 tempElement.setWeightMaleMax(results.getDouble("WEIGHTMALEMAX"));
                 tempElement.setWeightFemaleMin(results.getDouble("WEIGHTFEMALEMIN"));
@@ -394,6 +403,8 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
                 tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
+                tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
+                tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
             }
 
         }
@@ -423,6 +434,49 @@ public abstract class DBI_JDBC implements DBI {
             }
         }
         return tempSighting;
+    }
+
+    @Override
+    public WildLogOptions find(WildLogOptions inWildLogOptions) {
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            String sql = "SELECT * FROM WILDLOG";
+            state = conn.createStatement();
+            results = state.executeQuery(sql);
+            if (results.next()) {
+                inWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
+                inWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
+                inWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
+            }
+
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+        return inWildLogOptions;
     }
 
     @Override
@@ -457,6 +511,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempElement.setSizeFemaleMin(results.getDouble("SIZEFEMALEMIN"));
                 tempElement.setSizeFemaleMax(results.getDouble("SIZEFEMALEMAX"));
                 tempElement.setSizeUnit(UnitsSize.getEnumFromText(results.getString("SIZEUNIT")));
+                tempElement.setSizeType(SizeType.getEnumFromText(results.getString("SIZETYPE")));
                 tempElement.setWeightMaleMin(results.getDouble("WEIGHTMALEMIN"));
                 tempElement.setWeightMaleMax(results.getDouble("WEIGHTMALEMAX"));
                 tempElement.setWeightFemaleMin(results.getDouble("WEIGHTFEMALEMIN"));
@@ -673,6 +728,8 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
                 tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
+                tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
+                tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
                 tempList.add(tempSighting);
             }
 
@@ -795,6 +852,8 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
                 tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
+                tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
+                tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
                 tempList.add(tempSighting);
             }
 
@@ -845,76 +904,78 @@ public abstract class DBI_JDBC implements DBI {
                     }
                 }
                 // Update
-                String sql = "UPDATE ELEMENTS SET ";
-                sql = sql + "PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "', ";
-                sql = sql + "OTHERNAME = '" + inElement.getOtherName().replaceAll("'", "''") + "', ";
-                sql = sql + "SCIENTIFICNAME = '" + inElement.getScientificName().replaceAll("'", "''") + "', ";
-                sql = sql + "DESCRIPTION = '" + inElement.getDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "DISTRIBUTION = '" + inElement.getDistribution().replaceAll("'", "''") + "', ";
-                sql = sql + "NUTRITION = '" + inElement.getNutrition().replaceAll("'", "''") + "', ";
-                sql = sql + "WATERDEPENDANCE = '" + inElement.getWaterDependance() + "', ";
-                sql = sql + "SIZEMALEMIN = " + inElement.getSizeMaleMin() + ", ";
-                sql = sql + "SIZEMALEMAX = " + inElement.getSizeMaleMax() + ", ";
-                sql = sql + "SIZEFEMALEMIN = " + inElement.getSizeFemaleMin() + ", ";
-                sql = sql + "SIZEFEMALEMAX = " + inElement.getSizeFemaleMax() + ", ";
-                sql = sql + "SIZEUNIT = '" + inElement.getSizeUnit() + "', ";
-                sql = sql + "WEIGHTMALEMIN = " + inElement.getWeightMaleMin() + ", ";
-                sql = sql + "WEIGHTMALEMAX = " + inElement.getWeightMaleMax() + ", ";
-                sql = sql + "WEIGHTFEMALEMIN = " + inElement.getWeightFemaleMin() + ", ";
-                sql = sql + "WEIGHTFEMALEMAX = " + inElement.getWeightFemaleMax() + ", ";
-                sql = sql + "WEIGHTUNIT = '" + inElement.getWeightUnit() + "', ";
-                sql = sql + "BREEDINGDURATION = '" + inElement.getBreedingDuration().replaceAll("'", "''") + "', ";
-                sql = sql + "BREEDINGNUMBER = '" + inElement.getBreedingNumber().replaceAll("'", "''") + "', ";
-                sql = sql + "WISHLISTRATING = '" + inElement.getWishListRating() + "', ";
-                sql = sql + "DIAGNOSTICDESCRIPTION = '" + inElement.getDiagnosticDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "ACTIVETIME = '" + inElement.getActiveTime() + "', ";
-                sql = sql + "ENDANGEREDSTATUS = '" + inElement.getEndangeredStatus() + "', ";
-                sql = sql + "BEHAVIOURDESCRIPTION = '" + inElement.getBehaviourDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "ADDFREQUENCY = '" + inElement.getAddFrequency() + "', ";
-                sql = sql + "ELEMENTTYPE = '" + inElement.getType() + "', ";
-                sql = sql + "FEEDINGCLASS = '" + inElement.getFeedingClass() + "', ";
-                sql = sql + "LIFESPAN = '" + inElement.getLifespan().replaceAll("'", "''") + "', ";
-                sql = sql + "REFERENCEID = '" + inElement.getReferenceID().replaceAll("'", "''") + "'";
-                sql = sql + " WHERE PRIMARYNAME = '" + inOldName.replaceAll("'", "''") + "'";
-                state.executeUpdate(sql);
+                StringBuilder sql = new StringBuilder("UPDATE ELEMENTS SET ")
+                    .append("PRIMARYNAME = '").append(inElement.getPrimaryName().replaceAll("'", "''")).append("', ")
+                    .append("OTHERNAME = '").append(inElement.getOtherName().replaceAll("'", "''")).append("', ")
+                    .append("SCIENTIFICNAME = '").append(inElement.getScientificName().replaceAll("'", "''")).append("', ")
+                    .append("DESCRIPTION = '").append(inElement.getDescription().replaceAll("'", "''")).append("', ")
+                    .append("DISTRIBUTION = '").append(inElement.getDistribution().replaceAll("'", "''")).append("', ")
+                    .append("NUTRITION = '").append(inElement.getNutrition().replaceAll("'", "''")).append("', ")
+                    .append("WATERDEPENDANCE = '").append(inElement.getWaterDependance()).append("', ")
+                    .append("SIZEMALEMIN = ").append(inElement.getSizeMaleMin()).append(", ")
+                    .append("SIZEMALEMAX = ").append(inElement.getSizeMaleMax()).append(", ")
+                    .append("SIZEFEMALEMIN = ").append(inElement.getSizeFemaleMin()).append(", ")
+                    .append("SIZEFEMALEMAX = ").append(inElement.getSizeFemaleMax()).append(", ")
+                    .append("SIZEUNIT = '").append(inElement.getSizeUnit()).append("', ")
+                    .append("SIZETYPE = '").append(inElement.getSizeType()).append("', ")
+                    .append("WEIGHTMALEMIN = ").append(inElement.getWeightMaleMin()).append(", ")
+                    .append("WEIGHTMALEMAX = ").append(inElement.getWeightMaleMax()).append(", ")
+                    .append("WEIGHTFEMALEMIN = ").append(inElement.getWeightFemaleMin()).append(", ")
+                    .append("WEIGHTFEMALEMAX = ").append(inElement.getWeightFemaleMax()).append(", ")
+                    .append("WEIGHTUNIT = '").append(inElement.getWeightUnit()).append("', ")
+                    .append("BREEDINGDURATION = '").append(inElement.getBreedingDuration().replaceAll("'", "''")).append("', ")
+                    .append("BREEDINGNUMBER = '").append(inElement.getBreedingNumber().replaceAll("'", "''")).append("', ")
+                    .append("WISHLISTRATING = '").append(inElement.getWishListRating()).append("', ")
+                    .append("DIAGNOSTICDESCRIPTION = '").append(inElement.getDiagnosticDescription().replaceAll("'", "''")).append("', ")
+                    .append("ACTIVETIME = '").append(inElement.getActiveTime()).append("', ")
+                    .append("ENDANGEREDSTATUS = '").append(inElement.getEndangeredStatus()).append("', ")
+                    .append("BEHAVIOURDESCRIPTION = '").append(inElement.getBehaviourDescription().replaceAll("'", "''")).append("', ")
+                    .append("ADDFREQUENCY = '").append(inElement.getAddFrequency()).append("', ")
+                    .append("ELEMENTTYPE = '").append(inElement.getType()).append("', ")
+                    .append("FEEDINGCLASS = '").append(inElement.getFeedingClass()).append("', ")
+                    .append("LIFESPAN = '").append(inElement.getLifespan().replaceAll("'", "''")).append("', ")
+                    .append("REFERENCEID = '").append(inElement.getReferenceID().replaceAll("'", "''")).append("'")
+                    .append(" WHERE PRIMARYNAME = '").append(inOldName.replaceAll("'", "''")).append("'");
+                state.executeUpdate(sql.toString());
             }
             else {
                 results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
                 if (results.next())
                     return false;
                 // Insert
-                String sql = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (";
-                sql = sql + "'" + inElement.getPrimaryName().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getOtherName().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getScientificName().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getDistribution().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getNutrition().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getWaterDependance() + "', ";
-                sql = sql + "" + inElement.getSizeMaleMin() + ", ";
-                sql = sql + "" + inElement.getSizeMaleMax() + ", ";
-                sql = sql + "" + inElement.getSizeFemaleMin() + ", ";
-                sql = sql + "" + inElement.getSizeFemaleMax() + ", ";
-                sql = sql + "'" + inElement.getSizeUnit() + "', ";
-                sql = sql + "" + inElement.getWeightMaleMin() + ", ";
-                sql = sql + "" + inElement.getWeightMaleMax() + ", ";
-                sql = sql + "" + inElement.getWeightFemaleMin() + ", ";
-                sql = sql + "" + inElement.getWeightFemaleMax() + ", ";
-                sql = sql + "'" + inElement.getWeightUnit() + "', ";
-                sql = sql + "'" + inElement.getBreedingDuration().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getBreedingNumber().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getWishListRating() + "', ";
-                sql = sql + "'" + inElement.getDiagnosticDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getActiveTime() + "', ";
-                sql = sql + "'" + inElement.getEndangeredStatus() + "', ";
-                sql = sql + "'" + inElement.getBehaviourDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getAddFrequency() + "', ";
-                sql = sql + "'" + inElement.getType() + "', ";
-                sql = sql + "'" + inElement.getFeedingClass() + "', ";
-                sql = sql + "'" + inElement.getLifespan().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inElement.getReferenceID().replaceAll("'", "''") + "'";
-                sql = sql + ")";
-                state.execute(sql);
+                StringBuilder sql = new StringBuilder("INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (")
+                    .append("'").append(inElement.getPrimaryName().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getOtherName().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getScientificName().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getDescription().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getDistribution().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getNutrition().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getWaterDependance()).append("', ")
+                    .append("").append(inElement.getSizeMaleMin()).append(", ")
+                    .append("").append(inElement.getSizeMaleMax()).append(", ")
+                    .append("").append(inElement.getSizeFemaleMin()).append(", ")
+                    .append("").append(inElement.getSizeFemaleMax()).append(", ")
+                    .append("'").append(inElement.getSizeUnit()).append("', ")
+                    .append("'").append(inElement.getSizeType()).append("', ")
+                    .append("").append(inElement.getWeightMaleMin()).append(", ")
+                    .append("").append(inElement.getWeightMaleMax()).append(", ")
+                    .append("").append(inElement.getWeightFemaleMin()).append(", ")
+                    .append("").append(inElement.getWeightFemaleMax()).append(", ")
+                    .append("'").append(inElement.getWeightUnit()).append("', ")
+                    .append("'").append(inElement.getBreedingDuration().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getBreedingNumber().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getWishListRating()).append("', ")
+                    .append("'").append(inElement.getDiagnosticDescription().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getActiveTime()).append("', ")
+                    .append("'").append(inElement.getEndangeredStatus()).append("', ")
+                    .append("'").append(inElement.getBehaviourDescription().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getAddFrequency()).append("', ")
+                    .append("'").append(inElement.getType()).append("', ")
+                    .append("'").append(inElement.getFeedingClass()).append("', ")
+                    .append("'").append(inElement.getLifespan().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inElement.getReferenceID().replaceAll("'", "''")).append("'")
+                    .append(")");
+                state.execute(sql.toString());
             }
         }
         catch (SQLException ex) {
@@ -965,58 +1026,58 @@ public abstract class DBI_JDBC implements DBI {
                     }
                 }
                 // Update
-                String sql = "UPDATE LOCATIONS SET ";
-                sql = sql + "NAME = '" + inLocation.getName().replaceAll("'", "''") + "', ";
-                sql = sql + "DESCRIPTION = '" + inLocation.getDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "PROVINCE = '" + inLocation.getProvince() + "', ";
-                sql = sql + "RATING = '" + inLocation.getRating() + "', ";
-                sql = sql + "GAMEVIEWINGRATING = '" + inLocation.getGameViewingRating() + "', ";
-                sql = sql + "HABITATTYPE = '" + inLocation.getHabitatType() + "', ";
-                sql = sql + "ACCOMMODATIONTYPE = '" + inLocation.getAccommodationType() + "', ";
-                sql = sql + "CATERING = '" + inLocation.getCatering() + "', ";
-                sql = sql + "CONTACTNUMBERS = '" + inLocation.getContactNumbers().replaceAll("'", "''") + "', ";
-                sql = sql + "WEBSITE = '" + inLocation.getWebsite().replaceAll("'", "''") + "', ";
-                sql = sql + "EMAIL = '" + inLocation.getEmail().replaceAll("'", "''") + "', ";
-                sql = sql + "DIRECTIONS = '" + inLocation.getDirections().replaceAll("'", "''") + "', ";
-                sql = sql + "LATITUDEINDICATOR = '" + inLocation.getLatitude() + "', ";
-                sql = sql + "LATDEGREES = " + inLocation.getLatDegrees() + ", ";
-                sql = sql + "LATMINUTES = " + inLocation.getLatMinutes() + ", ";
-                sql = sql + "LATSECONDSFLOAT = " + inLocation.getLatSecondsFloat() + ", ";
-                sql = sql + "LONGITUDEINDICATOR = '" + inLocation.getLongitude() + "', ";
-                sql = sql + "LONDEGREES = " + inLocation.getLonDegrees() + ", ";
-                sql = sql + "LONMINUTES = " + inLocation.getLonMinutes() + ", ";
-                sql = sql + "LONSECONDSFLOAT = " + inLocation.getLonSecondsFloat() + "";
-                sql = sql + " WHERE NAME = '" + inOldName.replaceAll("'", "''") + "'";
-                state.executeUpdate(sql);
+                StringBuilder sql = new StringBuilder("UPDATE LOCATIONS SET ")
+                    .append("NAME = '").append(inLocation.getName().replaceAll("'", "''")).append("', ")
+                    .append("DESCRIPTION = '").append(inLocation.getDescription().replaceAll("'", "''")).append("', ")
+                    .append("PROVINCE = '").append(inLocation.getProvince()).append("', ")
+                    .append("RATING = '").append(inLocation.getRating()).append("', ")
+                    .append("GAMEVIEWINGRATING = '").append(inLocation.getGameViewingRating()).append("', ")
+                    .append("HABITATTYPE = '").append(inLocation.getHabitatType()).append("', ")
+                    .append("ACCOMMODATIONTYPE = '").append(inLocation.getAccommodationType()).append("', ")
+                    .append("CATERING = '").append(inLocation.getCatering()).append("', ")
+                    .append("CONTACTNUMBERS = '").append(inLocation.getContactNumbers().replaceAll("'", "''")).append("', ")
+                    .append("WEBSITE = '").append(inLocation.getWebsite().replaceAll("'", "''")).append("', ")
+                    .append("EMAIL = '").append(inLocation.getEmail().replaceAll("'", "''")).append("', ")
+                    .append("DIRECTIONS = '").append(inLocation.getDirections().replaceAll("'", "''")).append("', ")
+                    .append("LATITUDEINDICATOR = '").append(inLocation.getLatitude()).append("', ")
+                    .append("LATDEGREES = ").append(inLocation.getLatDegrees()).append(", ")
+                    .append("LATMINUTES = ").append(inLocation.getLatMinutes()).append(", ")
+                    .append("LATSECONDSFLOAT = ").append(inLocation.getLatSecondsFloat()).append(", ")
+                    .append("LONGITUDEINDICATOR = '").append(inLocation.getLongitude()).append("', ")
+                    .append("LONDEGREES = ").append(inLocation.getLonDegrees()).append(", ")
+                    .append("LONMINUTES = ").append(inLocation.getLonMinutes()).append(", ")
+                    .append("LONSECONDSFLOAT = ").append(inLocation.getLonSecondsFloat()).append("")
+                    .append(" WHERE NAME = '").append(inOldName.replaceAll("'", "''")).append("'");
+                state.executeUpdate(sql.toString());
             }
             else {
                 results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
                 if (results.next())
                     return false;
                 // Insert
-                String sql = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (";
-                sql = sql + "'" + inLocation.getName().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inLocation.getDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inLocation.getProvince() + "', ";
-                sql = sql + "'" + inLocation.getRating() + "', ";
-                sql = sql + "'" + inLocation.getGameViewingRating() + "', ";
-                sql = sql + "'" + inLocation.getHabitatType() + "', ";
-                sql = sql + "'" + inLocation.getAccommodationType() + "', ";
-                sql = sql + "'" + inLocation.getCatering() + "', ";
-                sql = sql + "'" + inLocation.getContactNumbers().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inLocation.getWebsite().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inLocation.getEmail().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inLocation.getDirections().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inLocation.getLatitude() + "', ";
-                sql = sql + "" + inLocation.getLatDegrees() + ", ";
-                sql = sql + "" + inLocation.getLatMinutes() + ", ";
-                sql = sql + "" + inLocation.getLatSecondsFloat() + ", ";
-                sql = sql + "'" + inLocation.getLongitude() + "', ";
-                sql = sql + "" + inLocation.getLonDegrees() + ", ";
-                sql = sql + "" + inLocation.getLonMinutes() + ", ";
-                sql = sql + "" + inLocation.getLonSecondsFloat() + "";
-                sql = sql + ")";
-                state.execute(sql);
+                StringBuilder sql = new StringBuilder("INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (")
+                    .append("'").append(inLocation.getName().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inLocation.getDescription().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inLocation.getProvince()).append("', ")
+                    .append("'").append(inLocation.getRating()).append("', ")
+                    .append("'").append(inLocation.getGameViewingRating()).append("', ")
+                    .append("'").append(inLocation.getHabitatType()).append("', ")
+                    .append("'").append(inLocation.getAccommodationType()).append("', ")
+                    .append("'").append(inLocation.getCatering()).append("', ")
+                    .append("'").append(inLocation.getContactNumbers().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inLocation.getWebsite().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inLocation.getEmail().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inLocation.getDirections().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inLocation.getLatitude()).append("', ")
+                    .append("").append(inLocation.getLatDegrees()).append(", ")
+                    .append("").append(inLocation.getLatMinutes()).append(", ")
+                    .append("").append(inLocation.getLatSecondsFloat()).append(", ")
+                    .append("'").append(inLocation.getLongitude()).append("', ")
+                    .append("").append(inLocation.getLonDegrees()).append(", ")
+                    .append("").append(inLocation.getLonMinutes()).append(", ")
+                    .append("").append(inLocation.getLonSecondsFloat()).append("")
+                    .append(")");
+                state.execute(sql.toString());
             }
         }
         catch (SQLException ex) {
@@ -1066,44 +1127,44 @@ public abstract class DBI_JDBC implements DBI {
                     }
                 }
                 // Update
-                String sql = "UPDATE VISITS SET ";
-                sql = sql + "NAME = '" + inVisit.getName().replaceAll("'", "''") + "', ";
+                StringBuilder sql = new StringBuilder("UPDATE VISITS SET ")
+                    .append("NAME = '").append(inVisit.getName().replaceAll("'", "''")).append("', ");
                 if (inVisit.getStartDate() != null)
-                    sql = sql + "STARTDATE = '" + new java.sql.Date(inVisit.getStartDate().getTime()) + "', ";
+                    sql.append("STARTDATE = '").append(new java.sql.Date(inVisit.getStartDate().getTime())).append("', ");
                 else
-                    sql = sql + "STARTDATE = null, ";
+                    sql.append("STARTDATE = null, ");
                 if (inVisit.getEndDate() != null)
-                    sql = sql + "ENDDATE = '" + new java.sql.Date(inVisit.getEndDate().getTime()) + "', ";
+                    sql.append("ENDDATE = '").append(new java.sql.Date(inVisit.getEndDate().getTime())).append("', ");
                 else
-                    sql = sql + "ENDDATE = null, ";
-                sql = sql + "DESCRIPTION = '" + inVisit.getDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "GAMEWATCHINGINTENSITY = '" + inVisit.getGameWatchingIntensity() + "', ";
-                sql = sql + "VISITTYPE = '" + inVisit.getType() + "', ";
-                sql = sql + "LOCATIONNAME = '" + inVisit.getLocationName().replaceAll("'", "''") + "'";
-                sql = sql + " WHERE NAME = '" + inOldName.replaceAll("'", "''") + "'";
-                state.executeUpdate(sql);
+                    sql.append("ENDDATE = null, ");
+                sql.append("DESCRIPTION = '").append(inVisit.getDescription().replaceAll("'", "''")).append("', ")
+                    .append("GAMEWATCHINGINTENSITY = '").append(inVisit.getGameWatchingIntensity()).append("', ")
+                    .append("VISITTYPE = '").append(inVisit.getType()).append("', ")
+                    .append("LOCATIONNAME = '").append(inVisit.getLocationName().replaceAll("'", "''")).append("'")
+                    .append(" WHERE NAME = '").append(inOldName.replaceAll("'", "''")).append("'");
+                state.executeUpdate(sql.toString());
             }
             else {
                 results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
                 if (results.next())
                     return false;
                 // Insert
-                String sql = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (";
-                sql = sql + "'" + inVisit.getName().replaceAll("'", "''") + "', ";
+                StringBuilder sql = new StringBuilder("INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (")
+                    .append("'").append(inVisit.getName().replaceAll("'", "''")).append("', ");
                 if (inVisit.getStartDate() != null)
-                    sql = sql + "'" + new java.sql.Date(inVisit.getStartDate().getTime()) + "', ";
+                    sql.append("'").append(new java.sql.Date(inVisit.getStartDate().getTime())).append("', ");
                 else
-                    sql = sql + "null, ";
+                    sql.append("null, ");
                 if (inVisit.getEndDate() != null)
-                    sql = sql + "'" + new java.sql.Date(inVisit.getEndDate().getTime()) + "', ";
+                    sql.append("'").append(new java.sql.Date(inVisit.getEndDate().getTime())).append("', ");
                 else
-                    sql = sql + "null, ";
-                sql = sql + "'" + inVisit.getDescription().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inVisit.getGameWatchingIntensity() + "', ";
-                sql = sql + "'" + inVisit.getType() + "', ";
-                sql = sql + "'" + inVisit.getLocationName().replaceAll("'", "''") + "'";
-                sql = sql + ")";
-                state.execute(sql);
+                    sql.append("null, ");
+                sql.append("'").append(inVisit.getDescription().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inVisit.getGameWatchingIntensity()).append("', ")
+                    .append("'").append(inVisit.getType()).append("', ")
+                    .append("'").append(inVisit.getLocationName().replaceAll("'", "''")).append("'")
+                    .append(")");
+                state.execute(sql.toString());
             }
         }
         catch (SQLException ex) {
@@ -1143,33 +1204,35 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inSighting.getSightingCounter() > 0) {
                 // Update
-                String sql = "UPDATE SIGHTINGS SET ";
-                sql = sql + "SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + ", ";
+                StringBuilder sql = new StringBuilder("UPDATE SIGHTINGS SET ")
+                    .append("SIGHTINGCOUNTER = ").append(inSighting.getSightingCounter()).append(", ");
                 if (inSighting.getDate() != null)
-                    sql = sql + "SIGHTINGDATE = '" + new java.sql.Timestamp(inSighting.getDate().getTime()) + "', ";
+                    sql.append("SIGHTINGDATE = '").append(new java.sql.Timestamp(inSighting.getDate().getTime())).append("', ");
                 else
-                    sql = sql + "STARTDATE = null, ";
-                sql = sql + "ELEMENTNAME = '" + inSighting.getElementName().replaceAll("'", "''") + "', ";
-                sql = sql + "LOCATIONNAME = '" + inSighting.getLocationName().replaceAll("'", "''") + "', ";
-                sql = sql + "VISITNAME = '" + inSighting.getVisitName().replaceAll("'", "''") + "', ";
-                sql = sql + "TIMEOFDAY = '" + inSighting.getTimeOfDay() + "', ";
-                sql = sql + "WEATHER = '" + inSighting.getWeather() + "', ";
-                sql = sql + "AREATYPE = '" + inSighting.getAreaType() + "', ";
-                sql = sql + "VIEWRATING = '" + inSighting.getViewRating() + "', ";
-                sql = sql + "CERTAINTY = '" + inSighting.getCertainty() + "', ";
-                sql = sql + "NUMBEROFELEMENTS = " + inSighting.getNumberOfElements() + ", ";
-                sql = sql + "DETAILS = '" + inSighting.getDetails().replaceAll("'", "''") + "', ";
-                sql = sql + "LATITUDEINDICATOR = '" + inSighting.getLatitude() + "', ";
-                sql = sql + "LATDEGREES = " + inSighting.getLatDegrees() + ", ";
-                sql = sql + "LATMINUTES = " + inSighting.getLatMinutes() + ", ";
-                sql = sql + "LATSECONDSFLOAT = " + inSighting.getLatSecondsFloat() + ", ";
-                sql = sql + "LONGITUDEINDICATOR = '" + inSighting.getLongitude() + "', ";
-                sql = sql + "LONDEGREES = " + inSighting.getLonDegrees() + ", ";
-                sql = sql + "LONMINUTES = " + inSighting.getLonMinutes() + ", ";
-                sql = sql + "LONSECONDSFLOAT = " + inSighting.getLonSecondsFloat() + ", ";
-                sql = sql + "SIGHTINGEVIDENCE = '" + inSighting.getSightingEvidence() + "'";
-                sql = sql + " WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
-                state.executeUpdate(sql);
+                    sql.append("STARTDATE = null, ");
+                sql.append("ELEMENTNAME = '").append(inSighting.getElementName().replaceAll("'", "''")).append("', ")
+                    .append("LOCATIONNAME = '").append(inSighting.getLocationName().replaceAll("'", "''")).append("', ")
+                    .append("VISITNAME = '").append(inSighting.getVisitName().replaceAll("'", "''")).append("', ")
+                    .append("TIMEOFDAY = '").append(inSighting.getTimeOfDay()).append("', ")
+                    .append("WEATHER = '").append(inSighting.getWeather()).append("', ")
+                    .append("AREATYPE = '").append(inSighting.getAreaType()).append("', ")
+                    .append("VIEWRATING = '").append(inSighting.getViewRating()).append("', ")
+                    .append("CERTAINTY = '").append(inSighting.getCertainty()).append("', ")
+                    .append("NUMBEROFELEMENTS = ").append(inSighting.getNumberOfElements()).append(", ")
+                    .append("DETAILS = '").append(inSighting.getDetails().replaceAll("'", "''")).append("', ")
+                    .append("LATITUDEINDICATOR = '").append(inSighting.getLatitude()).append("', ")
+                    .append("LATDEGREES = ").append(inSighting.getLatDegrees()).append(", ")
+                    .append("LATMINUTES = ").append(inSighting.getLatMinutes()).append(", ")
+                    .append("LATSECONDSFLOAT = ").append(inSighting.getLatSecondsFloat()).append(", ")
+                    .append("LONGITUDEINDICATOR = '").append(inSighting.getLongitude()).append("', ")
+                    .append("LONDEGREES = ").append(inSighting.getLonDegrees()).append(", ")
+                    .append("LONMINUTES = ").append(inSighting.getLonMinutes()).append(", ")
+                    .append("LONSECONDSFLOAT = ").append(inSighting.getLonSecondsFloat()).append(", ")
+                    .append("SIGHTINGEVIDENCE = '").append(inSighting.getSightingEvidence()).append("', ")
+                    .append("MOONPHASE = ").append(inSighting.getMoonPhase()).append(", ")
+                    .append("MOONLIGHT = '").append(inSighting.getMoonlight()).append("'")
+                    .append(" WHERE SIGHTINGCOUNTER = ").append(inSighting.getSightingCounter()).append("");
+                state.executeUpdate(sql.toString());
             }
             else {
                 results = state.executeQuery("SELECT MAX(SIGHTINGCOUNTER) FROM SIGHTINGS");
@@ -1178,33 +1241,35 @@ public abstract class DBI_JDBC implements DBI {
                     sightingCounter++;
                     inSighting.setSightingCounter(sightingCounter); // Need to set it for images to upload coorectly
                     // Insert
-                    String sql = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE) VALUES (";
-                    sql = sql + "" + inSighting.getSightingCounter() + ", ";
+                    StringBuilder sql = new StringBuilder("INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (")
+                        .append("").append(inSighting.getSightingCounter()).append(", ");
                     if (inSighting.getDate() != null)
-                        sql = sql + "'" + new java.sql.Timestamp(inSighting.getDate().getTime()) + "', ";
+                        sql.append("'").append(new java.sql.Timestamp(inSighting.getDate().getTime())).append("', ");
                     else
-                        sql = sql + "null, ";
-                    sql = sql + "'" + inSighting.getElementName().replaceAll("'", "''") + "', ";
-                    sql = sql + "'" + inSighting.getLocationName().replaceAll("'", "''") + "', ";
-                    sql = sql + "'" + inSighting.getVisitName().replaceAll("'", "''") + "', ";
-                    sql = sql + "'" + inSighting.getTimeOfDay() + "', ";
-                    sql = sql + "'" + inSighting.getWeather() + "', ";
-                    sql = sql + "'" + inSighting.getAreaType() + "', ";
-                    sql = sql + "'" + inSighting.getViewRating() + "', ";
-                    sql = sql + "'" + inSighting.getCertainty() + "', ";
-                    sql = sql + "" + inSighting.getNumberOfElements() + ", ";
-                    sql = sql + "'" + inSighting.getDetails().replaceAll("'", "''") + "', ";
-                    sql = sql + "'" + inSighting.getLatitude() + "', ";
-                    sql = sql + "" + inSighting.getLatDegrees() + ", ";
-                    sql = sql + "" + inSighting.getLatMinutes() + ", ";
-                    sql = sql + "" + inSighting.getLatSecondsFloat() + ", ";
-                    sql = sql + "'" + inSighting.getLongitude() + "', ";
-                    sql = sql + "" + inSighting.getLonDegrees() + ", ";
-                    sql = sql + "" + inSighting.getLonMinutes() + ", ";
-                    sql = sql + "" + inSighting.getLonSecondsFloat() + ", ";
-                    sql = sql + "'" + inSighting.getSightingEvidence() + "'";
-                    sql = sql + ")";
-                    state.execute(sql);
+                        sql.append("null, ");
+                    sql.append("'").append(inSighting.getElementName().replaceAll("'", "''")).append("', ")
+                        .append("'").append(inSighting.getLocationName().replaceAll("'", "''")).append("', ")
+                        .append("'").append(inSighting.getVisitName().replaceAll("'", "''")).append("', ")
+                        .append("'").append(inSighting.getTimeOfDay()).append("', ")
+                        .append("'").append(inSighting.getWeather()).append("', ")
+                        .append("'").append(inSighting.getAreaType()).append("', ")
+                        .append("'").append(inSighting.getViewRating()).append("', ")
+                        .append("'").append(inSighting.getCertainty()).append("', ")
+                        .append("").append(inSighting.getNumberOfElements()).append(", ")
+                        .append("'").append(inSighting.getDetails().replaceAll("'", "''")).append("', ")
+                        .append("'").append(inSighting.getLatitude()).append("', ")
+                        .append("").append(inSighting.getLatDegrees()).append(", ")
+                        .append("").append(inSighting.getLatMinutes()).append(", ")
+                        .append("").append(inSighting.getLatSecondsFloat()).append(", ")
+                        .append("'").append(inSighting.getLongitude()).append("', ")
+                        .append("").append(inSighting.getLonDegrees()).append(", ")
+                        .append("").append(inSighting.getLonMinutes()).append(", ")
+                        .append("").append(inSighting.getLonSecondsFloat()).append(", ")
+                        .append("'").append(inSighting.getSightingEvidence()).append("', ")
+                        .append("").append(inSighting.getMoonPhase()).append(", ")
+                        .append("'").append(inSighting.getMoonlight()).append("'")
+                        .append(")");
+                    state.execute(sql.toString());
                 }
                 else
                     return false;
@@ -1246,41 +1311,41 @@ public abstract class DBI_JDBC implements DBI {
         try {
             state = conn.createStatement();
             if (inUpdate) {
-                String sql = "UPDATE FILES SET ";
-                sql = sql + "ID = '" + inFoto.getId().replaceAll("'", "''") + "', ";
-                sql = sql + "FILENAME = '" + inFoto.getFilename().replaceAll("'", "''") + "', ";
-                sql = sql + "FILEPATH = '" + inFoto.getFileLocation().replaceAll("'", "''") + "', ";
-                sql = sql + "ORIGINALPATH = '" + inFoto.getOriginalFotoLocation().replaceAll("'", "''") + "', ";
-                sql = sql + "FILETYPE = '" + inFoto.getFotoType() + "',";
+                StringBuilder sql = new StringBuilder("UPDATE FILES SET ")
+                    .append("ID = '").append(inFoto.getId().replaceAll("'", "''")).append("', ")
+                    .append("FILENAME = '").append(inFoto.getFilename().replaceAll("'", "''")).append("', ")
+                    .append("FILEPATH = '").append(inFoto.getFileLocation().replaceAll("'", "''")).append("', ")
+                    .append("ORIGINALPATH = '").append(inFoto.getOriginalFotoLocation().replaceAll("'", "''")).append("', ")
+                    .append("FILETYPE = '").append(inFoto.getFotoType()).append("',");
                 if (inFoto.getDate() != null)
-                    sql = sql + "UPLOADDATE = '" + new java.sql.Date(inFoto.getDate().getTime()) + "',";
+                    sql.append("UPLOADDATE = '").append(new java.sql.Date(inFoto.getDate().getTime())).append("',");
                 else
-                    sql = sql + "UPLOADDATE = null,";
+                    sql.append("UPLOADDATE = null,");
                 if (inFoto.isDefaultFile())
-                    sql = sql + "ISDEFAULT = 1";
+                    sql.append("ISDEFAULT = 1");
                 else
-                    sql = sql + "ISDEFAULT = 0";
-                sql =sql + " WHERE FILEPATH = '" + inFoto.getFileLocation() + "'";
-                state.execute(sql);
+                    sql.append("ISDEFAULT = 0");
+                sql.append("WHERE FILEPATH = '").append(inFoto.getFileLocation()).append("'");
+                state.execute(sql.toString());
             }
             else {
                 // Insert
-                String sql = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (";
-                sql = sql + "'" + inFoto.getId().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inFoto.getFilename().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inFoto.getFileLocation().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inFoto.getOriginalFotoLocation().replaceAll("'", "''") + "', ";
-                sql = sql + "'" + inFoto.getFotoType() + "',";
+                StringBuilder sql = new StringBuilder("INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (")
+                    .append("'").append(inFoto.getId().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inFoto.getFilename().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inFoto.getFileLocation().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inFoto.getOriginalFotoLocation().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inFoto.getFotoType()).append("',");
                 if (inFoto.getDate() != null)
-                    sql = sql + "'" + new java.sql.Date(inFoto.getDate().getTime()) + "',";
+                    sql.append("'").append(new java.sql.Date(inFoto.getDate().getTime())).append("',");
                 else
-                    sql = sql + "null,";
+                    sql.append("null,");
                 if (inFoto.isDefaultFile())
-                    sql = sql + "1";
+                    sql.append("1");
                 else
-                    sql = sql + "0";
-                sql = sql + ")";
-                state.execute(sql);
+                    sql.append("0");
+                sql.append(")");
+                state.execute(sql.toString());
             }
         }
         catch (SQLException ex) {
@@ -1288,6 +1353,56 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean createOrUpdate(WildLogOptions inWildLogOptions) {
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            results = state.executeQuery("SELECT * FROM WILDLOG");
+            if (results.next()) {
+                // Update
+                StringBuilder sql = new StringBuilder("UPDATE WILDLOG SET ")
+                    .append("VERSION = ").append(inWildLogOptions.getDatabaseVersion()).append(", ")
+                    .append("DEFAULTLATITUDE = ").append(inWildLogOptions.getDefaultLatitude()).append(", ")
+                    .append("DEFAULTLONGITUDE = ").append(inWildLogOptions.getDefaultLongitude()).append("");
+                state.executeUpdate(sql.toString());
+            }
+            else {
+                // Insert
+                StringBuilder sql = new StringBuilder("INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT)");
+                state.execute(sql.toString());
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
             // Statement
             try {
                 if (state != null) {
@@ -1559,7 +1674,7 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             results = state.executeQuery("SELECT * FROM WILDLOG");
             if (!results.next()) {
-                state.executeUpdate("INSERT INTO WILDLOG VALUES (DEFAULT)");
+                createOrUpdate(new WildLogOptions());
                 results = state.executeQuery("SELECT * FROM WILDLOG");
             }
             while (results.next()) {

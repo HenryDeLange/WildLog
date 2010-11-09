@@ -49,6 +49,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.SizeType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.mapping.kml.util.KmlUtil;
@@ -246,6 +247,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         spnWeightMaleMax = new javax.swing.JSpinner();
         spnWeightFemaleMin = new javax.swing.JSpinner();
         spnWeightFemaleMax = new javax.swing.JSpinner();
+        jLabel10 = new javax.swing.JLabel();
+        cmbSizeType = new javax.swing.JComboBox();
 
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -608,12 +611,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
-        elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 530, -1, 20));
+        elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 510, -1, 20));
 
         cmbSizeUnits.setModel(new DefaultComboBoxModel(UnitsSize.values()));
         cmbSizeUnits.setSelectedItem(element.getSizeUnit());
         cmbSizeUnits.setName("cmbSizeUnits"); // NOI18N
-        elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 530, 70, -1));
+        elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 510, 70, -1));
 
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
@@ -832,6 +835,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         spnWeightFemaleMax.setValue(element.getWeightFemaleMax());
         elementIncludes.add(spnWeightFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, 50, -1));
 
+        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+        jLabel10.setName("jLabel10"); // NOI18N
+        elementIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 540, 40, 20));
+
+        cmbSizeType.setModel(new DefaultComboBoxModel(SizeType.values()));
+        cmbSizeType.setSelectedItem(element.getSizeType());
+        cmbSizeType.setName("cmbSizeType"); // NOI18N
+        elementIncludes.add(cmbSizeType, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 110, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -885,6 +897,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 }
                 element.setBreedingNumber(txtBreedingNumber.getText());
                 element.setSizeUnit((UnitsSize)cmbSizeUnits.getSelectedItem());
+                element.setSizeType((SizeType)cmbSizeType.getSelectedItem());
                 element.setWeightUnit((UnitsWeight)cmbWeightUnits.getSelectedItem());
                 try {
                     element.setWeightMaleMin(Double.valueOf(spnWeightMaleMin.getValue().toString()));
@@ -1265,6 +1278,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JComboBox cmbAddFrequency;
     private javax.swing.JComboBox cmbEndangeredStatus;
     private javax.swing.JComboBox cmbFeedingClass;
+    private javax.swing.JComboBox cmbSizeType;
     private javax.swing.JComboBox cmbSizeUnits;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JComboBox cmbWaterDependance;
@@ -1272,6 +1286,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JComboBox cmbWishList;
     private javax.swing.JPanel elementIncludes;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

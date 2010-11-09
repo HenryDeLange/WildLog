@@ -17,7 +17,7 @@ public class BarChart extends JPanel {
         // Variables
         private static final int MIN_BAR_SIZE = 20;
         private static final int LABEL_BUFFER = 102;
-        private static final int TOTAL_BUFFER = 20;
+        private static final int TOTAL_BUFFER = 15;
         private static final int SCALE_BUFFER = 10;
         private static final int BAR_HEIGHT_BUFFER = 5;
 	private List<BarChartEntity> bars = new ArrayList<BarChartEntity>();

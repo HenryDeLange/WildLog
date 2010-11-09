@@ -790,7 +790,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
        if (tblSightings.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Creature(s)?", "Delete Creature(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Sighting(s)?", "Delete Sighting(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
                 sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
                 app.getDBI().delete(sighting);
                 sighting = null;

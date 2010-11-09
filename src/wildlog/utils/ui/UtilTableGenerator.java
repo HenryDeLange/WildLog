@@ -530,7 +530,8 @@ public final class UtilTableGenerator {
                                 "Class"
                                 };
         Sighting temp = new Sighting();
-        temp.setLocationName(inLocation.getName());
+        if (inLocation.getName() != null)
+            temp.setLocationName(inLocation.getName());
         List<Sighting> allSightings = dbi.list(temp);
         List<String> allElements = new ArrayList<String>();
         for (Sighting tempSighting : allSightings) {
@@ -582,11 +583,13 @@ public final class UtilTableGenerator {
         List<String> allLocations = new ArrayList<String>();
         Object[][] tempTable = null;
         if (inElement != null) {
-            List<Sighting> allSightings = dbi.list(new Sighting());
+            Sighting temp = new Sighting();
+            if (inElement.getPrimaryName() != null)
+                temp.setElementName(inElement.getPrimaryName());
+            List<Sighting> allSightings = dbi.list(temp);
             for (int t = 0; t < allSightings.size(); t++) {
-                if (allSightings.get(t).getElementName().equals(inElement.getPrimaryName()))
-                    if (!allLocations.contains(allSightings.get(t).getLocationName()))
-                        allLocations.add(allSightings.get(t).getLocationName());
+                if (!allLocations.contains(allSightings.get(t).getLocationName()))
+                    allLocations.add(allSightings.get(t).getLocationName());
             }
             tempTable = new Object[allLocations.size()][3];
             for (int t = 0; t < allLocations.size(); t++) {

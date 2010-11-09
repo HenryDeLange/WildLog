@@ -434,7 +434,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="827" y="40" width="90" height="30"/>
+                      <AbsoluteConstraints x="850" y="40" width="80" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -454,7 +454,7 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="925" y="40" width="90" height="30"/>
+                      <AbsoluteConstraints x="935" y="40" width="80" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -473,7 +473,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="827" y="5" width="120" height="30"/>
+                      <AbsoluteConstraints x="725" y="45" width="120" height="25"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -590,7 +590,7 @@
                   </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="725" y="5" width="100" height="65"/>
+                      <AbsoluteConstraints x="725" y="5" width="120" height="40"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -646,19 +646,40 @@
                     </Constraint>
                   </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="jButton1">
+                <Component class="javax.swing.JButton" name="btnRotate">
                   <Properties>
                     <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="imgBrowsePhotos.getRotateCounterClockwiseAction()" type="code"/>
                     </Property>
-                    <Property name="icon" type="javax.swing.Icon" resourceKey="jButton1.icon"/>
-                    <Property name="text" type="java.lang.String" resourceKey="jButton1.text"/>
-                    <Property name="toolTipText" type="java.lang.String" resourceKey="jButton1.toolTipText"/>
-                    <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="btnRotate.icon"/>
+                    <Property name="text" type="java.lang.String" resourceKey="btnRotate.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnRotate.toolTipText"/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnRotate" noResource="true"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="950" y="5" width="65" height="30"/>
+                      <AbsoluteConstraints x="935" y="5" width="80" height="30"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnViewEXIF">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" resourceKey="btnViewEXIF.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="btnViewEXIF.toolTipText"/>
+                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+                      <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnViewEXIF" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewEXIFActionPerformed"/>
+                  </Events>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="850" y="5" width="80" height="30"/>
                     </Constraint>
                   </Constraints>
                 </Component>
@@ -1372,6 +1393,31 @@
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
           <SubComponents>
+            <Menu class="javax.swing.JMenu" name="helpMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" resourceKey="helpMenu.text"/>
+                <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+              </AuxValues>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="wildlog.WildLogView" id="showAboutBox" methodName="showAboutBox"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="aboutMenuItem.text"/>
+                    <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>
+                  </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+                  </AuxValues>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <MenuItem class="javax.swing.JMenuItem" name="exitMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1406,7 +1452,6 @@
         <Menu class="javax.swing.JMenu" name="exportMenu">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="exportMenu.text"/>
-            <Property name="name" type="java.lang.String" value="exportMenu" noResource="true"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
@@ -1458,9 +1503,17 @@
         <Menu class="javax.swing.JMenu" name="advancedMenu">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="advancedMenu.text"/>
-            <Property name="name" type="java.lang.String" value="advancedMenu" noResource="true"/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="calculateSunAndMoon" methodName="calculateSunAndMoon"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="jMenuItem3.text"/>
+                <Property name="name" type="java.lang.String" value="jMenuItem3" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
               <Properties>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
@@ -1487,16 +1540,33 @@
             <Property name="name" type="java.lang.String" value="settingsMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseWMS">
+            <Menu class="javax.swing.JMenu" name="jMenu5">
               <Properties>
-                <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" resourceKey="chkMnuUseWMS.text"/>
-                <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
+                <Property name="text" type="java.lang.String" resourceKey="jMenu5.text"/>
+                <Property name="name" type="java.lang.String" value="jMenu5" noResource="true"/>
               </Properties>
-              <Events>
-                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuUseWMSItemStateChanged"/>
-              </Events>
-            </MenuItem>
+              <SubComponents>
+                <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseWMS">
+                  <Properties>
+                    <Property name="selected" type="boolean" value="true"/>
+                    <Property name="text" type="java.lang.String" resourceKey="chkMnuUseWMS.text"/>
+                    <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuUseWMSItemStateChanged"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
+                  <Properties>
+                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                      <action class="wildlog.WildLogView" id="setupMapStartLocation" methodName="setupMapStartLocation"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" resourceKey="jMenuItem4.text"/>
+                    <Property name="name" type="java.lang.String" value="jMenuItem4" noResource="true"/>
+                  </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu2">
@@ -1505,6 +1575,18 @@
             <Property name="name" type="java.lang.String" value="jMenu2" noResource="true"/>
           </Properties>
           <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="exifReader" methodName="exifReader"/>
+                </Property>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="exifReader" methodName="exifReader"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="jMenuItem1.text"/>
+                <Property name="name" type="java.lang.String" value="jMenuItem1" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="jMenu1">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="jMenu1.text"/>
@@ -1541,31 +1623,6 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="helpMenu">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="helpMenu.text"/>
-            <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="aboutMenuItem">
-              <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="showAboutBox" methodName="showAboutBox"/>
-                </Property>
-                <Property name="text" type="java.lang.String" resourceKey="aboutMenuItem.text"/>
-                <Property name="name" type="java.lang.String" value="aboutMenuItem" noResource="true"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-              </AuxValues>
-            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>

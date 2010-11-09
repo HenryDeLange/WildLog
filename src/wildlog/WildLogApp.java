@@ -15,6 +15,7 @@ import org.jdesktop.swingx.mapviewer.wms.WMSService;
 import org.jdesktop.swingx.mapviewer.wms.WMSTileFactory;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.DBI;
 import wildlog.data.dbi.DBI_h2;
 import wildlog.data.enums.Latitudes;
@@ -43,6 +44,8 @@ public class WildLogApp extends SingleFrameApplication {
 
     // Getters and Setters
     public Latitudes getPrevLat() {
+        if (prevLat == null)
+            prevLat = Latitudes.NONE;
         return prevLat;
     }
 
@@ -75,6 +78,8 @@ public class WildLogApp extends SingleFrameApplication {
     }
 
     public Longitudes getPrevLon() {
+        if (prevLon == null)
+            prevLon = Longitudes.NONE;
         return prevLon;
     }
 
@@ -176,7 +181,8 @@ public class WildLogApp extends SingleFrameApplication {
     public MapFrameOffline getMapOffline() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
         if (mapOffline == null) {
-            mapOffline = new MapFrameOffline("WildLog Map - Offline"/*, useOnlineMap*/);
+            WildLogOptions options = getDBI().find(new WildLogOptions());
+            mapOffline = new MapFrameOffline("WildLog Map - Offline", options.getDefaultLatitude(), options.getDefaultLongitude()/*, useOnlineMap*/);
         }
         return mapOffline;
     }
@@ -184,6 +190,9 @@ public class WildLogApp extends SingleFrameApplication {
     public MapFrameOnline getMapOnline() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
         if (mapOnlineFrame == null) {
+            WildLogOptions options = getDBI().find(new WildLogOptions());
+            final GeoPosition defaultPosition = new GeoPosition(options.getDefaultLatitude(), options.getDefaultLongitude());
+
             mapOnline = new JXMapKit();
 
             mapOnlineFrame = new MapFrameOnline("WildLog Map - Online", mapOnline, this);
@@ -196,7 +205,7 @@ public class WildLogApp extends SingleFrameApplication {
             mapOnline.setPreferredSize(new Dimension(750, 500));
             mapOnline.setAddressLocationShown(false);
             mapOnline.setName("mapOnline");
-            mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+            mapOnline.setAddressLocation(defaultPosition);
             mapOnline.setZoom(12);
             mapOnlineFrame.add(mapOnline, new AbsoluteConstraints(0, 0, -1, -1), 0);
 
@@ -227,7 +236,7 @@ public class WildLogApp extends SingleFrameApplication {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     mapOnline.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+                    mapOnline.setAddressLocation(defaultPosition);
                     mapOnline.setZoom(12);
                 }
             });
@@ -245,7 +254,7 @@ public class WildLogApp extends SingleFrameApplication {
                     wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
                     TileFactory fact = new WMSTileFactory(wms);
                     mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+                    mapOnline.setAddressLocation(defaultPosition);
                     mapOnline.setZoom(13);
                 }
             });
@@ -263,7 +272,7 @@ public class WildLogApp extends SingleFrameApplication {
                     wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
                     TileFactory fact = new WMSTileFactory(wms);
                     mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+                    mapOnline.setAddressLocation(defaultPosition);
                     mapOnline.setZoom(13);
                 }
             });
@@ -281,7 +290,7 @@ public class WildLogApp extends SingleFrameApplication {
                     wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
                     TileFactory fact = new WMSTileFactory(wms);
                     mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(new GeoPosition(-28.75, 0, 0, 25, 0, 0));
+                    mapOnline.setAddressLocation(defaultPosition);
                     mapOnline.setZoom(13);
                 }
             });
