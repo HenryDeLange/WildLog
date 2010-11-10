@@ -613,7 +613,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnReportActionPerformed(evt);
             }
         });
-        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 120, 40));
+        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 120, 35));
 
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
         btnDefault.setText(resourceMap.getString("btnDefault.text")); // NOI18N

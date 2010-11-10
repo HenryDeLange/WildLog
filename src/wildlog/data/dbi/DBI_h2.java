@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
+import javax.swing.JOptionPane;
+import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -48,6 +50,7 @@ public class DBI_h2 extends DBI_JDBC {
         super();
         Statement state = null;
         ResultSet results = null;
+        boolean started = true;
         try {
             Class.forName("org.h2.Driver").newInstance();
             Properties props = new Properties();
@@ -94,17 +97,27 @@ public class DBI_h2 extends DBI_JDBC {
             System.err.println("\nUnable to load the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
             System.err.println("Please check your CLASSPATH.");
             cnfe.printStackTrace(System.err);
+            started = false;
         }
         catch (InstantiationException ie) {
             System.err.println("\nUnable to instantiate the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
             ie.printStackTrace(System.err);
+            started = false;
         }
         catch (IllegalAccessException iae) {
             System.err.println("\nNot allowed to access the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
             iae.printStackTrace(System.err);
+            started = false;
         }
         catch (SQLException sqle) {
             printSQLException(sqle);
+            started = false;
+        }
+        finally {
+            if (!started) {
+                JOptionPane.showMessageDialog(null, "The database could not be opened. Make sure it is not in use or broken.", "WildLog Error: Initialize Database", JOptionPane.ERROR_MESSAGE);
+                Application.getInstance().exit();
+            }
         }
     }
 

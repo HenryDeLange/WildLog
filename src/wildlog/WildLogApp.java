@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.swingx.JXMapKit;
@@ -29,13 +30,13 @@ import wildlog.mapping.MapFrameOnline;
 public class WildLogApp extends SingleFrameApplication {
     // Variables - This is actualy a very bad hack, but its the easiest and quickest to do for now...
     private Latitudes prevLat;
-    private String prevLatDeg;
-    private String prevLatMin;
-    private String prevLatSec;
+    private int prevLatDeg;
+    private int prevLatMin;
+    private float prevLatSec;
     private Longitudes prevLon;
-    private String prevLonDeg;
-    private String prevLonMin;
-    private String prevLonSec;
+    private int prevLonDeg;
+    private int prevLonMin;
+    private float prevLonSec;
     private boolean useOnlineMap = true;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
@@ -49,32 +50,32 @@ public class WildLogApp extends SingleFrameApplication {
         return prevLat;
     }
 
-    public void setPrevLat(Latitudes prevLat) {
-        this.prevLat = prevLat;
+    public void setPrevLat(Latitudes inPrevLat) {
+        prevLat = inPrevLat;
     }
 
-    public String getPrevLatDeg() {
+    public int getPrevLatDeg() {
         return prevLatDeg;
     }
 
-    public void setPrevLatDeg(String prevLatDeg) {
-        this.prevLatDeg = prevLatDeg;
+    public void setPrevLatDeg(int inPrevLatDeg) {
+        prevLatDeg = inPrevLatDeg;
     }
 
-    public String getPrevLatMin() {
+    public int getPrevLatMin() {
         return prevLatMin;
     }
 
-    public void setPrevLatMin(String prevLatMin) {
-        this.prevLatMin = prevLatMin;
+    public void setPrevLatMin(int inPrevLatMin) {
+        prevLatMin = inPrevLatMin;
     }
 
-    public String getPrevLatSec() {
+    public float getPrevLatSec() {
         return prevLatSec;
     }
 
-    public void setPrevLatSec(String prevLatSec) {
-        this.prevLatSec = prevLatSec;
+    public void setPrevLatSec(float inPrevLatSec) {
+        prevLatSec = inPrevLatSec;
     }
 
     public Longitudes getPrevLon() {
@@ -83,32 +84,32 @@ public class WildLogApp extends SingleFrameApplication {
         return prevLon;
     }
 
-    public void setPrevLon(Longitudes prevLon) {
-        this.prevLon = prevLon;
+    public void setPrevLon(Longitudes inPrevLon) {
+        prevLon = inPrevLon;
     }
 
-    public String getPrevLonDeg() {
+    public int getPrevLonDeg() {
         return prevLonDeg;
     }
 
-    public void setPrevLonDeg(String prevLonDeg) {
-        this.prevLonDeg = prevLonDeg;
+    public void setPrevLonDeg(int inPrevLonDeg) {
+        prevLonDeg = inPrevLonDeg;
     }
 
-    public String getPrevLonMin() {
+    public int getPrevLonMin() {
         return prevLonMin;
     }
 
-    public void setPrevLonMin(String prevLonMin) {
-        this.prevLonMin = prevLonMin;
+    public void setPrevLonMin(int inPrevLonMin) {
+        prevLonMin = inPrevLonMin;
     }
 
-    public String getPrevLonSec() {
+    public float getPrevLonSec() {
         return prevLonSec;
     }
 
-    public void setPrevLonSec(String prevLonSec) {
-        this.prevLonSec = prevLonSec;
+    public void setPrevLonSec(float inPrevLonSec) {
+        prevLonSec = inPrevLonSec;
     }
 
 

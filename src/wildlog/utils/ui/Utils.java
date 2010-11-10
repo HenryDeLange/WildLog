@@ -465,6 +465,7 @@ public final class Utils {
                         }
                     }
                     txtPane.setText(temp);
+                    txtPane.setCaretPosition(0);
                     JScrollPane scroll = new JScrollPane(txtPane);
                     scroll.setPreferredSize(new Dimension(500, 750));
                     frame.getContentPane().add(scroll);
