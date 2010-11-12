@@ -282,7 +282,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="853" y="548" width="-1" height="30"/>
+              <AbsoluteConstraints x="890" y="550" width="-1" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -534,7 +534,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="100" y="230" width="310" height="80"/>
+              <AbsoluteConstraints x="100" y="230" width="470" height="80"/>
             </Constraint>
           </Constraints>
 
@@ -687,13 +687,6 @@
             <Property name="font" type="java.awt.Font" resourceKey="lblNumberOfSightings.font"/>
             <Property name="horizontalAlignment" type="int" value="0"/>
             <Property name="text" type="java.lang.String" resourceKey="lblNumberOfSightings.text"/>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-                <LineBorder>
-                  <Property name="color" resourceKey="lblNumberOfSightings.border.lineColor"/>
-                </LineBorder>
-              </Border>
-            </Property>
             <Property name="name" type="java.lang.String" value="lblNumberOfSightings" noResource="true"/>
           </Properties>
           <Constraints>
@@ -994,6 +987,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 10, 2, 10]"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnAddSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -1020,7 +1016,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="970" y="550" width="30" height="20"/>
+              <AbsoluteConstraints x="850" y="550" width="30" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1052,7 +1048,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="710" y="550" width="-1" height="-1"/>
+              <AbsoluteConstraints x="710" y="550" width="-1" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1073,7 +1069,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="780" y="550" width="-1" height="-1"/>
+              <AbsoluteConstraints x="780" y="550" width="-1" height="30"/>
             </Constraint>
           </Constraints>
         </Component>

@@ -234,6 +234,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblSightings = new javax.swing.JLabel();
         lblCreatures = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
@@ -407,6 +408,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator5.setForeground(resourceMap.getColor("jSeparator5.foreground")); // NOI18N
         jSeparator5.setName("jSeparator5"); // NOI18N
         tabHome.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 340, 10));
+
+        jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
+        jLabel5.setForeground(resourceMap.getColor("jLabel5.foreground")); // NOI18N
+        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+        tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 30, -1, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -1166,6 +1173,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
         settingsMenu.setName("settingsMenu"); // NOI18N
 
+        jMenu5.setIcon(resourceMap.getIcon("jMenu5.icon")); // NOI18N
         jMenu5.setText(resourceMap.getString("jMenu5.text")); // NOI18N
         jMenu5.setName("jMenu5"); // NOI18N
 
@@ -1191,7 +1199,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jMenu2.setText(resourceMap.getString("jMenu2.text")); // NOI18N
         jMenu2.setName("jMenu2"); // NOI18N
 
-        jMenuItem1.setAction(actionMap.get("exifReader")); // NOI18N
         jMenuItem1.setAction(actionMap.get("exifReader")); // NOI18N
         jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
         jMenuItem1.setName("jMenuItem1"); // NOI18N
@@ -2416,6 +2423,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

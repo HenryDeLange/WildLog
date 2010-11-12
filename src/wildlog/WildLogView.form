@@ -204,6 +204,19 @@
                     </Constraint>
                   </Constraints>
                 </Component>
+                <Component class="javax.swing.JLabel" name="jLabel5">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" resourceKey="jLabel5.font"/>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="jLabel5.foreground"/>
+                    <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
+                    <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+                      <AbsoluteConstraints x="860" y="30" width="-1" height="-1"/>
+                    </Constraint>
+                  </Constraints>
+                </Component>
               </SubComponents>
             </Container>
             <Container class="javax.swing.JPanel" name="tabFoto">
@@ -1542,6 +1555,7 @@
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="jMenu5">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="jMenu5.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="jMenu5.text"/>
                 <Property name="name" type="java.lang.String" value="jMenu5" noResource="true"/>
               </Properties>
@@ -1577,9 +1591,6 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exifReader" methodName="exifReader"/>
-                </Property>
                 <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
                   <action class="wildlog.WildLogView" id="exifReader" methodName="exifReader"/>
                 </Property>

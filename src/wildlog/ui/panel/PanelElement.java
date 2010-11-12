@@ -376,7 +376,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 btnGoLocationActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(853, 548, -1, 30));
+        elementIncludes.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 550, -1, 30));
 
         jSeparator11.setName("jSeparator11"); // NOI18N
         elementIncludes.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -478,7 +478,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
-        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 310, 80));
+        elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 470, 80));
 
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
@@ -539,7 +539,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
-        lblNumberOfSightings.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfSightings.border.lineColor"))); // NOI18N
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
         elementIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 1, 30, 20));
 
@@ -670,6 +669,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
         btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddSighting.setMargin(new java.awt.Insets(2, 10, 2, 10));
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -682,7 +682,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfLocations.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfLocations.border.lineColor"))); // NOI18N
         lblNumberOfLocations.setName("lblNumberOfLocations"); // NOI18N
-        elementIncludes.add(lblNumberOfLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 550, 30, 20));
+        elementIncludes.add(lblNumberOfLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 550, 30, 30));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -696,7 +696,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         rdbLocations.setToolTipText(resourceMap.getString("rdbLocations.toolTipText")); // NOI18N
         rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbLocations.setName("rdbLocations"); // NOI18N
-        elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, -1));
+        elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, 30));
 
         buttonGroup1.add(rdbSightings);
         rdbSightings.setText(resourceMap.getString("rdbSightings.text")); // NOI18N
@@ -708,7 +708,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 rdbSightingsItemStateChanged(evt);
             }
         });
-        elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
+        elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, 30));
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N

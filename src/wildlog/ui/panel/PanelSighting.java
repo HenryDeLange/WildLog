@@ -304,7 +304,6 @@ public class PanelSighting extends javax.swing.JPanel {
         btnUseLocationGPS = new javax.swing.JButton();
         spnNumberOfElements = new javax.swing.JSpinner();
         btnGetDateFromImage = new javax.swing.JButton();
-        btnCalculateTimeCategory = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -460,7 +459,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        sightingIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, -1, 20));
+        sightingIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 260, -1, 20));
 
         jLabel12.setText(resourceMap.getString("jLabel12.text")); // NOI18N
         jLabel12.setName("jLabel12"); // NOI18N
@@ -468,7 +467,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
         jLabel13.setName("jLabel13"); // NOI18N
-        sightingIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 420, -1, 20));
+        sightingIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 400, -1, 20));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setName("jScrollPane2"); // NOI18N
@@ -483,7 +482,7 @@ public class PanelSighting extends javax.swing.JPanel {
         txtDetails.setName("txtDetails"); // NOI18N
         jScrollPane2.setViewportView(txtDetails);
 
-        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 440, 300, 130));
+        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 420, 300, 150));
 
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
         cmbWeather.setSelectedItem(sighting.getWeather());
@@ -496,7 +495,7 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
-        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 290, 155, 20));
+        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 290, 150, 20));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -825,29 +824,21 @@ public class PanelSighting extends javax.swing.JPanel {
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnNumberOfElements.setName("spnNumberOfElements"); // NOI18N
-        sightingIncludes.add(spnNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 320, 50, -1));
+        sightingIncludes.add(spnNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 260, 60, -1));
 
         btnGetDateFromImage.setBackground(resourceMap.getColor("btnGetDateFromImage.background")); // NOI18N
+        btnGetDateFromImage.setFont(resourceMap.getFont("btnGetDateFromImage.font")); // NOI18N
         btnGetDateFromImage.setText(resourceMap.getString("btnGetDateFromImage.text")); // NOI18N
         btnGetDateFromImage.setToolTipText(resourceMap.getString("btnGetDateFromImage.toolTipText")); // NOI18N
+        btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGetDateFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnGetDateFromImage.setName("btnGetDateFromImage"); // NOI18N
         btnGetDateFromImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGetDateFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(485, 260, 140, -1));
-
-        btnCalculateTimeCategory.setBackground(resourceMap.getColor("btnCalculateTimeCategory.background")); // NOI18N
-        btnCalculateTimeCategory.setText(resourceMap.getString("btnCalculateTimeCategory.text")); // NOI18N
-        btnCalculateTimeCategory.setToolTipText(resourceMap.getString("btnCalculateTimeCategory.toolTipText")); // NOI18N
-        btnCalculateTimeCategory.setName("btnCalculateTimeCategory"); // NOI18N
-        btnCalculateTimeCategory.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCalculateTimeCategoryActionPerformed(evt);
-            }
-        });
-        sightingIncludes.add(btnCalculateTimeCategory, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 313, 155, -1));
+        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, 100, 25));
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
@@ -855,30 +846,34 @@ public class PanelSighting extends javax.swing.JPanel {
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, -1, 20));
+        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 320, -1, 20));
 
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(735, 370, -1, 20));
+        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 320, -1, 20));
 
         btnCalculateMoonPhase.setBackground(resourceMap.getColor("btnCalculateMoonPhase.background")); // NOI18N
+        btnCalculateMoonPhase.setFont(resourceMap.getFont("btnCalculateMoonPhase.font")); // NOI18N
+        btnCalculateMoonPhase.setIcon(resourceMap.getIcon("btnCalculateMoonPhase.icon")); // NOI18N
         btnCalculateMoonPhase.setText(resourceMap.getString("btnCalculateMoonPhase.text")); // NOI18N
+        btnCalculateMoonPhase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCalculateMoonPhase.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCalculateMoonPhase.setName("btnCalculateMoonPhase"); // NOI18N
         btnCalculateMoonPhase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCalculateMoonPhaseActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 393, 300, -1));
+        sightingIncludes.add(btnCalculateMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 370, 200, 25));
 
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
-        sightingIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(775, 370, -1, 20));
+        sightingIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 320, -1, 20));
 
         cmbMoonlight.setModel(new DefaultComboBoxModel(Moonlight.values()));
         cmbMoonlight.setSelectedItem(sighting.getMoonlight());
         cmbMoonlight.setName("cmbMoonlight"); // NOI18N
-        sightingIncludes.add(cmbMoonlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 370, 100, -1));
+        sightingIncludes.add(cmbMoonlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 320, 100, -1));
 
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
         spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -893,7 +888,7 @@ public class PanelSighting extends javax.swing.JPanel {
         spnMoonPhase.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
         spnMoonPhase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnMoonPhase.setName("spnMoonPhase"); // NOI18N
-        sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(692, 370, 40, -1));
+        sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 320, 50, -1));
 
         spnLatDegrees.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
         spnLatDegrees.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1330,7 +1325,7 @@ public class PanelSighting extends javax.swing.JPanel {
                                     spnHours.setValue(tempDate.getHours());
                                     spnMinutes.setValue(tempDate.getMinutes());
                                     cmbTimeFormat.setSelectedIndex(0);
-                                    btnCalculateTimeCategoryActionPerformed(null);
+                                    btnCalculateMoonPhaseActionPerformed(null);
                                     break breakAllWhiles;
                                 }
                                 catch (ParseException ex) {
@@ -1350,7 +1345,7 @@ public class PanelSighting extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
 
-    private void btnCalculateTimeCategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateTimeCategoryActionPerformed
+    private void btnCalculateMoonPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateMoonPhaseActionPerformed
         if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null 
                 && !cmbLatitude.getSelectedItem().equals(Latitudes.NONE) && !cmbLongitude.getSelectedItem().equals(Longitudes.NONE)) {
             btnUpdateSightingActionPerformed(null);
@@ -1361,9 +1356,6 @@ public class PanelSighting extends javax.swing.JPanel {
         else {
             JOptionPane.showMessageDialog(this, "Please make sure to first specify details for the Creature, Location, Visit and GPS co-ordinate fields.", "Could not calculate the time category.", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_btnCalculateTimeCategoryActionPerformed
-
-    private void btnCalculateMoonPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateMoonPhaseActionPerformed
         if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null
                 && !cmbLatitude.getSelectedItem().equals(Latitudes.NONE) && !cmbLongitude.getSelectedItem().equals(Longitudes.NONE)) {
             btnUpdateSightingActionPerformed(null);
@@ -1415,7 +1407,6 @@ public class PanelSighting extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalculateMoonPhase;
-    private javax.swing.JButton btnCalculateTimeCategory;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGetDateFromImage;
     private javax.swing.JButton btnNextImage;

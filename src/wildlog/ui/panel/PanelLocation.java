@@ -528,7 +528,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnGoElementActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 548, 130, 30));
+        locationIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 550, 130, 30));
 
         jLabel48.setText(resourceMap.getString("jLabel48.text")); // NOI18N
         jLabel48.setName("jLabel48"); // NOI18N
@@ -616,7 +616,6 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         lblNumberOfVisits.setFont(resourceMap.getFont("lblNumberOfVisits.font")); // NOI18N
         lblNumberOfVisits.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNumberOfVisits.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfVisits.border.lineColor"))); // NOI18N
         lblNumberOfVisits.setName("lblNumberOfVisits"); // NOI18N
         locationIncludes.add(lblNumberOfVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 1, 30, 20));
 
@@ -657,20 +656,20 @@ public class PanelLocation extends PanelCanSetupHeader {
                 rdbLocationItemStateChanged(evt);
             }
         });
-        locationIncludes.add(rdbLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, -1));
+        locationIncludes.add(rdbLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, 30));
 
         buttonGroup1.add(rdbVisit);
         rdbVisit.setText(resourceMap.getString("rdbVisit.text")); // NOI18N
         rdbVisit.setToolTipText(resourceMap.getString("rdbVisit.toolTipText")); // NOI18N
         rdbVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbVisit.setName("rdbVisit"); // NOI18N
-        locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
+        locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, 30));
 
         lblNumberOfElements.setFont(resourceMap.getFont("lblNumberOfElements.font")); // NOI18N
         lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfElements.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfElements.border.lineColor"))); // NOI18N
         lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
-        locationIncludes.add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 550, 30, 20));
+        locationIncludes.add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 550, 30, 30));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -738,15 +737,19 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
         locationIncludes.add(btnKml, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 290, 110, 30));
 
+        btnSunAndMoon.setFont(resourceMap.getFont("btnSunAndMoon.font")); // NOI18N
+        btnSunAndMoon.setIcon(resourceMap.getIcon("btnSunAndMoon.icon")); // NOI18N
         btnSunAndMoon.setText(resourceMap.getString("btnSunAndMoon.text")); // NOI18N
         btnSunAndMoon.setToolTipText(resourceMap.getString("btnSunAndMoon.toolTipText")); // NOI18N
+        btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSunAndMoon.setMargin(new java.awt.Insets(2, 10, 2, 10));
         btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
         btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSunAndMoonActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 323, 110, 30));
+        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 330, 110, -1));
 
         spnLatDegrees.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
         spnLatDegrees.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -799,7 +802,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(locationIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
