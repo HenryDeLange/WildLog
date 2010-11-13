@@ -90,11 +90,18 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         for (int t = 0; t < fotos.size(); t++) {
             fotoString.append(fotos.get(t).toHTML());
         }
-        StringBuilder htmlSighting = new StringBuilder("<H2>Sighting</H2>");
-        htmlSighting.append("<b>Date:</b> ").append(UtilsHTML.formatDate(date, true));
+        StringBuilder htmlSighting = new StringBuilder("<head><title>Sightings ID: " + sightingCounter + "</title></head>");
+        htmlSighting.append("<body bgcolor='rgb(238,234,211)'>");
+        htmlSighting.append("<table bgcolor='rgb(238,234,211)' width='100%'>");
+        htmlSighting.append("<tr><td>");
+        htmlSighting.append("<b><u>Sighting ID: ").append(UtilsHTML.formatString(sightingCounter)).append("</u></b>");
+        htmlSighting.append("<br/>");
+        htmlSighting.append("<br/><b>Date:</b> ").append(UtilsHTML.formatDate(date, true));
         htmlSighting.append("<br/><b>Element:</b> ").append(elementName);
         htmlSighting.append("<br/><b>Location:</b> ").append(UtilsHTML.formatString(locationName));
         htmlSighting.append("<br/>");
+        htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
+        htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
         htmlSighting.append("<br/><b>Time of Day:</b> ").append(UtilsHTML.formatString(timeOfDay));
         htmlSighting.append("<br/><b>Weather:</b> ").append(UtilsHTML.formatString(weather));
         htmlSighting.append("<br/><b>Area Type:</b> ").append(UtilsHTML.formatString(areaType));
@@ -104,11 +111,14 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         htmlSighting.append("<br/><b>Moon Phase:</b> ").append(UtilsHTML.formatString(moonPhase)).append(" % Full");
         htmlSighting.append("<br/><b>Moonlight:</b> ").append(UtilsHTML.formatString(moonlight));
         htmlSighting.append("<br/><b>Details:</b> ").append(UtilsHTML.formatString(details));
-        htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
-        htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
-        htmlSighting.append("<br/><b>Sighting ID:</b> ").append(UtilsHTML.formatString(sightingCounter));
-        if (inIncludeImages)
+        if (inIncludeImages && fotoString.length() > 0) {
+            htmlSighting.append("<br/>");
             htmlSighting.append("<br/><b>Photos:</b><br/>").append(fotoString);
+        }
+        htmlSighting.append("</td></tr>");
+        htmlSighting.append("</table>");
+        htmlSighting.append("<br/>");
+        htmlSighting.append("</body>");
         return htmlSighting.toString();
     }
 

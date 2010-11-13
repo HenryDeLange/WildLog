@@ -236,7 +236,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator5 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
         rdbBrowseElement = new javax.swing.JRadioButton();
         rdbBrowseDate = new javax.swing.JRadioButton();
@@ -429,11 +428,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         tabFoto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
-        jLabel4.setName("jLabel4"); // NOI18N
-        tabFoto.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
-
         rdbBrowseLocation.setBackground(resourceMap.getColor("rdbBrowseLocation.background")); // NOI18N
         buttonGroup1.add(rdbBrowseLocation);
         rdbBrowseLocation.setText(resourceMap.getString("rdbBrowseLocation.text")); // NOI18N
@@ -445,7 +439,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseLocationItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        tabFoto.add(rdbBrowseLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         rdbBrowseElement.setBackground(resourceMap.getColor("rdbBrowseElement.background")); // NOI18N
         buttonGroup1.add(rdbBrowseElement);
@@ -458,7 +452,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseElementItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, -1, -1));
+        tabFoto.add(rdbBrowseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
 
         rdbBrowseDate.setBackground(resourceMap.getColor("rdbBrowseDate.background")); // NOI18N
         buttonGroup1.add(rdbBrowseDate);
@@ -471,7 +465,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseDateItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, -1, -1));
+        tabFoto.add(rdbBrowseDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, -1, -1));
 
         imgBrowsePhotos.setBackground(resourceMap.getColor("imgBrowsePhotos.background")); // NOI18N
         imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -513,7 +507,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
-        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 250, 460));
+        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 250, 480));
 
         btnGoBrowseSelection.setBackground(resourceMap.getColor("btnGoBrowseSelection.background")); // NOI18N
         btnGoBrowseSelection.setIcon(resourceMap.getIcon("btnGoBrowseSelection.icon")); // NOI18N
@@ -586,11 +580,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 100, -1));
+        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 100, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, 100, -1));
+        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 100, -1));
 
         btnRefreshDates.setBackground(resourceMap.getColor("btnRefreshDates.background")); // NOI18N
         btnRefreshDates.setIcon(resourceMap.getIcon("btnRefreshDates.icon")); // NOI18N
@@ -603,13 +597,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnRefreshDatesActionPerformed(evt);
             }
         });
-        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 55, 40, 30));
+        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 35, 40, 30));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 35, 80, 30));
 
+        btnReport.setBackground(resourceMap.getColor("btnReport.background")); // NOI18N
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
@@ -622,6 +617,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 120, 35));
 
+        btnDefault.setBackground(resourceMap.getColor("btnDefault.background")); // NOI18N
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
         btnDefault.setText(resourceMap.getString("btnDefault.text")); // NOI18N
         btnDefault.setToolTipText(resourceMap.getString("btnDefault.toolTipText")); // NOI18N
@@ -633,6 +629,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 5, 90, -1));
 
+        cmbElementTypesBrowseTab.setBackground(resourceMap.getColor("cmbElementTypesBrowseTab.background")); // NOI18N
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -643,7 +640,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 cmbElementTypesBrowseTabActionPerformed(evt);
             }
         });
-        tabFoto.add(cmbElementTypesBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 210, -1));
+        tabFoto.add(cmbElementTypesBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 210, -1));
 
         chkElementTypeBrowseTab.setBackground(resourceMap.getColor("chkElementTypeBrowseTab.background")); // NOI18N
         chkElementTypeBrowseTab.setText(resourceMap.getString("chkElementTypeBrowseTab.text")); // NOI18N
@@ -653,9 +650,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 chkElementTypeBrowseTabActionPerformed(evt);
             }
         });
-        tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
 
         btnRotate.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
+        btnRotate.setBackground(resourceMap.getColor("btnRotate.background")); // NOI18N
         btnRotate.setIcon(resourceMap.getIcon("btnRotate.icon")); // NOI18N
         btnRotate.setText(resourceMap.getString("btnRotate.text")); // NOI18N
         btnRotate.setToolTipText(resourceMap.getString("btnRotate.toolTipText")); // NOI18N
@@ -663,9 +661,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnRotate.setName("btnRotate"); // NOI18N
         tabFoto.add(btnRotate, new org.netbeans.lib.awtextra.AbsoluteConstraints(935, 5, 80, 30));
 
+        btnViewEXIF.setBackground(resourceMap.getColor("btnViewEXIF.background")); // NOI18N
+        btnViewEXIF.setIcon(resourceMap.getIcon("btnViewEXIF.icon")); // NOI18N
         btnViewEXIF.setText(resourceMap.getString("btnViewEXIF.text")); // NOI18N
         btnViewEXIF.setToolTipText(resourceMap.getString("btnViewEXIF.toolTipText")); // NOI18N
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnViewEXIF.setName("btnViewEXIF"); // NOI18N
         btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -695,6 +696,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
+        tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocationMouseClicked(evt);
@@ -731,6 +733,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblVisit.setName("tblVisit"); // NOI18N
+        tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblVisitMouseClicked(evt);
@@ -803,6 +806,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
+        tblElement_LocTab.setSelectionBackground(resourceMap.getColor("tblElement_LocTab.selectionBackground")); // NOI18N
         tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblElement_LocTabMouseClicked(evt);
@@ -874,6 +878,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
+        tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblElementMouseClicked(evt);
@@ -944,6 +949,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
+        tblLocation_EleTab.setSelectionBackground(resourceMap.getColor("tblLocation_EleTab.selectionBackground")); // NOI18N
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocation_EleTabMouseClicked(evt);
@@ -1621,7 +1627,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             cmbElementTypesBrowseTab.setVisible(false);
             chkElementTypeBrowseTab.setVisible(false);
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("");
+            txtPhotoInformation.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
@@ -1650,7 +1656,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             chkElementTypeBrowseTab.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(true);
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("");
+            txtPhotoInformation.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
@@ -1679,7 +1685,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             cmbElementTypesBrowseTab.setVisible(false);
             chkElementTypeBrowseTab.setVisible(false);
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("");
+            txtPhotoInformation.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
@@ -2422,7 +2428,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

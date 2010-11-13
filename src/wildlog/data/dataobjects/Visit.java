@@ -61,19 +61,31 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
             }
         }
 
-        StringBuilder htmlVisit = new StringBuilder();
-        htmlVisit.append("<H2>Visit</H2>");
-        htmlVisit.append("<b>Visit:</b> ").append(name);
+        StringBuilder htmlVisit = new StringBuilder("<head><title>Visit: " + name + "</title></head>");
+        htmlVisit.append("<body bgcolor='rgb(230,228,240)'>");
+        htmlVisit.append("<table bgcolor='rgb(230,228,240)' width='100%'>");
+        htmlVisit.append("<tr><td>");
+        htmlVisit.append("<b><u>").append(name).append("</u></b>");
         htmlVisit.append("<br/>");
         htmlVisit.append("<br/><b>Start Date:</b> ").append(UtilsHTML.formatDate(startDate, false));
         htmlVisit.append("<br/><b>End Date:</b> ").append(UtilsHTML.formatDate(endDate, false));
         htmlVisit.append("<br/><b>Game Watching:</b> ").append(UtilsHTML.formatString(gameWatchingIntensity));
-        htmlVisit.append("<br/><b>Type:</b> ").append(UtilsHTML.formatString(type));
+        htmlVisit.append("<br/><b>Type of Visit:</b> ").append(UtilsHTML.formatString(type));
         htmlVisit.append("<br/><b>Description:</b> ").append(UtilsHTML.formatString(description));
-        if (inIncludeImages)
+        if (inIncludeImages && fotoString.length() > 0) {
+            htmlVisit.append("<br/>");
             htmlVisit.append("<br/><b>Photos:</b><br/>").append(fotoString);
-        if (inIsRecursive)
-            htmlVisit.append("<br/><H3>Sightings:</H3>").append(sightingString);
+        }
+        if (inIsRecursive) {
+            htmlVisit.append("<br/>");
+            htmlVisit.append("</td></tr>");
+            htmlVisit.append("<tr><td>");
+            htmlVisit.append("<br/>").append(sightingString);
+        }
+        htmlVisit.append("</td></tr>");
+        htmlVisit.append("</table>");
+        htmlVisit.append("<br/>");
+        htmlVisit.append("</body>");
         return htmlVisit.toString();
     }
 

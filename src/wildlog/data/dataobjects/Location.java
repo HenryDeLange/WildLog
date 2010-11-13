@@ -96,14 +96,17 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
             }
         }
 
-        StringBuilder htmlLocation = new StringBuilder("<head><title>" + name + "</title></head>");
-        htmlLocation.append("<body>");
-        htmlLocation.append("<H2>Location</H2>");
-        htmlLocation.append("<b>Name:</b> ").append(name);
+        StringBuilder htmlLocation = new StringBuilder("<head><title>Location: " + name + "</title></head>");
+        htmlLocation.append("<body bgcolor='rgb(233,239,244)'>");
+        htmlLocation.append("<table bgcolor='rgb(233,239,244)' width='100%'>");
+        htmlLocation.append("<tr><td>");
+        htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");
+        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
+        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
         htmlLocation.append("<br/><b>Province:</b> ").append(UtilsHTML.formatString(province));
-        htmlLocation.append("<br/><b>Rating:</b> ").append(UtilsHTML.formatString(rating));
-        htmlLocation.append("<br/><b>Game View Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
+        htmlLocation.append("<br/><b>General Rating:</b> ").append(UtilsHTML.formatString(rating));
+        htmlLocation.append("<br/><b>Wildlife Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
         htmlLocation.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(habitatType));
         htmlLocation.append("<br/><b>Description:</b> ").append(UtilsHTML.formatString(description));
         htmlLocation.append("<br/><b>Directions:</b> ").append(UtilsHTML.formatString(directions));
@@ -115,58 +118,22 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
         else
             htmlLocation.append("<br/><b>Website:</b> ").append(UtilsHTML.formatString(website));
         htmlLocation.append("<br/><b>Email:</b> ").append(UtilsHTML.formatString(email));
-        htmlLocation.append("<br/><b>Contact Number:</b> ").append(UtilsHTML.formatString(contactNumbers));
+        htmlLocation.append("<br/><b>Phone Number:</b> ").append(UtilsHTML.formatString(contactNumbers));
         htmlLocation.append("<br/><b>Catering:</b> ").append(UtilsHTML.formatString(catering));
         htmlLocation.append("<br/><b>Accomodation:</b> ").append(UtilsHTML.formatString(accommodationType));
-        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
-        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
-//        htmlLocation.append("<br/><b>Sub Areas:</b> " + UtilsHTML.formatString(subAreasString);
-        if (inIncludeImages) {
-            // Generate image of the map
-            /**
-* *********************************************************
-             * Die code werk halfpad. Dit generate die image, maar die map word
-             * deur mekaar as mens rond speel met die map zoom en dan HTML
-             * generate...
-            inApp.getMapOffline().clearPoints();
-            if (latitude != null && longitude != null)
-                if (!latitude.equals(Latitudes.NONE) && !longitude.equals(Longitudes.NONE)) {
-                    float lat = latDegrees;
-                    lat = lat + latMinutes/60f;
-                    lat = lat + (latSecondsFloat/60f)/60f;
-                    if (latitude.equals(Latitudes.SOUTH))
-                        lat = -1 * lat;
-                    float lon = lonDegrees;
-                    lon = lon + lonMinutes/60f;
-                    lon = lon + (lonSecondsFloat/60f)/60f;
-                    if (longitude.equals(Longitudes.WEST))
-                        lon = -1 * lon;
-                    inApp.getMapOffline().addPoint(lat, lon, new Color(70, 120, 190));
-                }
-            inApp.getMapOffline().changeTitle("WildLog Map - Location: " + name);
-            inApp.getMapOffline().showMap(300, 300, 42000000f);
-            inApp.getMapOffline().getFrameForImageDrawing().pack();
-            inApp.getMapOffline().getFrameForImageDrawing().setVisible(false);
-            BufferedImage image = new BufferedImage(inApp.getMapOffline().getFrameForImageDrawing().getContentPane().getWidth(), inApp.getMapOffline().getFrameForImageDrawing().getContentPane().getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics graphics = image.getGraphics();
-            inApp.getMapOffline().getFrameForImageDrawing().getContentPane().printAll(graphics);
-            String folders = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Maps";
-            File temp = new File(folders);
-            temp.mkdirs();
-            String mapPath = folders + File.separatorChar + name + ".jpg";
-            try {
-                ImageIO.write(image, "jpg", new File(mapPath));
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-            htmlLocation.append("<br/><b>Map:</b><br/><img width='400px' src='" + mapPath + "' />";
-            */
-            // Fotos
+        if (inIncludeImages && fotoString.length() > 0) {
+            htmlLocation.append("<br/>");
             htmlLocation.append("<br/><b>Photos:</b><br/>").append(fotoString);
         }
-        if (inIsRecursive)
-            htmlLocation.append("<br/><H3>Visits:</H3><br/>").append(visitsString);
+        if (inIsRecursive) {
+            htmlLocation.append("<br/>");
+            htmlLocation.append("</td></tr>");
+            htmlLocation.append("<tr><td>");
+            htmlLocation.append("<br/>").append(visitsString);
+        }
+        htmlLocation.append("</td></tr>");
+        htmlLocation.append("</table>");
+        htmlLocation.append("<br/>");
         htmlLocation.append("</body>");
         return htmlLocation.toString();
     }

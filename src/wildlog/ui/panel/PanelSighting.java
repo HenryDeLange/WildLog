@@ -364,6 +364,7 @@ public class PanelSighting extends javax.swing.JPanel {
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
         tblElement.setEnabled(!disableEditing);
         tblElement.setName("tblElement"); // NOI18N
+        tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -595,7 +596,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtSearchKeyPressed(evt);
             }
         });
-        sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 235, 200, -1));
+        sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 235, 200, 20));
 
         btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
         btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
@@ -609,7 +610,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnSearchActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 235, 90, -1));
+        sightingIncludes.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 235, 90, 20));
 
         btnDeleteImage.setBackground(resourceMap.getColor("btnDeleteImage.background")); // NOI18N
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
@@ -655,6 +656,7 @@ public class PanelSighting extends javax.swing.JPanel {
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
         tblLocation.setEnabled(!disableEditing);
         tblLocation.setName("tblLocation"); // NOI18N
+        tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -676,6 +678,7 @@ public class PanelSighting extends javax.swing.JPanel {
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setEnabled(!disableEditing);
         tblVisit.setName("tblVisit"); // NOI18N
+        tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -704,7 +707,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 txtSearchLocationKeyPressed(evt);
             }
         });
-        sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 200, -1));
+        sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 200, 20));
 
         lblVisit.setFont(resourceMap.getFont("lblVisit.font")); // NOI18N
         lblVisit.setText(resourceMap.getString("lblVisit.text")); // NOI18N
@@ -747,7 +750,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnSearchLocationActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 90, -1));
+        sightingIncludes.add(btnSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, 90, 20));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -807,7 +810,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnUsePrevGPSActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnUsePrevGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 393, 130, -1));
+        sightingIncludes.add(btnUsePrevGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 393, 130, 20));
 
         btnUseLocationGPS.setBackground(resourceMap.getColor("btnUseLocationGPS.background")); // NOI18N
         btnUseLocationGPS.setText(resourceMap.getString("btnUseLocationGPS.text")); // NOI18N
@@ -819,7 +822,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnUseLocationGPSActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnUseLocationGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 393, 130, -1));
+        sightingIncludes.add(btnUseLocationGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 393, 130, 20));
 
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -828,6 +831,7 @@ public class PanelSighting extends javax.swing.JPanel {
 
         btnGetDateFromImage.setBackground(resourceMap.getColor("btnGetDateFromImage.background")); // NOI18N
         btnGetDateFromImage.setFont(resourceMap.getFont("btnGetDateFromImage.font")); // NOI18N
+        btnGetDateFromImage.setIcon(resourceMap.getIcon("btnGetDateFromImage.icon")); // NOI18N
         btnGetDateFromImage.setText(resourceMap.getString("btnGetDateFromImage.text")); // NOI18N
         btnGetDateFromImage.setToolTipText(resourceMap.getString("btnGetDateFromImage.toolTipText")); // NOI18N
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -838,7 +842,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnGetDateFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, 100, 25));
+        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 370, 130, 25));
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
@@ -864,7 +868,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 btnCalculateMoonPhaseActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 370, 200, 25));
+        sightingIncludes.add(btnCalculateMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 370, 170, 25));
 
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N

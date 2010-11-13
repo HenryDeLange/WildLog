@@ -8,6 +8,7 @@
     </Component>
   </NonVisualComponents>
   <Properties>
+    <Property name="background" type="java.awt.Color" resourceKey="Form.background"/>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1005, 585]"/>
     </Property>
@@ -40,7 +41,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="28" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Component id="locationIncludes" min="-2" pref="1005" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -55,6 +56,7 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="locationIncludes">
       <Properties>
+        <Property name="background" type="java.awt.Color" resourceKey="locationIncludes.background"/>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[1005, 585]"/>
         </Property>
@@ -415,6 +417,7 @@
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="font" type="java.awt.Font" resourceKey="tblVisit.font"/>
                 <Property name="name" type="java.lang.String" value="tblVisit" noResource="true"/>
+                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblVisit.selectionBackground"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblVisitMouseClicked"/>
@@ -444,6 +447,7 @@
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="name" type="java.lang.String" value="tblElement" noResource="true"/>
+                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblElement.selectionBackground"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tblElementMouseClicked"/>
@@ -496,6 +500,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnPreviousImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnPreviousImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnPreviousImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnPreviousImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnPreviousImage.toolTipText"/>
@@ -515,6 +520,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSetMainImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnSetMainImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSetMainImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSetMainImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnSetMainImage.toolTipText"/>
@@ -534,6 +540,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnNextImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnNextImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnNextImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnNextImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnNextImage.toolTipText"/>
@@ -553,6 +560,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnUploadImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnUploadImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnUploadImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnUploadImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUploadImage.toolTipText"/>
@@ -572,6 +580,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnGoVisit">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnGoVisit.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnGoVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnGoVisit.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnGoVisit.toolTipText"/>
@@ -591,6 +600,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnAddVisit">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnAddVisit.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnAddVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnAddVisit.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnAddVisit.toolTipText"/>
@@ -610,6 +620,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDeleteVisit">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnDeleteVisit.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnDeleteVisit.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteVisit.toolTipText"/>
@@ -629,6 +640,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnGoElement">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnGoElement.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnGoElement.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnGoElement.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnGoElement.toolTipText"/>
@@ -826,6 +838,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDeleteImage">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnDeleteImage.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnDeleteImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteImage.toolTipText"/>
@@ -869,6 +882,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnMap">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnMap.background"/>
             <Property name="font" type="java.awt.Font" resourceKey="btnMap.font"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnMap.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnMap.text"/>
@@ -889,6 +903,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnMapSightings">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnMapSightings.background"/>
             <Property name="font" type="java.awt.Font" resourceKey="btnMapSightings.font"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnMapSightings.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnMapSightings.text"/>
@@ -909,6 +924,7 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbLocation">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="rdbLocation.background"/>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup1"/>
             </Property>
@@ -931,6 +947,7 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbVisit">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="rdbVisit.background"/>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup1"/>
             </Property>
@@ -981,6 +998,7 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbDMS">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="rdbDMS.background"/>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup2"/>
             </Property>
@@ -1002,6 +1020,7 @@
         </Component>
         <Component class="javax.swing.JRadioButton" name="rdbDD">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="rdbDD.background"/>
             <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
               <ComponentRef name="buttonGroup2"/>
             </Property>
@@ -1023,6 +1042,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnReport">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnReport.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnReport.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnReport.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnReport.toolTipText"/>
@@ -1042,6 +1062,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnHTML">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnHTML.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnHTML.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnHTML.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnHTML.toolTipText"/>
@@ -1061,6 +1082,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnKml">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnKml.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnKml.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnKml.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnKml.toolTipText"/>
@@ -1080,6 +1102,7 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSunAndMoon">
           <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="btnSunAndMoon.background"/>
             <Property name="font" type="java.awt.Font" resourceKey="btnSunAndMoon.font"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSunAndMoon.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSunAndMoon.text"/>

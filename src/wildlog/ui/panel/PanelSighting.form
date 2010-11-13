@@ -129,6 +129,7 @@
                   <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblElement" noResource="true"/>
+                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblElement.selectionBackground"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
@@ -640,7 +641,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="235" width="200" height="-1"/>
+              <AbsoluteConstraints x="0" y="235" width="200" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -663,7 +664,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="200" y="235" width="90" height="-1"/>
+              <AbsoluteConstraints x="200" y="235" width="90" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -766,6 +767,7 @@
                   <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblLocation" noResource="true"/>
+                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblLocation.selectionBackground"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
@@ -800,6 +802,7 @@
                   <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblVisit" noResource="true"/>
+                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblVisit.selectionBackground"/>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
@@ -847,7 +850,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="20" width="200" height="-1"/>
+              <AbsoluteConstraints x="0" y="20" width="200" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -937,7 +940,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="200" y="20" width="90" height="-1"/>
+              <AbsoluteConstraints x="200" y="20" width="90" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1056,7 +1059,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="490" y="393" width="130" height="-1"/>
+              <AbsoluteConstraints x="490" y="393" width="130" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1075,7 +1078,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="360" y="393" width="130" height="-1"/>
+              <AbsoluteConstraints x="360" y="393" width="130" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1099,6 +1102,7 @@
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnGetDateFromImage.background"/>
             <Property name="font" type="java.awt.Font" resourceKey="btnGetDateFromImage.font"/>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="btnGetDateFromImage.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnGetDateFromImage.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnGetDateFromImage.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -1114,7 +1118,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="630" y="370" width="100" height="25"/>
+              <AbsoluteConstraints x="630" y="370" width="130" height="25"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1170,7 +1174,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="730" y="370" width="200" height="25"/>
+              <AbsoluteConstraints x="760" y="370" width="170" height="25"/>
             </Constraint>
           </Constraints>
         </Component>

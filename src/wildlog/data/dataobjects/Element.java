@@ -93,42 +93,48 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         for (int t = 0; t < fotos.size(); t++) {
             fotoString.append(fotos.get(t).toHTML());
         }
-        StringBuilder htmlElement = new StringBuilder("<head><title>" + primaryName + "</title></head>");
-        htmlElement.append("<body>");
-        htmlElement.append("<H2>Creature</H2>");
-        htmlElement.append("<b>Primary Name:</b> ").append(primaryName);
+        StringBuilder htmlElement = new StringBuilder("<head><title>Creature: " + primaryName + "</title></head>");
+        htmlElement.append("<body bgcolor='rgb(227,240,227)'>");
+        htmlElement.append("<table bgcolor='rgb(227,240,227)' width='100%'>");
+        htmlElement.append("<tr><td>");
+        htmlElement.append("<b><u>").append(primaryName).append("</u></b>");
+        htmlElement.append("<br/>");
         htmlElement.append("<br/><b>Other Name:</b> ").append(UtilsHTML.formatString(otherName));
         htmlElement.append("<br/><b>Scientific Name:</b> <i>").append(UtilsHTML.formatString(scientificName)).append("</i>");
         htmlElement.append("<br/><b>Reference ID:</b> ").append(UtilsHTML.formatString(referenceID));
         htmlElement.append("<br/>");
-        htmlElement.append("<br/><b>Type:</b> ").append(UtilsHTML.formatString(type));
+        htmlElement.append("<br/><b>Creature Type:</b> ").append(UtilsHTML.formatString(type));
         htmlElement.append("<br/><b>Feeding Class:</b> ").append(UtilsHTML.formatString(feedingClass));
         htmlElement.append("<br/><b>Add Frequency:</b> ").append(UtilsHTML.formatString(addFrequency));
-        htmlElement.append("<br/><b>Wish Rating:</b> ").append(UtilsHTML.formatString(wishListRating));
+        htmlElement.append("<br/><b>Wish List Rating:</b> ").append(UtilsHTML.formatString(wishListRating));
         htmlElement.append("<br/><b>Active Time:</b> ").append(UtilsHTML.formatString(activeTime));
         htmlElement.append("<br/><b>Endangered Status:</b> ").append(UtilsHTML.formatString(endangeredStatus));
-        htmlElement.append("<br/><b>Water Dependance:</b> ").append(UtilsHTML.formatString(waterDependance));
+        htmlElement.append("<br/><b>Water Need:</b> ").append(UtilsHTML.formatString(waterDependance));
         htmlElement.append("<br/><b>Food/Nutrition:</b> ").append(UtilsHTML.formatString(nutrition));
         htmlElement.append("<br/><b>Identification:</b> ").append(UtilsHTML.formatString(diagnosticDescription));
         htmlElement.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(description));
         htmlElement.append("<br/><b>Distribution:</b> ").append(UtilsHTML.formatString(distribution));
         htmlElement.append("<br/><b>Behaviour:</b> ").append(UtilsHTML.formatString(behaviourDescription));
-        htmlElement.append("<br/><b>Size Type:</b> ").append(UtilsHTML.formatString(sizeType));
-        htmlElement.append("<br/><b>Minimum Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Maximum Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Minimum Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Maximum Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Minimum Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
-        htmlElement.append("<br/><b>Maximum Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
-        htmlElement.append("<br/><b>Minimum Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
-        htmlElement.append("<br/><b>Maximum Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
         htmlElement.append("<br/><b>Lifespan:</b> ").append(UtilsHTML.formatString(lifespan));
         htmlElement.append("<br/><b>Breeding:</b> ").append(UtilsHTML.formatString(breedingDuration));
-        htmlElement.append("<br/><b>Breeding Number:</b> ").append(UtilsHTML.formatString(breedingNumber));
-        if (inIncludeImages)
+        htmlElement.append("<br/><b>Number of Young:</b> ").append(UtilsHTML.formatString(breedingNumber));
+        htmlElement.append("<br/><b>Size Type:</b> ").append(UtilsHTML.formatString(sizeType));
+        htmlElement.append("<br/><b>Min Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Max Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Min Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Max Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
+        htmlElement.append("<br/><b>Min Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Max Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Min Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        htmlElement.append("<br/><b>Max Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        if (inIncludeImages && fotoString.length() > 0) {
+            htmlElement.append("<br/>");
             htmlElement.append("<br/><b>Photos:</b><br/>").append(fotoString);
+        }
         if (inIsRecursive) {
-            htmlElement.append("<br/><H2>Sightings:</H2>");
+            htmlElement.append("<br/>");
+            htmlElement.append("</td></tr>");
+            htmlElement.append("<tr><td>");
             Sighting tempSighting = new Sighting();
             tempSighting.setElementName(primaryName);
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
@@ -136,7 +142,9 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
                 htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp));
             }
         }
-
+        htmlElement.append("</td></tr>");
+        htmlElement.append("</table>");
+        htmlElement.append("<br/>");
         htmlElement.append("</body>");
         return htmlElement.toString();
     }

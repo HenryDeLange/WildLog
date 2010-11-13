@@ -44,7 +44,7 @@ public final class UtilsHTML {
                 // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
                 //return "<img src='file://" + inFileLocation.toLowerCase() + "'/>";
                 File temp = new File(inFileLocation);
-                return "<img src='" + temp.getAbsolutePath().toLowerCase() + "'/>";
+                return "<img src='" + temp.getAbsolutePath().toLowerCase() + "'/>  ";
             //}
             //else {
             //    System.out.println("path is wrong " + inFileLocation);

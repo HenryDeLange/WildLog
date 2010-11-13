@@ -58,10 +58,10 @@ public class WildLogFile {
             return UtilsHTML.generateHTMLImages(getFileLocation());
         else
         if (fotoType.equals(WildLogFileType.MOVIE))
-            return "[Movie]";
+            return "[Movie] ";
         else
         if (fotoType.equals(WildLogFileType.OTHER))
-            return "[Other File]";
+            return "[Other File] ";
         else
             return "";
     }
