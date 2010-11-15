@@ -49,7 +49,7 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     private String elementName;
     private String locationName;
     private String visitName;
-    private int moonPhase;
+    private int moonPhase = -1;
     private Moonlight moonlight;
 
 

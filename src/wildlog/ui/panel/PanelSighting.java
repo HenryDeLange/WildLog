@@ -156,6 +156,7 @@ public class PanelSighting extends javax.swing.JPanel {
                 cmbCertainty.setSelectedItem(Certainty.SURE);
                 cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
                 spnNumberOfElements.setValue(0);
+                spnMoonPhase.setValue(-1);
                 cmbViewRating.setSelectedItem(ViewRating.NORMAL);
                 //cmbLatitude.setSelectedItem(Latitudes.SOUTH);
                 spnLatDegrees.setValue(0);
@@ -889,7 +890,7 @@ public class PanelSighting extends javax.swing.JPanel {
         spnMinutes.setName("spnMinutes"); // NOI18N
         sightingIncludes.add(spnMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 290, 40, -1));
 
-        spnMoonPhase.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
+        spnMoonPhase.setModel(new javax.swing.SpinnerNumberModel(0, -1, 100, 1));
         spnMoonPhase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnMoonPhase.setName("spnMoonPhase"); // NOI18N
         sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 320, 50, -1));
@@ -1352,24 +1353,17 @@ public class PanelSighting extends javax.swing.JPanel {
     private void btnCalculateMoonPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateMoonPhaseActionPerformed
         if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null 
                 && !cmbLatitude.getSelectedItem().equals(Latitudes.NONE) && !cmbLongitude.getSelectedItem().equals(Longitudes.NONE)) {
+            // Sun
             btnUpdateSightingActionPerformed(null);
             double latitude = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsFloat());
             double longitude = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsFloat());
             cmbTimeOfDay.setSelectedItem(AstroUtils.getSunCategory(getDateFromFields(), latitude, longitude));
-        }
-        else {
-            JOptionPane.showMessageDialog(this, "Please make sure to first specify details for the Creature, Location, Visit and GPS co-ordinate fields.", "Could not calculate the time category.", JOptionPane.ERROR_MESSAGE);
-        }
-        if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null
-                && !cmbLatitude.getSelectedItem().equals(Latitudes.NONE) && !cmbLongitude.getSelectedItem().equals(Longitudes.NONE)) {
-            btnUpdateSightingActionPerformed(null);
-            double latitude = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsFloat());
-            double longitude = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsFloat());
+            // Moon
             spnMoonPhase.setValue(AstroUtils.getMoonPhase(sighting.getDate()));
             cmbMoonlight.setSelectedItem(AstroUtils.getMoonlight(sighting.getDate(), latitude, longitude));
         }
         else {
-            JOptionPane.showMessageDialog(this, "Please make sure to first specify details for the Creature, Location, Visit and GPS co-ordinate fields.", "Could not calculate the moon information.", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please make sure to first specify details for the Creature, Location, Visit and GPS co-ordinate fields.", "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnCalculateMoonPhaseActionPerformed
 
