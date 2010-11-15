@@ -2312,13 +2312,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void calculateSunAndMoon() {
+        tabbedPanel.setSelectedIndex(0);
+        while (tabbedPanel.getTabCount() > 4) {
+            tabbedPanel.remove(4);
+        }
         if (JOptionPane.showConfirmDialog(this.getComponent(), "Please backup your data before proceding. This will replace the Sun and Moon information for all your Sightings with the auto generated values.", "Calculate Sun and Moon Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
             List<Sighting> sightings = app.getDBI().list(new Sighting());
             for (Sighting sighting : sightings) {
                 sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
                 double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsFloat());
                 double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsFloat());
-                if (lat != 0 && lon != 0) {
+                if (lat != 0 && lon != 0 && !(sighting.getDate().getHours() == 0 && sighting.getDate().getMinutes() == 0)) {
                     sighting.setMoonlight(AstroUtils.getMoonlight(sighting.getDate(), lat, lon));
                     sighting.setTimeOfDay(AstroUtils.getSunCategory(sighting.getDate(), lat, lon));
                 }

@@ -18,9 +18,11 @@ public enum Moonlight {
     }
 
     public static Moonlight getEnumFromText(String inText) {
-        if (inText.equalsIgnoreCase(MOON_SHINING.text)) return MOON_SHINING;
-        if (inText.equalsIgnoreCase(NO_MOON.text)) return NO_MOON;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText != null) {
+            if (inText.equalsIgnoreCase(MOON_SHINING.text)) return MOON_SHINING;
+            if (inText.equalsIgnoreCase(NO_MOON.text)) return NO_MOON;
+            if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        }
         return NONE;
     }
 }

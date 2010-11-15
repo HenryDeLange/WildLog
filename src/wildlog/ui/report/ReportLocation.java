@@ -102,8 +102,10 @@ public class ReportLocation extends javax.swing.JFrame {
         lblAfternoon = new javax.swing.JLabel();
         lblDusk = new javax.swing.JLabel();
         lblOther = new javax.swing.JLabel();
-        lblMoonshine = new javax.swing.JLabel();
-        lblNoMoon = new javax.swing.JLabel();
+        lblMoonlightDay = new javax.swing.JLabel();
+        lblNoMoonDay = new javax.swing.JLabel();
+        lblMoonlightNight = new javax.swing.JLabel();
+        lblNoMoonNight = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
@@ -283,17 +285,29 @@ public class ReportLocation extends javax.swing.JFrame {
         lblOther.setName("lblOther"); // NOI18N
         getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 725, 60, -1));
 
-        lblMoonshine.setFont(resourceMap.getFont("lblMoonshine.font")); // NOI18N
-        lblMoonshine.setForeground(resourceMap.getColor("lblMoonshine.foreground")); // NOI18N
-        lblMoonshine.setText(resourceMap.getString("lblMoonshine.text")); // NOI18N
-        lblMoonshine.setName("lblMoonshine"); // NOI18N
-        getContentPane().add(lblMoonshine, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 725, 100, -1));
+        lblMoonlightDay.setFont(resourceMap.getFont("lblMoonlightDay.font")); // NOI18N
+        lblMoonlightDay.setForeground(resourceMap.getColor("lblMoonlightDay.foreground")); // NOI18N
+        lblMoonlightDay.setText(resourceMap.getString("lblMoonlightDay.text")); // NOI18N
+        lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
+        getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 725, 140, -1));
 
-        lblNoMoon.setFont(resourceMap.getFont("lblNoMoon.font")); // NOI18N
-        lblNoMoon.setForeground(resourceMap.getColor("lblNoMoon.foreground")); // NOI18N
-        lblNoMoon.setText(resourceMap.getString("lblNoMoon.text")); // NOI18N
-        lblNoMoon.setName("lblNoMoon"); // NOI18N
-        getContentPane().add(lblNoMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 725, 90, -1));
+        lblNoMoonDay.setFont(resourceMap.getFont("lblNoMoonDay.font")); // NOI18N
+        lblNoMoonDay.setForeground(resourceMap.getColor("lblNoMoonDay.foreground")); // NOI18N
+        lblNoMoonDay.setText(resourceMap.getString("lblNoMoonDay.text")); // NOI18N
+        lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
+        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 725, 100, -1));
+
+        lblMoonlightNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
+        lblMoonlightNight.setForeground(resourceMap.getColor("lblMoonlightNight.foreground")); // NOI18N
+        lblMoonlightNight.setText(resourceMap.getString("lblMoonlightNight.text")); // NOI18N
+        lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
+        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 725, 130, -1));
+
+        lblNoMoonNight.setFont(resourceMap.getFont("lblNoMoonNight.font")); // NOI18N
+        lblNoMoonNight.setForeground(resourceMap.getColor("lblNoMoonNight.foreground")); // NOI18N
+        lblNoMoonNight.setText(resourceMap.getString("lblNoMoonNight.text")); // NOI18N
+        lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
+        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 725, 120, -1));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -604,8 +618,10 @@ public class ReportLocation extends javax.swing.JFrame {
         lblMidDay.setVisible(true);
         lblAfternoon.setVisible(true);
         lblDusk.setVisible(true);
-        lblMoonshine.setVisible(false);
-        lblNoMoon.setVisible(false);
+        lblMoonlightDay.setVisible(false);
+        lblNoMoonDay.setVisible(false);
+        lblMoonlightNight.setVisible(false);
+        lblNoMoonNight.setVisible(false);
         lblRemoteCamera.setVisible(false);
         lblVacation.setVisible(false);
         lblDayVisit.setVisible(false);
@@ -672,6 +688,51 @@ public class ReportLocation extends javax.swing.JFrame {
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
                         // Night
                         numNightSightings++;
+                        // Moonlight
+                        if (sighting.getMoonlight() != null) {
+                            if (sighting.getMoonlight().equals(Moonlight.MOON_SHINING)) {
+                                if (sighting.getMoonPhase() >= 0) {
+                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
+                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblMoonlightNight.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
+                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblMoonlightNight.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
+                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblMoonlightNight.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
+                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblMoonlightNight.getForeground()));
+                                    else
+                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                                }
+                                else
+                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                            }
+                            else
+                            if (sighting.getMoonlight().equals(Moonlight.NO_MOON)) {
+                                if (sighting.getMoonPhase() >= 0) {
+                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
+                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblNoMoonNight.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
+                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblNoMoonNight.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
+                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblNoMoonNight.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
+                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblNoMoonNight.getForeground()));
+                                    else
+                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                                }
+                                else
+                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                            }
+                            else {
+                                chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                            }
+                        }
                     }
                     else
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
@@ -680,55 +741,55 @@ public class ReportLocation extends javax.swing.JFrame {
                     else {
                         // Day
                         numDaySightings++;
+                        // Moonlight
+                        if (sighting.getMoonlight() != null) {
+                            if (sighting.getMoonlight().equals(Moonlight.MOON_SHINING)) {
+                                if (sighting.getMoonPhase() >= 0) {
+                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
+                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblMoonlightDay.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
+                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblMoonlightDay.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
+                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblMoonlightDay.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
+                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblMoonlightDay.getForeground()));
+                                    else
+                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                                }
+                                else
+                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                            }
+                            else
+                            if (sighting.getMoonlight().equals(Moonlight.NO_MOON)) {
+                                if (sighting.getMoonPhase() >= 0) {
+                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
+                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblNoMoonDay.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
+                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblNoMoonDay.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
+                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblNoMoonDay.getForeground()));
+                                    else
+                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
+                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblNoMoonDay.getForeground()));
+                                    else
+                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                                }
+                                else
+                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                            }
+                            else {
+                                chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
+                            }
+                        }
                     }
                 }
                 else
                     chartTime.addBar(new BarChartEntity(sighting.getLocationName(), Moonlight.NONE.name(), 1, lblOther.getForeground()));
-                // Moonlight
-                if (sighting.getMoonlight() != null) {
-                    if (sighting.getMoonlight().equals(Moonlight.MOON_SHINING)) {
-                        if (sighting.getMoonPhase() >= 0) {
-                            if (sighting.getMoonPhase() <= 12.5 || sighting.getMoonPhase() > 87.5)
-                                chartTime.addBar(new BarChartEntity("New (87.5-12.5%)", "Nuut", 1, lblMoonshine.getForeground()));
-                            else
-                            if (sighting.getMoonPhase() > 12.5 && sighting.getMoonPhase() <= 37.5)
-                                chartTime.addBar(new BarChartEntity("Quarter (12.5-37.5%)", "Kwart", 1, lblMoonshine.getForeground()));
-                            else
-                            if (sighting.getMoonPhase() > 37.5 && sighting.getMoonPhase() <= 62.5)
-                                chartTime.addBar(new BarChartEntity("Half (37.5-62.5%)", "Half", 1, lblMoonshine.getForeground()));
-                            else
-                            if (sighting.getMoonPhase() > 62.5 && sighting.getMoonPhase() <= 87.5)
-                                chartTime.addBar(new BarChartEntity("Quarter (62.5-87.5%)", "Kwart", 1, lblMoonshine.getForeground()));
-                            else
-                                chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                        }
-                        else
-                            chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                    }
-                    else
-                    if (sighting.getMoonlight().equals(Moonlight.NO_MOON)) {
-                        if (sighting.getMoonPhase() >= 0) {
-                            if (sighting.getMoonPhase() <= 12.5 || sighting.getMoonPhase() > 87.5)
-                                chartTime.addBar(new BarChartEntity("New (87.5-12.5%)", "Nuut", 1, lblNoMoon.getForeground()));
-                            else
-                            if (sighting.getMoonPhase() > 12.5 && sighting.getMoonPhase() <= 37.5)
-                                chartTime.addBar(new BarChartEntity("Quarter (12.5-37.5%)", "Kwart", 1, lblNoMoon.getForeground()));
-                            else
-                            if (sighting.getMoonPhase() > 37.5 && sighting.getMoonPhase() <= 62.5)
-                                chartTime.addBar(new BarChartEntity("Half (37.5-62.5%)", "Half", 1, lblNoMoon.getForeground()));
-                            else
-                            if (sighting.getMoonPhase() > 62.5 && sighting.getMoonPhase() <= 87.5)
-                                chartTime.addBar(new BarChartEntity("Quarter (62.5-87.5%)", "Kwart", 1, lblNoMoon.getForeground()));
-                            else
-                                chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                        }
-                        else
-                            chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                    }
-                    else {
-                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                    }
-                }
             }
         }
 
@@ -762,8 +823,10 @@ public class ReportLocation extends javax.swing.JFrame {
         lblMidDay.setVisible(false);
         lblAfternoon.setVisible(false);
         lblDusk.setVisible(false);
-        lblMoonshine.setVisible(true);
-        lblNoMoon.setVisible(true);
+        lblMoonlightDay.setVisible(true);
+        lblNoMoonDay.setVisible(true);
+        lblMoonlightNight.setVisible(true);
+        lblNoMoonNight.setVisible(true);
         lblRemoteCamera.setVisible(false);
         lblVacation.setVisible(false);
         lblDayVisit.setVisible(false);
@@ -891,8 +954,10 @@ public class ReportLocation extends javax.swing.JFrame {
         lblMidDay.setVisible(false);
         lblAfternoon.setVisible(false);
         lblDusk.setVisible(false);
-        lblMoonshine.setVisible(false);
-        lblNoMoon.setVisible(false);
+        lblMoonlightDay.setVisible(false);
+        lblNoMoonDay.setVisible(false);
+        lblMoonlightNight.setVisible(false);
+        lblNoMoonNight.setVisible(false);
         lblRemoteCamera.setVisible(true);
         lblVacation.setVisible(true);
         lblDayVisit.setVisible(true);
@@ -1068,8 +1133,10 @@ public class ReportLocation extends javax.swing.JFrame {
         lblMidDay.setVisible(false);
         lblAfternoon.setVisible(false);
         lblDusk.setVisible(false);
-        lblMoonshine.setVisible(false);
-        lblNoMoon.setVisible(false);
+        lblMoonlightDay.setVisible(false);
+        lblNoMoonDay.setVisible(false);
+        lblMoonlightNight.setVisible(false);
+        lblNoMoonNight.setVisible(false);
         lblRemoteCamera.setVisible(false);
         lblVacation.setVisible(false);
         lblDayVisit.setVisible(false);
@@ -1097,12 +1164,14 @@ public class ReportLocation extends javax.swing.JFrame {
     private javax.swing.JLabel lblLastVisit;
     private javax.swing.JLabel lblLegend;
     private javax.swing.JLabel lblMidDay;
-    private javax.swing.JLabel lblMoonshine;
+    private javax.swing.JLabel lblMoonlightDay;
+    private javax.swing.JLabel lblMoonlightNight;
     private javax.swing.JLabel lblMorning;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNight;
     private javax.swing.JLabel lblNightSightings;
-    private javax.swing.JLabel lblNoMoon;
+    private javax.swing.JLabel lblNoMoonDay;
+    private javax.swing.JLabel lblNoMoonNight;
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblNumberOfVisits;
