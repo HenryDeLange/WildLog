@@ -894,20 +894,20 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inOldName != null) {
                 if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
+                    results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150) + "'");
                     if (results.next()) {
                         return false;
                     }
                     else {
-                        state.execute("UPDATE SIGHTINGS SET ELEMENTNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "' WHERE ELEMENTNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE FILES SET ID = '" + "ELEMENT-" + inElement.getPrimaryName().replaceAll("'", "''") + "' WHERE ID = '" + "ELEMENT-" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE SIGHTINGS SET ELEMENTNAME = '" + limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150) + "' WHERE ELEMENTNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE FILES SET ID = '" + "ELEMENT-" + limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150) + "' WHERE ID = '" + "ELEMENT-" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
                 StringBuilder sql = new StringBuilder("UPDATE ELEMENTS SET ")
-                    .append("PRIMARYNAME = '").append(inElement.getPrimaryName().replaceAll("'", "''")).append("', ")
-                    .append("OTHERNAME = '").append(inElement.getOtherName().replaceAll("'", "''")).append("', ")
-                    .append("SCIENTIFICNAME = '").append(inElement.getScientificName().replaceAll("'", "''")).append("', ")
+                    .append("PRIMARYNAME = '").append(limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150)).append("', ")
+                    .append("OTHERNAME = '").append(limitLength(inElement.getOtherName().replaceAll("'", "''"), 150)).append("', ")
+                    .append("SCIENTIFICNAME = '").append(limitLength(inElement.getScientificName().replaceAll("'", "''"), 150)).append("', ")
                     .append("DESCRIPTION = '").append(inElement.getDescription().replaceAll("'", "''")).append("', ")
                     .append("DISTRIBUTION = '").append(inElement.getDistribution().replaceAll("'", "''")).append("', ")
                     .append("NUTRITION = '").append(inElement.getNutrition().replaceAll("'", "''")).append("', ")
@@ -923,8 +923,8 @@ public abstract class DBI_JDBC implements DBI {
                     .append("WEIGHTFEMALEMIN = ").append(inElement.getWeightFemaleMin()).append(", ")
                     .append("WEIGHTFEMALEMAX = ").append(inElement.getWeightFemaleMax()).append(", ")
                     .append("WEIGHTUNIT = '").append(inElement.getWeightUnit()).append("', ")
-                    .append("BREEDINGDURATION = '").append(inElement.getBreedingDuration().replaceAll("'", "''")).append("', ")
-                    .append("BREEDINGNUMBER = '").append(inElement.getBreedingNumber().replaceAll("'", "''")).append("', ")
+                    .append("BREEDINGDURATION = '").append(limitLength(inElement.getBreedingDuration().replaceAll("'", "''"), 50)).append("', ")
+                    .append("BREEDINGNUMBER = '").append(limitLength(inElement.getBreedingNumber().replaceAll("'", "''"), 50)).append("', ")
                     .append("WISHLISTRATING = '").append(inElement.getWishListRating()).append("', ")
                     .append("DIAGNOSTICDESCRIPTION = '").append(inElement.getDiagnosticDescription().replaceAll("'", "''")).append("', ")
                     .append("ACTIVETIME = '").append(inElement.getActiveTime()).append("', ")
@@ -933,8 +933,8 @@ public abstract class DBI_JDBC implements DBI {
                     .append("ADDFREQUENCY = '").append(inElement.getAddFrequency()).append("', ")
                     .append("ELEMENTTYPE = '").append(inElement.getType()).append("', ")
                     .append("FEEDINGCLASS = '").append(inElement.getFeedingClass()).append("', ")
-                    .append("LIFESPAN = '").append(inElement.getLifespan().replaceAll("'", "''")).append("', ")
-                    .append("REFERENCEID = '").append(inElement.getReferenceID().replaceAll("'", "''")).append("'")
+                    .append("LIFESPAN = '").append(limitLength(inElement.getLifespan().replaceAll("'", "''"), 50)).append("', ")
+                    .append("REFERENCEID = '").append(limitLength(inElement.getReferenceID().replaceAll("'", "''"), 50)).append("'")
                     .append(" WHERE PRIMARYNAME = '").append(inOldName.replaceAll("'", "''")).append("'");
                 state.executeUpdate(sql.toString());
             }
@@ -944,9 +944,9 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 // Insert
                 StringBuilder sql = new StringBuilder("INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (")
-                    .append("'").append(inElement.getPrimaryName().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getOtherName().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getScientificName().replaceAll("'", "''")).append("', ")
+                    .append("'").append(limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150)).append("', ")
+                    .append("'").append(limitLength(inElement.getOtherName().replaceAll("'", "''"), 150)).append("', ")
+                    .append("'").append(limitLength(inElement.getScientificName().replaceAll("'", "''"), 150)).append("', ")
                     .append("'").append(inElement.getDescription().replaceAll("'", "''")).append("', ")
                     .append("'").append(inElement.getDistribution().replaceAll("'", "''")).append("', ")
                     .append("'").append(inElement.getNutrition().replaceAll("'", "''")).append("', ")
@@ -962,8 +962,8 @@ public abstract class DBI_JDBC implements DBI {
                     .append("").append(inElement.getWeightFemaleMin()).append(", ")
                     .append("").append(inElement.getWeightFemaleMax()).append(", ")
                     .append("'").append(inElement.getWeightUnit()).append("', ")
-                    .append("'").append(inElement.getBreedingDuration().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getBreedingNumber().replaceAll("'", "''")).append("', ")
+                    .append("'").append(limitLength(inElement.getBreedingDuration().replaceAll("'", "''"), 50)).append("', ")
+                    .append("'").append(limitLength(inElement.getBreedingNumber().replaceAll("'", "''"), 50)).append("', ")
                     .append("'").append(inElement.getWishListRating()).append("', ")
                     .append("'").append(inElement.getDiagnosticDescription().replaceAll("'", "''")).append("', ")
                     .append("'").append(inElement.getActiveTime()).append("', ")
@@ -972,8 +972,8 @@ public abstract class DBI_JDBC implements DBI {
                     .append("'").append(inElement.getAddFrequency()).append("', ")
                     .append("'").append(inElement.getType()).append("', ")
                     .append("'").append(inElement.getFeedingClass()).append("', ")
-                    .append("'").append(inElement.getLifespan().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getReferenceID().replaceAll("'", "''")).append("'")
+                    .append("'").append(limitLength(inElement.getLifespan().replaceAll("'", "''"), 50)).append("', ")
+                    .append("'").append(limitLength(inElement.getReferenceID().replaceAll("'", "''"), 50)).append("'")
                     .append(")");
                 state.execute(sql.toString());
             }
@@ -1015,19 +1015,19 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inOldName != null) {
                 if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
+                    results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "'");
                     if (results.next()) {
                         return false;
                     }
                     else {
-                        state.execute("UPDATE SIGHTINGS SET LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE VISITS SET LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE FILES SET ID = '" + "LOCATION-" + inLocation.getName().replaceAll("'", "''") + "' WHERE ID = '" + "LOCATION-" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE SIGHTINGS SET LOCATIONNAME = '" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE VISITS SET LOCATIONNAME = '" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE FILES SET ID = '" + "LOCATION-" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "' WHERE ID = '" + "LOCATION-" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
                 StringBuilder sql = new StringBuilder("UPDATE LOCATIONS SET ")
-                    .append("NAME = '").append(inLocation.getName().replaceAll("'", "''")).append("', ")
+                    .append("NAME = '").append(limitLength(inLocation.getName().replaceAll("'", "''"), 150)).append("', ")
                     .append("DESCRIPTION = '").append(inLocation.getDescription().replaceAll("'", "''")).append("', ")
                     .append("PROVINCE = '").append(inLocation.getProvince()).append("', ")
                     .append("RATING = '").append(inLocation.getRating()).append("', ")
@@ -1035,9 +1035,9 @@ public abstract class DBI_JDBC implements DBI {
                     .append("HABITATTYPE = '").append(inLocation.getHabitatType()).append("', ")
                     .append("ACCOMMODATIONTYPE = '").append(inLocation.getAccommodationType()).append("', ")
                     .append("CATERING = '").append(inLocation.getCatering()).append("', ")
-                    .append("CONTACTNUMBERS = '").append(inLocation.getContactNumbers().replaceAll("'", "''")).append("', ")
-                    .append("WEBSITE = '").append(inLocation.getWebsite().replaceAll("'", "''")).append("', ")
-                    .append("EMAIL = '").append(inLocation.getEmail().replaceAll("'", "''")).append("', ")
+                    .append("CONTACTNUMBERS = '").append(limitLength(inLocation.getContactNumbers().replaceAll("'", "''"), 50)).append("', ")
+                    .append("WEBSITE = '").append(limitLength(inLocation.getWebsite().replaceAll("'", "''"), 100)).append("', ")
+                    .append("EMAIL = '").append(limitLength(inLocation.getEmail().replaceAll("'", "''"), 100)).append("', ")
                     .append("DIRECTIONS = '").append(inLocation.getDirections().replaceAll("'", "''")).append("', ")
                     .append("LATITUDEINDICATOR = '").append(inLocation.getLatitude()).append("', ")
                     .append("LATDEGREES = ").append(inLocation.getLatDegrees()).append(", ")
@@ -1056,7 +1056,7 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 // Insert
                 StringBuilder sql = new StringBuilder("INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (")
-                    .append("'").append(inLocation.getName().replaceAll("'", "''")).append("', ")
+                    .append("'").append(limitLength(inLocation.getName().replaceAll("'", "''"), 150)).append("', ")
                     .append("'").append(inLocation.getDescription().replaceAll("'", "''")).append("', ")
                     .append("'").append(inLocation.getProvince()).append("', ")
                     .append("'").append(inLocation.getRating()).append("', ")
@@ -1064,9 +1064,9 @@ public abstract class DBI_JDBC implements DBI {
                     .append("'").append(inLocation.getHabitatType()).append("', ")
                     .append("'").append(inLocation.getAccommodationType()).append("', ")
                     .append("'").append(inLocation.getCatering()).append("', ")
-                    .append("'").append(inLocation.getContactNumbers().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inLocation.getWebsite().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inLocation.getEmail().replaceAll("'", "''")).append("', ")
+                    .append("'").append(limitLength(inLocation.getContactNumbers().replaceAll("'", "''"), 50)).append("', ")
+                    .append("'").append(limitLength(inLocation.getWebsite().replaceAll("'", "''"), 100)).append("', ")
+                    .append("'").append(limitLength(inLocation.getEmail().replaceAll("'", "''"), 100)).append("', ")
                     .append("'").append(inLocation.getDirections().replaceAll("'", "''")).append("', ")
                     .append("'").append(inLocation.getLatitude()).append("', ")
                     .append("").append(inLocation.getLatDegrees()).append(", ")
@@ -1117,18 +1117,18 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             if (inOldName != null) {
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
+                    results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + limitLength(inVisit.getName().replaceAll("'", "''"), 150) + "'");
                     if (results.next()) {
                         return false;
                     }
                     else {
-                        state.execute("UPDATE SIGHTINGS SET VISITNAME = '" + inVisit.getName().replaceAll("'", "''") + "' WHERE VISITNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE FILES SET ID = '" + "VISIT-" + inVisit.getName().replaceAll("'", "''") + "' WHERE ID = '" + "VISIT-" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE SIGHTINGS SET VISITNAME = '" + limitLength(inVisit.getName().replaceAll("'", "''"), 150) + "' WHERE VISITNAME = '" + inOldName.replaceAll("'", "''") + "'");
+                        state.execute("UPDATE FILES SET ID = '" + "VISIT-" + limitLength(inVisit.getName().replaceAll("'", "''"), 150) + "' WHERE ID = '" + "VISIT-" + inOldName.replaceAll("'", "''") + "'");
                     }
                 }
                 // Update
                 StringBuilder sql = new StringBuilder("UPDATE VISITS SET ")
-                    .append("NAME = '").append(inVisit.getName().replaceAll("'", "''")).append("', ");
+                    .append("NAME = '").append(limitLength(inVisit.getName().replaceAll("'", "''"), 150)).append("', ");
                 if (inVisit.getStartDate() != null)
                     sql.append("STARTDATE = '").append(new java.sql.Date(inVisit.getStartDate().getTime())).append("', ");
                 else
@@ -1150,7 +1150,7 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 // Insert
                 StringBuilder sql = new StringBuilder("INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (")
-                    .append("'").append(inVisit.getName().replaceAll("'", "''")).append("', ");
+                    .append("'").append(limitLength(inVisit.getName().replaceAll("'", "''"), 150)).append("', ");
                 if (inVisit.getStartDate() != null)
                     sql.append("'").append(new java.sql.Date(inVisit.getStartDate().getTime())).append("', ");
                 else
@@ -1775,5 +1775,12 @@ public abstract class DBI_JDBC implements DBI {
         }
     }
 
+    @Override
+    public String limitLength(String inString, int inLength) {
+        if (inString.trim().length() > inLength)
+            return inString.trim().substring(0, inLength);
+        else
+            return inString.trim();
+    }
 
 }

@@ -518,29 +518,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         txtLifespan.setText(element.getLifespan());
         txtLifespan.setName("txtLifespan"); // NOI18N
-        txtLifespan.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtLifespanFocusGained(evt);
-            }
-        });
         elementIncludes.add(txtLifespan, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 148, 150, -1));
 
         txtbreedingDuration.setText(element.getBreedingDuration());
         txtbreedingDuration.setName("txtbreedingDuration"); // NOI18N
-        txtbreedingDuration.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtbreedingDurationFocusGained(evt);
-            }
-        });
         elementIncludes.add(txtbreedingDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 172, 150, -1));
 
         txtBreedingNumber.setText(element.getBreedingNumber());
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
-        txtBreedingNumber.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtBreedingNumberFocusGained(evt);
-            }
-        });
         elementIncludes.add(txtBreedingNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 197, 150, -1));
 
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
@@ -879,7 +864,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (Utils.checkCharacters(txtPrimaryName.getText().trim())) {
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = element.getPrimaryName();
-                element.setPrimaryName(txtPrimaryName.getText().trim()); // Used for indexing (ID)
+                element.setPrimaryName(app.getDBI().limitLength(txtPrimaryName.getText(), 150)); // Used for indexing (ID)
                 element.setOtherName(txtOtherName.getText());
                 element.setScientificName(txtScienceName.getText());
                 element.setReferenceID(txtReferenceID.getText());
@@ -955,6 +940,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (app.getDBI().createOrUpdate(element, oldName) == true) {
                     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
                     txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
+                    txtPrimaryName.setText(element.getPrimaryName());
                 }
                 else {
                     txtPrimaryName.setBackground(Color.RED);
@@ -1145,21 +1131,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed
-
-    private void txtLifespanFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLifespanFocusGained
-        txtLifespan.setSelectionStart(0);
-        txtLifespan.setSelectionEnd(txtLifespan.getText().length());
-}//GEN-LAST:event_txtLifespanFocusGained
-
-    private void txtbreedingDurationFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtbreedingDurationFocusGained
-        txtbreedingDuration.setSelectionStart(0);
-        txtbreedingDuration.setSelectionEnd(txtbreedingDuration.getText().length());
-    }//GEN-LAST:event_txtbreedingDurationFocusGained
-
-    private void txtBreedingNumberFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBreedingNumberFocusGained
-        txtBreedingNumber.setSelectionStart(0);
-        txtBreedingNumber.setSelectionEnd(txtBreedingNumber.getText().length());
-    }//GEN-LAST:event_txtBreedingNumberFocusGained
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         Utils.openFile("ELEMENT-" + element.getPrimaryName(), imageIndex, app);

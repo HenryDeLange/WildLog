@@ -721,7 +721,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = visit.getName();
-                visit.setName(txtName.getText().trim());
+                visit.setName(app.getDBI().limitLength(txtName.getText(), 150));
                 visit.setStartDate(dtpStartDate.getDate());
                 visit.setEndDate(dtpEndDate.getDate());
                 visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());
@@ -729,42 +729,17 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 visit.setDescription(txtDescription.getText());
                 visit.setLocationName(locationForVisit.getName());
 
-//                boolean canSave = false;
-//                if (locationForVisit.getVisits() == null)
-//                    locationForVisit.setVisits(new ArrayList<Visit>());
-//                Visit tempVisit = app.getDBI().find(new Visit(visit.getName()));
-//                if (tempVisit == null) {
-//                    int index = locationForVisit.getVisits().indexOf(visit);
-//                    if (index != -1) locationForVisit.getVisits().set(index, visit);
-//                    else locationForVisit.getVisits().add(visit);
-//                    canSave = true;
-//                }
-//                else {
-//                    if (tempVisit.equals(visit) && app.getDBI().list(new Visit(visit.getName())).size() == 1) {
-//                        int index = locationForVisit.getVisits().indexOf(visit);
-//                        if (index != -1) locationForVisit.getVisits().set(index, visit);
-//                        else locationForVisit.getVisits().add(visit);
-//                        canSave = true;
-//                    }
-//                    else {
-//                        txtName.setBackground(Color.RED);
-//                        visit.setName(oldName);
-//                        txtName.setText(txtName.getText() + "_not_unique");
-//                    }
-//                }
-//
-//                // Save the visit
-//                if (canSave) {
-                    if (app.getDBI().createOrUpdate(visit, oldName) == true) {
-                        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
-                        txtName.setBackground(resourceMap.getColor("txtName.background"));
-                    }
-                    else {
-                        txtName.setBackground(Color.RED);
-                        visit.setName(oldName);
-                        txtName.setText(txtName.getText() + "_not_unique");
-                    }
-//                }
+                // Save the visit
+                if (app.getDBI().createOrUpdate(visit, oldName) == true) {
+                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
+                    txtName.setBackground(resourceMap.getColor("txtName.background"));
+                    txtName.setText(visit.getName());
+                }
+                else {
+                    txtName.setBackground(Color.RED);
+                    visit.setName(oldName);
+                    txtName.setText(txtName.getText() + "_not_unique");
+                }
 
                 lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
 
@@ -775,7 +750,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         }
         else {
-            txtName.setText(txtName.getText() + "_unsupported_chracter");
+            txtName.setText(txtName.getText() + "_unsupported_character");
             txtName.setBackground(Color.RED);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed

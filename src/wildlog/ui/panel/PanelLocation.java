@@ -839,7 +839,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = locationWL.getName();
-                locationWL.setName(txtName.getText().trim());
+                locationWL.setName(app.getDBI().limitLength(txtName.getText(), 150));
                 locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
                 locationWL.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
                 rdbDMS.setSelected(true);
@@ -880,6 +880,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {
                     org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
                     txtName.setBackground(resourceMap.getColor("txtName.background"));
+                    txtName.setText(locationWL.getName());
                 }
                 else {
                     txtName.setBackground(Color.RED);
@@ -896,7 +897,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         }
         else {
-            txtName.setText(txtName.getText() + "_unsupported_chracter");
+            txtName.setText(txtName.getText() + "_unsupported_character");
             txtName.setBackground(Color.RED);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
