@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
@@ -26,10 +27,10 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
-import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.report.chart.BarChart;
 import wildlog.ui.report.chart.BarChartEntity;
+import wildlog.ui.report.helpers.MoonReportHelper;
 
 /**
  *
@@ -688,51 +689,6 @@ public class ReportLocation extends javax.swing.JFrame {
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
                         // Night
                         numNightSightings++;
-                        // Moonlight
-                        if (sighting.getMoonlight() != null) {
-                            if (sighting.getMoonlight().equals(Moonlight.MOON_SHINING)) {
-                                if (sighting.getMoonPhase() >= 0) {
-                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
-                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblMoonlightNight.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
-                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblMoonlightNight.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
-                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblMoonlightNight.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
-                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblMoonlightNight.getForeground()));
-                                    else
-                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                                }
-                                else
-                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                            }
-                            else
-                            if (sighting.getMoonlight().equals(Moonlight.NO_MOON)) {
-                                if (sighting.getMoonPhase() >= 0) {
-                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
-                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblNoMoonNight.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
-                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblNoMoonNight.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
-                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblNoMoonNight.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
-                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblNoMoonNight.getForeground()));
-                                    else
-                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                                }
-                                else
-                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                            }
-                            else {
-                                chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                            }
-                        }
                     }
                     else
                     if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
@@ -741,55 +697,10 @@ public class ReportLocation extends javax.swing.JFrame {
                     else {
                         // Day
                         numDaySightings++;
-                        // Moonlight
-                        if (sighting.getMoonlight() != null) {
-                            if (sighting.getMoonlight().equals(Moonlight.MOON_SHINING)) {
-                                if (sighting.getMoonPhase() >= 0) {
-                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
-                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblMoonlightDay.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
-                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblMoonlightDay.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
-                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblMoonlightDay.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
-                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblMoonlightDay.getForeground()));
-                                    else
-                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                                }
-                                else
-                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                            }
-                            else
-                            if (sighting.getMoonlight().equals(Moonlight.NO_MOON)) {
-                                if (sighting.getMoonPhase() >= 0) {
-                                    if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() <= 25)
-                                        chartTime.addBar(new BarChartEntity("0-25%", "Nuut", 1, lblNoMoonDay.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 25 && sighting.getMoonPhase() <= 50)
-                                        chartTime.addBar(new BarChartEntity("25-50%", "Kwart", 1, lblNoMoonDay.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 75)
-                                        chartTime.addBar(new BarChartEntity("50-75%", "Half", 1, lblNoMoonDay.getForeground()));
-                                    else
-                                    if (sighting.getMoonPhase() > 75 && sighting.getMoonPhase() <= 100)
-                                        chartTime.addBar(new BarChartEntity("75-100%", "Driekwart", 1, lblNoMoonDay.getForeground()));
-                                    else
-                                        chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                                }
-                                else
-                                    chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                            }
-                            else {
-                                chartTime.addBar(new BarChartEntity("Unknown", "Weetnie", 1, lblOther.getForeground()));
-                            }
-                        }
                     }
                 }
-                else
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), Moonlight.NONE.name(), 1, lblOther.getForeground()));
+                // Moon
+                MoonReportHelper.addMoonInfoToChart(chartTime, sighting, new JLabel[]{lblMoonlightNight, lblNoMoonNight, lblMoonlightDay, lblNoMoonDay, lblOther});
             }
         }
 

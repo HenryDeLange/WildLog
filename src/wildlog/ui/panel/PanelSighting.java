@@ -1323,7 +1323,7 @@ public class PanelSighting extends javax.swing.JPanel {
                         Tag tag = (Tag)tags.next();
                         if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
                             try {
-                                SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd hh:mm:ss");
+                                SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
                                 try {
                                     Date tempDate = f.parse(tag.getDescription());
                                     dtpSightingDate.setDate(tempDate);

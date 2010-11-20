@@ -111,7 +111,7 @@ public class MapOnlinePointLayer {
                 if (comp instanceof WildLogScrollPanel) {
                     scrollPane = (WildLogScrollPanel)comp;
                     JTextPane textPane = (JTextPane)scrollPane.getViewport().getComponent(0);
-                    textPane.setText("Showing " + (clickedPointIndex+1) + " of " + clickedPoints.size() + "<br/>" + clickedPoints.get(clickedPointIndex).objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src='", "<img src='file:\\\\"));
+                    textPane.setText("Showing " + (clickedPointIndex+1) + " of " + clickedPoints.size() + "<br/>" + clickedPoints.get(clickedPointIndex).objectWithHTML.toHTML(false, true, inApp).replaceAll("<img src=\"", "<img src=\"file:\\\\"));
                     break;
                 }
             }

@@ -988,9 +988,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnNextImageSightingActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        if (System.getProperty("os.name").equals("Windows XP")) {
-            Utils.openFile("VISIT-" + visit.getName(), imageIndex, app);
-        }
+        Utils.openFile("VISIT-" + visit.getName(), imageIndex, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
