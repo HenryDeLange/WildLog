@@ -1184,7 +1184,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnKMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKMLActionPerformed
-        // First export to HTML
+        // First export to HTML to create images
         UtilsHTML.exportHTML(element, app);
         // Nou doen die KML deel
         String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";

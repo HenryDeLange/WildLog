@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -1200,7 +1199,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnKmlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKmlActionPerformed
-        // First export to HTML
+        // First export to HTML to create the images
         UtilsHTML.exportHTML(locationWL, app);
         // Nou doen die KML deel
         String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";

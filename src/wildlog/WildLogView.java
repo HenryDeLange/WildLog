@@ -49,11 +49,8 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
-import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.PanelElement;
@@ -1579,7 +1576,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempLocation.toHTML(false, false, app));
+                txtPhotoInformation.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
@@ -1587,7 +1584,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempElement.toHTML(false, false, app));
+                txtPhotoInformation.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
@@ -1595,7 +1592,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempVisit.toHTML(false, false, app));
+                txtPhotoInformation.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
@@ -1603,7 +1600,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                txtPhotoInformation.setText(tempSighting.toHTML(false, false, app));
+                txtPhotoInformation.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                 setupFile(fotos);
             }

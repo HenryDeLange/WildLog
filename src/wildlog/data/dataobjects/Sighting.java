@@ -84,11 +84,11 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("SIGHTING-" + sightingCounter));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML());
+            fotoString.append(fotos.get(t).toHTML(inExportType));
         }
         StringBuilder htmlSighting = new StringBuilder("<head><title>Sightings ID: " + sightingCounter + "</title></head>");
         htmlSighting.append("<body bgcolor='rgb(238,234,211)'>");
@@ -97,7 +97,7 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         htmlSighting.append("<b><u>Sighting ID: ").append(UtilsHTML.formatString(sightingCounter)).append("</u></b>");
         htmlSighting.append("<br/>");
         htmlSighting.append("<br/><b>Date:</b> ").append(UtilsHTML.formatDate(date, true));
-        htmlSighting.append("<br/><b>Element:</b> ").append(elementName);
+        htmlSighting.append("<br/><b>Creature:</b> ").append(elementName);
         htmlSighting.append("<br/><b>Location:</b> ").append(UtilsHTML.formatString(locationName));
         htmlSighting.append("<br/>");
         htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
@@ -127,7 +127,7 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(elementName);
-        entry.setDescription(this.toHTML(false, true, inApp));
+        entry.setDescription(this.toHTML(false, true, inApp, UtilsHTML.ImageExportTypes.ForKML));
         Element element = inApp.getDBI().find(new Element(elementName));
         if (element.getType() != null) {
             if (element.getType().equals(ElementType.ANIMAL)) {

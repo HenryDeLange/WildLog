@@ -52,10 +52,10 @@ public class WildLogFile {
         return filename + " - " + fileLocation;
     }
 
-    public String toHTML() {
+    public String toHTML(UtilsHTML.ImageExportTypes inExportType) {
         if (fotoType.equals(WildLogFileType.IMAGE))
             // Moet die getter hier gebruik want ek wil die File().exists() doen...
-            return UtilsHTML.generateHTMLImages(getFileLocation());
+            return UtilsHTML.generateHTMLImages(getFileLocation(), inExportType);
         else
         if (fotoType.equals(WildLogFileType.MOVIE))
             return "[Movie] ";

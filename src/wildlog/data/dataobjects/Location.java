@@ -75,11 +75,11 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("LOCATION-" + name));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML());
+            fotoString.append(fotos.get(t).toHTML(inExportType));
         }
 //        String subAreasString = "";
 //        if (subAreas != null)
@@ -92,7 +92,7 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
             tempVisit.setLocationName(name);
             List<Visit> visits = inApp.getDBI().list(tempVisit);
             for (int t = 0; t < visits.size(); t++) {
-                visitsString.append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp)).append("<br/>");
+                visitsString.append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType)).append("<br/>");
             }
         }
 
@@ -143,7 +143,7 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(name);
-        entry.setDescription(this.toHTML(false, true, inApp));
+        entry.setDescription(this.toHTML(false, true, inApp, UtilsHTML.ImageExportTypes.ForKML));
         entry.setStyle("locationStyle");
         entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
         entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));

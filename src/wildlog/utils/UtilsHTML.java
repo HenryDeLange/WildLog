@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -13,8 +14,13 @@ import wildlog.data.dataobjects.Visit;
 
 
 public final class UtilsHTML {
+    public static enum ImageExportTypes {
+        ForKML,
+        ForHTML,
+        ForMap;
+    }
 
-    public static String generateHTMLImages(String inFileLocation) {
+    public static String generateHTMLImages(String inFileLocation, ImageExportTypes inExportType) {
         //try {
             //URL imgURL = UtilsHTML.class.getResource(inFileLocation);
             //if (imgURL != null) {
@@ -43,8 +49,16 @@ public final class UtilsHTML {
                 }
                 // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
                 //return "<img src='file://" + inFileLocation.toLowerCase() + "'/>";
-                File temp = new File(inFileLocation);
-                return "<img src=\"" + temp.getAbsolutePath().toLowerCase() + "\"/>  ";
+                if (inExportType.equals(UtilsHTML.ImageExportTypes.ForHTML))
+                    return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + File.separatorChar + "wildlog" + File.separatorChar + "export" + File.separatorChar + "html"), "..") + "\"/>  ";
+                else
+                if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML))
+                    return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + File.separatorChar + "wildlog" + File.separatorChar + "export"), "..") + "\"/>  ";
+                else
+                if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap))
+                    return "<img src=\"file:\\" + toFile.getAbsolutePath().toLowerCase() + "\"/>  ";
+                else
+                    return "[image error]";
             //}
             //else {
             //    System.out.println("path is wrong " + inFileLocation);
@@ -64,7 +78,7 @@ public final class UtilsHTML {
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inElement.toHTML(true, true, inApp).getBytes());
+            fileOutput.write(inElement.toHTML(true, true, inApp, UtilsHTML.ImageExportTypes.ForHTML).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {
@@ -88,7 +102,7 @@ public final class UtilsHTML {
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inLocation.toHTML(true, true, inApp).getBytes());
+            fileOutput.write(inLocation.toHTML(true, true, inApp, UtilsHTML.ImageExportTypes.ForHTML).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {
@@ -112,7 +126,7 @@ public final class UtilsHTML {
         try {
             if (toFile.exists()) toFile.delete();
             fileOutput = new FileOutputStream(toFile);
-            fileOutput.write(inVisit.toHTML(true, true, inApp).getBytes());
+            fileOutput.write(inVisit.toHTML(true, true, inApp, UtilsHTML.ImageExportTypes.ForHTML).getBytes());
             fileOutput.flush();
         }
         catch (IOException ex) {

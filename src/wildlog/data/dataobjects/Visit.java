@@ -45,11 +45,11 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("VISIT-" + name));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML());
+            fotoString.append(fotos.get(t).toHTML(inExportType));
         }
         StringBuilder sightingString = new StringBuilder();
         if (inIsRecursive) {
@@ -57,7 +57,7 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
             tempSighting.setVisitName(name);
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
             for (int t = 0; t < sightings.size(); t++) {
-                sightingString.append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp)).append("<br/>");
+                sightingString.append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType)).append("<br/>");
             }
         }
 

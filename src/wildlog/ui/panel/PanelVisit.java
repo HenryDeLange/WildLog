@@ -1063,7 +1063,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // First export to HTML
+        // First export to HTML to create the images
         UtilsHTML.exportHTML(visit, app);
         // Nou doen die KML deel
         String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";

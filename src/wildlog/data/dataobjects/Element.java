@@ -87,11 +87,11 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp) {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("ELEMENT-" + primaryName));
         for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML());
+            fotoString.append(fotos.get(t).toHTML(inExportType));
         }
         StringBuilder htmlElement = new StringBuilder("<head><title>Creature: " + primaryName + "</title></head>");
         htmlElement.append("<body bgcolor='rgb(227,240,227)'>");
@@ -139,7 +139,7 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
             tempSighting.setElementName(primaryName);
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
             for (Sighting temp : sightings) {
-                htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp));
+                htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType));
             }
         }
         htmlElement.append("</td></tr>");
