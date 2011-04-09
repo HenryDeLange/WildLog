@@ -39,6 +39,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
+import wildlog.utils.FilePaths;
 
 /**
  *
@@ -56,7 +57,7 @@ public class DBI_h2 extends DBI_JDBC {
             Properties props = new Properties();
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
-            conn = DriverManager.getConnection("jdbc:h2:/wildlog/data/wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+            conn = DriverManager.getConnection("jdbc:h2:" + FilePaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
             super.init();
             
             // Create tables
@@ -127,7 +128,7 @@ public class DBI_h2 extends DBI_JDBC {
         try {
             state = conn.createStatement();
             // Backup
-            File dirs = new File(File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+            File dirs = new File(FilePaths.WILDLOG_BACKUPS.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
             dirs.mkdirs();
             // Create a database file backup
             state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");

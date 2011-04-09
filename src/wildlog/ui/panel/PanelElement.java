@@ -56,6 +56,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
+import wildlog.utils.FilePaths;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
 
@@ -864,7 +865,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (Utils.checkCharacters(txtPrimaryName.getText().trim())) {
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = element.getPrimaryName();
-                element.setPrimaryName(app.getDBI().limitLength(txtPrimaryName.getText(), 150)); // Used for indexing (ID)
+                element.setPrimaryName(app.getDBI().limitLength(txtPrimaryName.getText(), 100)); // Used for indexing (ID)
                 element.setOtherName(txtOtherName.getText());
                 element.setScientificName(txtScienceName.getText());
                 element.setReferenceID(txtReferenceID.getText());
@@ -1187,14 +1188,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         // First export to HTML to create images
         UtilsHTML.exportHTML(element, app);
         // Nou doen die KML deel
-        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
+        String path = FilePaths.WILDLOG_EXPORT_KML.getFullPath();
         File tempFile = new File(path);
         tempFile.mkdirs();
         // Make sure icons exist in the KML folder
         KmlUtil.copyKmlIcons(app, path);
         // KML Stuff
         KmlGenerator kmlgen = new KmlGenerator();
-        String finalPath = path + File.separatorChar + "WildLogMarkers - Creature (" + element.getPrimaryName() + ").kml";
+        String finalPath = path + "WildLogMarkers - Creature (" + element.getPrimaryName() + ").kml";
         kmlgen.setKmlPath(finalPath);
         // Get entries for Sightings and Locations
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();

@@ -3,17 +3,19 @@ package wildlog;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.jdesktop.swingx.mapviewer.TileFactory;
-import org.jdesktop.swingx.mapviewer.wms.WMSService;
-import org.jdesktop.swingx.mapviewer.wms.WMSTileFactory;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.WildLogOptions;
@@ -23,6 +25,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
+import wildlog.utils.FilePaths;
 
 /**
  * The main class of the application.
@@ -115,11 +118,19 @@ public class WildLogApp extends SingleFrameApplication {
 
     @Override
     protected void initialize(String[] arg0) {
-        System.out.println("STARTING UP WildLog...");
+//        System.out.println("STARTING UP WildLog...");
         super.initialize(arg0);
-        File dataFolder = new File(File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("wildloghome"));
+            FilePaths.setRoot(reader.readLine());
+        }
+        catch (IOException ex) {
+            Logger.getLogger(WildLogApp.class.getName()).log(Level.SEVERE, null, ex);
+            shutdown();
+        }
+        File dataFolder = new File(FilePaths.WILDLOG_DATA.getFullPath());
         dataFolder.mkdirs();
-        File imagesFolder = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar);
+        File imagesFolder = new File(FilePaths.WILDLOG_IMAGES.getFullPath());
         imagesFolder.mkdirs();
 
         //dbi = new DBI_derby();
@@ -164,8 +175,9 @@ public class WildLogApp extends SingleFrameApplication {
     @Override
     protected void shutdown() {
         super.shutdown();
-        dbi.close();
-        System.out.println("SHUTTING DOWN WildLog");
+        if (dbi != null)
+            dbi.close();
+//        System.out.println("SHUTTING DOWN WildLog");
     }
     
     
@@ -243,60 +255,61 @@ public class WildLogApp extends SingleFrameApplication {
             });
             btnLoadOpenStreetMap.setPreferredSize(new Dimension(150, 25));
             mapOnlineFrame.add(btnLoadOpenStreetMap, new AbsoluteConstraints(150, 500, -1, -1));
-            
-            JButton btnLoadNASA2 = new JButton("NASA: Mosaic");
-            btnLoadNASA2.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    WMSService wms = new WMSService();
-                    //wms.setLayer("BMNG");
-                    wms.setLayer("global_mosaic");
-                    //wms.setLayer("daily_planet");
-                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-                    TileFactory fact = new WMSTileFactory(wms);
-                    mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(defaultPosition);
-                    mapOnline.setZoom(13);
-                }
-            });
-            btnLoadNASA2.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadNASA2, new AbsoluteConstraints(300, 500, -1, -1));
 
-            JButton btnLoadNASA1 = new JButton("NASA: Blue Marble");
-            btnLoadNASA1.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    WMSService wms = new WMSService();
-                    wms.setLayer("BMNG");
-                    //wms.setLayer("global_mosaic");
-                    //wms.setLayer("daily_planet");
-                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-                    TileFactory fact = new WMSTileFactory(wms);
-                    mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(defaultPosition);
-                    mapOnline.setZoom(13);
-                }
-            });
-            btnLoadNASA1.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadNASA1, new AbsoluteConstraints(450, 500, -1, -1));
-
-            JButton btnLoadNASA3 = new JButton("NASA: Daily Planet");
-            btnLoadNASA3.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    WMSService wms = new WMSService();
-                    //wms.setLayer("BMNG");
-                    //wms.setLayer("global_mosaic");
-                    wms.setLayer("daily_planet");
-                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-                    TileFactory fact = new WMSTileFactory(wms);
-                    mapOnline.setTileFactory(fact);
-                    mapOnline.setAddressLocation(defaultPosition);
-                    mapOnline.setZoom(13);
-                }
-            });
-            btnLoadNASA3.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadNASA3, new AbsoluteConstraints(600, 500, -1, -1));
+            // Die NASA layers werk nie meer nie..
+//            JButton btnLoadNASA2 = new JButton("NASA: Mosaic");
+//            btnLoadNASA2.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    WMSService wms = new WMSService();
+//                    //wms.setLayer("BMNG");
+//                    wms.setLayer("global_mosaic");
+//                    //wms.setLayer("daily_planet");
+//                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
+//                    TileFactory fact = new WMSTileFactory(wms);
+//                    mapOnline.setTileFactory(fact);
+//                    mapOnline.setAddressLocation(defaultPosition);
+//                    mapOnline.setZoom(13);
+//                }
+//            });
+//            btnLoadNASA2.setPreferredSize(new Dimension(150, 25));
+//            mapOnlineFrame.add(btnLoadNASA2, new AbsoluteConstraints(300, 500, -1, -1));
+//
+//            JButton btnLoadNASA1 = new JButton("NASA: Blue Marble");
+//            btnLoadNASA1.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    WMSService wms = new WMSService();
+//                    wms.setLayer("BMNG");
+//                    //wms.setLayer("global_mosaic");
+//                    //wms.setLayer("daily_planet");
+//                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
+//                    TileFactory fact = new WMSTileFactory(wms);
+//                    mapOnline.setTileFactory(fact);
+//                    mapOnline.setAddressLocation(defaultPosition);
+//                    mapOnline.setZoom(13);
+//                }
+//            });
+//            btnLoadNASA1.setPreferredSize(new Dimension(150, 25));
+//            mapOnlineFrame.add(btnLoadNASA1, new AbsoluteConstraints(450, 500, -1, -1));
+//
+//            JButton btnLoadNASA3 = new JButton("NASA: Daily Planet");
+//            btnLoadNASA3.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    WMSService wms = new WMSService();
+//                    //wms.setLayer("BMNG");
+//                    //wms.setLayer("global_mosaic");
+//                    wms.setLayer("daily_planet");
+//                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
+//                    TileFactory fact = new WMSTileFactory(wms);
+//                    mapOnline.setTileFactory(fact);
+//                    mapOnline.setAddressLocation(defaultPosition);
+//                    mapOnline.setZoom(13);
+//                }
+//            });
+//            btnLoadNASA3.setPreferredSize(new Dimension(150, 25));
+//            mapOnlineFrame.add(btnLoadNASA3, new AbsoluteConstraints(600, 500, -1, -1));
 
             mapOnlineFrame.pack();
         }

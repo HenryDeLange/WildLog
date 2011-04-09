@@ -90,7 +90,7 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         for (int t = 0; t < fotos.size(); t++) {
             fotoString.append(fotos.get(t).toHTML(inExportType));
         }
-        StringBuilder htmlSighting = new StringBuilder("<head><title>Sightings ID: " + sightingCounter + "</title></head>");
+        StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
         htmlSighting.append("<body bgcolor='rgb(238,234,211)'>");
         htmlSighting.append("<table bgcolor='rgb(238,234,211)' width='100%'>");
         htmlSighting.append("<tr><td>");

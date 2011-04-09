@@ -11,6 +11,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.utils.ui.Utils;
 
 
 public final class UtilsHTML {
@@ -25,7 +26,10 @@ public final class UtilsHTML {
             //URL imgURL = UtilsHTML.class.getResource(inFileLocation);
             //if (imgURL != null) {
                 File fromFile = new File(inFileLocation);
-                File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Images" + inFileLocation.substring(0, inFileLocation.lastIndexOf(File.separatorChar)));
+                File toDir = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath()
+                        + "Images" + Utils.stripRootFromPath(
+                                            inFileLocation.substring(0, inFileLocation.lastIndexOf(File.separatorChar)),
+                                            FilePaths.getRoot()));
                 toDir.mkdirs();
                 File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
                 FileInputStream fileInput = null;
@@ -49,11 +53,13 @@ public final class UtilsHTML {
                 }
                 // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
                 //return "<img src='file://" + inFileLocation.toLowerCase() + "'/>";
+                String fullpath = toFile.getAbsolutePath().toLowerCase();
                 if (inExportType.equals(UtilsHTML.ImageExportTypes.ForHTML))
-                    return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + File.separatorChar + "wildlog" + File.separatorChar + "export" + File.separatorChar + "html"), "..") + "\"/>  ";
+                    //return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + FilePaths.WILDLOG_EXPORT_HTML), "..") + "\"/>  ";
+                    return "<img src=\"..\\" + Utils.stripRootFromPath(fullpath, FilePaths.WILDLOG_EXPORT_HTML.getRelativePath()) + "\"/>  ";
                 else
                 if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML))
-                    return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + File.separatorChar + "wildlog" + File.separatorChar + "export"), "..") + "\"/>  ";
+                    return "<img src=\"..\\html\\" + Utils.stripRootFromPath(fullpath, FilePaths.WILDLOG_EXPORT_HTML.getRelativePath()) + "\"/>  ";
                 else
                 if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap))
                     return "<img src=\"file:\\" + toFile.getAbsolutePath().toLowerCase() + "\"/>  ";
@@ -72,7 +78,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Element inElement, WildLogApp inApp) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Creatures"  + File.separatorChar + inElement.getPrimaryName() + ".html");
+        File toFile = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath() + "Creatures"  + File.separatorChar + inElement.getPrimaryName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -96,7 +102,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Location inLocation, WildLogApp inApp) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Locations"  + File.separatorChar + inLocation.getName() + ".html");
+        File toFile = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath() + "Locations"  + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -120,7 +126,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Visit inVisit, WildLogApp inApp) {
-        File toFile = new File(File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar + "Visits" + File.separatorChar + inVisit.getName() + ".html");
+        File toFile = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath() + "Visits" + File.separatorChar + inVisit.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {

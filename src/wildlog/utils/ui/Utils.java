@@ -37,6 +37,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dbi.DBI;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.utils.FilePaths;
 
 public final class Utils {
     public final static String jpeg = "jpeg";
@@ -119,7 +120,7 @@ public final class Utils {
                 lastFilePath = fromFile.getPath();
                 // Is an image
                 if (new ImageFilter().accept(fromFile)) {
-                    File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar + inFolderName);
+                    File toDir = new File(FilePaths.WILDLOG_IMAGES.getFullPath() + inFolderName);
                     toDir.mkdirs();
                     File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
                     File toFile_Thumbnail = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
@@ -157,7 +158,12 @@ public final class Utils {
                         fileOutput.write(newBytes);
                         fileOutput.flush();
                         big.dispose();
-                        inApp.getDBI().createOrUpdate(new WildLogFile(inID, toFile_Thumbnail.getName(), toFile_Thumbnail.getAbsolutePath(), toFile_Original.getAbsolutePath(), WildLogFileType.IMAGE), false);
+                        inApp.getDBI().createOrUpdate(
+                                new WildLogFile(inID, toFile_Thumbnail.getName(),
+                                    stripRootFromPath(toFile_Thumbnail.getAbsolutePath(), FilePaths.getRoot()),
+                                    stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getRoot()),
+                                    WildLogFileType.IMAGE)
+                                , false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -176,7 +182,7 @@ public final class Utils {
                 else
                 // Is a movie
                 if (new MovieFilter().accept(fromFile)) {
-                    File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Movies" + File.separatorChar + inFolderName);
+                    File toDir = new File(FilePaths.WILDLOG_MOVIES.getFullPath() + inFolderName);
                     toDir.mkdirs();
                     File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
                     while (toFile.exists()) {
@@ -192,7 +198,12 @@ public final class Utils {
                         fileInput.read(tempBytes);
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
-                        inApp.getDBI().createOrUpdate(new WildLogFile(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), WildLogFileType.MOVIE), false);
+                        inApp.getDBI().createOrUpdate(
+                                new WildLogFile(inID, toFile.getName(),
+                                    "No Thumbnail",
+                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getRoot()),
+                                    WildLogFileType.MOVIE)
+                                , false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -209,7 +220,7 @@ public final class Utils {
                     }
                 }
                 else {
-                    File toDir = new File(File.separatorChar + "WildLog" + File.separatorChar + "Other Uploads" + File.separatorChar + inFolderName);
+                    File toDir = new File(FilePaths.WILDLOG_OTHER.getFullPath() + inFolderName);
                     toDir.mkdirs();
                     File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
                     while (toFile.exists()) {
@@ -225,7 +236,12 @@ public final class Utils {
                         fileInput.read(tempBytes);
                         fileOutput.write(tempBytes);
                         fileOutput.flush();
-                        inApp.getDBI().createOrUpdate(new WildLogFile(inID, toFile.getName(), "No Thumbnail", toFile.getAbsolutePath(), WildLogFileType.OTHER), false);
+                        inApp.getDBI().createOrUpdate(
+                                new WildLogFile(inID, toFile.getName(),
+                                    "No Thumbnail",
+                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getRoot()),
+                                    WildLogFileType.OTHER)
+                                , false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
@@ -314,7 +330,7 @@ public final class Utils {
         if (fotos.size() > inImageIndex) {
             if (fotos.get(inImageIndex).getFotoType() != null) {
                 if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
-                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation()), inSize));
+                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation(true)), inSize));
                 else
                 if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
                     inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
@@ -337,7 +353,7 @@ public final class Utils {
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            String fileName = fotos.get(inIndex).getOriginalFotoLocation();
+            String fileName = fotos.get(inIndex).getOriginalFotoLocation(true);
             openFile(fileName);
         }
     }
@@ -488,9 +504,13 @@ public final class Utils {
     public static void showExifPopup(String inID, int inIndex, WildLogApp inApp) {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            String fileName = fotos.get(inIndex).getOriginalFotoLocation();
+            String fileName = fotos.get(inIndex).getOriginalFotoLocation(true);
             showExifPopup(new File(fileName));
         }
+    }
+
+    public static String stripRootFromPath(String inPath, String inRoot) {
+        return inPath.toLowerCase().substring(inPath.toLowerCase().indexOf(inRoot.toLowerCase()) + inRoot.toLowerCase().length());
     }
 
 }

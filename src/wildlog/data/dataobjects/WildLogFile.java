@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.utils.FilePaths;
 
 
 // Foundation for the Foto class
@@ -55,7 +56,7 @@ public class WildLogFile {
     public String toHTML(UtilsHTML.ImageExportTypes inExportType) {
         if (fotoType.equals(WildLogFileType.IMAGE))
             // Moet die getter hier gebruik want ek wil die File().exists() doen...
-            return UtilsHTML.generateHTMLImages(getFileLocation(), inExportType);
+            return UtilsHTML.generateHTMLImages(getFileLocation(true), inExportType);
         else
         if (fotoType.equals(WildLogFileType.MOVIE))
             return "[Movie] ";
@@ -71,10 +72,10 @@ public class WildLogFile {
 //        return description;
 //    }
 
-    public String getFileLocation() {
-        // Dis bietjie van 'n hack, maar dit help vir die kere wat 'n rekenaar 'n ander C drive het...
-        if (new File(fileLocation.substring(2)).exists())
-            return fileLocation.substring(2);
+    public String getFileLocation(boolean inGetFullpath) {
+        // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
+        if (inGetFullpath)
+            return FilePaths.getRoot() + fileLocation;
         else
             return fileLocation;
     }
@@ -87,10 +88,10 @@ public class WildLogFile {
         return date;
     }
 
-    public String getOriginalFotoLocation() {
-        // Dis bietjie van 'n hack, maar dit help vir die kere wat 'n rekenaar 'n ander C drive het...
-        if (new File(originalFotoLocation.substring(2)).exists())
-            return originalFotoLocation.substring(2);
+    public String getOriginalFotoLocation(boolean inGetFullpath) {
+        // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
+        if (inGetFullpath)
+            return FilePaths.getRoot() + originalFotoLocation;
         else
             return originalFotoLocation;
     }

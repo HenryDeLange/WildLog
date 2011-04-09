@@ -15,7 +15,11 @@ import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,6 +69,7 @@ import wildlog.ui.report.ReportLocation;
 import wildlog.ui.report.ReportSighting;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.AstroUtils;
+import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
@@ -232,6 +237,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblCreatures = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
+        lblWorkspace = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
         rdbBrowseElement = new javax.swing.JRadioButton();
@@ -296,11 +302,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblSearchResults = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
+        workspaceMenu = new javax.swing.JMenu();
+        mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem aboutMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem mnuCboutMenuItem = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
-        backupMenuItem = new javax.swing.JMenuItem();
+        backupMenu = new javax.swing.JMenu();
+        mnuBackupMenuItem = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         csvExportMenuItem = new javax.swing.JMenuItem();
         htmlExportMenuItem1 = new javax.swing.JMenuItem();
@@ -308,18 +318,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         importMenu = new javax.swing.JMenu();
         csvImportMenuItem = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        calcSunMoonMenuItem = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
-        jMenu5 = new javax.swing.JMenu();
+        subMenu2 = new javax.swing.JMenu();
         chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        mnuMapStartMenuItem = new javax.swing.JMenuItem();
+        extraMenu = new javax.swing.JMenu();
+        mnuExifMenuItem = new javax.swing.JMenuItem();
+        subMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        subMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
         statusPanel = new javax.swing.JPanel();
         javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
@@ -410,6 +420,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
         tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 30, -1, -1));
+
+        lblWorkspace.setFont(resourceMap.getFont("lblWorkspace.font")); // NOI18N
+        lblWorkspace.setForeground(resourceMap.getColor("lblWorkspace.foreground")); // NOI18N
+        lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblWorkspace.setText(FilePaths.WILDLOG.getFullPath());
+        lblWorkspace.setName("lblWorkspace"); // NOI18N
+        tabHome.add(lblWorkspace, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 560, 450, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -1098,16 +1115,34 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
+        workspaceMenu.setText(resourceMap.getString("workspaceMenu.text")); // NOI18N
+        workspaceMenu.setName("workspaceMenu"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getActionMap(WildLogView.class, this);
+        mnuChangeWorkspaceMenuItem.setAction(actionMap.get("changeWorkspace")); // NOI18N
+        mnuChangeWorkspaceMenuItem.setText(resourceMap.getString("mnuChangeWorkspaceMenuItem.text")); // NOI18N
+        mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
+        workspaceMenu.add(mnuChangeWorkspaceMenuItem);
+
+        jMenuItem1.setAction(actionMap.get("cleanWorkspace")); // NOI18N
+        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        workspaceMenu.add(jMenuItem1);
+
+        fileMenu.add(workspaceMenu);
+
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getActionMap(WildLogView.class, this);
-        aboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
-        aboutMenuItem.setText(resourceMap.getString("aboutMenuItem.text")); // NOI18N
-        aboutMenuItem.setName("aboutMenuItem"); // NOI18N
-        helpMenu.add(aboutMenuItem);
+        mnuCboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
+        mnuCboutMenuItem.setText(resourceMap.getString("mnuCboutMenuItem.text")); // NOI18N
+        mnuCboutMenuItem.setName("mnuCboutMenuItem"); // NOI18N
+        helpMenu.add(mnuCboutMenuItem);
 
         fileMenu.add(helpMenu);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        fileMenu.add(jSeparator2);
 
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
@@ -1115,15 +1150,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(fileMenu);
 
-        jMenu4.setText(resourceMap.getString("jMenu4.text")); // NOI18N
-        jMenu4.setName("jMenu4"); // NOI18N
+        backupMenu.setText(resourceMap.getString("backupMenu.text")); // NOI18N
+        backupMenu.setName("backupMenu"); // NOI18N
 
-        backupMenuItem.setAction(actionMap.get("backup")); // NOI18N
-        backupMenuItem.setText(resourceMap.getString("backupMenuItem.text")); // NOI18N
-        backupMenuItem.setName("backupMenuItem"); // NOI18N
-        jMenu4.add(backupMenuItem);
+        mnuBackupMenuItem.setAction(actionMap.get("backup")); // NOI18N
+        mnuBackupMenuItem.setText(resourceMap.getString("mnuBackupMenuItem.text")); // NOI18N
+        mnuBackupMenuItem.setName("mnuBackupMenuItem"); // NOI18N
+        backupMenu.add(mnuBackupMenuItem);
 
-        menuBar.add(jMenu4);
+        menuBar.add(backupMenu);
 
         exportMenu.setText(resourceMap.getString("exportMenu.text")); // NOI18N
 
@@ -1156,10 +1191,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         advancedMenu.setText(resourceMap.getString("advancedMenu.text")); // NOI18N
 
-        jMenuItem3.setAction(actionMap.get("calculateSunAndMoon")); // NOI18N
-        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
-        jMenuItem3.setName("jMenuItem3"); // NOI18N
-        advancedMenu.add(jMenuItem3);
+        calcSunMoonMenuItem.setAction(actionMap.get("calculateSunAndMoon")); // NOI18N
+        calcSunMoonMenuItem.setText(resourceMap.getString("calcSunMoonMenuItem.text")); // NOI18N
+        calcSunMoonMenuItem.setName("calcSunMoonMenuItem"); // NOI18N
+        advancedMenu.add(calcSunMoonMenuItem);
 
         moveVisitsMenuItem.setAction(actionMap.get("advancedMoveVisits")); // NOI18N
         moveVisitsMenuItem.setText(resourceMap.getString("moveVisitsMenuItem.text")); // NOI18N
@@ -1176,9 +1211,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
         settingsMenu.setName("settingsMenu"); // NOI18N
 
-        jMenu5.setIcon(resourceMap.getIcon("jMenu5.icon")); // NOI18N
-        jMenu5.setText(resourceMap.getString("jMenu5.text")); // NOI18N
-        jMenu5.setName("jMenu5"); // NOI18N
+        subMenu2.setIcon(resourceMap.getIcon("subMenu2.icon")); // NOI18N
+        subMenu2.setText(resourceMap.getString("subMenu2.text")); // NOI18N
+        subMenu2.setName("subMenu2"); // NOI18N
 
         chkMnuUseWMS.setSelected(true);
         chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
@@ -1188,48 +1223,48 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 chkMnuUseWMSItemStateChanged(evt);
             }
         });
-        jMenu5.add(chkMnuUseWMS);
+        subMenu2.add(chkMnuUseWMS);
 
-        jMenuItem4.setAction(actionMap.get("setupMapStartLocation")); // NOI18N
-        jMenuItem4.setText(resourceMap.getString("jMenuItem4.text")); // NOI18N
-        jMenuItem4.setName("jMenuItem4"); // NOI18N
-        jMenu5.add(jMenuItem4);
+        mnuMapStartMenuItem.setAction(actionMap.get("setupMapStartLocation")); // NOI18N
+        mnuMapStartMenuItem.setText(resourceMap.getString("mnuMapStartMenuItem.text")); // NOI18N
+        mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
+        subMenu2.add(mnuMapStartMenuItem);
 
-        settingsMenu.add(jMenu5);
+        settingsMenu.add(subMenu2);
 
         menuBar.add(settingsMenu);
 
-        jMenu2.setText(resourceMap.getString("jMenu2.text")); // NOI18N
-        jMenu2.setName("jMenu2"); // NOI18N
+        extraMenu.setText(resourceMap.getString("extraMenu.text")); // NOI18N
+        extraMenu.setName("extraMenu"); // NOI18N
 
-        jMenuItem1.setAction(actionMap.get("exifReader")); // NOI18N
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenu2.add(jMenuItem1);
+        mnuExifMenuItem.setAction(actionMap.get("exifReader")); // NOI18N
+        mnuExifMenuItem.setText(resourceMap.getString("mnuExifMenuItem.text")); // NOI18N
+        mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
+        extraMenu.add(mnuExifMenuItem);
 
-        jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
-        jMenu1.setName("jMenu1"); // NOI18N
+        subMenu1.setText(resourceMap.getString("subMenu1.text")); // NOI18N
+        subMenu1.setName("subMenu1"); // NOI18N
 
         mnuDBConsole.setAction(actionMap.get("openDBConsole")); // NOI18N
         mnuDBConsole.setText(resourceMap.getString("mnuDBConsole.text")); // NOI18N
         mnuDBConsole.setToolTipText(resourceMap.getString("mnuDBConsole.toolTipText")); // NOI18N
         mnuDBConsole.setName("mnuDBConsole"); // NOI18N
-        jMenu1.add(mnuDBConsole);
+        subMenu1.add(mnuDBConsole);
 
-        jMenu2.add(jMenu1);
+        extraMenu.add(subMenu1);
 
-        jMenu3.setText(resourceMap.getString("jMenu3.text")); // NOI18N
-        jMenu3.setName("jMenu3"); // NOI18N
+        subMenu3.setText(resourceMap.getString("subMenu3.text")); // NOI18N
+        subMenu3.setName("subMenu3"); // NOI18N
 
         mnuOpenMapApp.setAction(actionMap.get("openOpenMapApp")); // NOI18N
         mnuOpenMapApp.setText(resourceMap.getString("mnuOpenMapApp.text")); // NOI18N
         mnuOpenMapApp.setToolTipText(resourceMap.getString("mnuOpenMapApp.toolTipText")); // NOI18N
         mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
-        jMenu3.add(mnuOpenMapApp);
+        subMenu3.add(mnuOpenMapApp);
 
-        jMenu2.add(jMenu3);
+        extraMenu.add(subMenu3);
 
-        menuBar.add(jMenu2);
+        menuBar.add(extraMenu);
 
         statusPanel.setName("statusPanel"); // NOI18N
 
@@ -2052,7 +2087,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     public void backup() {
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         app.getDBI().doBackup();
-        JOptionPane.showMessageDialog(this.getComponent(), "The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder.", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this.getComponent(), "Done. The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. (Note: This only backup the database entries, the image, etc. files have to done manually.)", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
 
@@ -2094,14 +2129,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             @Override
             protected Object doInBackground() throws Exception {
                 // Then do KML export
-                String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
+                String path = FilePaths.WILDLOG_EXPORT_KML.getFullPath();
                 File tempFile = new File(path);
                 tempFile.mkdirs();
                 // Make sure icons exist in the KML folder
                 KmlUtil.copyKmlIcons(app, path);
                 // KML Stuff
                 KmlGenerator kmlgen = new KmlGenerator();
-                kmlgen.setKmlPath(path + File.separatorChar + "WildLogMarkers.kml");
+                kmlgen.setKmlPath(path + "WildLogMarkers.kml");
                 // Get entries for Sightings and Locations
                 Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
                 // Sightings
@@ -2126,7 +2161,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
                 // Try to open the Kml file
                 JOptionPane.showMessageDialog(null, "Done: The KML file will automatically be opened.", "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
-                Utils.openFile(path + File.separatorChar + "WildLogMarkers.kml");
+                Utils.openFile(path + "WildLogMarkers.kml");
                 return null;
             }
         }.execute();
@@ -2135,10 +2170,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     @Action
     public void exportToCSV() {
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV";
+        String path = FilePaths.WILDLOG_EXPORT_CSV.getFullPath();
         File tempFile = new File(path);
         tempFile.mkdirs();
-        app.getDBI().doExportCSV(path + File.separatorChar);
+        app.getDBI().doExportCSV(path);
         JOptionPane.showMessageDialog(this.getComponent(), "Done: You can find the files under the '\\WildLog\\Export\\CSV\\' folder.' folder.", "Finished Generating CSV", JOptionPane.INFORMATION_MESSAGE);
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
@@ -2255,7 +2290,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         try {
                             lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
                             if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.IMAGE))
-                                imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation()));
+                                imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)));
                             else
                             if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.MOVIE))
                                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
@@ -2380,11 +2415,65 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             Utils.showExifPopup(fileChooser.getSelectedFile());
         }
     }
+
+    @Action
+    public void changeWorkspace() {
+        // Write first
+        BufferedWriter writer = null;
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Select the directory with to use as the new Workspace Folder.");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
+                writer = new BufferedWriter(new FileWriter("wildloghome"));
+                writer.write(fileChooser.getSelectedFile().getPath());
+                writer.flush();
+            }
+        }
+        catch (IOException ex) {
+            Logger.getLogger(WildLogApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally {
+            if (writer != null)
+                try {
+                    writer.close();
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
+        // Then try to read
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("wildloghome"));
+            FilePaths.setRoot(reader.readLine());
+        }
+        catch (IOException ex) {
+            Logger.getLogger(WildLogApp.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this.getComponent(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+        finally {
+            if (reader != null)
+                try {
+                    reader.close();
+                }
+                catch (IOException ex) {
+                    Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                }
+        }
+        // Shutdown
+        JOptionPane.showMessageDialog(this.getComponent(), "The Workspace Folder has been changed. Please restart the application", "Done!", JOptionPane.INFORMATION_MESSAGE);
+        app.quit(null);
+    }
+
+    @Action
+    public void cleanWorkspace() {
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
-    private javax.swing.JMenuItem backupMenuItem;
+    private javax.swing.JMenu backupMenu;
     private javax.swing.JButton btnAddElement;
     private javax.swing.JButton btnAddLocation;
     private javax.swing.JButton btnBrowseNext;
@@ -2408,6 +2497,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JMenuItem calcSunMoonMenuItem;
     private javax.swing.JCheckBox chkElementTypeBrowseTab;
     private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JCheckBox ckbTypeFilter;
@@ -2418,6 +2508,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.JMenu exportMenu;
+    private javax.swing.JMenu extraMenu;
     private javax.swing.JMenuItem htmlExportMenuItem1;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
     private javax.swing.JMenu importMenu;
@@ -2434,14 +2525,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2449,6 +2533,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblCreatures;
@@ -2459,10 +2544,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel lblSearchResults;
     private javax.swing.JLabel lblSightings;
     private javax.swing.JLabel lblVisits;
+    private javax.swing.JLabel lblWorkspace;
     private javax.swing.JMenuItem linkElementsMenuItem;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem mnuBackupMenuItem;
+    private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuDBConsole;
+    private javax.swing.JMenuItem mnuExifMenuItem;
+    private javax.swing.JMenuItem mnuMapStartMenuItem;
     private javax.swing.JMenuItem mnuOpenMapApp;
     private javax.swing.JMenuItem moveVisitsMenuItem;
     private javax.swing.JProgressBar progressBar;
@@ -2474,6 +2564,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
+    private javax.swing.JMenu subMenu1;
+    private javax.swing.JMenu subMenu2;
+    private javax.swing.JMenu subMenu3;
     private javax.swing.JPanel tabElement;
     private javax.swing.JPanel tabFoto;
     private javax.swing.JPanel tabHome;
@@ -2487,6 +2580,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JTree treBrowsePhoto;
     private javax.swing.JTextPane txtPhotoInformation;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JMenu workspaceMenu;
     // End of variables declaration//GEN-END:variables
 
     private final Timer messageTimer;

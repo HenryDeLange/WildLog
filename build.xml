@@ -20,6 +20,7 @@
         <copy file="Mapping Data/roads.shp" flatten="true" todir="${dist.dir}"/>
         <copy file="Mapping Data/town2.shp" flatten="true" todir="${dist.dir}"/>
         <copy file="Mapping Data/WorldBase.shp" flatten="true" todir="${dist.dir}"/>
+        <copy file="Mapping Data/wildloghome" flatten="true" todir="${dist.dir}"/>
     </target>
 
     <!--

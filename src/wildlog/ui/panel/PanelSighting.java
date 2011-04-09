@@ -41,6 +41,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeFormat;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.LatLonConverter;
@@ -1085,11 +1086,7 @@ public class PanelSighting extends javax.swing.JPanel {
         if (sighting != null) {
             if (tblElement.getSelectedRowCount() == 1) {
                 element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
-                if (fotos.size() > 0)
-                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(fotos.get(0).getFileLocation()), 100));
-                else
-                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, lblElementImage, 100, app);
             }
         }
     }//GEN-LAST:event_tblElementMouseReleased
@@ -1133,11 +1130,7 @@ public class PanelSighting extends javax.swing.JPanel {
 //                    cmbSubArea.setModel(new DefaultComboBoxModel(location.getSubAreas().toArray()));
                 UtilTableGenerator.setupVeryShortVisitTable(tblVisit, location);
                 visit = null;
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + location.getName()));
-                if (fotos.size() > 0)
-                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(fotos.get(0).getFileLocation()), 100));
-                else
-                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                Utils.setupFoto("LOCATION-" + location.getName(), 0, lblElementImage, 100, app);
             }
             else {
 
@@ -1313,39 +1306,41 @@ public class PanelSighting extends javax.swing.JPanel {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
         if (fotos.size() > 0) {
             WildLogFile tempFoto = fotos.get(imageIndex);
-            try {
-                Metadata meta = JpegMetadataReader.readMetadata(new File(tempFoto.getOriginalFotoLocation()));
-                Iterator directories = meta.getDirectoryIterator();
-                breakAllWhiles: while (directories.hasNext()) {
-                    Directory directory = (Directory)directories.next();
-                    Iterator tags = directory.getTagIterator();
-                    while (tags.hasNext()) {
-                        Tag tag = (Tag)tags.next();
-                        if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
-                            try {
-                                SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+            if (tempFoto.getFotoType().equals(WildLogFileType.IMAGE)) {
+                try {
+                    Metadata meta = JpegMetadataReader.readMetadata(new File(tempFoto.getOriginalFotoLocation(true)));
+                    Iterator directories = meta.getDirectoryIterator();
+                    breakAllWhiles: while (directories.hasNext()) {
+                        Directory directory = (Directory)directories.next();
+                        Iterator tags = directory.getTagIterator();
+                        while (tags.hasNext()) {
+                            Tag tag = (Tag)tags.next();
+                            if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
                                 try {
-                                    Date tempDate = f.parse(tag.getDescription());
-                                    dtpSightingDate.setDate(tempDate);
-                                    spnHours.setValue(tempDate.getHours());
-                                    spnMinutes.setValue(tempDate.getMinutes());
-                                    cmbTimeFormat.setSelectedIndex(0);
-                                    btnCalculateMoonPhaseActionPerformed(null);
-                                    break breakAllWhiles;
+                                    SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                                    try {
+                                        Date tempDate = f.parse(tag.getDescription());
+                                        dtpSightingDate.setDate(tempDate);
+                                        spnHours.setValue(tempDate.getHours());
+                                        spnMinutes.setValue(tempDate.getMinutes());
+                                        cmbTimeFormat.setSelectedIndex(0);
+                                        btnCalculateMoonPhaseActionPerformed(null);
+                                        break breakAllWhiles;
+                                    }
+                                    catch (ParseException ex) {
+                                        ex.printStackTrace();
+                                    }
                                 }
-                                catch (ParseException ex) {
+                                catch (MetadataException ex) {
                                     ex.printStackTrace();
                                 }
-                            }
-                            catch (MetadataException ex) {
-                                ex.printStackTrace();
                             }
                         }
                     }
                 }
-            }
-            catch (JpegProcessingException ex) {
-                ex.printStackTrace();
+                catch (JpegProcessingException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed

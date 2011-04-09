@@ -45,6 +45,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
+import wildlog.utils.FilePaths;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
 
@@ -235,7 +236,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnReport = new javax.swing.JButton();
         btnChecklist = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnKmlExport = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -690,18 +691,18 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
         visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 85, 110, 33));
 
-        jButton1.setBackground(resourceMap.getColor("jButton1.background")); // NOI18N
-        jButton1.setIcon(resourceMap.getIcon("jButton1.icon")); // NOI18N
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setToolTipText(resourceMap.getString("jButton1.toolTipText")); // NOI18N
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnKmlExport.setBackground(resourceMap.getColor("btnKmlExport.background")); // NOI18N
+        btnKmlExport.setIcon(resourceMap.getIcon("btnKmlExport.icon")); // NOI18N
+        btnKmlExport.setText(resourceMap.getString("btnKmlExport.text")); // NOI18N
+        btnKmlExport.setToolTipText(resourceMap.getString("btnKmlExport.toolTipText")); // NOI18N
+        btnKmlExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnKmlExport.setName("btnKmlExport"); // NOI18N
+        btnKmlExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnKmlExportActionPerformed(evt);
             }
         });
-        visitIncludes.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 110, 33));
+        visitIncludes.add(btnKmlExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 110, 33));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -721,7 +722,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = visit.getName();
-                visit.setName(app.getDBI().limitLength(txtName.getText(), 150));
+                visit.setName(app.getDBI().limitLength(txtName.getText(), 100));
                 visit.setStartDate(dtpStartDate.getDate());
                 visit.setEndDate(dtpEndDate.getDate());
                 visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());
@@ -758,7 +759,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
         lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
-        sighting = null;
         if (visit.getName() != null) {
             UtilTableGenerator.setupCompleteSightingTable(tblSightings, visit);
             Sighting tempSighting = new Sighting();
@@ -783,6 +783,22 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
         else
             lblVisitName.setText(". . .  - [" + locationForVisit.getName() + "]");
+        // Scroll the table
+        if (sighting != null) {
+            int select = -1;
+            for (int t = 0; t < tblSightings.getModel().getRowCount(); t++) {
+                if ((Long)(tblSightings.getValueAt(t, 5)) == sighting.getSightingCounter())
+                {
+                    select = t;
+                    break;
+                }
+            }
+            if (select >= 0) {
+//                tblSightings.getSelectionModel().setSelectionInterval(select, select);
+                tblSightings.scrollRectToVisible(tblSightings.getCellRect(select, 0, true));
+            }
+        }
+        sighting = null;
         setupNumberOfSightingImages();
         refreshSightingInfo();
     }//GEN-LAST:event_formComponentShown
@@ -1062,18 +1078,18 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         Utils.openFile(UtilsHTML.exportHTML(visit, app));
     }//GEN-LAST:event_btnHTMLActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnKmlExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKmlExportActionPerformed
         // First export to HTML to create the images
         UtilsHTML.exportHTML(visit, app);
         // Nou doen die KML deel
-        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
+        String path = FilePaths.WILDLOG_EXPORT_KML.getFullPath();
         File tempFile = new File(path);
         tempFile.mkdirs();
         // Make sure icons exist in the KML folder
         KmlUtil.copyKmlIcons(app, path);
         // KML Stuff
         KmlGenerator kmlgen = new KmlGenerator();
-        String finalPath = path + File.separatorChar + "WildLogMarkers - Visit (" + visit.getName() + ").kml";
+        String finalPath = path + "WildLogMarkers - Visit (" + visit.getName() + ").kml";
         kmlgen.setKmlPath(finalPath);
         // Get entries for Sightings and Locations
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
@@ -1098,7 +1114,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
         // Try to open the Kml file
         Utils.openFile(finalPath);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnKmlExportActionPerformed
 
 
     private void setupNumberOfImages() {
@@ -1132,6 +1148,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnEditSighting;
     private javax.swing.JButton btnGoElement;
     private javax.swing.JButton btnHTML;
+    private javax.swing.JButton btnKmlExport;
     private javax.swing.JButton btnMapSighting;
     private javax.swing.JButton btnMapVisit;
     private javax.swing.JButton btnNextImage;
@@ -1146,7 +1163,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JComboBox cmbType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

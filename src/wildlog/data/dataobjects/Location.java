@@ -96,7 +96,7 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
             }
         }
 
-        StringBuilder htmlLocation = new StringBuilder("<head><title>Location: " + name + "</title></head>");
+        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Location: " + name + "</title></head>");
         htmlLocation.append("<body bgcolor='rgb(233,239,244)'>");
         htmlLocation.append("<table bgcolor='rgb(233,239,244)' width='100%'>");
         htmlLocation.append("<tr><td>");

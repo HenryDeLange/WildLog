@@ -1314,8 +1314,8 @@ public abstract class DBI_JDBC implements DBI {
                 StringBuilder sql = new StringBuilder("UPDATE FILES SET ")
                     .append("ID = '").append(inFoto.getId().replaceAll("'", "''")).append("', ")
                     .append("FILENAME = '").append(inFoto.getFilename().replaceAll("'", "''")).append("', ")
-                    .append("FILEPATH = '").append(inFoto.getFileLocation().replaceAll("'", "''")).append("', ")
-                    .append("ORIGINALPATH = '").append(inFoto.getOriginalFotoLocation().replaceAll("'", "''")).append("', ")
+                    .append("FILEPATH = '").append(inFoto.getFileLocation(false).replaceAll("'", "''")).append("', ")
+                    .append("ORIGINALPATH = '").append(inFoto.getOriginalFotoLocation(false).replaceAll("'", "''")).append("', ")
                     .append("FILETYPE = '").append(inFoto.getFotoType()).append("',");
                 if (inFoto.getDate() != null)
                     sql.append("UPLOADDATE = '").append(new java.sql.Date(inFoto.getDate().getTime())).append("',");
@@ -1325,7 +1325,7 @@ public abstract class DBI_JDBC implements DBI {
                     sql.append("ISDEFAULT = 1");
                 else
                     sql.append("ISDEFAULT = 0");
-                sql.append("WHERE FILEPATH = '").append(inFoto.getFileLocation()).append("'");
+                sql.append("WHERE FILEPATH = '").append(inFoto.getFileLocation(false)).append("'");
                 state.execute(sql.toString());
             }
             else {
@@ -1333,8 +1333,8 @@ public abstract class DBI_JDBC implements DBI {
                 StringBuilder sql = new StringBuilder("INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (")
                     .append("'").append(inFoto.getId().replaceAll("'", "''")).append("', ")
                     .append("'").append(inFoto.getFilename().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inFoto.getFileLocation().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inFoto.getOriginalFotoLocation().replaceAll("'", "''")).append("', ")
+                    .append("'").append(inFoto.getFileLocation(false).replaceAll("'", "''")).append("', ")
+                    .append("'").append(inFoto.getOriginalFotoLocation(false).replaceAll("'", "''")).append("', ")
                     .append("'").append(inFoto.getFotoType()).append("',");
                 if (inFoto.getDate() != null)
                     sql.append("'").append(new java.sql.Date(inFoto.getDate().getTime())).append("',");
@@ -1618,11 +1618,11 @@ public abstract class DBI_JDBC implements DBI {
         try {
             state = conn.createStatement();
             // Delete File from database - Note: Do not use FilePath, because it is not unique
-            state.executeUpdate("DELETE FROM FILES WHERE ORIGINALPATH = '" + inFoto.getOriginalFotoLocation().replaceAll("'", "''") + "'");
+            state.executeUpdate("DELETE FROM FILES WHERE ORIGINALPATH = '" + inFoto.getOriginalFotoLocation(false).replaceAll("'", "''") + "'");
             // Delete the file on the PC
-            File tempFile = new File(inFoto.getFileLocation());
+            File tempFile = new File(inFoto.getFileLocation(true));
             tempFile.delete();
-            tempFile = new File(inFoto.getOriginalFotoLocation());
+            tempFile = new File(inFoto.getOriginalFotoLocation(true));
             tempFile.delete();
         }
         catch (SQLException ex) {

@@ -61,7 +61,7 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
             }
         }
 
-        StringBuilder htmlVisit = new StringBuilder("<head><title>Visit: " + name + "</title></head>");
+        StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Visit: " + name + "</title></head>");
         htmlVisit.append("<body bgcolor='rgb(230,228,240)'>");
         htmlVisit.append("<table bgcolor='rgb(230,228,240)' width='100%'>");
         htmlVisit.append("<tr><td>");

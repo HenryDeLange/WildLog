@@ -2,6 +2,8 @@ package wildlog.ui.panel;
 
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
+import astro.MoonTimes;
+import astro.SunTimes;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -43,6 +45,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.report.ReportLocation;
 import wildlog.utils.AstroUtils;
+import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.SpinnerFixer;
@@ -838,7 +841,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = locationWL.getName();
-                locationWL.setName(app.getDBI().limitLength(txtName.getText(), 150));
+                locationWL.setName(app.getDBI().limitLength(txtName.getText(), 100));
                 locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
                 locationWL.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
                 rdbDMS.setSelected(true);
@@ -1202,14 +1205,14 @@ public class PanelLocation extends PanelCanSetupHeader {
         // First export to HTML to create the images
         UtilsHTML.exportHTML(locationWL, app);
         // Nou doen die KML deel
-        String path = File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML";
+        String path = FilePaths.WILDLOG_EXPORT_KML.getFullPath();
         File tempFile = new File(path);
         tempFile.mkdirs();
         // Make sure icons exist in the KML folder
         KmlUtil.copyKmlIcons(app, path);
         // KML Stuff
         KmlGenerator kmlgen = new KmlGenerator();
-        String finalPath = path + File.separatorChar + "WildLogMarkers - Location (" + locationWL.getName() + ").kml";
+        String finalPath = path + "WildLogMarkers - Location (" + locationWL.getName() + ").kml";
         kmlgen.setKmlPath(finalPath);
         // Get entries for Sightings and Locations
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
@@ -1245,7 +1248,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (lat != 0 && lon != 0) {
             String temp = "Curent Moon Phase: " + AstroUtils.getMoonPhase(Calendar.getInstance().getTime()) + " % Full " + System.getProperty("line.separator");
             temp = temp + "Current Moonlight: " + AstroUtils.getMoonlight(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Moonrise : " + MoonTimes.getMoonrise(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Moonset  : " + MoonTimes.getMoonset(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
             temp = temp + "Current Sunlight: " + AstroUtils.getSunCategory(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Dawn    : " + SunTimes.getDawn(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Sunrise : " + SunTimes.getSunrise(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Sunset  : " + SunTimes.getSunset(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
+            temp = temp + "Current Dusk    : " + SunTimes.getDusk(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
             JOptionPane.showMessageDialog(this, temp, "Sun and Moon Information for " + locationWL.getName(), JOptionPane.INFORMATION_MESSAGE);
         }
         else {

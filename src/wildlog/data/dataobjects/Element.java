@@ -93,7 +93,7 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         for (int t = 0; t < fotos.size(); t++) {
             fotoString.append(fotos.get(t).toHTML(inExportType));
         }
-        StringBuilder htmlElement = new StringBuilder("<head><title>Creature: " + primaryName + "</title></head>");
+        StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
         htmlElement.append("<body bgcolor='rgb(227,240,227)'>");
         htmlElement.append("<table bgcolor='rgb(227,240,227)' width='100%'>");
         htmlElement.append("<tr><td>");
