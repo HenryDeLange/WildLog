@@ -763,14 +763,14 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public List<WildLogFile> list(WildLogFile inFoto) {
+    public List<WildLogFile> list(WildLogFile inFile) {
         Statement state = null;
         ResultSet results = null;
         List<WildLogFile> tempList = new ArrayList<WildLogFile>();
         try {
             String sql = "SELECT * FROM FILES";
-            if (inFoto.getId() != null)
-                sql = sql + " WHERE ID = '" + inFoto.getId().replaceAll("'", "''") + "'";
+            if (inFile.getId() != null)
+                sql = sql + " WHERE ID = '" + inFile.getId().replaceAll("'", "''") + "'";
             sql = sql + " ORDER BY ISDEFAULT desc, FILEPATH";
 
             state = conn.createStatement();

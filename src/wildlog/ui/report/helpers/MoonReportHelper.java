@@ -43,10 +43,10 @@ public class MoonReportHelper {
             if (inSighting.getMoonPhase() > 50 && inSighting.getMoonPhase() <= 100)
                 inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "51-100%", "Second Half", 1, getColor(inSighting, inLabels)));
             else
-                inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "Wierd Phase", "Weetnie", 1, getColor(inSighting, inLabels)));
+                inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "Unknown", "Unknown", 1, getColor(inSighting, inLabels)));
         }
         else
-            inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "Wierd Phase", "Weetnie", 1, getColor(inSighting, inLabels)));
+            inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "Unknown", "Unknown", 1, getColor(inSighting, inLabels)));
     }
 
     private static Color getColor(Sighting inSighting, JLabel[] inLables) {

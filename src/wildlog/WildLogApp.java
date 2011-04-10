@@ -232,7 +232,7 @@ public class WildLogApp extends SingleFrameApplication {
                 }
             });
             btnPrevMapPoint.setPreferredSize(new Dimension(70, 25));
-            mapOnlineFrame.add(btnPrevMapPoint, new AbsoluteConstraints(0, 500, -1, -1));
+            mapOnlineFrame.add(btnPrevMapPoint, new AbsoluteConstraints(0, 505, -1, -1));
 
             JButton btnNextMapPoint = new JButton("Next");
             btnNextMapPoint.addActionListener(new ActionListener() {
@@ -242,19 +242,19 @@ public class WildLogApp extends SingleFrameApplication {
                 }
             });
             btnNextMapPoint.setPreferredSize(new Dimension(70, 25));
-            mapOnlineFrame.add(btnNextMapPoint, new AbsoluteConstraints(70, 500, -1, -1));
+            mapOnlineFrame.add(btnNextMapPoint, new AbsoluteConstraints(70, 505, -1, -1));
 
-            JButton btnLoadOpenStreetMap = new JButton("Open Street Map");
-            btnLoadOpenStreetMap.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    mapOnline.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-                    mapOnline.setAddressLocation(defaultPosition);
-                    mapOnline.setZoom(12);
-                }
-            });
-            btnLoadOpenStreetMap.setPreferredSize(new Dimension(150, 25));
-            mapOnlineFrame.add(btnLoadOpenStreetMap, new AbsoluteConstraints(150, 500, -1, -1));
+//            JButton btnLoadOpenStreetMap = new JButton("Open Street Map");
+//            btnLoadOpenStreetMap.addActionListener(new ActionListener() {
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    mapOnline.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
+//                    mapOnline.setAddressLocation(defaultPosition);
+//                    mapOnline.setZoom(12);
+//                }
+//            });
+//            btnLoadOpenStreetMap.setPreferredSize(new Dimension(150, 25));
+//            mapOnlineFrame.add(btnLoadOpenStreetMap, new AbsoluteConstraints(150, 505, -1, -1));
 
             // Die NASA layers werk nie meer nie..
 //            JButton btnLoadNASA2 = new JButton("NASA: Mosaic");
@@ -312,6 +312,7 @@ public class WildLogApp extends SingleFrameApplication {
 //            mapOnlineFrame.add(btnLoadNASA3, new AbsoluteConstraints(600, 500, -1, -1));
 
             mapOnlineFrame.pack();
+            mapOnlineFrame.setResizable(false);
         }
         return mapOnlineFrame;
     }

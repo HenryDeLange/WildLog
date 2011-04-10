@@ -18,7 +18,7 @@ public class BarChart extends JPanel {
         private static final int MIN_BAR_HEIGHT = 20;
 //        private static final int MIN_BAR_WIDTH = 3;
         private static final int LABEL_BUFFER = 102;
-        private static final int TOTAL_BUFFER = 15;
+        private static final int TOTAL_BUFFER = 20;
         private static final int SCALE_BUFFER = 10;
         private static final int BAR_HEIGHT_BUFFER = 5;
 	private List<BarChartEntity> bars = new ArrayList<BarChartEntity>();
@@ -98,7 +98,8 @@ public class BarChart extends JPanel {
                         entityName = new SimpleDateFormat("dd MMM yyyy").format(entity.getBarName());
                     // Setup
                     int value = entity.getValue();
-                    barWidth = (int)(Math.round((chartWidth - (LABEL_BUFFER + TOTAL_BUFFER)) * ((double)value / max)));
+                    // Note: floor, ceil, round produce differnet results with many bars
+                    barWidth = (int)(Math.floor((chartWidth - (LABEL_BUFFER + TOTAL_BUFFER)) * ((double)value / max)));
 //                    if (barWidth < MIN_BAR_WIDTH)
 //                        barWidth = MIN_BAR_WIDTH;
                     BarChartCoordinate coord = chartCoords.get(entityName);

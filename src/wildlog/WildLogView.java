@@ -1611,7 +1611,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
+                txtPhotoInformation.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
@@ -1619,7 +1620,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
+                txtPhotoInformation.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
@@ -1627,7 +1629,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
+                txtPhotoInformation.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
                 setupFile(fotos);
                 btnReport.setVisible(true);
@@ -1635,7 +1638,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                txtPhotoInformation.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML));
+                txtPhotoInformation.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                 setupFile(fotos);
             }
@@ -2468,6 +2472,39 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void cleanWorkspace() {
+        if (JOptionPane.showConfirmDialog(this.getComponent(), "It is recommended to backup the entire WildLog folder before you continue.", "Warning!",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+            // Check database files
+            List<WildLogFile> files = app.getDBI().list(new WildLogFile());
+            for (WildLogFile file : files) {
+                if (!new File(file.getFileLocation(true)).isFile()) {
+                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getFileLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                }
+                if (!new File(file.getOriginalFotoLocation(true)).isFile()) {
+                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getOriginalFotoLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            // Delete temporary folders
+            try {
+                Utils.deleteRecursive(new File(FilePaths.WILDLOG_EXPORT.getFullPath()));
+            }
+            catch (IOException ex) {
+                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
+            }
+            // Check for unused empty folders
+            try {
+                Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_IMAGES.getFullPath()));
+                Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_MOVIES.getFullPath()));
+                Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_OTHER.getFullPath()));
+            }
+            catch (IOException ex) {
+                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
+            }
+            // Done
+            JOptionPane.showMessageDialog(this.getComponent(), "Finished checking and cleaning the Workspace Folder.", "Done!", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
     
 

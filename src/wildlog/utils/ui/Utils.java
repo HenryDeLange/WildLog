@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -511,6 +512,25 @@ public final class Utils {
 
     public static String stripRootFromPath(String inPath, String inRoot) {
         return inPath.toLowerCase().substring(inPath.toLowerCase().indexOf(inRoot.toLowerCase()) + inRoot.toLowerCase().length());
+    }
+
+    public static void deleteRecursive(File inFile) throws IOException {
+        if (inFile.isDirectory()) {
+            for (File content : inFile.listFiles())
+                deleteRecursive(content);
+        }
+        if (!inFile.delete())
+            throw new FileNotFoundException("Failed to delete file: " + inFile);
+    }
+
+    public static void deleteRecursiveOnlyEmptyFolders(File inFile) throws IOException {
+        if (inFile.isDirectory()) {
+            for (File content : inFile.listFiles())
+                deleteRecursiveOnlyEmptyFolders(content);
+            if (inFile.listFiles().length == 0)
+                if (!inFile.delete())
+                    throw new FileNotFoundException("Failed to delete folder: " + inFile);
+        }
     }
 
 }

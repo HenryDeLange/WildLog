@@ -11,7 +11,7 @@ public enum FilePaths {
     WILDLOG_BACKUPS (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar),
     WILDLOG_EXPORT (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar),
     WILDLOG_EXPORT_KML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML" + File.separatorChar),
-    WILDLOG_EXPORT_CSV (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV"),
+    WILDLOG_EXPORT_CSV (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV" + File.separatorChar),
     WILDLOG_EXPORT_HTML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar)
     ;
 
@@ -26,17 +26,14 @@ public enum FilePaths {
     private String path;
 
     public String getFullPath() {
-        System.out.println(currentRoot + " >< " + path);
         return currentRoot + path;
     }
 
     public String getRelativePath() {
-        System.out.println(path);
         return path;
     }
 
     public static String getRoot() {
-        System.out.println(currentRoot);
         return currentRoot;
     }
 
