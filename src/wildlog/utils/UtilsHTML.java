@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.regex.Matcher;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;

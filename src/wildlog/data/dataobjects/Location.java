@@ -77,9 +77,11 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("LOCATION-" + name));
-        for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML(inExportType));
+        if (inIncludeImages) {
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("LOCATION-" + name));
+            for (int t = 0; t < fotos.size(); t++) {
+                fotoString.append(fotos.get(t).toHTML(inExportType));
+            }
         }
 //        String subAreasString = "";
 //        if (subAreas != null)

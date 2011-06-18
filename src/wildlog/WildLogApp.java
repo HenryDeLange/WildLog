@@ -6,8 +6,12 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -118,7 +122,8 @@ public class WildLogApp extends SingleFrameApplication {
 
     @Override
     protected void initialize(String[] arg0) {
-//        System.out.println("STARTING UP WildLog...");
+        System.out.println("STARTING UP WildLog..."
+                + new SimpleDateFormat("dd MMM yyyy (hh:mm:ss)").format(Calendar.getInstance().getTime()));
         super.initialize(arg0);
         try {
             BufferedReader reader = new BufferedReader(new FileReader("wildloghome"));
@@ -169,6 +174,28 @@ public class WildLogApp extends SingleFrameApplication {
      * Main method launching the application.
      */
     public static void main(String[] args) {
+        // Configure to log to a logging file
+        if (args != null && args.length == 1) {
+            if ("log_to_file".equalsIgnoreCase(args[0])) {
+                try {
+//                    PrintStream orgStream 	= null;
+                    PrintStream fileStream 	= null;
+                    // Saving the orginal stream
+//                    orgStream = System.out;
+                    fileStream = new PrintStream(new FileOutputStream("errorlog.txt",true));
+                    // Redirecting console output to file
+                    System.setOut(fileStream);
+                    // Redirecting runtime exceptions to file
+                    System.setErr(fileStream);
+                    //Restoring back to console
+//                    System.setOut(orgStream);
+                }
+                catch (FileNotFoundException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        // Launch the application
         launch(WildLogApp.class, args);
     }
 
@@ -177,7 +204,8 @@ public class WildLogApp extends SingleFrameApplication {
         super.shutdown();
         if (dbi != null)
             dbi.close();
-//        System.out.println("SHUTTING DOWN WildLog");
+        System.out.println("SHUTTING DOWN WildLog - " 
+                + new SimpleDateFormat("dd MMM yyyy (hh:mm:ss)").format(Calendar.getInstance().getTime()));
     }
     
     

@@ -88,9 +88,11 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("SIGHTING-" + sightingCounter));
-        for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML(inExportType));
+        if (inIncludeImages) {
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("SIGHTING-" + sightingCounter));
+            for (int t = 0; t < fotos.size(); t++) {
+                fotoString.append(fotos.get(t).toHTML(inExportType));
+            }
         }
         StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
         htmlSighting.append("<body bgcolor='rgb(238,234,211)'>");

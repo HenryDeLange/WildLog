@@ -2430,7 +2430,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
                 writer = new BufferedWriter(new FileWriter("wildloghome"));
-                writer.write(fileChooser.getSelectedFile().getPath());
+                String path = fileChooser.getSelectedFile().getPath();
+                if (path.toLowerCase().endsWith(FilePaths.WILDLOG.toString().toLowerCase().substring(1, FilePaths.WILDLOG.toString().length() - 1)))
+                    path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1));
+                writer.write(path);
                 writer.flush();
             }
         }

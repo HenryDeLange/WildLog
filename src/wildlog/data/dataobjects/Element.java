@@ -89,9 +89,11 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("ELEMENT-" + primaryName));
-        for (int t = 0; t < fotos.size(); t++) {
-            fotoString.append(fotos.get(t).toHTML(inExportType));
+        if (inIncludeImages) {
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("ELEMENT-" + primaryName));
+            for (int t = 0; t < fotos.size(); t++) {
+                fotoString.append(fotos.get(t).toHTML(inExportType));
+            }
         }
         StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
         htmlElement.append("<body bgcolor='rgb(227,240,227)'>");

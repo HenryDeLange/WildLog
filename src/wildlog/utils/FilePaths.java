@@ -16,15 +16,18 @@ public enum FilePaths {
     ;
 
     private static String currentRoot;
+    private String path;
+    
+    private FilePaths(String inPath) {
+        path = inPath;
+    }
 
     public static void setRoot(String inRoot) {
         currentRoot = inRoot;
         if (currentRoot.charAt(currentRoot.length()-1) == File.separatorChar)
             currentRoot = currentRoot.substring(0, currentRoot.length()-1);
     }
-    
-    private String path;
-
+        
     public String getFullPath() {
         return currentRoot + path;
     }
@@ -35,10 +38,6 @@ public enum FilePaths {
 
     public static String getRoot() {
         return currentRoot;
-    }
-
-    private FilePaths(String inPath) {
-        path = inPath;
     }
 
     @Override

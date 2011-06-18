@@ -511,7 +511,14 @@ public final class Utils {
     }
 
     public static String stripRootFromPath(String inPath, String inRoot) {
-        return inPath.toLowerCase().substring(inPath.toLowerCase().indexOf(inRoot.toLowerCase()) + inRoot.toLowerCase().length());
+        File tempFile = new File(inRoot + File.separatorChar);
+        String tempRoot = tempFile.getAbsolutePath().toLowerCase();
+        tempFile = new File(inPath);
+        String tempPath = tempFile.getAbsolutePath().toLowerCase();
+        String finalPath = tempPath.substring(0 + tempRoot.length());
+        if (File.separatorChar != finalPath.charAt(0))
+            finalPath = File.separatorChar + finalPath;
+        return finalPath;
     }
 
     public static void deleteRecursive(File inFile) throws IOException {
