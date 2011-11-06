@@ -9,9 +9,11 @@ import com.drew.metadata.Tag;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -1309,36 +1311,30 @@ public class PanelSighting extends javax.swing.JPanel {
             if (tempFoto.getFotoType().equals(WildLogFileType.IMAGE)) {
                 try {
                     Metadata meta = JpegMetadataReader.readMetadata(new File(tempFoto.getOriginalFotoLocation(true)));
-                    Iterator directories = meta.getDirectoryIterator();
+                    Iterator<Directory> directories = meta.getDirectories().iterator();
                     breakAllWhiles: while (directories.hasNext()) {
                         Directory directory = (Directory)directories.next();
-                        Iterator tags = directory.getTagIterator();
-                        while (tags.hasNext()) {
-                            Tag tag = (Tag)tags.next();
+                        Collection<Tag> tags = directory.getTags();
+                        for (Tag tag : tags) {
                             if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
+                                SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
                                 try {
-                                    SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-                                    try {
-                                        Date tempDate = f.parse(tag.getDescription());
-                                        dtpSightingDate.setDate(tempDate);
-                                        spnHours.setValue(tempDate.getHours());
-                                        spnMinutes.setValue(tempDate.getMinutes());
-                                        cmbTimeFormat.setSelectedIndex(0);
-                                        btnCalculateMoonPhaseActionPerformed(null);
-                                        break breakAllWhiles;
-                                    }
-                                    catch (ParseException ex) {
-                                        ex.printStackTrace();
-                                    }
+                                    Date tempDate = f.parse(tag.getDescription());
+                                    dtpSightingDate.setDate(tempDate);
+                                    spnHours.setValue(tempDate.getHours());
+                                    spnMinutes.setValue(tempDate.getMinutes());
+                                    cmbTimeFormat.setSelectedIndex(0);
+                                    btnCalculateMoonPhaseActionPerformed(null);
+                                    break breakAllWhiles;
                                 }
-                                catch (MetadataException ex) {
+                                catch (ParseException ex) {
                                     ex.printStackTrace();
                                 }
                             }
                         }
                     }
                 }
-                catch (JpegProcessingException ex) {
+                catch (IOException | JpegProcessingException ex) {
                     ex.printStackTrace();
                 }
             }

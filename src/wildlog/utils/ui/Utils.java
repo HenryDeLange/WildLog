@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -463,20 +464,14 @@ public final class Utils {
                 String temp = "";
                 try {
                     Metadata meta = JpegMetadataReader.readMetadata(inFile);
-                    Iterator directories = meta.getDirectoryIterator();
+                    Iterator<Directory> directories = meta.getDirectories().iterator();
                     breakAllWhiles: while (directories.hasNext()) {
                         Directory directory = (Directory)directories.next();
-                        Iterator tags = directory.getTagIterator();
-                        while (tags.hasNext()) {
-                            Tag tag = (Tag)tags.next();
-                            try {
-                                String name = tag.getTagName();
-                                String description = tag.getDescription();
-                                temp = temp + "<b>" + name + ":</b> " + description + "<br/>";
-                            }
-                            catch (MetadataException ex) {
-                                Logger.getLogger(Utils.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                        Collection<Tag> tags = directory.getTags();
+                        for (Tag tag : tags) {
+                            String name = tag.getTagName();
+                            String description = tag.getDescription();
+                            temp = temp + "<b>" + name + ":</b> " + description + "<br/>";
                         }
                     }
                     txtPane.setText(temp);
@@ -487,6 +482,9 @@ public final class Utils {
                     //frame.setLocationRelativeTo(((WildLogApp)Application.getInstance()).getMainView().getComponent());
                     frame.pack();
                     frame.setVisible(true);
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace();
                 }
                 catch (JpegProcessingException ex) {
                     ex.printStackTrace();
