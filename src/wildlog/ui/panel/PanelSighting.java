@@ -4,7 +4,6 @@ import com.drew.imaging.jpeg.JpegMetadataReader;
 import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
-import com.drew.metadata.MetadataException;
 import com.drew.metadata.Tag;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -1334,7 +1333,10 @@ public class PanelSighting extends javax.swing.JPanel {
                         }
                     }
                 }
-                catch (IOException | JpegProcessingException ex) {
+                catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                catch (JpegProcessingException ex) {
                     ex.printStackTrace();
                 }
             }

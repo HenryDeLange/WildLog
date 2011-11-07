@@ -1,0 +1,39 @@
+<launch4jConfig>
+  <dontWrapJar>true</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>WildLog.jar</jar>
+  <outfile>C:\Users\Henry\Desktop\WildLog.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine>log_to_file</cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <customProcName>true</customProcName>
+  <stayAlive>false</stayAlive>
+  <manifest>C:\_Projekte (Code)\WildLog Stuff\Installer project\WildLog.exe.manifest</manifest>
+  <icon>C:\Users\Henry\Desktop\WildLog.ico</icon>
+  <singleInstance>
+    <mutexName>WildLogInstance</mutexName>
+    <windowTitle>WildLog</windowTitle>
+  </singleInstance>
+  <jre>
+    <path></path>
+    <minVersion>1.6.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <opt>-Xms128m -Xmx512m</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>3.5.0.0</fileVersion>
+    <txtFileVersion>WildLog v3.5 Launcher</txtFileVersion>
+    <fileDescription>WildLog Application: EXE wrapper for WildLog.jar</fileDescription>
+    <copyright>2011</copyright>
+    <productVersion>3.5.0.0</productVersion>
+    <txtProductVersion>WildLog v3.5 Launcher</txtProductVersion>
+    <productName>WildLog</productName>
+    <companyName></companyName>
+    <internalName>WildLog</internalName>
+    <originalFilename>WildLog.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>
