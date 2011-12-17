@@ -5,7 +5,7 @@ public enum GameWatchIntensity {
     VERY_HIGH("Heavily Focused"),
     HIGH("Focused"),
     MEDIUM("Lightly Focused"),
-    LOW("Not Realy Focus"),
+    LOW("Not Realy Focused"),
     VERY_LOW("No Focus"),
     NONE("None");
             

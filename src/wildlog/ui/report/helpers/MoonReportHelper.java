@@ -1,12 +1,15 @@
 package wildlog.ui.report.helpers;
 
 import java.awt.Color;
+import java.util.Date;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 import wildlog.ui.report.chart.BarChart;
 import wildlog.ui.report.chart.BarChartEntity;
+import wildlog.utils.AstroUtils;
+import wildlog.utils.LatLonConverter;
 
 /**
  *
@@ -37,11 +40,26 @@ public class MoonReportHelper {
 //            inChart.addBar(new BarChartEntity("All Unknown Phase", "Weetnie", 1, inLabels[4].getForeground()));
 
         if (inSighting.getMoonPhase() >= 0) {
-            if (inSighting.getMoonPhase() >= 0 && inSighting.getMoonPhase() <= 50)
+            if (inSighting.getMoonPhase() >= 0 && inSighting.getMoonPhase() < 50)
                 inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "0-50%", "First Half", 1, getColor(inSighting, inLabels)));
             else
             if (inSighting.getMoonPhase() > 50 && inSighting.getMoonPhase() <= 100)
-                inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "51-100%", "Second Half", 1, getColor(inSighting, inLabels)));
+                inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "50-100%", "Second Half", 1, getColor(inSighting, inLabels)));
+            else
+                // IF the moon is 50% then base it on wether the moon is growing or shrinking.
+            if (inSighting.getMoonPhase() == 50) {
+                Date testDate = new Date(inSighting.getDate().getTime() + 1000*60*60*24*2);
+                int testMoonphase = AstroUtils.getMoonPhase(testDate);
+                System.out.println("Dit was: " + inSighting.getMoonPhase());
+                System.out.println("Dit gaan wees: " + testMoonphase);
+                if (testMoonphase >= 0 && testMoonphase < 50)
+                    inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "0-50%", "First Half", 1, getColor(inSighting, inLabels)));
+                else
+                if (testMoonphase > 50 && testMoonphase <= 100)
+                    inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "50-100%", "Second Half", 1, getColor(inSighting, inLabels)));
+                else
+                    inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "Unknown", "Unknown", 1, getColor(inSighting, inLabels)));
+            }
             else
                 inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "Unknown", "Unknown", 1, getColor(inSighting, inLabels)));
         }

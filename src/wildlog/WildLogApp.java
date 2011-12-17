@@ -123,7 +123,7 @@ public class WildLogApp extends SingleFrameApplication {
     @Override
     protected void initialize(String[] arg0) {
         System.out.println("STARTING UP WildLog..."
-                + new SimpleDateFormat("dd MMM yyyy (hh:mm:ss)").format(Calendar.getInstance().getTime()));
+                + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
         super.initialize(arg0);
         try {
             BufferedReader reader = new BufferedReader(new FileReader("wildloghome"));
@@ -205,7 +205,7 @@ public class WildLogApp extends SingleFrameApplication {
         if (dbi != null)
             dbi.close();
         System.out.println("SHUTTING DOWN WildLog - " 
-                + new SimpleDateFormat("dd MMM yyyy (hh:mm:ss)").format(Calendar.getInstance().getTime()));
+                + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
     }
     
     
@@ -271,74 +271,6 @@ public class WildLogApp extends SingleFrameApplication {
             });
             btnNextMapPoint.setPreferredSize(new Dimension(70, 25));
             mapOnlineFrame.add(btnNextMapPoint, new AbsoluteConstraints(70, 505, -1, -1));
-
-//            JButton btnLoadOpenStreetMap = new JButton("Open Street Map");
-//            btnLoadOpenStreetMap.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    mapOnline.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
-//                    mapOnline.setAddressLocation(defaultPosition);
-//                    mapOnline.setZoom(12);
-//                }
-//            });
-//            btnLoadOpenStreetMap.setPreferredSize(new Dimension(150, 25));
-//            mapOnlineFrame.add(btnLoadOpenStreetMap, new AbsoluteConstraints(150, 505, -1, -1));
-
-            // Die NASA layers werk nie meer nie..
-//            JButton btnLoadNASA2 = new JButton("NASA: Mosaic");
-//            btnLoadNASA2.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    WMSService wms = new WMSService();
-//                    //wms.setLayer("BMNG");
-//                    wms.setLayer("global_mosaic");
-//                    //wms.setLayer("daily_planet");
-//                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-//                    TileFactory fact = new WMSTileFactory(wms);
-//                    mapOnline.setTileFactory(fact);
-//                    mapOnline.setAddressLocation(defaultPosition);
-//                    mapOnline.setZoom(13);
-//                }
-//            });
-//            btnLoadNASA2.setPreferredSize(new Dimension(150, 25));
-//            mapOnlineFrame.add(btnLoadNASA2, new AbsoluteConstraints(300, 500, -1, -1));
-//
-//            JButton btnLoadNASA1 = new JButton("NASA: Blue Marble");
-//            btnLoadNASA1.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    WMSService wms = new WMSService();
-//                    wms.setLayer("BMNG");
-//                    //wms.setLayer("global_mosaic");
-//                    //wms.setLayer("daily_planet");
-//                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-//                    TileFactory fact = new WMSTileFactory(wms);
-//                    mapOnline.setTileFactory(fact);
-//                    mapOnline.setAddressLocation(defaultPosition);
-//                    mapOnline.setZoom(13);
-//                }
-//            });
-//            btnLoadNASA1.setPreferredSize(new Dimension(150, 25));
-//            mapOnlineFrame.add(btnLoadNASA1, new AbsoluteConstraints(450, 500, -1, -1));
-//
-//            JButton btnLoadNASA3 = new JButton("NASA: Daily Planet");
-//            btnLoadNASA3.addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent e) {
-//                    WMSService wms = new WMSService();
-//                    //wms.setLayer("BMNG");
-//                    //wms.setLayer("global_mosaic");
-//                    wms.setLayer("daily_planet");
-//                    wms.setBaseUrl("http://wms.jpl.nasa.gov/wms.cgi?");
-//                    TileFactory fact = new WMSTileFactory(wms);
-//                    mapOnline.setTileFactory(fact);
-//                    mapOnline.setAddressLocation(defaultPosition);
-//                    mapOnline.setZoom(13);
-//                }
-//            });
-//            btnLoadNASA3.setPreferredSize(new Dimension(150, 25));
-//            mapOnlineFrame.add(btnLoadNASA3, new AbsoluteConstraints(600, 500, -1, -1));
-
             mapOnlineFrame.pack();
             mapOnlineFrame.setResizable(false);
         }
@@ -348,13 +280,6 @@ public class WildLogApp extends SingleFrameApplication {
     public void clearOnlinemap() {
         mapOnlineFrame = null;
     }
-
-//    public void resetMapFrame() {
-//        if (mapOffline != null)
-//            mapOffline.getFrameForImageDrawing().setVisible(false);
-//
-//        mapOffline = null;
-//    }
 
     public boolean isUseOnlineMap() {
         return useOnlineMap;
