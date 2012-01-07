@@ -56,6 +56,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
+import wildlog.utils.FileDrop;
 import wildlog.utils.FilePaths;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
@@ -95,6 +96,21 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         fixSelectAllForSpinners(spnWeightMaleMax);
         fixSelectAllForSpinners(spnWeightFemaleMin);
         fixSelectAllForSpinners(spnWeightFemaleMax);
+        
+        // setup the file dropping
+        FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                btnUpdateActionPerformed(null);
+                if (!txtPrimaryName.getBackground().equals(Color.RED)) {
+                    imageIndex = Utils.uploadImage("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), null, lblImage, 300, app, inFiles);
+                    setupNumberOfImages();
+                    // everything went well - saving
+                    btnUpdateActionPerformed(null);
+                }
+            }
+        });
+        
     }
     
     public Element getElement() {

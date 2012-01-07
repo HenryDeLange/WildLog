@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -45,6 +46,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.report.ReportLocation;
 import wildlog.utils.AstroUtils;
+import wildlog.utils.FileDrop;
 import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
@@ -87,6 +89,20 @@ public class PanelLocation extends PanelCanSetupHeader {
         SpinnerFixer.fixSelectAllForSpinners(spnLonDegrees);
         SpinnerFixer.fixSelectAllForSpinners(spnLonMinutes);
         SpinnerFixer.fixSelectAllForSpinners(spnLonSeconds);
+        
+        // setup the file dropping
+        FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                btnUpdateActionPerformed(null);
+                if (!txtName.getBackground().equals(Color.RED)) {
+                    imageIndex = Utils.uploadImage("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), null, lblImage, 300, app, inFiles);
+                    setupNumberOfImages();
+                    // everything went well - saving
+                    btnUpdateActionPerformed(null);
+                }
+            }
+        });
     }
     
     public void setLocationWL(Location inLocation) {

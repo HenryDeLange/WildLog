@@ -45,6 +45,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.utils.AstroUtils;
+import wildlog.utils.FileDrop;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.SpinnerFixer;
 
@@ -191,6 +192,29 @@ public class PanelSighting extends javax.swing.JPanel {
         SpinnerFixer.fixSelectAllForSpinners(spnLonDegrees);
         SpinnerFixer.fixSelectAllForSpinners(spnLonMinutes);
         SpinnerFixer.fixSelectAllForSpinners(spnLonSeconds);
+        
+        FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                if (sighting != null) {
+                    boolean loadDate = false;
+                    if (dtpSightingDate.getDate() == null) {
+                        dtpSightingDate.setDate(Calendar.getInstance().getTime());
+                        loadDate = true;
+                    }
+                    btnUpdateSightingActionPerformed(null);
+                    if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
+                        imageIndex = Utils.uploadImage("SIGHTING-" + sighting.getSightingCounter(), "Sightings"+File.separatorChar+sighting.toString(), null, lblImage, 300, app, inFiles);
+                        setupNumberOfImages();
+                        if (loadDate) {
+                            btnGetDateFromImageActionPerformed(null);
+                        }
+                        // Save
+                        btnUpdateSightingActionPerformed(null);
+                    }
+                }
+            }
+        });
     }
 
     public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh, boolean inTreatAsNewSighting, boolean inDisableEditing) {
@@ -1316,14 +1340,31 @@ public class PanelSighting extends javax.swing.JPanel {
                         Collection<Tag> tags = directory.getTags();
                         for (Tag tag : tags) {
                             if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
-                                SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                                // Not all files store the date in the same format, so I have to try a few known formats...
                                 try {
+                                    // This seems to be by far the most used format
+                                    SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
                                     Date tempDate = f.parse(tag.getDescription());
                                     dtpSightingDate.setDate(tempDate);
                                     spnHours.setValue(tempDate.getHours());
                                     spnMinutes.setValue(tempDate.getMinutes());
                                     cmbTimeFormat.setSelectedIndex(0);
                                     btnCalculateMoonPhaseActionPerformed(null);
+                                    break breakAllWhiles;
+                                }
+                                catch (ParseException ex) {
+                                    ex.printStackTrace();
+                                }
+                                try {
+                                    // Wird format used by Samsung Galaxy Gio (Android)
+                                    SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+                                    Date tempDate = f.parse(tag.getDescription());
+                                    dtpSightingDate.setDate(tempDate);
+                                    spnHours.setValue(tempDate.getHours());
+                                    spnMinutes.setValue(tempDate.getMinutes());
+                                    cmbTimeFormat.setSelectedIndex(0);
+                                    btnCalculateMoonPhaseActionPerformed(null);
+                                    System.err.println("However: [THIS DATE (" + tag.getDescription() + ") COULD BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
                                     break breakAllWhiles;
                                 }
                                 catch (ParseException ex) {

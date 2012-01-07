@@ -45,6 +45,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
+import wildlog.utils.FileDrop;
 import wildlog.utils.FilePaths;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
@@ -80,6 +81,20 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         imageSightingIndex = 0;
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         tblSightings.getTableHeader().setReorderingAllowed(false);
+        
+        // setup the file dropping
+        FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                btnUpdateActionPerformed(null);
+                if (!txtName.getBackground().equals(Color.RED)) {
+                    imageIndex = Utils.uploadImage("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), null, lblImage, 300, app, inFiles);
+                    setupNumberOfImages();
+                    // everything went well - saving
+                    btnUpdateActionPerformed(null);
+                }
+            }
+        });
     }
     
     public void setVisit(Visit inVisit) {

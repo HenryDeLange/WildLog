@@ -94,8 +94,12 @@ public final class Utils {
         return resizedImg;
     }
 
+    /**
+     * Upload a file using a FileChooser dialog.
+     */
     public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        if (inComponent != null)
+            inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
 //        d.setDirectory(lastFilePath);
@@ -113,9 +117,31 @@ public final class Utils {
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         int result = fileChooser.showOpenDialog(inComponent);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            File[] files = fileChooser.getSelectedFiles();
-            for (int t = 0; t < files.length; t++) {
-                File fromFile = files[t];
+            performFileUpload(inID, inFolderName, fileChooser.getSelectedFiles(), inImageLabel, inSize, inApp);
+        }
+        if (inComponent != null)
+            inComponent.setCursor(Cursor.getDefaultCursor());
+        // return new image index
+        return 0;
+    }
+    
+    /**
+     * Upload a file using a List of Files. (Used with FileDrop.)
+     */
+    public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
+        if (inComponent != null)
+            inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        performFileUpload(inID, inFolderName, inFiles.toArray(new File[inFiles.size()]), inImageLabel, inSize, inApp);
+        if (inComponent != null)
+            inComponent.setCursor(Cursor.getDefaultCursor());
+        // return new image index
+        return 0;
+    }
+    
+    private static void performFileUpload(String inID, String inFolderName, File[] inFiles, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+        for (int t = 0; t < inFiles.length; t++) {
+            File fromFile = inFiles[t];
+            if (fromFile != null && fromFile.isFile()) {
                 lastFilePath = fromFile.getPath();
                 // Is an image
                 if (new ImageFilter().accept(fromFile)) {
@@ -258,9 +284,6 @@ public final class Utils {
                 }
             }
         }
-        inComponent.setCursor(Cursor.getDefaultCursor());
-        // return new image index
-        return 0;
     }
 
     // Methods for the buttons on the panels that work with the images
