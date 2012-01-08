@@ -9,10 +9,12 @@ public enum FilePaths {
     WILDLOG_MOVIES (File.separatorChar + "WildLog" + File.separatorChar + "Movies" + File.separatorChar),
     WILDLOG_OTHER (File.separatorChar + "WildLog" + File.separatorChar + "Other Uploads" + File.separatorChar),
     WILDLOG_BACKUPS (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar),
+    WILDLOG_BACKUPS_MONTHLY (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "Auto" + File.separatorChar),
     WILDLOG_EXPORT (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar),
     WILDLOG_EXPORT_KML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML" + File.separatorChar),
     WILDLOG_EXPORT_CSV (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV" + File.separatorChar),
-    WILDLOG_EXPORT_HTML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar)
+    WILDLOG_EXPORT_HTML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar),
+    WILDLOG_SETTINGS (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar)
     ;
 
     private static String currentRoot;
@@ -23,6 +25,8 @@ public enum FilePaths {
     }
 
     public static void setRoot(String inRoot) {
+        if (inRoot == null)
+            inRoot = File.separator;
         currentRoot = inRoot;
         if (currentRoot.charAt(currentRoot.length()-1) == File.separatorChar)
             currentRoot = currentRoot.substring(0, currentRoot.length()-1);

@@ -8,12 +8,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import org.jdesktop.application.Application;
@@ -125,21 +124,17 @@ public class WildLogApp extends SingleFrameApplication {
         System.out.println("STARTING UP WildLog..."
                 + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
         super.initialize(arg0);
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("wildloghome"));
-            FilePaths.setRoot(reader.readLine());
-        }
-        catch (IOException ex) {
-            Logger.getLogger(WildLogApp.class.getName()).log(Level.SEVERE, null, ex);
-            shutdown();
-        }
         File dataFolder = new File(FilePaths.WILDLOG_DATA.getFullPath());
         dataFolder.mkdirs();
         File imagesFolder = new File(FilePaths.WILDLOG_IMAGES.getFullPath());
         imagesFolder.mkdirs();
-
         //dbi = new DBI_derby();
         dbi = new DBI_h2();
+        // Check to do monthly backup
+        File dirs = new File(FilePaths.WILDLOG_BACKUPS_MONTHLY.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+        if (!dirs.exists()) {
+            dbi.doBackup(FilePaths.WILDLOG_BACKUPS_MONTHLY);
+        }
     }
 
     /**
@@ -174,25 +169,62 @@ public class WildLogApp extends SingleFrameApplication {
      * Main method launching the application.
      */
     public static void main(String[] args) {
+        // Make sure the Settings folder exists
+        File folder = new File(FilePaths.WILDLOG_SETTINGS.toString());
+        folder.mkdirs();
         // Configure to log to a logging file
         if (args != null && args.length == 1) {
             if ("log_to_file".equalsIgnoreCase(args[0])) {
                 try {
-//                    PrintStream orgStream 	= null;
-                    PrintStream fileStream 	= null;
+                    PrintStream fileStream = null;
                     // Saving the orginal stream
-//                    orgStream = System.out;
-                    fileStream = new PrintStream(new FileOutputStream("errorlog.txt",true));
+                    fileStream = new PrintStream(new FileOutputStream(FilePaths.WILDLOG_SETTINGS.toString() + "errorlog.txt", true));
                     // Redirecting console output to file
                     System.setOut(fileStream);
                     // Redirecting runtime exceptions to file
                     System.setErr(fileStream);
-                    //Restoring back to console
-//                    System.setOut(orgStream);
                 }
                 catch (FileNotFoundException ex) {
                     ex.printStackTrace();
                 }
+            }
+        }
+        // Try to read the workspace file
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new FileReader(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
+            FilePaths.setRoot(reader.readLine());
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+            FileWriter writer = null;
+            try {
+                writer = new FileWriter(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome");
+                writer.write(File.separator);
+            }
+            catch (IOException ioex) {
+                ioex.printStackTrace();
+            }
+            finally {
+                if (writer != null) {
+                    try {
+                        writer.flush();
+                        writer.close();
+                    }
+                    catch (IOException ioex) {
+                        ioex.printStackTrace();
+                    }
+                }
+            }
+            // Try to load the new file
+            try {
+                BufferedReader reader = new BufferedReader(
+                        new FileReader(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
+                FilePaths.setRoot(reader.readLine());
+            }
+            catch (IOException ioex) {
+                ioex.printStackTrace();
+                System.exit(-1);
             }
         }
         // Launch the application

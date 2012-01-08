@@ -16,12 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
-import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -410,7 +407,7 @@ public class ReportLocation extends javax.swing.JFrame {
             }
             pj.print();
         } catch (PrinterException ex) {
-            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_mnuPrintReportActionPerformed
 

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import wildlog.utils.FilePaths;
 
 /**
  *
@@ -125,7 +126,7 @@ public class DBI_derby extends DBI_JDBC {
     }
 
     @Override
-    public void doBackup() {
+    public void doBackup(FilePaths inPath) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

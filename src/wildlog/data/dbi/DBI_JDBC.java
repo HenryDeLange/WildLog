@@ -1306,7 +1306,6 @@ public abstract class DBI_JDBC implements DBI {
 
     @Override
     public boolean createOrUpdate(WildLogFile inFoto, boolean inUpdate) {
-        // Note: mens kan nie fotos update nie
         Statement state = null;
         try {
             state = conn.createStatement();
@@ -1325,7 +1324,7 @@ public abstract class DBI_JDBC implements DBI {
                     sql.append("ISDEFAULT = 1");
                 else
                     sql.append("ISDEFAULT = 0");
-                sql.append("WHERE FILEPATH = '").append(inFoto.getFileLocation(false)).append("'");
+                sql.append("WHERE ORIGINALPATH = '").append(inFoto.getOriginalFotoLocation(false)).append("'");
                 state.execute(sql.toString());
             }
             else {

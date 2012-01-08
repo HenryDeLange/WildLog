@@ -8,11 +8,12 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.utils.FilePaths;
 
 
 public interface DBI {
     public void close();
-    public void doBackup();
+    public void doBackup(FilePaths inFolder);
     public void doExportCSV(String inPath);
     public void doImportCSV(String inPath, String inPrefix);
     

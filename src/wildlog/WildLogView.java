@@ -5,8 +5,6 @@ import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
@@ -1535,7 +1533,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         }
         catch (IOException ex) {
-            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_tabFotoComponentShown
 
@@ -1606,7 +1604,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
@@ -1676,7 +1674,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
             catch (IOException ex) {
-                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
             browseByLocation();
             this.getComponent().setCursor(Cursor.getDefaultCursor());
@@ -1705,7 +1703,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
             catch (IOException ex) {
-                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
             browseByElement();
             this.getComponent().setCursor(Cursor.getDefaultCursor());
@@ -1734,7 +1732,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
             catch (IOException ex) {
-                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
             }
             browseByDate();
             this.getComponent().setCursor(Cursor.getDefaultCursor());
@@ -2090,7 +2088,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     @Action
     public void backup() {
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        app.getDBI().doBackup();
+        app.getDBI().doBackup(FilePaths.WILDLOG_BACKUPS);
         JOptionPane.showMessageDialog(this.getComponent(), "Done. The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. (Note: This only backup the database entries, the image, etc. files have to done manually.)", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
@@ -2281,7 +2279,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             imgBrowsePhotos.setToolTipText("");
         }
         catch (IOException ex) {
-            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }
 
@@ -2303,7 +2301,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                         }
                         catch (IOException ex) {
-                            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                            ex.printStackTrace();
                         }
                         finally {
                             imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
@@ -2315,7 +2313,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                             lblNumberOfImages.setText("0 of 0");
                         }
                         catch (IOException ex) {
-                            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                            ex.printStackTrace();
                         }
                         finally {
                             imgBrowsePhotos.setToolTipText("");
@@ -2328,7 +2326,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         lblNumberOfImages.setText("");
                     }
                     catch (IOException ex) {
-                        Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                        ex.printStackTrace();
                     }
                     finally {
                         imgBrowsePhotos.setToolTipText("");
@@ -2429,16 +2427,25 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             fileChooser.setDialogTitle("Select the directory with to use as the new Workspace Folder.");
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
-                writer = new BufferedWriter(new FileWriter("wildloghome"));
+                writer = new BufferedWriter(
+                        new FileWriter(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
                 String path = fileChooser.getSelectedFile().getPath();
-                if (path.toLowerCase().endsWith(FilePaths.WILDLOG.toString().toLowerCase().substring(1, FilePaths.WILDLOG.toString().length() - 1)))
-                    path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1));
+                if (path.toLowerCase().endsWith(FilePaths.WILDLOG.toString().toLowerCase().substring(1, FilePaths.WILDLOG.toString().length() - 1))) {
+                    // The name might be tricky to parse if it ends with WildLog so we have to do some extra checks...
+                    // Because the user can selecte either c:\MyWildLog(\WildLog\Data) or c:\MyWildLog\WildLog(\Data)...
+                    // I'll use the Data folder to test for the actual WildLog folder structure
+                    File testFile = new File(path + FilePaths.WILDLOG_DATA.toString().replace(FilePaths.WILDLOG.toString(), File.separator));
+                    if (testFile.exists() && testFile.isDirectory()) {
+                        // I assume the user selected the WildLog folder an we need to strip it from the path
+                        path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1));
+                    }
+                }
                 writer.write(path);
                 writer.flush();
             }
         }
         catch (IOException ex) {
-            Logger.getLogger(WildLogApp.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         finally {
             if (writer != null)
@@ -2446,17 +2453,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     writer.close();
                 }
                 catch (IOException ex) {
-                    Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
         }
         // Then try to read
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader("wildloghome"));
+            reader = new BufferedReader(
+                    new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
             FilePaths.setRoot(reader.readLine());
         }
         catch (IOException ex) {
-            Logger.getLogger(WildLogApp.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(this.getComponent(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
         }
         finally {
@@ -2465,7 +2473,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     reader.close();
                 }
                 catch (IOException ex) {
-                    Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
                 }
         }
         // Shutdown
@@ -2492,7 +2500,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 Utils.deleteRecursive(new File(FilePaths.WILDLOG_EXPORT.getFullPath()));
             }
             catch (IOException ex) {
-                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
                 JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
             }
             // Check for unused empty folders
@@ -2502,7 +2510,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_OTHER.getFullPath()));
             }
             catch (IOException ex) {
-                Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+                ex.printStackTrace();
                 JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
             }
             // Done

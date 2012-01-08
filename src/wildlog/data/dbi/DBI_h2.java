@@ -123,12 +123,12 @@ public class DBI_h2 extends DBI_JDBC {
     }
 
     @Override
-    public void doBackup() {
+    public void doBackup(FilePaths inFolder) {
         Statement state = null;
         try {
             state = conn.createStatement();
             // Backup
-            File dirs = new File(FilePaths.WILDLOG_BACKUPS.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+            File dirs = new File(inFolder.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
             dirs.mkdirs();
             // Create a database file backup
             state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");

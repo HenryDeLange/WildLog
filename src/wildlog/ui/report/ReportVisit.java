@@ -12,11 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import wildlog.WildLogApp;
-import wildlog.WildLogView;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
@@ -379,7 +376,7 @@ public class ReportVisit extends javax.swing.JFrame {
             }
             pj.print();
         } catch (PrinterException ex) {
-            Logger.getLogger(WildLogView.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
