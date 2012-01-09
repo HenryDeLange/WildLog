@@ -278,6 +278,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 formComponentShown(evt);
             }
         });
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         elementIncludes.setBackground(resourceMap.getColor("elementIncludes.background")); // NOI18N
         elementIncludes.setMaximumSize(new java.awt.Dimension(1005, 585));
@@ -862,19 +863,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbSizeType.setName("cmbSizeType"); // NOI18N
         elementIncludes.add(cmbSizeType, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 110, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        add(elementIncludes);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -1036,6 +1025,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     }
                 };
                 dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+                dialog.setResizable(false);
                 dialog.setVisible(true);
             }
             else {
@@ -1145,6 +1135,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 }
             };
             dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+            dialog.setResizable(false);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed

@@ -6,10 +6,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
-import org.jdesktop.application.TaskMonitor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -25,8 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.Timer;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -100,63 +96,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         initComponents();
 
-        // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = getResourceMap();
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
-        messageTimer = new Timer(messageTimeout, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                statusMessageLabel.setText("");
-            }
-        });
-        messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
-        for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
-        }
-        busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
-                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
-            }
-        });
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
-        statusAnimationLabel.setIcon(idleIcon);
-        progressBar.setVisible(false);
-
-        // connecting action tasks to status bar via TaskMonitor
-        TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
-        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            @Override
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                String propertyName = evt.getPropertyName();
-                if ("started".equals(propertyName)) {
-                    if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
-                        busyIconIndex = 0;
-                        busyIconTimer.start();
-                    }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
-                } else if ("done".equals(propertyName)) {
-                    busyIconTimer.stop();
-                    statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
-                } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
-                    statusMessageLabel.setText((text == null) ? "" : text);
-                    messageTimer.restart();
-                } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setValue(value);
-                }
-            }
-        });
-
         // Setup the tab headers
         setupTabHeaderHome();
         setupTabHeaderFoto();
@@ -169,6 +108,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation.getTableHeader().setReorderingAllowed(false);
         tblLocation_EleTab.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
+        
+        // Set the minimum size of the frame
+        this.getFrame().setMinimumSize(new Dimension(1024, 685));
     }
 
     @Action
@@ -329,19 +271,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuDBConsole = new javax.swing.JMenuItem();
         subMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
-        statusPanel = new javax.swing.JPanel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
-        statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
         buttonGroup1 = new javax.swing.ButtonGroup();
 
-        mainPanel.setMaximumSize(new java.awt.Dimension(1000, 630));
+        mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         mainPanel.setName("mainPanel"); // NOI18N
-        mainPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
+        mainPanel.setPreferredSize(new java.awt.Dimension(2500, 1300));
+        mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        tabbedPanel.setMaximumSize(new java.awt.Dimension(1000, 630));
+        tabbedPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
         tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
@@ -381,7 +319,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
         jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
-        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 10, -1, -1));
+        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 10, -1, -1));
 
         jLabel3.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
@@ -417,7 +355,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jLabel5.setForeground(resourceMap.getColor("jLabel5.foreground")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 30, -1, -1));
+        tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 30, -1, -1));
 
         lblWorkspace.setFont(resourceMap.getFont("lblWorkspace.font")); // NOI18N
         lblWorkspace.setForeground(resourceMap.getColor("lblWorkspace.foreground")); // NOI18N
@@ -429,10 +367,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
         tabFoto.setBackground(resourceMap.getColor("tabFoto.background")); // NOI18N
-        tabFoto.setMaximumSize(new java.awt.Dimension(1000, 630));
-        tabFoto.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabFoto.setName("tabFoto"); // NOI18N
-        tabFoto.setPreferredSize(new java.awt.Dimension(1000, 630));
         tabFoto.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabFotoComponentShown(evt);
@@ -451,7 +386,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseLocationItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        tabFoto.add(rdbBrowseLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
 
         rdbBrowseElement.setBackground(resourceMap.getColor("rdbBrowseElement.background")); // NOI18N
         buttonGroup1.add(rdbBrowseElement);
@@ -464,7 +399,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseElementItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
+        tabFoto.add(rdbBrowseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, -1, -1));
 
         rdbBrowseDate.setBackground(resourceMap.getColor("rdbBrowseDate.background")); // NOI18N
         buttonGroup1.add(rdbBrowseDate);
@@ -477,7 +412,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseDateItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, -1, -1));
+        tabFoto.add(rdbBrowseDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, -1, -1));
 
         imgBrowsePhotos.setBackground(resourceMap.getColor("imgBrowsePhotos.background")); // NOI18N
         imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -494,7 +429,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             .addGap(0, 498, Short.MAX_VALUE)
         );
 
-        tabFoto.add(imgBrowsePhotos, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 80, 500, 500));
+        tabFoto.add(imgBrowsePhotos, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 500, 500));
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
 
@@ -504,7 +439,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         txtPhotoInformation.setName("txtPhotoInformation"); // NOI18N
         jScrollPane5.setViewportView(txtPhotoInformation);
 
-        tabFoto.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(268, 12, 240, 570));
+        tabFoto.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 235, 570));
 
         jScrollPane4.setName("jScrollPane4"); // NOI18N
 
@@ -519,7 +454,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
-        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 250, 480));
+        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 50, 250, 500));
 
         btnGoBrowseSelection.setBackground(resourceMap.getColor("btnGoBrowseSelection.background")); // NOI18N
         btnGoBrowseSelection.setIcon(resourceMap.getIcon("btnGoBrowseSelection.icon")); // NOI18N
@@ -532,7 +467,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoBrowseSelectionActionPerformed(evt);
             }
         });
-        tabFoto.add(btnGoBrowseSelection, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 553, 250, 30));
+        tabFoto.add(btnGoBrowseSelection, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 550, 250, 30));
 
         btnZoomIn.setAction(imgBrowsePhotos.getZoomInAction());
         btnZoomIn.setBackground(resourceMap.getColor("btnZoomIn.background")); // NOI18N
@@ -541,7 +476,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomIn.setToolTipText(resourceMap.getString("btnZoomIn.toolTipText")); // NOI18N
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setName("btnZoomIn"); // NOI18N
-        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 40, 80, 30));
+        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 80, 30));
 
         btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
         btnZoomOut.setBackground(resourceMap.getColor("btnZoomOut.background")); // NOI18N
@@ -550,7 +485,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomOut.setToolTipText(resourceMap.getString("btnZoomOut.toolTipText")); // NOI18N
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setName("btnZoomOut"); // NOI18N
-        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(935, 40, 80, 30));
+        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 40, 80, 30));
 
         btnViewImage.setBackground(resourceMap.getColor("btnViewImage.background")); // NOI18N
         btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
@@ -562,7 +497,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 45, 120, 25));
+        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 50, 120, 25));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -575,7 +510,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnBrowsePrevActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 5, -1, 65));
+        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, -1, 65));
 
         btnBrowseNext.setBackground(resourceMap.getColor("btnBrowseNext.background")); // NOI18N
         btnBrowseNext.setIcon(resourceMap.getIcon("btnBrowseNext.icon")); // NOI18N
@@ -588,15 +523,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnBrowseNextActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(665, 5, -1, 65));
+        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, -1, 65));
 
         dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 100, -1));
+        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, 100, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 40, 100, -1));
+        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 25, 100, -1));
 
         btnRefreshDates.setBackground(resourceMap.getColor("btnRefreshDates.background")); // NOI18N
         btnRefreshDates.setIcon(resourceMap.getIcon("btnRefreshDates.icon")); // NOI18N
@@ -609,12 +544,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnRefreshDatesActionPerformed(evt);
             }
         });
-        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 35, 40, 30));
+        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 23, 40, 25));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
-        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(578, 35, 80, 30));
+        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 40, 80, 30));
 
         btnReport.setBackground(resourceMap.getColor("btnReport.background")); // NOI18N
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
@@ -627,7 +562,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnReportActionPerformed(evt);
             }
         });
-        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(725, 5, 120, 35));
+        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 10, 120, 35));
 
         btnDefault.setBackground(resourceMap.getColor("btnDefault.background")); // NOI18N
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
@@ -639,7 +574,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnDefaultActionPerformed(evt);
             }
         });
-        tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(573, 5, 90, -1));
+        tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 90, -1));
 
         cmbElementTypesBrowseTab.setBackground(resourceMap.getColor("cmbElementTypesBrowseTab.background")); // NOI18N
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
@@ -652,7 +587,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 cmbElementTypesBrowseTabActionPerformed(evt);
             }
         });
-        tabFoto.add(cmbElementTypesBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 210, -1));
+        tabFoto.add(cmbElementTypesBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 25, 210, -1));
 
         chkElementTypeBrowseTab.setBackground(resourceMap.getColor("chkElementTypeBrowseTab.background")); // NOI18N
         chkElementTypeBrowseTab.setText(resourceMap.getString("chkElementTypeBrowseTab.text")); // NOI18N
@@ -662,7 +597,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 chkElementTypeBrowseTabActionPerformed(evt);
             }
         });
-        tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
+        tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
 
         btnRotate.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
         btnRotate.setBackground(resourceMap.getColor("btnRotate.background")); // NOI18N
@@ -671,7 +606,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnRotate.setToolTipText(resourceMap.getString("btnRotate.toolTipText")); // NOI18N
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRotate.setName("btnRotate"); // NOI18N
-        tabFoto.add(btnRotate, new org.netbeans.lib.awtextra.AbsoluteConstraints(935, 5, 80, 30));
+        tabFoto.add(btnRotate, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 10, 80, 30));
 
         btnViewEXIF.setBackground(resourceMap.getColor("btnViewEXIF.background")); // NOI18N
         btnViewEXIF.setIcon(resourceMap.getIcon("btnViewEXIF.icon")); // NOI18N
@@ -685,7 +620,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnViewEXIFActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewEXIF, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 5, 80, 30));
+        tabFoto.add(btnViewEXIF, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, 80, 30));
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -727,12 +662,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane1.setViewportView(tblLocation);
 
-        tabLocation.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 860, 260));
+        tabLocation.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 850, 260));
 
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        tabLocation.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 280, -1, -1));
+        tabLocation.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 280, -1, -1));
 
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
@@ -784,7 +719,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoElement_LocTabActionPerformed(evt);
             }
         });
-        tabLocation.add(btnGoElement_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, 300, 30));
+        tabLocation.add(btnGoElement_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 550, 300, 30));
 
         btnAddLocation.setBackground(resourceMap.getColor("btnAddLocation.background")); // NOI18N
         btnAddLocation.setIcon(resourceMap.getIcon("btnAddLocation.icon")); // NOI18N
@@ -831,7 +766,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane3.setViewportView(tblElement_LocTab);
 
-        tabLocation.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 300, 300, 250));
+        tabLocation.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 300, 300, 250));
 
         btnGoVisit_LocTab.setBackground(resourceMap.getColor("btnGoVisit_LocTab.background")); // NOI18N
         btnGoVisit_LocTab.setIcon(resourceMap.getIcon("btnGoVisit_LocTab.icon")); // NOI18N
@@ -909,12 +844,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         scrlElement.setViewportView(tblElement);
 
-        tabElement.add(scrlElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 860, 260));
+        tabElement.add(scrlElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 850, 260));
 
         jLabel6.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
-        tabElement.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 280, -1, -1));
+        tabElement.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 280, -1, -1));
 
         btnGoElement.setBackground(resourceMap.getColor("btnGoElement.background")); // NOI18N
         btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
@@ -974,7 +909,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane6.setViewportView(tblLocation_EleTab);
 
-        tabElement.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 300, 330, 250));
+        tabElement.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 330, 250));
 
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
@@ -999,7 +934,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoLocationActionPerformed(evt);
             }
         });
-        tabElement.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 550, 330, 30));
+        tabElement.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 550, 330, 30));
 
         ckbTypeFilter.setBackground(resourceMap.getColor("ckbTypeFilter.background")); // NOI18N
         ckbTypeFilter.setText(resourceMap.getString("ckbTypeFilter.text")); // NOI18N
@@ -1042,7 +977,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 txtSearchKeyPressed(evt);
             }
         });
-        tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 320, -1));
+        tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 310, -1));
 
         btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
         btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
@@ -1070,7 +1005,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
-        tabElement.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, 350, 10));
+        tabElement.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, 340, 10));
 
         btnClearSearch.setBackground(resourceMap.getColor("btnClearSearch.background")); // NOI18N
         btnClearSearch.setIcon(resourceMap.getIcon("btnClearSearch.icon")); // NOI18N
@@ -1083,30 +1018,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnClearSearchActionPerformed(evt);
             }
         });
-        tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 400, 150, 30));
+        tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 400, 150, 30));
 
         lblSearchResults.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSearchResults.setText(resourceMap.getString("lblSearchResults.text")); // NOI18N
         lblSearchResults.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblSearchResults.border.lineColor"))); // NOI18N
         lblSearchResults.setName("lblSearchResults"); // NOI18N
-        tabElement.add(lblSearchResults, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 130, 20));
+        tabElement.add(lblSearchResults, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 120, 20));
 
         tabbedPanel.addTab(resourceMap.getString("tabElement.TabConstraints.tabTitle"), tabElement); // NOI18N
 
-        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
-        mainPanel.setLayout(mainPanelLayout);
-        mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1022, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(mainPanelLayout.createSequentialGroup()
-                .addComponent(tabbedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        mainPanel.add(tabbedPanel);
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -1264,46 +1186,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(extraMenu);
 
-        statusPanel.setName("statusPanel"); // NOI18N
-
-        statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
-
-        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
-
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-
-        progressBar.setName("progressBar"); // NOI18N
-
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 1022, Short.MAX_VALUE)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 852, Short.MAX_VALUE)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusAnimationLabel)
-                .addContainerGap())
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(statusMessageLabel)
-                    .addComponent(statusAnimationLabel)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3))
-        );
-
         setComponent(mainPanel);
         setMenuBar(menuBar);
-        setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
@@ -1776,6 +1660,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     }
                 };
                 dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+                dialog.setResizable(false);
                 dialog.setVisible(true);
             }
         }
@@ -2603,15 +2488,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem mnuMapStartMenuItem;
     private javax.swing.JMenuItem mnuOpenMapApp;
     private javax.swing.JMenuItem moveVisitsMenuItem;
-    private javax.swing.JProgressBar progressBar;
     private javax.swing.JRadioButton rdbBrowseDate;
     private javax.swing.JRadioButton rdbBrowseElement;
     private javax.swing.JRadioButton rdbBrowseLocation;
     private javax.swing.JScrollPane scrlElement;
     private javax.swing.JMenu settingsMenu;
-    private javax.swing.JLabel statusAnimationLabel;
-    private javax.swing.JLabel statusMessageLabel;
-    private javax.swing.JPanel statusPanel;
     private javax.swing.JMenu subMenu1;
     private javax.swing.JMenu subMenu2;
     private javax.swing.JMenu subMenu3;
@@ -2631,11 +2512,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenu workspaceMenu;
     // End of variables declaration//GEN-END:variables
 
-    private final Timer messageTimer;
-    private final Timer busyIconTimer;
-    private final Icon idleIcon;
-    private final Icon[] busyIcons = new Icon[15];
-    private int busyIconIndex = 0;
 
     private JDialog aboutBox;
 

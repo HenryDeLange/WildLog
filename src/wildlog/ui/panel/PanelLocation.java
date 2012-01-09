@@ -264,6 +264,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 formComponentShown(evt);
             }
         });
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         locationIncludes.setBackground(resourceMap.getColor("locationIncludes.background")); // NOI18N
         locationIncludes.setMaximumSize(new java.awt.Dimension(1005, 585));
@@ -275,7 +276,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
         txtName.setText(locationWL.getName());
         txtName.setName("txtName"); // NOI18N
-        locationIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 28, 490, -1));
+        locationIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 28, 490, -1));
 
         lblLocation.setFont(resourceMap.getFont("lblLocation.font")); // NOI18N
         lblLocation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -285,17 +286,17 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         jLabel35.setText(resourceMap.getString("jLabel35.text")); // NOI18N
         jLabel35.setName("jLabel35"); // NOI18N
-        locationIncludes.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 52, -1, -1));
+        locationIncludes.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, -1));
 
         cmbProvince.setMaximumRowCount(10);
         cmbProvince.setModel(new DefaultComboBoxModel(Province.values()));
         cmbProvince.setSelectedItem(locationWL.getProvince());
         cmbProvince.setName("cmbProvince"); // NOI18N
-        locationIncludes.add(cmbProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 52, 170, -1));
+        locationIncludes.add(cmbProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 52, 170, -1));
 
         jLabel36.setText(resourceMap.getString("jLabel36.text")); // NOI18N
         jLabel36.setName("jLabel36"); // NOI18N
-        locationIncludes.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, -1, -1));
+        locationIncludes.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
 
         cmbRating.setModel(new DefaultComboBoxModel(LocationRating.values()));
         cmbRating.setSelectedItem(locationWL.getRating());
@@ -311,7 +312,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         cmbHabitat.setModel(new DefaultComboBoxModel(Habitat.values()));
         cmbHabitat.setSelectedItem(locationWL.getHabitatType());
         cmbHabitat.setName("cmbHabitat"); // NOI18N
-        locationIncludes.add(cmbHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 76, 170, -1));
+        locationIncludes.add(cmbHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 76, 170, -1));
 
         cmbGameRating.setModel(new DefaultComboBoxModel(GameViewRating.values()));
         cmbGameRating.setSelectedItem(locationWL.getGameViewingRating());
@@ -329,7 +330,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane10.setViewportView(txtDescription);
 
-        locationIncludes.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 240, 90));
+        locationIncludes.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 100, 240, 90));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -346,12 +347,12 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         txtWebsite.setText(locationWL.getWebsite());
         txtWebsite.setName("txtWebsite"); // NOI18N
-        locationIncludes.add(txtWebsite, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 240, -1));
+        locationIncludes.add(txtWebsite, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 200, 240, -1));
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
         txtEmail.setNextFocusableComponent(txtContactNumber);
-        locationIncludes.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 224, 240, -1));
+        locationIncludes.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 224, 240, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -367,16 +368,16 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         txtContactNumber.setText(locationWL.getContactNumbers());
         txtContactNumber.setName("txtContactNumber"); // NOI18N
-        locationIncludes.add(txtContactNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 248, 240, -1));
+        locationIncludes.add(txtContactNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 248, 240, -1));
 
         cmbCatering.setModel(new DefaultComboBoxModel(CateringType.values()));
         cmbCatering.setSelectedItem(locationWL.getCatering());
         cmbCatering.setName("cmbCatering"); // NOI18N
-        locationIncludes.add(cmbCatering, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 272, 240, -1));
+        locationIncludes.add(cmbCatering, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 272, 240, -1));
 
         jLabel40.setText(resourceMap.getString("jLabel40.text")); // NOI18N
         jLabel40.setName("jLabel40"); // NOI18N
-        locationIncludes.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 76, -1, -1));
+        locationIncludes.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 76, -1, -1));
 
         jLabel41.setText(resourceMap.getString("jLabel41.text")); // NOI18N
         jLabel41.setName("jLabel41"); // NOI18N
@@ -414,7 +415,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
         jScrollPane12.setViewportView(tblVisit);
 
-        locationIncludes.add(jScrollPane12, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 376, 590, 200));
+        locationIncludes.add(jScrollPane12, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 376, 580, 200));
 
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
@@ -441,7 +442,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         jLabel45.setText(resourceMap.getString("jLabel45.text")); // NOI18N
         jLabel45.setName("jLabel45"); // NOI18N
-        locationIncludes.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 361, -1, -1));
+        locationIncludes.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 361, -1, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -519,7 +520,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnGoVisitActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnGoVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 380, 90, 80));
+        locationIncludes.add(btnGoVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 90, 80));
 
         btnAddVisit.setBackground(resourceMap.getColor("btnAddVisit.background")); // NOI18N
         btnAddVisit.setIcon(resourceMap.getIcon("btnAddVisit.icon")); // NOI18N
@@ -532,7 +533,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnAddVisitActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnAddVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 490, 90, 30));
+        locationIncludes.add(btnAddVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 90, 30));
 
         btnDeleteVisit.setBackground(resourceMap.getColor("btnDeleteVisit.background")); // NOI18N
         btnDeleteVisit.setIcon(resourceMap.getIcon("btnDeleteVisit.icon")); // NOI18N
@@ -545,7 +546,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnDeleteVisitActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnDeleteVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 548, 90, 30));
+        locationIncludes.add(btnDeleteVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 548, 90, 30));
 
         btnGoElement.setBackground(resourceMap.getColor("btnGoElement.background")); // NOI18N
         btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
@@ -562,7 +563,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         jLabel48.setText(resourceMap.getString("jLabel48.text")); // NOI18N
         jLabel48.setName("jLabel48"); // NOI18N
-        locationIncludes.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 28, -1, -1));
+        locationIncludes.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, -1, -1));
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -612,12 +613,12 @@ public class PanelLocation extends PanelCanSetupHeader {
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
         cmbLatitude.setNextFocusableComponent(cmbLongitude);
-        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 300, 90, -1));
+        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 300, 90, -1));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
         cmbLongitude.setSelectedIndex(2);
         cmbLongitude.setName("cmbLongitude"); // NOI18N
-        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, 90, -1));
+        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 320, 90, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
@@ -838,19 +839,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         spnLonDecimal.setName("spnLonDecimal"); // NOI18N
         locationIncludes.add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 140, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(locationIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(locationIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        add(locationIncludes);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed

@@ -264,6 +264,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 formComponentShown(evt);
             }
         });
+        setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
         visitIncludes.setBackground(resourceMap.getColor("visitIncludes.background")); // NOI18N
         visitIncludes.setMaximumSize(new java.awt.Dimension(1005, 585));
@@ -286,12 +287,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         jLabel52.setText(resourceMap.getString("jLabel52.text")); // NOI18N
         jLabel52.setName("jLabel52"); // NOI18N
-        visitIncludes.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 28, -1, -1));
+        visitIncludes.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, -1, -1));
 
         txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
         txtName.setText(visit.getName());
         txtName.setName("txtName"); // NOI18N
-        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 28, 510, -1));
+        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 28, 500, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -308,20 +309,20 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         jLabel53.setText(resourceMap.getString("jLabel53.text")); // NOI18N
         jLabel53.setName("jLabel53"); // NOI18N
-        visitIncludes.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 110, -1, -1));
+        visitIncludes.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         jScrollPane14.setName("jScrollPane14"); // NOI18N
 
         txtDescription.setColumns(20);
         txtDescription.setFont(resourceMap.getFont("txtDescription.font")); // NOI18N
         txtDescription.setLineWrap(true);
-        txtDescription.setRows(5);
+        txtDescription.setRows(4);
         txtDescription.setText(visit.getDescription());
         txtDescription.setWrapStyleWord(true);
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 115, 390, 70));
+        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 380, 75));
 
         jLabel54.setText(resourceMap.getString("jLabel54.text")); // NOI18N
         jLabel54.setName("jLabel54"); // NOI18N
@@ -335,11 +336,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        visitIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 52, -1, 20));
+        visitIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, 20));
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        visitIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, -1, 20));
+        visitIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, 20));
 
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
@@ -355,21 +356,21 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 52, 140, -1));
+        visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 52, 140, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, 140, -1));
+        visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 140, -1));
 
         jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
-        visitIncludes.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 695, 10));
+        visitIncludes.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 190, 690, 10));
 
         jSeparator2.setForeground(resourceMap.getColor("jSeparator2.foreground")); // NOI18N
         jSeparator2.setName("jSeparator2"); // NOI18N
-        visitIncludes.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 360, 310, 10));
+        visitIncludes.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 360, 315, 10));
 
         btnPreviousImage.setBackground(resourceMap.getColor("btnPreviousImage.background")); // NOI18N
         btnPreviousImage.setIcon(resourceMap.getIcon("btnPreviousImage.icon")); // NOI18N
@@ -422,7 +423,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
         jScrollPane1.setViewportView(tblSightings);
 
-        visitIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 219, 580, 360));
+        visitIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 219, 570, 360));
 
         btnUploadImage.setBackground(resourceMap.getColor("btnUploadImage.background")); // NOI18N
         btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
@@ -440,7 +441,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        visitIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, -1, -1));
+        visitIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, -1, -1));
 
         btnAddSighting.setBackground(resourceMap.getColor("btnAddSighting.background")); // NOI18N
         btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
@@ -453,7 +454,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnAddSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 90, 30));
+        visitIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 90, 30));
 
         btnDeleteSighting.setBackground(resourceMap.getColor("btnDeleteSighting.background")); // NOI18N
         btnDeleteSighting.setIcon(resourceMap.getIcon("btnDeleteSighting.icon")); // NOI18N
@@ -466,7 +467,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnDeleteSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnDeleteSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 90, 30));
+        visitIncludes.add(btnDeleteSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 90, 30));
 
         btnEditSighting.setBackground(resourceMap.getColor("btnEditSighting.background")); // NOI18N
         btnEditSighting.setIcon(resourceMap.getIcon("btnEditSighting.icon")); // NOI18N
@@ -479,7 +480,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnEditSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 220, 90, 50));
+        visitIncludes.add(btnEditSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 90, 50));
 
         lblSightingImage.setBackground(resourceMap.getColor("lblSightingImage.background")); // NOI18N
         lblSightingImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -534,7 +535,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jSeparator4.setForeground(resourceMap.getColor("jSeparator4.foreground")); // NOI18N
         jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator4.setName("jSeparator4"); // NOI18N
-        visitIncludes.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 190, 30, 170));
+        visitIncludes.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 190, 30, 170));
 
         btnMapSighting.setBackground(resourceMap.getColor("btnMapSighting.background")); // NOI18N
         btnMapSighting.setIcon(resourceMap.getIcon("btnMapSighting.icon")); // NOI18N
@@ -719,18 +720,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
         visitIncludes.add(btnKmlExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 110, 33));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(visitIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 1005, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(visitIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        add(visitIncludes);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
@@ -852,6 +842,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             };
             dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+            dialog.setResizable(false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
             sighting = null;
@@ -862,6 +853,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSightingActionPerformed
         if (sighting != null) {
             tblSightings.clearSelection();
+            // TODO: Move this dialog wrapping code into a central class and let everything call the same code
             final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
@@ -877,6 +869,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             };
             dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+            dialog.setResizable(false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
             sighting = null;
