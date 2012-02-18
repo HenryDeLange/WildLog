@@ -193,7 +193,7 @@ public class WildLogApp extends SingleFrameApplication {
         try {
             BufferedReader reader = new BufferedReader(
                     new FileReader(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
-            FilePaths.setRoot(reader.readLine());
+            FilePaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
             ex.printStackTrace();
@@ -220,7 +220,7 @@ public class WildLogApp extends SingleFrameApplication {
             try {
                 BufferedReader reader = new BufferedReader(
                         new FileReader(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
-                FilePaths.setRoot(reader.readLine());
+                FilePaths.setWorkspacePrefix(reader.readLine());
             }
             catch (IOException ioex) {
                 ioex.printStackTrace();

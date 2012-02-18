@@ -185,8 +185,8 @@ public final class Utils {
                         big.dispose();
                         inApp.getDBI().createOrUpdate(
                                 new WildLogFile(inID, toFile_Thumbnail.getName(),
-                                    stripRootFromPath(toFile_Thumbnail.getAbsolutePath(), FilePaths.getRoot()),
-                                    stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getRoot()),
+                                    stripRootFromPath(toFile_Thumbnail.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
+                                    stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
                                     WildLogFileType.IMAGE)
                                 , false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
@@ -226,7 +226,7 @@ public final class Utils {
                         inApp.getDBI().createOrUpdate(
                                 new WildLogFile(inID, toFile.getName(),
                                     "No Thumbnail",
-                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getRoot()),
+                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
                                     WildLogFileType.MOVIE)
                                 , false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
@@ -264,7 +264,7 @@ public final class Utils {
                         inApp.getDBI().createOrUpdate(
                                 new WildLogFile(inID, toFile.getName(),
                                     "No Thumbnail",
-                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getRoot()),
+                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
                                     WildLogFileType.OTHER)
                                 , false);
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
@@ -528,15 +528,13 @@ public final class Utils {
         }
     }
 
+    /**
+     * This method will strip the first root part from the path.
+     * WARNING: This method assumes that both the inPath and inRoot are 
+     * absolute proper paths.
+     */
     public static String stripRootFromPath(String inPath, String inRoot) {
-        File tempFile = new File(inRoot + File.separatorChar);
-        String tempRoot = tempFile.getAbsolutePath().toLowerCase();
-        tempFile = new File(inPath);
-        String tempPath = tempFile.getAbsolutePath().toLowerCase();
-        String finalPath = tempPath.substring(0 + tempRoot.length());
-        if (File.separatorChar != finalPath.charAt(0))
-            finalPath = File.separatorChar + finalPath;
-        return finalPath;
+        return inPath.substring(inRoot.length());
     }
 
     public static void deleteRecursive(File inFile) throws IOException {
@@ -544,7 +542,7 @@ public final class Utils {
             for (File content : inFile.listFiles())
                 deleteRecursive(content);
         }
-        if (!inFile.delete())
+        if (inFile.exists() && !inFile.delete())
             throw new FileNotFoundException("Failed to delete file: " + inFile);
     }
 

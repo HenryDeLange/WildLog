@@ -4,13 +4,14 @@ import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import astro.MoonTimes;
 import astro.SunTimes;
+import com.topografix.gpx._1._1.GpxType;
+import com.topografix.gpx._1._1.WptType;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -19,12 +20,18 @@ import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import org.jdesktop.application.Application;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
@@ -983,7 +990,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
         if (tblVisit.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Visit(s)?", "Delete Visit(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Visit(s)? This will delete all Sightings and photos linked to this Visit.", "Delete Visit(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 PanelVisit tempPanel = null;
                 for (int t = 0; t < selectedRows.length; t++) {

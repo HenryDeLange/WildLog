@@ -17,36 +17,87 @@ public enum FilePaths {
     WILDLOG_SETTINGS (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar)
     ;
 
-    private static String currentRoot;
+    private static String currentWorkspacePrefix;
     private String path;
     
     private FilePaths(String inPath) {
         path = inPath;
     }
 
-    public static void setRoot(String inRoot) {
-        if (inRoot == null)
-            inRoot = File.separator;
-        currentRoot = inRoot;
-        if (currentRoot.charAt(currentRoot.length()-1) == File.separatorChar)
-            currentRoot = currentRoot.substring(0, currentRoot.length()-1);
+    /**
+     * This sets the workspace's prefix that will be used. Can be relative/absolute.
+     * @param inRoot 
+     */
+    public static void setWorkspacePrefix(String inPrefix) {
+        if (inPrefix == null)
+            currentWorkspacePrefix = getFullWorkspacePrefix(); // Dit sal 'n "mooi" waarde return
+        else
+            currentWorkspacePrefix = inPrefix;
     }
-        
+    
+    /**
+     * Get the WorkspacePrefix + the Path.
+     * WARNING: Rather use relative paths to cater for different drive letters, etc.
+     */
     public String getFullPath() {
-        return currentRoot + path;
+        return concatPaths(getFullWorkspacePrefix(), path);
     }
 
+    /**
+     * Get only the Path. This is relative to the WildLog folder.
+     */
     public String getRelativePath() {
         return path;
     }
 
-    public static String getRoot() {
-        return currentRoot;
+    /**
+     * This will return the full path of the Workspace Prefix.
+     * WARNING: Some tweaking is done to the to make it behave nicely...
+     */
+    public static String getFullWorkspacePrefix() {
+        if (currentWorkspacePrefix == null)
+            currentWorkspacePrefix = File.listRoots()[0].getPath();
+        if (currentWorkspacePrefix.charAt(0) != File.separatorChar && currentWorkspacePrefix.charAt(1) != ':')
+            currentWorkspacePrefix = File.separator + currentWorkspacePrefix;
+        return new File(currentWorkspacePrefix).getAbsolutePath();
+    }
+    
+    /**
+     * This will return the full path of the Workspace Prefix. It will start with a File.separatorChar.
+     * WARNING: Some tweaking is done to the to make it behave nicely...
+     */
+    public static String getRelativeWorkspacePrefix() {
+        return getFullWorkspacePrefix().substring(2);
+    }
+    
+    /**
+     * This method will concatenate two path segments and make sure that only one File.separatorChar is used.
+     * WARNING: Nulls will return null and ""s will return any non-"" value.
+     */
+    // TODO: Verander die dalk om VarArgs te gebruik. bv concatPaths(String... input) sodat ek meer Strings op 'n slag kan instuur
+    public static String concatPaths(String inPart1, String inPart2) {
+        if (inPart1 == null || inPart2 == null)
+            return null;
+        if (inPart1.length() == 0 || inPart2.length() == 0)
+            return inPart1 + inPart2;
+        else
+        if (inPart1.charAt(inPart1.length()-1) == File.separatorChar 
+                && inPart2.charAt(0) == File.separatorChar)
+            return inPart1 + inPart2.substring(1);
+        else
+        if (inPart1.charAt(inPart1.length()-1) != File.separatorChar 
+                && inPart2.charAt(0) != File.separatorChar)
+            return inPart1 + File.separatorChar + inPart2;
+        else
+            return inPart1 + inPart2;
     }
 
     @Override
+    /**
+     * Returns the Path (relative to the WildLog folder).
+     */
     public String toString() {
-        return path;
+        return getRelativePath();
     }
 
 }

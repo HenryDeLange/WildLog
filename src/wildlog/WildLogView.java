@@ -319,7 +319,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
         jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
-        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 10, -1, -1));
+        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 10, -1, -1));
 
         jLabel3.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
@@ -355,7 +355,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jLabel5.setForeground(resourceMap.getColor("jLabel5.foreground")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 30, -1, -1));
+        tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, -1, -1));
 
         lblWorkspace.setFont(resourceMap.getFont("lblWorkspace.font")); // NOI18N
         lblWorkspace.setForeground(resourceMap.getColor("lblWorkspace.foreground")); // NOI18N
@@ -1228,7 +1228,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
         if (tblElement.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this.getComponent(), "Are you sure you want to delete the Creature(s)?", "Delete Creature(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this.getComponent(), "Are you sure you want to delete the Creature(s)?  This will delete all Sightings and photos linked to this Creature.", "Delete Creature(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblElement.getSelectedRows();
                 PanelElement tempPanel = null;
                 for (int t = 0; t < selectedRows.length; t++) {
@@ -1303,7 +1303,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
         if (tblLocation.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this.getComponent(), "Are you sure you want to delete the Location(s)?", "Delete Location(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            if (JOptionPane.showConfirmDialog(this.getComponent(), "Are you sure you want to delete the Location(s)? This will delete all Visits, Sightings and photos linked to this Location.", "Delete Location(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
                     Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 0)));
@@ -2346,7 +2346,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         try {
             reader = new BufferedReader(
                     new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
-            FilePaths.setRoot(reader.readLine());
+            FilePaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
             ex.printStackTrace();
