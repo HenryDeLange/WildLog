@@ -2322,7 +2322,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     File testFile = new File(path + FilePaths.WILDLOG_DATA.toString().replace(FilePaths.WILDLOG.toString(), File.separator));
                     if (testFile.exists() && testFile.isDirectory()) {
                         // I assume the user selected the WildLog folder an we need to strip it from the path
-                        path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1));
+                        // TODO: I need to improve this. Move the code out of here and write some unit tests
+                        path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1)) + File.separator;
                     }
                 }
                 writer.write(path);

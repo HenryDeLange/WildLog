@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="8.1.1" version="8.1.1" Modules="freeware" RootPath="." Language="en">
+<DOCUMENT Type="Advanced Installer" CreateVersion="8.1.1" version="8.6" Modules="simple" RootPath="." Language="en" Id="{CCD0E87A-8D5F-4A5F-9A35-4EB613D6A9D4}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_MINJREVERSION" MultiBuildValue="DefaultBuild:1.6" ValueLocId="-"/>
     <ROW Property="AI_MINRAM" MultiBuildValue="DefaultBuild:512" ValueLocId="-"/>
@@ -14,10 +14,10 @@
     <ROW Property="CTRLS" Value="3"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="WildLog" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{432591A8-A9CB-492B-AA39-E07DFBF8ABA1} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{DB52C1CB-74BC-47B6-B923-E8DFCB37BF77} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
-    <ROW Property="ProductName" Value="WildLog v3.5" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="3.5"/>
+    <ROW Property="ProductName" Value="WildLog v3.6" ValueLocId="*"/>
+    <ROW Property="ProductVersion" Value="3.6.1"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{46872473-716E-4D94-B617-046B7C8FED5C}"/>
@@ -51,38 +51,38 @@
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="AbsoluteLayout.jar" Component_="AbsoluteLayout.jar" FileName="Absolu~1.jar|AbsoluteLayout.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\AbsoluteLayout.jar" SelfReg="false" NextFile="appframework_1.0.3.jar"/>
-    <ROW File="Astro.jar" Component_="AbsoluteLayout.jar" FileName="Astro.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\Astro.jar" SelfReg="false" NextFile="h2_1.2.143.jar"/>
-    <ROW File="H2_License.txt" Component_="H2_License.txt" FileName="H2Lice~1.txt|H2 License.txt" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\Licenses\H2 License.txt" SelfReg="false" NextFile="OpenMap_License.txt"/>
-    <ROW File="KmlGenerator.jar" Component_="AbsoluteLayout.jar" FileName="KmlGen~1.jar|KmlGenerator.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\KmlGenerator.jar" SelfReg="false" NextFile="openmap.jar"/>
-    <ROW File="OpenMap_License.txt" Component_="H2_License.txt" FileName="OpenMa~1.txt|OpenMap License.txt" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\Licenses\OpenMap License.txt" SelfReg="false" NextFile="SwingX_License.txt"/>
-    <ROW File="SwingX_License.txt" Component_="H2_License.txt" FileName="SwingX~1.txt|SwingX License.txt" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\Licenses\SwingX License.txt" SelfReg="false" NextFile="protected_land.shp"/>
-    <ROW File="Uninstall_Notes.txt" Component_="Uninstall_Notes.txt" FileName="Uninst~1.txt|Uninstall Notes.txt" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\Uninstall Notes.txt" SelfReg="false" NextFile="WildLog_General_Guide_v3.pdf"/>
-    <ROW File="WildLog.bat" Component_="WildLog.bat" FileName="WildLog.bat" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog.bat" SelfReg="false" NextFile="WildLog.ico"/>
-    <ROW File="WildLog.exe" Component_="WildLog.exe" FileName="WildLog.exe" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog.exe" SelfReg="false" NextFile="errorlog.txt"/>
-    <ROW File="WildLog.ico" Component_="protected_land.shp" FileName="WildLog.ico" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog.ico" SelfReg="false" NextFile="WildLog.jar"/>
-    <ROW File="WildLog.jar" Component_="protected_land.shp" FileName="WildLog.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog.jar" SelfReg="false" NextFile="wildloghome"/>
-    <ROW File="WildLog_Field_Sheet.pdf" Component_="WildLog_Field_Sheet.pdf" FileName="WildLo~2.pdf|WildLog Field Sheet.pdf" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog Field Sheet.pdf" SelfReg="false" NextFile="WildLog.bat"/>
-    <ROW File="WildLog_General_Guide_v3.pdf" Component_="WildLog_General_Guide_v3.pdf" FileName="WildLo~1.pdf|WildLog - General Guide v3.pdf" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog - General Guide v3.pdf" SelfReg="false" NextFile="WildLog_Field_Sheet.pdf"/>
-    <ROW File="WildLog_License.txt" Component_="WildLog_License.txt" FileName="WildLo~1.txt|WildLog License.txt" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\Licenses\WildLog License.txt" SelfReg="false" NextFile="metadata_extractor_2.5.0_RC2.jar"/>
-    <ROW File="WorldBase.shp" Component_="protected_land.shp" FileName="WorldB~1.shp|WorldBase.shp" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WorldBase.shp" SelfReg="false" NextFile="WildLog_License.txt"/>
-    <ROW File="appframework_1.0.3.jar" Component_="AbsoluteLayout.jar" FileName="appfra~1.jar|appframework-1.0.3.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\appframework-1.0.3.jar" SelfReg="false" NextFile="Astro.jar"/>
-    <ROW File="errorlog.txt" Component_="protected_land.shp" FileName="errorlog.txt" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\errorlog.txt" SelfReg="false"/>
-    <ROW File="h2_1.2.143.jar" Component_="AbsoluteLayout.jar" FileName="h2-121~1.jar|h2-1.2.143.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\h2-1.2.143.jar" SelfReg="false" NextFile="KmlGenerator.jar"/>
-    <ROW File="metadata_extractor_2.5.0_RC2.jar" Component_="AbsoluteLayout.jar" FileName="metada~1.jar|metadata-extractor-2.5.0-RC2.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\metadata-extractor-2.5.0-RC2.jar" SelfReg="false" NextFile="xmpcore.jar"/>
-    <ROW File="openmap.jar" Component_="AbsoluteLayout.jar" FileName="openmap.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\openmap.jar" SelfReg="false" NextFile="swing_worker_1.1.jar"/>
-    <ROW File="protected_land.shp" Component_="protected_land.shp" FileName="protec~1.shp|protected_land.shp" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\protected_land.shp" SelfReg="false" NextFile="provinces.shp"/>
-    <ROW File="provinces.shp" Component_="protected_land.shp" FileName="provin~1.shp|provinces.shp" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\provinces.shp" SelfReg="false" NextFile="roads.shp"/>
-    <ROW File="roads.shp" Component_="protected_land.shp" FileName="roads.shp" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\roads.shp" SelfReg="false" NextFile="town2.shp"/>
-    <ROW File="swing_worker_1.1.jar" Component_="AbsoluteLayout.jar" FileName="swing-~1.jar|swing-worker-1.1.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\swing-worker-1.1.jar" SelfReg="false" NextFile="swingx_core_1.6.2.jar"/>
-    <ROW File="swingx_core_1.6.2.jar" Component_="AbsoluteLayout.jar" FileName="swingx~1.jar|swingx-core-1.6.2.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\swingx-core-1.6.2.jar" SelfReg="false" NextFile="swingx_ws_1.0.jar"/>
-    <ROW File="swingx_ws_1.0.jar" Component_="AbsoluteLayout.jar" FileName="swingx~2.jar|swingx-ws-1.0.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\swingx-ws-1.0.jar" SelfReg="false" NextFile="H2_License.txt"/>
-    <ROW File="town2.shp" Component_="protected_land.shp" FileName="town2.shp" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\town2.shp" SelfReg="false" NextFile="Uninstall_Notes.txt"/>
-    <ROW File="wildloghome" Component_="protected_land.shp" FileName="wildlo~1|wildloghome" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\wildloghome" SelfReg="false" NextFile="WorldBase.shp"/>
-    <ROW File="xmpcore.jar" Component_="AbsoluteLayout.jar" FileName="xmpcore.jar" Attributes="0" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\lib\xmpcore.jar" SelfReg="false" NextFile="WildLog.exe"/>
+    <ROW File="AbsoluteLayout.jar" Component_="AbsoluteLayout.jar" FileName="Absolu~1.jar|AbsoluteLayout.jar" Attributes="0" SourcePath="WildLog\lib\AbsoluteLayout.jar" SelfReg="false" NextFile="appframework_1.0.3.jar"/>
+    <ROW File="Astro.jar" Component_="AbsoluteLayout.jar" FileName="Astro.jar" Attributes="0" SourcePath="WildLog\lib\Astro.jar" SelfReg="false" NextFile="h2_1.2.143.jar"/>
+    <ROW File="H2_License.txt" Component_="H2_License.txt" FileName="H2Lice~1.txt|H2 License.txt" Attributes="0" SourcePath="WildLog\Licenses\H2 License.txt" SelfReg="false" NextFile="OpenMap_License.txt"/>
+    <ROW File="InstallReadme.rtf" Component_="protected_land.shp" FileName="Instal~1.rtf|InstallReadme.rtf" Attributes="0" SourcePath="WildLog\InstallReadme.rtf" SelfReg="false" NextFile="WildLog_License.rtf"/>
+    <ROW File="KmlGenerator.jar" Component_="AbsoluteLayout.jar" FileName="KmlGen~1.jar|KmlGenerator.jar" Attributes="0" SourcePath="WildLog\lib\KmlGenerator.jar" SelfReg="false" NextFile="openmap.jar"/>
+    <ROW File="OpenMap_License.txt" Component_="H2_License.txt" FileName="OpenMa~1.txt|OpenMap License.txt" Attributes="0" SourcePath="WildLog\Licenses\OpenMap License.txt" SelfReg="false" NextFile="SwingX_License.txt"/>
+    <ROW File="SwingX_License.txt" Component_="H2_License.txt" FileName="SwingX~1.txt|SwingX License.txt" Attributes="0" SourcePath="WildLog\Licenses\SwingX License.txt" SelfReg="false" NextFile="protected_land.shp"/>
+    <ROW File="Uninstall_Notes.txt" Component_="Uninstall_Notes.txt" FileName="Uninst~1.txt|Uninstall Notes.txt" Attributes="0" SourcePath="WildLog\Uninstall Notes.txt" SelfReg="false" NextFile="WildLog_General_Guide_v3.pdf"/>
+    <ROW File="WildLog.bat" Component_="WildLog.bat" FileName="WildLog.bat" Attributes="0" SourcePath="WildLog\WildLog.bat" SelfReg="false" NextFile="WildLog.ico"/>
+    <ROW File="WildLog.exe" Component_="WildLog.exe" FileName="WildLog.exe" Attributes="0" SourcePath="WildLog\WildLog.exe" SelfReg="false" NextFile="InstallReadme.rtf"/>
+    <ROW File="WildLog.ico" Component_="protected_land.shp" FileName="WildLog.ico" Attributes="0" SourcePath="WildLog\WildLog.ico" SelfReg="false" NextFile="WildLog.jar"/>
+    <ROW File="WildLog.jar" Component_="protected_land.shp" FileName="WildLog.jar" Attributes="0" SourcePath="WildLog\WildLog.jar" SelfReg="false" NextFile="WorldBase.shp"/>
+    <ROW File="WildLog_Field_Sheet.pdf" Component_="WildLog_Field_Sheet.pdf" FileName="WildLo~2.pdf|WildLog Field Sheet.pdf" Attributes="0" SourcePath="WildLog\WildLog Field Sheet.pdf" SelfReg="false" NextFile="WildLog.bat"/>
+    <ROW File="WildLog_General_Guide_v3.pdf" Component_="WildLog_General_Guide_v3.pdf" FileName="WildLo~1.pdf|WildLog - General Guide v3.pdf" Attributes="0" SourcePath="WildLog\WildLog - General Guide v3.pdf" SelfReg="false" NextFile="WildLog_Field_Sheet.pdf"/>
+    <ROW File="WildLog_License.rtf" Component_="H2_License.txt" FileName="WildLo~1.rtf|WildLog License.rtf" Attributes="0" SourcePath="WildLog\Licenses\WildLog License.rtf" SelfReg="false"/>
+    <ROW File="WildLog_License.txt" Component_="WildLog_License.txt" FileName="WildLo~1.txt|WildLog License.txt" Attributes="0" SourcePath="WildLog\Licenses\WildLog License.txt" SelfReg="false" NextFile="metadata_extractor_2.5.0_RC2.jar"/>
+    <ROW File="WorldBase.shp" Component_="protected_land.shp" FileName="WorldB~1.shp|WorldBase.shp" Attributes="0" SourcePath="WildLog\WorldBase.shp" SelfReg="false" NextFile="WildLog_License.txt"/>
+    <ROW File="appframework_1.0.3.jar" Component_="AbsoluteLayout.jar" FileName="appfra~1.jar|appframework-1.0.3.jar" Attributes="0" SourcePath="WildLog\lib\appframework-1.0.3.jar" SelfReg="false" NextFile="Astro.jar"/>
+    <ROW File="h2_1.2.143.jar" Component_="AbsoluteLayout.jar" FileName="h2-121~1.jar|h2-1.2.143.jar" Attributes="0" SourcePath="WildLog\lib\h2-1.2.143.jar" SelfReg="false" NextFile="KmlGenerator.jar"/>
+    <ROW File="metadata_extractor_2.5.0_RC2.jar" Component_="AbsoluteLayout.jar" FileName="metada~1.jar|metadata-extractor-2.5.0-RC2.jar" Attributes="0" SourcePath="WildLog\lib\metadata-extractor-2.5.0-RC2.jar" SelfReg="false" NextFile="xmpcore.jar"/>
+    <ROW File="openmap.jar" Component_="AbsoluteLayout.jar" FileName="openmap.jar" Attributes="0" SourcePath="WildLog\lib\openmap.jar" SelfReg="false" NextFile="swing_worker_1.1.jar"/>
+    <ROW File="protected_land.shp" Component_="protected_land.shp" FileName="protec~1.shp|protected_land.shp" Attributes="0" SourcePath="WildLog\protected_land.shp" SelfReg="false" NextFile="provinces.shp"/>
+    <ROW File="provinces.shp" Component_="protected_land.shp" FileName="provin~1.shp|provinces.shp" Attributes="0" SourcePath="WildLog\provinces.shp" SelfReg="false" NextFile="roads.shp"/>
+    <ROW File="roads.shp" Component_="protected_land.shp" FileName="roads.shp" Attributes="0" SourcePath="WildLog\roads.shp" SelfReg="false" NextFile="town2.shp"/>
+    <ROW File="swing_worker_1.1.jar" Component_="AbsoluteLayout.jar" FileName="swing-~1.jar|swing-worker-1.1.jar" Attributes="0" SourcePath="WildLog\lib\swing-worker-1.1.jar" SelfReg="false" NextFile="swingx_core_1.6.2.jar"/>
+    <ROW File="swingx_core_1.6.2.jar" Component_="AbsoluteLayout.jar" FileName="swingx~1.jar|swingx-core-1.6.2.jar" Attributes="0" SourcePath="WildLog\lib\swingx-core-1.6.2.jar" SelfReg="false" NextFile="swingx_ws_1.0.jar"/>
+    <ROW File="swingx_ws_1.0.jar" Component_="AbsoluteLayout.jar" FileName="swingx~2.jar|swingx-ws-1.0.jar" Attributes="0" SourcePath="WildLog\lib\swingx-ws-1.0.jar" SelfReg="false" NextFile="H2_License.txt"/>
+    <ROW File="town2.shp" Component_="protected_land.shp" FileName="town2.shp" Attributes="0" SourcePath="WildLog\town2.shp" SelfReg="false" NextFile="Uninstall_Notes.txt"/>
+    <ROW File="xmpcore.jar" Component_="AbsoluteLayout.jar" FileName="xmpcore.jar" Attributes="0" SourcePath="WildLog\lib\xmpcore.jar" SelfReg="false" NextFile="WildLog.exe"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
-    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="..\..\..\Users\Henry\Desktop" PackageFileName="WildLog Setup" Languages="en" InstallationType="4"/>
+    <ROW BuildKey="DefaultBuild" BuildName="DefaultBuild" BuildOrder="1" BuildType="0" PackageFolder="." PackageFileName="WildLog Setup" Languages="en" InstallationType="4"/>
     <ATTRIBUTE name="CurrentBuild" value="DefaultBuild"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
@@ -92,6 +92,7 @@
   <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
     <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
     <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="LicenseAgreementDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\LicenseAgreementDlg.aip"/>
     <ROW Fragment="ReadmeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\ReadmeDlg.aip"/>
     <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
     <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
@@ -103,11 +104,12 @@
     <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlComponent">
-    <ROW Dialog_="ReadmeDlg" Control="ReadmeText" Type="FileScrollableText" X="20" Y="60" Width="330" Height="150" Attributes="7" Text="..\..\..\Users\Henry\Desktop\WildLog\InstallReadme.rtf" Control_Next="BottomLine" TextLocId="Control.Text.ReadmeDlg#ReadmeText_2" MsiKey="ReadmeDlg#ReadmeText"/>
+    <ROW Dialog_="ReadmeDlg" Control="ReadmeText" Type="FileScrollableText" X="20" Y="60" Width="330" Height="150" Attributes="7" Text="WildLog\InstallReadme.rtf" Control_Next="BottomLine" TextLocId="Control.Text.ReadmeDlg#ReadmeText_2" MsiKey="ReadmeDlg#ReadmeText"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control="AgreementText" Type="FileScrollableText" X="20" Y="60" Width="330" Height="120" Attributes="7" Text="WildLog\Licenses\WildLog License.rtf" Control_Next="Buttons" TextLocId="Control.Text.LicenseAgreementDlg#AgreementText" MsiKey="LicenseAgreementDlg#AgreementText"/>
     <ATTRIBUTE name="FixedSizeBitmaps" value="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
-    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="ReadmeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL" Ordering="1"/>
     <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
     <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
     <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
@@ -122,9 +124,11 @@
     <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
     <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
     <ROW Dialog_="ReadmeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="1"/>
-    <ROW Dialog_="ReadmeDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="ReadmeDlg" Control_="Back" Event="NewDialog" Argument="LicenseAgreementDlg" Condition="AI_INSTALL" Ordering="1"/>
     <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
     <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="ReadmeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control_="Next" Event="NewDialog" Argument="ReadmeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="LicenseAgreementDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR"/>
@@ -136,6 +140,7 @@
     <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
     <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
     <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
     <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
     <ROW Action="AI_ViewReadme" Type="1" Source="aicustact.dll" Target="[#WildLog_General_Guide_v3.pdf]"/>
     <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]"/>
@@ -144,7 +149,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="SystemFolder_msiexec.exe" SourcePath="&lt;AI_RES&gt;uninstall.ico" Index="0"/>
-    <ROW Name="WildLog.exe" SourcePath="..\..\..\Users\Henry\Desktop\WildLog\WildLog.ico" Index="0"/>
+    <ROW Name="WildLog.exe" SourcePath="WildLog\WildLog.ico" Index="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
     <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
@@ -169,12 +174,11 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="Uninstall" Directory_="SHORTCUTDIR" Name="Uninst~2|Uninstall" Component_="WildLog_General_Guide_v3.pdf" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFolder_msiexec.exe" IconIndex="0" ShowCmd="1"/>
     <ROW Shortcut="Uninstall_Notes" Directory_="SHORTCUTDIR" Name="Uninst~1.txt|Uninstall Notes.txt" Component_="Uninstall_Notes.txt" Target="[#Uninstall_Notes.txt]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
-    <ROW Shortcut="WildLog_Admin" Directory_="SHORTCUTDIR" Name="WildLo~1.5|WildLog v3.5" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
+    <ROW Shortcut="WildLog_Admin" Directory_="SHORTCUTDIR" Name="WildLo~1.6|WildLog v3.6" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
     <ROW Shortcut="WildLog_Field_Sheet.pdf" Directory_="SHORTCUTDIR" Name="WildLo~2.pdf|WildLog Field Sheet.pdf" Component_="WildLog_Field_Sheet.pdf" Target="[#WildLog_Field_Sheet.pdf]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
     <ROW Shortcut="WildLog_General_Guide_v3.pdf" Directory_="SHORTCUTDIR" Name="WildLo~1.pdf|WildLog - General Guide v3.pdf" Component_="WildLog_General_Guide_v3.pdf" Target="[#WildLog_General_Guide_v3.pdf]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
     <ROW Shortcut="WildLog_License" Directory_="SHORTCUTDIR" Name="WildLo~2|WildLog License" Component_="WildLog_License.txt" Target="[#WildLog_License.txt]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="Licenses_DIR"/>
-    <ROW Shortcut="WildLog_v35" Directory_="DesktopFolder" Name="WildLo~1.5|WildLog v3.5" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
-    <ROW Shortcut="WildLog_v3_1" Directory_="SHORTCUTDIR" Name="WildLo~1.5(N|WildLog v3.5 (Non-Admin)" Component_="WildLog.bat" Target="[#WildLog.bat]" Description="This will not ask for administrator rights, but you might experience problems switching workspaces." Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
+    <ROW Shortcut="WildLog_v35" Directory_="DesktopFolder" Name="WildLo~1.6|WildLog v3.6" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

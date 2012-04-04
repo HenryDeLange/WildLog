@@ -764,6 +764,7 @@ public abstract class DBI_JDBC implements DBI {
 
     @Override
     public List<WildLogFile> list(WildLogFile inFile) {
+// FIXME: This call might be starting to give performance issues...
         Statement state = null;
         ResultSet results = null;
         List<WildLogFile> tempList = new ArrayList<WildLogFile>();

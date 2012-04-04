@@ -142,6 +142,7 @@ public class WildLogApp extends SingleFrameApplication {
      */
     @Override
     protected void startup() {
+        // Show the main frame
         ImageIcon icon = new ImageIcon(getClass().getResource("resources/icons/WildLog Icon.gif"));
         WildLogView view = new WildLogView(this);
         view.getFrame().setIconImage(icon.getImage());
