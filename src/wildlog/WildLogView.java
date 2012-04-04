@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -33,12 +34,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
+import javax.swing.Timer;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskMonitor;
+import org.jdesktop.application.TaskService;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
@@ -96,6 +103,63 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         initComponents();
 
+        // status bar initialization - message timeout, idle icon and busy animation, etc
+        ResourceMap resourceMap = getResourceMap();
+        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
+        messageTimer = new Timer(messageTimeout, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                statusMessageLabel.setText("");
+            }
+        });
+        messageTimer.setRepeats(false);
+        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
+        for (int i = 0; i < busyIcons.length; i++) {
+            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
+        }
+        busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                busyIconIndex = (busyIconIndex + 1) % busyIcons.length;
+                statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
+            }
+        });
+        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
+        statusAnimationLabel.setIcon(idleIcon);
+        progressBar.setVisible(false);
+
+        // connecting action tasks to status bar via TaskMonitor
+        TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
+        taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            @Override
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                String propertyName = evt.getPropertyName();
+                if ("started".equals(propertyName)) {
+                    if (!busyIconTimer.isRunning()) {
+                        statusAnimationLabel.setIcon(busyIcons[0]);
+                        busyIconIndex = 0;
+                        busyIconTimer.start();
+                    }
+                    progressBar.setVisible(true);
+                    progressBar.setIndeterminate(true);
+                } else if ("done".equals(propertyName)) {
+                    busyIconTimer.stop();
+                    statusAnimationLabel.setIcon(idleIcon);
+                    progressBar.setVisible(false);
+                    progressBar.setValue(0);
+                } else if ("message".equals(propertyName)) {
+                    String text = (String)(evt.getNewValue());
+                    statusMessageLabel.setText((text == null) ? "" : text);
+                    messageTimer.restart();
+                } else if ("progress".equals(propertyName)) {
+                    int value = (Integer)(evt.getNewValue());
+                    progressBar.setVisible(true);
+                    progressBar.setIndeterminate(false);
+                    progressBar.setValue(value);
+                }
+            }
+        });
+        
         // Setup the tab headers
         setupTabHeaderHome();
         setupTabHeaderFoto();
@@ -272,6 +336,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         subMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        statusPanel = new javax.swing.JPanel();
+        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
+        statusMessageLabel = new javax.swing.JLabel();
+        statusAnimationLabel = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -1186,8 +1255,45 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(extraMenu);
 
+        statusPanel.setName("statusPanel"); // NOI18N
+
+        statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
+
+        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
+
+        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
+
+        progressBar.setName("progressBar"); // NOI18N
+
+        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
+        statusPanel.setLayout(statusPanelLayout);
+        statusPanelLayout.setHorizontalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 1022, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(statusMessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statusAnimationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        statusPanelLayout.setVerticalGroup(
+            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(statusPanelLayout.createSequentialGroup()
+                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(statusAnimationLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
         setComponent(mainPanel);
         setMenuBar(menuBar);
+        setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
@@ -1980,7 +2086,35 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void exportToHTML() {
-        exportToHTML(true);
+        Utils.kickoffTask(new Task(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                messageTimer.stop();
+                setMessage("Starting the HTML Export");
+                JOptionPane.showMessageDialog(getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                setProgress(0);
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    UtilsHTML.exportHTML(listElements.get(t), app);
+                    setProgress(0 + (int)((t/(double)listElements.size())*50));
+                    setMessage("HTML Export: " + getProgress() + "%");
+                }
+                setProgress(50);
+                setMessage("HTML Export: " + getProgress() + "%");
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    UtilsHTML.exportHTML(listLocations.get(t), app);
+                    setProgress(50 + (int)((t/(double)listLocations.size())*50));
+                    setMessage("HTML Export: " + getProgress() + "%");
+                }
+                setProgress(100);
+                setMessage("HTML Export: " + getProgress());
+                JOptionPane.showMessageDialog(getComponent(), "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                setMessage("Done with the HTML Export");
+                messageTimer.start();
+                return null;
+            }
+        }, app);
     }
 
     private void exportToHTML(final boolean inShowDialog) {
@@ -1997,7 +2131,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app);
                 }
-                //if (inShowDialog)
+                if (inShowDialog)
                     JOptionPane.showMessageDialog(null, "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
                 return null;
             }
@@ -2404,7 +2538,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
     }
     
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
@@ -2489,11 +2623,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem mnuMapStartMenuItem;
     private javax.swing.JMenuItem mnuOpenMapApp;
     private javax.swing.JMenuItem moveVisitsMenuItem;
+    private javax.swing.JProgressBar progressBar;
     private javax.swing.JRadioButton rdbBrowseDate;
     private javax.swing.JRadioButton rdbBrowseElement;
     private javax.swing.JRadioButton rdbBrowseLocation;
     private javax.swing.JScrollPane scrlElement;
     private javax.swing.JMenu settingsMenu;
+    private javax.swing.JLabel statusAnimationLabel;
+    private javax.swing.JLabel statusMessageLabel;
+    private javax.swing.JPanel statusPanel;
     private javax.swing.JMenu subMenu1;
     private javax.swing.JMenu subMenu2;
     private javax.swing.JMenu subMenu3;
@@ -2513,7 +2651,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenu workspaceMenu;
     // End of variables declaration//GEN-END:variables
 
-
+    private final Timer messageTimer;
+    private final Timer busyIconTimer;
+    private final Icon idleIcon;
+    private final Icon[] busyIcons = new Icon[15];
+    private int busyIconIndex = 0;
+    
     private JDialog aboutBox;
 
 }

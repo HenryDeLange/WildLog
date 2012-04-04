@@ -32,6 +32,11 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ApplicationContext;
+import org.jdesktop.application.Task;
+import org.jdesktop.application.TaskMonitor;
+import org.jdesktop.application.TaskService;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dbi.DBI;
@@ -554,6 +559,16 @@ public final class Utils {
                 if (!inFile.delete())
                     throw new FileNotFoundException("Failed to delete folder: " + inFile);
         }
+    }
+    
+    public static void kickoffTask(Task inTask, Application inApp)
+    {
+        ApplicationContext appContext = inApp.getContext();
+        TaskMonitor taskMonitor = appContext.getTaskMonitor();
+        TaskService taskService = appContext.getTaskService();
+        taskService.execute(inTask);
+        taskMonitor.setForegroundTask(inTask);
+        taskMonitor.setAutoUpdateForegroundTask(false);
     }
 
 }
