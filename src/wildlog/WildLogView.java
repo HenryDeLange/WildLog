@@ -41,11 +41,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
-import org.jdesktop.application.TaskService;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
@@ -142,15 +140,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     }
                     progressBar.setVisible(true);
                     progressBar.setIndeterminate(true);
+                    messageTimer.stop();
                 } else if ("done".equals(propertyName)) {
                     busyIconTimer.stop();
                     statusAnimationLabel.setIcon(idleIcon);
                     progressBar.setVisible(false);
                     progressBar.setValue(0);
+                    messageTimer.restart();
                 } else if ("message".equals(propertyName)) {
                     String text = (String)(evt.getNewValue());
                     statusMessageLabel.setText((text == null) ? "" : text);
-                    messageTimer.restart();
+                    messageTimer.stop();
                 } else if ("progress".equals(propertyName)) {
                     int value = (Integer)(evt.getNewValue());
                     progressBar.setVisible(true);

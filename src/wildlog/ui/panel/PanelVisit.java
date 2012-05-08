@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.Task;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -41,6 +43,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
@@ -48,6 +51,7 @@ import wildlog.ui.report.ReportVisit;
 import wildlog.utils.FileDrop;
 import wildlog.utils.FilePaths;
 import wildlog.utils.UtilsHTML;
+import wildlog.utils.jpegmovie.JpgToMovie;
 import wildlog.utils.ui.UtilMapGenerator;
 
 /**
@@ -252,6 +256,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnChecklist = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
         btnKmlExport = new javax.swing.JButton();
+        btnSlideshowSightings = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -720,6 +725,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
         visitIncludes.add(btnKmlExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 110, 33));
 
+        btnSlideshowSightings.setText(resourceMap.getString("btnSlideshowSightings.text")); // NOI18N
+        btnSlideshowSightings.setName("btnSlideshowSightings"); // NOI18N
+        btnSlideshowSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowSightingsActionPerformed(evt);
+            }
+        });
+        visitIncludes.add(btnSlideshowSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 440, 90, 30));
+
         add(visitIncludes);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1124,6 +1138,55 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         Utils.openFile(finalPath);
     }//GEN-LAST:event_btnKmlExportActionPerformed
 
+    private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
+         Utils.kickoffTask(new Task(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the Slideshow: 0%");
+                setProgress(0);
+                // TODO: This should be done in a seperate thread using the progress bar
+                List<String> slideshowList = new ArrayList<String>();
+                Sighting temp = new Sighting();
+                temp.setVisitName(visit.getName());
+                List<Sighting> sightingList = app.getDBI().list(temp);
+                // FIXME: Change the DBI to do the sorting for me (use ORDER BY date)
+                Collections.sort(sightingList);
+                setProgress(5);
+                for (int t = 0; t < sightingList.size(); t++) {
+                    Sighting tempSighting = sightingList.get(t);
+                    // TODO: Put these strange name formats somewhere central... Maybe have a method on WildlogFile that will get a propper ID for a provided type (Location, sighting, etc.)
+                    List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                    for (WildLogFile tempFile : files) {
+                        if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
+                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") || 
+                                tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
+                                slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                            }
+                        }
+                    }
+                    setProgress((int)(((double)t / (double)sightingList.size())*50.0) + 5);
+                    setMessage("Creating the Slideshow " + (int)((((double)t / (double)sightingList.size())*50.0) + 5) + "%");
+                }
+                // Now create the slideshow
+                File tempFile = new File(FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
+                tempFile.mkdirs();
+                String outputFile = FilePaths.WILDLOG_EXPORT_SLIDESHOW.getRelativePath() + visit.getName() + ".mov";
+                JpgToMovie jpgToMovie = new JpgToMovie();
+                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
+                if (slideshowList.size() > 0 && jpgToMovie.createMovieFromJpgs(750, 1.5f, slideshowList, outputFile)) {
+                    // Lastly launch the file
+                    Utils.openFile(outputFile);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "There was a problem generating the slideshow.", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+                setProgress(100);
+                setMessage("Done with the Slideshow");
+                return null;
+            }
+        }, app);
+    }//GEN-LAST:event_btnSlideshowSightingsActionPerformed
+
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
@@ -1165,6 +1228,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnPreviousImageSighting;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
+    private javax.swing.JButton btnSlideshowSightings;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JComboBox cmbGameWatchIntensity;
