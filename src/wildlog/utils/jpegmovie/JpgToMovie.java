@@ -22,7 +22,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
 	private boolean fileSuccess = true;
 	
 	public boolean createMovieFromJpgs(int inSize, float inFrameRate, List<String> inFiles, String outputURL) {
-		// Configure the processor
+            // Configure the processor
 		Processor processor;
 		try {
 			processor = Manager.createProcessor(new ImageDataSource(inSize, inFrameRate, inFiles));

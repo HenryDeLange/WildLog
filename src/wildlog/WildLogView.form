@@ -1639,6 +1639,16 @@
                 <Property name="name" type="java.lang.String" value="mnuExifMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuCreateSlideshow">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="CreateSlideshow" methodName="CreateSlideshow"/>
+                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="mnuCreateSlideshow.icon"/>
+                <Property name="text" type="java.lang.String" resourceKey="mnuCreateSlideshow.text"/>
+                <Property name="name" type="java.lang.String" value="mnuCreateSlideshow" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="subMenu1">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="subMenu1.text"/>

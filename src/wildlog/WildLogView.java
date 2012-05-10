@@ -5,6 +5,7 @@ import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.net.URISyntaxException;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
@@ -17,7 +18,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +40,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -70,6 +75,7 @@ import wildlog.ui.report.ReportVisit;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.jpegmovie.JpgToMovie;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -333,6 +339,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
+        mnuCreateSlideshow = new javax.swing.JMenuItem();
         subMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
         subMenu3 = new javax.swing.JMenu();
@@ -1242,6 +1249,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuExifMenuItem.setText(resourceMap.getString("mnuExifMenuItem.text")); // NOI18N
         mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
         extraMenu.add(mnuExifMenuItem);
+
+        mnuCreateSlideshow.setAction(actionMap.get("CreateSlideshow")); // NOI18N
+        mnuCreateSlideshow.setIcon(resourceMap.getIcon("mnuCreateSlideshow.icon")); // NOI18N
+        mnuCreateSlideshow.setText(resourceMap.getString("mnuCreateSlideshow.text")); // NOI18N
+        mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
+        extraMenu.add(mnuCreateSlideshow);
 
         subMenu1.setText(resourceMap.getString("subMenu1.text")); // NOI18N
         subMenu1.setName("subMenu1"); // NOI18N
@@ -2548,6 +2561,35 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
         app.getDBI().createOrUpdate(options);
     }
+
+    @Action
+    public void CreateSlideshow() throws IOException, URISyntaxException {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Jpeg images", "jpg", "jpeg", "JPG", "JPEG"));
+        fileChooser.setDialogTitle("Select the images to use for the slideshow...");
+        if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this.getComponent())) {
+            List<File> files = Arrays.asList(fileChooser.getSelectedFiles());
+            List<String> fileNames = new ArrayList<String>(files.size());
+            for (File tempFile : files) {
+                fileNames.add(tempFile.getAbsolutePath());
+            }
+            fileChooser.setDialogTitle("Please select where to save the slideshow...");
+            fileChooser.setMultiSelectionEnabled(false);
+            fileChooser.setSelectedFile(null);
+            fileChooser.setFileFilter(new FileNameExtensionFilter("Slideshow movie", "mov"));
+            if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(this.getComponent())) {
+                String outputFile = fileChooser.getSelectedFile().getPath().substring(2);
+                JpgToMovie jpgToMovie = new JpgToMovie();
+                jpgToMovie.createMovieFromJpgs(
+                        750, 
+                        app.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(), 
+                        fileNames, 
+                        outputFile);
+                Utils.openFile(outputFile);
+            }
+        }
+    }
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2630,6 +2672,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuBackupMenuItem;
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
+    private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuExifMenuItem;
     private javax.swing.JMenuItem mnuMapStartMenuItem;
