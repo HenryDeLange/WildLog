@@ -5,6 +5,7 @@ public class WildLogOptions {
     private int databaseVersion;
     private double defaultLatitude;
     private double defaultLongitude;
+    private float defaultSlideshowSpeed;
 
     
     public int getDatabaseVersion() {
@@ -29,6 +30,14 @@ public class WildLogOptions {
 
     public void setDefaultLongitude(double inDefaultLongitude) {
         defaultLongitude = inDefaultLongitude;
+    }
+
+    public float getDefaultSlideshowSpeed() {
+        return defaultSlideshowSpeed;
+    }
+
+    public void setDefaultSlideshowSpeed(float inDefaultSlideshowSpeed) {
+        defaultSlideshowSpeed = inDefaultSlideshowSpeed;
     }
 
 }

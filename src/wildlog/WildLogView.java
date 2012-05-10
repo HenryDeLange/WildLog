@@ -174,7 +174,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblVisit.getTableHeader().setReorderingAllowed(false);
         
         // Set the minimum size of the frame
-        this.getFrame().setMinimumSize(new Dimension(1024, 685));
+        this.getFrame().setMinimumSize(new Dimension(1024, 705));
     }
 
     @Action
@@ -329,6 +329,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         subMenu2 = new javax.swing.JMenu();
         chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         mnuMapStartMenuItem = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         subMenu1 = new javax.swing.JMenu();
@@ -337,10 +339,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuOpenMapApp = new javax.swing.JMenuItem();
         buttonGroup1 = new javax.swing.ButtonGroup();
         statusPanel = new javax.swing.JPanel();
-        javax.swing.JSeparator statusPanelSeparator = new javax.swing.JSeparator();
         statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
         progressBar = new javax.swing.JProgressBar();
+        statusAnimationLabel = new javax.swing.JLabel();
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -431,7 +432,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblWorkspace.setText(FilePaths.WILDLOG.getFullPath());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
-        tabHome.add(lblWorkspace, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 560, 450, -1));
+        tabHome.add(lblWorkspace, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 560, 530, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -1221,6 +1222,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         settingsMenu.add(subMenu2);
 
+        jMenu1.setIcon(resourceMap.getIcon("jMenu1.icon")); // NOI18N
+        jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
+        jMenu1.setName("jMenu1"); // NOI18N
+
+        mnuSetSlideshowSpeed.setAction(actionMap.get("SetSlideshowSpeed")); // NOI18N
+        mnuSetSlideshowSpeed.setText(resourceMap.getString("mnuSetSlideshowSpeed.text")); // NOI18N
+        mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
+        jMenu1.add(mnuSetSlideshowSpeed);
+
+        settingsMenu.add(jMenu1);
+
         menuBar.add(settingsMenu);
 
         extraMenu.setText(resourceMap.getString("extraMenu.text")); // NOI18N
@@ -1255,41 +1267,25 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(extraMenu);
 
+        statusPanel.setBackground(resourceMap.getColor("statusPanel.background")); // NOI18N
         statusPanel.setName("statusPanel"); // NOI18N
+        statusPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 0));
 
-        statusPanelSeparator.setName("statusPanelSeparator"); // NOI18N
-
+        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        statusMessageLabel.setAlignmentY(0.0F);
+        statusMessageLabel.setMaximumSize(new java.awt.Dimension(800, 20));
         statusMessageLabel.setName("statusMessageLabel"); // NOI18N
+        statusMessageLabel.setPreferredSize(new java.awt.Dimension(400, 20));
+        statusPanel.add(statusMessageLabel);
+
+        progressBar.setName("progressBar"); // NOI18N
+        progressBar.setPreferredSize(new java.awt.Dimension(400, 16));
+        statusPanel.add(progressBar);
 
         statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-
-        progressBar.setName("progressBar"); // NOI18N
-
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 1022, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 361, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(statusAnimationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(statusAnimationLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-        );
+        statusAnimationLabel.setPreferredSize(new java.awt.Dimension(20, 20));
+        statusPanel.add(statusAnimationLabel);
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
@@ -2537,6 +2533,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             JOptionPane.showMessageDialog(this.getComponent(), "Finished checking and cleaning the Workspace Folder.", "Done!", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    @Action
+    public void SetSlideshowSpeed() {
+        WildLogOptions options = app.getDBI().find(new WildLogOptions());
+        String inputFramerate = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default framerate to use for the slideshows. \n (This can be any positive decimal value, for example 1 or 0.3)", options.getDefaultSlideshowSpeed());
+        if (inputFramerate != null) {
+            try {
+                options.setDefaultSlideshowSpeed(Math.abs(Float.parseFloat(inputFramerate)));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        app.getDBI().createOrUpdate(options);
+    }
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2593,6 +2604,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -2622,6 +2634,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem mnuExifMenuItem;
     private javax.swing.JMenuItem mnuMapStartMenuItem;
     private javax.swing.JMenuItem mnuOpenMapApp;
+    private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem moveVisitsMenuItem;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JRadioButton rdbBrowseDate;

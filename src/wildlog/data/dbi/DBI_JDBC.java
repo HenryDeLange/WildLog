@@ -169,7 +169,8 @@ public abstract class DBI_JDBC implements DBI {
                             .append("(")
                             .append("   VERSION int DEFAULT 2,")
                             .append("   DEFAULTLATITUDE float(52) DEFAULT -28.7,")
-                            .append("   DEFAULTLONGITUDE float(52) DEFAULT 24.7")
+                            .append("   DEFAULTLONGITUDE float(52) DEFAULT 24.7,")
+                            .append("   DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5")
                             .append(")").toString();
     }
 
@@ -448,6 +449,7 @@ public abstract class DBI_JDBC implements DBI {
                 inWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
                 inWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
                 inWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
+                inWildLogOptions.setDefaultSlideshowSpeed(results.getFloat("DEFAULTSLIDESHOWSPEED"));
             }
 
         }
@@ -1379,12 +1381,13 @@ public abstract class DBI_JDBC implements DBI {
                 StringBuilder sql = new StringBuilder("UPDATE WILDLOG SET ")
                     .append("VERSION = ").append(inWildLogOptions.getDatabaseVersion()).append(", ")
                     .append("DEFAULTLATITUDE = ").append(inWildLogOptions.getDefaultLatitude()).append(", ")
-                    .append("DEFAULTLONGITUDE = ").append(inWildLogOptions.getDefaultLongitude()).append("");
+                    .append("DEFAULTLONGITUDE = ").append(inWildLogOptions.getDefaultLongitude()).append(", ")
+                    .append("DEFAULTSLIDESHOWSPEED = ").append(inWildLogOptions.getDefaultSlideshowSpeed()).append("");
                 state.executeUpdate(sql.toString());
             }
             else {
                 // Insert
-                StringBuilder sql = new StringBuilder("INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT)");
+                StringBuilder sql = new StringBuilder("INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT)");
                 state.execute(sql.toString());
             }
         }
@@ -1673,13 +1676,17 @@ public abstract class DBI_JDBC implements DBI {
         try {
             state = conn.createStatement();
             results = state.executeQuery("SELECT * FROM WILDLOG");
+            // If there isn't a row create one
             if (!results.next()) {
                 createOrUpdate(new WildLogOptions());
-                results = state.executeQuery("SELECT * FROM WILDLOG");
             }
+            // Read the row
+            results = state.executeQuery("SELECT VERSION FROM WILDLOG");
             while (results.next()) {
                 if (results.getInt("VERSION") == 0)
                     doUpdate1();
+                if (results.getInt("VERSION") == 1)
+                    doUpdate2();
             }
         }
         catch (SQLException ex) {
@@ -1747,6 +1754,44 @@ public abstract class DBI_JDBC implements DBI {
             state.execute("DROP TABLE TEMP_FILES");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=1");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                    results = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                    state = null;
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+    }
+    
+    private void doUpdate2() {
+        // This update adds a column to the options table
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Add the column with default value etc.
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=2");
         }
         catch (SQLException ex) {
             printSQLException(ex);
