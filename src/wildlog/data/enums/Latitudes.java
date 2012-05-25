@@ -27,6 +27,7 @@ public enum Latitudes {
     }
 
     public static Latitudes getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(NORTH.text)) return NORTH;
         if (inText.equalsIgnoreCase(NORTH.key)) return NORTH;
         if (inText.equalsIgnoreCase(SOUTH.text)) return SOUTH;

@@ -21,6 +21,7 @@ public enum FeedingClass {
     }
 
     public static FeedingClass getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(CARNIVORE.text)) return CARNIVORE;
         if (inText.equalsIgnoreCase(HERBIVORE.text)) return HERBIVORE;
         if (inText.equalsIgnoreCase(OMNIVORE.text)) return OMNIVORE;

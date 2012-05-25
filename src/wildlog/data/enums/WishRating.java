@@ -21,6 +21,7 @@ public enum WishRating {
     }
 
     public static WishRating getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(EXCEPTIONAL.text)) return EXCEPTIONAL;
         if (inText.equalsIgnoreCase(NEED_GOOD_SIGHTING.text)) return NEED_GOOD_SIGHTING;
         if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;

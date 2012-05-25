@@ -24,6 +24,7 @@ public enum ActiveTimeSpesific {
     }
 
     public static ActiveTimeSpesific getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(EARLY_MORNING.text)) return EARLY_MORNING;
         if (inText.equalsIgnoreCase(MORNING.text)) return MORNING;
         if (inText.equalsIgnoreCase(MID_MORNING.text)) return MID_MORNING;

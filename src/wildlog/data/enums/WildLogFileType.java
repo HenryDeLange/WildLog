@@ -22,6 +22,7 @@ public enum WildLogFileType {
     }
 
     public static WildLogFileType getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(IMAGE.text)) return IMAGE;
         if (inText.equalsIgnoreCase(MOVIE.text)) return MOVIE;
         if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;

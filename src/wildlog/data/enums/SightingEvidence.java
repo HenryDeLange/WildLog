@@ -20,6 +20,7 @@ public enum SightingEvidence {
     }
 
     public static SightingEvidence getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(SEEN.text)) return SEEN;
         if (inText.equalsIgnoreCase(HEARD.text)) return HEARD;
         if (inText.equalsIgnoreCase(OTHER_EVIDENCE.text)) return OTHER_EVIDENCE;

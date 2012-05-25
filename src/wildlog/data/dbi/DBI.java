@@ -44,6 +44,4 @@ public interface DBI {
     public boolean delete(Sighting inSighting);
     public boolean delete(WildLogFile inFoto);
 
-    public String limitLength(String inString, int inLength);
-
 }

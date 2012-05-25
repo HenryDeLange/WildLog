@@ -30,6 +30,7 @@ public enum AddFrequency {
     }
 
     public static AddFrequency getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
         if (inText.equalsIgnoreCase(MEDIUM.text)) return MEDIUM;
         if (inText.equalsIgnoreCase(LOW.text)) return LOW;

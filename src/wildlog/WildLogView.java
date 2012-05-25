@@ -2149,9 +2149,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void exportToKML() {
-// TODO: register the workers as instance variables and then use the wait() and notify()
-// calls to only start the KML after HTMLis done... But since it goes reasonabily fast
-// currently it can run concurrently for now
         // First do the HTML export to generate the Images in the right place
         exportToHTML(false);
         JOptionPane.showMessageDialog(this.getComponent(), "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.", "Generating KML", JOptionPane.INFORMATION_MESSAGE);
@@ -2576,7 +2573,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
             fileChooser.setDialogTitle("Please select where to save the slideshow...");
             fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.setSelectedFile(null);
+            fileChooser.setSelectedFile(new File("movie.mov"));
             fileChooser.setFileFilter(new FileNameExtensionFilter("Slideshow movie", "mov"));
             if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(this.getComponent())) {
                 String outputFile = fileChooser.getSelectedFile().getPath().substring(2);

@@ -25,6 +25,7 @@ public enum Province {
     }
 
     public static Province getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(GAUTENG.text)) return GAUTENG;
         if (inText.equalsIgnoreCase(WESTERN_CAPE.text)) return WESTERN_CAPE;
         if (inText.equalsIgnoreCase(EASTERN_CAPE.text)) return EASTERN_CAPE;

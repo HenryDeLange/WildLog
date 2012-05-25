@@ -38,6 +38,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dbi.DBUtils;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
@@ -350,7 +351,6 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
-        txtEmail.setNextFocusableComponent(txtContactNumber);
         locationIncludes.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 224, 240, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -611,7 +611,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
-        cmbLatitude.setNextFocusableComponent(cmbLongitude);
         locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 300, 90, -1));
 
         cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
@@ -845,7 +844,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = locationWL.getName();
-                locationWL.setName(app.getDBI().limitLength(txtName.getText(), 100));
+                locationWL.setName(DBUtils.limitLength(txtName.getText(), 100));
                 locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
                 locationWL.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
                 rdbDMS.setSelected(true);
@@ -875,6 +874,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 locationWL.setEmail(txtEmail.getText());
                 locationWL.setWebsite(txtWebsite.getText());
                 locationWL.setDirections(txtDirections.getText());
+                // FIXME: This will need to be changed to work with Java 7
                 Object[] tempArray = lstAccommodationType.getSelectedValues();
                 List<AccommodationType> tempList = new ArrayList<AccommodationType>(tempArray.length);
                 for (Object tempObject : tempArray) {

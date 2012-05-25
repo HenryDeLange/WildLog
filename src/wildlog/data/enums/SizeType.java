@@ -19,12 +19,11 @@ public enum SizeType {
     }
 
     public static SizeType getEnumFromText(String inText) {
-        if (inText != null) {
-            if (inText.equalsIgnoreCase(SHOULDER.text)) return SHOULDER;
-            if (inText.equalsIgnoreCase(TOTAL_LENGTH.text)) return TOTAL_LENGTH;
-            if (inText.equalsIgnoreCase(TOTAL_HEIGHT.text)) return TOTAL_HEIGHT;
-            if (inText.equalsIgnoreCase(NONE.text)) return NONE;
-        }
+        if (inText == null) inText = "";
+        if (inText.equalsIgnoreCase(SHOULDER.text)) return SHOULDER;
+        if (inText.equalsIgnoreCase(TOTAL_LENGTH.text)) return TOTAL_LENGTH;
+        if (inText.equalsIgnoreCase(TOTAL_HEIGHT.text)) return TOTAL_HEIGHT;
+        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }
 }

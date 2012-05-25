@@ -20,6 +20,7 @@ public enum ActiveTime {
     }
 
     public static ActiveTime getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(DAY.text)) return DAY;
         if (inText.equalsIgnoreCase(NIGHT.text)) return NIGHT;
         if (inText.equalsIgnoreCase(ALWAYS.text)) return ALWAYS;

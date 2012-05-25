@@ -21,6 +21,7 @@ public enum ViewRating {
     }
 
     public static ViewRating getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(VERY_GOOD.text)) return VERY_GOOD;
         if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
         if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;

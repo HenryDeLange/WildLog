@@ -37,6 +37,7 @@ public enum Habitat {
     }
 
     public static Habitat getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(SUCCULENT_KAROO.text)) return SUCCULENT_KAROO;
         if (inText.equalsIgnoreCase(NAMA_KAROO.text)) return NAMA_KAROO;
         if (inText.equalsIgnoreCase(FYNBOS.text)) return FYNBOS;

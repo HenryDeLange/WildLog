@@ -21,6 +21,7 @@ public enum VisitType {
     }
 
     public static VisitType getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(VACATION.text)) return VACATION;
         if (inText.equalsIgnoreCase(REMOTE_CAMERA.text)) return REMOTE_CAMERA;
         if (inText.equalsIgnoreCase(BIRD_ATLASSING.text)) return BIRD_ATLASSING;

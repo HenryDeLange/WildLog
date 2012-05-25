@@ -83,7 +83,7 @@ public final class Utils {
             }
             else {
                 double ratio = (double)inSize/inIcon.getImage().getWidth(null);
-                finalWidth = (int)(inIcon.getImage().getHeight(null)*ratio);
+                finalHeight = (int)(inIcon.getImage().getHeight(null)*ratio);
             }
         }
         inIcon.setImage(Utils.getScaledImage(inIcon.getImage(), finalWidth, finalHeight));
@@ -197,7 +197,7 @@ public final class Utils {
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace();
+                        ex.printStackTrace(System.err);
                     }
                     finally {
                         try {
@@ -205,7 +205,7 @@ public final class Utils {
                             fileOutput.close();
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace();
+                            ex.printStackTrace(System.err);
                         }
                     }
                 }
@@ -237,7 +237,7 @@ public final class Utils {
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace();
+                        ex.printStackTrace(System.err);
                     }
                     finally {
                         try {
@@ -245,7 +245,7 @@ public final class Utils {
                             fileOutput.close();
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace();
+                            ex.printStackTrace(System.err);
                         }
                     }
                 }
@@ -275,7 +275,7 @@ public final class Utils {
                         setupFoto(inID, 0, inImageLabel, inSize, inApp);
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace();
+                        ex.printStackTrace(System.err);
                     }
                     finally {
                         try {
@@ -283,7 +283,7 @@ public final class Utils {
                             fileOutput.close();
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace();
+                            ex.printStackTrace(System.err);
                         }
                     }
                 }
@@ -391,7 +391,7 @@ public final class Utils {
                 Desktop.getDesktop().open(new File(inPath));
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
                 // Backup Plan - Because of Java 6 bug for avi files
                 try {
                     String os = System.getProperty("os.name").toLowerCase();
@@ -414,7 +414,7 @@ public final class Utils {
                     }
                 }
                 catch (IOException e) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                 }
             }
         }
@@ -463,7 +463,7 @@ public final class Utils {
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
             finally {
                 try {
@@ -473,7 +473,7 @@ public final class Utils {
                         fileOutput.close();
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                 }
             }
         }
@@ -509,10 +509,10 @@ public final class Utils {
                     frame.setVisible(true);
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                 }
                 catch (JpegProcessingException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                     JOptionPane.showMessageDialog(null, "Could not process the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
                 }
             }

@@ -23,6 +23,7 @@ public enum Weather {
     }
 
     public static Weather getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(SUNNY.text)) return SUNNY;
         if (inText.equalsIgnoreCase(LIGHT_OVERCAST.text)) return LIGHT_OVERCAST;
         if (inText.equalsIgnoreCase(HEAVY_OVERCAST.text)) return HEAVY_OVERCAST;

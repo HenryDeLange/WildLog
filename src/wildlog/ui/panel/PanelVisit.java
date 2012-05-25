@@ -42,6 +42,7 @@ import wildlog.utils.ui.Utils;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dbi.DBUtils;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
@@ -754,7 +755,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (Utils.checkCharacters(txtName.getText().trim())) {
             if (txtName.getText().length() > 0) {
                 String oldName = visit.getName();
-                visit.setName(app.getDBI().limitLength(txtName.getText(), 100));
+                visit.setName(DBUtils.limitLength(txtName.getText(), 100));
                 visit.setStartDate(dtpStartDate.getDate());
                 visit.setEndDate(dtpEndDate.getDate());
                 visit.setGameWatchingIntensity((GameWatchIntensity)cmbGameWatchIntensity.getSelectedItem());
@@ -1252,6 +1253,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     private Date parseDate(String inDate) {
+        // TODO: fix this deprication
         Date date = new Date(inDate);
         return date;
     }

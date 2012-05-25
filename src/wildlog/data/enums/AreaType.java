@@ -27,6 +27,7 @@ public enum AreaType {
     }
 
     public static AreaType getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(OPEN.text)) return OPEN;
         if (inText.equalsIgnoreCase(THICKET.text)) return THICKET;
         if (inText.equalsIgnoreCase(LIGHT_COVER.text)) return LIGHT_COVER;

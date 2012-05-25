@@ -20,6 +20,7 @@ public enum LocationRating {
     }
 
     public static LocationRating getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
         if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;
         if (inText.equalsIgnoreCase(DECENT.text)) return DECENT;

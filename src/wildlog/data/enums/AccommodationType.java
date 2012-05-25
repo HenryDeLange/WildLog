@@ -26,6 +26,7 @@ public enum AccommodationType {
     }
 
     public static List<AccommodationType> getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         List<AccommodationType> tempList = new ArrayList<AccommodationType>(3);
         if (inText.contains(CAMPING.text)) tempList.add(CAMPING);
         if (inText.contains(SMALL_UNIT.text)) tempList.add(SMALL_UNIT);

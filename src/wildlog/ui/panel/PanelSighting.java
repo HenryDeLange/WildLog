@@ -602,7 +602,6 @@ public class PanelSighting extends javax.swing.JPanel {
         cmbLatitude.setSelectedIndex(2);
         cmbLatitude.setEnabled(!disableEditing);
         cmbLatitude.setName("cmbLatitude"); // NOI18N
-        cmbLatitude.setNextFocusableComponent(cmbLongitude);
         sightingIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, 80, -1));
 
         jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N

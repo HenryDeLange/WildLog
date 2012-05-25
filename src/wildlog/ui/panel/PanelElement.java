@@ -47,6 +47,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dbi.DBUtils;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SizeType;
@@ -870,7 +871,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (Utils.checkCharacters(txtPrimaryName.getText().trim())) {
             if (txtPrimaryName.getText().length() > 0) {
                 String oldName = element.getPrimaryName();
-                element.setPrimaryName(app.getDBI().limitLength(txtPrimaryName.getText(), 100)); // Used for indexing (ID)
+                element.setPrimaryName(DBUtils.limitLength(txtPrimaryName.getText(), 100)); // Used for indexing (ID)
                 element.setOtherName(txtOtherName.getText());
                 element.setScientificName(txtScienceName.getText());
                 element.setReferenceID(txtReferenceID.getText());

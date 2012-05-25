@@ -41,10 +41,7 @@ import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
 import wildlog.utils.FilePaths;
 
-/**
- *
- * @author Henry
- */
+
 public class DBI_h2 extends DBI_JDBC {
     // Constructor
     public DBI_h2() {
@@ -58,38 +55,37 @@ public class DBI_h2 extends DBI_JDBC {
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
             conn = DriverManager.getConnection("jdbc:h2:" + FilePaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
-            super.init();
             
             // Create tables
             results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createElementsTable);
+                state.execute(tableElementsTable);
             }
             results = conn.getMetaData().getTables(null, null, "LOCATIONS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createLocationsTable);
+                state.execute(tableLocationsTable);
             }
             results = conn.getMetaData().getTables(null, null, "VISITS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createVisitsTable);
+                state.execute(tableVisitsTable);
             }
             results = conn.getMetaData().getTables(null, null, "SIGHTINGS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createSightingsTable);
+                state.execute(tableSightingsTable);
             }
             results = conn.getMetaData().getTables(null, null, "FILES", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createFilesTable);
+                state.execute(tableFilesTable);
             }
             results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(createWildLogTable);
+                state.execute(tableWildLogTable);
             }
 
             super.doUpdates(); // This also creates the WildLogOptions row the first time

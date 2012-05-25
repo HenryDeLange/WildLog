@@ -2,6 +2,7 @@ package wildlog.data.dbi;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,138 +44,52 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
 
-/**
- *
- * @author Henry
- */
 public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
-    protected String createElementsTable;
-    protected String createLocationsTable;
-    protected String createVisitsTable;
-    protected String createSightingsTable;
-    protected String createFilesTable;
-    protected String createWildLogTable;
-
+    
+    protected String tableElementsTable = "CREATE TABLE ELEMENTS (   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,   OTHERNAME varchar(150),   SCIENTIFICNAME varchar(150),   DESCRIPTION longvarchar,   DISTRIBUTION longvarchar,   NUTRITION longvarchar,   WATERDEPENDANCE varchar(50),   SIZEMALEMIN float(52),   SIZEMALEMAX float(52),   SIZEFEMALEMIN float(52),   SIZEFEMALEMAX float(52),   SIZEUNIT varchar(10),   SIZETYPE varchar(50),   WEIGHTMALEMIN float(52),   WEIGHTMALEMAX float(52),   WEIGHTFEMALEMIN float(52),   WEIGHTFEMALEMAX float(52),   WEIGHTUNIT varchar(10),   BREEDINGDURATION varchar(50),   BREEDINGNUMBER varchar(50),   WISHLISTRATING varchar(50),   DIAGNOSTICDESCRIPTION longvarchar,   ACTIVETIME varchar(50),   ENDANGEREDSTATUS varchar(35),   BEHAVIOURDESCRIPTION longvarchar,   ADDFREQUENCY varchar(50),   ELEMENTTYPE varchar(50),   FEEDINGCLASS varchar(50),   LIFESPAN varchar(50),   REFERENCEID varchar(50))";
+    protected String tableLocationsTable = "CREATE TABLE LOCATIONS (   NAME varchar(150) PRIMARY KEY NOT NULL,   DESCRIPTION longvarchar,   PROVINCE varchar(35),   RATING varchar(50),   GAMEVIEWINGRATING varchar(50),   HABITATTYPE varchar(50),   ACCOMMODATIONTYPE varchar(150),   CATERING varchar(50),   CONTACTNUMBERS varchar(50),   WEBSITE varchar(100),   EMAIL varchar(100),   DIRECTIONS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52))";
+    protected String tableVisitsTable = "CREATE TABLE VISITS (   NAME varchar(150) PRIMARY KEY NOT NULL,   STARTDATE date,   ENDDATE date,   DESCRIPTION longvarchar,   GAMEWATCHINGINTENSITY varchar(50),   VISITTYPE varchar(50),   LOCATIONNAME varchar(150))";
+    protected String tableSightingsTable = "CREATE TABLE SIGHTINGS (   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL,   LOCATIONNAME varchar(150) NOT NULL,   VISITNAME varchar(150) NOT NULL,   TIMEOFDAY varchar(50),   WEATHER varchar(50),   AREATYPE varchar(50),   VIEWRATING varchar(50),   CERTAINTY varchar(50),   NUMBEROFELEMENTS int,   DETAILS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52),   SIGHTINGEVIDENCE varchar(50),   MOONLIGHT varchar(50),   MOONPHASE int)";
+    protected String tableFilesTable = "CREATE TABLE FILES (   ID varchar(175),   FILENAME varchar(255),   FILEPATH varchar(500),   ORIGINALPATH varchar(500),   FILETYPE varchar(50),   UPLOADDATE date,   ISDEFAULT smallint)";
+    protected String tableWildLogTable = "CREATE TABLE WILDLOG (   VERSION int DEFAULT 2,   DEFAULTLATITUDE float(52) DEFAULT -28.7,   DEFAULTLONGITUDE float(52) DEFAULT 24.7,   DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5)";
+    // Find
+    protected String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
+    protected String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
+    protected String findSighting = "SELECT * FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
+    protected String findElement = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = ?";
+    // List
+    protected String listLocation = "SELECT * FROM LOCATIONS";
+    protected String listVisit = "SELECT * FROM VISITS";
+    protected String listSighting = "SELECT * FROM SIGHTINGS";
+    protected String listElement = "SELECT * FROM ELEMENTS";
+    protected String listFile = "SELECT * FROM FILES";
+    // Create
+    protected String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
+    protected String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected String createFile = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?,?)";
+    // Update
+    protected String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, PROVINCE = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ? WHERE NAME = ?";
+    protected String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
+    protected String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, AREATYPE = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ? WHERE SIGHTINGCOUNTER = ?";
+    protected String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
+    protected String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, FILEPATH = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
+    // Delete
+    protected String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
+    protected String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
+    protected String deleteSighting = "DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
+    protected String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
+    protected String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
+    
     public DBI_JDBC() {
-
     }
 
-    protected void init() {
-        // Create tables
-        createElementsTable = new StringBuilder("CREATE TABLE ELEMENTS ")
-                            .append("(")
-                            .append("   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,")
-                            .append("   OTHERNAME varchar(150),")
-                            .append("   SCIENTIFICNAME varchar(150),")
-                            .append("   DESCRIPTION longvarchar,")
-                            .append("   DISTRIBUTION longvarchar,")
-                            .append("   NUTRITION longvarchar,")
-                            .append("   WATERDEPENDANCE varchar(50),")
-                            .append("   SIZEMALEMIN float(52),")
-                            .append("   SIZEMALEMAX float(52),")
-                            .append("   SIZEFEMALEMIN float(52),")
-                            .append("   SIZEFEMALEMAX float(52),")
-                            .append("   SIZEUNIT varchar(10),")
-                            .append("   SIZETYPE varchar(50),")
-                            .append("   WEIGHTMALEMIN float(52),")
-                            .append("   WEIGHTMALEMAX float(52),")
-                            .append("   WEIGHTFEMALEMIN float(52),")
-                            .append("   WEIGHTFEMALEMAX float(52),")
-                            .append("   WEIGHTUNIT varchar(10),")
-                            .append("   BREEDINGDURATION varchar(50),")
-                            .append("   BREEDINGNUMBER varchar(50),")
-                            .append("   WISHLISTRATING varchar(50),")
-                            .append("   DIAGNOSTICDESCRIPTION longvarchar,")
-                            .append("   ACTIVETIME varchar(50),")
-                            .append("   ENDANGEREDSTATUS varchar(35),")
-                            .append("   BEHAVIOURDESCRIPTION longvarchar,")
-                            .append("   ADDFREQUENCY varchar(50),")
-                            .append("   ELEMENTTYPE varchar(50),")
-                            .append("   FEEDINGCLASS varchar(50),")
-                            .append("   LIFESPAN varchar(50),")
-                            .append("   REFERENCEID varchar(50)")
-                            .append(")").toString();
-        createLocationsTable = new StringBuilder("CREATE TABLE LOCATIONS ")
-                            .append("(")
-                            .append("   NAME varchar(150) PRIMARY KEY NOT NULL,")
-                            .append("   DESCRIPTION longvarchar,")
-                            .append("   PROVINCE varchar(35),")
-                            .append("   RATING varchar(50),")
-                            .append("   GAMEVIEWINGRATING varchar(50),")
-                            .append("   HABITATTYPE varchar(50),")
-                            .append("   ACCOMMODATIONTYPE varchar(150),")
-                            .append("   CATERING varchar(50),")
-                            .append("   CONTACTNUMBERS varchar(50),")
-                            .append("   WEBSITE varchar(100),")
-                            .append("   EMAIL varchar(100),")
-                            .append("   DIRECTIONS longvarchar,")
-                            .append("   LATITUDEINDICATOR varchar(10),")
-                            .append("   LATDEGREES int,")
-                            .append("   LATMINUTES int,")
-                            .append("   LATSECONDSFLOAT float(52),")
-                            .append("   LONGITUDEINDICATOR varchar(10),")
-                            .append("   LONDEGREES int,")
-                            .append("   LONMINUTES int,")
-                            .append("   LONSECONDSFLOAT float(52)")
-                            .append(")").toString();
-        createVisitsTable = new StringBuilder("CREATE TABLE VISITS ")
-                            .append("(")
-                            .append("   NAME varchar(150) PRIMARY KEY NOT NULL,")
-                            .append("   STARTDATE date,")
-                            .append("   ENDDATE date,")
-                            .append("   DESCRIPTION longvarchar,")
-                            .append("   GAMEWATCHINGINTENSITY varchar(50),")
-                            .append("   VISITTYPE varchar(50),")
-                            .append("   LOCATIONNAME varchar(150)")
-                            .append(")").toString();
-        createSightingsTable = new StringBuilder("CREATE TABLE SIGHTINGS ")
-                            .append("(")
-                            .append("   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,")
-                            .append("   SIGHTINGDATE timestamp NOT NULL,")
-                            .append("   ELEMENTNAME varchar(150) NOT NULL,")
-                            .append("   LOCATIONNAME varchar(150) NOT NULL,")
-                            .append("   VISITNAME varchar(150) NOT NULL,")
-                            .append("   TIMEOFDAY varchar(50),")
-                            .append("   WEATHER varchar(50),")
-                            .append("   AREATYPE varchar(50),")
-                            .append("   VIEWRATING varchar(50),")
-                            .append("   CERTAINTY varchar(50),")
-                            .append("   NUMBEROFELEMENTS int,")
-                            .append("   DETAILS longvarchar,")
-                            .append("   LATITUDEINDICATOR varchar(10),")
-                            .append("   LATDEGREES int,")
-                            .append("   LATMINUTES int,")
-                            .append("   LATSECONDSFLOAT float(52),")
-                            .append("   LONGITUDEINDICATOR varchar(10),")
-                            .append("   LONDEGREES int,")
-                            .append("   LONMINUTES int,")
-                            .append("   LONSECONDSFLOAT float(52),")
-                            .append("   SIGHTINGEVIDENCE varchar(50),")
-                            .append("   MOONLIGHT varchar(50),")
-                            .append("   MOONPHASE int")
-                            .append(")").toString();
-        createFilesTable = new StringBuilder("CREATE TABLE FILES ")
-                            .append("(")
-                            .append("   ID varchar(175),")
-                            .append("   FILENAME varchar(255),")
-                            .append("   FILEPATH varchar(500),")
-                            .append("   ORIGINALPATH varchar(500),")
-                            .append("   FILETYPE varchar(50),")
-                            .append("   UPLOADDATE date,")
-                            .append("   ISDEFAULT smallint")
-                            .append(")").toString();
-        createWildLogTable = new StringBuilder("CREATE TABLE WILDLOG ")
-                            .append("(")
-                            .append("   VERSION int DEFAULT 2,")
-                            .append("   DEFAULTLATITUDE float(52) DEFAULT -28.7,")
-                            .append("   DEFAULTLONGITUDE float(52) DEFAULT 24.7,")
-                            .append("   DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5")
-                            .append(")").toString();
-    }
+// TODO: Write some JUnit tests to test the database queries so that I can have faith in them...
 
-   // Methods
+    // Methods
     @Override
     public void close() {
         // Close Connection
@@ -191,13 +106,13 @@ public abstract class DBI_JDBC implements DBI {
 
     @Override
     public Element find(Element inElement) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         Element tempElement = null;
         try {
-            String sql = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'";
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            state = conn.prepareStatement(findElement);
+            state.setString(1, DBUtils.sanitizeString(inElement.getPrimaryName()));
+            results = state.executeQuery();
             if (results.next()) {
                 tempElement = new Element();
                 tempElement.setPrimaryName(results.getString("PRIMARYNAME"));
@@ -231,45 +146,25 @@ public abstract class DBI_JDBC implements DBI {
                 tempElement.setLifespan(results.getString("LIFESPAN"));
                 tempElement.setReferenceID(results.getString("REFERENCEID"));
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempElement;
     }
 
     @Override
     public Location find(Location inLocation) {
-        Statement state = null;
-        ResultSet results = null;
         Location tempLocation = null;
+        PreparedStatement state = null;
+        ResultSet results = null;
         try {
-            String sql = "SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'";
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            state = conn.prepareStatement(findLocation);
+            state.setString(1, DBUtils.sanitizeString(inLocation.getName()));
+            results = state.executeQuery();
             if (results.next()) {
                 tempLocation = new Location();
                 tempLocation.setName(results.getString("NAME"));
@@ -293,45 +188,25 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
                 tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempLocation;
     }
 
     @Override
     public Visit find(Visit inVisit) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         Visit tempVisit = null;
         try {
-            String sql = "SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'";
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            state = conn.prepareStatement(findVisit);
+            state.setString(1, DBUtils.sanitizeString(inVisit.getName()));
+            results = state.executeQuery();
             if (results.next()) {
                 tempVisit = new Visit();
                 tempVisit.setName(results.getString("NAME"));
@@ -342,45 +217,25 @@ public abstract class DBI_JDBC implements DBI {
                 tempVisit.setType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
                 tempVisit.setLocationName(results.getString("LOCATIONNAME"));
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempVisit;
     }
 
     @Override
     public Sighting find(Sighting inSighting) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         Sighting tempSighting = null;
         try {
-            String sql = "SELECT * FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            state = conn.prepareStatement(findSighting);
+            state.setLong(1, inSighting.getSightingCounter());
+            results = state.executeQuery();
             if (results.next()) {
                 tempSighting = new Sighting();
                 tempSighting.setSightingCounter(results.getLong("SIGHTINGCOUNTER"));
@@ -407,98 +262,59 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempSighting;
     }
 
     @Override
     public WildLogOptions find(WildLogOptions inWildLogOptions) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         try {
             String sql = "SELECT * FROM WILDLOG";
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             if (results.next()) {
                 inWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
                 inWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
                 inWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
                 inWildLogOptions.setDefaultSlideshowSpeed(results.getFloat("DEFAULTSLIDESHOWSPEED"));
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return inWildLogOptions;
     }
 
     @Override
     public List<Element> list(Element inElement) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         List<Element> tempList = new ArrayList<Element>();
         try {
-            String sql = "SELECT * FROM ELEMENTS";
-            if (inElement.getPrimaryName() != null && inElement.getType() == null)
-                sql = sql + " WHERE PRIMARYNAME like '%" + inElement.getPrimaryName().replaceAll("'", "''") + "%'";
-            else
-            if (inElement.getPrimaryName() == null && inElement.getType() != null)
+            String sql = listElement;
+            if (inElement.getPrimaryName() != null && inElement.getType() == null) {
+                sql = sql + " WHERE PRIMARYNAME like '%" + DBUtils.sanitizeString(inElement.getPrimaryName()) + "%'";
+            }
+            else if (inElement.getPrimaryName() == null && inElement.getType() != null) {
                 sql = sql + " WHERE ELEMENTTYPE = '" + inElement.getType() + "'";
-            else
-            if (inElement.getPrimaryName() != null && inElement.getType() != null)
-                sql = sql + " WHERE PRIMARYNAME like '%" + inElement.getPrimaryName().replaceAll("'", "''") + "%' AND ELEMENTTYPE = '" + inElement.getType() + "'";
-
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            }
+            else if (inElement.getPrimaryName() != null && inElement.getType() != null) {
+                sql = sql + " WHERE PRIMARYNAME like '%" + DBUtils.sanitizeString(inElement.getPrimaryName())
+                        + "%' AND ELEMENTTYPE = '" + inElement.getType() + "'";
+            }
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             while (results.next()) {
                 Element tempElement = new Element();
                 tempElement.setPrimaryName(results.getString("PRIMARYNAME"));
@@ -533,48 +349,28 @@ public abstract class DBI_JDBC implements DBI {
                 tempElement.setReferenceID(results.getString("REFERENCEID"));
                 tempList.add(tempElement);
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempList;
     }
 
     @Override
     public List<Location> list(Location inLocation) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         List<Location> tempList = new ArrayList<Location>();
         try {
-            String sql = "SELECT * FROM LOCATIONS";
-            if (inLocation.getName() != null)
-                sql = sql + " WHERE NAME like '%" + inLocation.getName().replaceAll("'", "''") + "%'";
-
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            String sql = listLocation;
+            if (inLocation.getName() != null) {
+                sql = sql + " WHERE NAME like '%" + DBUtils.sanitizeString(inLocation.getName()) + "%'";
+            }
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             while (results.next()) {
                 Location tempLocation = new Location();
                 tempLocation.setName(results.getString("NAME"));
@@ -599,51 +395,31 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
                 tempList.add(tempLocation);
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempList;
     }
 
     @Override
     public List<Visit> list(Visit inVisit) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         List<Visit> tempList = new ArrayList<Visit>();
         try {
-            String sql = "SELECT * FROM VISITS";
-            if (inVisit.getName() != null)
-                sql = sql + " WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'";
-            else
-            if (inVisit.getLocationName() != null)
-                sql = sql + " WHERE LOCATIONNAME = '" + inVisit.getLocationName().replaceAll("'", "''") + "'";
-
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            String sql = listVisit;
+            if (inVisit.getName() != null) {
+                sql = sql + " WHERE NAME = '" + DBUtils.sanitizeString(inVisit.getName()) + "'";
+            }
+            else if (inVisit.getLocationName() != null) {
+                sql = sql + " WHERE LOCATIONNAME = '" + DBUtils.sanitizeString(inVisit.getLocationName()) + "'";
+            }
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             while (results.next()) {
                 Visit tempVisit = new Visit();
                 tempVisit.setName(results.getString("NAME"));
@@ -655,60 +431,39 @@ public abstract class DBI_JDBC implements DBI {
                 tempVisit.setLocationName(results.getString("LOCATIONNAME"));
                 tempList.add(tempVisit);
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempList;
     }
 
     @Override
     public List<Sighting> list(Sighting inSighting) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         List<Sighting> tempList = new ArrayList<Sighting>();
         try {
-            String sql = "SELECT * FROM SIGHTINGS";
-            if (inSighting.getSightingCounter() > 0)
+            String sql = listSighting;
+            if (inSighting.getSightingCounter() > 0) {
                 sql = sql + " WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
-            else
-            if (inSighting.getElementName() != null)
-                sql = sql + " WHERE ELEMENTNAME = '" + inSighting.getElementName().replaceAll("'", "''") + "'";
-            else
-            if (inSighting.getLocationName() != null)
-                sql = sql + " WHERE LOCATIONNAME = '" + inSighting.getLocationName().replaceAll("'", "''") + "'";
-            else
-            if (inSighting.getVisitName() != null)
-                sql = sql + " WHERE VISITNAME = '" + inSighting.getVisitName().replaceAll("'", "''") + "'";
-
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            }
+            else if (inSighting.getElementName() != null) {
+                sql = sql + " WHERE ELEMENTNAME = '" + DBUtils.sanitizeString(inSighting.getElementName()) + "'";
+            }
+            else if (inSighting.getLocationName() != null) {
+                sql = sql + " WHERE LOCATIONNAME = '" + DBUtils.sanitizeString(inSighting.getLocationName()) + "'";
+            }
+            else if (inSighting.getVisitName() != null) {
+                sql = sql + " WHERE VISITNAME = '" + DBUtils.sanitizeString(inSighting.getVisitName()) + "'";
+            }
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
-                tempSighting = new Sighting();
                 tempSighting.setSightingCounter(results.getLong("SIGHTINGCOUNTER"));
                 tempSighting.setDate(results.getTimestamp("SIGHTINGDATE"));
                 tempSighting.setElementName(results.getString("ELEMENTNAME"));
@@ -740,44 +495,24 @@ public abstract class DBI_JDBC implements DBI {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempList;
     }
 
     @Override
     public List<WildLogFile> list(WildLogFile inFile) {
-// FIXME: This call might be starting to give performance issues...
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         List<WildLogFile> tempList = new ArrayList<WildLogFile>();
         try {
-            String sql = "SELECT * FROM FILES";
-            if (inFile.getId() != null)
-                sql = sql + " WHERE ID = '" + inFile.getId().replaceAll("'", "''") + "'";
+            String sql = listFile;
+            if (inFile.getId() != null) {
+                sql = sql + " WHERE ID = '" + DBUtils.sanitizeString(inFile.getId()) + "'";
+            }
             sql = sql + " ORDER BY ISDEFAULT desc, FILEPATH";
-
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             while (results.next()) {
                 WildLogFile tempFoto = new WildLogFile();
                 tempFoto.setId(results.getString("ID"));
@@ -789,51 +524,31 @@ public abstract class DBI_JDBC implements DBI {
                 tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
                 tempList.add(tempFoto);
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempList;
     }
 
     @Override
     public List<Sighting> searchSightingOnDate(Date inStartDate, Date inEndDate) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         List<Sighting> tempList = new ArrayList<Sighting>();
         try {
             String sql = "SELECT * FROM SIGHTINGS";
-            if (inStartDate != null && inEndDate != null)
-                sql = sql + " WHERE SIGHTINGDATE > '" + new java.sql.Date(inStartDate.getTime()) + "' AND SIGHTINGDATE < '" + new java.sql.Date(inEndDate.getTime()) + "'";
-
-            state = conn.createStatement();
-            results = state.executeQuery(sql);
+            if (inStartDate != null && inEndDate != null) {
+                sql = sql + " WHERE SIGHTINGDATE > '" + new java.sql.Date(inStartDate.getTime())
+                        + "' AND SIGHTINGDATE < '" + new java.sql.Date(inEndDate.getTime()) + "'";
+            }
+            state = conn.prepareStatement(sql);
+            results = state.executeQuery();
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
-                tempSighting = new Sighting();
                 tempSighting.setSightingCounter(results.getLong("SIGHTINGCOUNTER"));
                 tempSighting.setDate(results.getTimestamp("SIGHTINGDATE"));
                 tempSighting.setElementName(results.getString("ELEMENTNAME"));
@@ -859,512 +574,354 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
                 tempList.add(tempSighting);
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return tempList;
     }
 
     @Override
     public boolean createOrUpdate(Element inElement, String inOldName) {
-        Statement state = null;
-        ResultSet results = null;
+        PreparedStatement state = null;
         try {
-            state = conn.createStatement();
+            // Make sure the name isn't already used
+            if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
+                List<Element> list = list(new Element(DBUtils.sanitizeString(inElement.getPrimaryName())));
+                if (!list.isEmpty()) {
+                    return false;
+                }
+            }
+            // Check whether it is an update or not
             if (inOldName != null) {
+                // Check whether there was a name change or not.
                 if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150) + "'");
-                    if (results.next()) {
-                        return false;
+                    // Update the Sightings
+                    Sighting sighting = new Sighting();
+                    sighting.setElementName(inOldName);
+                    List<Sighting> sightings = list(sighting);
+                    for (Sighting temp : sightings) {
+                        temp.setElementName(inElement.getPrimaryName());
+                        createOrUpdate(temp);
                     }
-                    else {
-                        state.execute("UPDATE SIGHTINGS SET ELEMENTNAME = '" + limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150) + "' WHERE ELEMENTNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE FILES SET ID = '" + "ELEMENT-" + limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150) + "' WHERE ID = '" + "ELEMENT-" + inOldName.replaceAll("'", "''") + "'");
+                    // Update the Files
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile("ELEMENT-" + DBUtils.sanitizeString(inOldName)));
+                    for (WildLogFile temp : wildLogFiles) {
+                        temp.setId("ELEMENT-" + DBUtils.limitLength(DBUtils.sanitizeString(inElement.getPrimaryName()), 150));
+                        createOrUpdate(temp, true);
                     }
                 }
                 // Update
-                StringBuilder sql = new StringBuilder("UPDATE ELEMENTS SET ")
-                    .append("PRIMARYNAME = '").append(limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("OTHERNAME = '").append(limitLength(inElement.getOtherName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("SCIENTIFICNAME = '").append(limitLength(inElement.getScientificName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("DESCRIPTION = '").append(inElement.getDescription().replaceAll("'", "''")).append("', ")
-                    .append("DISTRIBUTION = '").append(inElement.getDistribution().replaceAll("'", "''")).append("', ")
-                    .append("NUTRITION = '").append(inElement.getNutrition().replaceAll("'", "''")).append("', ")
-                    .append("WATERDEPENDANCE = '").append(inElement.getWaterDependance()).append("', ")
-                    .append("SIZEMALEMIN = ").append(inElement.getSizeMaleMin()).append(", ")
-                    .append("SIZEMALEMAX = ").append(inElement.getSizeMaleMax()).append(", ")
-                    .append("SIZEFEMALEMIN = ").append(inElement.getSizeFemaleMin()).append(", ")
-                    .append("SIZEFEMALEMAX = ").append(inElement.getSizeFemaleMax()).append(", ")
-                    .append("SIZEUNIT = '").append(inElement.getSizeUnit()).append("', ")
-                    .append("SIZETYPE = '").append(inElement.getSizeType()).append("', ")
-                    .append("WEIGHTMALEMIN = ").append(inElement.getWeightMaleMin()).append(", ")
-                    .append("WEIGHTMALEMAX = ").append(inElement.getWeightMaleMax()).append(", ")
-                    .append("WEIGHTFEMALEMIN = ").append(inElement.getWeightFemaleMin()).append(", ")
-                    .append("WEIGHTFEMALEMAX = ").append(inElement.getWeightFemaleMax()).append(", ")
-                    .append("WEIGHTUNIT = '").append(inElement.getWeightUnit()).append("', ")
-                    .append("BREEDINGDURATION = '").append(limitLength(inElement.getBreedingDuration().replaceAll("'", "''"), 50)).append("', ")
-                    .append("BREEDINGNUMBER = '").append(limitLength(inElement.getBreedingNumber().replaceAll("'", "''"), 50)).append("', ")
-                    .append("WISHLISTRATING = '").append(inElement.getWishListRating()).append("', ")
-                    .append("DIAGNOSTICDESCRIPTION = '").append(inElement.getDiagnosticDescription().replaceAll("'", "''")).append("', ")
-                    .append("ACTIVETIME = '").append(inElement.getActiveTime()).append("', ")
-                    .append("ENDANGEREDSTATUS = '").append(inElement.getEndangeredStatus()).append("', ")
-                    .append("BEHAVIOURDESCRIPTION = '").append(inElement.getBehaviourDescription().replaceAll("'", "''")).append("', ")
-                    .append("ADDFREQUENCY = '").append(inElement.getAddFrequency()).append("', ")
-                    .append("ELEMENTTYPE = '").append(inElement.getType()).append("', ")
-                    .append("FEEDINGCLASS = '").append(inElement.getFeedingClass()).append("', ")
-                    .append("LIFESPAN = '").append(limitLength(inElement.getLifespan().replaceAll("'", "''"), 50)).append("', ")
-                    .append("REFERENCEID = '").append(limitLength(inElement.getReferenceID().replaceAll("'", "''"), 50)).append("'")
-                    .append(" WHERE PRIMARYNAME = '").append(inOldName.replaceAll("'", "''")).append("'");
-                state.executeUpdate(sql.toString());
+                state = conn.prepareStatement(updateElement);
+                state.setString(31, DBUtils.sanitizeString(inOldName));
             }
             else {
-                results = state.executeQuery("SELECT * FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
-                if (results.next())
-                    return false;
                 // Insert
-                StringBuilder sql = new StringBuilder("INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (")
-                    .append("'").append(limitLength(inElement.getPrimaryName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("'").append(limitLength(inElement.getOtherName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("'").append(limitLength(inElement.getScientificName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("'").append(inElement.getDescription().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getDistribution().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getNutrition().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getWaterDependance()).append("', ")
-                    .append("").append(inElement.getSizeMaleMin()).append(", ")
-                    .append("").append(inElement.getSizeMaleMax()).append(", ")
-                    .append("").append(inElement.getSizeFemaleMin()).append(", ")
-                    .append("").append(inElement.getSizeFemaleMax()).append(", ")
-                    .append("'").append(inElement.getSizeUnit()).append("', ")
-                    .append("'").append(inElement.getSizeType()).append("', ")
-                    .append("").append(inElement.getWeightMaleMin()).append(", ")
-                    .append("").append(inElement.getWeightMaleMax()).append(", ")
-                    .append("").append(inElement.getWeightFemaleMin()).append(", ")
-                    .append("").append(inElement.getWeightFemaleMax()).append(", ")
-                    .append("'").append(inElement.getWeightUnit()).append("', ")
-                    .append("'").append(limitLength(inElement.getBreedingDuration().replaceAll("'", "''"), 50)).append("', ")
-                    .append("'").append(limitLength(inElement.getBreedingNumber().replaceAll("'", "''"), 50)).append("', ")
-                    .append("'").append(inElement.getWishListRating()).append("', ")
-                    .append("'").append(inElement.getDiagnosticDescription().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getActiveTime()).append("', ")
-                    .append("'").append(inElement.getEndangeredStatus()).append("', ")
-                    .append("'").append(inElement.getBehaviourDescription().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inElement.getAddFrequency()).append("', ")
-                    .append("'").append(inElement.getType()).append("', ")
-                    .append("'").append(inElement.getFeedingClass()).append("', ")
-                    .append("'").append(limitLength(inElement.getLifespan().replaceAll("'", "''"), 50)).append("', ")
-                    .append("'").append(limitLength(inElement.getReferenceID().replaceAll("'", "''"), 50)).append("'")
-                    .append(")");
-                state.execute(sql.toString());
+                state = conn.prepareStatement(createElement);
             }
+            state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getPrimaryName()), 150));
+            state.setString(2, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getOtherName()), 150));
+            state.setString(3, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getScientificName()), 150));
+            state.setString(4, DBUtils.sanitizeString(inElement.getDescription()));
+            state.setString(5, DBUtils.sanitizeString(inElement.getDistribution()));
+            state.setString(6, DBUtils.sanitizeString(inElement.getNutrition()));
+            state.setString(7, DBUtils.stringFromObject(inElement.getWaterDependance()));
+            state.setDouble(8, inElement.getSizeMaleMin());
+            state.setDouble(9, inElement.getSizeMaleMax());
+            state.setDouble(10, inElement.getSizeFemaleMin());
+            state.setDouble(11, inElement.getSizeFemaleMax());
+            state.setString(12, DBUtils.stringFromObject(inElement.getSizeUnit()));
+            state.setString(13, DBUtils.stringFromObject(inElement.getSizeType()));
+            state.setDouble(14, inElement.getWeightMaleMin());
+            state.setDouble(15, inElement.getWeightMaleMax());
+            state.setDouble(16, inElement.getWeightFemaleMin());
+            state.setDouble(17, inElement.getWeightFemaleMax());
+            state.setString(18, DBUtils.stringFromObject(inElement.getWeightUnit()));
+            state.setString(19, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getBreedingDuration()), 50));
+            state.setString(20, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getBreedingNumber()), 50));
+            state.setString(21, DBUtils.stringFromObject(inElement.getWishListRating()));
+            state.setString(22, DBUtils.sanitizeString(inElement.getDiagnosticDescription()));
+            state.setString(23, DBUtils.stringFromObject(inElement.getActiveTime()));
+            state.setString(24, DBUtils.stringFromObject(inElement.getEndangeredStatus()));
+            state.setString(25, DBUtils.sanitizeString(inElement.getBehaviourDescription()));
+            state.setString(26, DBUtils.stringFromObject(inElement.getAddFrequency()));
+            state.setString(27, DBUtils.stringFromObject(inElement.getType()));
+            state.setString(28, DBUtils.stringFromObject(inElement.getFeedingClass()));
+            state.setString(29, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getLifespan()), 50));
+            state.setString(30, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getReferenceID()), 50));
+            // Execute
+            state.executeUpdate();
         }
         catch (SQLException ex) {
             printSQLException(ex);
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatement(state);
         }
         return true;
+
     }
 
     @Override
     public boolean createOrUpdate(Location inLocation, String inOldName) {
-        Statement state = null;
-        ResultSet results = null;
+        PreparedStatement state = null;
         try {
-            state = conn.createStatement();
+            // Make sure the name isn't already used
+            if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
+                List<Location> list = list(new Location(DBUtils.sanitizeString(inLocation.getName())));
+                if (!list.isEmpty()) {
+                    return false;
+                }
+            }
+            // Check whether it is an update or not
             if (inOldName != null) {
+                // Check whether there was a name change or not.
                 if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "'");
-                    if (results.next()) {
-                        return false;
+                    // Update the Sightings
+                    Sighting sighting = new Sighting();
+                    sighting.setLocationName(inOldName);
+                    List<Sighting> sightings = list(sighting);
+                    for (Sighting temp : sightings) {
+                        temp.setLocationName(inLocation.getName());
+                        createOrUpdate(temp);
                     }
-                    else {
-                        state.execute("UPDATE SIGHTINGS SET LOCATIONNAME = '" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE VISITS SET LOCATIONNAME = '" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "' WHERE LOCATIONNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE FILES SET ID = '" + "LOCATION-" + limitLength(inLocation.getName().replaceAll("'", "''"), 150) + "' WHERE ID = '" + "LOCATION-" + inOldName.replaceAll("'", "''") + "'");
+                    // Update the Visits
+                    List<Visit> visits = list(new Visit(inOldName));
+                    for (Visit temp : visits) {
+                        temp.setLocationName(inLocation.getName());
+                        createOrUpdate(temp, temp.getName());
+                    }
+                    // Update the Files
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile("LOCATION-" + DBUtils.sanitizeString(inOldName)));
+                    for (WildLogFile temp : wildLogFiles) {
+                        temp.setId("LOCATION-" + DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getName()), 150));
+                        createOrUpdate(temp, true);
                     }
                 }
                 // Update
-                StringBuilder sql = new StringBuilder("UPDATE LOCATIONS SET ")
-                    .append("NAME = '").append(limitLength(inLocation.getName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("DESCRIPTION = '").append(inLocation.getDescription().replaceAll("'", "''")).append("', ")
-                    .append("PROVINCE = '").append(inLocation.getProvince()).append("', ")
-                    .append("RATING = '").append(inLocation.getRating()).append("', ")
-                    .append("GAMEVIEWINGRATING = '").append(inLocation.getGameViewingRating()).append("', ")
-                    .append("HABITATTYPE = '").append(inLocation.getHabitatType()).append("', ")
-                    .append("ACCOMMODATIONTYPE = '").append(inLocation.getAccommodationType()).append("', ")
-                    .append("CATERING = '").append(inLocation.getCatering()).append("', ")
-                    .append("CONTACTNUMBERS = '").append(limitLength(inLocation.getContactNumbers().replaceAll("'", "''"), 50)).append("', ")
-                    .append("WEBSITE = '").append(limitLength(inLocation.getWebsite().replaceAll("'", "''"), 100)).append("', ")
-                    .append("EMAIL = '").append(limitLength(inLocation.getEmail().replaceAll("'", "''"), 100)).append("', ")
-                    .append("DIRECTIONS = '").append(inLocation.getDirections().replaceAll("'", "''")).append("', ")
-                    .append("LATITUDEINDICATOR = '").append(inLocation.getLatitude()).append("', ")
-                    .append("LATDEGREES = ").append(inLocation.getLatDegrees()).append(", ")
-                    .append("LATMINUTES = ").append(inLocation.getLatMinutes()).append(", ")
-                    .append("LATSECONDSFLOAT = ").append(inLocation.getLatSecondsFloat()).append(", ")
-                    .append("LONGITUDEINDICATOR = '").append(inLocation.getLongitude()).append("', ")
-                    .append("LONDEGREES = ").append(inLocation.getLonDegrees()).append(", ")
-                    .append("LONMINUTES = ").append(inLocation.getLonMinutes()).append(", ")
-                    .append("LONSECONDSFLOAT = ").append(inLocation.getLonSecondsFloat()).append("")
-                    .append(" WHERE NAME = '").append(inOldName.replaceAll("'", "''")).append("'");
-                state.executeUpdate(sql.toString());
+                state = conn.prepareStatement(updateLocation);
+                state.setString(21, DBUtils.sanitizeString(inOldName));
             }
             else {
-                results = state.executeQuery("SELECT * FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
-                if (results.next())
-                    return false;
                 // Insert
-                StringBuilder sql = new StringBuilder("INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (")
-                    .append("'").append(limitLength(inLocation.getName().replaceAll("'", "''"), 150)).append("', ")
-                    .append("'").append(inLocation.getDescription().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inLocation.getProvince()).append("', ")
-                    .append("'").append(inLocation.getRating()).append("', ")
-                    .append("'").append(inLocation.getGameViewingRating()).append("', ")
-                    .append("'").append(inLocation.getHabitatType()).append("', ")
-                    .append("'").append(inLocation.getAccommodationType()).append("', ")
-                    .append("'").append(inLocation.getCatering()).append("', ")
-                    .append("'").append(limitLength(inLocation.getContactNumbers().replaceAll("'", "''"), 50)).append("', ")
-                    .append("'").append(limitLength(inLocation.getWebsite().replaceAll("'", "''"), 100)).append("', ")
-                    .append("'").append(limitLength(inLocation.getEmail().replaceAll("'", "''"), 100)).append("', ")
-                    .append("'").append(inLocation.getDirections().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inLocation.getLatitude()).append("', ")
-                    .append("").append(inLocation.getLatDegrees()).append(", ")
-                    .append("").append(inLocation.getLatMinutes()).append(", ")
-                    .append("").append(inLocation.getLatSecondsFloat()).append(", ")
-                    .append("'").append(inLocation.getLongitude()).append("', ")
-                    .append("").append(inLocation.getLonDegrees()).append(", ")
-                    .append("").append(inLocation.getLonMinutes()).append(", ")
-                    .append("").append(inLocation.getLonSecondsFloat()).append("")
-                    .append(")");
-                state.execute(sql.toString());
+                state = conn.prepareStatement(createLocation);
             }
+            state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getName()), 150));
+            state.setString(2, DBUtils.sanitizeString(inLocation.getDescription()));
+            state.setString(3, DBUtils.stringFromObject(inLocation.getProvince()));
+            state.setString(4, DBUtils.stringFromObject(inLocation.getRating()));
+            state.setString(5, DBUtils.stringFromObject(inLocation.getGameViewingRating()));
+            state.setString(6, DBUtils.stringFromObject(inLocation.getHabitatType()));
+            state.setString(7, DBUtils.stringFromObject(inLocation.getAccommodationType()));
+            state.setString(8, DBUtils.stringFromObject(inLocation.getCatering()));
+            state.setString(9, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getContactNumbers()), 50));
+            state.setString(10, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getWebsite()), 100));
+            state.setString(11, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getEmail()), 100));
+            state.setString(12, DBUtils.sanitizeString(inLocation.getDirections()));
+            state.setString(13, DBUtils.stringFromObject(inLocation.getLatitude()));
+            state.setInt(14, inLocation.getLatDegrees());
+            state.setInt(15, inLocation.getLatMinutes());
+            state.setFloat(16, inLocation.getLatSecondsFloat());
+            state.setString(17, DBUtils.stringFromObject(inLocation.getLongitude()));
+            state.setInt(18, inLocation.getLonDegrees());
+            state.setInt(19, inLocation.getLonMinutes());
+            state.setFloat(20, inLocation.getLonSecondsFloat());
+            // Execute
+            state.executeUpdate();
         }
         catch (SQLException ex) {
             printSQLException(ex);
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatement(state);
         }
         return true;
     }
 
     @Override
     public boolean createOrUpdate(Visit inVisit, String inOldName) {
-        Statement state = null;
-        ResultSet results = null;
+        PreparedStatement state = null;
         try {
-            state = conn.createStatement();
+            // Make sure the name isn't already used
+            if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
+                List<Visit> list = list(new Visit(DBUtils.sanitizeString(inVisit.getName())));
+                if (!list.isEmpty()) {
+                    return false;
+                }
+            }
+            // Check whether to update or create the it.
             if (inOldName != null) {
+                // Update teh related tables if the name cahnges
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                    results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + limitLength(inVisit.getName().replaceAll("'", "''"), 150) + "'");
-                    if (results.next()) {
-                        return false;
+                    // Update the Sightings
+                    Sighting sighting = new Sighting();
+                    sighting.setVisitName(inOldName);
+                    List<Sighting> sightings = list(sighting);
+                    for (Sighting temp : sightings) {
+                        temp.setVisitName(inVisit.getName());
+                        createOrUpdate(temp);
                     }
-                    else {
-                        state.execute("UPDATE SIGHTINGS SET VISITNAME = '" + limitLength(inVisit.getName().replaceAll("'", "''"), 150) + "' WHERE VISITNAME = '" + inOldName.replaceAll("'", "''") + "'");
-                        state.execute("UPDATE FILES SET ID = '" + "VISIT-" + limitLength(inVisit.getName().replaceAll("'", "''"), 150) + "' WHERE ID = '" + "VISIT-" + inOldName.replaceAll("'", "''") + "'");
+                    // Update the Files
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile("VISIT-" + DBUtils.sanitizeString(inOldName)));
+                    for (WildLogFile temp : wildLogFiles) {
+                        temp.setId("VISIT-" + DBUtils.limitLength(DBUtils.sanitizeString(inVisit.getName()), 150));
+                        createOrUpdate(temp, true);
                     }
                 }
                 // Update
-                StringBuilder sql = new StringBuilder("UPDATE VISITS SET ")
-                    .append("NAME = '").append(limitLength(inVisit.getName().replaceAll("'", "''"), 150)).append("', ");
-                if (inVisit.getStartDate() != null)
-                    sql.append("STARTDATE = '").append(new java.sql.Date(inVisit.getStartDate().getTime())).append("', ");
-                else
-                    sql.append("STARTDATE = null, ");
-                if (inVisit.getEndDate() != null)
-                    sql.append("ENDDATE = '").append(new java.sql.Date(inVisit.getEndDate().getTime())).append("', ");
-                else
-                    sql.append("ENDDATE = null, ");
-                sql.append("DESCRIPTION = '").append(inVisit.getDescription().replaceAll("'", "''")).append("', ")
-                    .append("GAMEWATCHINGINTENSITY = '").append(inVisit.getGameWatchingIntensity()).append("', ")
-                    .append("VISITTYPE = '").append(inVisit.getType()).append("', ")
-                    .append("LOCATIONNAME = '").append(inVisit.getLocationName().replaceAll("'", "''")).append("'")
-                    .append(" WHERE NAME = '").append(inOldName.replaceAll("'", "''")).append("'");
-                state.executeUpdate(sql.toString());
+                state = conn.prepareStatement(updateVisit);
+                state.setString(8, DBUtils.sanitizeString(inOldName));
             }
             else {
-                results = state.executeQuery("SELECT * FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
-                if (results.next())
-                    return false;
                 // Insert
-                StringBuilder sql = new StringBuilder("INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (")
-                    .append("'").append(limitLength(inVisit.getName().replaceAll("'", "''"), 150)).append("', ");
-                if (inVisit.getStartDate() != null)
-                    sql.append("'").append(new java.sql.Date(inVisit.getStartDate().getTime())).append("', ");
-                else
-                    sql.append("null, ");
-                if (inVisit.getEndDate() != null)
-                    sql.append("'").append(new java.sql.Date(inVisit.getEndDate().getTime())).append("', ");
-                else
-                    sql.append("null, ");
-                sql.append("'").append(inVisit.getDescription().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inVisit.getGameWatchingIntensity()).append("', ")
-                    .append("'").append(inVisit.getType()).append("', ")
-                    .append("'").append(inVisit.getLocationName().replaceAll("'", "''")).append("'")
-                    .append(")");
-                state.execute(sql.toString());
+                state = conn.prepareStatement(createVisit);
             }
+            state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inVisit.getName()), 150));
+            if (inVisit.getStartDate() != null) {
+                state.setDate(2, new java.sql.Date(inVisit.getStartDate().getTime()));
+            }
+            else {
+                state.setDate(2, null);
+            }
+            if (inVisit.getEndDate() != null) {
+                state.setDate(3, new java.sql.Date(inVisit.getEndDate().getTime()));
+            }
+            else {
+                state.setDate(3, null);
+            }
+            state.setString(4, DBUtils.sanitizeString(inVisit.getDescription()));
+            state.setString(5, DBUtils.stringFromObject(inVisit.getGameWatchingIntensity()));
+            state.setString(6, DBUtils.stringFromObject(inVisit.getType()));
+            state.setString(7, DBUtils.sanitizeString(inVisit.getLocationName()));
+            // Execute
+            state.executeUpdate();
         }
         catch (SQLException ex) {
             printSQLException(ex);
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatement(state);
         }
         return true;
     }
 
     @Override
     public boolean createOrUpdate(Sighting inSighting) {
-        Statement state = null;
+        PreparedStatement state = null;
+        Statement tempState = null;
         ResultSet results = null;
+        boolean isUpdate = false;
         try {
-            state = conn.createStatement();
             if (inSighting.getSightingCounter() > 0) {
+                // Note: No need to update the files, because once a sighting has an ID it never changes
                 // Update
-                StringBuilder sql = new StringBuilder("UPDATE SIGHTINGS SET ")
-                    .append("SIGHTINGCOUNTER = ").append(inSighting.getSightingCounter()).append(", ");
-                if (inSighting.getDate() != null)
-                    sql.append("SIGHTINGDATE = '").append(new java.sql.Timestamp(inSighting.getDate().getTime())).append("', ");
-                else
-                    sql.append("STARTDATE = null, ");
-                sql.append("ELEMENTNAME = '").append(inSighting.getElementName().replaceAll("'", "''")).append("', ")
-                    .append("LOCATIONNAME = '").append(inSighting.getLocationName().replaceAll("'", "''")).append("', ")
-                    .append("VISITNAME = '").append(inSighting.getVisitName().replaceAll("'", "''")).append("', ")
-                    .append("TIMEOFDAY = '").append(inSighting.getTimeOfDay()).append("', ")
-                    .append("WEATHER = '").append(inSighting.getWeather()).append("', ")
-                    .append("AREATYPE = '").append(inSighting.getAreaType()).append("', ")
-                    .append("VIEWRATING = '").append(inSighting.getViewRating()).append("', ")
-                    .append("CERTAINTY = '").append(inSighting.getCertainty()).append("', ")
-                    .append("NUMBEROFELEMENTS = ").append(inSighting.getNumberOfElements()).append(", ")
-                    .append("DETAILS = '").append(inSighting.getDetails().replaceAll("'", "''")).append("', ")
-                    .append("LATITUDEINDICATOR = '").append(inSighting.getLatitude()).append("', ")
-                    .append("LATDEGREES = ").append(inSighting.getLatDegrees()).append(", ")
-                    .append("LATMINUTES = ").append(inSighting.getLatMinutes()).append(", ")
-                    .append("LATSECONDSFLOAT = ").append(inSighting.getLatSecondsFloat()).append(", ")
-                    .append("LONGITUDEINDICATOR = '").append(inSighting.getLongitude()).append("', ")
-                    .append("LONDEGREES = ").append(inSighting.getLonDegrees()).append(", ")
-                    .append("LONMINUTES = ").append(inSighting.getLonMinutes()).append(", ")
-                    .append("LONSECONDSFLOAT = ").append(inSighting.getLonSecondsFloat()).append(", ")
-                    .append("SIGHTINGEVIDENCE = '").append(inSighting.getSightingEvidence()).append("', ")
-                    .append("MOONPHASE = ").append(inSighting.getMoonPhase()).append(", ")
-                    .append("MOONLIGHT = '").append(inSighting.getMoonlight()).append("'")
-                    .append(" WHERE SIGHTINGCOUNTER = ").append(inSighting.getSightingCounter()).append("");
-                state.executeUpdate(sql.toString());
+                state = conn.prepareStatement(updateSighting);
+                isUpdate = true;
             }
             else {
-                results = state.executeQuery("SELECT MAX(SIGHTINGCOUNTER) FROM SIGHTINGS");
+                // Get the max ID and then run the query.
+                tempState = conn.createStatement();
+                results = tempState.executeQuery("SELECT MAX(SIGHTINGCOUNTER) FROM SIGHTINGS");
                 if (results.next()) {
                     long sightingCounter = results.getLong(1);
                     sightingCounter++;
-                    inSighting.setSightingCounter(sightingCounter); // Need to set it for images to upload coorectly
-                    // Insert
-                    StringBuilder sql = new StringBuilder("INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (")
-                        .append("").append(inSighting.getSightingCounter()).append(", ");
-                    if (inSighting.getDate() != null)
-                        sql.append("'").append(new java.sql.Timestamp(inSighting.getDate().getTime())).append("', ");
-                    else
-                        sql.append("null, ");
-                    sql.append("'").append(inSighting.getElementName().replaceAll("'", "''")).append("', ")
-                        .append("'").append(inSighting.getLocationName().replaceAll("'", "''")).append("', ")
-                        .append("'").append(inSighting.getVisitName().replaceAll("'", "''")).append("', ")
-                        .append("'").append(inSighting.getTimeOfDay()).append("', ")
-                        .append("'").append(inSighting.getWeather()).append("', ")
-                        .append("'").append(inSighting.getAreaType()).append("', ")
-                        .append("'").append(inSighting.getViewRating()).append("', ")
-                        .append("'").append(inSighting.getCertainty()).append("', ")
-                        .append("").append(inSighting.getNumberOfElements()).append(", ")
-                        .append("'").append(inSighting.getDetails().replaceAll("'", "''")).append("', ")
-                        .append("'").append(inSighting.getLatitude()).append("', ")
-                        .append("").append(inSighting.getLatDegrees()).append(", ")
-                        .append("").append(inSighting.getLatMinutes()).append(", ")
-                        .append("").append(inSighting.getLatSecondsFloat()).append(", ")
-                        .append("'").append(inSighting.getLongitude()).append("', ")
-                        .append("").append(inSighting.getLonDegrees()).append(", ")
-                        .append("").append(inSighting.getLonMinutes()).append(", ")
-                        .append("").append(inSighting.getLonSecondsFloat()).append(", ")
-                        .append("'").append(inSighting.getSightingEvidence()).append("', ")
-                        .append("").append(inSighting.getMoonPhase()).append(", ")
-                        .append("'").append(inSighting.getMoonlight()).append("'")
-                        .append(")");
-                    state.execute(sql.toString());
+                    // Need to set the counter on the sighting for images to upload correctly and the below code to work
+                    inSighting.setSightingCounter(sightingCounter);
                 }
-                else
+                else {
                     return false;
+                }
+                // Insert
+                state = conn.prepareStatement(createSighting);
             }
+            // Populate the values
+            state.setLong(1, inSighting.getSightingCounter());
+// TODO: Might need to use Tiestamp in other places as well...
+            state.setTimestamp(2, new java.sql.Timestamp(inSighting.getDate().getTime()));
+            state.setString(3, DBUtils.sanitizeString(inSighting.getElementName()));
+            state.setString(4, DBUtils.sanitizeString(inSighting.getLocationName()));
+            state.setString(5, DBUtils.sanitizeString(inSighting.getVisitName()));
+            state.setString(6, DBUtils.stringFromObject(inSighting.getTimeOfDay()));
+            state.setString(7, DBUtils.stringFromObject(inSighting.getWeather()));
+            state.setString(8, DBUtils.stringFromObject(inSighting.getAreaType()));
+            state.setString(9, DBUtils.stringFromObject(inSighting.getViewRating()));
+            state.setString(10, DBUtils.stringFromObject(inSighting.getCertainty()));
+            state.setInt(11, inSighting.getNumberOfElements());
+            state.setString(12, DBUtils.sanitizeString(inSighting.getDetails()));
+            state.setString(13, DBUtils.stringFromObject(inSighting.getLatitude()));
+            state.setInt(14, inSighting.getLatDegrees());
+            state.setInt(15, inSighting.getLatMinutes());
+            state.setFloat(16, inSighting.getLatSecondsFloat());
+            state.setString(17, DBUtils.stringFromObject(inSighting.getLongitude()));
+            state.setInt(18, inSighting.getLonDegrees());
+            state.setInt(19, inSighting.getLonMinutes());
+            state.setFloat(20, inSighting.getLonSecondsFloat());
+            state.setString(21, DBUtils.stringFromObject(inSighting.getSightingEvidence()));
+            state.setInt(22, inSighting.getMoonPhase());
+            state.setString(23, DBUtils.stringFromObject(inSighting.getMoonlight()));
+
+            if (isUpdate) {
+                state.setLong(24, inSighting.getSightingCounter());
+            }
+            // Execute
+            state.executeUpdate();
         }
         catch (SQLException ex) {
             printSQLException(ex);
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(tempState, results);
+            closeStatement(state);
         }
         return true;
     }
 
     @Override
     public boolean createOrUpdate(WildLogFile inFoto, boolean inUpdate) {
-        Statement state = null;
+        PreparedStatement state = null;
         try {
-            state = conn.createStatement();
             if (inUpdate) {
-                StringBuilder sql = new StringBuilder("UPDATE FILES SET ")
-                    .append("ID = '").append(inFoto.getId().replaceAll("'", "''")).append("', ")
-                    .append("FILENAME = '").append(inFoto.getFilename().replaceAll("'", "''")).append("', ")
-                    .append("FILEPATH = '").append(inFoto.getFileLocation(false).replaceAll("'", "''")).append("', ")
-                    .append("ORIGINALPATH = '").append(inFoto.getOriginalFotoLocation(false).replaceAll("'", "''")).append("', ")
-                    .append("FILETYPE = '").append(inFoto.getFotoType()).append("',");
-                if (inFoto.getDate() != null)
-                    sql.append("UPLOADDATE = '").append(new java.sql.Date(inFoto.getDate().getTime())).append("',");
-                else
-                    sql.append("UPLOADDATE = null,");
-                if (inFoto.isDefaultFile())
-                    sql.append("ISDEFAULT = 1");
-                else
-                    sql.append("ISDEFAULT = 0");
-                sql.append("WHERE ORIGINALPATH = '").append(inFoto.getOriginalFotoLocation(false)).append("'");
-                state.execute(sql.toString());
+                state = conn.prepareStatement(updateFile);
             }
             else {
-                // Insert
-                StringBuilder sql = new StringBuilder("INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (")
-                    .append("'").append(inFoto.getId().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inFoto.getFilename().replaceAll("'", "''")).append("', ")
-                    .append("'").append(inFoto.getFileLocation(false).replaceAll("'", "''")).append("', ")
-                    .append("'").append(inFoto.getOriginalFotoLocation(false).replaceAll("'", "''")).append("', ")
-                    .append("'").append(inFoto.getFotoType()).append("',");
-                if (inFoto.getDate() != null)
-                    sql.append("'").append(new java.sql.Date(inFoto.getDate().getTime())).append("',");
-                else
-                    sql.append("null,");
-                if (inFoto.isDefaultFile())
-                    sql.append("1");
-                else
-                    sql.append("0");
-                sql.append(")");
-                state.execute(sql.toString());
+                state = conn.prepareStatement(createFile);
             }
+            state.setString(1, DBUtils.sanitizeString(inFoto.getId()));
+            state.setString(2, DBUtils.sanitizeString(inFoto.getFilename()));
+            state.setString(3, DBUtils.sanitizeString(inFoto.getFileLocation(false)));
+            state.setString(4, DBUtils.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            state.setString(5, DBUtils.stringFromObject(inFoto.getFotoType()));
+            if (inFoto.getDate() != null) {
+                state.setDate(6, new java.sql.Date(inFoto.getDate().getTime()));
+            }
+            else {
+                state.setDate(6, null);
+            }
+            if (inFoto.isDefaultFile()) {
+                state.setBoolean(7, true);
+            }
+            else {
+                state.setBoolean(7, false);
+            }
+
+            if (inUpdate) {
+                state.setString(8, DBUtils.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            }
+            state.executeUpdate();
         }
         catch (SQLException ex) {
             printSQLException(ex);
             return false;
         }
         finally {
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatement(state);
         }
         return true;
     }
@@ -1379,10 +936,10 @@ public abstract class DBI_JDBC implements DBI {
             if (results.next()) {
                 // Update
                 StringBuilder sql = new StringBuilder("UPDATE WILDLOG SET ")
-                    .append("VERSION = ").append(inWildLogOptions.getDatabaseVersion()).append(", ")
-                    .append("DEFAULTLATITUDE = ").append(inWildLogOptions.getDefaultLatitude()).append(", ")
-                    .append("DEFAULTLONGITUDE = ").append(inWildLogOptions.getDefaultLongitude()).append(", ")
-                    .append("DEFAULTSLIDESHOWSPEED = ").append(inWildLogOptions.getDefaultSlideshowSpeed()).append("");
+                        .append("VERSION = ").append(inWildLogOptions.getDatabaseVersion())
+                        .append(", ").append("DEFAULTLATITUDE = ").append(inWildLogOptions.getDefaultLatitude())
+                        .append(", ").append("DEFAULTLONGITUDE = ").append(inWildLogOptions.getDefaultLongitude())
+                        .append(", ").append("DEFAULTSLIDESHOWSPEED = ").append(inWildLogOptions.getDefaultSlideshowSpeed()).append("");
                 state.executeUpdate(sql.toString());
             }
             else {
@@ -1396,49 +953,33 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return true;
     }
 
     @Override
     public boolean delete(Element inElement) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         try {
             // Delete the Element
-            state = conn.createStatement();
-            state.executeUpdate("DELETE FROM ELEMENTS WHERE PRIMARYNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
-            // Delete all Sightings for this element
-            results = state.executeQuery("SELECT * FROM SIGHTINGS WHERE ELEMENTNAME = '" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
-            while (results.next()) {
-                Sighting sighting = new Sighting(results.getLong("SIGHTINGCOUNTER"));
-                delete(sighting);
+            state = conn.prepareStatement(deleteElement);
+            state.setString(1, DBUtils.sanitizeString(inElement.getPrimaryName()));
+            state.executeUpdate();
+            // Delete all Sightings for this Element
+            Sighting sighting = new Sighting();
+            sighting.setElementName(inElement.getPrimaryName());
+            List<Sighting> sightingList = list(sighting);
+            for (Sighting temp : sightingList) {
+                delete(temp);
             }
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'ELEMENT-" + inElement.getPrimaryName().replaceAll("'", "''") + "'");
-            while (results.next()) {
-                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
-                delete(file);
+            WildLogFile file = new WildLogFile();
+            file.setId("ELEMENT-" + DBUtils.sanitizeString(inElement.getPrimaryName()));
+            List<WildLogFile> fileList = list(file);
+            for (WildLogFile temp : fileList) {
+                delete(temp);
             }
         }
         catch (SQLException ex) {
@@ -1446,49 +987,35 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return true;
     }
 
     @Override
     public boolean delete(Location inLocation) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         try {
-            state = conn.createStatement();
+            state = conn.prepareStatement(deleteLocation);
+            state.setString(1, DBUtils.sanitizeString(inLocation.getName()));
             // Delete Location
-            state.executeUpdate("DELETE FROM LOCATIONS WHERE NAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
-            // Delete Visits for this location
-            results = state.executeQuery("SELECT * FROM VISITS WHERE LOCATIONNAME = '" + inLocation.getName().replaceAll("'", "''") + "'");
-            while (results.next()) {
-                Visit visit = new Visit(results.getString("NAME"));
-                delete(visit);
+            state.executeUpdate();
+            state.close();
+            state = conn.prepareStatement(deleteLocation);
+            // Delete Visits for this Location
+            Visit visit = new Visit();
+            visit.setLocationName(inLocation.getName());
+            List<Visit> visitList = list(visit);
+            for (Visit temp : visitList) {
+                delete(temp);
             }
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'LOCATION-" + inLocation.getName().replaceAll("'", "''") + "'");
-            while (results.next()) {
-                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
-                delete(file);
+            WildLogFile file = new WildLogFile();
+            file.setId("LOCATION-" + DBUtils.sanitizeString(inLocation.getName()));
+            List<WildLogFile> fileList = list(file);
+            for (WildLogFile temp : fileList) {
+                delete(temp);
             }
         }
         catch (SQLException ex) {
@@ -1496,49 +1023,33 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return true;
     }
 
     @Override
     public boolean delete(Visit inVisit) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         try {
-            state = conn.createStatement();
+            state = conn.prepareStatement(deleteVisit);
+            state.setString(1, DBUtils.sanitizeString(inVisit.getName()));
             // Delete Visit
-            state.executeUpdate("DELETE FROM VISITS WHERE NAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
-            // Delete Sightings for this visit
-            results = state.executeQuery("SELECT * FROM SIGHTINGS WHERE VISITNAME = '" + inVisit.getName().replaceAll("'", "''") + "'");
-            while (results.next()) {
-                Sighting sighting = new Sighting(results.getLong("SIGHTINGCOUNTER"));
-                delete(sighting);
+            state.executeUpdate();
+            // Delete Sightings for this Visit
+            Sighting sighting = new Sighting();
+            sighting.setVisitName(inVisit.getName());
+            List<Sighting> sightingList = list(sighting);
+            for (Sighting temp : sightingList) {
+                delete(temp);
             }
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'VISIT-" + inVisit.getName().replaceAll("'", "''") + "'");
-            while (results.next()) {
-                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
-                delete(file);
+            WildLogFile file = new WildLogFile();
+            file.setId("VISIT-" + DBUtils.sanitizeString(inVisit.getName()));
+            List<WildLogFile> fileList = list(file);
+            for (WildLogFile temp : fileList) {
+                delete(temp);
             }
         }
         catch (SQLException ex) {
@@ -1546,43 +1057,26 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return true;
     }
 
     @Override
     public boolean delete(Sighting inSighting) {
-        Statement state = null;
+        PreparedStatement state = null;
         ResultSet results = null;
         try {
-            state = conn.createStatement();
+            state = conn.prepareStatement(deleteSighting);
+            state.setLong(1, inSighting.getSightingCounter());
             // Delete Sightings
-            state.executeUpdate("DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "");
+            state.executeUpdate();
             // Delete Fotos
-            results = state.executeQuery("SELECT * FROM FILES WHERE ID = 'SIGHTING-" + inSighting.getSightingCounter() + "'");
-            while (results.next()) {
-                WildLogFile file = new WildLogFile(results.getString("ID"), results.getString("FILENAME"), results.getString("FILEPATH"), results.getString("ORIGINALPATH"), WildLogFileType.getEnumFromText(results.getString("FILETYPE")), results.getDate("UPLOADDATE"));
-                delete(file);
+            WildLogFile file = new WildLogFile();
+            file.setId("SIGHTING-" + inSighting.getSightingCounter());
+            List<WildLogFile> fileList = list(file);
+            for (WildLogFile temp : fileList) {
+                delete(temp);
             }
         }
         catch (SQLException ex) {
@@ -1590,26 +1084,7 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
         return true;
     }
@@ -1617,11 +1092,13 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public boolean delete(WildLogFile inFoto) {
         // Note: this method only deletes one file at a time
-        Statement state = null;
+        PreparedStatement state = null;
         try {
-            state = conn.createStatement();
-            // Delete File from database - Note: Do not use FilePath, because it is not unique
-            state.executeUpdate("DELETE FROM FILES WHERE ORIGINALPATH = '" + inFoto.getOriginalFotoLocation(false).replaceAll("'", "''") + "'");
+            // Note: Do not use FilePath, because it is not unique
+            state = conn.prepareStatement(deleteFile);
+            state.setString(1, DBUtils.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            // Delete File from database
+            state.executeUpdate();
             // Delete the file on the PC
             File tempFile = new File(inFoto.getFileLocation(true));
             tempFile.delete();
@@ -1633,20 +1110,10 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            // Statement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatement(state);
         }
         return true;
     }
-
 
     /**
      * Prints details of an SQLException chain to <code>System.err</code>.
@@ -1654,12 +1121,10 @@ public abstract class DBI_JDBC implements DBI {
      *
      * @param e the SQLException from which to print details.
      */
-    protected static void printSQLException(SQLException e)
-    {
+    protected static void printSQLException(SQLException e) {
         // Unwraps the entire exception chain to unveil the real cause of the
         // Exception.
-        while (e != null)
-        {
+        while (e != null) {
             System.err.println("\n----- SQLException -----");
             System.err.println("  SQL State:  " + e.getSQLState());
             System.err.println("  Error Code: " + e.getErrorCode());
@@ -1683,10 +1148,12 @@ public abstract class DBI_JDBC implements DBI {
             // Read the row
             results = state.executeQuery("SELECT VERSION FROM WILDLOG");
             while (results.next()) {
-                if (results.getInt("VERSION") == 0)
+                if (results.getInt("VERSION") == 0) {
                     doUpdate1();
-                if (results.getInt("VERSION") == 1)
+                }
+                if (results.getInt("VERSION") == 1) {
                     doUpdate2();
+                }
             }
         }
         catch (SQLException ex) {
@@ -1703,7 +1170,7 @@ public abstract class DBI_JDBC implements DBI {
             catch (SQLException sqle) {
                 printSQLException(sqle);
             }
-            // Statement
+            // PreparedStatement
             try {
                 if (state != null) {
                     state.close();
@@ -1715,7 +1182,6 @@ public abstract class DBI_JDBC implements DBI {
             }
         }
     }
-
 
     // Private update methods
     private void doUpdate1() {
@@ -1735,11 +1201,11 @@ public abstract class DBI_JDBC implements DBI {
             state.execute("ALTER TABLE SIGHTINGS RENAME TO TEMP_SIGHTINGS");
             state.execute("ALTER TABLE FILES RENAME TO TEMP_FILES");
             // Create new tables
-            state.execute(createElementsTable);
-            state.execute(createLocationsTable);
-            state.execute(createVisitsTable);
-            state.execute(createSightingsTable);
-            state.execute(createFilesTable);
+            state.execute(tableElementsTable);
+            state.execute(tableLocationsTable);
+            state.execute(tableVisitsTable);
+            state.execute(tableSightingsTable);
+            state.execute(tableFilesTable);
             // Copy data accross from old tables
             state.executeUpdate("INSERT INTO ELEMENTS SELECT PRIMARYNAME, OTHERNAME, SCIENTIFICNAME, DESCRIPTION, DISTRIBUTION, NUTRITION, WATERDEPENDANCE, SIZEMALEMIN, SIZEMALEMAX , SIZEFEMALEMIN, SIZEFEMALEMAX, SIZEUNIT, WEIGHTMALEMIN, WEIGHTMALEMAX, WEIGHTFEMALEMIN, WEIGHTFEMALEMAX, WEIGHTUNIT, BREEDINGDURATION, BREEDINGNUMBER, WISHLISTRATING, DIAGNOSTICDESCRIPTION, ACTIVETIME, ENDANGEREDSTATUS, BEHAVIOURDESCRIPTION, ADDFREQUENCY, ELEMENTTYPE, FEEDINGCLASS, LIFESPAN, REFERENCEID FROM TEMP_ELEMENTS");
             state.executeUpdate("INSERT INTO LOCATIONS SELECT * FROM TEMP_LOCATIONS");
@@ -1769,7 +1235,7 @@ public abstract class DBI_JDBC implements DBI {
             catch (SQLException sqle) {
                 printSQLException(sqle);
             }
-            // Statement
+            // PreparedStatement
             try {
                 if (state != null) {
                     state.close();
@@ -1781,7 +1247,7 @@ public abstract class DBI_JDBC implements DBI {
             }
         }
     }
-    
+
     private void doUpdate2() {
         // This update adds a column to the options table
         Statement state = null;
@@ -1807,7 +1273,7 @@ public abstract class DBI_JDBC implements DBI {
             catch (SQLException sqle) {
                 printSQLException(sqle);
             }
-            // Statement
+            // PreparedStatement
             try {
                 if (state != null) {
                     state.close();
@@ -1820,12 +1286,34 @@ public abstract class DBI_JDBC implements DBI {
         }
     }
 
-    @Override
-    public String limitLength(String inString, int inLength) {
-        if (inString.trim().length() > inLength)
-            return inString.trim().substring(0, inLength);
-        else
-            return inString.trim();
+    protected static void closeStatementAndResultset(Statement inStatement, ResultSet inResultSet) {
+        closeStatement(inStatement);
+        closeResultset(inResultSet);
     }
 
+    protected static void closeStatement(Statement inStatement) {
+        // PreparedStatement
+        try {
+            if (inStatement != null) {
+                inStatement.close();
+                inStatement = null;
+            }
+        }
+        catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+    }
+
+    protected static void closeResultset(ResultSet inResultSet) {
+        // ResultSet
+        try {
+            if (inResultSet != null) {
+                inResultSet.close();
+                inResultSet = null;
+            }
+        }
+        catch (SQLException sqle) {
+            printSQLException(sqle);
+        }
+    }
 }

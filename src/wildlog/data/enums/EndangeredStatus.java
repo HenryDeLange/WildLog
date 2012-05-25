@@ -29,6 +29,7 @@ public enum EndangeredStatus {
     }
 
     public static EndangeredStatus getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(EX.text)) return EX;
         if (inText.equalsIgnoreCase(EW.text)) return EW;
         if (inText.equalsIgnoreCase(CR.text)) return CR;

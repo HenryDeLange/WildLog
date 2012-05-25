@@ -28,6 +28,7 @@ public enum ElementType {
     }
 
     public static ElementType getEnumFromText(String inText) {
+        if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(ANIMAL.text)) return ANIMAL;
         if (inText.equalsIgnoreCase(BIRD.text)) return BIRD;
         if (inText.equalsIgnoreCase(REPTILE.text)) return REPTILE;
