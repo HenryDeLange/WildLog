@@ -3,6 +3,9 @@ package wildlog.data.dbi;
 public class DBUtils {
     
     public static String limitLength(String inString, int inLength) {
+        if (inString == null)
+            return null;
+        else
         if (inString.trim().length() > inLength)
             return inString.trim().substring(0, inLength);
         else

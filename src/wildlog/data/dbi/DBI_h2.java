@@ -60,32 +60,32 @@ public class DBI_h2 extends DBI_JDBC {
             results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableElementsTable);
+                state.execute(tableElements);
             }
             results = conn.getMetaData().getTables(null, null, "LOCATIONS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableLocationsTable);
+                state.execute(tableLocations);
             }
             results = conn.getMetaData().getTables(null, null, "VISITS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableVisitsTable);
+                state.execute(tableVisits);
             }
             results = conn.getMetaData().getTables(null, null, "SIGHTINGS", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableSightingsTable);
+                state.execute(tableSightings);
             }
             results = conn.getMetaData().getTables(null, null, "FILES", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableFilesTable);
+                state.execute(tableFiles);
             }
             results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableWildLogTable);
+                state.execute(tableWildLog);
             }
 
             super.doUpdates(); // This also creates the WildLogOptions row the first time

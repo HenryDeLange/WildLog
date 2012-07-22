@@ -89,7 +89,7 @@ public final class Utils {
         inIcon.setImage(Utils.getScaledImage(inIcon.getImage(), finalWidth, finalHeight));
         return inIcon;
     }
-    
+
     public static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
         BufferedImage resizedImg = new BufferedImage(inWidth, inHeight, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = resizedImg.createGraphics();
@@ -129,7 +129,7 @@ public final class Utils {
         // return new image index
         return 0;
     }
-    
+
     /**
      * Upload a file using a List of Files. (Used with FileDrop.)
      */
@@ -142,7 +142,7 @@ public final class Utils {
         // return new image index
         return 0;
     }
-    
+
     private static void performFileUpload(String inID, String inFolderName, File[] inFiles, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         for (int t = 0; t < inFiles.length; t++) {
             File fromFile = inFiles[t];
@@ -535,7 +535,7 @@ public final class Utils {
 
     /**
      * This method will strip the first root part from the path.
-     * WARNING: This method assumes that both the inPath and inRoot are 
+     * WARNING: This method assumes that both the inPath and inRoot are
      * absolute proper paths.
      */
     public static String stripRootFromPath(String inPath, String inRoot) {
@@ -560,7 +560,7 @@ public final class Utils {
                     throw new FileNotFoundException("Failed to delete folder: " + inFile);
         }
     }
-    
+
     public static void kickoffTask(Task inTask, Application inApp)
     {
         ApplicationContext appContext = inApp.getContext();

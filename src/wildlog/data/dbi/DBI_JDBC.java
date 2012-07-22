@@ -48,41 +48,41 @@ public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
     
-    protected String tableElementsTable = "CREATE TABLE ELEMENTS (   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,   OTHERNAME varchar(150),   SCIENTIFICNAME varchar(150),   DESCRIPTION longvarchar,   DISTRIBUTION longvarchar,   NUTRITION longvarchar,   WATERDEPENDANCE varchar(50),   SIZEMALEMIN float(52),   SIZEMALEMAX float(52),   SIZEFEMALEMIN float(52),   SIZEFEMALEMAX float(52),   SIZEUNIT varchar(10),   SIZETYPE varchar(50),   WEIGHTMALEMIN float(52),   WEIGHTMALEMAX float(52),   WEIGHTFEMALEMIN float(52),   WEIGHTFEMALEMAX float(52),   WEIGHTUNIT varchar(10),   BREEDINGDURATION varchar(50),   BREEDINGNUMBER varchar(50),   WISHLISTRATING varchar(50),   DIAGNOSTICDESCRIPTION longvarchar,   ACTIVETIME varchar(50),   ENDANGEREDSTATUS varchar(35),   BEHAVIOURDESCRIPTION longvarchar,   ADDFREQUENCY varchar(50),   ELEMENTTYPE varchar(50),   FEEDINGCLASS varchar(50),   LIFESPAN varchar(50),   REFERENCEID varchar(50))";
-    protected String tableLocationsTable = "CREATE TABLE LOCATIONS (   NAME varchar(150) PRIMARY KEY NOT NULL,   DESCRIPTION longvarchar,   PROVINCE varchar(35),   RATING varchar(50),   GAMEVIEWINGRATING varchar(50),   HABITATTYPE varchar(50),   ACCOMMODATIONTYPE varchar(150),   CATERING varchar(50),   CONTACTNUMBERS varchar(50),   WEBSITE varchar(100),   EMAIL varchar(100),   DIRECTIONS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52))";
-    protected String tableVisitsTable = "CREATE TABLE VISITS (   NAME varchar(150) PRIMARY KEY NOT NULL,   STARTDATE date,   ENDDATE date,   DESCRIPTION longvarchar,   GAMEWATCHINGINTENSITY varchar(50),   VISITTYPE varchar(50),   LOCATIONNAME varchar(150))";
-    protected String tableSightingsTable = "CREATE TABLE SIGHTINGS (   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL,   LOCATIONNAME varchar(150) NOT NULL,   VISITNAME varchar(150) NOT NULL,   TIMEOFDAY varchar(50),   WEATHER varchar(50),   AREATYPE varchar(50),   VIEWRATING varchar(50),   CERTAINTY varchar(50),   NUMBEROFELEMENTS int,   DETAILS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52),   SIGHTINGEVIDENCE varchar(50),   MOONLIGHT varchar(50),   MOONPHASE int)";
-    protected String tableFilesTable = "CREATE TABLE FILES (   ID varchar(175),   FILENAME varchar(255),   FILEPATH varchar(500),   ORIGINALPATH varchar(500),   FILETYPE varchar(50),   UPLOADDATE date,   ISDEFAULT smallint)";
-    protected String tableWildLogTable = "CREATE TABLE WILDLOG (   VERSION int DEFAULT 2,   DEFAULTLATITUDE float(52) DEFAULT -28.7,   DEFAULTLONGITUDE float(52) DEFAULT 24.7,   DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5)";
+    protected static final String tableElements = "CREATE TABLE ELEMENTS (   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,   OTHERNAME varchar(150),   SCIENTIFICNAME varchar(150),   DESCRIPTION longvarchar,   DISTRIBUTION longvarchar,   NUTRITION longvarchar,   WATERDEPENDANCE varchar(50),   SIZEMALEMIN float(52),   SIZEMALEMAX float(52),   SIZEFEMALEMIN float(52),   SIZEFEMALEMAX float(52),   SIZEUNIT varchar(10),   SIZETYPE varchar(50),   WEIGHTMALEMIN float(52),   WEIGHTMALEMAX float(52),   WEIGHTFEMALEMIN float(52),   WEIGHTFEMALEMAX float(52),   WEIGHTUNIT varchar(10),   BREEDINGDURATION varchar(50),   BREEDINGNUMBER varchar(50),   WISHLISTRATING varchar(50),   DIAGNOSTICDESCRIPTION longvarchar,   ACTIVETIME varchar(50),   ENDANGEREDSTATUS varchar(35),   BEHAVIOURDESCRIPTION longvarchar,   ADDFREQUENCY varchar(50),   ELEMENTTYPE varchar(50),   FEEDINGCLASS varchar(50),   LIFESPAN varchar(50),   REFERENCEID varchar(50))";
+    protected static final String tableLocations = "CREATE TABLE LOCATIONS (   NAME varchar(150) PRIMARY KEY NOT NULL,   DESCRIPTION longvarchar,   PROVINCE varchar(35),   RATING varchar(50),   GAMEVIEWINGRATING varchar(50),   HABITATTYPE varchar(50),   ACCOMMODATIONTYPE varchar(150),   CATERING varchar(50),   CONTACTNUMBERS varchar(50),   WEBSITE varchar(100),   EMAIL varchar(100),   DIRECTIONS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52))";
+    protected static final String tableVisits = "CREATE TABLE VISITS (   NAME varchar(150) PRIMARY KEY NOT NULL,   STARTDATE date,   ENDDATE date,   DESCRIPTION longvarchar,   GAMEWATCHINGINTENSITY varchar(50),   VISITTYPE varchar(50),   LOCATIONNAME varchar(150))";
+    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL,   LOCATIONNAME varchar(150) NOT NULL,   VISITNAME varchar(150) NOT NULL,   TIMEOFDAY varchar(50),   WEATHER varchar(50),   AREATYPE varchar(50),   VIEWRATING varchar(50),   CERTAINTY varchar(50),   NUMBEROFELEMENTS int,   DETAILS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52),   SIGHTINGEVIDENCE varchar(50),   MOONLIGHT varchar(50),   MOONPHASE int)";
+    protected static final String tableFiles = "CREATE TABLE FILES (   ID varchar(175),   FILENAME varchar(255),   FILEPATH varchar(500),   ORIGINALPATH varchar(500),   FILETYPE varchar(50),   UPLOADDATE date,   ISDEFAULT smallint)";
+    protected static final String tableWildLog = "CREATE TABLE WILDLOG (   VERSION int DEFAULT 2,   DEFAULTLATITUDE float(52) DEFAULT -28.7,   DEFAULTLONGITUDE float(52) DEFAULT 24.7,   DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5)";
     // Find
-    protected String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
-    protected String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
-    protected String findSighting = "SELECT * FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
-    protected String findElement = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = ?";
+    protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
+    protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
+    protected static final String findSighting = "SELECT * FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
+    protected static final String findElement = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = ?";
     // List
-    protected String listLocation = "SELECT * FROM LOCATIONS";
-    protected String listVisit = "SELECT * FROM VISITS";
-    protected String listSighting = "SELECT * FROM SIGHTINGS";
-    protected String listElement = "SELECT * FROM ELEMENTS";
-    protected String listFile = "SELECT * FROM FILES";
+    protected static final String listLocation = "SELECT * FROM LOCATIONS";
+    protected static final String listVisit = "SELECT * FROM VISITS";
+    protected static final String listSighting = "SELECT * FROM SIGHTINGS";
+    protected static final String listElement = "SELECT * FROM ELEMENTS";
+    protected static final String listFile = "SELECT * FROM FILES";
     // Create
-    protected String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    protected String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
-    protected String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    protected String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    protected String createFile = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?,?)";
+    protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
+    protected static final String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected static final String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?,?)";
     // Update
-    protected String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, PROVINCE = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ? WHERE NAME = ?";
-    protected String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
-    protected String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, AREATYPE = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ? WHERE SIGHTINGCOUNTER = ?";
-    protected String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
-    protected String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, FILEPATH = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
+    protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, PROVINCE = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ? WHERE NAME = ?";
+    protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
+    protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, AREATYPE = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ? WHERE SIGHTINGCOUNTER = ?";
+    protected static final String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
+    protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, FILEPATH = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
     // Delete
-    protected String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
-    protected String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
-    protected String deleteSighting = "DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
-    protected String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
-    protected String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
+    protected static final String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
+    protected static final String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
+    protected static final String deleteSighting = "DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
+    protected static final String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
+    protected static final String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
     
     public DBI_JDBC() {
     }
@@ -842,8 +842,10 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Populate the values
             state.setLong(1, inSighting.getSightingCounter());
-// TODO: Might need to use Tiestamp in other places as well...
-            state.setTimestamp(2, new java.sql.Timestamp(inSighting.getDate().getTime()));
+            if (inSighting.getDate() != null)
+            	state.setTimestamp(2, new java.sql.Timestamp(inSighting.getDate().getTime()));
+            else
+            	state.setTimestamp(2, null);
             state.setString(3, DBUtils.sanitizeString(inSighting.getElementName()));
             state.setString(4, DBUtils.sanitizeString(inSighting.getLocationName()));
             state.setString(5, DBUtils.sanitizeString(inSighting.getVisitName()));
@@ -961,7 +963,6 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public boolean delete(Element inElement) {
         PreparedStatement state = null;
-        ResultSet results = null;
         try {
             // Delete the Element
             state = conn.prepareStatement(deleteElement);
@@ -987,7 +988,7 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            closeStatementAndResultset(state, results);
+            closeStatement(state);
         }
         return true;
     }
@@ -995,14 +996,12 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public boolean delete(Location inLocation) {
         PreparedStatement state = null;
-        ResultSet results = null;
         try {
             state = conn.prepareStatement(deleteLocation);
             state.setString(1, DBUtils.sanitizeString(inLocation.getName()));
             // Delete Location
             state.executeUpdate();
             state.close();
-            state = conn.prepareStatement(deleteLocation);
             // Delete Visits for this Location
             Visit visit = new Visit();
             visit.setLocationName(inLocation.getName());
@@ -1023,7 +1022,7 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            closeStatementAndResultset(state, results);
+            closeStatement(state);
         }
         return true;
     }
@@ -1031,7 +1030,6 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public boolean delete(Visit inVisit) {
         PreparedStatement state = null;
-        ResultSet results = null;
         try {
             state = conn.prepareStatement(deleteVisit);
             state.setString(1, DBUtils.sanitizeString(inVisit.getName()));
@@ -1057,7 +1055,7 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            closeStatementAndResultset(state, results);
+            closeStatement(state);
         }
         return true;
     }
@@ -1065,7 +1063,6 @@ public abstract class DBI_JDBC implements DBI {
     @Override
     public boolean delete(Sighting inSighting) {
         PreparedStatement state = null;
-        ResultSet results = null;
         try {
             state = conn.prepareStatement(deleteSighting);
             state.setLong(1, inSighting.getSightingCounter());
@@ -1084,7 +1081,7 @@ public abstract class DBI_JDBC implements DBI {
             return false;
         }
         finally {
-            closeStatementAndResultset(state, results);
+            closeStatement(state);
         }
         return true;
     }
@@ -1201,11 +1198,11 @@ public abstract class DBI_JDBC implements DBI {
             state.execute("ALTER TABLE SIGHTINGS RENAME TO TEMP_SIGHTINGS");
             state.execute("ALTER TABLE FILES RENAME TO TEMP_FILES");
             // Create new tables
-            state.execute(tableElementsTable);
-            state.execute(tableLocationsTable);
-            state.execute(tableVisitsTable);
-            state.execute(tableSightingsTable);
-            state.execute(tableFilesTable);
+            state.execute(tableElements);
+            state.execute(tableLocations);
+            state.execute(tableVisits);
+            state.execute(tableSightings);
+            state.execute(tableFiles);
             // Copy data accross from old tables
             state.executeUpdate("INSERT INTO ELEMENTS SELECT PRIMARYNAME, OTHERNAME, SCIENTIFICNAME, DESCRIPTION, DISTRIBUTION, NUTRITION, WATERDEPENDANCE, SIZEMALEMIN, SIZEMALEMAX , SIZEFEMALEMIN, SIZEFEMALEMAX, SIZEUNIT, WEIGHTMALEMIN, WEIGHTMALEMAX, WEIGHTFEMALEMIN, WEIGHTFEMALEMAX, WEIGHTUNIT, BREEDINGDURATION, BREEDINGNUMBER, WISHLISTRATING, DIAGNOSTICDESCRIPTION, ACTIVETIME, ENDANGEREDSTATUS, BEHAVIOURDESCRIPTION, ADDFREQUENCY, ELEMENTTYPE, FEEDINGCLASS, LIFESPAN, REFERENCEID FROM TEMP_ELEMENTS");
             state.executeUpdate("INSERT INTO LOCATIONS SELECT * FROM TEMP_LOCATIONS");

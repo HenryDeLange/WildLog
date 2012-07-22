@@ -67,6 +67,7 @@ import wildlog.ui.panel.PanelMergeElements;
 import wildlog.ui.panel.PanelMoveVisit;
 import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.PanelVisit;
+import wildlog.ui.panel.bulkupload.BulkUploadPanel;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
 import wildlog.ui.report.ReportLocation;
@@ -85,24 +86,24 @@ import wildlog.utils.ui.WildLogTreeCellRenderer;
  * The application's main frame.
  */
 public final class WildLogView extends FrameView implements PanelNeedsRefreshWhenSightingAdded {
-    
+
     // This section contains all the custom initializations that needs to happen...
     private WildLogApp app;
     private Element searchElement;
     private Element searchElementBrowseTab;
     private Location searchLocation;
     private int imageIndex = 0;
-    
+
     private void init() {
         app = (WildLogApp) Application.getInstance();
         searchElement = new Element();
         searchLocation = new Location();
     }
-    
+
 
     public WildLogView(SingleFrameApplication app) {
         super(app);
-        
+
         init();
 
         initComponents();
@@ -165,7 +166,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
         });
-        
+
         // Setup the tab headers
         setupTabHeaderHome();
         setupTabHeaderFoto();
@@ -178,7 +179,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation.getTableHeader().setReorderingAllowed(false);
         tblLocation_EleTab.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
-        
+
         // Set the minimum size of the frame
         this.getFrame().setMinimumSize(new Dimension(1024, 705));
     }
@@ -248,6 +249,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator5 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         lblWorkspace = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         tabFoto = new javax.swing.JPanel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
         rdbBrowseElement = new javax.swing.JRadioButton();
@@ -440,6 +442,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblWorkspace.setText(FilePaths.WILDLOG.getFullPath());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
         tabHome.add(lblWorkspace, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 560, 530, -1));
+
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        tabHome.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 330, -1, -1));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -1501,7 +1512,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void tabFotoComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabFotoComponentShown
 //        if (!buttonGroup1.isSelected(rdbBrowseLocation.getModel()) && !buttonGroup1.isSelected(rdbBrowseElement.getModel()) && !buttonGroup1.isSelected(rdbBrowseDate.getModel()))
 //            rdbBrowseLocation.setSelected(true);
-        
+
         dtpStartDate.setVisible(false);
         dtpEndDate.setVisible(false);
         btnRefreshDates.setVisible(false);
@@ -2009,6 +2020,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         }
     }//GEN-LAST:event_btnViewEXIFActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFrame frame = new JFrame();
+        frame.getContentPane().add(new BulkUploadPanel());
+        frame.pack();
+        frame.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -2579,16 +2597,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 String outputFile = fileChooser.getSelectedFile().getPath().substring(2);
                 JpgToMovie jpgToMovie = new JpgToMovie();
                 jpgToMovie.createMovieFromJpgs(
-                        750, 
-                        app.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(), 
-                        fileNames, 
+                        750,
+                        app.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(),
+                        fileNames,
                         outputFile);
                 Utils.openFile(outputFile);
             }
         }
     }
-    
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
@@ -2630,6 +2648,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem htmlExportMenuItem1;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
     private javax.swing.JMenu importMenu;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -2709,7 +2728,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
-    
+
     private JDialog aboutBox;
 
 }
