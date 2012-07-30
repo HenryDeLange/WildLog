@@ -3,6 +3,7 @@ package wildlog.utils.ui;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
@@ -21,7 +22,7 @@ import wildlog.data.enums.Longitudes;
 
 public final class UtilTableGenerator {
     private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
-    
+
 
     // METHODS:
     public static void setupCompleteElementTable(JTable inTable, Element inElement) {
@@ -125,7 +126,7 @@ public final class UtilTableGenerator {
         // Setup sorting
         setupRowSorter(inTable, 0);
     }
-    
+
     public static void setupCompleteLocationTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
@@ -182,7 +183,7 @@ public final class UtilTableGenerator {
         // Setup sorting
         setupRowSorter(inTable, 0);
     }
-    
+
     public static void setupCompleteVisitTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
@@ -381,7 +382,7 @@ public final class UtilTableGenerator {
         // Setup sorting
         setupRowSorter(inTable, 1);
     }
-    
+
     public static void setupCompleteSightingTable(JTable inTable, Visit inVisit) {
         // Load data
         String[] columnNames = {
@@ -634,7 +635,7 @@ public final class UtilTableGenerator {
                                 };
         List<Location> tempList = null;
         tempList = dbi.list(inLocation);
-        
+
         Object[][] tempTable = new Object[tempList.size()][2];
         for (int t = 0; t < tempList.size(); t++) {
             Location tempLocation = tempList.get(t);
@@ -727,5 +728,41 @@ public final class UtilTableGenerator {
         tempList.add(new SortKey(inColumn, SortOrder.ASCENDING));
         inTable.getRowSorter().setSortKeys(tempList);
     }
-   
+
+    /**
+     * (From DefaultTableModel)
+     * Returns a vector that contains the same objects as the array.
+     * @param inArray  the array to be converted
+     * @return  the new vector; if <code>anArray</code> is <code>null</code>,
+     *                          returns <code>null</code>
+     */
+    public static Vector convertToVector(Object[] inArray) {
+        if (inArray == null) {
+            return null;
+        }
+        Vector<Object> vector = new Vector<Object>(inArray.length);
+        for (Object object : inArray) {
+            vector.addElement(object);
+        }
+        return vector;
+    }
+
+    /**
+     * (From DefaultTableModel)
+     * Returns a vector of vectors that contains the same objects as the array.
+     * @param inArray  the double array to be converted
+     * @return the new vector of vectors; if <code>anArray</code> is
+     *                          <code>null</code>, returns <code>null</code>
+     */
+    public static Vector convertToVector(Object[][] inArray) {
+        if (inArray == null) {
+            return null;
+        }
+        Vector<Vector> vector = new Vector<Vector>(inArray.length);
+        for (Object[] objectArray : inArray) {
+            vector.addElement(convertToVector(objectArray));
+        }
+        return vector;
+    }
+
 }

@@ -1,16 +1,23 @@
 package wildlog.ui.panel.bulkupload;
 
 import javax.swing.ImageIcon;
+import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.utils.ui.Utils;
 
 
 public class ImageBox extends javax.swing.JPanel {
 
     /** Creates new form ImageBox */
-    public ImageBox(String inImagePath) {
+    public ImageBox(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper) {
         initComponents();
+        populateUI(inBulkUploadImageFileWrapper);
+    }
+
+    private void populateUI(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper) {
         // Setup the image label
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(inImagePath), 200));
+        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(inBulkUploadImageFileWrapper.getImagePath()), 200));
+        // TODO: visualise the unselected images (background colour and a special image, etc.)
+        //inBulkUploadImageFileWrapper.isIncludeInImport()
     }
 
     /** This method is called from within the constructor to
@@ -28,37 +35,38 @@ public class ImageBox extends javax.swing.JPanel {
         btnRemove = new javax.swing.JButton();
         btnNewSighting = new javax.swing.JButton();
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ImageBox.class);
+        setBackground(resourceMap.getColor("Form.background")); // NOI18N
         setName("Form"); // NOI18N
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ImageBox.class);
         lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setOpaque(true);
-        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 200));
+        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setName("btnUp"); // NOI18N
-        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 0, 40, 100));
+        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 40, 100));
 
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setName("btnDown"); // NOI18N
-        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 40, 100));
+        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 40, 100));
 
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setName("btnRemove"); // NOI18N
-        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 200, 120, 40));
+        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 120, 40));
 
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setName("btnNewSighting"); // NOI18N
-        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 200, 120, 40));
+        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 205, 120, 40));
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDown;

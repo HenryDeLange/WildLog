@@ -1,41 +1,37 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * BulkUploadPanel.java
- *
- * Created on Jul 21, 2012, 5:05:29 PM
- */
 package wildlog.ui.panel.bulkupload;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import wildlog.ui.panel.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panel.bulkupload.editors.ImageBoxEditor;
 import wildlog.ui.panel.bulkupload.editors.InfoBoxEditor;
 import wildlog.ui.panel.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panel.bulkupload.renderers.InfoBoxRenderer;
+import wildlog.utils.ui.UtilTableGenerator;
 
-/**
- *
- * @author Henry
- */
+
 public class BulkUploadPanel extends javax.swing.JPanel {
 
     /** Creates new form BulkUploadPanel */
     public BulkUploadPanel() {
         initComponents();
 
+        // Setup the datamodel
+        DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
+        model.getDataVector().clear();
+        model.getDataVector().addAll(UtilTableGenerator.convertToVector(BulkUploadDataLoader.genenrateTableData("")));
+        model.fireTableDataChanged();
+
         // Setup the JPanel renderers
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
-
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseEntered(e);
+                // FIXME: For performance reasons try to find a way of only triggering this once as a new cell becomes editable (thus only constantly checking the boolean)
 //                if (!tableHandle.isCellEditable(tableHandle.rowAtPoint(e.getPoint()), tableHandle.columnAtPoint(e.getPoint()))) {
                     tableHandle.editCellAt(tableHandle.rowAtPoint(e.getPoint()), tableHandle.columnAtPoint(e.getPoint()));
 //                }
@@ -75,6 +71,7 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList();
         jButton3 = new javax.swing.JButton();
+        jCheckBox2 = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
@@ -121,10 +118,12 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         dtpEndDate.setName("dtpEndDate"); // NOI18N
         pnlTop.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, 140, -1));
 
+        jLabel5.setBackground(resourceMap.getColor("jLabel5.background")); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jLabel5.setName("jLabel5"); // NOI18N
+        jLabel5.setOpaque(true);
         pnlTop.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 15, 100, 100));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
@@ -139,6 +138,7 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         pnlTop.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, 150, -1));
 
         jCheckBox1.setBackground(resourceMap.getColor("jCheckBox1.background")); // NOI18N
+        jCheckBox1.setSelected(true);
         jCheckBox1.setText(resourceMap.getString("jCheckBox1.text")); // NOI18N
         jCheckBox1.setName("jCheckBox1"); // NOI18N
         pnlTop.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
@@ -166,7 +166,7 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, 70, 50));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
-        pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(421, 70, 440, 30));
+        pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(421, 70, 440, 10));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator2.setName("jSeparator2"); // NOI18N
@@ -201,6 +201,12 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         jButton3.setName("jButton3"); // NOI18N
         pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(503, 35, 140, 30));
 
+        jCheckBox2.setBackground(resourceMap.getColor("jCheckBox2.background")); // NOI18N
+        jCheckBox2.setSelected(true);
+        jCheckBox2.setText(resourceMap.getString("jCheckBox2.text")); // NOI18N
+        jCheckBox2.setName("jCheckBox2"); // NOI18N
+        pnlTop.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
+
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -208,9 +214,7 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         tblBulkImport.setBackground(resourceMap.getColor("tblBulkImport.background")); // NOI18N
         tblBulkImport.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "C:\\_Camera Trap\\Woody Cape\\Cdy00002.JPG"},
-                {null, "C:\\_Camera Trap\\Woody Cape\\Cdy00003.JPG"},
-                {null, "C:\\_Camera Trap\\Woody Cape\\Cdy00004.JPG"}
+                {null, null}
             },
             new String [] {
                 "Sightings", "Images"
@@ -224,6 +228,7 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         tblBulkImport.setName("tblBulkImport"); // NOI18N
         tblBulkImport.setRowHeight(250);
         tblBulkImport.setSelectionBackground(resourceMap.getColor("tblBulkImport.selectionBackground")); // NOI18N
+        tblBulkImport.setSelectionForeground(resourceMap.getColor("tblBulkImport.selectionForeground")); // NOI18N
         tblBulkImport.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblBulkImport.getTableHeader().setResizingAllowed(false);
         tblBulkImport.getTableHeader().setReorderingAllowed(false);
@@ -249,6 +254,7 @@ public class BulkUploadPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

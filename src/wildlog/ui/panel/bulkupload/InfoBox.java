@@ -3,6 +3,7 @@ package wildlog.ui.panel.bulkupload;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.Utils;
 
 
@@ -11,11 +12,25 @@ public class InfoBox extends javax.swing.JPanel {
     /** Creates new form InfoBox */
     public InfoBox(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
         initComponents();
-        lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(inBulkUploadSightingWrapper.getDateAndTime()));
-        lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(inBulkUploadSightingWrapper.getDateAndTime()));
-        lblElementName.setText(inBulkUploadSightingWrapper.getElemantName());
-        lblLatitude.setText(Double.toString(inBulkUploadSightingWrapper.getLatitude()));
-        lblLongitude.setText(Double.toString(inBulkUploadSightingWrapper.getLongitude()));
+        populateUI(inBulkUploadSightingWrapper);
+    }
+
+    private void populateUI(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
+        lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(inBulkUploadSightingWrapper.getDate()));
+        lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(inBulkUploadSightingWrapper.getDate()));
+        lblElementName.setText(inBulkUploadSightingWrapper.getElementName());
+        lblLatitude.setText(Double.toString(
+                LatLonConverter.getDecimalDegree(
+                    inBulkUploadSightingWrapper.getLatitude(),
+                    inBulkUploadSightingWrapper.getLatDegrees(),
+                    inBulkUploadSightingWrapper.getLatMinutes(),
+                    inBulkUploadSightingWrapper.getLatSecondsFloat())));
+        lblLongitude.setText(Double.toString(
+                LatLonConverter.getDecimalDegree(
+                    inBulkUploadSightingWrapper.getLongitude(),
+                    inBulkUploadSightingWrapper.getLonDegrees(),
+                    inBulkUploadSightingWrapper.getLonMinutes(),
+                    inBulkUploadSightingWrapper.getLonSecondsFloat())));
         lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(inBulkUploadSightingWrapper.getImagePath()), 150));
     }
 
@@ -41,28 +56,33 @@ public class InfoBox extends javax.swing.JPanel {
         jSeparator1 = new javax.swing.JSeparator();
         lblImage = new javax.swing.JLabel();
         btnEdit = new javax.swing.JButton();
-
-        setName("Form"); // NOI18N
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        btnChooseCreature = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(InfoBox.class);
+        setBackground(resourceMap.getColor("Form.background")); // NOI18N
+        setMaximumSize(new java.awt.Dimension(250, 250));
+        setMinimumSize(new java.awt.Dimension(250, 250));
+        setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(250, 250));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         lblElementName.setFont(resourceMap.getFont("lblElementName.font")); // NOI18N
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(resourceMap.getString("lblElementName.text")); // NOI18N
         lblElementName.setName("lblElementName"); // NOI18N
-        add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 3, 220, 20));
+        add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 3, 230, 20));
 
         jSeparator2.setName("jSeparator2"); // NOI18N
-        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 27, 240, 10));
+        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 27, 230, 10));
 
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
         lblDate.setText(resourceMap.getString("lblDate.text")); // NOI18N
         lblDate.setName("lblDate"); // NOI18N
-        add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 70, -1));
+        add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 70, -1));
 
         jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
@@ -76,23 +96,23 @@ public class InfoBox extends javax.swing.JPanel {
         jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 53, -1, -1));
 
         lblLatitude.setText(resourceMap.getString("lblLatitude.text")); // NOI18N
         lblLatitude.setName("lblLatitude"); // NOI18N
-        add(lblLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 52, 130, -1));
+        add(lblLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 53, 130, -1));
 
         jLabel10.setFont(resourceMap.getFont("jLabel10.font")); // NOI18N
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
         lblLongitude.setText(resourceMap.getString("lblLongitude.text")); // NOI18N
         lblLongitude.setName("lblLongitude"); // NOI18N
-        add(lblLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 130, -1));
+        add(lblLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 130, -1));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
-        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 47, 240, 10));
+        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 47, 230, 10));
 
         lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -100,7 +120,7 @@ public class InfoBox extends javax.swing.JPanel {
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setOpaque(true);
-        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 150, 150));
+        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 150, 150));
 
         btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -110,7 +130,13 @@ public class InfoBox extends javax.swing.JPanel {
                 btnEditActionPerformed(evt);
             }
         });
-        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 100, 70, 130));
+        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 80, 70));
+
+        btnChooseCreature.setText(resourceMap.getString("btnChooseCreature.text")); // NOI18N
+        btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
+        btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnChooseCreature.setName("btnChooseCreature"); // NOI18N
+        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 80, 80));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -119,6 +145,7 @@ public class InfoBox extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEditActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChooseCreature;
     private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

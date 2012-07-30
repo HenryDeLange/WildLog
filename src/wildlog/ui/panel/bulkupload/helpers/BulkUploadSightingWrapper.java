@@ -1,30 +1,26 @@
 package wildlog.ui.panel.bulkupload.helpers;
 
 import java.util.Date;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 
 
-public class BulkUploadSightingWrapper {
-    private long tempID;
+public class BulkUploadSightingWrapper extends Sighting {
     private String imagePath;
-    private String elemantName;
-    private Date dateAndTime;
-    private double latitude;
-    private double longitude;
 
-    public Date getDateAndTime() {
-        return dateAndTime;
-    }
-
-    public void setDateAndTime(Date inDateAndTime) {
-        dateAndTime = inDateAndTime;
-    }
-
-    public String getElemantName() {
-        return elemantName;
-    }
-
-    public void setElemantName(String inElemantName) {
-        elemantName = inElemantName;
+    public BulkUploadSightingWrapper(String inImagePath) {
+        imagePath = inImagePath;
+        setElementName("baaa");
+        setDate(new Date());
+        setLatitude(Latitudes.SOUTH);
+        setLatDegrees(25);
+        setLatMinutes(24);
+        setLatSecondsFloat(23.2f);
+        setLongitude(Longitudes.EAST);
+        setLatDegrees(15);
+        setLatMinutes(14);
+        setLatSecondsFloat(13.2f);
     }
 
     public String getImagePath() {
@@ -33,30 +29,6 @@ public class BulkUploadSightingWrapper {
 
     public void setImagePath(String inImagePath) {
         imagePath = inImagePath;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double inLatitude) {
-        latitude = inLatitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double inLongitude) {
-        longitude = inLongitude;
-    }
-
-    public long getTempID() {
-        return tempID;
-    }
-
-    public void setTempID(long inTempID) {
-        tempID = inTempID;
     }
 
 }
