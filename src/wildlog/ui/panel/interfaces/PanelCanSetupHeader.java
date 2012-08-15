@@ -1,12 +1,9 @@
 package wildlog.ui.panel.interfaces;
 
+import javax.swing.JPanel;
 import wildlog.WildLogApp;
 
-/**
- *
- * @author DeLangeH
- */
-public abstract class PanelCanSetupHeader extends javax.swing.JPanel {
+public abstract class PanelCanSetupHeader extends JPanel {
     protected int imageIndex;
     protected WildLogApp app;
 

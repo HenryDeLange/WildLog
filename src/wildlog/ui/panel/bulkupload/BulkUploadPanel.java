@@ -3,20 +3,31 @@ package wildlog.ui.panel.bulkupload;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.ui.panel.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panel.bulkupload.editors.ImageBoxEditor;
 import wildlog.ui.panel.bulkupload.editors.InfoBoxEditor;
 import wildlog.ui.panel.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panel.bulkupload.renderers.InfoBoxRenderer;
+import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.utils.ui.UtilTableGenerator;
+import wildlog.utils.ui.Utils;
 
 
-public class BulkUploadPanel extends javax.swing.JPanel {
+public class BulkUploadPanel extends PanelCanSetupHeader {
 
     /** Creates new form BulkUploadPanel */
     public BulkUploadPanel() {
+        app = (WildLogApp) Application.getInstance();
+        imageIndex = 0;
+        // Init auto generated code
         initComponents();
 
         // Setup the datamodel
@@ -37,6 +48,38 @@ public class BulkUploadPanel extends javax.swing.JPanel {
 //                }
             }
         });
+
+        // Setup the Location list
+        getLocationList();
+    }
+
+    @Override
+    public void setupTabHeader() {
+//        JPanel tabHeader = new JPanel();
+//        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Location.gif"))));
+//        tabHeader.add(new JLabel("Bulk Upload"));
+//        JButton btnClose = new JButton();
+//        btnClose.setPreferredSize(new Dimension(12, 12));
+//        btnClose.setBackground(new Color(255, 000, 000));
+//        btnClose.setToolTipText("Close");
+//        btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
+//        btnClose.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                closeTab();
+//            }
+//        });
+//        tabHeader.add(btnClose);
+//        tabHeader.setBackground(new Color(0, 0, 0, 0));
+//        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
+    }
+
+    private void closeTab() {
+//        ((JTabbedPane)getParent()).remove(this);
+    }
+
+    private void getLocationList() {
+        lstLocation.setListData(app.getDBI().list(new Location()).toArray());
     }
 
     /** This method is called from within the constructor to
@@ -55,23 +98,23 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         dtpStartDate = new org.jdesktop.swingx.JXDatePicker();
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
-        jLabel5 = new javax.swing.JLabel();
+        lblLocationImage = new javax.swing.JLabel();
         btnUpdate = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        txtVisitName = new javax.swing.JTextField();
+        chkShowInactiveTimes = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
+        spnInactivityTime = new javax.swing.JSpinner();
+        btnReload = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jButton2 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        txtLocationName = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        lstLocation = new javax.swing.JList();
         jButton3 = new javax.swing.JButton();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        chkIncludeSubfolders = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
@@ -118,13 +161,18 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         dtpEndDate.setName("dtpEndDate"); // NOI18N
         pnlTop.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, 140, -1));
 
-        jLabel5.setBackground(resourceMap.getColor("jLabel5.background")); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-        jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jLabel5.setName("jLabel5"); // NOI18N
-        jLabel5.setOpaque(true);
-        pnlTop.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 15, 100, 100));
+        lblLocationImage.setBackground(resourceMap.getColor("lblLocationImage.background")); // NOI18N
+        lblLocationImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLocationImage.setText(resourceMap.getString("lblLocationImage.text")); // NOI18N
+        lblLocationImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblLocationImage.setName("lblLocationImage"); // NOI18N
+        lblLocationImage.setOpaque(true);
+        lblLocationImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblLocationImageMouseReleased(evt);
+            }
+        });
+        pnlTop.add(lblLocationImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 15, 100, 100));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -133,28 +181,28 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         btnUpdate.setName("btnUpdate"); // NOI18N
         pnlTop.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 130, 80));
 
-        jTextField1.setText(resourceMap.getString("jTextField1.text")); // NOI18N
-        jTextField1.setName("jTextField1"); // NOI18N
-        pnlTop.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, 150, -1));
+        txtVisitName.setText(resourceMap.getString("txtVisitName.text")); // NOI18N
+        txtVisitName.setName("txtVisitName"); // NOI18N
+        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, 150, -1));
 
-        jCheckBox1.setBackground(resourceMap.getColor("jCheckBox1.background")); // NOI18N
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText(resourceMap.getString("jCheckBox1.text")); // NOI18N
-        jCheckBox1.setName("jCheckBox1"); // NOI18N
-        pnlTop.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
+        chkShowInactiveTimes.setBackground(resourceMap.getColor("chkShowInactiveTimes.background")); // NOI18N
+        chkShowInactiveTimes.setSelected(true);
+        chkShowInactiveTimes.setText(resourceMap.getString("chkShowInactiveTimes.text")); // NOI18N
+        chkShowInactiveTimes.setName("chkShowInactiveTimes"); // NOI18N
+        pnlTop.add(chkShowInactiveTimes, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
 
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
         pnlTop.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 100, -1, 20));
 
-        jSpinner1.setName("jSpinner1"); // NOI18N
-        pnlTop.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 50, -1));
+        spnInactivityTime.setName("spnInactivityTime"); // NOI18N
+        pnlTop.add(spnInactivityTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 50, -1));
 
-        jButton1.setBackground(resourceMap.getColor("jButton1.background")); // NOI18N
-        jButton1.setIcon(resourceMap.getIcon("jButton1.icon")); // NOI18N
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
-        pnlTop.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 95, 130, 30));
+        btnReload.setBackground(resourceMap.getColor("btnReload.background")); // NOI18N
+        btnReload.setIcon(resourceMap.getIcon("btnReload.icon")); // NOI18N
+        btnReload.setText(resourceMap.getString("btnReload.text")); // NOI18N
+        btnReload.setName("btnReload"); // NOI18N
+        pnlTop.add(btnReload, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 95, 130, 30));
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
@@ -177,22 +225,26 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         jButton2.setName("jButton2"); // NOI18N
         pnlTop.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 35, 80, 30));
 
-        jTextField2.setText(resourceMap.getString("jTextField2.text")); // NOI18N
-        jTextField2.setName("jTextField2"); // NOI18N
-        pnlTop.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 200, -1));
+        txtLocationName.setText(resourceMap.getString("txtLocationName.text")); // NOI18N
+        txtLocationName.setName("txtLocationName"); // NOI18N
+        txtLocationName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtLocationNameKeyReleased(evt);
+            }
+        });
+        pnlTop.add(txtLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 200, -1));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "*New Name 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        lstLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstLocation.setName("lstLocation"); // NOI18N
+        lstLocation.setSelectionBackground(resourceMap.getColor("lstLocation.selectionBackground")); // NOI18N
+        lstLocation.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstLocationValueChanged(evt);
+            }
         });
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList1.setName("jList1"); // NOI18N
-        jList1.setSelectedIndex(0);
-        jList1.setSelectionBackground(resourceMap.getColor("jList1.selectionBackground")); // NOI18N
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(lstLocation);
 
         pnlTop.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 290, 80));
 
@@ -201,11 +253,11 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         jButton3.setName("jButton3"); // NOI18N
         pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(503, 35, 140, 30));
 
-        jCheckBox2.setBackground(resourceMap.getColor("jCheckBox2.background")); // NOI18N
-        jCheckBox2.setSelected(true);
-        jCheckBox2.setText(resourceMap.getString("jCheckBox2.text")); // NOI18N
-        jCheckBox2.setName("jCheckBox2"); // NOI18N
-        pnlTop.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
+        chkIncludeSubfolders.setBackground(resourceMap.getColor("chkIncludeSubfolders.background")); // NOI18N
+        chkIncludeSubfolders.setSelected(true);
+        chkIncludeSubfolders.setText(resourceMap.getString("chkIncludeSubfolders.text")); // NOI18N
+        chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
+        pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
 
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
 
@@ -246,32 +298,68 @@ public class BulkUploadPanel extends javax.swing.JPanel {
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void lstLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLocationValueChanged
+        if (!lstLocation.getSelectionModel().isSelectionEmpty()) {
+            String selectedName = lstLocation.getSelectedValue().toString();
+            // Change the location name
+            txtLocationName.setText(selectedName);
+            // Cahnge the image
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + selectedName));
+            if (fotos.size() > 0) {
+                Utils.setupFoto("LOCATION-" + selectedName, imageIndex, lblLocationImage, 100, app);
+            }
+            else {
+                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            }
+        }
+        else {
+            lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+        }
+    }//GEN-LAST:event_lstLocationValueChanged
+
+    private void txtLocationNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLocationNameKeyReleased
+        for (int t = 0; t < lstLocation.getModel().getSize(); t++) {
+            if (lstLocation.getModel().getElementAt(t).toString().equals(txtLocationName.getText())) {
+                lstLocation.setSelectedIndex(t);
+                break;
+            }
+            else
+                lstLocation.getSelectionModel().clearSelection();
+        }
+    }//GEN-LAST:event_txtLocationNameKeyReleased
+
+    private void lblLocationImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationImageMouseReleased
+        if (!lstLocation.getSelectionModel().isSelectionEmpty()) {
+            Utils.openFile("LOCATION-" + lstLocation.getSelectedValue().toString(), imageIndex, app);
+        }
+    }//GEN-LAST:event_lblLocationImageMouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReload;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JCheckBox chkIncludeSubfolders;
+    private javax.swing.JCheckBox chkShowInactiveTimes;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblLocationImage;
+    private javax.swing.JList lstLocation;
     private javax.swing.JPanel pnlTop;
+    private javax.swing.JSpinner spnInactivityTime;
     private javax.swing.JTable tblBulkImport;
+    private javax.swing.JTextField txtLocationName;
+    private javax.swing.JTextField txtVisitName;
     // End of variables declaration//GEN-END:variables
 }

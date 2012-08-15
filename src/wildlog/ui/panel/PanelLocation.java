@@ -54,15 +54,11 @@ import wildlog.utils.ui.SpinnerFixer;
 import wildlog.utils.ui.UtilMapGenerator;
 
 
-/**
- *
- * @author  henry.delange
- */
 public class PanelLocation extends PanelCanSetupHeader {
     // location is already used in this component... Have problem with getLocation()...
     private Location locationWL;
-    
-    
+
+
     /** Creates new form PanelLocation */
     public PanelLocation(Location inLocation) {
         app = (WildLogApp) Application.getInstance();
@@ -77,7 +73,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
         }
         setupNumberOfImages();
-        
+
         tblElement.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
 
@@ -89,7 +85,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         SpinnerFixer.fixSelectAllForSpinners(spnLonDegrees);
         SpinnerFixer.fixSelectAllForSpinners(spnLonMinutes);
         SpinnerFixer.fixSelectAllForSpinners(spnLonSeconds);
-        
+
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
             @Override
@@ -104,15 +100,15 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
     }
-    
+
     public void setLocationWL(Location inLocation) {
         locationWL = inLocation;
     }
-    
+
     public Location getLocationWL() {
         return locationWL;
     }
-    
+
     @Override
     public boolean equals(Object inObject) {
         if (getClass() != inObject.getClass()) return false;
@@ -124,7 +120,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!locationWL.getName().equalsIgnoreCase(inPanel.getLocationWL().getName())) return false;
         return true;
     }
-    
+
     @Override
     public void setupTabHeader() {
         JPanel tabHeader = new JPanel();
@@ -146,11 +142,11 @@ public class PanelLocation extends PanelCanSetupHeader {
         tabHeader.setBackground(new Color(0, 0, 0, 0));
         ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
-    
+
     private void closeTab() {
         ((JTabbedPane)getParent()).remove(this);
     }
-    
+
     // Need to look again later at listbox and how I use it...
     // Esspecially how I set the selected values...
     private int[] selectedAccommodationTypes() {
@@ -165,8 +161,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         return index;
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -947,7 +943,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             cmbLatitude.setSelectedItem(locationWL.getLatitude());
         if (locationWL.getLongitude() != null)
             cmbLongitude.setSelectedItem(locationWL.getLongitude());
-        
+
         rdbLocation.setSelected(true);
         //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
 
@@ -1273,7 +1269,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         else
             lblNumberOfImages.setText("0 of 0");
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddVisit;
     private javax.swing.JButton btnDeleteImage;
@@ -1353,5 +1349,5 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtWebsite;
     // End of variables declaration//GEN-END:variables
-    
+
 }

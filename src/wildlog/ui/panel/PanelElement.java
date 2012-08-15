@@ -63,14 +63,10 @@ import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
 
 
-/**
- *
- * @author  henry.delange
- */
 public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenSightingAdded {
     // Variables:
     private Element element;
-    
+
     /** Creates new form PanelElement */
     public PanelElement(Element inElement) {
         app = (WildLogApp) Application.getInstance();
@@ -97,7 +93,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         fixSelectAllForSpinners(spnWeightMaleMax);
         fixSelectAllForSpinners(spnWeightFemaleMin);
         fixSelectAllForSpinners(spnWeightFemaleMax);
-        
+
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
             @Override
@@ -111,16 +107,16 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 }
             }
         });
-        
+
     }
-    
+
     public Element getElement() {
         return element;
     }
     public void setElement(Element inElement) {
         element = inElement;
     }
-    
+
     @Override
     public boolean equals(Object inObject) {
         if (getClass() != inObject.getClass()) return false;
@@ -132,7 +128,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (!element.getPrimaryName().equalsIgnoreCase(inPanel.getElement().getPrimaryName())) return false;
         return true;
     }
-    
+
     @Override
     public void setupTabHeader() {
         JPanel tabHeader = new JPanel();
@@ -154,7 +150,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         tabHeader.setBackground(new Color(0, 0, 0, 0));
         ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
-    
+
     private void closeTab() {
         ((JTabbedPane)getParent()).remove(this);
     }
@@ -163,8 +159,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     public void refreshTableForSightings() {
         formComponentShown(null);
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1058,7 +1054,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         // Clear old points
         UtilMapGenerator.clearMap(app);
-        
+
         // Load points
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
@@ -1097,7 +1093,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightingList.get(t), app);
             }
         }
-        
+
         // Open Map
         if (app.isUseOnlineMap()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + element.getPrimaryName());
@@ -1257,7 +1253,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         );
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnDeleteImage;
@@ -1354,5 +1350,5 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JTextField txtScienceName;
     private javax.swing.JTextField txtbreedingDuration;
     // End of variables declaration//GEN-END:variables
-    
+
 }
