@@ -1,22 +1,23 @@
 package wildlog.ui.panel.bulkupload;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.utils.ui.Utils;
 
 
 public class ImageBox extends JPanel {
+    private BulkUploadImageFileWrapper imageWrapper;
 
     /** Creates new form ImageBox */
     public ImageBox(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper) {
         initComponents();
-        populateUI(inBulkUploadImageFileWrapper);
+        imageWrapper = inBulkUploadImageFileWrapper;
+        populateUI();
     }
 
-    private void populateUI(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper) {
+    private void populateUI() {
         // Setup the image label
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(inBulkUploadImageFileWrapper.getImagePath()), 200));
+        lblImage.setIcon(imageWrapper.getIcon());
         // TODO: visualise the unselected images (background colour and a special image, etc.)
         //inBulkUploadImageFileWrapper.isIncludeInImport()
     }
@@ -47,6 +48,11 @@ public class ImageBox extends JPanel {
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setOpaque(true);
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
+            }
+        });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
@@ -69,6 +75,11 @@ public class ImageBox extends JPanel {
         btnNewSighting.setName("btnNewSighting"); // NOI18N
         add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 205, 120, 40));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        Utils.openFile(imageWrapper.getFile().getAbsolutePath());
+    }//GEN-LAST:event_lblImageMouseReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDown;
     private javax.swing.JButton btnNewSighting;

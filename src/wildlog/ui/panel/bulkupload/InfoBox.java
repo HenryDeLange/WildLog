@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
@@ -27,8 +26,10 @@ public class InfoBox extends JPanel {
     }
 
     private void populateUI() {
-        lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(sightingWrapper.getDate()));
-        lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(sightingWrapper.getDate()));
+        if (sightingWrapper.getDate() != null) {
+            lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(sightingWrapper.getDate()));
+            lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(sightingWrapper.getDate()));
+        }
         lblElementName.setText(sightingWrapper.getElementName());
         lblLatitude.setText(Double.toString(
                 LatLonConverter.getDecimalDegree(
@@ -42,7 +43,7 @@ public class InfoBox extends JPanel {
                     sightingWrapper.getLonDegrees(),
                     sightingWrapper.getLonMinutes(),
                     sightingWrapper.getLonSecondsFloat())));
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sightingWrapper.getImagePath()), 150));
+        lblImage.setIcon(sightingWrapper.getIcon());
     }
 
     /** This method is called from within the constructor to
@@ -131,6 +132,11 @@ public class InfoBox extends JPanel {
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setName("lblImage"); // NOI18N
         lblImage.setOpaque(true);
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageMouseReleased(evt);
+            }
+        });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 150, 150));
 
         btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
@@ -173,9 +179,15 @@ public class InfoBox extends JPanel {
         dialog.setLocationRelativeTo(this.getParent().getParent());
         dialog.setVisible(true);
         // Set the label to the selected text
-        if (dialog.getElementName() != null && dialog.getElementName().length() > 0)
+        if (dialog.getElementName() != null && dialog.getElementName().length() > 0) {
             sightingWrapper.setElementName(dialog.getElementName());
+            sightingWrapper.setIcon(dialog.getElementIcon());
+        }
     }//GEN-LAST:event_btnChooseCreatureActionPerformed
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        Utils.openFile("ELEMENT-" + sightingWrapper.getElementName(), 0, app);
+    }//GEN-LAST:event_lblImageMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChooseCreature;

@@ -66,7 +66,7 @@ public class PanelSighting extends javax.swing.JPanel {
     private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
     private boolean treatAsNewSighting;
     private boolean disableEditing = false;
-    
+
     /** Creates new form PanelVisit */
     public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, boolean inTreatAsNewSighting, boolean inDisableEditing) {
         sighting = inSighting;
@@ -192,7 +192,7 @@ public class PanelSighting extends javax.swing.JPanel {
         SpinnerFixer.fixSelectAllForSpinners(spnLonDegrees);
         SpinnerFixer.fixSelectAllForSpinners(spnLonMinutes);
         SpinnerFixer.fixSelectAllForSpinners(spnLonSeconds);
-        
+
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
             @Override
             public void filesDropped(List<File> inFiles) {
@@ -222,7 +222,7 @@ public class PanelSighting extends javax.swing.JPanel {
         panelToRefresh = inPanelToRefresh;
     }
 
-    
+
     private void setupSightingInfo() {
         if (sighting != null) {
             lblSightingID.setText("Sighting ID: " + Long.toString(sighting.getSightingCounter()));
@@ -259,8 +259,8 @@ public class PanelSighting extends javax.swing.JPanel {
             System.out.println("No sighting provided...");
         }
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1331,60 +1331,22 @@ public class PanelSighting extends javax.swing.JPanel {
         if (fotos.size() > 0) {
             WildLogFile tempFoto = fotos.get(imageIndex);
             if (tempFoto.getFotoType().equals(WildLogFileType.IMAGE)) {
-                try {
-                    Metadata meta = JpegMetadataReader.readMetadata(new File(tempFoto.getOriginalFotoLocation(true)));
-                    Iterator<Directory> directories = meta.getDirectories().iterator();
-                    breakAllWhiles: while (directories.hasNext()) {
-                        Directory directory = (Directory)directories.next();
-                        Collection<Tag> tags = directory.getTags();
-                        for (Tag tag : tags) {
-                            if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
-                                // Not all files store the date in the same format, so I have to try a few known formats...
-                                try {
-                                    // This seems to be by far the most used format
-                                    SimpleDateFormat f = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-                                    Date tempDate = f.parse(tag.getDescription());
-                                    dtpSightingDate.setDate(tempDate);
-                                    spnHours.setValue(tempDate.getHours());
-                                    spnMinutes.setValue(tempDate.getMinutes());
-                                    cmbTimeFormat.setSelectedIndex(0);
-                                    btnCalculateMoonPhaseActionPerformed(null);
-                                    break breakAllWhiles;
-                                }
-                                catch (ParseException ex) {
-                                    ex.printStackTrace();
-                                }
-                                try {
-                                    // Wird format used by Samsung Galaxy Gio (Android)
-                                    SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
-                                    Date tempDate = f.parse(tag.getDescription());
-                                    dtpSightingDate.setDate(tempDate);
-                                    spnHours.setValue(tempDate.getHours());
-                                    spnMinutes.setValue(tempDate.getMinutes());
-                                    cmbTimeFormat.setSelectedIndex(0);
-                                    btnCalculateMoonPhaseActionPerformed(null);
-                                    System.err.println("However: [THIS DATE (" + tag.getDescription() + ") COULD BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
-                                    break breakAllWhiles;
-                                }
-                                catch (ParseException ex) {
-                                    ex.printStackTrace();
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                catch (JpegProcessingException ex) {
-                    ex.printStackTrace();
+                // Get the date form the image
+                Date imageDate = Utils.getExifDateFromJpeg(new File(tempFoto.getOriginalFotoLocation(true)));
+                // Set the date
+                if (imageDate != null) {
+                    dtpSightingDate.setDate(imageDate);
+                    spnHours.setValue(imageDate.getHours());
+                    spnMinutes.setValue(imageDate.getMinutes());
+                    cmbTimeFormat.setSelectedIndex(0);
+                    btnCalculateMoonPhaseActionPerformed(null);
                 }
             }
         }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
 
     private void btnCalculateMoonPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateMoonPhaseActionPerformed
-        if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null 
+        if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null
                 && !cmbLatitude.getSelectedItem().equals(Latitudes.NONE) && !cmbLongitude.getSelectedItem().equals(Longitudes.NONE)) {
             // Sun
             btnUpdateSightingActionPerformed(null);
@@ -1435,7 +1397,7 @@ public class PanelSighting extends javax.swing.JPanel {
         return temp;
     }
 
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCalculateMoonPhase;
     private javax.swing.JButton btnDeleteImage;
@@ -1517,5 +1479,5 @@ public class PanelSighting extends javax.swing.JPanel {
     private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSearchLocation;
     // End of variables declaration//GEN-END:variables
-    
+
 }

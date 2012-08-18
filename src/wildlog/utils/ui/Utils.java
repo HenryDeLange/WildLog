@@ -21,7 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -569,6 +572,47 @@ public final class Utils {
         taskService.execute(inTask);
         taskMonitor.setForegroundTask(inTask);
         taskMonitor.setAutoUpdateForegroundTask(false);
+    }
+
+    public static Date getExifDateFromJpeg(File inFile) {
+        try {
+            Metadata meta = JpegMetadataReader.readMetadata(inFile);
+            Iterator<Directory> directories = meta.getDirectories().iterator();
+            while (directories.hasNext()) {
+                Directory directory = (Directory)directories.next();
+                Collection<Tag> tags = directory.getTags();
+                for (Tag tag : tags) {
+                    if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
+                        // Not all files store the date in the same format, so I have to try a few known formats...
+                        // Try 1:
+                        try {
+                            // This seems to be by far the most used format
+                            return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
+                        }
+                        catch (ParseException ex) {
+                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
+                            ex.printStackTrace(System.err);
+                        }
+                        // Try 2:
+                        try {
+                            // Wierd format used by Samsung Galaxy Gio (Android)
+                            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
+                        }
+                        catch (ParseException ex) {
+                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
+                            ex.printStackTrace(System.err);
+                        }
+                    }
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (JpegProcessingException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
     }
 
 }

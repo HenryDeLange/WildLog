@@ -214,7 +214,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 360, -1));
 
         chkShowInactiveTimes.setBackground(resourceMap.getColor("chkShowInactiveTimes.background")); // NOI18N
-        chkShowInactiveTimes.setSelected(true);
         chkShowInactiveTimes.setText(resourceMap.getString("chkShowInactiveTimes.text")); // NOI18N
         chkShowInactiveTimes.setName("chkShowInactiveTimes"); // NOI18N
         pnlTop.add(chkShowInactiveTimes, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
@@ -283,6 +282,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 100, 30));
 
         chkIncludeSubfolders.setBackground(resourceMap.getColor("chkIncludeSubfolders.background")); // NOI18N
+        chkIncludeSubfolders.setSelected(true);
         chkIncludeSubfolders.setText(resourceMap.getString("chkIncludeSubfolders.text")); // NOI18N
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
         pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
@@ -306,7 +306,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.setFocusable(false);
         tblBulkImport.setGridColor(resourceMap.getColor("tblBulkImport.gridColor")); // NOI18N
         tblBulkImport.setName("tblBulkImport"); // NOI18N
-        tblBulkImport.setRowHeight(250);
+        tblBulkImport.setRowHeight(270);
         tblBulkImport.setSelectionBackground(resourceMap.getColor("tblBulkImport.selectionBackground")); // NOI18N
         tblBulkImport.setSelectionForeground(resourceMap.getColor("tblBulkImport.selectionForeground")); // NOI18N
         tblBulkImport.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

@@ -2,6 +2,7 @@ package wildlog.ui.panel.bulkupload;
 
 import java.awt.Frame;
 import java.util.List;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -104,6 +105,10 @@ public class ElementSelectionBox extends javax.swing.JDialog {
 
     protected String getElementName() {
         return txtElementName.getText();
+    }
+
+    protected Icon getElementIcon() {
+        return lblElementImage.getIcon();
     }
 
     private void txtElementNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtElementNameKeyReleased
