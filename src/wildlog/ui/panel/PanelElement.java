@@ -30,6 +30,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
+import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.enums.ActiveTime;
@@ -1120,7 +1121,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, null, null, element, this, true, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, null, null, element, this, true, false), new AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());

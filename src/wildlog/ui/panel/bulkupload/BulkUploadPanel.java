@@ -1,10 +1,21 @@
 package wildlog.ui.panel.bulkupload;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
@@ -30,10 +41,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Init auto generated code
         initComponents();
 
+        // Setup the Location list
+        getLocationList();
+
+        // Get the list of files from the folder to import from
+        File rootFile = showFileChooser();
+
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        model.getDataVector().addAll(UtilTableGenerator.convertToVector(BulkUploadDataLoader.genenrateTableData("")));
+        model.getDataVector().addAll(UtilTableGenerator.convertToVector(
+                BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected())));
         model.fireTableDataChanged();
 
         // Setup the JPanel renderers
@@ -48,38 +66,47 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 //                }
             }
         });
-
-        // Setup the Location list
-        getLocationList();
     }
 
     @Override
     public void setupTabHeader() {
-//        JPanel tabHeader = new JPanel();
-//        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Location.gif"))));
-//        tabHeader.add(new JLabel("Bulk Upload"));
-//        JButton btnClose = new JButton();
-//        btnClose.setPreferredSize(new Dimension(12, 12));
-//        btnClose.setBackground(new Color(255, 000, 000));
-//        btnClose.setToolTipText("Close");
-//        btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
-//        btnClose.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                closeTab();
-//            }
-//        });
-//        tabHeader.add(btnClose);
-//        tabHeader.setBackground(new Color(0, 0, 0, 0));
-//        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
+        JPanel tabHeader = new JPanel();
+        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"))));
+        tabHeader.add(new JLabel("Bulk Upload"));
+        JButton btnClose = new JButton();
+        btnClose.setPreferredSize(new Dimension(12, 12));
+        btnClose.setBackground(new Color(255, 000, 000));
+        btnClose.setToolTipText("Close");
+        btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
+        btnClose.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                closeTab();
+            }
+        });
+        tabHeader.add(btnClose);
+        tabHeader.setBackground(new Color(0, 0, 0, 0));
+        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
 
     private void closeTab() {
-//        ((JTabbedPane)getParent()).remove(this);
+        ((JTabbedPane)getParent()).remove(this);
     }
 
     private void getLocationList() {
         lstLocation.setListData(app.getDBI().list(new Location()).toArray());
+    }
+
+    private File showFileChooser() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select a folder to import");
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setMultiSelectionEnabled(false);
+        // TODO: Maak dat mens die image files kan sien, maar net folders kan kies...
+//        fileChooser.setFileFilter(new ImageFilter());
+        fileChooser.showOpenDialog(this.getParent());
+        return fileChooser.getSelectedFile();
     }
 
     /** This method is called from within the constructor to
@@ -139,12 +166,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        pnlTop.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, -1, 20));
+        pnlTop.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, -1, 20));
 
         jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        pnlTop.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, -1, 20));
+        pnlTop.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, -1, 20));
 
         jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
@@ -154,7 +181,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        pnlTop.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 10, 140, -1));
+        pnlTop.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 40, 140, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
@@ -165,6 +192,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         lblLocationImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocationImage.setText(resourceMap.getString("lblLocationImage.text")); // NOI18N
         lblLocationImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblLocationImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblLocationImage.setName("lblLocationImage"); // NOI18N
         lblLocationImage.setOpaque(true);
         lblLocationImage.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -172,7 +200,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 lblLocationImageMouseReleased(evt);
             }
         });
-        pnlTop.add(lblLocationImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 15, 100, 100));
+        pnlTop.add(lblLocationImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 35, 90, 90));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -181,9 +209,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnUpdate.setName("btnUpdate"); // NOI18N
         pnlTop.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 130, 80));
 
-        txtVisitName.setText(resourceMap.getString("txtVisitName.text")); // NOI18N
+        txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH:mm)").format(Calendar.getInstance().getTime()));
         txtVisitName.setName("txtVisitName"); // NOI18N
-        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 10, 150, -1));
+        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 360, -1));
 
         chkShowInactiveTimes.setBackground(resourceMap.getColor("chkShowInactiveTimes.background")); // NOI18N
         chkShowInactiveTimes.setSelected(true);
@@ -210,20 +238,21 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+        jLabel8.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel8.setName("jLabel8"); // NOI18N
-        pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, 70, 50));
+        pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 70, 40));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
-        pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(421, 70, 440, 10));
+        pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(422, 70, 440, 10));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator2.setName("jSeparator2"); // NOI18N
-        pnlTop.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 70, 20, 55));
+        pnlTop.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 5, 20, 120));
 
         jButton2.setBackground(resourceMap.getColor("jButton2.background")); // NOI18N
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
         jButton2.setName("jButton2"); // NOI18N
-        pnlTop.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 35, 80, 30));
+        pnlTop.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 100, 30));
 
         txtLocationName.setText(resourceMap.getString("txtLocationName.text")); // NOI18N
         txtLocationName.setName("txtLocationName"); // NOI18N
@@ -232,7 +261,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 txtLocationNameKeyReleased(evt);
             }
         });
-        pnlTop.add(txtLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 200, -1));
+        pnlTop.add(txtLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 310, -1));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
@@ -246,15 +275,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
         jScrollPane2.setViewportView(lstLocation);
 
-        pnlTop.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 290, 80));
+        pnlTop.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 80));
 
         jButton3.setBackground(resourceMap.getColor("jButton3.background")); // NOI18N
         jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
         jButton3.setName("jButton3"); // NOI18N
-        pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(503, 35, 140, 30));
+        pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 100, 30));
 
         chkIncludeSubfolders.setBackground(resourceMap.getColor("chkIncludeSubfolders.background")); // NOI18N
-        chkIncludeSubfolders.setSelected(true);
         chkIncludeSubfolders.setText(resourceMap.getString("chkIncludeSubfolders.text")); // NOI18N
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
         pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
@@ -289,8 +317,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(250);
         tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(250);
         tblBulkImport.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("tblBulkImport.columnModel.title0")); // NOI18N
-        tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor());
-        tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer());
+        tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app));
+        tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app));
         tblBulkImport.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("tblBulkImport.columnModel.title1")); // NOI18N
         tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
         tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());

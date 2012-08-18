@@ -1,37 +1,48 @@
 package wildlog.ui.panel.bulkupload;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import wildlog.WildLogApp;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.Utils;
 
 
-public class InfoBox extends javax.swing.JPanel {
+public class InfoBox extends JPanel {
+    private WildLogApp app;
+    private BulkUploadSightingWrapper sightingWrapper;
 
     /** Creates new form InfoBox */
-    public InfoBox(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
+    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
+        app = inApp;
         initComponents();
-        populateUI(inBulkUploadSightingWrapper);
+        sightingWrapper = inBulkUploadSightingWrapper;
+        populateUI();
     }
 
-    private void populateUI(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
-        lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(inBulkUploadSightingWrapper.getDate()));
-        lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(inBulkUploadSightingWrapper.getDate()));
-        lblElementName.setText(inBulkUploadSightingWrapper.getElementName());
+    private void populateUI() {
+        lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(sightingWrapper.getDate()));
+        lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(sightingWrapper.getDate()));
+        lblElementName.setText(sightingWrapper.getElementName());
         lblLatitude.setText(Double.toString(
                 LatLonConverter.getDecimalDegree(
-                    inBulkUploadSightingWrapper.getLatitude(),
-                    inBulkUploadSightingWrapper.getLatDegrees(),
-                    inBulkUploadSightingWrapper.getLatMinutes(),
-                    inBulkUploadSightingWrapper.getLatSecondsFloat())));
+                    sightingWrapper.getLatitude(),
+                    sightingWrapper.getLatDegrees(),
+                    sightingWrapper.getLatMinutes(),
+                    sightingWrapper.getLatSecondsFloat())));
         lblLongitude.setText(Double.toString(
                 LatLonConverter.getDecimalDegree(
-                    inBulkUploadSightingWrapper.getLongitude(),
-                    inBulkUploadSightingWrapper.getLonDegrees(),
-                    inBulkUploadSightingWrapper.getLonMinutes(),
-                    inBulkUploadSightingWrapper.getLonSecondsFloat())));
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(inBulkUploadSightingWrapper.getImagePath()), 150));
+                    sightingWrapper.getLongitude(),
+                    sightingWrapper.getLonDegrees(),
+                    sightingWrapper.getLonMinutes(),
+                    sightingWrapper.getLonSecondsFloat())));
+        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(sightingWrapper.getImagePath()), 150));
     }
 
     /** This method is called from within the constructor to
@@ -136,6 +147,11 @@ public class InfoBox extends javax.swing.JPanel {
         btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseCreature.setName("btnChooseCreature"); // NOI18N
+        btnChooseCreature.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseCreatureActionPerformed(evt);
+            }
+        });
         add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 80, 80));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -143,6 +159,23 @@ public class InfoBox extends javax.swing.JPanel {
         System.out.println(lblElementName.getText());
         lblElementName.setText(lblElementName.getText() + "clicked");
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
+        final ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app);
+        ActionListener escListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                refreshTableForSightings();
+                dialog.dispose();
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        dialog.setLocationRelativeTo(this.getParent().getParent());
+        dialog.setVisible(true);
+        // Set the label to the selected text
+        if (dialog.getElementName() != null && dialog.getElementName().length() > 0)
+            sightingWrapper.setElementName(dialog.getElementName());
+    }//GEN-LAST:event_btnChooseCreatureActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChooseCreature;

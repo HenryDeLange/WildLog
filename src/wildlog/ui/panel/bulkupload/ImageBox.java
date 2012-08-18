@@ -1,11 +1,12 @@
 package wildlog.ui.panel.bulkupload;
 
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.utils.ui.Utils;
 
 
-public class ImageBox extends javax.swing.JPanel {
+public class ImageBox extends JPanel {
 
     /** Creates new form ImageBox */
     public ImageBox(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper) {

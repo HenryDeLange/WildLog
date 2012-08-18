@@ -249,7 +249,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator5 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         lblWorkspace = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnBulkUpload = new javax.swing.JButton();
         tabFoto = new javax.swing.JPanel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
         rdbBrowseElement = new javax.swing.JRadioButton();
@@ -443,14 +443,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblWorkspace.setName("lblWorkspace"); // NOI18N
         tabHome.add(lblWorkspace, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 560, 530, -1));
 
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBulkUpload.setText(resourceMap.getString("btnBulkUpload.text")); // NOI18N
+        btnBulkUpload.setName("btnBulkUpload"); // NOI18N
+        btnBulkUpload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBulkUploadActionPerformed(evt);
             }
         });
-        tabHome.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 330, -1, -1));
+        tabHome.add(btnBulkUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 200, 80));
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -2021,12 +2021,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
     }//GEN-LAST:event_btnViewEXIFActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFrame frame = new JFrame();
-        frame.getContentPane().add(new BulkUploadPanel());
-        frame.pack();
-        frame.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnBulkUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkUploadActionPerformed
+        // TODO: Make sure to wrap this in a swing progress bar background tast with informative fedback messages
+        UtilPanelGenerator.addPanelAsTab(new BulkUploadPanel(), tabbedPanel);
+    }//GEN-LAST:event_btnBulkUploadActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -2614,6 +2612,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnAddLocation;
     private javax.swing.JButton btnBrowseNext;
     private javax.swing.JButton btnBrowsePrev;
+    private javax.swing.JButton btnBulkUpload;
     private javax.swing.JButton btnClearSearch;
     private javax.swing.JButton btnDefault;
     private javax.swing.JButton btnDeleteElement;
@@ -2648,7 +2647,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem htmlExportMenuItem1;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
     private javax.swing.JMenu importMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
