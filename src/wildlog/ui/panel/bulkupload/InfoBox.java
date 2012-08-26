@@ -4,22 +4,36 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import org.netbeans.lib.awtextra.AbsoluteConstraints;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Visit;
+import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.Utils;
 
 
-public class InfoBox extends JPanel {
+public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdded {
     private WildLogApp app;
     private BulkUploadSightingWrapper sightingWrapper;
+    private JTextField txtLocation;
+    private JTextField txtVisit;
 
     /** Creates new form InfoBox */
-    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
+    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JTextField inTxtLocation, JTextField inTxtVisit) {
         app = inApp;
+        txtLocation = inTxtLocation;
+        txtVisit = inTxtVisit;
         initComponents();
         sightingWrapper = inBulkUploadSightingWrapper;
         populateUI();
@@ -158,13 +172,41 @@ public class InfoBox extends JPanel {
                 btnChooseCreatureActionPerformed(evt);
             }
         });
-        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 80, 80));
+        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 80, 70));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        System.out.println(lblElementName.getText());
-        lblElementName.setText(lblElementName.getText() + "clicked");
+        // TODO: Copied from Element Panel, need to centralise all of these similar sighting popup code segments
+        final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
+        dialog.setLayout(new AbsoluteLayout());
+        dialog.setSize(965, 625);
+        dialog.add(new PanelSighting(
+                sightingWrapper,
+                new Location(txtLocation.getText()),
+                new Visit(txtVisit.getText()),
+                new Element(sightingWrapper.getElementName()),
+                this,
+                false,
+                false), new AbsoluteConstraints(0, 0, -1, -1));
+        dialog.setLocationRelativeTo(this);
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+        dialog.setIconImage(icon.getImage());
+        ActionListener escListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                refreshTableForSightings();
+                dialog.dispose();
+            }
+        };
+        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        dialog.setResizable(false);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnEditActionPerformed
+
+    @Override
+    public void refreshTableForSightings() {
+        // TODO ???
+    }
 
     private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
         final ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app);

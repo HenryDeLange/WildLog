@@ -66,6 +66,7 @@ public class ElementSelectionBox extends javax.swing.JDialog {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstElements.setName("lstElements"); // NOI18N
+        lstElements.setSelectionBackground(resourceMap.getColor("lstElements.selectionBackground")); // NOI18N
         lstElements.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstElementsValueChanged(evt);

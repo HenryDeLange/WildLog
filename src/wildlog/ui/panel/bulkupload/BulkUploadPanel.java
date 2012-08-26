@@ -317,8 +317,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(250);
         tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(250);
         tblBulkImport.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("tblBulkImport.columnModel.title0")); // NOI18N
-        tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app));
-        tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app));
+        tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, txtLocationName, txtVisitName));
+        tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, txtLocationName, txtVisitName));
         tblBulkImport.getColumnModel().getColumn(1).setHeaderValue(resourceMap.getString("tblBulkImport.columnModel.title1")); // NOI18N
         tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
         tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());

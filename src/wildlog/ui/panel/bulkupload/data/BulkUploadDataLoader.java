@@ -20,7 +20,7 @@ public class BulkUploadDataLoader {
     public static Object[][] genenrateTableData(File inFolderPath, boolean inIsRecuresive) {
         List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
 
-        // TODO read all of the file info at this stage: EXIF data and make the thumbnail in memory
+        // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>();
         // First load all the images and sort them according to date
         for (File file : files) {
@@ -41,6 +41,8 @@ public class BulkUploadDataLoader {
                     // Start a new sighting and image list for the linked images
                     sightingKey = new BulkUploadSightingWrapper(
                             Utils.getScaledIcon(new ImageIcon(WildLogApp.class.getResource("resources/images/NoImage.gif")), 150));
+                    // Set the date for this sighting
+                    sightingKey.setDate(currentSightingDate);
                     // Update the map
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
                     // Update the curent date to compare against
