@@ -23,6 +23,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.ui.panel.bulkupload.data.BulkUploadDataLoader;
+import wildlog.ui.panel.bulkupload.data.BulkUploadDataWrapper;
 import wildlog.ui.panel.bulkupload.editors.ImageBoxEditor;
 import wildlog.ui.panel.bulkupload.editors.InfoBoxEditor;
 import wildlog.ui.panel.bulkupload.renderers.ImageBoxRenderer;
@@ -50,9 +51,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        model.getDataVector().addAll(UtilTableGenerator.convertToVector(
-                BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected())));
+        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected());
+        model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
         model.fireTableDataChanged();
+
+        // Setup the dates
+        dtpStartDate.setDate(wrapper.getStartDate());
+        dtpEndDate.setDate(wrapper.getEndDate());
 
         // Setup the JPanel renderers
         final JTable tableHandle = tblBulkImport;

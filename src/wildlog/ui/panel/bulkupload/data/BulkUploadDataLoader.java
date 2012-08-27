@@ -17,7 +17,7 @@ import wildlog.utils.ui.Utils;
 
 public class BulkUploadDataLoader {
 
-    public static Object[][] genenrateTableData(File inFolderPath, boolean inIsRecuresive) {
+    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive) {
         List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
 
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
@@ -28,7 +28,7 @@ public class BulkUploadDataLoader {
             imageList.add(
                     new BulkUploadImageFileWrapper(file, Utils.getScaledIcon(new ImageIcon(file.getAbsolutePath()), 200), date, true));
         }
-        Collections.sort(files);
+        Collections.sort(imageList);
 
         // Next calculate the sightings and build the Object[][]
         Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =
@@ -54,7 +54,13 @@ public class BulkUploadDataLoader {
         }
 
         // Return the results
-        return getArrayFromHash(finalMap);
+        BulkUploadDataWrapper wrapper = new BulkUploadDataWrapper();
+        if (!imageList.isEmpty()) {
+            wrapper.setStartDate(imageList.get(0).getDate());
+            wrapper.setEndDate(imageList.get(imageList.size()-1).getDate());
+        }
+        wrapper.setData(getArrayFromHash(finalMap));
+        return wrapper;
     }
 
     private static Object[][] getArrayFromHash(Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> inData){
