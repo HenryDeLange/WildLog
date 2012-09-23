@@ -31,7 +31,7 @@ public class MapFrameOffline {
     private double defaultLongitude;
 
 
-    
+
     // Constructor:
     public MapFrameOffline(String inTitle, double inDefaultLatitude, double inDefaultLongitude/*, boolean inUseWMS*/) {
         title = inTitle;
@@ -40,7 +40,7 @@ public class MapFrameOffline {
         initMap(/*inUseWMS*/);
     }
 
-    
+
     // Private Methods:
     private void initMap(/*boolean inUseWMS*/) {
         pointLayer = new MapOfflinePointLayer();
@@ -50,7 +50,7 @@ public class MapFrameOffline {
         // Setup Icon for the Frame
         ImageIcon icon = new ImageIcon(Application.getInstance().getClass().getResource("resources/icons/WildLog Map Icon.gif"));
         frame.setIconImage(icon.getImage());
-        
+
         // Add the frame to the MapHandler. This is the frame that will be used to show the map.
         mapHandler.add(frame);
         // Create and add a LayerHandler to the MapHandler. The LayerHandler manages Layers, whether they are part of
@@ -118,11 +118,25 @@ public class MapFrameOffline {
         shapeLayerProtectedLand.setProperties(shapeLayerPropsProtectedLand);
         shapeLayerProtectedLand.setVisible(true);
 
+        // TODO: Use this to add the spesies distribution maps
+//        ShapeLayer shapeLayerMammals = new ShapeLayer();
+//        Properties shapeLayerPropsMammals = new Properties();
+//        shapeLayerPropsMammals.put("prettyName", "Mammals SA");
+//        shapeLayerPropsMammals.put("lineColor", "4E7F12");
+//        shapeLayerPropsMammals.put("fillColor", "AA5577");
+//        shapeLayerPropsMammals.put("shapeFile", "Mammals(SA).shp");
+//        // TODO Need to either select only one shape, or prefferabily load only the relevant shape file
+//        // TODO: Are these ssx file still needed?
+////        shapeLayerPropsMammals.put("spatialIndex", "protected_land.ssx");
+//        shapeLayerMammals.setProperties(shapeLayerPropsMammals);
+//        shapeLayerMammals.setVisible(true);
+
         // Last on top
         mapHandler.add(shapeLayerBase);
         mapHandler.add(shapeLayerSouthAfrica);
         mapHandler.add(shapeLayerRoads);
         //mapHandler.add(shapeLayerTowns); // Baie punte, so los dit tot ek layers kan aan en af sit met die mapping
+//        mapHandler.add(shapeLayerMammals);
         mapHandler.add(shapeLayerProtectedLand);
 
         //if (inUseWMS) doWMS();

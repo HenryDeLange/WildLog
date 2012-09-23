@@ -20,10 +20,13 @@ public class ImageBoxRenderer  implements TableCellRenderer {
 
     public static JPanel drawImageBoxes(Object value, JTable table, int row, int column) {
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)value;
+        if (imageListWrapper.getImageList().isEmpty()) {
+            return null;
+        }
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         panel.setBackground(new Color(235, 246, 220));
         for (BulkUploadImageFileWrapper imageWrapper : imageListWrapper.getImageList()) {
-            panel.add(new ImageBox(imageWrapper));
+            panel.add(new ImageBox(imageWrapper, table));
         }
         table.setRowHeight(row, 250 *
                 (int)Math.ceil((double)(250 * imageListWrapper.getImageList().size())

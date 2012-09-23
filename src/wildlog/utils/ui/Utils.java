@@ -11,6 +11,7 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -91,6 +92,10 @@ public final class Utils {
         }
         inIcon.setImage(Utils.getScaledImage(inIcon.getImage(), finalWidth, finalHeight));
         return inIcon;
+    }
+
+    public static ImageIcon getScaledIconForNoImage(int inSize) {
+        return getScaledIcon(new ImageIcon(WildLogApp.class.getResource("resources/images/NoImage.gif")), inSize);
     }
 
     public static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
@@ -613,6 +618,13 @@ public final class Utils {
             ex.printStackTrace(System.err);
         }
         return null;
+    }
+
+    public static void setDialogToCenter(Component inParentComponent, Component inComponentToCenter) {
+        Point point = inParentComponent.getLocation();
+        inComponentToCenter.setLocation(
+                point.x + (inParentComponent.getWidth() - inComponentToCenter.getWidth())/2,
+                point.y + (inParentComponent.getHeight() - inComponentToCenter.getHeight())/2);
     }
 
 }

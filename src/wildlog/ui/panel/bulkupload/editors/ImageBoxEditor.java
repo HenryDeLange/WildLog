@@ -12,6 +12,11 @@ public class ImageBoxEditor extends AbstractCellEditor implements TableCellEdito
     private Object editorValue;
 
     @Override
+    public boolean shouldSelectCell(EventObject anEvent) {
+        return false;
+    }
+    
+    @Override
     public boolean isCellEditable(EventObject anEvent) {
         return true;
     }

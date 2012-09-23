@@ -1,17 +1,23 @@
 package wildlog.ui.panel.bulkupload;
 
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
+import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageListWrapper;
+import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.ui.Utils;
 
 
 public class ImageBox extends JPanel {
     private BulkUploadImageFileWrapper imageWrapper;
+    private JTable table;
 
     /** Creates new form ImageBox */
-    public ImageBox(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper) {
+    public ImageBox(BulkUploadImageFileWrapper inBulkUploadImageFileWrapper, JTable inTable) {
         initComponents();
         imageWrapper = inBulkUploadImageFileWrapper;
+        table = inTable;
         populateUI();
     }
 
@@ -36,6 +42,7 @@ public class ImageBox extends JPanel {
         btnDown = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnNewSighting = new javax.swing.JButton();
+        btnClone = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ImageBox.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -58,29 +65,149 @@ public class ImageBox extends JPanel {
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setName("btnUp"); // NOI18N
+        btnUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpActionPerformed(evt);
+            }
+        });
         add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 40, 100));
 
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setName("btnDown"); // NOI18N
+        btnDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownActionPerformed(evt);
+            }
+        });
         add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 40, 100));
 
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setName("btnRemove"); // NOI18N
-        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 120, 40));
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 80, 40));
 
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setName("btnNewSighting"); // NOI18N
-        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 205, 120, 40));
+        btnNewSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNewSightingActionPerformed(evt);
+            }
+        });
+        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 80, 40));
+
+        btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
+        btnClone.setName("btnClone"); // NOI18N
+        btnClone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloneActionPerformed(evt);
+            }
+        });
+        add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 205, 80, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         Utils.openFile(imageWrapper.getFile().getAbsolutePath());
     }//GEN-LAST:event_lblImageMouseReleased
 
+    private void btnUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpActionPerformed
+        if (table.getEditingRow() > 0) {
+            moveImageToNewRow(-1);
+        }
+    }//GEN-LAST:event_btnUpActionPerformed
+
+    private void btnDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownActionPerformed
+        if (table.getEditingRow() < (table.getRowCount()-1)) {
+            moveImageToNewRow(+1);
+        }
+    }//GEN-LAST:event_btnDownActionPerformed
+
+    // TODO: Sommige van die methods share code (veral "remove") wat refactor moet word om code te share...
+
+    private void btnNewSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSightingActionPerformed
+        // Make sure to call stop editing after getting the row and col
+        int row = table.getEditingRow();
+        int col = table.getEditingColumn();
+        table.getCellEditor().stopCellEditing();
+        // Perform the add and remember to let the model know
+        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+        BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
+        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(Utils.getScaledIconForNoImage(150));
+        newSightingWrapper.setDate(imageWrapper.getDate());
+        BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+        currentListWrapper.getImageList().remove(imageWrapper);
+        if (currentListWrapper.getImageList().isEmpty()) {
+            model.removeRow(row);
+        }
+        else
+            model.fireTableCellUpdated(row, col);
+        BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper();
+        newListWrapper.getImageList().add(imageWrapper);
+        if (imageWrapper.getDate().before(currentSightingWrapper.getDate())) {
+            model.insertRow(row, new Object[]{newSightingWrapper, newListWrapper});
+        }
+        else {
+            model.insertRow(row + 1, new Object[]{newSightingWrapper, newListWrapper});
+        }
+    }//GEN-LAST:event_btnNewSightingActionPerformed
+
+    private void btnCloneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloneActionPerformed
+        // Make sure to call stop editing after getting the row and col
+        int row = table.getEditingRow();
+        int col = table.getEditingColumn();
+        table.getCellEditor().stopCellEditing();
+        // Perform the add and remember to let the model know
+        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+        BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+        listWrapper.getImageList().add(imageWrapper.getClone());
+        model.fireTableCellUpdated(row, col);
+    }//GEN-LAST:event_btnCloneActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // Make sure to call stop editing after getting the row and col
+        int row = table.getEditingRow();
+        int col = table.getEditingColumn();
+        table.getCellEditor().stopCellEditing();
+        // Remove the current image from the row
+        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+        BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+        currentListWrapper.getImageList().remove(imageWrapper);
+        if (currentListWrapper.getImageList().isEmpty()) {
+            model.removeRow(row);
+        }
+        else
+            model.fireTableCellUpdated(row, col);
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void moveImageToNewRow(int inDelta) {
+        // Make sure to call stop editing after getting the row and col
+        int row = table.getEditingRow();
+        int col = table.getEditingColumn();
+        table.getCellEditor().stopCellEditing();
+        // Perform the move and remember to let the model know
+        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+        // Add the image to the new row
+        BulkUploadImageListWrapper newListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row + inDelta, col);
+        newListWrapper.getImageList().add(imageWrapper);
+        model.fireTableCellUpdated(row + inDelta, col);
+        // Remove the current image from the row
+        BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+        currentListWrapper.getImageList().remove(imageWrapper);
+        if (currentListWrapper.getImageList().isEmpty()) {
+            model.removeRow(row);
+        }
+        else
+            model.fireTableCellUpdated(row, col);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClone;
     private javax.swing.JButton btnDown;
     private javax.swing.JButton btnNewSighting;
     private javax.swing.JButton btnRemove;

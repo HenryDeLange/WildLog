@@ -1,5 +1,6 @@
 package wildlog.ui.panel.bulkupload;
 
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -188,7 +189,8 @@ public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdde
                 this,
                 false,
                 false), new AbsoluteConstraints(0, 0, -1, -1));
-        dialog.setLocationRelativeTo(this);
+        //dialog.setLocationRelativeTo(this.getParent().getParent());
+        Utils.setDialogToCenter(app.getMainFrame(), dialog);
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
         dialog.setIconImage(icon.getImage());
         ActionListener escListener = new ActionListener() {
@@ -218,7 +220,7 @@ public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdde
             }
         };
         dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        dialog.setLocationRelativeTo(this.getParent().getParent());
+        Utils.setDialogToCenter(app.getMainFrame(), dialog);
         dialog.setVisible(true);
         // Set the label to the selected text
         if (dialog.getElementName() != null && dialog.getElementName().length() > 0) {

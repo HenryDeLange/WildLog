@@ -18,6 +18,8 @@ import wildlog.utils.ui.Utils;
 public class BulkUploadDataLoader {
 
     public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive) {
+        // TODO: Since this action maxes out the CPU (thus not bottlenecking at the disk IO) multithreading should help to improve performance
+
         List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
 
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
@@ -39,8 +41,7 @@ public class BulkUploadDataLoader {
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, 120000)) {
                     // Start a new sighting and image list for the linked images
-                    sightingKey = new BulkUploadSightingWrapper(
-                            Utils.getScaledIcon(new ImageIcon(WildLogApp.class.getResource("resources/images/NoImage.gif")), 150));
+                    sightingKey = new BulkUploadSightingWrapper(Utils.getScaledIconForNoImage(150));
                     // Set the date for this sighting
                     sightingKey.setDate(currentSightingDate);
                     // Update the map

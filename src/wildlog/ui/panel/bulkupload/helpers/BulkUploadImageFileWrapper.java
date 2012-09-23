@@ -68,4 +68,8 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
         file = inFile;
     }
 
+    public BulkUploadImageFileWrapper getClone() {
+        return new BulkUploadImageFileWrapper(file, icon, date, includeInImport);
+    }
+
 }
