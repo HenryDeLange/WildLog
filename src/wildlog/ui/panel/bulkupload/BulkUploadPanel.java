@@ -8,27 +8,46 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.Certainty;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.VisitType;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.panel.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panel.bulkupload.data.BulkUploadDataWrapper;
 import wildlog.ui.panel.bulkupload.editors.ImageBoxEditor;
 import wildlog.ui.panel.bulkupload.editors.InfoBoxEditor;
+import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
+import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageListWrapper;
+import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.ui.panel.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panel.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
+import wildlog.utils.AstroUtils;
+import wildlog.utils.LatLonConverter;
+import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
 
@@ -44,22 +63,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         // Setup the Location list
         getLocationList();
+        // Load the images
+        loadImages();
 
-        // Get the list of files from the folder to import from
-        File rootFile = showFileChooser();
-
-        // Setup the datamodel
-        DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
-        model.getDataVector().clear();
-        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected());
-        model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
-        model.fireTableDataChanged();
-
-        // Setup the dates
-        dtpStartDate.setDate(wrapper.getStartDate());
-        dtpEndDate.setDate(wrapper.getEndDate());
-
-        // Setup the JPanel renderers
+        // Hack to make the buttons clickable when teh mouse scrolles over the cell
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -100,6 +107,22 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void getLocationList() {
         lstLocation.setListData(app.getDBI().list(new Location()).toArray());
+    }
+
+    private void loadImages() {
+        // Get the list of files from the folder to import from
+        File rootFile = showFileChooser();
+
+        // Setup the datamodel
+        DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
+        model.getDataVector().clear();
+        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected());
+        model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
+        model.fireTableDataChanged();
+
+        // Setup the dates
+        dtpStartDate.setDate(wrapper.getStartDate());
+        dtpEndDate.setDate(wrapper.getEndDate());
     }
 
     private File showFileChooser() {
@@ -147,6 +170,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         lstLocation = new javax.swing.JList();
         jButton3 = new javax.swing.JButton();
         chkIncludeSubfolders = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        cmbVisitType = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
@@ -212,11 +237,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setName("btnUpdate"); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
         pnlTop.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 130, 80));
 
-        txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH:mm)").format(Calendar.getInstance().getTime()));
+        txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()));
         txtVisitName.setName("txtVisitName"); // NOI18N
-        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 360, -1));
+        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 200, -1));
 
         chkShowInactiveTimes.setBackground(resourceMap.getColor("chkShowInactiveTimes.background")); // NOI18N
         chkShowInactiveTimes.setText(resourceMap.getString("chkShowInactiveTimes.text")); // NOI18N
@@ -234,6 +264,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnReload.setIcon(resourceMap.getIcon("btnReload.icon")); // NOI18N
         btnReload.setText(resourceMap.getString("btnReload.text")); // NOI18N
         btnReload.setName("btnReload"); // NOI18N
+        btnReload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReloadActionPerformed(evt);
+            }
+        });
         pnlTop.add(btnReload, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 95, 130, 30));
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
@@ -291,6 +326,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders.setText(resourceMap.getString("chkIncludeSubfolders.text")); // NOI18N
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
         pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
+
+        jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
+        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+        pnlTop.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(705, 10, 40, 20));
+
+        cmbVisitType.setBackground(resourceMap.getColor("cmbVisitType.background")); // NOI18N
+        cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.values()));
+        cmbVisitType.setSelectedItem(VisitType.OTHER);
+        cmbVisitType.setName("cmbVisitType"); // NOI18N
+        pnlTop.add(cmbVisitType, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 120, -1));
 
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
 
@@ -367,11 +413,95 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
+    private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
+        loadImages();
+    }//GEN-LAST:event_btnReloadActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // FIXME: Clean/refactor up this (and related sighting saving) code to be "robust" and re-useable...
+        if (txtLocationName.getText() != null && !txtLocationName.getText().isEmpty()
+                && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
+            DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
+            // Make sure all sightings have a creature set
+            for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(0, 0);
+                if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
+                    JOptionPane.showMessageDialog(this.getParent(), "Please select a Creature for each of the Sightings.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            // Process the Location
+            Location location = app.getDBI().find(new Location(txtLocationName.getText()));
+            if (location == null) {
+                location = new Location(txtLocationName.getText());
+                app.getDBI().createOrUpdate(location, null);
+            }
+            // Process the Visit
+            Visit visit = new Visit(txtVisitName.getText());
+            if (app.getDBI().find(visit) == null) {
+                visit.setLocationName(location.getName());
+                visit.setStartDate(dtpStartDate.getDate());
+                visit.setEndDate(dtpEndDate.getDate());
+                visit.setType((VisitType)cmbVisitType.getSelectedItem());
+                app.getDBI().createOrUpdate(visit, null);
+                // Processs the sightings
+                for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                    BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
+                    // Check wether the Creature exists or not
+                    if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
+                        app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
+                    }
+                    // Continue processing the Sighting
+                    sightingWrapper.setLocationName(location.getName());
+                    sightingWrapper.setVisitName(visit.getName());
+                    // If the sighting's GPS point is set then try to calculate Sun and Moon
+                    if (sightingWrapper.getDate() != null
+                            && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
+                            && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
+                        // Sun
+                        double latitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSecondsFloat());
+                        double longitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSecondsFloat());
+                        sightingWrapper.setTimeOfDay(AstroUtils.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
+                        // Moon
+                        sightingWrapper.setMoonPhase(AstroUtils.getMoonPhase(sightingWrapper.getDate()));
+                        sightingWrapper.setMoonlight(AstroUtils.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
+                    }
+                    // Save the sigting
+                    app.getDBI().createOrUpdate(sightingWrapper);
+                    // Save the corresponding images
+                    BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(rowCount, 1);
+                    List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
+                    for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
+                        files.add(imageWrapper.getFile());
+                    }
+                    Utils.performFileUpload(
+                                "SIGHTING-" + sightingWrapper.getSightingCounter(),
+                                "Sightings" + File.separatorChar + sightingWrapper.toString(),
+                                files.toArray(new File[files.size()]),
+                                null, 300, app);
+                }
+                // Done processing
+                // Open the Visit and close the bulk upload tabs
+                UtilPanelGenerator.addPanelAsTab(
+                        UtilPanelGenerator.getVisitPanel(location, visit.getName()),
+                        ((JTabbedPane)getParent()));
+                closeTab();
+            }
+            else {
+                JOptionPane.showMessageDialog(this.getParent(), "The Visit name is not unique, please specify another one.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(this.getParent(), "Please provide a Location name and Visit name before saving.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkIncludeSubfolders;
     private javax.swing.JCheckBox chkShowInactiveTimes;
+    private javax.swing.JComboBox cmbVisitType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private javax.swing.JButton jButton2;
@@ -380,6 +510,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

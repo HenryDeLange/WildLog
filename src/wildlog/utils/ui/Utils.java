@@ -151,7 +151,7 @@ public final class Utils {
         return 0;
     }
 
-    private static void performFileUpload(String inID, String inFolderName, File[] inFiles, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static void performFileUpload(String inID, String inFolderName, File[] inFiles, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         for (int t = 0; t < inFiles.length; t++) {
             File fromFile = inFiles[t];
             if (fromFile != null && fromFile.isFile()) {
@@ -361,27 +361,29 @@ public final class Utils {
     }
 
     public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > inImageIndex) {
-            if (fotos.get(inImageIndex).getFotoType() != null) {
-                if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
-                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation(true)), inSize));
-                else
-                if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
-                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
-                else
-                if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.OTHER))
-                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
-                inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
+        if (inImageLabel != null) {
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
+            if (fotos.size() > inImageIndex) {
+                if (fotos.get(inImageIndex).getFotoType() != null) {
+                    if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
+                        inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation(true)), inSize));
+                    else
+                    if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
+                        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
+                    else
+                    if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.OTHER))
+                        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
+                    inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
+                }
+                else {
+                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+                    inImageLabel.setToolTipText("");
+                }
             }
             else {
                 inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
                 inImageLabel.setToolTipText("");
             }
-        }
-        else {
-            inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
-            inImageLabel.setToolTipText("");
         }
     }
 

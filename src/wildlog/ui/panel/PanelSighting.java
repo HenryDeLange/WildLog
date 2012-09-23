@@ -1,25 +1,17 @@
 package wildlog.ui.panel;
 
-import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
@@ -53,7 +45,7 @@ import wildlog.utils.ui.SpinnerFixer;
  *
  * @author  henry.delange
  */
-public class PanelSighting extends javax.swing.JPanel {
+public class PanelSighting extends JPanel {
     private Location location;
     private Visit visit;
     //private Visit oldVisit;
@@ -66,6 +58,8 @@ public class PanelSighting extends javax.swing.JPanel {
     private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
     private boolean treatAsNewSighting;
     private boolean disableEditing = false;
+    // TODO: Use this boolean to disable the location, visit, image upload (buttons and drag-drop) and prevent the save frm hitting the DB
+    private boolean bulkUploadMode = false;
 
     /** Creates new form PanelVisit */
     public PanelSighting(Sighting inSighting, Location inLocation, Visit inVisit, Element inElement, boolean inTreatAsNewSighting, boolean inDisableEditing) {

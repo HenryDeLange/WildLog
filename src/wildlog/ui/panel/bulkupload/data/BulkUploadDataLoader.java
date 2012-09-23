@@ -8,7 +8,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.ImageIcon;
-import wildlog.WildLogApp;
+import wildlog.data.enums.Certainty;
+import wildlog.data.enums.SightingEvidence;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
@@ -44,6 +45,9 @@ public class BulkUploadDataLoader {
                     sightingKey = new BulkUploadSightingWrapper(Utils.getScaledIconForNoImage(150));
                     // Set the date for this sighting
                     sightingKey.setDate(currentSightingDate);
+                    // Set other defaults for the sighting
+                    sightingKey.setCertainty(Certainty.SURE);
+                    sightingKey.setSightingEvidence(SightingEvidence.SEEN);
                     // Update the map
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
                     // Update the curent date to compare against
