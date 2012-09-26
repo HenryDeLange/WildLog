@@ -1,6 +1,7 @@
 package wildlog.ui.panel.bulkupload;
 
 import java.awt.Frame;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -12,13 +13,18 @@ import wildlog.utils.ui.Utils;
 
 public class ElementSelectionBox extends javax.swing.JDialog {
     private WildLogApp app;
+    private boolean selectionMade = false;
 
     /** Creates new form ElementSelectionBox */
-    public ElementSelectionBox(Frame inParent, boolean inIsModal, WildLogApp inApp) {
+    public ElementSelectionBox(Frame inParent, boolean inIsModal, WildLogApp inApp, String inSelectedElement) {
         super(inParent, inIsModal);
         app = inApp;
         initComponents();
         lstElements.setListData(app.getDBI().list(new Element()).toArray());
+        if (inSelectedElement != null && !inSelectedElement.isEmpty()) {
+            txtElementName.setText(inSelectedElement);
+            txtElementNameKeyReleased(null);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -67,9 +73,19 @@ public class ElementSelectionBox extends javax.swing.JDialog {
 
         lstElements.setName("lstElements"); // NOI18N
         lstElements.setSelectionBackground(resourceMap.getColor("lstElements.selectionBackground")); // NOI18N
+        lstElements.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lstElementsMouseClicked(evt);
+            }
+        });
         lstElements.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstElementsValueChanged(evt);
+            }
+        });
+        lstElements.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                lstElementsKeyReleased(evt);
             }
         });
         jScrollPane1.setViewportView(lstElements);
@@ -114,8 +130,11 @@ public class ElementSelectionBox extends javax.swing.JDialog {
 
     private void txtElementNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtElementNameKeyReleased
         for (int t = 0; t < lstElements.getModel().getSize(); t++) {
-            if (lstElements.getModel().getElementAt(t).toString().equals(txtElementName.getText())) {
+            if (lstElements.getModel().getElementAt(t).toString().equalsIgnoreCase(txtElementName.getText())) {
                 lstElements.setSelectedIndex(t);
+                if (t > 3) {
+                    lstElements.scrollRectToVisible(lstElements.getCellBounds(t, t));
+                }
                 break;
             }
             else {
@@ -129,14 +148,8 @@ public class ElementSelectionBox extends javax.swing.JDialog {
             String selectedName = lstElements.getSelectedValue().toString();
             // Change the location name
             txtElementName.setText(selectedName);
-            // Cahnge the image
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + selectedName));
-            if (fotos.size() > 0) {
-                Utils.setupFoto("ELEMENT-" + selectedName, 0, lblElementImage, 150, app);
-            }
-            else {
-                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
-            }
+            // Change the image
+            Utils.setupFoto("ELEMENT-" + selectedName, 0, lblElementImage, 150, app);
         }
         else {
             lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
@@ -150,8 +163,28 @@ public class ElementSelectionBox extends javax.swing.JDialog {
     }//GEN-LAST:event_lblElementImageMouseReleased
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        selectionMade = true;
         dispose();
     }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void lstElementsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstElementsKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            btnSelectActionPerformed(null);
+    }//GEN-LAST:event_lstElementsKeyReleased
+
+    private void lstElementsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstElementsMouseClicked
+        if (evt.getClickCount() == 2) {
+            btnSelectActionPerformed(null);
+        }
+    }//GEN-LAST:event_lstElementsMouseClicked
+
+    public boolean isSelectionMade() {
+        return selectionMade;
+    }
+
+    public void setSelectionMade(boolean inSelectionMade) {
+        selectionMade = inSelectionMade;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSelect;

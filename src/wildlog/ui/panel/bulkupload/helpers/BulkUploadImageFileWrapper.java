@@ -53,7 +53,7 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
             return 0;
     }
 
-    public boolean isInSameSighting(Date inDate, int inWindowPeriodInMiliseconds) {
+    public boolean isInSameSighting(Date inDate, long inWindowPeriodInMiliseconds) {
         if (inDate == null)
             return false;
         else

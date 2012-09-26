@@ -211,11 +211,14 @@
         </Component>
         <Component class="javax.swing.JSpinner" name="spnInactivityTime">
           <Properties>
+            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+              <SpinnerModel initial="120" maximum="10000000" minimum="1" numberType="java.lang.Integer" stepSize="1" type="number"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnInactivityTime" noResource="true"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="700" y="100" width="50" height="-1"/>
+              <AbsoluteConstraints x="630" y="100" width="60" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -242,7 +245,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="755" y="100" width="-1" height="20"/>
+              <AbsoluteConstraints x="695" y="100" width="-1" height="20"/>
             </Constraint>
           </Constraints>
         </Component>

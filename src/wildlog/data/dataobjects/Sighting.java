@@ -37,6 +37,7 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     private int latDegrees;
     private int latMinutes;
     //private int latSeconds;  // Old field not used anymore
+    // TODO: Make these double instead...
     private float latSecondsFloat;
     private Longitudes longitude;
     private int lonDegrees;
@@ -497,5 +498,5 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     public void setMoonlight(Moonlight inMoonlight) {
         moonlight = inMoonlight;
     }
-    
+
 }

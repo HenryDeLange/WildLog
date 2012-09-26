@@ -1,6 +1,5 @@
 package wildlog.ui.panel.bulkupload;
 
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
@@ -19,22 +19,23 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.Utils;
 
 
-public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdded {
+public class InfoBox extends JPanel {
     private WildLogApp app;
     private BulkUploadSightingWrapper sightingWrapper;
     private JTextField txtLocation;
     private JTextField txtVisit;
+    private JTable table;
 
     /** Creates new form InfoBox */
-    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JTextField inTxtLocation, JTextField inTxtVisit) {
+    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JTextField inTxtLocation, JTextField inTxtVisit, JTable inTable) {
         app = inApp;
         txtLocation = inTxtLocation;
         txtVisit = inTxtVisit;
+        table = inTable;
         initComponents();
         sightingWrapper = inBulkUploadSightingWrapper;
         populateUI();
@@ -186,9 +187,10 @@ public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdde
                 new Location(txtLocation.getText()),
                 new Visit(txtVisit.getText()),
                 new Element(sightingWrapper.getElementName()),
-                this,
+                null,
                 false,
-                false), new AbsoluteConstraints(0, 0, -1, -1));
+                false,
+                true), new AbsoluteConstraints(0, 0, -1, -1));
         //dialog.setLocationRelativeTo(this.getParent().getParent());
         Utils.setDialogToCenter(app.getMainFrame(), dialog);
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
@@ -196,26 +198,25 @@ public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdde
         ActionListener escListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                refreshTableForSightings();
                 dialog.dispose();
             }
         };
         dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
         dialog.setResizable(false);
         dialog.setVisible(true);
+        // Update the UI
+        table.getCellEditor().stopCellEditing();
+        Utils.setupFoto("ELEMENT-" + sightingWrapper.getElementName(), 0, lblImage, 150, app);
+        sightingWrapper.setIcon(lblImage.getIcon());
+        populateUI();
     }//GEN-LAST:event_btnEditActionPerformed
 
-    @Override
-    public void refreshTableForSightings() {
-        // TODO ???
-    }
-
     private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
-        final ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app);
+        final ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app, sightingWrapper.getElementName());
         ActionListener escListener = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                refreshTableForSightings();
+                dialog.setSelectionMade(false);
                 dialog.dispose();
             }
         };
@@ -223,7 +224,8 @@ public class InfoBox extends JPanel implements PanelNeedsRefreshWhenSightingAdde
         Utils.setDialogToCenter(app.getMainFrame(), dialog);
         dialog.setVisible(true);
         // Set the label to the selected text
-        if (dialog.getElementName() != null && dialog.getElementName().length() > 0) {
+        table.getCellEditor().stopCellEditing();
+        if (dialog.isSelectionMade() && dialog.getElementName() != null && dialog.getElementName().length() > 0) {
             sightingWrapper.setElementName(dialog.getElementName());
             sightingWrapper.setIcon(dialog.getElementIcon());
         }

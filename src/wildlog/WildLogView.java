@@ -18,8 +18,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1774,7 +1772,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 final JDialog dialog = new JDialog(app.getMainFrame(), "View an Existing Sighting", true);
                 dialog.setLayout(new AbsoluteLayout());
                 dialog.setSize(965, 625);
-                dialog.add(new PanelSighting(tempSighting, app.getDBI().find(new Location(tempSighting.getLocationName())), app.getDBI().find(new Visit(tempSighting.getVisitName())), app.getDBI().find(new Element(tempSighting.getElementName())), this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+                dialog.add(new PanelSighting(
+                        tempSighting, app.getDBI().find(new Location(tempSighting.getLocationName())),
+                        app.getDBI().find(new Visit(tempSighting.getVisitName())), app.getDBI().find(new Element(tempSighting.getElementName())),
+                        this, false, false),
+                        new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
                 dialog.setLocationRelativeTo(this.getComponent());
                 ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
                 dialog.setIconImage(icon.getImage());
@@ -1794,6 +1796,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Override
     public void refreshTableForSightings() {
+        // TODO: Use the provided sighting to do a smarter refresh without clearing the whole tree
         tabFotoComponentShown(null);
     }
 

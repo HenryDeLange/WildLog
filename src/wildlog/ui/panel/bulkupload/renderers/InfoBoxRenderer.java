@@ -22,7 +22,7 @@ public class InfoBoxRenderer implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        return new InfoBox(app, (BulkUploadSightingWrapper)value, txtLocation, txtVisit);
+        return new InfoBox(app, (BulkUploadSightingWrapper)value, txtLocation, txtVisit, table);
     }
 
 }

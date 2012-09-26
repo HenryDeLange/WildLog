@@ -212,7 +212,7 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="!disableEditing" type="code"/>
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
           </Properties>
@@ -553,7 +553,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
-            <Property name="enabled" type="boolean" value="false"/>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbElementType" noResource="true"/>
           </Properties>
           <Events>
@@ -675,7 +677,7 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="!disableEditing" type="code"/>
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
@@ -698,7 +700,7 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="!disableEditing" type="code"/>
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
           </Properties>
@@ -761,7 +763,7 @@
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="font" type="java.awt.Font" resourceKey="tblLocation.font"/>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="!disableEditing" type="code"/>
+                  <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblLocation" noResource="true"/>
                 <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblLocation.selectionBackground"/>
@@ -796,7 +798,7 @@
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
                 <Property name="font" type="java.awt.Font" resourceKey="tblVisit.font"/>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                  <Connection code="!disableEditing" type="code"/>
+                  <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblVisit" noResource="true"/>
                 <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblVisit.selectionBackground"/>
@@ -838,7 +840,7 @@
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="txtSearchLocation.text"/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="!disableEditing" type="code"/>
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtSearchLocation" noResource="true"/>
           </Properties>
@@ -928,7 +930,7 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="!disableEditing" type="code"/>
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnSearchLocation" noResource="true"/>
           </Properties>
@@ -996,6 +998,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="rdbDMS" noResource="true"/>
           </Properties>
           <Events>
@@ -1017,6 +1022,9 @@
             <Property name="toolTipText" type="java.lang.String" resourceKey="rdbDD.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="rdbDD" noResource="true"/>
           </Properties>
@@ -1049,6 +1057,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnUsePrevGPS" noResource="true"/>
           </Properties>
           <Events>
@@ -1067,6 +1078,9 @@
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnUseLocationGPS.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnUseLocationGPS" noResource="true"/>
           </Properties>
@@ -1087,6 +1101,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnNumberOfElements" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1104,6 +1121,9 @@
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnGetDateFromImage.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 2, 2, 2]"/>
@@ -1161,6 +1181,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 2, 2, 2]"/>
             </Property>
@@ -1194,6 +1217,9 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getMoonlight()" type="code"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="cmbMoonlight" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1209,6 +1235,9 @@
             </Property>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="spnHours" noResource="true"/>
           </Properties>
@@ -1226,6 +1255,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnMinutes" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1241,6 +1273,9 @@
             </Property>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="spnMoonPhase" noResource="true"/>
           </Properties>
@@ -1258,6 +1293,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnLatDegrees" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1274,6 +1312,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnLatMinutes" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1289,6 +1330,9 @@
             </Property>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="spnLatSeconds" noResource="true"/>
             <Property name="value" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -1325,6 +1369,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnLonDegrees" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1341,6 +1388,9 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="spnLonMinutes" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1356,6 +1406,9 @@
             </Property>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="spnLonSeconds" noResource="true"/>
           </Properties>

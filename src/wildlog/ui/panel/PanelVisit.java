@@ -65,7 +65,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private Location locationForVisit;
     private Sighting sighting;
     private int imageSightingIndex;
-    
+
     /** Creates new form PanelVisit */
     public PanelVisit(Location inLocation, Visit inVisit) {
         app = (WildLogApp) Application.getInstance();
@@ -87,7 +87,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         imageSightingIndex = 0;
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         tblSightings.getTableHeader().setReorderingAllowed(false);
-        
+
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
             @Override
@@ -102,23 +102,23 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
     }
-    
+
     public void setVisit(Visit inVisit) {
         visit = inVisit;
     }
-    
+
     public Visit getVisit() {
         return visit;
     }
-    
+
     public void setLocationForVisit(Location inLocation) {
         locationForVisit = inLocation;
     }
-    
+
     public Location getLocationForVisit() {
         return locationForVisit;
     }
-    
+
     @Override
     public boolean equals(Object inObject) {
         if (getClass() != inObject.getClass()) return false;
@@ -134,7 +134,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 return false;
         return true;
     }
-    
+
     @Override
     public void setupTabHeader() {
         JPanel tabHeader = new JPanel();
@@ -156,7 +156,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         tabHeader.setBackground(new Color(0, 0, 0, 0));
         ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
     }
-    
+
     public void closeTab() {
         ((JTabbedPane)getParent()).remove(this);
     }
@@ -166,7 +166,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         //app.getDBI().refresh(locationForVisit);
         formComponentShown(null);
     }
-    
+
     private void refreshSightingInfo() {
         if (sighting != null) {
             if (sighting.getElementName() != null) {
@@ -196,8 +196,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightingImages.setText("");
         }
     }
-    
-    
+
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -1170,7 +1170,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                     for (WildLogFile tempFile : files) {
                         if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") || 
+                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
                                 tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
                                 slideshowList.add(tempFile.getOriginalFotoLocation(true));
                             }
@@ -1208,7 +1208,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 List<WildLogFile> files = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
                 for (WildLogFile tempFile : files) {
                     if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                        if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") || 
+                        if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
                             tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
                             slideshowList.add(tempFile.getOriginalFotoLocation(true));
                         }
@@ -1257,7 +1257,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         Date date = new Date(inDate);
         return date;
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnChecklist;
@@ -1314,5 +1314,5 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JTextField txtName;
     private javax.swing.JPanel visitIncludes;
     // End of variables declaration//GEN-END:variables
-    
+
 }

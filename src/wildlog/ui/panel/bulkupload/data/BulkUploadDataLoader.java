@@ -18,11 +18,9 @@ import wildlog.utils.ui.Utils;
 
 public class BulkUploadDataLoader {
 
-    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive) {
+    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds) {
         // TODO: Since this action maxes out the CPU (thus not bottlenecking at the disk IO) multithreading should help to improve performance
-
         List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
-
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>();
         // First load all the images and sort them according to date
@@ -32,15 +30,15 @@ public class BulkUploadDataLoader {
                     new BulkUploadImageFileWrapper(file, Utils.getScaledIcon(new ImageIcon(file.getAbsolutePath()), 200), date, true));
         }
         Collections.sort(imageList);
-
+        long timeDiffInMiliseconds = inSightingDurationInSeconds*1000;
         // Next calculate the sightings and build the Object[][]
         Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =
                 new LinkedHashMap<BulkUploadSightingWrapper, BulkUploadImageListWrapper>(imageList.size());
         if (imageList.size() > 0) {
-            Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - 120000*2);
+            Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
             BulkUploadSightingWrapper sightingKey = null;
             for (BulkUploadImageFileWrapper temp : imageList) {
-                if (!temp.isInSameSighting(currentSightingDate, 120000)) {
+                if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
                     sightingKey = new BulkUploadSightingWrapper(Utils.getScaledIconForNoImage(150));
                     // Set the date for this sighting
@@ -57,7 +55,6 @@ public class BulkUploadDataLoader {
                 finalMap.get(sightingKey).getImageList().add(temp);
             }
         }
-
         // Return the results
         BulkUploadDataWrapper wrapper = new BulkUploadDataWrapper();
         if (!imageList.isEmpty()) {

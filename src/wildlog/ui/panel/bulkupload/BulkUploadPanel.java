@@ -9,11 +9,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,11 +27,9 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.panel.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panel.bulkupload.data.BulkUploadDataWrapper;
 import wildlog.ui.panel.bulkupload.editors.ImageBoxEditor;
@@ -116,7 +111,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected());
+        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue());
         model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
         model.fireTableDataChanged();
 
@@ -257,8 +252,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel6.setName("jLabel6"); // NOI18N
         pnlTop.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 100, -1, 20));
 
+        spnInactivityTime.setModel(new javax.swing.SpinnerNumberModel(120, 1, 10000000, 1));
         spnInactivityTime.setName("spnInactivityTime"); // NOI18N
-        pnlTop.add(spnInactivityTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 50, -1));
+        pnlTop.add(spnInactivityTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, 60, -1));
 
         btnReload.setBackground(resourceMap.getColor("btnReload.background")); // NOI18N
         btnReload.setIcon(resourceMap.getIcon("btnReload.icon")); // NOI18N
@@ -273,7 +269,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
-        pnlTop.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(755, 100, -1, 20));
+        pnlTop.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 100, -1, 20));
 
         jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
