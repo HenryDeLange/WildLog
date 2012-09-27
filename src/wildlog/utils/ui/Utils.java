@@ -583,41 +583,55 @@ public final class Utils {
 
     public static Date getExifDateFromJpeg(File inFile) {
         try {
-            Metadata meta = JpegMetadataReader.readMetadata(inFile);
-            Iterator<Directory> directories = meta.getDirectories().iterator();
-            while (directories.hasNext()) {
-                Directory directory = (Directory)directories.next();
-                Collection<Tag> tags = directory.getTags();
-                for (Tag tag : tags) {
-                    if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
-                        // Not all files store the date in the same format, so I have to try a few known formats...
-                        // Try 1:
-                        try {
-                            // This seems to be by far the most used format
-                            return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
-                        }
-                        catch (ParseException ex) {
-                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
-                            ex.printStackTrace(System.err);
-                        }
-                        // Try 2:
-                        try {
-                            // Wierd format used by Samsung Galaxy Gio (Android)
-                            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
-                        }
-                        catch (ParseException ex) {
-                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
-                            ex.printStackTrace(System.err);
-                        }
-                    }
-                }
-            }
+            return getExifDateFromJpeg(JpegMetadataReader.readMetadata(inFile));
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
         catch (JpegProcessingException ex) {
             ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+
+    public static Date getExifDateFromJpeg(InputStream inInputStream) {
+        try {
+            return getExifDateFromJpeg(JpegMetadataReader.readMetadata(inInputStream));
+        }
+        catch (JpegProcessingException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+
+    private static Date getExifDateFromJpeg(Metadata inMeta) {
+        Iterator<Directory> directories = inMeta.getDirectories().iterator();
+        while (directories.hasNext()) {
+            Directory directory = (Directory)directories.next();
+            Collection<Tag> tags = directory.getTags();
+            for (Tag tag : tags) {
+                if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
+                    // Not all files store the date in the same format, so I have to try a few known formats...
+                    // Try 1:
+                    try {
+                        // This seems to be by far the most used format
+                        return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
+                    }
+                    catch (ParseException ex) {
+                        System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
+                        ex.printStackTrace(System.err);
+                    }
+                    // Try 2:
+                    try {
+                        // Wierd format used by Samsung Galaxy Gio (Android)
+                        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
+                    }
+                    catch (ParseException ex) {
+                        System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }
         }
         return null;
     }

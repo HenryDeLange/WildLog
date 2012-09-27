@@ -2,10 +2,12 @@ package wildlog.ui.panel.bulkupload.helpers;
 
 import javax.swing.Icon;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.ui.panel.bulkupload.InfoBox;
 
 
 public class BulkUploadSightingWrapper extends Sighting {
     private Icon icon;
+    private InfoBox infoBox;
 
     public BulkUploadSightingWrapper(Icon inIcon) {
         icon = inIcon;
@@ -27,6 +29,14 @@ public class BulkUploadSightingWrapper extends Sighting {
 
     public void setIcon(Icon inIcon) {
         icon = inIcon;
+    }
+
+    public InfoBox getInfoBox() {
+        return infoBox;
+    }
+
+    public void setInfoBox(InfoBox inInfoBox) {
+        infoBox = inInfoBox;
     }
 
 }

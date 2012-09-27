@@ -3,22 +3,25 @@ package wildlog.ui.panel.bulkupload.helpers;
 import java.io.File;
 import java.util.Date;
 import javax.swing.Icon;
+import wildlog.ui.panel.bulkupload.ImageBox;
 
 
 public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFileWrapper> {
-    // FIXME: Maak miskien dat die Imagewrapper nie net 'n reference an sy icon hou nie maar sommer die hele panel, vir maklikke reuse by rendering
     private Icon icon;
+    private ImageBox imageBox;
     private File file;
     private Date date;
-    // FIXME: Is this property really needed?
-    private boolean includeInImport = true;
 
 
-    public BulkUploadImageFileWrapper(File inFile, Icon inIcon, Date inDate, boolean inIncludeInImport) {
+    public BulkUploadImageFileWrapper(File inFile, Icon inIcon, Date inDate) {
+        this(inFile, inIcon, inDate, null);
+    }
+
+    public BulkUploadImageFileWrapper(File inFile, Icon inIcon, Date inDate, ImageBox inImageBox) {
         file = inFile;
         icon = inIcon;
         date = inDate;
-        includeInImport = inIncludeInImport;
+        imageBox = inImageBox;
     }
 
     public Icon getIcon() {
@@ -35,14 +38,6 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
 
     public void setDate(Date inDate) {
         date = inDate;
-    }
-
-    public boolean isIncludeInImport() {
-        return includeInImport;
-    }
-
-    public void setIncludeInImport(boolean inIncludeInImport) {
-        includeInImport = inIncludeInImport;
     }
 
     @Override
@@ -70,7 +65,15 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     }
 
     public BulkUploadImageFileWrapper getClone() {
-        return new BulkUploadImageFileWrapper(file, icon, date, includeInImport);
+        return new BulkUploadImageFileWrapper(file, icon, date, imageBox);
+    }
+
+    public ImageBox getImageBox() {
+        return imageBox;
+    }
+
+    public void setImageBox(ImageBox inImageBox) {
+        imageBox = inImageBox;
     }
 
 }

@@ -7,8 +7,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.TableCellEditor;
 import wildlog.WildLogApp;
-import wildlog.ui.panel.bulkupload.InfoBox;
-import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.panel.bulkupload.renderers.InfoBoxRenderer;
 
 
 public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor {
@@ -35,10 +34,8 @@ public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor
 
     @Override
     public Component getTableCellEditorComponent(JTable inTable, Object inValue, boolean inIsSelected, int inRow, int inColumn) {
-//        System.out.println("InfoBox Editor " + inRow + "-" + inColumn);
         editorValue = inValue;
-        InfoBox infoBox = new InfoBox(app, (BulkUploadSightingWrapper)inValue, txtLocation, txtVisit, inTable);
-        return infoBox;
+        return InfoBoxRenderer.drawInfoBox(inTable, inValue, app, txtLocation, txtVisit);
     }
 
 }

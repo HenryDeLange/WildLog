@@ -28,7 +28,6 @@ public class ImageBoxEditor extends AbstractCellEditor implements TableCellEdito
 
     @Override
     public Component getTableCellEditorComponent(JTable inTable, Object inValue, boolean inIsSelected, int inRow, int inColumn) {
-//        System.out.println("ImageBox Editor " + inRow + "-" + inColumn);
         editorValue = inValue;
         return ImageBoxRenderer.drawImageBoxes(inValue, inTable, inRow, inColumn);
     }

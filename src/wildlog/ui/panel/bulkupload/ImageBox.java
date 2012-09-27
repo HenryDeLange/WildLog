@@ -19,13 +19,12 @@ public class ImageBox extends JPanel {
         imageWrapper = inBulkUploadImageFileWrapper;
         table = inTable;
         populateUI();
+        imageWrapper.setImageBox(this);
     }
 
-    private void populateUI() {
+    public final void populateUI() {
         // Setup the image label
         lblImage.setIcon(imageWrapper.getIcon());
-        // TODO: visualise the unselected images (background colour and a special image, etc.)
-        //inBulkUploadImageFileWrapper.isIncludeInImport()
     }
 
     /** This method is called from within the constructor to

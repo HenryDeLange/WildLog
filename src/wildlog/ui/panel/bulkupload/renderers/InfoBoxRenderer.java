@@ -22,8 +22,17 @@ public class InfoBoxRenderer implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
-//        System.out.println("InfoBox Renderer " + inRow + "-" + inColumn);
-        InfoBox infoBox = new InfoBox(app, (BulkUploadSightingWrapper)inValue, txtLocation, txtVisit, inTable);
+        return drawInfoBox(inTable, inValue, app, txtLocation, txtVisit);
+    }
+
+    public static Component drawInfoBox(JTable inTable, Object inValue, WildLogApp inApp, JTextField inTxtLocation, JTextField inTxtVisit) {
+        // Try to use the old panel if possible (I'm assuming it will be faster, but might use more memory and cause issues)
+        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)inValue;
+        InfoBox infoBox = sightingWrapper.getInfoBox();
+        if (infoBox == null)
+            infoBox = new InfoBox(inApp, sightingWrapper, inTxtLocation, inTxtVisit, inTable);
+        else
+            infoBox.populateUI();
         return infoBox;
     }
 

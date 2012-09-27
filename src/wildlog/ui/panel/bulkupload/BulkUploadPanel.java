@@ -63,16 +63,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         getLocationList();
         // Load the images
         loadImages();
-        // "Hack" to make the buttons clickable when teh mouse scrolles over the cell
+        // "Hack" to make the buttons clickable when teh mouse scrolles over the cell (very performance intensive, but "better" now...)
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                super.mouseEntered(e);
-                // FIXME: For performance reasons try to find a way of only triggering this once as a new cell becomes editable (thus only constantly checking the boolean)
-//                if (!tableHandle.isCellEditable(tableHandle.rowAtPoint(e.getPoint()), tableHandle.columnAtPoint(e.getPoint()))) {
-                    tableHandle.editCellAt(tableHandle.rowAtPoint(e.getPoint()), tableHandle.columnAtPoint(e.getPoint()));
-//                }
+                int row = tableHandle.rowAtPoint(e.getPoint());
+                int col = tableHandle.columnAtPoint(e.getPoint());
+                if (row != tableHandle.getEditingRow() || col != tableHandle.getEditingColumn()) {
+                    tableHandle.editCellAt(row, col);
+                }
             }
         });
     }

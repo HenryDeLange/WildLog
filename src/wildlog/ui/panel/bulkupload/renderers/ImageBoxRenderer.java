@@ -1,6 +1,5 @@
 package wildlog.ui.panel.bulkupload.renderers;
 
-import java.awt.Color;
 import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -17,38 +16,13 @@ public class ImageBoxRenderer implements TableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
-//        System.out.println("ImageBox Renderer " + inRow + "-" + inColumn);
         return drawImageBoxes(inValue, inTable, inRow, inColumn);
     }
 
     public static JPanel drawImageBoxes(Object inValue, JTable inTable, int inRow, int inColumn) {
-//        BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
-//        if (imageListWrapper.getImageList().isEmpty()) {
-//            return null;
-//        }
-////        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-//        JPanel panel = new JPanel(new BoxLayout(inTable, inRow));
-//        Color backgroundColor = new Color(235-(inRow%2*25), 246-(inRow%2*25), 220-(inRow%2*25));
-//panel.setBackground(new Color(200, 100, 100));
-//panel.setBorder(new EmptyBorder(0,0,0,0));
-//        for (BulkUploadImageFileWrapper imageWrapper : imageListWrapper.getImageList()) {
-//            ImageBox imageBox = new ImageBox(imageWrapper, inTable);
-//            imageBox.setBackground(backgroundColor);
-//            panel.add(imageBox);
-//        }
-//        final int imageBoxHeight = 250;
-//        final int randomBuffer = 0; // FIXME: I don't know why I need to correct the space like this... Somewhere some buffering is being set...
-//        int newHeight = imageBoxHeight * (int)Math.ceil((double)((double)imageListWrapper.getImageList().size()
-//                / (int)((inTable.getColumnModel().getColumn(inColumn).getWidth() + randomBuffer) / imageBoxHeight)));
-//        if (inTable.getRowHeight(inRow) != newHeight) {
-//            System.out.println("Changing row height....................... " + inRow + " " + newHeight);
-//            inTable.setRowHeight(inRow, newHeight);
-//        }
-//        return panel;
+// FIXME: Possible issue still present where for some reason (after this "performance increases") a cell sometimes does not render or only slow rendering, but it seems to show again when scrolling or hovering over...
+        // Note: Java alsready only calls this method for visible rows, so no need to check that
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
-//        if (imageListWrapper.getImageList().isEmpty()) {
-//            return null;
-//        }
         JPanel panel = new JPanel(new AbsoluteLayout());
         if (inRow%2 == 0)
             panel.setBackground(BulkUploadPanel.tableBackgroundColor1);
@@ -61,14 +35,18 @@ public class ImageBoxRenderer implements TableCellRenderer {
         for (BulkUploadImageFileWrapper imageWrapper : imageListWrapper.getImageList()) {
             if (posX == 0)
                 posY++;
-            ImageBox imageBox = new ImageBox(imageWrapper, inTable);
+            // Try to use the old panel if possible (I'm assuming it will be faster, but might use more memory and cause issues)
+            ImageBox imageBox = imageWrapper.getImageBox();
+            if (imageBox == null)
+                imageBox = new ImageBox(imageWrapper, inTable);
+            else
+                imageBox.populateUI();
             imageBox.setBackground(panel.getBackground());
             panel.add(imageBox, new AbsoluteConstraints(imageBoxSize*posX++, imageBoxSize*posY, imageBoxSize, imageBoxSize));
             if (posX == imagesPerRow)
                 posX = 0;
         }
         if (inTable.getRowHeight(inRow) != imageBoxSize*(posY+1)) {
-//            System.out.println("Changing row height....................... " + inRow + " " + imageBoxSize*(posY+1));
             inTable.setRowHeight(inRow, imageBoxSize*(posY+1));
         }
         return panel;

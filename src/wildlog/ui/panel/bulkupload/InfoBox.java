@@ -24,6 +24,8 @@ import wildlog.utils.ui.Utils;
 
 
 public class InfoBox extends JPanel {
+    private static final SimpleDateFormat dateFormater = new SimpleDateFormat("dd MMM yyyy");
+    private static final SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
     private WildLogApp app;
     private BulkUploadSightingWrapper sightingWrapper;
     private JTextField txtLocation;
@@ -39,12 +41,13 @@ public class InfoBox extends JPanel {
         initComponents();
         sightingWrapper = inBulkUploadSightingWrapper;
         populateUI();
+        sightingWrapper.setInfoBox(this);
     }
 
-    private void populateUI() {
+    public final void populateUI() {
         if (sightingWrapper.getDate() != null) {
-            lblDate.setText(new SimpleDateFormat("dd MMM yyyy").format(sightingWrapper.getDate()));
-            lblTime.setText(new SimpleDateFormat("HH:mm:ss").format(sightingWrapper.getDate()));
+            lblDate.setText(dateFormater.format(sightingWrapper.getDate()));
+            lblTime.setText(timeFormater.format(sightingWrapper.getDate()));
         }
         lblElementName.setText(sightingWrapper.getElementName());
         lblLatitude.setText(Double.toString(
