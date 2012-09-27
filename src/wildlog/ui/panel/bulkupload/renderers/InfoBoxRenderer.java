@@ -21,8 +21,10 @@ public class InfoBoxRenderer implements TableCellRenderer {
     }
 
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        return new InfoBox(app, (BulkUploadSightingWrapper)value, txtLocation, txtVisit, table);
+    public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
+//        System.out.println("InfoBox Renderer " + inRow + "-" + inColumn);
+        InfoBox infoBox = new InfoBox(app, (BulkUploadSightingWrapper)inValue, txtLocation, txtVisit, inTable);
+        return infoBox;
     }
 
 }

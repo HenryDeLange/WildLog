@@ -98,10 +98,10 @@ public class InfoBox extends JPanel {
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(resourceMap.getString("lblElementName.text")); // NOI18N
         lblElementName.setName("lblElementName"); // NOI18N
-        add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 3, 230, 20));
+        add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 3, 230, 20));
 
         jSeparator2.setName("jSeparator2"); // NOI18N
-        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 27, 230, 10));
+        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 27, 230, 10));
 
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
@@ -153,7 +153,7 @@ public class InfoBox extends JPanel {
                 lblImageMouseReleased(evt);
             }
         });
-        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 150, 150));
+        add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 85, 150, 150));
 
         btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -163,7 +163,7 @@ public class InfoBox extends JPanel {
                 btnEditActionPerformed(evt);
             }
         });
-        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, 80, 70));
+        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 165, 80, 70));
 
         btnChooseCreature.setText(resourceMap.getString("btnChooseCreature.text")); // NOI18N
         btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
@@ -174,7 +174,7 @@ public class InfoBox extends JPanel {
                 btnChooseCreatureActionPerformed(evt);
             }
         });
-        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 90, 80, 70));
+        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 70));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed

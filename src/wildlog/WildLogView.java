@@ -1796,7 +1796,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Override
     public void refreshTableForSightings() {
-        // TODO: Use the provided sighting to do a smarter refresh without clearing the whole tree
+        // TODO: Do a smarter refresh without clearing the whole tree
         tabFotoComponentShown(null);
     }
 

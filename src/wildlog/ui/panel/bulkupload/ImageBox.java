@@ -64,23 +64,25 @@ public class ImageBox extends JPanel {
 
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUp.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnUp.setName("btnUp"); // NOI18N
         btnUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpActionPerformed(evt);
             }
         });
-        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 40, 100));
+        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 100));
 
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDown.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnDown.setName("btnDown"); // NOI18N
         btnDown.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDownActionPerformed(evt);
             }
         });
-        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 40, 100));
+        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
 
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -90,7 +92,7 @@ public class ImageBox extends JPanel {
                 btnRemoveActionPerformed(evt);
             }
         });
-        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 80, 40));
+        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 80, 30));
 
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -100,7 +102,7 @@ public class ImageBox extends JPanel {
                 btnNewSightingActionPerformed(evt);
             }
         });
-        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 80, 40));
+        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
         btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
         btnClone.setName("btnClone"); // NOI18N
@@ -109,7 +111,7 @@ public class ImageBox extends JPanel {
                 btnCloneActionPerformed(evt);
             }
         });
-        add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 205, 80, 40));
+        add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 205, 80, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
@@ -145,8 +147,9 @@ public class ImageBox extends JPanel {
         if (currentListWrapper.getImageList().isEmpty()) {
             model.removeRow(row);
         }
-        else
+        else {
             model.fireTableCellUpdated(row, col);
+        }
         BulkUploadImageListWrapper newListWrapper = new BulkUploadImageListWrapper();
         newListWrapper.getImageList().add(imageWrapper);
         if (imageWrapper.getDate().before(currentSightingWrapper.getDate())) {

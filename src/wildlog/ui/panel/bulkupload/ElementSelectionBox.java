@@ -2,12 +2,12 @@ package wildlog.ui.panel.bulkupload;
 
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.utils.ui.Utils;
 
 
@@ -20,7 +20,9 @@ public class ElementSelectionBox extends javax.swing.JDialog {
         super(inParent, inIsModal);
         app = inApp;
         initComponents();
-        lstElements.setListData(app.getDBI().list(new Element()).toArray());
+        List<Element> elements = app.getDBI().list(new Element());
+        Collections.sort(elements);
+        lstElements.setListData(elements.toArray());
         if (inSelectedElement != null && !inSelectedElement.isEmpty()) {
             txtElementName.setText(inSelectedElement);
             txtElementNameKeyReleased(null);

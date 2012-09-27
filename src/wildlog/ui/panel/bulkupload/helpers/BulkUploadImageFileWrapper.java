@@ -6,6 +6,7 @@ import javax.swing.Icon;
 
 
 public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFileWrapper> {
+    // FIXME: Maak miskien dat die Imagewrapper nie net 'n reference an sy icon hou nie maar sommer die hele panel, vir maklikke reuse by rendering
     private Icon icon;
     private File file;
     private Date date;

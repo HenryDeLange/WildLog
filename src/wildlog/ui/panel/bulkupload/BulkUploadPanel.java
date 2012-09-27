@@ -10,6 +10,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -48,6 +49,9 @@ import wildlog.utils.ui.Utils;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
+    public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
+    public final static Color tableBackgroundColor2 = new Color(215, 226, 200);
+
 
     /** Creates new form BulkUploadPanel */
     public BulkUploadPanel() {
@@ -55,13 +59,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         imageIndex = 0;
         // Init auto generated code
         initComponents();
-
         // Setup the Location list
         getLocationList();
         // Load the images
         loadImages();
-
-        // Hack to make the buttons clickable when teh mouse scrolles over the cell
+        // "Hack" to make the buttons clickable when teh mouse scrolles over the cell
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -101,7 +103,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private void getLocationList() {
-        lstLocation.setListData(app.getDBI().list(new Location()).toArray());
+        List<Location> locations = app.getDBI().list(new Location());
+        Collections.sort(locations);
+        lstLocation.setListData(locations.toArray());
     }
 
     private void loadImages() {
@@ -170,9 +174,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
-        setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
         setName("Form"); // NOI18N
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         setLayout(new java.awt.BorderLayout());
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(BulkUploadPanel.class);
@@ -239,6 +247,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
         pnlTop.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 130, 80));
 
+        txtVisitName.setBackground(resourceMap.getColor("txtVisitName.background")); // NOI18N
         txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()));
         txtVisitName.setName("txtVisitName"); // NOI18N
         pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 200, -1));
@@ -253,12 +262,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         pnlTop.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 100, -1, 20));
 
         spnInactivityTime.setModel(new javax.swing.SpinnerNumberModel(120, 1, 10000000, 1));
+        spnInactivityTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnInactivityTime.setName("spnInactivityTime"); // NOI18N
         pnlTop.add(spnInactivityTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 100, 60, -1));
 
         btnReload.setBackground(resourceMap.getColor("btnReload.background")); // NOI18N
         btnReload.setIcon(resourceMap.getIcon("btnReload.icon")); // NOI18N
         btnReload.setText(resourceMap.getString("btnReload.text")); // NOI18N
+        btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReload.setName("btnReload"); // NOI18N
         btnReload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -286,9 +297,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         jButton2.setBackground(resourceMap.getColor("jButton2.background")); // NOI18N
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setName("jButton2"); // NOI18N
         pnlTop.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 100, 30));
 
+        txtLocationName.setBackground(resourceMap.getColor("txtLocationName.background")); // NOI18N
         txtLocationName.setText(resourceMap.getString("txtLocationName.text")); // NOI18N
         txtLocationName.setName("txtLocationName"); // NOI18N
         txtLocationName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -314,6 +327,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         jButton3.setBackground(resourceMap.getColor("jButton3.background")); // NOI18N
         jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setName("jButton3"); // NOI18N
         pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 100, 30));
 
@@ -336,6 +350,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
 
+        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         tblBulkImport.setBackground(resourceMap.getColor("tblBulkImport.background")); // NOI18N
@@ -353,16 +369,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.setFocusable(false);
         tblBulkImport.setGridColor(resourceMap.getColor("tblBulkImport.gridColor")); // NOI18N
         tblBulkImport.setName("tblBulkImport"); // NOI18N
-        tblBulkImport.setRowHeight(270);
+        tblBulkImport.setRowHeight(250);
         tblBulkImport.setSelectionBackground(resourceMap.getColor("tblBulkImport.selectionBackground")); // NOI18N
         tblBulkImport.setSelectionForeground(resourceMap.getColor("tblBulkImport.selectionForeground")); // NOI18N
         tblBulkImport.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblBulkImport.getTableHeader().setResizingAllowed(false);
         tblBulkImport.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(tblBulkImport);
-        tblBulkImport.getColumnModel().getColumn(0).setMinWidth(250);
-        tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(250);
-        tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(250);
+        tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
+        tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
+        tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
         tblBulkImport.getColumnModel().getColumn(0).setHeaderValue(resourceMap.getString("tblBulkImport.columnModel.title0")); // NOI18N
         tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, txtLocationName, txtVisitName));
         tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, txtLocationName, txtVisitName));
@@ -394,7 +410,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void txtLocationNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLocationNameKeyReleased
         for (int t = 0; t < lstLocation.getModel().getSize(); t++) {
-            if (lstLocation.getModel().getElementAt(t).toString().equals(txtLocationName.getText())) {
+            if (lstLocation.getModel().getElementAt(t).toString().equalsIgnoreCase(txtLocationName.getText())) {
                 lstLocation.setSelectedIndex(t);
                 break;
             }
@@ -415,6 +431,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // FIXME: Clean/refactor up this (and related sighting saving) code to be "robust" and re-useable...
+        // TODO: Close the tab sooner (once validation is fine) and then use the progressbar to keep track of the saving
         if (txtLocationName.getText() != null && !txtLocationName.getText().isEmpty()
                 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
             DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
@@ -491,6 +508,33 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             JOptionPane.showMessageDialog(this.getParent(), "Please provide a Location name and Visit name before saving.", "Can't Save", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        // Reload the locations as they might have changed
+        getLocationList();
+        txtLocationNameKeyReleased(null);
+        // Re-check all species images already assigned since some might have changed
+        DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
+        for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
+            if (sightingWrapper.getElementName() != null && !sightingWrapper.getElementName().isEmpty()) {
+                List<Element> elements = app.getDBI().list(new Element());
+                boolean foundElement = false;
+                for (Element element : elements) {
+                    if (sightingWrapper.getElementName().equalsIgnoreCase(element.getPrimaryName())) {
+                        JLabel tempLabel = new JLabel();
+                        Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, tempLabel, 150, app);
+                        sightingWrapper.setIcon(tempLabel.getIcon());
+                        foundElement = true;
+                        break;
+                    }
+                }
+                if (!foundElement) {
+                    sightingWrapper.setIcon(Utils.getScaledIconForNoImage(150));
+                }
+            }
+        }
+    }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReload;

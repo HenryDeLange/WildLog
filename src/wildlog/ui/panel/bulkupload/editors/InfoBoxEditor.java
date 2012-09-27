@@ -24,7 +24,7 @@ public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor
     }
 
     @Override
-    public boolean isCellEditable(EventObject anEvent) {
+    public boolean isCellEditable(EventObject inEvent) {
         return true;
     }
 
@@ -34,9 +34,11 @@ public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor
     }
 
     @Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
-        editorValue = value;
-        return new InfoBox(app, (BulkUploadSightingWrapper)value, txtLocation, txtVisit, table);
+    public Component getTableCellEditorComponent(JTable inTable, Object inValue, boolean inIsSelected, int inRow, int inColumn) {
+//        System.out.println("InfoBox Editor " + inRow + "-" + inColumn);
+        editorValue = inValue;
+        InfoBox infoBox = new InfoBox(app, (BulkUploadSightingWrapper)inValue, txtLocation, txtVisit, inTable);
+        return infoBox;
     }
 
 }
