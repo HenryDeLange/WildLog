@@ -70,7 +70,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             Utils.setupFoto("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
         }
         setupNumberOfImages();
 

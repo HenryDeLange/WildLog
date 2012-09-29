@@ -12,15 +12,15 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.FileImageInputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -67,44 +69,66 @@ public final class Utils {
         return ext;
     }
 
-    public static ImageIcon getScaledIcon(ImageIcon inIcon, int inSize) {
-        int finalHeight = inSize;
-        int finalWidth = inSize;
-        if (inIcon.getImage().getHeight(null) >= inIcon.getImage().getWidth(null)) {
-            if (inIcon.getImage().getHeight(null) >= inSize) {
-                double ratio = (double)inIcon.getImage().getHeight(null)/inSize;
-                finalWidth = (int)(inIcon.getImage().getWidth(null)/ratio);
+    public static ImageIcon getScaledIcon(File inFile, int inSize) {
+        try {
+            FileImageInputStream inputStream = new FileImageInputStream(inFile);
+            Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
+            ImageReader imageReader = imageReaderList.next();
+            imageReader.setInput(inputStream);
+            int imageWidth = imageReader.getWidth(imageReader.getMinIndex());
+            int imageHeight = imageReader.getHeight(imageReader.getMinIndex());
+            int finalHeight = inSize;
+            int finalWidth = inSize;
+            if (imageHeight >= imageWidth) {
+                if (imageHeight >= inSize) {
+                    double ratio = (double)imageHeight/inSize;
+                    finalWidth = (int)(imageWidth/ratio);
+                }
+                else {
+                    double ratio = (double)inSize/imageHeight;
+                    finalWidth = (int)(imageWidth*ratio);
+                }
             }
             else {
-                double ratio = (double)inSize/inIcon.getImage().getHeight(null);
-                finalWidth = (int)(inIcon.getImage().getWidth(null)*ratio);
+                if (imageWidth >= inSize) {
+                    double ratio = (double)imageWidth/inSize;
+                    finalHeight = (int)(imageHeight/ratio);
+                }
+                else {
+                    double ratio = (double)imageWidth;
+                    finalHeight = (int)(imageHeight*ratio);
+                }
             }
+            imageReader.dispose();
+            inputStream.close();
+            return new ImageIcon(getScaledImage(Toolkit.getDefaultToolkit().createImage(inFile.getAbsolutePath()), finalWidth, finalHeight));
         }
-        else {
-            if (inIcon.getImage().getWidth(null) >= inSize) {
-                double ratio = (double)inIcon.getImage().getWidth(null)/inSize;
-                finalHeight = (int)(inIcon.getImage().getHeight(null)/ratio);
-            }
-            else {
-                double ratio = (double)inSize/inIcon.getImage().getWidth(null);
-                finalHeight = (int)(inIcon.getImage().getHeight(null)*ratio);
-            }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
         }
-        inIcon.setImage(Utils.getScaledImage(inIcon.getImage(), finalWidth, finalHeight));
-        return inIcon;
+        return getScaledIconForNoImage(inSize);
+    }
+
+    public static ImageIcon getScaledIcon(String inPath, int inSize) {
+        return getScaledIcon(new File(inPath), inSize);
+    }
+
+    public static ImageIcon getScaledIcon(URL inRUL, int inSize) {
+        try {
+            return getScaledIcon(new File(inRUL.toURI()), inSize);
+        }
+        catch (URISyntaxException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return getScaledIcon(inRUL.getPath(), inSize);
     }
 
     public static ImageIcon getScaledIconForNoImage(int inSize) {
-        return getScaledIcon(new ImageIcon(WildLogApp.class.getResource("resources/images/NoImage.gif")), inSize);
+        return getScaledIcon(WildLogApp.class.getResource("resources/images/NoImage.gif"), inSize);
     }
 
     public static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
-        BufferedImage resizedImg = new BufferedImage(inWidth, inHeight, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2 = resizedImg.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(inImage, 0, 0, inWidth, inHeight, null);
-        g2.dispose();
-        return resizedImg;
+        return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_DEFAULT);
     }
 
     /**
@@ -158,145 +182,65 @@ public final class Utils {
                 lastFilePath = fromFile.getPath();
                 // Is an image
                 if (new ImageFilter().accept(fromFile)) {
-                    File toDir = new File(FilePaths.WILDLOG_IMAGES.getFullPath() + inFolderName);
-                    toDir.mkdirs();
-                    File toFile_Original = new File(toDir.getAbsolutePath() + File.separatorChar + "Original_"+fromFile.getName());
-                    File toFile_Thumbnail = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-                    while (toFile_Original.exists()) {
-                        toFile_Original = new File(toFile_Original.getPath().substring(0, toFile_Original.getPath().length() - 4) + "x" + toFile_Original.getPath().substring(toFile_Original.getPath().length() - 4));
-                    }
+                    // Get the thumbnail first
+                    // Make the folder
+                    new File(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath() + inFolderName).mkdirs();
+                    // Setup the output files
+                    File toFile_Thumbnail = new File(FilePaths.concatPaths(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), inFolderName, fromFile.getName()));
+                    // Check that the filename is unique
                     while (toFile_Thumbnail.exists()) {
-                        toFile_Thumbnail = new File(toFile_Thumbnail.getPath().substring(0, toFile_Thumbnail.getPath().length() - 4) + "x" + toFile_Thumbnail.getPath().substring(toFile_Thumbnail.getPath().length() - 4));
+                        toFile_Thumbnail = new File(FilePaths.concatPaths(toFile_Thumbnail.getParent(), "wl_" + toFile_Thumbnail.getName()));
                     }
-                    FileInputStream fileInput = null;
-                    FileOutputStream fileOutput = null;
+                    // Resize the file and then save the thumbnail to into WildLog's folders
+                    ImageIcon thumbnail = getScaledIcon(fromFile, THUMBNAIL_SIZE);
                     try {
-                        // Write Original
-                        fileInput = new FileInputStream(fromFile);
-                        fileOutput = new FileOutputStream(toFile_Original);
-                        byte[] tempBytes = new byte[(int)fromFile.length()];
-                        fileInput.read(tempBytes);
-                        fileOutput.write(tempBytes);
-                        fileOutput.flush();
-                        // Write Thumbnail
-                        fileInput.close();
-                        fileOutput.close();
-                        fileInput = new FileInputStream(fromFile);
-                        fileOutput = new FileOutputStream(toFile_Thumbnail);
-                        tempBytes = new byte[(int)fromFile.length()];
-                        fileInput.read(tempBytes);
-                        ImageIcon image = new ImageIcon(tempBytes);
-                        image = getScaledIcon(image, THUMBNAIL_SIZE);
-                        BufferedImage bi = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-                        Graphics2D big = bi.createGraphics();
-                        big.drawImage(image.getImage(), 0, 0, null);
-                        ByteArrayOutputStream os = new ByteArrayOutputStream();
-                        ImageIO.write(bi, "jpg", os);
-                        byte[] newBytes = os.toByteArray();
-                        fileOutput.write(newBytes);
-                        fileOutput.flush();
-                        big.dispose();
-                        inApp.getDBI().createOrUpdate(
-                                new WildLogFile(inID, toFile_Thumbnail.getName(),
-                                    stripRootFromPath(toFile_Thumbnail.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
-                                    stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
-                                    WildLogFileType.IMAGE)
-                                , false);
-                        setupFoto(inID, 0, inImageLabel, inSize, inApp);
+                        BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                        Graphics2D graphics2D = bufferedImage.createGraphics();
+                        graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
+                        ImageIO.write(bufferedImage, "jpg", toFile_Thumbnail);
+                        graphics2D.dispose();
                     }
                     catch (IOException ex) {
                         ex.printStackTrace(System.err);
                     }
-                    finally {
-                        try {
-                            fileInput.close();
-                            fileOutput.close();
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
-                    }
+                    saveOriginalFile(FilePaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID, toFile_Thumbnail.getAbsolutePath(), inImageLabel, inSize);
                 }
                 else
                 // Is a movie
                 if (new MovieFilter().accept(fromFile)) {
-                    File toDir = new File(FilePaths.WILDLOG_MOVIES.getFullPath() + inFolderName);
-                    toDir.mkdirs();
-                    File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-                    while (toFile.exists()) {
-                        toFile = new File(toFile.getPath().substring(0, toFile.getPath().length() - 4) + "x" + toFile.getPath().substring(toFile.getPath().length() - 4));
-                    }
-                    FileInputStream fileInput = null;
-                    FileOutputStream fileOutput = null;
-                    try {
-                        // Write Original
-                        fileInput = new FileInputStream(fromFile);
-                        fileOutput = new FileOutputStream(toFile);
-                        byte[] tempBytes = new byte[(int)fromFile.length()];
-                        fileInput.read(tempBytes);
-                        fileOutput.write(tempBytes);
-                        fileOutput.flush();
-                        inApp.getDBI().createOrUpdate(
-                                new WildLogFile(inID, toFile.getName(),
-                                    "No Thumbnail",
-                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
-                                    WildLogFileType.MOVIE)
-                                , false);
-                        setupFoto(inID, 0, inImageLabel, inSize, inApp);
-                    }
-                    catch (IOException ex) {
-                        ex.printStackTrace(System.err);
-                    }
-                    finally {
-                        try {
-                            fileInput.close();
-                            fileOutput.close();
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
-                    }
+                    saveOriginalFile(FilePaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID, null, inImageLabel, inSize);
                 }
                 else {
-                    File toDir = new File(FilePaths.WILDLOG_OTHER.getFullPath() + inFolderName);
-                    toDir.mkdirs();
-                    File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-                    while (toFile.exists()) {
-                        toFile = new File(toFile.getPath().substring(0, toFile.getPath().length() - 4) + "x" + toFile.getPath().substring(toFile.getPath().length() - 4));
-                    }
-                    FileInputStream fileInput = null;
-                    FileOutputStream fileOutput = null;
-                    try {
-                        // Write Original
-                        fileInput = new FileInputStream(fromFile);
-                        fileOutput = new FileOutputStream(toFile);
-                        byte[] tempBytes = new byte[(int)fromFile.length()];
-                        fileInput.read(tempBytes);
-                        fileOutput.write(tempBytes);
-                        fileOutput.flush();
-                        inApp.getDBI().createOrUpdate(
-                                new WildLogFile(inID, toFile.getName(),
-                                    "No Thumbnail",
-                                    stripRootFromPath(toFile.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
-                                    WildLogFileType.OTHER)
-                                , false);
-                        setupFoto(inID, 0, inImageLabel, inSize, inApp);
-                    }
-                    catch (IOException ex) {
-                        ex.printStackTrace(System.err);
-                    }
-                    finally {
-                        try {
-                            fileInput.close();
-                            fileOutput.close();
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
-                    }
+                    saveOriginalFile(FilePaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID, null, inImageLabel, inSize);
                 }
             }
         }
+    }
+
+    private static void saveOriginalFile(FilePaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID, String inThumbnailPath, JLabel inImageLabel, int inSize) {
+        // Make the folder
+        new File(inFilePaths.getFullPath() + inFolderName).mkdirs();
+        // Setup the output files
+        File toFile_Original = new File(FilePaths.concatPaths(inFilePaths.getFullPath(), inFolderName, inFromFile.getName()));
+        // Check that the filename is unique
+        while (toFile_Original.exists()) {
+            toFile_Original = new File(FilePaths.concatPaths(toFile_Original.getParent(), "wl_" + toFile_Original.getName()));
+        }
+        // Copy the original file into WildLog's folders
+        copyFile(inFromFile, toFile_Original);
+        // Save the database entry
+        String thumbnailPath = "No Thumbnail";
+        if (inThumbnailPath != null)
+            thumbnailPath = stripRootFromPath(inThumbnailPath, FilePaths.getFullWorkspacePrefix());
+        inApp.getDBI().createOrUpdate(
+                new WildLogFile(
+                        inID,
+                        toFile_Original.getName(),
+                        thumbnailPath,
+                        stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
+                        inFileType)
+                , false);
+        setupFoto(inID, 0, inImageLabel, inSize, inApp);
     }
 
     // Methods for the buttons on the panels that work with the images
@@ -351,11 +295,11 @@ public final class Utils {
                 inImageIndex = nextImage(inID, inImageIndex, inImageLabel, inSize, inApp);
             }
             else {
-                inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
+                inImageLabel.setIcon(Utils.getScaledIcon(inDefaultImageURL.getPath(), inSize));
             }
         }
         else {
-            inImageLabel.setIcon(Utils.getScaledIcon(new ImageIcon(inDefaultImageURL), inSize));
+            inImageLabel.setIcon(Utils.getScaledIcon(inDefaultImageURL.getPath(), inSize));
         }
         return inImageIndex;
     }
@@ -366,22 +310,22 @@ public final class Utils {
             if (fotos.size() > inImageIndex) {
                 if (fotos.get(inImageIndex).getFotoType() != null) {
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
-                        inImageLabel.setIcon(getScaledIcon(new ImageIcon(fotos.get(inImageIndex).getFileLocation(true)), inSize));
+                        inImageLabel.setIcon(getScaledIcon(fotos.get(inImageIndex).getFileLocation(true), inSize));
                     else
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
-                        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/Movie.gif")), inSize));
+                        inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/Movie.gif"), inSize));
                     else
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.OTHER))
-                        inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/OtherFile.gif")), inSize));
+                        inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/OtherFile.gif"), inSize));
                     inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
                 }
                 else {
-                    inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+                    inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/NoImage.gif"), inSize));
                     inImageLabel.setToolTipText("");
                 }
             }
             else {
-                inImageLabel.setIcon(getScaledIcon(new ImageIcon(inApp.getClass().getResource("resources/images/NoImage.gif")), inSize));
+                inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/NoImage.gif"), inSize));
                 inImageLabel.setToolTipText("");
             }
         }
@@ -456,36 +400,32 @@ public final class Utils {
         return true;
     }
 
-    public static void copyFile(InputStream inFileToRead, File inFileToWrite) {
-        if (!inFileToWrite.exists()) {
-            InputStream fileInput = null;
-            FileOutputStream fileOutput = null;
-            try {
-                fileInput = inFileToRead;
-                if (fileInput != null) {
-                    fileOutput = new FileOutputStream(inFileToWrite);
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = fileInput.read(buf)) > 0) {
-                        fileOutput.write(buf, 0, len);
-                    }
-                    fileOutput.flush();
-                }
-            }
-            catch (IOException ex) {
-                ex.printStackTrace(System.err);
-            }
-            finally {
+    public static void copyFile(File inFileToRead, File inFileToWrite) {
+        FileOutputStream outputStream = null;
+        FileInputStream inputStream = null;
+        try {
+            outputStream = new FileOutputStream(inFileToWrite);
+            inputStream = new FileInputStream(inFileToRead);
+            inputStream.getChannel().transferTo(0, inFileToRead.length(), outputStream.getChannel());
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            if (inputStream != null)
                 try {
-                    if (fileInput != null)
-                        fileInput.close();
-                    if (fileOutput != null)
-                        fileOutput.close();
+                    inputStream.close();
                 }
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
                 }
-            }
+            if (outputStream != null)
+                try {
+                    outputStream.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
         }
     }
 

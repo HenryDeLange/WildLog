@@ -8,7 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -129,20 +128,20 @@ public class PanelSighting extends JPanel {
                 if (fotos.size() > 0)
                     Utils.setupFoto("LOCATION-" + location.getName(), 0, lblLocationImage, 100, app);
                 else
-                    lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                    lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             }
             else {
-                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             }
             if (element != null) {
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
                 if (fotos.size() > 0)
                     Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, lblElementImage, 100, app);
                 else
-                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                    lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             }
             else {
-                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             }
             //Setup Tables
             tblElement.getTableHeader().setReorderingAllowed(false);
@@ -163,7 +162,7 @@ public class PanelSighting extends JPanel {
                 spnLonDegrees.setValue(0);
                 spnLonMinutes.setValue(0);
                 spnLonSeconds.setValue(0.0f);
-                lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+                lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             }
             else {
                 // Setup the Sighting info
@@ -253,7 +252,7 @@ public class PanelSighting extends JPanel {
             if (fotos.size() > 0)
                 Utils.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
             else
-                lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+                lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             setupNumberOfImages();
         }
         else {
@@ -1192,7 +1191,7 @@ public class PanelSighting extends JPanel {
             cmbElementType.setEnabled(!cmbElementType.isEnabled());
             txtSearch.setText("");
             // Clear Images
-            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
         }
 }//GEN-LAST:event_chkElementTypeFilterActionPerformed
 
@@ -1202,7 +1201,7 @@ public class PanelSighting extends JPanel {
             UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
             txtSearch.setText("");
             // Clear Images
-            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
         }
 }//GEN-LAST:event_cmbElementTypeActionPerformed
 
@@ -1217,7 +1216,7 @@ public class PanelSighting extends JPanel {
             }
             UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
             // Clear Images
-            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
         }
 }//GEN-LAST:event_btnSearchActionPerformed
 
@@ -1230,7 +1229,7 @@ public class PanelSighting extends JPanel {
             }
             UtilTableGenerator.setupShortLocationTable(tblLocation, searchLocation);
             // Clear Images
-            lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Location"}, 0));
         }
     }//GEN-LAST:event_btnSearchLocationActionPerformed

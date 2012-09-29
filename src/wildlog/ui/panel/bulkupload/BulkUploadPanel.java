@@ -400,11 +400,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 Utils.setupFoto("LOCATION-" + selectedName, imageIndex, lblLocationImage, 100, app);
             }
             else {
-                lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+                lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             }
         }
         else {
-            lblLocationImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 100));
+            lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
         }
     }//GEN-LAST:event_lstLocationValueChanged
 

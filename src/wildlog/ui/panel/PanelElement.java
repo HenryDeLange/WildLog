@@ -79,7 +79,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
         }
         setupNumberOfImages();
 

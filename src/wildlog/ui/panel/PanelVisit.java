@@ -81,7 +81,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             lblNumberOfImages.setText("0 of 0");
         }
         imageSightingIndex = 0;
@@ -175,10 +175,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 if (fotos.size() > 0)
                     Utils.setupFoto("ELEMENT-" + temp.getPrimaryName(), 0, lblElementImage, 150, app);
                 else
-                    lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+                    lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
             }
             else {
-                lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+                lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
             }
             imageSightingIndex = 0;
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
@@ -186,13 +186,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 Utils.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageSightingIndex, lblSightingImage, 150, app);
             }
             else {
-                lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+                lblSightingImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
             }
             setupNumberOfSightingImages();
         }
         else {
-            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
-            lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+            lblSightingImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
             lblNumberOfSightingImages.setText("");
         }
     }
@@ -790,8 +790,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        lblSightingImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
-        lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+        lblSightingImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+        lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
         if (visit.getName() != null) {
             UtilTableGenerator.setupCompleteSightingTable(tblSightings, visit);
             Sighting tempSighting = new Sighting();

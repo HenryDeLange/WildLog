@@ -65,7 +65,9 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     }
 
     public BulkUploadImageFileWrapper getClone() {
-        return new BulkUploadImageFileWrapper(file, icon, date, imageBox);
+        BulkUploadImageFileWrapper imageFileWrapper = new BulkUploadImageFileWrapper(file, icon, date);
+        imageFileWrapper.setImageBox(new ImageBox(imageFileWrapper, imageBox.getTable()));
+        return imageFileWrapper;
     }
 
     public ImageBox getImageBox() {

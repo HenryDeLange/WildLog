@@ -154,7 +154,7 @@ public class WildLogApp extends SingleFrameApplication {
      * Windows shown in our application come fully initialized from the GUI
      * builder, so this additional configuration is not needed.
      */
-    @Override 
+    @Override
     protected void configureWindow(java.awt.Window root) {
     }
 
@@ -237,16 +237,16 @@ public class WildLogApp extends SingleFrameApplication {
         super.shutdown();
         if (dbi != null)
             dbi.close();
-        System.out.println("SHUTTING DOWN WildLog - " 
+        System.out.println("SHUTTING DOWN WildLog - "
                 + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
     }
-    
-    
+
+
     // Make sure the application uses the same DBI instance...
     // Might want to think of other ways to do this, but seems ok for now
     // The DBI is initialized in startup() and closed in shutdown()
     private DBI dbi;
-    
+
     public DBI getDBI() {
         return dbi;
     }

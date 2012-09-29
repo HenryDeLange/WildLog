@@ -6,6 +6,7 @@ public enum FilePaths {
     WILDLOG (File.separatorChar + "WildLog" + File.separatorChar),
     WILDLOG_DATA (File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar),
     WILDLOG_IMAGES (File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar),
+    WILDLOG_IMAGES_THUMBNAILS (File.separatorChar + "WildLog" + File.separatorChar + "Thumbnails" + File.separatorChar),
     WILDLOG_MOVIES (File.separatorChar + "WildLog" + File.separatorChar + "Movies" + File.separatorChar),
     WILDLOG_OTHER (File.separatorChar + "WildLog" + File.separatorChar + "Other Uploads" + File.separatorChar),
     WILDLOG_BACKUPS (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar),
@@ -20,14 +21,14 @@ public enum FilePaths {
 
     private static String currentWorkspacePrefix;
     private String path;
-    
+
     private FilePaths(String inPath) {
         path = inPath;
     }
 
     /**
      * This sets the workspace's prefix that will be used. Can be relative/absolute.
-     * @param inRoot 
+     * @param inRoot
      */
     public static void setWorkspacePrefix(String inPrefix) {
         if (inPrefix == null)
@@ -35,7 +36,7 @@ public enum FilePaths {
         else
             currentWorkspacePrefix = inPrefix;
     }
-    
+
     /**
      * Get the WorkspacePrefix + the Path.
      * WARNING: Rather use relative paths to cater for different drive letters, etc.
@@ -62,7 +63,7 @@ public enum FilePaths {
             currentWorkspacePrefix = File.separator + currentWorkspacePrefix;
         return new File(currentWorkspacePrefix).getAbsolutePath();
     }
-    
+
     /**
      * This will return the full path of the Workspace Prefix. It will start with a File.separatorChar.
      * WARNING: Some tweaking is done to the to make it behave nicely...
@@ -70,27 +71,40 @@ public enum FilePaths {
     public static String getRelativeWorkspacePrefix() {
         return getFullWorkspacePrefix().substring(2);
     }
-    
+
     /**
      * This method will concatenate two path segments and make sure that only one File.separatorChar is used.
      * WARNING: Nulls will return null and ""s will return any non-"" value.
      */
     // TODO: Verander die dalk om VarArgs te gebruik. bv concatPaths(String... input) sodat ek meer Strings op 'n slag kan instuur
-    public static String concatPaths(String inPart1, String inPart2) {
-        if (inPart1 == null || inPart2 == null)
-            return null;
-        if (inPart1.length() == 0 || inPart2.length() == 0)
-            return inPart1 + inPart2;
-        else
-        if (inPart1.charAt(inPart1.length()-1) == File.separatorChar 
-                && inPart2.charAt(0) == File.separatorChar)
-            return inPart1 + inPart2.substring(1);
-        else
-        if (inPart1.charAt(inPart1.length()-1) != File.separatorChar 
-                && inPart2.charAt(0) != File.separatorChar)
-            return inPart1 + File.separatorChar + inPart2;
-        else
-            return inPart1 + inPart2;
+    public static String concatPaths(String... inPathParts) {
+        String finalPath = "";
+        for (String part : inPathParts) {
+            if (part == null)
+                return null;
+                if (part.length() != 0) {
+                    if (finalPath.length() == 0) {
+                    finalPath = part;
+                    continue;
+                }
+                if (finalPath.charAt(finalPath.length()-1) == File.separatorChar
+                        && part.charAt(0) == File.separatorChar) {
+                    finalPath = finalPath + part.substring(1);
+                    continue;
+                }
+                else
+                if (finalPath.charAt(finalPath.length()-1) != File.separatorChar
+                        && part.charAt(0) != File.separatorChar) {
+                    finalPath = finalPath + File.separatorChar + part;
+                    continue;
+                }
+                else {
+                    finalPath = finalPath + part;
+                    continue;
+                }
+            }
+        }
+        return finalPath;
     }
 
     @Override

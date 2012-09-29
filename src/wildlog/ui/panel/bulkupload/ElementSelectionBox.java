@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.utils.ui.Utils;
@@ -154,7 +153,7 @@ public class ElementSelectionBox extends javax.swing.JDialog {
             Utils.setupFoto("ELEMENT-" + selectedName, 0, lblElementImage, 150, app);
         }
         else {
-            lblElementImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 150));
+            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
         }
     }//GEN-LAST:event_lstElementsValueChanged
 

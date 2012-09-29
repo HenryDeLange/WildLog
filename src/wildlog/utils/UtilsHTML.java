@@ -1,7 +1,6 @@
 package wildlog.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -29,38 +28,20 @@ public final class UtilsHTML {
                                             FilePaths.getFullWorkspacePrefix())));
         toDir.mkdirs();
         File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
-        FileInputStream fileInput = null;
-        FileOutputStream fileOutput = null;
-        try {
-            fileInput = new FileInputStream(fromFile);
-            fileOutput = new FileOutputStream(toFile);
-            byte[] tempBytes = new byte[(int) fromFile.length()];
-            fileInput.read(tempBytes);
-            fileOutput.write(tempBytes);
-            fileOutput.flush();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                fileInput.close();
-                fileOutput.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
+        Utils.copyFile(fromFile, toFile);
         // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
         String fullpath = toFile.getAbsolutePath().toLowerCase();
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForHTML))
             //return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + FilePaths.WILDLOG_EXPORT_HTML), "..") + "\"/>  ";
-            return "<img src=\"..\\" 
-                    + Utils.stripRootFromPath(fullpath, 
-                        FilePaths.concatPaths(FilePaths.getFullWorkspacePrefix(), FilePaths.WILDLOG_EXPORT_HTML.getRelativePath())) 
+            return "<img src=\"..\\"
+                    + Utils.stripRootFromPath(fullpath,
+                        FilePaths.concatPaths(FilePaths.getFullWorkspacePrefix(), FilePaths.WILDLOG_EXPORT_HTML.getRelativePath()))
                     + "\"/>  ";
         else
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML))
-            return "<img src=\"..\\html\\"  
-                    + Utils.stripRootFromPath(fullpath, 
-                        FilePaths.concatPaths(FilePaths.getFullWorkspacePrefix(), FilePaths.WILDLOG_EXPORT_HTML.getRelativePath())) 
+            return "<img src=\"..\\html\\"
+                    + Utils.stripRootFromPath(fullpath,
+                        FilePaths.concatPaths(FilePaths.getFullWorkspacePrefix(), FilePaths.WILDLOG_EXPORT_HTML.getRelativePath()))
                     + "\"/>  ";
         else
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap))
@@ -74,7 +55,8 @@ public final class UtilsHTML {
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
-            if (toFile.exists()) toFile.delete();
+            if (toFile.exists())
+                toFile.delete();
             fileOutput = new FileOutputStream(toFile);
             fileOutput.write(inElement.toHTML(true, true, inApp, UtilsHTML.ImageExportTypes.ForHTML).getBytes());
             fileOutput.flush();
@@ -98,7 +80,8 @@ public final class UtilsHTML {
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
-            if (toFile.exists()) toFile.delete();
+            if (toFile.exists())
+                toFile.delete();
             fileOutput = new FileOutputStream(toFile);
             fileOutput.write(inLocation.toHTML(true, true, inApp, UtilsHTML.ImageExportTypes.ForHTML).getBytes());
             fileOutput.flush();
@@ -122,7 +105,8 @@ public final class UtilsHTML {
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
-            if (toFile.exists()) toFile.delete();
+            if (toFile.exists())
+                toFile.delete();
             fileOutput = new FileOutputStream(toFile);
             fileOutput.write(inVisit.toHTML(true, true, inApp, UtilsHTML.ImageExportTypes.ForHTML).getBytes());
             fileOutput.flush();

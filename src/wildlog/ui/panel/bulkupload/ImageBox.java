@@ -208,6 +208,10 @@ public class ImageBox extends JPanel {
             model.fireTableCellUpdated(row, col);
     }
 
+    public JTable getTable() {
+        return table;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClone;
     private javax.swing.JButton btnDown;

@@ -1,23 +1,15 @@
 package wildlog.ui.panel.bulkupload.data;
 
-import java.awt.Image;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -29,62 +21,36 @@ import wildlog.utils.ui.Utils;
 public class BulkUploadDataLoader {
 
     public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds) {
+        // TODO: Setting to false might keep the cache in memory
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>(files.size());
         // First load all the images and sort them according to date
-        Runnable run1 = new Runnable() {
-                @Override
-                public void run() {
-                    for (int t = 0; t < files.size()/4; t++) {
-                        loadFileData(files.get(t), imageList);
-                    }
-                }
-            };
-        Runnable run2 = new Runnable() {
-                @Override
-                public void run() {
-                    for (int t = files.size()/4; t < files.size()/4*2; t++) {
-                        loadFileData(files.get(t), imageList);
-                    }
-                }
-            };
-        Runnable run3 = new Runnable() {
-                @Override
-                public void run() {
-                    for (int t = files.size()/4*2; t < files.size()/4*3; t++) {
-                        loadFileData(files.get(t), imageList);
-                    }
-                }
-            };
-        Runnable run4 = new Runnable() {
-                @Override
-                public void run() {
-                    for (int t = files.size()/4*3; t < files.size(); t++) {
-                        loadFileData(files.get(t), imageList);
-                    }
-                }
-            };
-         // This will starts the runnables and calls "Thread.join()" to make sure that
-         // processing waits for the thread to finish before continuing. This is done
-         // to preserve method execution order, but still benefit from multiple threads
-         // doing the work, without having to manage their states, async nature, etc.
-        Thread thread1 = new Thread(run1);
-        thread1.start();
-        Thread thread2 = new Thread(run2);
-        thread2.start();
-        Thread thread3 = new Thread(run3);
-        thread3.start();
-        Thread thread4 = new Thread(run4);
-        thread4.start();
+        int threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
+        if (threadCount < 3)
+            threadCount = 3;
+        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+        for (final File tempFile : files) {
+            executorService.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadFileData(tempFile, imageList);
+                        }
+                    });
+        }
+        executorService.shutdown();
         try {
-            thread1.join();
-            thread2.join();
-            thread3.join();
-            thread4.join();
+            int count = 0;
+            while(!executorService.awaitTermination(6, TimeUnit.MINUTES) && count < 10) {
+                count++;
+                System.out.println("Bulk Upload: Timer expired while loading images... Resetting... " + count);
+            }
+            if (!executorService.isTerminated()) {
+                System.err.println("Bulk Upload Error: Terminating bulk import... " + count);
+                return null;
+            }
         }
         catch (InterruptedException ex) {
-            System.out.println("Thread unexpectedly interrupted...");
             ex.printStackTrace(System.err);
         }
         Collections.sort(imageList);
@@ -124,20 +90,9 @@ public class BulkUploadDataLoader {
     }
 
     private static void loadFileData(File inFile, List<BulkUploadImageFileWrapper> inImageList) {
-        // Hope that making the buffer big enough and mark/reset the stream will improve reading performance
-        try {
-            BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(inFile), 3000000);
-            inputStream.mark(5000000);
-            Date date = Utils.getExifDateFromJpeg(inFile);
-            inputStream.reset();
-            inImageList.add(new BulkUploadImageFileWrapper(
-                inFile,
-                Utils.getScaledIcon(new ImageIcon(ImageIO.read(inputStream)), 200),
-                date));
-        }
-        catch (IOException ex) {
-            Logger.getLogger(BulkUploadDataLoader.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        // Note: Ek load die file twee keer, maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
+        Date date = Utils.getExifDateFromJpeg(inFile);
+        inImageList.add(new BulkUploadImageFileWrapper(inFile, Utils.getScaledIcon(inFile, 200), date));
     }
 
     private static Object[][] getArrayFromHash(Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> inData){

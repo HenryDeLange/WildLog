@@ -1346,7 +1346,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
 }//GEN-LAST:event_tabElementComponentShown
 
@@ -1374,7 +1374,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilTableGenerator.setupCompleteLocationTable(tblLocation, searchLocation);
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
-        lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        lblImage_LocTab.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
     }//GEN-LAST:event_tabLocationComponentShown
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
@@ -1394,7 +1394,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         cmbType.setEnabled(!cmbType.isEnabled());
         txtSearch.setText("");
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_ckbTypeFilterActionPerformed
 
@@ -1403,7 +1403,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         txtSearch.setText("");
         UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -1454,12 +1454,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             if (fotos.size() > 0)
                 Utils.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, 300, app);
             else
-                lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+                lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             // Get Locations
             UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, tempElement);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         }
     }//GEN-LAST:event_tblElementMouseReleased
@@ -1472,14 +1472,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             if (fotos.size() > 0)
                 Utils.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, 300, app);
             else
-                lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+                lblImage_LocTab.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             // Get Visits
             UtilTableGenerator.setupShortVisitTable(tblVisit, tempLocation);
             // Get All Elements seen
             UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, tempLocation);
         }
         else {
-            lblImage_LocTab.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+            lblImage_LocTab.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
             tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         }
@@ -1495,7 +1495,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         // Reset the Image and Location table
-        lblImage.setIcon(Utils.getScaledIcon(new ImageIcon(app.getClass().getResource("resources/images/NoImage.gif")), 300));
+        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_btnSearchActionPerformed
