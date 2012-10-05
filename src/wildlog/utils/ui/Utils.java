@@ -45,9 +45,11 @@ import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.DBI;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.utils.FilePaths;
+import wildlog.utils.jpegmovie.JpgToMovie;
 
 public final class Utils {
     public final static String jpeg = "jpeg";
@@ -511,9 +513,8 @@ public final class Utils {
         }
     }
 
-    public static void kickoffTask(Task inTask, Application inApp)
-    {
-        ApplicationContext appContext = inApp.getContext();
+    public static void kickoffTask(Task inTask) {
+        ApplicationContext appContext = Application.getInstance().getContext();
         TaskMonitor taskMonitor = appContext.getTaskMonitor();
         TaskService taskService = appContext.getTaskService();
         taskService.execute(inTask);
@@ -581,6 +582,25 @@ public final class Utils {
         inComponentToCenter.setLocation(
                 point.x + (inParentComponent.getWidth() - inComponentToCenter.getWidth())/2,
                 point.y + (inParentComponent.getHeight() - inComponentToCenter.getHeight())/2);
+    }
+
+    public static void generateSlideshow(List<String> inList, WildLogApp inApp, String inOutputFilename) {
+        // Now create the slideshow
+        File tempFile = new File(FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
+        tempFile.mkdirs();
+        JpgToMovie jpgToMovie = new JpgToMovie();
+        if (inList.size() > 0) {
+            if (jpgToMovie.createMovieFromJpgs(750, inApp.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(), inList, inOutputFilename)) {
+                // Lastly launch the file
+                Utils.openFile(inOutputFilename);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "There was a problem generating the slideshow.", "Warning", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Can't generate slideshow if there aren't any images.", "No Images", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
 }

@@ -870,13 +870,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 locationWL.setEmail(txtEmail.getText());
                 locationWL.setWebsite(txtWebsite.getText());
                 locationWL.setDirections(txtDirections.getText());
-                // FIXME: This will need to be changed to work with Java 7
-                Object[] tempArray = lstAccommodationType.getSelectedValues();
-                List<AccommodationType> tempList = new ArrayList<AccommodationType>(tempArray.length);
-                for (Object tempObject : tempArray) {
-                    tempList.add((AccommodationType)tempObject);
-                }
-                locationWL.setAccommodationType(tempList);
+                locationWL.setAccommodationType(lstAccommodationType.getSelectedValuesList());
 
                 // Save the location
                 if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {

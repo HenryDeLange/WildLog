@@ -1153,16 +1153,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnKmlExportActionPerformed
 
     private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
-         Utils.kickoffTask(new Task(app) {
+        Utils.kickoffTask(new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
-                // TODO: This should be done in a seperate thread using the progress bar
                 List<String> slideshowList = new ArrayList<String>();
                 Sighting temp = new Sighting();
                 temp.setVisitName(visit.getName());
                 List<Sighting> sightingList = app.getDBI().list(temp);
-                // FIXME: Change the DBI to do the sorting for me (use ORDER BY date)
                 Collections.sort(sightingList);
                 for (int t = 0; t < sightingList.size(); t++) {
                     Sighting tempSighting = sightingList.get(t);
@@ -1178,22 +1176,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     }
                 }
                 // Now create the slideshow
-                File tempFile = new File(FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
-                tempFile.mkdirs();
-                String outputFile = FilePaths.WILDLOG_EXPORT_SLIDESHOW.getRelativePath() + visit.getName() + " (sightings).mov";
-                JpgToMovie jpgToMovie = new JpgToMovie();
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                if (slideshowList.size() > 0 && jpgToMovie.createMovieFromJpgs(750, app.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(), slideshowList, outputFile)) {
-                    // Lastly launch the file
-                    Utils.openFile(outputFile);
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "There was a problem generating the slideshow.", "Warning", JOptionPane.WARNING_MESSAGE);
-                }
+                Utils.generateSlideshow(slideshowList, app, FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Sightings.mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }
-        }, app);
+        });
     }//GEN-LAST:event_btnSlideshowSightingsActionPerformed
 
     private void btnSlideshowVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitActionPerformed
@@ -1201,9 +1189,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
-                // TODO: This should be done in a seperate thread using the progress bar
                 List<String> slideshowList = new ArrayList<String>();
-                // FIXME: Change the DBI to do the sorting for me (use ORDER BY date)
                 // TODO: Put these strange name formats somewhere central... Maybe have a method on WildlogFile that will get a propper ID for a provided type (Location, sighting, etc.)
                 List<WildLogFile> files = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
                 for (WildLogFile tempFile : files) {
@@ -1214,23 +1200,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         }
                     }
                 }
-                // Now create the slideshow
-                File tempFile = new File(FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
-                tempFile.mkdirs();
-                String outputFile = FilePaths.WILDLOG_EXPORT_SLIDESHOW.getRelativePath() + visit.getName() + ".mov";
-                JpgToMovie jpgToMovie = new JpgToMovie();
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                if (slideshowList.size() > 0 && jpgToMovie.createMovieFromJpgs(750, app.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(), slideshowList, outputFile)) {
-                    // Lastly launch the file
-                    Utils.openFile(outputFile);
-                }
-                else {
-                    JOptionPane.showMessageDialog(null, "There was a problem generating the slideshow.", "Warning", JOptionPane.WARNING_MESSAGE);
-                }
+                Utils.generateSlideshow(slideshowList, app, FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + ".mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }
-        }, app);
+        });
     }//GEN-LAST:event_btnSlideshowVisitActionPerformed
 
 

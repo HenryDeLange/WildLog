@@ -76,7 +76,6 @@ public enum FilePaths {
      * This method will concatenate two path segments and make sure that only one File.separatorChar is used.
      * WARNING: Nulls will return null and ""s will return any non-"" value.
      */
-    // TODO: Verander die dalk om VarArgs te gebruik. bv concatPaths(String... input) sodat ek meer Strings op 'n slag kan instuur
     public static String concatPaths(String... inPathParts) {
         String finalPath = "";
         for (String part : inPathParts) {

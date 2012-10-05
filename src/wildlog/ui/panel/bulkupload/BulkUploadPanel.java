@@ -43,6 +43,7 @@ import wildlog.ui.panel.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -51,10 +52,14 @@ import wildlog.utils.ui.Utils;
 public class BulkUploadPanel extends PanelCanSetupHeader {
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
     public final static Color tableBackgroundColor2 = new Color(215, 226, 200);
+    private ProgressbarTask progressbarTask;
 
 
     /** Creates new form BulkUploadPanel */
-    public BulkUploadPanel() {
+    public BulkUploadPanel(ProgressbarTask inProgressbarTask) {
+        progressbarTask = inProgressbarTask;
+        progressbarTask.setMessage("Bulk Import Setup: Starting...");
+        progressbarTask.setTaskProgress(0);
         app = (WildLogApp) Application.getInstance();
         imageIndex = 0;
         // Init auto generated code
@@ -75,6 +80,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 }
             }
         });
+        progressbarTask.setTaskProgress(100);
+        progressbarTask.setMessage("Bulk Import Setup: Done...");
     }
 
     @Override
@@ -103,25 +110,35 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private void getLocationList() {
+        progressbarTask.setMessage("Bulk Import Setup: Loading Location List...");
+        progressbarTask.setTaskProgress(1);
         List<Location> locations = app.getDBI().list(new Location());
         Collections.sort(locations);
         lstLocation.setListData(locations.toArray());
+        progressbarTask.setTaskProgress(5);
+        progressbarTask.setMessage("Bulk Import Setup: Done Loading Location List...");
     }
 
     private void loadImages() {
+        progressbarTask.setMessage("Bulk Import Setup: Start Loading Images...");
+        progressbarTask.setTaskProgress(5);
         // Get the list of files from the folder to import from
         File rootFile = showFileChooser();
-
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue());
+        progressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files)");
+        progressbarTask.setTaskProgress(10);
+        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), progressbarTask);
+        progressbarTask.setMessage("Bulk Import Setup: Loading Images (Populating table)");
+        progressbarTask.setTaskProgress(90);
         model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
         model.fireTableDataChanged();
-
         // Setup the dates
         dtpStartDate.setDate(wrapper.getStartDate());
         dtpEndDate.setDate(wrapper.getEndDate());
+        progressbarTask.setTaskProgress(95);
+        progressbarTask.setMessage("Bulk Import Setup: Done Loading Images...");
     }
 
     private File showFileChooser() {
@@ -133,6 +150,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // TODO: Maak dat mens die image files kan sien, maar net folders kan kies...
 //        fileChooser.setFileFilter(new ImageFilter());
         fileChooser.showOpenDialog(this.getParent());
+        // FIXME: Die fiels moet slegs return word as mens OK druk, tans lyk dit my selfs as mens cancle maar steeds 'n folder gekies het sal hy die import doen. Die hele prosess moet gestop word as mens die dialog cancle.
         return fileChooser.getSelectedFile();
     }
 

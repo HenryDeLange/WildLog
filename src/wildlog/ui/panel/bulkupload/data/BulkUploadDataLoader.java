@@ -15,13 +15,15 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.Utils;
 
 
 public class BulkUploadDataLoader {
 
-    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds) {
-        // TODO: Setting to false might keep the cache in memory
+    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask) {
+        inProgressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files) - Filtering File List");
+        inProgressbarTask.setTaskProgress(13);
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>(files.size());
@@ -29,12 +31,16 @@ public class BulkUploadDataLoader {
         int threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
         if (threadCount < 3)
             threadCount = 3;
+        inProgressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files) - Processing...");
+        inProgressbarTask.setTaskProgress(15);
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         for (final File tempFile : files) {
             executorService.execute(new Runnable() {
                         @Override
                         public void run() {
                             loadFileData(tempFile, imageList);
+                            // FIXME: Soms is die progress minder as 1, dan move die progress bar nie.. Moet die nog fi om beter progress te wys...
+                            inProgressbarTask.setTaskProgress(inProgressbarTask.getProgress() + (int)((1.0f/(float)files.size())*80));
                         }
                     });
         }
@@ -53,9 +59,13 @@ public class BulkUploadDataLoader {
         catch (InterruptedException ex) {
             ex.printStackTrace(System.err);
         }
+        inProgressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files) - Sorting Files");
+        inProgressbarTask.setTaskProgress(80);
         Collections.sort(imageList);
         long timeDiffInMiliseconds = inSightingDurationInSeconds*1000;
         // Next calculate the sightings and build the Object[][]
+        inProgressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files) - Building Sightings...");
+        inProgressbarTask.setTaskProgress(85);
         Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =
                 new LinkedHashMap<BulkUploadSightingWrapper, BulkUploadImageListWrapper>(imageList.size());
         if (imageList.size() > 0) {
@@ -79,6 +89,8 @@ public class BulkUploadDataLoader {
                 finalMap.get(sightingKey).getImageList().add(temp);
             }
         }
+        inProgressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files) - Setting Visit Dates");
+        inProgressbarTask.setTaskProgress(88);
         // Return the results
         BulkUploadDataWrapper wrapper = new BulkUploadDataWrapper();
         if (!imageList.isEmpty()) {
@@ -86,6 +98,8 @@ public class BulkUploadDataLoader {
             wrapper.setEndDate(imageList.get(imageList.size()-1).getDate());
         }
         wrapper.setData(getArrayFromHash(finalMap));
+        inProgressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files) - Done");
+        inProgressbarTask.setTaskProgress(89);
         return wrapper;
     }
 

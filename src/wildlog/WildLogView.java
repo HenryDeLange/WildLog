@@ -3,6 +3,7 @@ package wildlog;
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.net.URISyntaxException;
@@ -75,6 +76,7 @@ import wildlog.utils.AstroUtils;
 import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.jpegmovie.JpgToMovie;
+import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -2025,8 +2027,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_btnViewEXIFActionPerformed
 
     private void btnBulkUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkUploadActionPerformed
-        // TODO: Make sure to wrap this in a swing progress bar background tast with informative fedback messages
-        UtilPanelGenerator.addPanelAsTab(new BulkUploadPanel(), tabbedPanel);
+        Utils.kickoffTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this);
+                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, tabbedPanel);
+                return null;
+            }
+        });
     }//GEN-LAST:event_btnBulkUploadActionPerformed
 
     private void browseByLocation() {
@@ -2142,7 +2150,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 messageTimer.start();
                 return null;
             }
-        }, app);
+        });
     }
 
     private void exportToHTML(final boolean inShowDialog) {
@@ -2286,7 +2294,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void openDBConsole() {
-        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.2.143.jar");
+        Utils.openFile(System.getProperty("user.dir") + "/lib/h2.jar");
     }
 
 @Action
@@ -2580,30 +2588,35 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void CreateSlideshow() throws IOException, URISyntaxException {
-        JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileFilter(new FileNameExtensionFilter("Jpeg images", "jpg", "jpeg", "JPG", "JPEG"));
         fileChooser.setDialogTitle("Select the images to use for the slideshow...");
+        final Component parent = this.getComponent();
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this.getComponent())) {
-            List<File> files = Arrays.asList(fileChooser.getSelectedFiles());
-            List<String> fileNames = new ArrayList<String>(files.size());
-            for (File tempFile : files) {
-                fileNames.add(tempFile.getAbsolutePath());
-            }
-            fileChooser.setDialogTitle("Please select where to save the slideshow...");
-            fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.setSelectedFile(new File("movie.mov"));
-            fileChooser.setFileFilter(new FileNameExtensionFilter("Slideshow movie", "mov"));
-            if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(this.getComponent())) {
-                String outputFile = fileChooser.getSelectedFile().getPath().substring(2);
-                JpgToMovie jpgToMovie = new JpgToMovie();
-                jpgToMovie.createMovieFromJpgs(
-                        750,
-                        app.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(),
-                        fileNames,
-                        outputFile);
-                Utils.openFile(outputFile);
-            }
+            Utils.kickoffTask(new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Creating the Slideshow");
+                    List<File> files = Arrays.asList(fileChooser.getSelectedFiles());
+                    List<String> fileNames = new ArrayList<String>(files.size());
+                    for (File tempFile : files) {
+                        fileNames.add(tempFile.getAbsolutePath());
+                    }
+                    fileChooser.setDialogTitle("Please select where to save the slideshow...");
+                    fileChooser.setMultiSelectionEnabled(false);
+                    fileChooser.setSelectedFile(new File("movie.mov"));
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Slideshow movie", "mov"));
+                    if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(parent)) {
+                        // Now create the slideshow
+                        setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
+                        String outputFile = fileChooser.getSelectedFile().getPath().substring(2);
+                        Utils.generateSlideshow(fileNames, app, outputFile);
+                        setMessage("Done with the Slideshow");
+                    }
+                    return null;
+                }
+            });
         }
     }
 
@@ -2729,7 +2742,5 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
-
     private JDialog aboutBox;
-
 }
