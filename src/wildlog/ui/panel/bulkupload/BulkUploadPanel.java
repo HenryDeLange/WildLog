@@ -58,7 +58,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     /** Creates new form BulkUploadPanel */
     public BulkUploadPanel(ProgressbarTask inProgressbarTask) {
         progressbarTask = inProgressbarTask;
-        progressbarTask.setMessage("Bulk Import Setup: Starting...");
+        progressbarTask.setMessage("Preparing the Bulk Import process...");
         progressbarTask.setTaskProgress(0);
         app = (WildLogApp) Application.getInstance();
         imageIndex = 0;
@@ -81,7 +81,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             }
         });
         progressbarTask.setTaskProgress(100);
-        progressbarTask.setMessage("Bulk Import Setup: Done...");
+        progressbarTask.setMessage("Finished preparing the Bulk Import");
     }
 
     @Override
@@ -110,35 +110,23 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private void getLocationList() {
-        progressbarTask.setMessage("Bulk Import Setup: Loading Location List...");
-        progressbarTask.setTaskProgress(1);
         List<Location> locations = app.getDBI().list(new Location());
         Collections.sort(locations);
         lstLocation.setListData(locations.toArray());
-        progressbarTask.setTaskProgress(5);
-        progressbarTask.setMessage("Bulk Import Setup: Done Loading Location List...");
     }
 
     private void loadImages() {
-        progressbarTask.setMessage("Bulk Import Setup: Start Loading Images...");
-        progressbarTask.setTaskProgress(5);
         // Get the list of files from the folder to import from
         File rootFile = showFileChooser();
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        progressbarTask.setMessage("Bulk Import Setup: Loading Images (Reading files)");
-        progressbarTask.setTaskProgress(10);
         BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), progressbarTask);
-        progressbarTask.setMessage("Bulk Import Setup: Loading Images (Populating table)");
-        progressbarTask.setTaskProgress(90);
         model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
         model.fireTableDataChanged();
         // Setup the dates
         dtpStartDate.setDate(wrapper.getStartDate());
         dtpEndDate.setDate(wrapper.getEndDate());
-        progressbarTask.setTaskProgress(95);
-        progressbarTask.setMessage("Bulk Import Setup: Done Loading Images...");
     }
 
     private File showFileChooser() {
