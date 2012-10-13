@@ -48,6 +48,10 @@ public class WildLogApp extends SingleFrameApplication {
     private MapFrameOffline mapOffline;
     private JXMapKit mapOnline;
     private MapFrameOnline mapOnlineFrame;
+    private int threadCount;
+    // Make sure the application uses the same DBI instance...
+    // The DBI is initialized in startup() and closed in shutdown()
+    private DBI dbi;
 
     // Getters and Setters
     public Latitudes getPrevLat() {
@@ -124,6 +128,10 @@ public class WildLogApp extends SingleFrameApplication {
         System.out.println("STARTING UP WildLog..."
                 + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
         super.initialize(arg0);
+        // Get the threadcount
+        threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
+        if (threadCount < 3)
+            threadCount = 3;
         File dataFolder = new File(FilePaths.WILDLOG_DATA.getFullPath());
         dataFolder.mkdirs();
         File imagesFolder = new File(FilePaths.WILDLOG_IMAGES.getFullPath());
@@ -242,11 +250,6 @@ public class WildLogApp extends SingleFrameApplication {
     }
 
 
-    // Make sure the application uses the same DBI instance...
-    // Might want to think of other ways to do this, but seems ok for now
-    // The DBI is initialized in startup() and closed in shutdown()
-    private DBI dbi;
-
     public DBI getDBI() {
         return dbi;
     }
@@ -320,6 +323,10 @@ public class WildLogApp extends SingleFrameApplication {
 
     public void setUseOnlineMap(boolean useOnlineMap) {
         this.useOnlineMap = useOnlineMap;
+    }
+
+    public int getThreadCount() {
+        return threadCount;
     }
 
 }

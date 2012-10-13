@@ -1,6 +1,7 @@
 package wildlog.ui.panel.bulkupload;
 
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -52,22 +55,14 @@ import wildlog.utils.ui.Utils;
 public class BulkUploadPanel extends PanelCanSetupHeader {
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
     public final static Color tableBackgroundColor2 = new Color(215, 226, 200);
-    private ProgressbarTask progressbarTask;
 
 
     /** Creates new form BulkUploadPanel */
     public BulkUploadPanel(ProgressbarTask inProgressbarTask) {
-        progressbarTask = inProgressbarTask;
-        progressbarTask.setMessage("Preparing the Bulk Import process...");
-        progressbarTask.setTaskProgress(0);
         app = (WildLogApp) Application.getInstance();
         imageIndex = 0;
         // Init auto generated code
         initComponents();
-        // Setup the Location list
-        getLocationList();
-        // Load the images
-        loadImages();
         // "Hack" to make the buttons clickable when teh mouse scrolles over the cell (very performance intensive, but "better" now...)
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
@@ -80,8 +75,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 }
             }
         });
-        progressbarTask.setTaskProgress(100);
-        progressbarTask.setMessage("Finished preparing the Bulk Import");
+        // Setup the tab's content
+        setupTab(inProgressbarTask);
+    }
+
+    public final void setupTab(ProgressbarTask inProgressbarTask) {
+        inProgressbarTask.setMessage("Preparing the Bulk Import process...");
+        inProgressbarTask.setTaskProgress(0);
+        // Setup the Location list
+        getLocationList();
+        // Load the images
+        loadImages(inProgressbarTask);
+        inProgressbarTask.setTaskProgress(100);
+        inProgressbarTask.setMessage("Finished preparing the Bulk Import");
     }
 
     @Override
@@ -115,13 +121,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         lstLocation.setListData(locations.toArray());
     }
 
-    private void loadImages() {
+    private void loadImages(ProgressbarTask inProgressbarTask) {
         // Get the list of files from the folder to import from
         File rootFile = showFileChooser();
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), progressbarTask);
+        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), inProgressbarTask, app);
         model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
         model.fireTableDataChanged();
         // Setup the dates
@@ -432,87 +438,131 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
-        loadImages();
+        // You can only use a task once, hence for the saving we need to create a new task
+        Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setupTab(this);
+                return null;
+            }
+        });
     }//GEN-LAST:event_btnReloadActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // FIXME: Clean/refactor up this (and related sighting saving) code to be "robust" and re-useable...
-        // TODO: Close the tab sooner (once validation is fine) and then use the progressbar to keep track of the saving
-        if (txtLocationName.getText() != null && !txtLocationName.getText().isEmpty()
-                && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
-            DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
-            // Make sure all sightings have a creature set
-            for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(0, 0);
-                if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
-                    JOptionPane.showMessageDialog(this.getParent(), "Please select a Creature for each of the Sightings.", "Can't Save", JOptionPane.ERROR_MESSAGE);
-                    return;
+        // You can only use a task once, hence for the saving we need to create a new task
+        final Container thisParentHandle = this.getParent();
+        Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                // Make sure the location is OK
+                if (txtLocationName.getText() != null && !txtLocationName.getText().isEmpty()
+                        && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
+                    // Make sure the visit is OK
+                    final Visit visit = new Visit(txtVisitName.getText());
+                    if (app.getDBI().find(visit) != null) {
+                        JOptionPane.showMessageDialog(thisParentHandle, "The Visit name is not unique, please specify another one.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+                    }
+                    // Make sure all sightings have a creature set
+                    final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
+                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(0, 0);
+                        if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
+                            JOptionPane.showMessageDialog(thisParentHandle, "Please assign a Creature to each of the Sightings.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+                            return null;
+                        }
+                    }
+                    // Everything seems fine, start saving and close the tab to prevent new edits
+                    this.setMessage("Saving the Bulk Import: Starting...");
+                    this.setTaskProgress(0);
+                    closeTab();
+                    // Process the Location
+                    Location location = app.getDBI().find(new Location(txtLocationName.getText()));
+                    if (location == null) {
+                        location = new Location(txtLocationName.getText());
+                        app.getDBI().createOrUpdate(location, null);
+                    }
+                    // Process the Visit
+                    visit.setLocationName(location.getName());
+                    visit.setStartDate(dtpStartDate.getDate());
+                    visit.setEndDate(dtpEndDate.getDate());
+                    visit.setType((VisitType)cmbVisitType.getSelectedItem());
+                    app.getDBI().createOrUpdate(visit, null);
+                    // Processs the sightings
+                    final Location locationHandle = location;
+                    final Object saveElementLock = new Object();
+                    final Object saveSightingLock = new Object();
+                    ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount());
+                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                        final int counter = rowCount;
+                        final ProgressbarTask progressbarHandle = this;
+                        executorService.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                // FIXME: Clean/refactor up this (and related sighting saving) code to be "robust" and re-useable...
+                                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(counter, 0);
+                                // Check wether the Creature exists or not
+                                if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
+                                    synchronized (saveElementLock) {
+                                        app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
+                                    }
+                                }
+                                // Continue processing the Sighting
+                                sightingWrapper.setLocationName(locationHandle.getName());
+                                sightingWrapper.setVisitName(visit.getName());
+                                // If the sighting's GPS point is set then try to calculate Sun and Moon
+                                if (sightingWrapper.getDate() != null
+                                        && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
+                                        && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
+                                    // Sun
+                                    double latitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSecondsFloat());
+                                    double longitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSecondsFloat());
+                                    sightingWrapper.setTimeOfDay(AstroUtils.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
+                                    // Moon
+                                    sightingWrapper.setMoonPhase(AstroUtils.getMoonPhase(sightingWrapper.getDate()));
+                                    sightingWrapper.setMoonlight(AstroUtils.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
+                                }
+                                // Save the sigting
+                                synchronized (saveSightingLock) {
+                                    app.getDBI().createOrUpdate(sightingWrapper);
+                                }
+                                // Save the corresponding images
+                                BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(counter, 1);
+                                List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
+                                for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
+                                    files.add(imageWrapper.getFile());
+                                }
+                                Utils.performFileUpload(
+                                            "SIGHTING-" + sightingWrapper.getSightingCounter(),
+                                            "Sightings" + File.separatorChar + sightingWrapper.toString(),
+                                            files.toArray(new File[files.size()]),
+                                            null, 300, app);
+                                // Update the progress
+                                try {
+                                    // TODO: Try to improve this progress bar to be more accurate, but not a big deal...
+                                    progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());
+                                }
+                                catch (Exception e) {
+                                    e.printStackTrace(System.out);
+                                }
+                            }
+                        });
+                    }
+                    if (!Utils.tryAndWaitToShutdownExecutorService(executorService)) {
+                        JOptionPane.showMessageDialog(thisParentHandle, "There was an unexpected problem while saving.", "Problem Saving", JOptionPane.ERROR_MESSAGE);
+                    }
+                    // Saving is done, now open the visits's tab
+                    this.setMessage("Saving the Bulk Import: Finished");
+                    this.setTaskProgress(100);
+                    UtilPanelGenerator.addPanelAsTab(
+                        UtilPanelGenerator.getVisitPanel(locationHandle, visit.getName()),
+                        ((JTabbedPane)thisParentHandle));
                 }
-            }
-            // Process the Location
-            Location location = app.getDBI().find(new Location(txtLocationName.getText()));
-            if (location == null) {
-                location = new Location(txtLocationName.getText());
-                app.getDBI().createOrUpdate(location, null);
-            }
-            // Process the Visit
-            Visit visit = new Visit(txtVisitName.getText());
-            if (app.getDBI().find(visit) == null) {
-                visit.setLocationName(location.getName());
-                visit.setStartDate(dtpStartDate.getDate());
-                visit.setEndDate(dtpEndDate.getDate());
-                visit.setType((VisitType)cmbVisitType.getSelectedItem());
-                app.getDBI().createOrUpdate(visit, null);
-                // Processs the sightings
-                for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                    BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
-                    // Check wether the Creature exists or not
-                    if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
-                        app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
-                    }
-                    // Continue processing the Sighting
-                    sightingWrapper.setLocationName(location.getName());
-                    sightingWrapper.setVisitName(visit.getName());
-                    // If the sighting's GPS point is set then try to calculate Sun and Moon
-                    if (sightingWrapper.getDate() != null
-                            && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
-                            && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
-                        // Sun
-                        double latitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSecondsFloat());
-                        double longitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSecondsFloat());
-                        sightingWrapper.setTimeOfDay(AstroUtils.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
-                        // Moon
-                        sightingWrapper.setMoonPhase(AstroUtils.getMoonPhase(sightingWrapper.getDate()));
-                        sightingWrapper.setMoonlight(AstroUtils.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
-                    }
-                    // Save the sigting
-                    app.getDBI().createOrUpdate(sightingWrapper);
-                    // Save the corresponding images
-                    BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(rowCount, 1);
-                    List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
-                    for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
-                        files.add(imageWrapper.getFile());
-                    }
-                    Utils.performFileUpload(
-                                "SIGHTING-" + sightingWrapper.getSightingCounter(),
-                                "Sightings" + File.separatorChar + sightingWrapper.toString(),
-                                files.toArray(new File[files.size()]),
-                                null, 300, app);
+                else {
+                    JOptionPane.showMessageDialog(thisParentHandle, "Please provide a Location name and Visit name before saving.", "Can't Save", JOptionPane.ERROR_MESSAGE);
                 }
-                // Done processing
-                // Open the Visit and close the bulk upload tabs
-                UtilPanelGenerator.addPanelAsTab(
-                        UtilPanelGenerator.getVisitPanel(location, visit.getName()),
-                        ((JTabbedPane)getParent()));
-                closeTab();
+                return null;
             }
-            else {
-                JOptionPane.showMessageDialog(this.getParent(), "The Visit name is not unique, please specify another one.", "Can't Save", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-        else {
-            JOptionPane.showMessageDialog(this.getParent(), "Please provide a Location name and Visit name before saving.", "Can't Save", JOptionPane.ERROR_MESSAGE);
-        }
+        });
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown

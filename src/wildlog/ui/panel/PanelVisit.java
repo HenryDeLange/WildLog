@@ -1153,7 +1153,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnKmlExportActionPerformed
 
     private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
-        Utils.kickoffTask(new Task(app) {
+        Utils.kickoffProgressbarTask(new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
@@ -1185,7 +1185,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnSlideshowSightingsActionPerformed
 
     private void btnSlideshowVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitActionPerformed
-        Utils.kickoffTask(new Task(app) {
+        Utils.kickoffProgressbarTask(new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");

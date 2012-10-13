@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import wildlog.WildLogApp;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -21,17 +22,13 @@ import wildlog.utils.ui.Utils;
 
 public class BulkUploadDataLoader {
 
-    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask) {
+    public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, WildLogApp inApp) {
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>(files.size());
         // First load all the images and sort them according to date
-        int threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
-        if (threadCount < 3)
-            threadCount = 3;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        final int buffer = 15/files.size()*100;
+        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
         for (int t = 0; t < files.size(); t++) {
             final File tempFile = files.get(t);
             final int counter = t;
@@ -40,7 +37,8 @@ public class BulkUploadDataLoader {
                         public void run() {
                             loadFileData(tempFile, imageList);
                             try {
-                                inProgressbarTask.setTaskProgress(buffer + counter, buffer, files.size() + buffer);
+                                // TODO: Try to improve this progress bar to be more accurate, but not a big deal...
+                                inProgressbarTask.setTaskProgress(counter, 0, files.size());
                             }
                             catch (Exception e) {
                                 e.printStackTrace(System.out);
@@ -48,20 +46,8 @@ public class BulkUploadDataLoader {
                         }
                     });
         }
-        executorService.shutdown();
-        try {
-            int count = 0;
-            while(!executorService.awaitTermination(6, TimeUnit.MINUTES) && count < 10) {
-                count++;
-                System.out.println("Bulk Upload: Timer expired while loading images... Resetting... " + count);
-            }
-            if (!executorService.isTerminated()) {
-                System.err.println("Bulk Upload Error: Terminating bulk import... " + count);
-                return null;
-            }
-        }
-        catch (InterruptedException ex) {
-            ex.printStackTrace(System.err);
+        if (!Utils.tryAndWaitToShutdownExecutorService(executorService)) {
+            return null;
         }
         Collections.sort(imageList);
         inProgressbarTask.setMessage("Bulk Import Preparation: Process files...");
@@ -128,15 +114,17 @@ public class BulkUploadDataLoader {
 
     private static List<File> getListOfFilesToImport(File inRoot, boolean inIncludeFolders) {
         List<File> list = new ArrayList<File>();
-        File[] tempFileList = inRoot.listFiles();
-        for (File tempFile : tempFileList) {
-        if (inIncludeFolders && tempFile.isDirectory()) {
-            list.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
-        }
-        else {
-            String tempName = tempFile.getName().toLowerCase();
-            if (tempName.endsWith("jpg") || tempName.endsWith("jpeg"))
-                list.add(tempFile);
+        if (inRoot != null) {
+            File[] tempFileList = inRoot.listFiles();
+            for (File tempFile : tempFileList) {
+            if (inIncludeFolders && tempFile.isDirectory()) {
+                list.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
+            }
+            else {
+                String tempName = tempFile.getName().toLowerCase();
+                if (tempName.endsWith("jpg") || tempName.endsWith("jpeg"))
+                    list.add(tempFile);
+                }
             }
         }
         return list;

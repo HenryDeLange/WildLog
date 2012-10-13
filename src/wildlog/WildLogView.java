@@ -2027,7 +2027,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_btnViewEXIFActionPerformed
 
     private void btnBulkUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkUploadActionPerformed
-        Utils.kickoffTask(new ProgressbarTask(app) {
+        Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this);
@@ -2122,7 +2122,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void exportToHTML() {
-        Utils.kickoffTask(new Task(app) {
+        Utils.kickoffProgressbarTask(new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 messageTimer.stop();
@@ -2594,7 +2594,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         fileChooser.setDialogTitle("Select the images to use for the slideshow...");
         final Component parent = this.getComponent();
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this.getComponent())) {
-            Utils.kickoffTask(new ProgressbarTask(app) {
+            Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setMessage("Creating the Slideshow");
