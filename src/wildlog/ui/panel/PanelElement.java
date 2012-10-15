@@ -83,8 +83,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
         setupNumberOfImages();
 
+        // Setup the table
         tblLocation.getTableHeader().setReorderingAllowed(false);
-
+        tblLocation.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation));
 
         fixSelectAllForSpinners(spnSizeMaleMin);
         fixSelectAllForSpinners(spnSizeMaleMax);
@@ -109,6 +110,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
+        // Attach clipboard
+        Utils.attachClipboardPopup(txtPrimaryName);
+        Utils.attachClipboardPopup(txtScienceName);
+        Utils.attachClipboardPopup(txtOtherName);
+        Utils.attachClipboardPopup(txtBehaviourDescription);
+        Utils.attachClipboardPopup(txtBreedingNumber);
+        Utils.attachClipboardPopup(txtDescription);
+        Utils.attachClipboardPopup(txtDiagnosticDescription);
+        Utils.attachClipboardPopup(txtDistribution);
+        Utils.attachClipboardPopup(txtLifespan);
+        Utils.attachClipboardPopup(txtNutrition);
+        Utils.attachClipboardPopup(txtReferenceID);
+        Utils.attachClipboardPopup(txtbreedingDuration);
     }
 
     public Element getElement() {

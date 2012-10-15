@@ -143,10 +143,15 @@ public class PanelSighting extends JPanel {
             else {
                 lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
             }
+
             //Setup Tables
             tblElement.getTableHeader().setReorderingAllowed(false);
+            tblElement.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement));
             tblLocation.getTableHeader().setReorderingAllowed(false);
+            tblLocation.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation));
             tblVisit.getTableHeader().setReorderingAllowed(false);
+            tblVisit.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblVisit));
+
             // Setup default values for input fields
             if (treatAsNewSighting) {
                 cmbCertainty.setSelectedItem(Certainty.SURE);
@@ -210,6 +215,13 @@ public class PanelSighting extends JPanel {
                     }
                 }
             });
+        }
+
+        if (!disableEditing && !bulkUploadMode) {
+            // Attach clipboard
+            Utils.attachClipboardPopup(txtSearch);
+            Utils.attachClipboardPopup(txtSearchLocation);
+            Utils.attachClipboardPopup(txtDetails);
         }
     }
 

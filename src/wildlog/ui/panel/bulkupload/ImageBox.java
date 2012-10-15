@@ -25,6 +25,8 @@ public class ImageBox extends JPanel {
     public final void populateUI() {
         // Setup the image label
         lblImage.setIcon(imageWrapper.getIcon());
+        // TODO: Tooltips aren't wotking. It makes other rows dissapear after viewing a tooltip and then moving the mouse to a new row... See http://stackoverflow.com/questions/10854831/tool-tip-in-jpanel-in-jtable-not-working
+//        lblImage.setToolTipText(imageWrapper.getFile().getName());
     }
 
     /** This method is called from within the constructor to

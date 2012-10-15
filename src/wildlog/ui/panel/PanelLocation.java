@@ -74,8 +74,11 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         setupNumberOfImages();
 
+        // Setup the tables
         tblElement.getTableHeader().setReorderingAllowed(false);
+        tblElement.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement));
         tblVisit.getTableHeader().setReorderingAllowed(false);
+        tblVisit.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblVisit));
 
         SpinnerFixer.fixSelectAllForSpinners(spnLatDecimal);
         SpinnerFixer.fixSelectAllForSpinners(spnLatDegrees);
@@ -99,6 +102,14 @@ public class PanelLocation extends PanelCanSetupHeader {
                 }
             }
         });
+
+        // Attach clipboard
+        Utils.attachClipboardPopup(txtName);
+        Utils.attachClipboardPopup(txtContactNumber);
+        Utils.attachClipboardPopup(txtDescription);
+        Utils.attachClipboardPopup(txtDirections);
+        Utils.attachClipboardPopup(txtEmail);
+        Utils.attachClipboardPopup(txtWebsite);
     }
 
     public void setLocationWL(Location inLocation) {

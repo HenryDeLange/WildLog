@@ -86,7 +86,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
         imageSightingIndex = 0;
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
+        // Setup the table
         tblSightings.getTableHeader().setReorderingAllowed(false);
+        tblSightings.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblSightings));
 
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
@@ -101,6 +103,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             }
         });
+
+        // Attach clipboard
+        Utils.attachClipboardPopup(txtName);
+        Utils.attachClipboardPopup(txtDescription);
     }
 
     public void setVisit(Visit inVisit) {

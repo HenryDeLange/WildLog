@@ -103,9 +103,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     public WildLogView(SingleFrameApplication app) {
         super(app);
-
         init();
-
         initComponents();
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
@@ -180,8 +178,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation_EleTab.getTableHeader().setReorderingAllowed(false);
         tblVisit.getTableHeader().setReorderingAllowed(false);
 
+        // Add key listeners to table to allow the selection of rows based on key events.
+        tblLocation.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation));
+        tblLocation_EleTab.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation_EleTab));
+        tblElement.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement));
+        tblElement_LocTab.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement_LocTab));
+        tblVisit.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblVisit));
+
         // Set the minimum size of the frame
         this.getFrame().setMinimumSize(new Dimension(1024, 705));
+
+        // Attach clipboard
+        Utils.attachClipboardPopup(txtSearch);
     }
 
     @Action
