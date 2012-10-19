@@ -142,6 +142,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUpdate" noResource="true"/>
           </Properties>
           <Events>
@@ -172,6 +173,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnPreviousImage" noResource="true"/>
           </Properties>
           <Events>
@@ -192,6 +194,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnNextImage" noResource="true"/>
           </Properties>
           <Events>
@@ -212,6 +215,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
           </Properties>
           <Events>
@@ -271,6 +275,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnGoLocation" noResource="true"/>
           </Properties>
           <Events>
@@ -781,6 +786,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
           </Properties>
           <Events>
@@ -906,6 +912,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
           <Events>
@@ -927,6 +934,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnMap" noResource="true"/>
           </Properties>
           <Events>
@@ -978,6 +986,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 10, 2, 10]"/>
             </Property>
@@ -1099,6 +1108,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
           </Properties>
           <Events>
@@ -1119,6 +1129,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnHTML" noResource="true"/>
           </Properties>
           <Events>
@@ -1139,6 +1150,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnKML" noResource="true"/>
           </Properties>
           <Events>

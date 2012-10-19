@@ -85,6 +85,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUpdateSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -171,6 +172,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnPreviousImage" noResource="true"/>
           </Properties>
           <Events>
@@ -191,6 +193,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnNextImage" noResource="true"/>
           </Properties>
           <Events>
@@ -214,6 +217,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
           </Properties>
           <Events>
@@ -656,6 +660,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
           </Properties>
           <Events>
@@ -679,6 +684,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
           <Events>
@@ -702,6 +708,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
           </Properties>
           <Events>
@@ -932,6 +939,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSearchLocation" noResource="true"/>
           </Properties>
           <Events>
@@ -1060,6 +1068,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUsePrevGPS" noResource="true"/>
           </Properties>
           <Events>
@@ -1082,6 +1091,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUseLocationGPS" noResource="true"/>
           </Properties>
           <Events>
@@ -1125,6 +1135,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 2, 2, 2]"/>
             </Property>
@@ -1184,6 +1195,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 2, 2, 2]"/>
             </Property>

@@ -121,6 +121,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUpdate" noResource="true"/>
           </Properties>
           <Events>
@@ -320,6 +321,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnPreviousImage" noResource="true"/>
           </Properties>
           <Events>
@@ -340,6 +342,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnNextImage" noResource="true"/>
           </Properties>
           <Events>
@@ -394,6 +397,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnUploadImage" noResource="true"/>
           </Properties>
           <Events>
@@ -426,6 +430,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnAddSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -446,6 +451,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnDeleteSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -466,6 +472,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnEditSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -564,6 +571,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
           <Events>
@@ -596,6 +604,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnMapSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -616,6 +625,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSetMainImage" noResource="true"/>
           </Properties>
           <Events>
@@ -636,6 +646,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnGoElement" noResource="true"/>
           </Properties>
           <Events>
@@ -656,6 +667,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnMapVisit" noResource="true"/>
           </Properties>
           <Events>
@@ -694,6 +706,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnPreviousImageSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -713,6 +726,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnNextImageSighting" noResource="true"/>
           </Properties>
           <Events>
@@ -840,6 +854,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
           </Properties>
           <Events>
@@ -858,6 +873,7 @@
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnChecklist.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnChecklist.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnChecklist.toolTipText"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 5, 2, 5]"/>
             </Property>
@@ -881,6 +897,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnHTML" noResource="true"/>
           </Properties>
           <Events>
@@ -901,6 +918,7 @@
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnKmlExport" noResource="true"/>
           </Properties>
           <Events>
@@ -908,7 +926,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="455" y="55" width="120" height="50"/>
+              <AbsoluteConstraints x="455" y="55" width="120" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -916,6 +934,7 @@
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSlideshowSightings.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSlideshowSightings.text"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSlideshowSightings" noResource="true"/>
           </Properties>
           <Events>
@@ -923,7 +942,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="455" y="150" width="120" height="35"/>
+              <AbsoluteConstraints x="455" y="155" width="120" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -931,6 +950,7 @@
           <Properties>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnSlideshowVisit.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnSlideshowVisit.text"/>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="btnSlideshowVisit" noResource="true"/>
           </Properties>
           <Events>
@@ -938,7 +958,21 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="455" y="110" width="120" height="35"/>
+              <AbsoluteConstraints x="460" y="120" width="120" height="30"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnBulkImport">
+          <Properties>
+            <Property name="text" type="java.lang.String" resourceKey="btnBulkImport.text"/>
+            <Property name="name" type="java.lang.String" value="btnBulkImport" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBulkImportActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="460" y="90" width="110" height="30"/>
             </Constraint>
           </Constraints>
         </Component>

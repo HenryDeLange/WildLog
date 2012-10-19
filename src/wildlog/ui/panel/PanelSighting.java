@@ -386,6 +386,7 @@ public class PanelSighting extends JPanel {
         btnUpdateSighting.setToolTipText(resourceMap.getString("btnUpdateSighting.toolTipText")); // NOI18N
         btnUpdateSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdateSighting.setEnabled(!disableEditing);
+        btnUpdateSighting.setFocusPainted(false);
         btnUpdateSighting.setName("btnUpdateSighting"); // NOI18N
         btnUpdateSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -431,6 +432,7 @@ public class PanelSighting extends JPanel {
         btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
         btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -444,6 +446,7 @@ public class PanelSighting extends JPanel {
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
         btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -458,6 +461,7 @@ public class PanelSighting extends JPanel {
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -642,6 +646,7 @@ public class PanelSighting extends JPanel {
         btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
         btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSearch.setEnabled(!disableEditing);
+        btnSearch.setFocusPainted(false);
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -656,6 +661,7 @@ public class PanelSighting extends JPanel {
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -670,6 +676,7 @@ public class PanelSighting extends JPanel {
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -782,6 +789,7 @@ public class PanelSighting extends JPanel {
         btnSearchLocation.setToolTipText(resourceMap.getString("btnSearchLocation.toolTipText")); // NOI18N
         btnSearchLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSearchLocation.setEnabled(!disableEditing && !bulkUploadMode);
+        btnSearchLocation.setFocusPainted(false);
         btnSearchLocation.setName("btnSearchLocation"); // NOI18N
         btnSearchLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -845,6 +853,7 @@ public class PanelSighting extends JPanel {
         btnUsePrevGPS.setToolTipText(resourceMap.getString("btnUsePrevGPS.toolTipText")); // NOI18N
         btnUsePrevGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsePrevGPS.setEnabled(!disableEditing && !bulkUploadMode);
+        btnUsePrevGPS.setFocusPainted(false);
         btnUsePrevGPS.setName("btnUsePrevGPS"); // NOI18N
         btnUsePrevGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -858,6 +867,7 @@ public class PanelSighting extends JPanel {
         btnUseLocationGPS.setToolTipText(resourceMap.getString("btnUseLocationGPS.toolTipText")); // NOI18N
         btnUseLocationGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseLocationGPS.setEnabled(!disableEditing && !bulkUploadMode);
+        btnUseLocationGPS.setFocusPainted(false);
         btnUseLocationGPS.setName("btnUseLocationGPS"); // NOI18N
         btnUseLocationGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -879,6 +889,7 @@ public class PanelSighting extends JPanel {
         btnGetDateFromImage.setToolTipText(resourceMap.getString("btnGetDateFromImage.toolTipText")); // NOI18N
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnGetDateFromImage.setFocusPainted(false);
         btnGetDateFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnGetDateFromImage.setName("btnGetDateFromImage"); // NOI18N
         btnGetDateFromImage.addActionListener(new java.awt.event.ActionListener() {
@@ -906,6 +917,7 @@ public class PanelSighting extends JPanel {
         btnCalculateMoonPhase.setText(resourceMap.getString("btnCalculateMoonPhase.text")); // NOI18N
         btnCalculateMoonPhase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateMoonPhase.setEnabled(!disableEditing);
+        btnCalculateMoonPhase.setFocusPainted(false);
         btnCalculateMoonPhase.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCalculateMoonPhase.setName("btnCalculateMoonPhase"); // NOI18N
         btnCalculateMoonPhase.addActionListener(new java.awt.event.ActionListener() {

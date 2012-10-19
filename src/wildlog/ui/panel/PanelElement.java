@@ -3,6 +3,7 @@ package wildlog.ui.panel;
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -151,6 +152,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (element.getPrimaryName() != null) tabHeader.add(new JLabel(element.getPrimaryName() + " "));
         else tabHeader.add(new JLabel("[new] "));
         JButton btnClose = new JButton();
+        btnClose.setFocusPainted(false);
+        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.setBackground(new Color(255, 000, 000));
         btnClose.setToolTipText("Close");
@@ -329,6 +332,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnUpdate.setText(resourceMap.getString("btnUpdate.text")); // NOI18N
         btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -345,6 +349,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
         btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
         btnPreviousImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,6 +363,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
         btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
         btnNextImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -371,6 +377,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
         btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
         btnSetMainImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -407,6 +414,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnGoLocation.setText(resourceMap.getString("btnGoLocation.text")); // NOI18N
         btnGoLocation.setToolTipText(resourceMap.getString("btnGoLocation.toolTipText")); // NOI18N
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoLocation.setFocusPainted(false);
         btnGoLocation.setName("btnGoLocation"); // NOI18N
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -599,6 +607,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
         btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUploadImage.setFocusPainted(false);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
         btnUploadImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -654,6 +663,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
         btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -668,6 +678,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnMap.setText(resourceMap.getString("btnMap.text")); // NOI18N
         btnMap.setToolTipText(resourceMap.getString("btnMap.toolTipText")); // NOI18N
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMap.setFocusPainted(false);
         btnMap.setName("btnMap"); // NOI18N
         btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -695,6 +706,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
         btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddSighting.setFocusPainted(false);
         btnAddSighting.setMargin(new java.awt.Insets(2, 10, 2, 10));
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
@@ -751,6 +763,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReport.setFocusPainted(false);
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -764,6 +777,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
         btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnHTML.setFocusPainted(false);
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -777,6 +791,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnKML.setText(resourceMap.getString("btnKML.text")); // NOI18N
         btnKML.setToolTipText(resourceMap.getString("btnKML.toolTipText")); // NOI18N
         btnKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnKML.setFocusPainted(false);
         btnKML.setName("btnKML"); // NOI18N
         btnKML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

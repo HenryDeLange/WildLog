@@ -160,6 +160,7 @@ public class InfoBox extends JPanel {
 
         btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEdit.setFocusPainted(false);
         btnEdit.setName("btnEdit"); // NOI18N
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,6 +172,7 @@ public class InfoBox extends JPanel {
         btnChooseCreature.setText(resourceMap.getString("btnChooseCreature.text")); // NOI18N
         btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnChooseCreature.setFocusPainted(false);
         btnChooseCreature.setName("btnChooseCreature"); // NOI18N
         btnChooseCreature.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -2,6 +2,7 @@ package wildlog.ui.panel.bulkupload;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,7 +59,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
 
     /** Creates new form BulkUploadPanel */
-    public BulkUploadPanel(ProgressbarTask inProgressbarTask) {
+    public BulkUploadPanel(ProgressbarTask inProgressbarTask, String inVisitName) {
         app = (WildLogApp) Application.getInstance();
         imageIndex = 0;
         // Init auto generated code
@@ -75,6 +76,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 }
             }
         });
+        if (inVisitName != null && !inVisitName.isEmpty()) {
+            txtVisitName.setText(inVisitName);
+        }
         // Setup the tab's content
         setupTab(inProgressbarTask);
     }
@@ -96,6 +100,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"))));
         tabHeader.add(new JLabel("Bulk Upload"));
         JButton btnClose = new JButton();
+        btnClose.setFocusPainted(false);
+        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.setBackground(new Color(255, 000, 000));
         btnClose.setToolTipText("Close");
@@ -251,6 +257,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
         btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -282,6 +289,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnReload.setIcon(resourceMap.getIcon("btnReload.icon")); // NOI18N
         btnReload.setText(resourceMap.getString("btnReload.text")); // NOI18N
         btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReload.setFocusPainted(false);
         btnReload.setName("btnReload"); // NOI18N
         btnReload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -310,6 +318,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jButton2.setBackground(resourceMap.getColor("jButton2.background")); // NOI18N
         jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setFocusPainted(false);
         jButton2.setName("jButton2"); // NOI18N
         pnlTop.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 100, 30));
 
@@ -340,6 +349,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jButton3.setBackground(resourceMap.getColor("jButton3.background")); // NOI18N
         jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setFocusPainted(false);
         jButton3.setName("jButton3"); // NOI18N
         pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, 100, 30));
 

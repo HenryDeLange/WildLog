@@ -65,6 +65,7 @@ public class ImageBox extends JPanel {
 
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnUp.setFocusPainted(false);
         btnUp.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnUp.setName("btnUp"); // NOI18N
         btnUp.addActionListener(new java.awt.event.ActionListener() {
@@ -76,6 +77,7 @@ public class ImageBox extends JPanel {
 
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDown.setFocusPainted(false);
         btnDown.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnDown.setName("btnDown"); // NOI18N
         btnDown.addActionListener(new java.awt.event.ActionListener() {
@@ -87,6 +89,7 @@ public class ImageBox extends JPanel {
 
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRemove.setFocusPainted(false);
         btnRemove.setName("btnRemove"); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -97,6 +100,7 @@ public class ImageBox extends JPanel {
 
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnNewSighting.setFocusPainted(false);
         btnNewSighting.setName("btnNewSighting"); // NOI18N
         btnNewSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -106,6 +110,7 @@ public class ImageBox extends JPanel {
         add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
         btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
+        btnClone.setFocusPainted(false);
         btnClone.setName("btnClone"); // NOI18N
         btnClone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

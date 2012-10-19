@@ -5,12 +5,13 @@ import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.Icon;
+import javax.swing.JDialog;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.utils.ui.Utils;
 
 
-public class ElementSelectionBox extends javax.swing.JDialog {
+public class ElementSelectionBox extends JDialog {
     private WildLogApp app;
     private boolean selectionMade = false;
 
@@ -72,6 +73,7 @@ public class ElementSelectionBox extends javax.swing.JDialog {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        lstElements.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstElements.setName("lstElements"); // NOI18N
         lstElements.setSelectionBackground(resourceMap.getColor("lstElements.selectionBackground")); // NOI18N
         lstElements.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -91,7 +93,7 @@ public class ElementSelectionBox extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(lstElements);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 250, 170));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 250, 360));
 
         lblElementImage.setBackground(resourceMap.getColor("lblElementImage.background")); // NOI18N
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -103,7 +105,7 @@ public class ElementSelectionBox extends javax.swing.JDialog {
                 lblElementImageMouseReleased(evt);
             }
         });
-        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 150, 150));
+        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 150, 150));
 
         btnSelect.setBackground(resourceMap.getColor("btnSelect.background")); // NOI18N
         btnSelect.setText(resourceMap.getString("btnSelect.text")); // NOI18N
@@ -114,9 +116,9 @@ public class ElementSelectionBox extends javax.swing.JDialog {
                 btnSelectActionPerformed(evt);
             }
         });
-        jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 150, 50));
+        jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 150, 70));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 240));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 430));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

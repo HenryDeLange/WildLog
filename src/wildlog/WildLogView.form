@@ -20,6 +20,7 @@
       <SubComponents>
         <Container class="javax.swing.JTabbedPane" name="tabbedPanel">
           <Properties>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[2500, 1300]"/>
             </Property>
@@ -59,8 +60,98 @@
                 </Constraint>
               </Constraints>
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
-                <Property name="useNullLayout" type="boolean" value="false"/>
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="60" pref="60" max="60" attributes="0"/>
+                          <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="703" pref="703" max="703" attributes="0"/>
+                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="15" pref="15" max="15" attributes="0"/>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="110" pref="110" max="110" attributes="0"/>
+                          <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="16" pref="16" max="16" attributes="0"/>
+                          <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace min="810" pref="810" max="810" attributes="0"/>
+                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace pref="858" max="32767" attributes="0"/>
+                          <Component id="jLabel3" min="-2" pref="149" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="jSeparator6" min="-2" pref="455" max="-2" attributes="0"/>
+                          <EmptySpace pref="502" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+                          <Component id="jSeparator5" min="-2" pref="437" max="-2" attributes="0"/>
+                          <EmptySpace pref="512" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                          <Component id="lblWorkspace" min="-2" pref="437" max="-2" attributes="0"/>
+                          <EmptySpace pref="520" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="134" max="-2" attributes="0"/>
+                          <Component id="lblLocations" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="lblVisits" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="lblSightings" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="lblCreatures" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="643" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="6" pref="6" max="6" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="8" pref="8" max="8" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="30" pref="30" max="30" attributes="0"/>
+                                  <Component id="jLabel12" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                          <Component id="jSeparator6" min="-2" pref="10" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="lblLocations" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblVisits" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblSightings" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblCreatures" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                          <Component id="jSeparator5" min="-2" pref="10" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                          <Component id="lblWorkspace" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace pref="186" max="32767" attributes="0"/>
+                          <Component id="jLabel3" min="-2" pref="228" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
               </Layout>
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel10">
@@ -70,11 +161,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="jLabel10.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="60" y="40" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel11">
                   <Properties>
@@ -83,11 +169,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="jLabel11.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel11" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="110" y="70" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel12">
                   <Properties>
@@ -96,11 +177,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="jLabel12.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="320" y="100" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel15">
                   <Properties>
@@ -109,11 +185,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="jLabel15.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel15" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="810" y="10" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel3">
                   <Properties>
@@ -121,11 +192,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="850" y="330" width="160" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblLocations">
                   <Properties>
@@ -133,11 +199,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="lblLocations.text"/>
                     <Property name="name" type="java.lang.String" value="lblLocations" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="140" y="150" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblVisits">
                   <Properties>
@@ -145,11 +206,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="lblVisits.text"/>
                     <Property name="name" type="java.lang.String" value="lblVisits" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="230" y="150" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblSightings">
                   <Properties>
@@ -157,11 +213,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="lblSightings.text"/>
                     <Property name="name" type="java.lang.String" value="lblSightings" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="300" y="150" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblCreatures">
                   <Properties>
@@ -169,11 +220,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="lblCreatures.text"/>
                     <Property name="name" type="java.lang.String" value="lblCreatures" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="390" y="150" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator5">
                   <Properties>
@@ -181,11 +227,6 @@
                     <Property name="foreground" type="java.awt.Color" resourceKey="jSeparator5.foreground"/>
                     <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="130" y="140" width="340" height="10"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel5">
                   <Properties>
@@ -194,11 +235,6 @@
                     <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="870" y="30" width="-1" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
                 <Component class="javax.swing.JLabel" name="lblWorkspace">
                   <Properties>
@@ -210,25 +246,13 @@
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblWorkspace" noResource="true"/>
                   </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="450" y="560" width="530" height="-1"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
-                <Component class="javax.swing.JButton" name="btnBulkUpload">
+                <Component class="javax.swing.JSeparator" name="jSeparator6">
                   <Properties>
-                    <Property name="text" type="java.lang.String" resourceKey="btnBulkUpload.text"/>
-                    <Property name="name" type="java.lang.String" value="btnBulkUpload" noResource="true"/>
+                    <Property name="background" type="java.awt.Color" resourceKey="jSeparator6.background"/>
+                    <Property name="foreground" type="java.awt.Color" resourceKey="jSeparator6.foreground"/>
+                    <Property name="name" type="java.lang.String" value="jSeparator6" noResource="true"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBulkUploadActionPerformed"/>
-                  </Events>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-                      <AbsoluteConstraints x="240" y="300" width="200" height="80"/>
-                    </Constraint>
-                  </Constraints>
                 </Component>
               </SubComponents>
             </Container>
@@ -412,6 +436,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoBrowseSelection" noResource="true"/>
                   </Properties>
                   <Events>
@@ -435,6 +460,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnZoomIn" noResource="true"/>
                   </Properties>
                   <Constraints>
@@ -455,6 +481,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnZoomOut" noResource="true"/>
                   </Properties>
                   <Constraints>
@@ -471,6 +498,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnViewImage" noResource="true"/>
                   </Properties>
                   <Events>
@@ -491,6 +519,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnBrowsePrev" noResource="true"/>
                   </Properties>
                   <Events>
@@ -511,6 +540,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnBrowseNext" noResource="true"/>
                   </Properties>
                   <Events>
@@ -557,6 +587,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnRefreshDates" noResource="true"/>
                   </Properties>
                   <Events>
@@ -589,6 +620,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
                   </Properties>
                   <Events>
@@ -606,6 +638,7 @@
                     <Property name="icon" type="javax.swing.Icon" resourceKey="btnDefault.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="btnDefault.text"/>
                     <Property name="toolTipText" type="java.lang.String" resourceKey="btnDefault.toolTipText"/>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnDefault" noResource="true"/>
                   </Properties>
                   <Events>
@@ -666,6 +699,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnRotate" noResource="true"/>
                   </Properties>
                   <Constraints>
@@ -683,6 +717,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[2, 2, 2, 2]"/>
                     </Property>
@@ -832,6 +867,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoLocation_LocTab" noResource="true"/>
                   </Properties>
                   <Events>
@@ -852,6 +888,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoElement_LocTab" noResource="true"/>
                   </Properties>
                   <Events>
@@ -872,6 +909,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnAddLocation" noResource="true"/>
                   </Properties>
                   <Events>
@@ -892,6 +930,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnDeleteLocation" noResource="true"/>
                   </Properties>
                   <Events>
@@ -944,6 +983,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoVisit_LocTab" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1089,6 +1129,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoElement" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1109,6 +1150,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnAddElement" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1129,6 +1171,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnDeleteElement" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1202,6 +1245,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoLocation" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1301,6 +1345,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnSearch" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1357,6 +1402,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusPainted" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnClearSearch" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1546,6 +1592,16 @@
                 </Property>
                 <Property name="text" type="java.lang.String" resourceKey="csvImportMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="csvImportMenuItem" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="bulkImportMenuItem">
+              <Properties>
+                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
+                  <action class="wildlog.WildLogView" id="bulkImportAction" methodName="bulkImportAction"/>
+                </Property>
+                <Property name="text" type="java.lang.String" resourceKey="bulkImportMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="bulkImportMenuItem.toolTipText"/>
+                <Property name="name" type="java.lang.String" value="bulkImportMenuItem" noResource="true"/>
               </Properties>
             </MenuItem>
           </SubComponents>

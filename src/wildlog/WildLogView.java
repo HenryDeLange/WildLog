@@ -257,7 +257,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator5 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         lblWorkspace = new javax.swing.JLabel();
-        btnBulkUpload = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JSeparator();
         tabFoto = new javax.swing.JPanel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
         rdbBrowseElement = new javax.swing.JRadioButton();
@@ -337,6 +337,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         kmlExportMenuItem = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         csvImportMenuItem = new javax.swing.JMenuItem();
+        bulkImportMenuItem = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
         calcSunMoonMenuItem = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
@@ -366,6 +367,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mainPanel.setPreferredSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
 
+        tabbedPanel.setFocusable(false);
         tabbedPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
@@ -382,83 +384,143 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 tabHomeComponentShown(evt);
             }
         });
-        tabHome.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel10.setFont(resourceMap.getFont("jLabel10.font")); // NOI18N
         jLabel10.setForeground(resourceMap.getColor("jLabel10.foreground")); // NOI18N
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
-        tabHome.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 40, -1, -1));
 
         jLabel11.setFont(resourceMap.getFont("jLabel11.font")); // NOI18N
         jLabel11.setForeground(resourceMap.getColor("jLabel11.foreground")); // NOI18N
         jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
         jLabel11.setName("jLabel11"); // NOI18N
-        tabHome.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, -1, -1));
 
         jLabel12.setFont(resourceMap.getFont("jLabel12.font")); // NOI18N
         jLabel12.setForeground(resourceMap.getColor("jLabel12.foreground")); // NOI18N
         jLabel12.setText(resourceMap.getString("jLabel12.text")); // NOI18N
         jLabel12.setName("jLabel12"); // NOI18N
-        tabHome.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, -1, -1));
 
         jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
         jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
         jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
         jLabel15.setName("jLabel15"); // NOI18N
-        tabHome.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 10, -1, -1));
 
         jLabel3.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        tabHome.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 330, 160, -1));
 
         lblLocations.setForeground(resourceMap.getColor("lblLocations.foreground")); // NOI18N
         lblLocations.setText(resourceMap.getString("lblLocations.text")); // NOI18N
         lblLocations.setName("lblLocations"); // NOI18N
-        tabHome.add(lblLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 150, -1, -1));
 
         lblVisits.setForeground(resourceMap.getColor("lblVisits.foreground")); // NOI18N
         lblVisits.setText(resourceMap.getString("lblVisits.text")); // NOI18N
         lblVisits.setName("lblVisits"); // NOI18N
-        tabHome.add(lblVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, -1, -1));
 
         lblSightings.setForeground(resourceMap.getColor("lblSightings.foreground")); // NOI18N
         lblSightings.setText(resourceMap.getString("lblSightings.text")); // NOI18N
         lblSightings.setName("lblSightings"); // NOI18N
-        tabHome.add(lblSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 150, -1, -1));
 
         lblCreatures.setForeground(resourceMap.getColor("lblCreatures.foreground")); // NOI18N
         lblCreatures.setText(resourceMap.getString("lblCreatures.text")); // NOI18N
         lblCreatures.setName("lblCreatures"); // NOI18N
-        tabHome.add(lblCreatures, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 150, -1, -1));
 
         jSeparator5.setBackground(resourceMap.getColor("jSeparator5.background")); // NOI18N
         jSeparator5.setForeground(resourceMap.getColor("jSeparator5.foreground")); // NOI18N
         jSeparator5.setName("jSeparator5"); // NOI18N
-        tabHome.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 140, 340, 10));
 
         jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
         jLabel5.setForeground(resourceMap.getColor("jLabel5.foreground")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
-        tabHome.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 30, -1, -1));
 
         lblWorkspace.setFont(resourceMap.getFont("lblWorkspace.font")); // NOI18N
         lblWorkspace.setForeground(resourceMap.getColor("lblWorkspace.foreground")); // NOI18N
         lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblWorkspace.setText(FilePaths.WILDLOG.getFullPath());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
-        tabHome.add(lblWorkspace, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 560, 530, -1));
 
-        btnBulkUpload.setText(resourceMap.getString("btnBulkUpload.text")); // NOI18N
-        btnBulkUpload.setName("btnBulkUpload"); // NOI18N
-        btnBulkUpload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBulkUploadActionPerformed(evt);
-            }
-        });
-        tabHome.add(btnBulkUpload, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 200, 80));
+        jSeparator6.setBackground(resourceMap.getColor("jSeparator6.background")); // NOI18N
+        jSeparator6.setForeground(resourceMap.getColor("jSeparator6.foreground")); // NOI18N
+        jSeparator6.setName("jSeparator6"); // NOI18N
+
+        javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
+        tabHome.setLayout(tabHomeLayout);
+        tabHomeLayout.setHorizontalGroup(
+            tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(60, 60, 60)
+                .addComponent(jLabel10)
+                .addGap(703, 703, 703)
+                .addComponent(jLabel5)
+                .addGap(15, 15, 15))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(110, 110, 110)
+                .addComponent(jLabel11)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel12))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                .addGap(810, 810, 810)
+                .addComponent(jLabel15)
+                .addGap(13, 13, 13))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                .addContainerGap(858, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(502, Short.MAX_VALUE))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(512, Short.MAX_VALUE))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(lblWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(520, Short.MAX_VALUE))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(134, 134, 134)
+                .addComponent(lblLocations)
+                .addGap(18, 18, 18)
+                .addComponent(lblVisits)
+                .addGap(18, 18, 18)
+                .addComponent(lblSightings)
+                .addGap(18, 18, 18)
+                .addComponent(lblCreatures)
+                .addContainerGap(643, Short.MAX_VALUE))
+        );
+        tabHomeLayout.setVerticalGroup(
+            tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(jLabel15)
+                .addGap(6, 6, 6)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel10))
+                    .addComponent(jLabel5))
+                .addGap(8, 8, 8)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel11)
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel12)))
+                .addGap(12, 12, 12)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblLocations)
+                    .addComponent(lblVisits)
+                    .addComponent(lblSightings)
+                    .addComponent(lblCreatures))
+                .addGap(11, 11, 11)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addComponent(lblWorkspace)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
@@ -557,6 +619,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnGoBrowseSelection.setText(resourceMap.getString("btnGoBrowseSelection.text")); // NOI18N
         btnGoBrowseSelection.setToolTipText(resourceMap.getString("btnGoBrowseSelection.toolTipText")); // NOI18N
         btnGoBrowseSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoBrowseSelection.setFocusPainted(false);
         btnGoBrowseSelection.setName("btnGoBrowseSelection"); // NOI18N
         btnGoBrowseSelection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -571,6 +634,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomIn.setText(resourceMap.getString("btnZoomIn.text")); // NOI18N
         btnZoomIn.setToolTipText(resourceMap.getString("btnZoomIn.toolTipText")); // NOI18N
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoomIn.setFocusPainted(false);
         btnZoomIn.setName("btnZoomIn"); // NOI18N
         tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 80, 30));
 
@@ -580,6 +644,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomOut.setText(resourceMap.getString("btnZoomOut.text")); // NOI18N
         btnZoomOut.setToolTipText(resourceMap.getString("btnZoomOut.toolTipText")); // NOI18N
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoomOut.setFocusPainted(false);
         btnZoomOut.setName("btnZoomOut"); // NOI18N
         tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 40, 80, 30));
 
@@ -587,6 +652,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
         btnViewImage.setToolTipText(resourceMap.getString("btnViewImage.toolTipText")); // NOI18N
         btnViewImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewImage.setFocusPainted(false);
         btnViewImage.setName("btnViewImage"); // NOI18N
         btnViewImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -600,6 +666,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnBrowsePrev.setText(resourceMap.getString("btnBrowsePrev.text")); // NOI18N
         btnBrowsePrev.setToolTipText(resourceMap.getString("btnBrowsePrev.toolTipText")); // NOI18N
         btnBrowsePrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBrowsePrev.setFocusPainted(false);
         btnBrowsePrev.setName("btnBrowsePrev"); // NOI18N
         btnBrowsePrev.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -613,6 +680,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnBrowseNext.setText(resourceMap.getString("btnBrowseNext.text")); // NOI18N
         btnBrowseNext.setToolTipText(resourceMap.getString("btnBrowseNext.toolTipText")); // NOI18N
         btnBrowseNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBrowseNext.setFocusPainted(false);
         btnBrowseNext.setName("btnBrowseNext"); // NOI18N
         btnBrowseNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -634,6 +702,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnRefreshDates.setText(resourceMap.getString("btnRefreshDates.text")); // NOI18N
         btnRefreshDates.setToolTipText(resourceMap.getString("btnRefreshDates.toolTipText")); // NOI18N
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRefreshDates.setFocusPainted(false);
         btnRefreshDates.setName("btnRefreshDates"); // NOI18N
         btnRefreshDates.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -652,6 +721,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
         btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReport.setFocusPainted(false);
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -664,6 +734,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
         btnDefault.setText(resourceMap.getString("btnDefault.text")); // NOI18N
         btnDefault.setToolTipText(resourceMap.getString("btnDefault.toolTipText")); // NOI18N
+        btnDefault.setFocusPainted(false);
         btnDefault.setName("btnDefault"); // NOI18N
         btnDefault.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -701,6 +772,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnRotate.setText(resourceMap.getString("btnRotate.text")); // NOI18N
         btnRotate.setToolTipText(resourceMap.getString("btnRotate.toolTipText")); // NOI18N
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnRotate.setFocusPainted(false);
         btnRotate.setName("btnRotate"); // NOI18N
         tabFoto.add(btnRotate, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 10, 80, 30));
 
@@ -709,6 +781,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnViewEXIF.setText(resourceMap.getString("btnViewEXIF.text")); // NOI18N
         btnViewEXIF.setToolTipText(resourceMap.getString("btnViewEXIF.toolTipText")); // NOI18N
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewEXIF.setFocusPainted(false);
         btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnViewEXIF.setName("btnViewEXIF"); // NOI18N
         btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
@@ -741,11 +814,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblLocationMouseClicked(evt);
-            }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblLocationMouseReleased(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblLocationMouseClicked(evt);
             }
         });
         tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -796,6 +869,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnGoLocation_LocTab.setText(resourceMap.getString("btnGoLocation_LocTab.text")); // NOI18N
         btnGoLocation_LocTab.setToolTipText(resourceMap.getString("btnGoLocation_LocTab.toolTipText")); // NOI18N
         btnGoLocation_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoLocation_LocTab.setFocusPainted(false);
         btnGoLocation_LocTab.setName("btnGoLocation_LocTab"); // NOI18N
         btnGoLocation_LocTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -809,6 +883,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnGoElement_LocTab.setText(resourceMap.getString("btnGoElement_LocTab.text")); // NOI18N
         btnGoElement_LocTab.setToolTipText(resourceMap.getString("btnGoElement_LocTab.toolTipText")); // NOI18N
         btnGoElement_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoElement_LocTab.setFocusPainted(false);
         btnGoElement_LocTab.setName("btnGoElement_LocTab"); // NOI18N
         btnGoElement_LocTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -822,6 +897,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnAddLocation.setText(resourceMap.getString("btnAddLocation.text")); // NOI18N
         btnAddLocation.setToolTipText(resourceMap.getString("btnAddLocation.toolTipText")); // NOI18N
         btnAddLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddLocation.setFocusPainted(false);
         btnAddLocation.setName("btnAddLocation"); // NOI18N
         btnAddLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -835,6 +911,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnDeleteLocation.setText(resourceMap.getString("btnDeleteLocation.text")); // NOI18N
         btnDeleteLocation.setToolTipText(resourceMap.getString("btnDeleteLocation.toolTipText")); // NOI18N
         btnDeleteLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteLocation.setFocusPainted(false);
         btnDeleteLocation.setName("btnDeleteLocation"); // NOI18N
         btnDeleteLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -869,6 +946,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnGoVisit_LocTab.setText(resourceMap.getString("btnGoVisit_LocTab.text")); // NOI18N
         btnGoVisit_LocTab.setToolTipText(resourceMap.getString("btnGoVisit_LocTab.toolTipText")); // NOI18N
         btnGoVisit_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoVisit_LocTab.setFocusPainted(false);
         btnGoVisit_LocTab.setName("btnGoVisit_LocTab"); // NOI18N
         btnGoVisit_LocTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -952,6 +1030,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnGoElement.setText(resourceMap.getString("btnGoElement.text")); // NOI18N
         btnGoElement.setToolTipText(resourceMap.getString("btnGoElement.toolTipText")); // NOI18N
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoElement.setFocusPainted(false);
         btnGoElement.setName("btnGoElement"); // NOI18N
         btnGoElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -965,6 +1044,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnAddElement.setText(resourceMap.getString("btnAddElement.text")); // NOI18N
         btnAddElement.setToolTipText(resourceMap.getString("btnAddElement.toolTipText")); // NOI18N
         btnAddElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddElement.setFocusPainted(false);
         btnAddElement.setName("btnAddElement"); // NOI18N
         btnAddElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -978,6 +1058,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnDeleteElement.setText(resourceMap.getString("btnDeleteElement.text")); // NOI18N
         btnDeleteElement.setToolTipText(resourceMap.getString("btnDeleteElement.toolTipText")); // NOI18N
         btnDeleteElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteElement.setFocusPainted(false);
         btnDeleteElement.setName("btnDeleteElement"); // NOI18N
         btnDeleteElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1024,6 +1105,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnGoLocation.setText(resourceMap.getString("btnGoLocation.text")); // NOI18N
         btnGoLocation.setToolTipText(resourceMap.getString("btnGoLocation.toolTipText")); // NOI18N
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoLocation.setFocusPainted(false);
         btnGoLocation.setName("btnGoLocation"); // NOI18N
         btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1080,6 +1162,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
         btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSearch.setFocusPainted(false);
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1108,6 +1191,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnClearSearch.setText(resourceMap.getString("btnClearSearch.text")); // NOI18N
         btnClearSearch.setToolTipText(resourceMap.getString("btnClearSearch.toolTipText")); // NOI18N
         btnClearSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClearSearch.setFocusPainted(false);
         btnClearSearch.setName("btnClearSearch"); // NOI18N
         btnClearSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1202,6 +1286,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         csvImportMenuItem.setText(resourceMap.getString("csvImportMenuItem.text")); // NOI18N
         csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
         importMenu.add(csvImportMenuItem);
+
+        bulkImportMenuItem.setAction(actionMap.get("bulkImportAction")); // NOI18N
+        bulkImportMenuItem.setText(resourceMap.getString("bulkImportMenuItem.text")); // NOI18N
+        bulkImportMenuItem.setToolTipText(resourceMap.getString("bulkImportMenuItem.toolTipText")); // NOI18N
+        bulkImportMenuItem.setName("bulkImportMenuItem"); // NOI18N
+        importMenu.add(bulkImportMenuItem);
 
         menuBar.add(importMenu);
 
@@ -2034,17 +2124,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
     }//GEN-LAST:event_btnViewEXIFActionPerformed
 
-    private void btnBulkUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkUploadActionPerformed
-        Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this);
-                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, tabbedPanel);
-                return null;
-            }
-        });
-    }//GEN-LAST:event_btnBulkUploadActionPerformed
-
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -2628,6 +2707,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
     }
 
+    @Action
+    public void bulkImportAction() {
+        Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, null);
+                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, tabbedPanel);
+                return null;
+            }
+        });
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
@@ -2636,7 +2727,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnAddLocation;
     private javax.swing.JButton btnBrowseNext;
     private javax.swing.JButton btnBrowsePrev;
-    private javax.swing.JButton btnBulkUpload;
     private javax.swing.JButton btnClearSearch;
     private javax.swing.JButton btnDefault;
     private javax.swing.JButton btnDeleteElement;
@@ -2655,6 +2745,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnViewImage;
     private javax.swing.JButton btnZoomIn;
     private javax.swing.JButton btnZoomOut;
+    private javax.swing.JMenuItem bulkImportMenuItem;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenuItem calcSunMoonMenuItem;
     private javax.swing.JCheckBox chkElementTypeBrowseTab;
@@ -2695,6 +2786,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblCreatures;
     private javax.swing.JLabel lblImage;

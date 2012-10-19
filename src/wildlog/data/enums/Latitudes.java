@@ -1,16 +1,18 @@
 package wildlog.data.enums;
 
 public enum Latitudes {
-    NORTH("N", "North (+)"),
-    SOUTH("S", "South (-)"),
-    NONE("", "None");
+    NORTH("N", "North (+)", "+"),
+    SOUTH("S", "South (-)", "-"),
+    NONE("", "None", "");
 
     private String key;
     private String text;
+    private String sign;
 
-    Latitudes(String inKey, String inText) {
+    Latitudes(String inKey, String inText, String inSign) {
         key = inKey;
         text = inText;
+        sign = inSign;
     }
 
     public String getKey() {
@@ -19,6 +21,10 @@ public enum Latitudes {
 
     public String getText() {
         return text;
+    }
+
+    public String getSign() {
+        return sign;
     }
 
     @Override
