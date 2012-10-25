@@ -3,21 +3,20 @@ package wildlog.data.dataobjects;
 import KmlGenerator.objects.KmlEntry;
 import java.util.List;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.Habitat;
-import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
-import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Province;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Location class
-public class Location implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML {
+public class Location extends DataObjectWithGPS implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML {
     private String name; // Used as index (ID)
     private String description;
     private Province province; // For locations outside south africa the country name must be used
@@ -38,23 +37,13 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
     private String website;
     private String email;
     private String directions;
-    private Latitudes latitude;
-    private int latDegrees;
-    private int latMinutes;
-    //private int latSeconds; // Old field not used anymore
-    private float latSecondsFloat;
-    private Longitudes longitude;
-    private int lonDegrees;
-    private int lonMinutes;
-    //private int lonSeconds;  // Old field not used anymore
-    private float lonSecondsFloat;
     //private List<String> subAreas;
 
-    
+
     // CONSTRUCTORS:
     public Location() {
     }
-    
+
     public Location(String inName) {
         name = inName;
     }
@@ -104,8 +93,8 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
         htmlLocation.append("<tr><td>");
         htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");
-        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
-        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
+        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsDouble);
+        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsDouble);
         htmlLocation.append("<br/><b>Province:</b> ").append(UtilsHTML.formatString(province));
         htmlLocation.append("<br/><b>General Rating:</b> ").append(UtilsHTML.formatString(rating));
         htmlLocation.append("<br/><b>Wildlife Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
@@ -147,8 +136,8 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
         entry.setName(name);
         entry.setDescription(this.toHTML(false, true, inApp, UtilsHTML.ImageExportTypes.ForKML));
         entry.setStyle("locationStyle");
-        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
-        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
+        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsDouble));
+        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsDouble));
         return entry;
     }
 
@@ -165,7 +154,7 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
     public Province getProvince() {
         return province;
     }
-    
+
     public LocationRating getRating() {
         return rating;
     }
@@ -177,76 +166,44 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
     public Habitat getHabitatType() {
         return habitatType;
     }
-    
+
 //    @Override
 //    public List<Foto> getFotos() {
 //        if (fotos == null) fotos = new ArrayList<Foto>(1);
 //        return fotos;
 //    }
-    
+
 //    public Foto getPrimaryFoto() {
 //        return primaryFoto;
 //    }
-    
+
 //    public List<Visit> getVisits() {
 //        if (visits == null) visits = new ArrayList<Visit>();
 //        return visits;
 //    }
-    
+
     public List<AccommodationType> getAccommodationType() {
         return accommodationType;
     }
-    
+
     public String getContactNumbers() {
         return contactNumbers;
     }
-    
+
     public CateringType getCatering() {
         return catering;
     }
-    
+
     public String getDirections() {
         return directions;
     }
-    
+
     public String getEmail() {
         return email;
     }
-    
+
     public String getWebsite() {
         return website;
-    }
-
-    public int getLatDegrees() {
-        return latDegrees;
-    }
-
-    public int getLatMinutes() {
-        return latMinutes;
-    }
-
-    public float getLatSecondsFloat() {
-        return latSecondsFloat;
-    }
-
-    public Latitudes getLatitude() {
-        return latitude;
-    }
-
-    public int getLonDegrees() {
-        return lonDegrees;
-    }
-
-    public int getLonMinutes() {
-        return lonMinutes;
-    }
-
-    public float getLonSecondsFloat() {
-        return lonSecondsFloat;
-    }
-
-    public Longitudes getLongitude() {
-        return longitude;
     }
 
 //    public List<String> getSubAreas() {
@@ -288,19 +245,19 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
 //    public void setFotos(List<Foto> inFotos) {
 //        fotos = inFotos;
 //    }
-    
+
 //    public void setPrimaryFoto(Foto inFoto) {
 //        primaryFoto = inFoto;
 //    }
-    
+
 //    public void setVisits(List<Visit> inVisits) {
 //        visits = inVisits;
 //    }
-    
+
     public void setAccommodationType(List<AccommodationType> inAccommodationType) {
         accommodationType = inAccommodationType;
     }
-    
+
     public void setContactNumbers(String inContactNumbers) {
         contactNumbers = inContactNumbers;
     }
@@ -319,38 +276,6 @@ public class Location implements Comparable<Location>, DataObjectWithHTML, DataO
 
     public void setWebsite(String inWebsite) {
         website = inWebsite;
-    }
-
-    public void setLatDegrees(int inLatDegrees) {
-        latDegrees = inLatDegrees;
-    }
-
-    public void setLatMinutes(int inLatMinutes) {
-        latMinutes = inLatMinutes;
-    }
-
-    public void setLatSecondsFloat(float inLatSeconds) {
-        latSecondsFloat = inLatSeconds;
-    }
-
-    public void setLatitude(Latitudes inLatitude) {
-        latitude = inLatitude;
-    }
-
-    public void setLonDegrees(int inLonDegrees) {
-        lonDegrees = inLonDegrees;
-    }
-
-    public void setLonMinutes(int inLonMinutes) {
-        lonMinutes = inLonMinutes;
-    }
-
-    public void setLonSecondsFloat(float inLonSeconds) {
-        lonSecondsFloat = inLonSeconds;
-    }
-
-    public void setLongitude(Longitudes inLongitude) {
-        longitude = inLongitude;
     }
 
 //    public void setSubAreas(List<String> inSubAreas) {

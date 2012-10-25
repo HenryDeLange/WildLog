@@ -63,6 +63,7 @@ public class ImageBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
+        btnUp.setBackground(resourceMap.getColor("btnUp.background")); // NOI18N
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setFocusPainted(false);
@@ -75,6 +76,7 @@ public class ImageBox extends JPanel {
         });
         add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 100));
 
+        btnDown.setBackground(resourceMap.getColor("btnDown.background")); // NOI18N
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setFocusPainted(false);
@@ -87,6 +89,7 @@ public class ImageBox extends JPanel {
         });
         add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
 
+        btnRemove.setBackground(resourceMap.getColor("btnRemove.background")); // NOI18N
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
@@ -98,6 +101,7 @@ public class ImageBox extends JPanel {
         });
         add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 80, 30));
 
+        btnNewSighting.setBackground(resourceMap.getColor("btnNewSighting.background")); // NOI18N
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setFocusPainted(false);
@@ -109,6 +113,7 @@ public class ImageBox extends JPanel {
         });
         add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
+        btnClone.setBackground(resourceMap.getColor("btnClone.background")); // NOI18N
         btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
         btnClone.setFocusPainted(false);
         btnClone.setName("btnClone"); // NOI18N

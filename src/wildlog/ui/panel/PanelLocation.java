@@ -82,15 +82,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         tblVisit.getTableHeader().setReorderingAllowed(false);
         tblVisit.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblVisit));
 
-        SpinnerFixer.fixSelectAllForSpinners(spnLatDecimal);
-        SpinnerFixer.fixSelectAllForSpinners(spnLatDegrees);
-        SpinnerFixer.fixSelectAllForSpinners(spnLatMinutes);
-        SpinnerFixer.fixSelectAllForSpinners(spnLatSeconds);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonDecimal);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonDegrees);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonMinutes);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonSeconds);
-
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
             @Override
@@ -112,6 +103,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         Utils.attachClipboardPopup(txtDirections);
         Utils.attachClipboardPopup(txtEmail);
         Utils.attachClipboardPopup(txtWebsite);
+        Utils.attachClipboardPopup(txtLatitude);
+        Utils.attachClipboardPopup(txtLongitude);
     }
 
     public void setLocationWL(Location inLocation) {
@@ -236,10 +229,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jLabel6 = new javax.swing.JLabel();
         lblImage = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        cmbLatitude = new javax.swing.JComboBox();
-        cmbLongitude = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         btnDeleteImage = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         lblNumberOfVisits = new javax.swing.JLabel();
@@ -249,21 +239,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbVisit = new javax.swing.JRadioButton();
         lblNumberOfElements = new javax.swing.JLabel();
         lblNumberOfImages = new javax.swing.JLabel();
-        rdbDMS = new javax.swing.JRadioButton();
-        rdbDD = new javax.swing.JRadioButton();
         btnReport = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
         btnKml = new javax.swing.JButton();
         btnSunAndMoon = new javax.swing.JButton();
-        spnLatDegrees = new javax.swing.JSpinner();
-        spnLatMinutes = new javax.swing.JSpinner();
-        spnLatSeconds = new javax.swing.JSpinner();
-        spnLatDecimal = new javax.swing.JSpinner();
-        spnLonDegrees = new javax.swing.JSpinner();
-        spnLonMinutes = new javax.swing.JSpinner();
-        spnLonSeconds = new javax.swing.JSpinner();
-        spnLonDecimal = new javax.swing.JSpinner();
         btnGPS = new javax.swing.JButton();
+        txtLatitude = new javax.swing.JTextField();
+        txtLongitude = new javax.swing.JTextField();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -629,23 +611,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         jSeparator1.setName("jSeparator1"); // NOI18N
         locationIncludes.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 22, 690, 20));
 
-        cmbLatitude.setModel(new DefaultComboBoxModel(Latitudes.values()));
-        cmbLatitude.setSelectedIndex(2);
-        cmbLatitude.setName("cmbLatitude"); // NOI18N
-        locationIncludes.add(cmbLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 300, 90, -1));
-
-        cmbLongitude.setModel(new DefaultComboBoxModel(Longitudes.values()));
-        cmbLongitude.setSelectedIndex(2);
-        cmbLongitude.setName("cmbLongitude"); // NOI18N
-        locationIncludes.add(cmbLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 320, 90, -1));
-
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
         locationIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, 20));
-
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
-        jLabel11.setName("jLabel11"); // NOI18N
-        locationIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, 20));
 
         btnDeleteImage.setBackground(resourceMap.getColor("btnDeleteImage.background")); // NOI18N
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
@@ -735,32 +703,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         locationIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 40, 20));
 
-        rdbDMS.setBackground(resourceMap.getColor("rdbDMS.background")); // NOI18N
-        buttonGroup2.add(rdbDMS);
-        rdbDMS.setText(resourceMap.getString("rdbDMS.text")); // NOI18N
-        rdbDMS.setToolTipText(resourceMap.getString("rdbDMS.toolTipText")); // NOI18N
-        rdbDMS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbDMS.setName("rdbDMS"); // NOI18N
-        rdbDMS.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                rdbDMSItemStateChanged(evt);
-            }
-        });
-        locationIncludes.add(rdbDMS, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, -1, -1));
-
-        rdbDD.setBackground(resourceMap.getColor("rdbDD.background")); // NOI18N
-        buttonGroup2.add(rdbDD);
-        rdbDD.setText(resourceMap.getString("rdbDD.text")); // NOI18N
-        rdbDD.setToolTipText(resourceMap.getString("rdbDD.toolTipText")); // NOI18N
-        rdbDD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbDD.setName("rdbDD"); // NOI18N
-        rdbDD.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                rdbDDItemStateChanged(evt);
-            }
-        });
-        locationIncludes.add(rdbDD, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 320, -1, -1));
-
         btnReport.setBackground(resourceMap.getColor("btnReport.background")); // NOI18N
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
         btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
@@ -819,60 +761,32 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
         locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 295, 110, 30));
 
-        spnLatDegrees.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
-        spnLatDegrees.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLatDegrees.setName("spnLatDegrees"); // NOI18N
-        spnLatDegrees.setValue(locationWL.getLatDegrees());
-        locationIncludes.add(spnLatDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 300, 40, -1));
-
-        spnLatMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 60, 1));
-        spnLatMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLatMinutes.setName("spnLatMinutes"); // NOI18N
-        spnLatMinutes.setValue(locationWL.getLatMinutes());
-        locationIncludes.add(spnLatMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 300, 40, -1));
-
-        spnLatSeconds.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(60.0f), Float.valueOf(0.1f)));
-        spnLatSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLatSeconds.setName("spnLatSeconds"); // NOI18N
-        spnLatSeconds.setValue(locationWL.getLatSecondsFloat());
-        locationIncludes.add(spnLatSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 300, 60, -1));
-
-        spnLatDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 90.99999d, 0.1d));
-        spnLatDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLatDecimal.setName("spnLatDecimal"); // NOI18N
-        locationIncludes.add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 300, 140, -1));
-
-        spnLonDegrees.setModel(new javax.swing.SpinnerNumberModel(0, 0, 180, 1));
-        spnLonDegrees.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLonDegrees.setName("spnLonDegrees"); // NOI18N
-        spnLonDegrees.setValue(locationWL.getLonDegrees());
-        locationIncludes.add(spnLonDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 40, -1));
-
-        spnLonMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 60, 1));
-        spnLonMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLonMinutes.setName("spnLonMinutes"); // NOI18N
-        spnLonMinutes.setValue(locationWL.getLonMinutes());
-        locationIncludes.add(spnLonMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 320, 40, -1));
-
-        spnLonSeconds.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(60.0f), Float.valueOf(0.1f)));
-        spnLonSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLonSeconds.setName("spnLonSeconds"); // NOI18N
-        spnLonSeconds.setValue(locationWL.getLonSecondsFloat());
-        locationIncludes.add(spnLonSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, 60, -1));
-
-        spnLonDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 181.0d, 0.1d));
-        spnLonDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLonDecimal.setName("spnLonDecimal"); // NOI18N
-        locationIncludes.add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, 140, -1));
-
+        btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
+        btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGPS.setFocusPainted(false);
+        btnGPS.setMargin(new java.awt.Insets(4, 4, 4, 4));
         btnGPS.setName("btnGPS"); // NOI18N
         btnGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGPSActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 220, 70, 40));
+        locationIncludes.add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 300, 85, 40));
+
+        txtLatitude.setBackground(resourceMap.getColor("txtLatitude.background")); // NOI18N
+        txtLatitude.setText(resourceMap.getString("txtLatitude.text")); // NOI18N
+        txtLatitude.setDisabledTextColor(resourceMap.getColor("txtLatitude.disabledTextColor")); // NOI18N
+        txtLatitude.setEnabled(false);
+        txtLatitude.setName("txtLatitude"); // NOI18N
+        locationIncludes.add(txtLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 300, 150, -1));
+
+        txtLongitude.setBackground(resourceMap.getColor("txtLongitude.background")); // NOI18N
+        txtLongitude.setText(resourceMap.getString("txtLongitude.text")); // NOI18N
+        txtLongitude.setDisabledTextColor(resourceMap.getColor("txtLongitude.disabledTextColor")); // NOI18N
+        txtLongitude.setEnabled(false);
+        txtLongitude.setName("txtLongitude"); // NOI18N
+        locationIncludes.add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 320, 150, -1));
 
         add(locationIncludes);
     }// </editor-fold>//GEN-END:initComponents
@@ -882,25 +796,6 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (txtName.getText().length() > 0) {
                 String oldName = locationWL.getName();
                 locationWL.setName(DBUtils.limitLength(txtName.getText(), 100));
-                locationWL.setLatitude((Latitudes)cmbLatitude.getSelectedItem());
-                locationWL.setLongitude((Longitudes)cmbLongitude.getSelectedItem());
-                rdbDMS.setSelected(true);
-                try {
-                    locationWL.setLatDegrees((Integer)spnLatDegrees.getValue());
-                    locationWL.setLatMinutes((Integer)spnLatMinutes.getValue());
-                    locationWL.setLatSecondsFloat((Float)spnLatSeconds.getValue());
-                    locationWL.setLonDegrees((Integer)spnLonDegrees.getValue());
-                    locationWL.setLonMinutes((Integer)spnLonMinutes.getValue());
-                    locationWL.setLonSecondsFloat((Float)spnLonSeconds.getValue());
-                }
-                catch (NumberFormatException e) {
-                    spnLatDegrees.setValue(0);
-                    spnLatMinutes.setValue(0);
-                    spnLatSeconds.setValue(0);
-                    spnLonDegrees.setValue(0);
-                    spnLonMinutes.setValue(0);
-                    spnLonSeconds.setValue(0);
-                }
                 locationWL.setDescription(txtDescription.getText());
                 locationWL.setProvince((Province)cmbProvince.getSelectedItem());
                 locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
@@ -974,10 +869,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        if (locationWL.getLatitude() != null)
-            cmbLatitude.setSelectedItem(locationWL.getLatitude());
-        if (locationWL.getLongitude() != null)
-            cmbLongitude.setSelectedItem(locationWL.getLongitude());
+        txtLatitude.setText(LatLonConverter.getLatitudeString(locationWL));
+        txtLongitude.setText(LatLonConverter.getLongitudeString(locationWL));
 
         rdbLocation.setSelected(true);
         //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
@@ -995,10 +888,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Visits"}, 0));
             tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
         }
-        // Lat Lon stuff
-        spnLatDecimal.setValue(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), (Integer)spnLatDegrees.getValue(), (Integer)spnLatMinutes.getValue(), (Float)spnLatSeconds.getValue()));
-        spnLonDecimal.setValue(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), (Integer)spnLonDegrees.getValue(), (Integer)spnLonMinutes.getValue(), (Float)spnLonSeconds.getValue()));
-        rdbDMS.setSelected(true);
+
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
     }//GEN-LAST:event_formComponentShown
 
@@ -1040,16 +930,17 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilMapGenerator.clearMap(app);
 
         // Load points
+        // TODO: Hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
         if (locationWL.getLatitude() != null && locationWL.getLongitude() != null)
             if (!locationWL.getLatitude().equals(Latitudes.NONE) && !locationWL.getLongitude().equals(Longitudes.NONE)) {
-                float lat = locationWL.getLatDegrees();
-                lat = lat + locationWL.getLatMinutes()/60f;
-                lat = lat + (locationWL.getLatSecondsFloat()/60f)/60f;
+                double lat = locationWL.getLatDegrees();
+                lat = lat + locationWL.getLatMinutes()/60.0;
+                lat = lat + (locationWL.getLatSecondsDouble()/60.0)/60.0;
                 if (locationWL.getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
-                float lon = locationWL.getLonDegrees();
-                lon = lon + locationWL.getLonMinutes()/60f;
-                lon = lon + (locationWL.getLonSecondsFloat()/60f)/60f;
+                double lon = locationWL.getLonDegrees();
+                lon = lon + locationWL.getLonMinutes()/60.0;
+                lon = lon + (locationWL.getLonSecondsDouble()/60.0)/60.0;
                 if (locationWL.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), locationWL, app);
@@ -1089,14 +980,14 @@ public class PanelLocation extends PanelCanSetupHeader {
                 for (int i = 0; i < sightings.size(); i++) {
                     if (sightings.get(i).getLatitude() != null && sightings.get(i).getLongitude() != null) {
                         if (!sightings.get(i).getLatitude().equals(Latitudes.NONE) && !sightings.get(i).getLongitude().equals(Longitudes.NONE)) {
-                            float lat = sightings.get(i).getLatDegrees();
-                            lat = lat + sightings.get(i).getLatMinutes()/60f;
-                            lat = lat + (sightings.get(i).getLatSecondsFloat()/60f)/60f;
+                            double lat = sightings.get(i).getLatDegrees();
+                            lat = lat + sightings.get(i).getLatMinutes()/60.0;
+                            lat = lat + (sightings.get(i).getLatSecondsDouble()/60.0)/60.0;
                             if (sightings.get(i).getLatitude().equals(Latitudes.SOUTH))
                                 lat = -1 * lat;
-                            float lon = sightings.get(i).getLonDegrees();
-                            lon = lon + sightings.get(i).getLonMinutes()/60f;
-                            lon = lon + (sightings.get(i).getLonSecondsFloat()/60f)/60f;
+                            double lon = sightings.get(i).getLonDegrees();
+                            lon = lon + sightings.get(i).getLonMinutes()/60.0;
+                            lon = lon + (sightings.get(i).getLonSecondsDouble()/60.0)/60.0;
                             if (sightings.get(i).getLongitude().equals(Longitudes.WEST))
                                 lon = -1 * lon;
                             UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sightings.get(i), app);
@@ -1166,55 +1057,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_tblVisitMouseClicked
 
-    private void rdbDDItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbDDItemStateChanged
-        if (rdbDD.isSelected()) {
-            try {
-                spnLatDecimal.setValue(Math.abs(LatLonConverter.getDecimalDegree((Latitudes)cmbLatitude.getSelectedItem(), (Integer)spnLatDegrees.getValue(), (Integer)spnLatMinutes.getValue(), (Float)spnLatSeconds.getValue())));
-                spnLonDecimal.setValue(Math.abs(LatLonConverter.getDecimalDegree((Longitudes)cmbLongitude.getSelectedItem(), (Integer)spnLonDegrees.getValue(), (Integer)spnLonMinutes.getValue(), (Float)spnLonSeconds.getValue())));
-                // If the parsing worked then continue
-                spnLatDegrees.setVisible(false);
-                spnLonDegrees.setVisible(false);
-                spnLatMinutes.setVisible(false);
-                spnLonMinutes.setVisible(false);
-                spnLatSeconds.setVisible(false);
-                spnLonSeconds.setVisible(false);
-                spnLatDecimal.setVisible(true);
-                spnLonDecimal.setVisible(true);
-            }
-            catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "The input format should be <integer> <integer> <decimal>", "Wrong Number Format", JOptionPane.INFORMATION_MESSAGE);
-                rdbDMS.setSelected(true);
-            }
-        }
-    }//GEN-LAST:event_rdbDDItemStateChanged
-
-    private void rdbDMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbDMSItemStateChanged
-        //new DecimalFormat("#.###").format( can be used to format a decimal value
-        if (rdbDMS.isSelected()) {
-            try {
-                spnLatDegrees.setValue(Math.abs(LatLonConverter.getDegrees((Latitudes)cmbLatitude.getSelectedItem(), (Double)spnLatDecimal.getValue())));
-                spnLonDegrees.setValue(Math.abs(LatLonConverter.getDegrees((Longitudes)cmbLongitude.getSelectedItem(), (Double)spnLonDecimal.getValue())));
-                spnLatMinutes.setValue(LatLonConverter.getMinutes((Latitudes)cmbLatitude.getSelectedItem(), (Double)spnLatDecimal.getValue()));
-                spnLonMinutes.setValue(LatLonConverter.getMinutes((Longitudes)cmbLongitude.getSelectedItem(), (Double)spnLonDecimal.getValue()));
-                spnLatSeconds.setValue(LatLonConverter.getSeconds((Latitudes)cmbLatitude.getSelectedItem(), (Double)spnLatDecimal.getValue()));
-                spnLonSeconds.setValue(LatLonConverter.getSeconds((Longitudes)cmbLongitude.getSelectedItem(), (Double)spnLonDecimal.getValue()));
-                // If the parsing worked then continue
-                spnLatDegrees.setVisible(true);
-                spnLonDegrees.setVisible(true);
-                spnLatMinutes.setVisible(true);
-                spnLonMinutes.setVisible(true);
-                spnLatSeconds.setVisible(true);
-                spnLonSeconds.setVisible(true);
-                spnLatDecimal.setVisible(false);
-                spnLonDecimal.setVisible(false);
-            }
-            catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "The input format should be <decimal>", "Wrong Number Format", JOptionPane.INFORMATION_MESSAGE);
-                rdbDD.setSelected(true);
-            }
-        }
-    }//GEN-LAST:event_rdbDMSItemStateChanged
-
     private void tblVisitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
             tblVisitMouseReleased(null);
@@ -1278,8 +1120,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnKmlActionPerformed
 
     private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
-        double lat = LatLonConverter.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSecondsFloat());
-        double lon = LatLonConverter.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSecondsFloat());
+        double lat = LatLonConverter.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSecondsDouble());
+        double lon = LatLonConverter.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSecondsDouble());
         if (lat != 0 && lon != 0) {
             String temp = "Curent Moon Phase: " + AstroUtils.getMoonPhase(Calendar.getInstance().getTime()) + " % Full " + System.getProperty("line.separator");
             temp = temp + "Current Moonlight: " + AstroUtils.getMoonlight(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
@@ -1298,9 +1140,13 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnSunAndMoonActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true);
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, locationWL);
         Utils.setDialogToCenter(app.getMainFrame(), dialog);
         dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            txtLatitude.setText(LatLonConverter.getLatitudeString(locationWL));
+            txtLongitude.setText(LatLonConverter.getLongitudeString(locationWL));
+        }
     }//GEN-LAST:event_btnGPSActionPerformed
 
     private void setupNumberOfImages() {
@@ -1334,13 +1180,10 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JComboBox cmbCatering;
     private javax.swing.JComboBox cmbGameRating;
     private javax.swing.JComboBox cmbHabitat;
-    private javax.swing.JComboBox cmbLatitude;
-    private javax.swing.JComboBox cmbLongitude;
     private javax.swing.JComboBox cmbProvince;
     private javax.swing.JComboBox cmbRating;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel35;
@@ -1370,24 +1213,16 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JLabel lblNumberOfVisits;
     private javax.swing.JPanel locationIncludes;
     private javax.swing.JList lstAccommodationType;
-    private javax.swing.JRadioButton rdbDD;
-    private javax.swing.JRadioButton rdbDMS;
     private javax.swing.JRadioButton rdbLocation;
     private javax.swing.JRadioButton rdbVisit;
-    private javax.swing.JSpinner spnLatDecimal;
-    private javax.swing.JSpinner spnLatDegrees;
-    private javax.swing.JSpinner spnLatMinutes;
-    private javax.swing.JSpinner spnLatSeconds;
-    private javax.swing.JSpinner spnLonDecimal;
-    private javax.swing.JSpinner spnLonDegrees;
-    private javax.swing.JSpinner spnLonMinutes;
-    private javax.swing.JSpinner spnLonSeconds;
     private javax.swing.JTable tblElement;
     private javax.swing.JTable tblVisit;
     private javax.swing.JTextField txtContactNumber;
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextArea txtDirections;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtLatitude;
+    private javax.swing.JTextField txtLongitude;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtWebsite;
     // End of variables declaration//GEN-END:variables

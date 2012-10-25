@@ -38,11 +38,11 @@ public class WildLogApp extends SingleFrameApplication {
     private Latitudes prevLat;
     private int prevLatDeg;
     private int prevLatMin;
-    private float prevLatSec;
+    private double prevLatSec;
     private Longitudes prevLon;
     private int prevLonDeg;
     private int prevLonMin;
-    private float prevLonSec;
+    private double prevLonSec;
     private boolean useOnlineMap = true;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
@@ -80,11 +80,11 @@ public class WildLogApp extends SingleFrameApplication {
         prevLatMin = inPrevLatMin;
     }
 
-    public float getPrevLatSec() {
+    public double getPrevLatSec() {
         return prevLatSec;
     }
 
-    public void setPrevLatSec(float inPrevLatSec) {
+    public void setPrevLatSec(double inPrevLatSec) {
         prevLatSec = inPrevLatSec;
     }
 
@@ -114,11 +114,11 @@ public class WildLogApp extends SingleFrameApplication {
         prevLonMin = inPrevLonMin;
     }
 
-    public float getPrevLonSec() {
+    public double getPrevLonSec() {
         return prevLonSec;
     }
 
-    public void setPrevLonSec(float inPrevLonSec) {
+    public void setPrevLonSec(double inPrevLonSec) {
         prevLonSec = inPrevLonSec;
     }
 

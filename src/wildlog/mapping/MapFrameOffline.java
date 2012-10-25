@@ -246,7 +246,7 @@ public class MapFrameOffline {
         }
     }
 
-    public void addPoint(float inLat, float inLon, Color inColor) {
+    public void addPoint(double inLat, double inLon, Color inColor) {
         if (pointLayer == null) pointLayer = new MapOfflinePointLayer();
         pointLayer.addPoint(inLat, inLon, 5, inColor);
     }

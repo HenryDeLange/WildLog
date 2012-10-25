@@ -1,23 +1,39 @@
 package wildlog.ui.dialog;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.utils.LatLonConverter;
+import wildlog.utils.ui.SpinnerFixer;
 
 
 public class GPSDialog extends JDialog {
+    private boolean selectionMade = false;
+    private DataObjectWithGPS dataObjectWithGPS;
+    private double uiLatitude = 0.0;
+    private double uiLongitude = 0.0;
 
     /** Creates new form GPSDialog */
-    public GPSDialog(java.awt.Frame parent, boolean modal) {
+    public GPSDialog(Frame parent, boolean modal, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent, modal);
+        dataObjectWithGPS = inDataObjectWithGPS;
+        if (dataObjectWithGPS == null)
+            dispose();
         // Need to set a few settings onthe content pane before continuing (for example size, background color, etc.)
         getContentPane().setPreferredSize(new Dimension(410, 210));
+        // Initialize the auto generated code
+        initComponents();
+        // Hide stuff
+        spnLatDecimal.setVisible(false);
+        spnLonDecimal.setVisible(false);
         // Setup the escape key
         // TODO: Maybe move this into a util method that can apply it to any dialog (or similar component)
         final JDialog thisHandler = this;
@@ -25,16 +41,56 @@ public class GPSDialog extends JDialog {
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-        //                thisHandler.setSelectionMade(false);
                         thisHandler.dispose();
                     }
                 },
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        // Initialize the auto generated code
-        initComponents();
-        // TODO: Use DB defaults to set the initial lat/lon
-        tglSouth.setSelected(true);
-        tglEast.setSelected(true);
+        // Fix the selection of the spinners
+        SpinnerFixer.fixSelectAllForSpinners(spnLatDecimal);
+        SpinnerFixer.fixSelectAllForSpinners(spnLatDeg);
+        SpinnerFixer.fixSelectAllForSpinners(spnLatMin);
+        SpinnerFixer.fixSelectAllForSpinners(spnLatSec);
+        SpinnerFixer.fixSelectAllForSpinners(spnLonDecimal);
+        SpinnerFixer.fixSelectAllForSpinners(spnLonDeg);
+        SpinnerFixer.fixSelectAllForSpinners(spnLonMin);
+        SpinnerFixer.fixSelectAllForSpinners(spnLonSec);
+        // Setup the ui Lat and Lon
+        if (Latitudes.NORTH.equals(dataObjectWithGPS.getLatitude())) {
+            tglNorth.setSelected(true);
+        }
+        else
+        if (Latitudes.SOUTH.equals(dataObjectWithGPS.getLatitude())) {
+            tglSouth.setSelected(true);
+        }
+        else {
+            // TODO: Use DB defaults to set the initial lat/lon
+            tglSouth.setSelected(true);
+        }
+        if (Longitudes.EAST.equals(dataObjectWithGPS.getLongitude())) {
+            tglEast.setSelected(true);
+        }
+        else
+        if (Longitudes.WEST.equals(dataObjectWithGPS.getLongitude())) {
+            tglWest.setSelected(true);
+        }
+        else {
+            // TODO: Use DB defaults to set the initial lat/lon
+            tglEast.setSelected(true);
+        }
+        // Get existing value from passed in dataObjectWithGPS
+        uiLatitude = LatLonConverter.getDecimalDegree(
+                Latitudes.NONE,
+                dataObjectWithGPS.getLatDegrees(),
+                dataObjectWithGPS.getLatMinutes(),
+                dataObjectWithGPS.getLatSecondsDouble());
+        uiLongitude = LatLonConverter.getDecimalDegree(
+                Longitudes.NONE,
+                dataObjectWithGPS.getLonDegrees(),
+                dataObjectWithGPS.getLonMinutes(),
+                dataObjectWithGPS.getLonSecondsDouble());
+        // Populate the initial values into the spinners
+        tglDecimalDegrees.setSelected(true);
+        setupDD();
     }
 
     /** This method is called from within the constructor to
@@ -46,11 +102,12 @@ public class GPSDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnUsePrevious = new javax.swing.JButton();
+        btnUseImage = new javax.swing.JButton();
+        btnUseMap = new javax.swing.JButton();
+        btnUseGPX = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         tglNorth = new javax.swing.JToggleButton();
         tglSouth = new javax.swing.JToggleButton();
@@ -58,15 +115,15 @@ public class GPSDialog extends JDialog {
         tglWest = new javax.swing.JToggleButton();
         tglEast = new javax.swing.JToggleButton();
         tglDecimalDegrees = new javax.swing.JToggleButton();
-        tglDecimalMinutes = new javax.swing.JToggleButton();
-        tglDecimalSeconds = new javax.swing.JToggleButton();
-        spnLatInteger1 = new javax.swing.JSpinner();
-        spnLatInteger2 = new javax.swing.JSpinner();
+        tglDegMinSec = new javax.swing.JToggleButton();
+        spnLatDeg = new javax.swing.JSpinner();
+        spnLatMin = new javax.swing.JSpinner();
+        spnLatSec = new javax.swing.JSpinner();
         spnLatDecimal = new javax.swing.JSpinner();
-        spnLonInteger1 = new javax.swing.JSpinner();
-        spnLonInteger2 = new javax.swing.JSpinner();
+        spnLonDeg = new javax.swing.JSpinner();
+        spnLonMin = new javax.swing.JSpinner();
+        spnLonSec = new javax.swing.JSpinner();
         spnLonDecimal = new javax.swing.JSpinner();
-        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(GPSDialog.class);
@@ -76,31 +133,31 @@ public class GPSDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
-        jButton1.setFocusPainted(false);
-        jButton1.setName("jButton1"); // NOI18N
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 120, 30));
+        btnUsePrevious.setText(resourceMap.getString("btnUsePrevious.text")); // NOI18N
+        btnUsePrevious.setFocusPainted(false);
+        btnUsePrevious.setName("btnUsePrevious"); // NOI18N
+        getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 120, 30));
 
-        jButton2.setIcon(resourceMap.getIcon("jButton2.icon")); // NOI18N
-        jButton2.setText(resourceMap.getString("jButton2.text")); // NOI18N
-        jButton2.setToolTipText(resourceMap.getString("jButton2.toolTipText")); // NOI18N
-        jButton2.setFocusPainted(false);
-        jButton2.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        jButton2.setName("jButton2"); // NOI18N
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 120, 30));
+        btnUseImage.setIcon(resourceMap.getIcon("btnUseImage.icon")); // NOI18N
+        btnUseImage.setText(resourceMap.getString("btnUseImage.text")); // NOI18N
+        btnUseImage.setToolTipText(resourceMap.getString("btnUseImage.toolTipText")); // NOI18N
+        btnUseImage.setFocusPainted(false);
+        btnUseImage.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnUseImage.setName("btnUseImage"); // NOI18N
+        getContentPane().add(btnUseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 120, 30));
 
-        jButton3.setIcon(resourceMap.getIcon("jButton3.icon")); // NOI18N
-        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
-        jButton3.setFocusPainted(false);
-        jButton3.setName("jButton3"); // NOI18N
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 120, 30));
+        btnUseMap.setIcon(resourceMap.getIcon("btnUseMap.icon")); // NOI18N
+        btnUseMap.setText(resourceMap.getString("btnUseMap.text")); // NOI18N
+        btnUseMap.setFocusPainted(false);
+        btnUseMap.setName("btnUseMap"); // NOI18N
+        getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 120, 30));
 
-        jButton4.setIcon(resourceMap.getIcon("jButton4.icon")); // NOI18N
-        jButton4.setText(resourceMap.getString("jButton4.text")); // NOI18N
-        jButton4.setFocusPainted(false);
-        jButton4.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        jButton4.setName("jButton4"); // NOI18N
-        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 120, 30));
+        btnUseGPX.setIcon(resourceMap.getIcon("btnUseGPX.icon")); // NOI18N
+        btnUseGPX.setText(resourceMap.getString("btnUseGPX.text")); // NOI18N
+        btnUseGPX.setFocusPainted(false);
+        btnUseGPX.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnUseGPX.setName("btnUseGPX"); // NOI18N
+        getContentPane().add(btnUseGPX, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 120, 30));
 
         btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
         btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
@@ -112,6 +169,9 @@ public class GPSDialog extends JDialog {
             }
         });
         getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 130, 70));
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 390, -1));
 
         jLabel1.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
@@ -176,180 +236,238 @@ public class GPSDialog extends JDialog {
                 tglDecimalDegreesActionPerformed(evt);
             }
         });
-        getContentPane().add(tglDecimalDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 170, 60, 30));
+        getContentPane().add(tglDecimalDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 60, 45));
 
-        tglDecimalMinutes.setText(resourceMap.getString("tglDecimalMinutes.text")); // NOI18N
-        tglDecimalMinutes.setToolTipText(resourceMap.getString("tglDecimalMinutes.toolTipText")); // NOI18N
-        tglDecimalMinutes.setFocusPainted(false);
-        tglDecimalMinutes.setName("tglDecimalMinutes"); // NOI18N
-        tglDecimalMinutes.addActionListener(new java.awt.event.ActionListener() {
+        tglDegMinSec.setText(resourceMap.getString("tglDegMinSec.text")); // NOI18N
+        tglDegMinSec.setToolTipText(resourceMap.getString("tglDegMinSec.toolTipText")); // NOI18N
+        tglDegMinSec.setFocusPainted(false);
+        tglDegMinSec.setName("tglDegMinSec"); // NOI18N
+        tglDegMinSec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglDecimalMinutesActionPerformed(evt);
+                tglDegMinSecActionPerformed(evt);
             }
         });
-        getContentPane().add(tglDecimalMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 60, 30));
+        getContentPane().add(tglDegMinSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 155, 60, 45));
 
-        tglDecimalSeconds.setSelected(true);
-        tglDecimalSeconds.setText(resourceMap.getString("tglDecimalSeconds.text")); // NOI18N
-        tglDecimalSeconds.setToolTipText(resourceMap.getString("tglDecimalSeconds.toolTipText")); // NOI18N
-        tglDecimalSeconds.setFocusPainted(false);
-        tglDecimalSeconds.setName("tglDecimalSeconds"); // NOI18N
-        tglDecimalSeconds.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tglDecimalSecondsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(tglDecimalSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 60, 30));
+        spnLatDeg.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
+        spnLatDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLatDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDeg, "#"));
+        spnLatDeg.setName("spnLatDeg"); // NOI18N
+        getContentPane().add(spnLatDeg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 50, 30));
 
-        spnLatInteger1.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
-        spnLatInteger1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLatInteger1.setName("spnLatInteger1"); // NOI18N
-        getContentPane().add(spnLatInteger1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 50, 30));
+        spnLatMin.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLatMin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnLatMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLatMin.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatMin, "#"));
+        spnLatMin.setName("spnLatMin"); // NOI18N
+        getContentPane().add(spnLatMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 50, 30));
 
-        spnLatInteger2.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
-        spnLatInteger2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLatInteger2.setName("spnLatInteger2"); // NOI18N
-        getContentPane().add(spnLatInteger2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 50, 30));
+        spnLatSec.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLatSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
+        spnLatSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLatSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatSec, "#.####"));
+        spnLatSec.setName("spnLatSec"); // NOI18N
+        getContentPane().add(spnLatSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 70, 30));
 
-        spnLatDecimal.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLatDecimal.setFont(resourceMap.getFont("spnLatDecimal.font")); // NOI18N
+        spnLatDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 90.0d, 1.0E-5d));
         spnLatDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLatDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDecimal, "#.############"));
         spnLatDecimal.setName("spnLatDecimal"); // NOI18N
-        getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 70, 30));
+        getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, 30));
 
-        spnLonInteger1.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
-        spnLonInteger1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLonInteger1.setName("spnLonInteger1"); // NOI18N
-        getContentPane().add(spnLonInteger1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 50, 30));
+        spnLonDeg.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLonDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 180, 1));
+        spnLonDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLonDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDeg, "#"));
+        spnLonDeg.setName("spnLonDeg"); // NOI18N
+        getContentPane().add(spnLonDeg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 50, 30));
 
-        spnLonInteger2.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
-        spnLonInteger2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnLonInteger2.setName("spnLonInteger2"); // NOI18N
-        getContentPane().add(spnLonInteger2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 50, 30));
+        spnLonMin.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLonMin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnLonMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLonMin.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonMin, "#"));
+        spnLonMin.setName("spnLonMin"); // NOI18N
+        getContentPane().add(spnLonMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 50, 30));
+
+        spnLonSec.setFont(resourceMap.getFont("spnLonSec.font")); // NOI18N
+        spnLonSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
+        spnLonSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLonSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonSec, "#.####"));
+        spnLonSec.setName("spnLonSec"); // NOI18N
+        getContentPane().add(spnLonSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 70, 30));
 
         spnLonDecimal.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLonDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 180.0d, 1.0E-5d));
         spnLonDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnLonDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDecimal, "#.############"));
         spnLonDecimal.setName("spnLonDecimal"); // NOI18N
-        getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 70, 30));
-
-        jSeparator1.setName("jSeparator1"); // NOI18N
-        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 390, -1));
+        getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 190, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // Get lat and long enums
+        if (tglNorth.isSelected())
+            dataObjectWithGPS.setLatitude(Latitudes.NORTH);
+        else
+            dataObjectWithGPS.setLatitude(Latitudes.SOUTH);
+        if (tglEast.isSelected())
+            dataObjectWithGPS.setLongitude(Longitudes.EAST);
+        else
+            dataObjectWithGPS.setLongitude(Longitudes.WEST);
+        // Get the number values
+        if (tglDecimalDegrees.isSelected()) {
+            // Use decimal degrees
+            double latDecimalDegree = (double)spnLatDecimal.getValue();
+            double lonDecimalDegree = (double)spnLonDecimal.getValue();
+            dataObjectWithGPS.setLatDegrees(LatLonConverter.getDegrees(Latitudes.NONE, latDecimalDegree));
+            dataObjectWithGPS.setLonDegrees(LatLonConverter.getDegrees(Longitudes.NONE, lonDecimalDegree));
+            dataObjectWithGPS.setLatMinutes(LatLonConverter.getMinutes(latDecimalDegree));
+            dataObjectWithGPS.setLonMinutes(LatLonConverter.getMinutes(lonDecimalDegree));
+            dataObjectWithGPS.setLatSecondsDouble(LatLonConverter.getSeconds(latDecimalDegree));
+            dataObjectWithGPS.setLonSecondsDouble(LatLonConverter.getSeconds(lonDecimalDegree));
+        }
+        else {
+            // Use degrees minutes seconds
+            dataObjectWithGPS.setLatDegrees((int)spnLatDeg.getValue());
+            dataObjectWithGPS.setLonDegrees((int)spnLonDeg.getValue());
+            dataObjectWithGPS.setLatMinutes((int)spnLatMin.getValue());
+            dataObjectWithGPS.setLonMinutes((int)spnLonMin.getValue());
+            dataObjectWithGPS.setLatSecondsDouble((Double)spnLatSec.getValue());
+            dataObjectWithGPS.setLonSecondsDouble((Double)spnLonSec.getValue());
+        }
+        selectionMade = true;
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tglNorthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglNorthActionPerformed
-        tglSouth.setSelected(!tglNorth.isSelected());
+        if (tglNorth.isSelected())
+            tglSouth.setSelected(false);
+        else
+            tglNorth.setSelected(true);
     }//GEN-LAST:event_tglNorthActionPerformed
 
     private void tglSouthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSouthActionPerformed
-        tglNorth.setSelected(!tglSouth.isSelected());
+        if (tglSouth.isSelected())
+            tglNorth.setSelected(false);
+        else
+            tglSouth.setSelected(true);
     }//GEN-LAST:event_tglSouthActionPerformed
 
     private void tglWestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglWestActionPerformed
-        tglEast.setSelected(!tglWest.isSelected());
+        if (tglWest.isSelected())
+            tglEast.setSelected(false);
+        else
+            tglWest.setSelected(true);
     }//GEN-LAST:event_tglWestActionPerformed
 
     private void tglEastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglEastActionPerformed
-        tglWest.setSelected(!tglEast.isSelected());
+        if (tglEast.isSelected())
+            tglWest.setSelected(false);
+        else
+            tglEast.setSelected(true);
     }//GEN-LAST:event_tglEastActionPerformed
 
     private void tglDecimalDegreesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDecimalDegreesActionPerformed
         if (tglDecimalDegrees.isSelected()) {
-            tglDecimalMinutes.setSelected(!tglDecimalDegrees.isSelected());
-            tglDecimalSeconds.setSelected(!tglDecimalDegrees.isSelected());
-            setupDecimalDegrees();
+            tglDegMinSec.setSelected(false);
+            loadValuesFromDMS();
+            setupDD();
         }
         else {
-            setupDecimalSeconds();
+            tglDecimalDegrees.setSelected(true);
         }
     }//GEN-LAST:event_tglDecimalDegreesActionPerformed
 
-    private void tglDecimalMinutesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDecimalMinutesActionPerformed
-        if (tglDecimalMinutes.isSelected()) {
-            tglDecimalDegrees.setSelected(!tglDecimalMinutes.isSelected());
-            tglDecimalSeconds.setSelected(!tglDecimalMinutes.isSelected());
-            setupDecimalMinutes();
+    private void tglDegMinSecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDegMinSecActionPerformed
+        if (tglDegMinSec.isSelected()) {
+            tglDecimalDegrees.setSelected(false);
+            loadValuesFromDD();
+            setupDMS();
         }
         else {
-            setupDecimalSeconds();
+            tglDegMinSec.setSelected(true);
         }
-    }//GEN-LAST:event_tglDecimalMinutesActionPerformed
+    }//GEN-LAST:event_tglDegMinSecActionPerformed
 
-    private void tglDecimalSecondsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDecimalSecondsActionPerformed
-        if (tglDecimalSeconds.isSelected()) {
-            tglDecimalDegrees.setSelected(!tglDecimalSeconds.isSelected());
-            tglDecimalMinutes.setSelected(!tglDecimalSeconds.isSelected());
-            setupDecimalSeconds();
-        }
-        else {
-            tglDecimalSeconds.setSelected(true);
-            setupDecimalSeconds();
-        }
-    }//GEN-LAST:event_tglDecimalSecondsActionPerformed
-
-    private void setupDecimalDegrees() {
+    private void setupDD() {
         // Update UI
-        // FIXME: Is this really the correct way of doing it, to re-add the same componenent but with different constraints?
-        getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, 30));
-        spnLatInteger1.setVisible(false);
-        spnLatInteger2.setVisible(false);
+        spnLatDeg.setVisible(false);
+        spnLatMin.setVisible(false);
+        spnLatSec.setVisible(false);
         spnLatDecimal.setVisible(true);
-        getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 190, 30));
-        spnLonInteger1.setVisible(false);
-        spnLonInteger2.setVisible(false);
+        spnLonDeg.setVisible(false);
+        spnLonMin.setVisible(false);
+        spnLonSec.setVisible(false);
         spnLonDecimal.setVisible(true);
+        // Setup values
+        spnLatDecimal.setValue(uiLatitude);
+        spnLonDecimal.setValue(uiLongitude);
     }
 
-    private void setupDecimalMinutes() {
+    private void setupDMS() {
         // Update UI
-        getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 110, 120, 30));
-        getContentPane().add(spnLatInteger2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 60, 30));
-        spnLatInteger1.setVisible(false);
-        spnLatInteger2.setVisible(true);
-        spnLatDecimal.setVisible(true);
-        getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 170, 120, 30));
-        getContentPane().add(spnLonInteger2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 60, 30));
-        spnLonInteger1.setVisible(false);
-        spnLonInteger2.setVisible(true);
-        spnLonDecimal.setVisible(true);
+        spnLatDeg.setVisible(true);
+        spnLatMin.setVisible(true);
+        spnLatSec.setVisible(true);
+        spnLatDecimal.setVisible(false);
+        spnLonDeg.setVisible(true);
+        spnLonMin.setVisible(true);
+        spnLonSec.setVisible(true);
+        spnLonDecimal.setVisible(false);
+        // Setup values
+        spnLatDeg.setValue(LatLonConverter.getDegrees(Latitudes.NONE, uiLatitude));
+        spnLatMin.setValue(LatLonConverter.getMinutes(uiLatitude));
+        spnLatSec.setValue(LatLonConverter.getSeconds(uiLatitude));
+        spnLonDeg.setValue(LatLonConverter.getDegrees(Longitudes.NONE, uiLongitude));
+        spnLonMin.setValue(LatLonConverter.getMinutes(uiLongitude));
+        spnLonSec.setValue(LatLonConverter.getSeconds(uiLongitude));
     }
 
-    private void setupDecimalSeconds() {
-        // Update UI
-        getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 70, 30));
-        getContentPane().add(spnLatInteger2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 50, 30));
-        spnLatInteger1.setVisible(true);
-        spnLatInteger2.setVisible(true);
-        spnLatDecimal.setVisible(true);
-        getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 70, 30));
-        getContentPane().add(spnLonInteger2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 50, 30));
-        spnLonInteger1.setVisible(true);
-        spnLonInteger2.setVisible(true);
-        spnLonDecimal.setVisible(true);
+    private void loadValuesFromDD() {
+        uiLatitude = (double)spnLatDecimal.getValue();
+        uiLongitude = (double)spnLonDecimal.getValue();
+    }
+
+    private void loadValuesFromDMS() {
+        uiLatitude = LatLonConverter.getDecimalDegree(
+            Latitudes.NONE,
+            (int)spnLatDeg.getValue(),
+            (int)spnLatMin.getValue(),
+            (double)spnLatSec.getValue());
+        uiLongitude = LatLonConverter.getDecimalDegree(
+            Longitudes.NONE,
+            (int)spnLonDeg.getValue(),
+            (int)spnLonMin.getValue(),
+            (double)spnLonSec.getValue());
+    }
+
+    public boolean isSelectionMade() {
+        return selectionMade;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnUseGPX;
+    private javax.swing.JButton btnUseImage;
+    private javax.swing.JButton btnUseMap;
+    private javax.swing.JButton btnUsePrevious;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner spnLatDecimal;
-    private javax.swing.JSpinner spnLatInteger1;
-    private javax.swing.JSpinner spnLatInteger2;
+    private javax.swing.JSpinner spnLatDeg;
+    private javax.swing.JSpinner spnLatMin;
+    private javax.swing.JSpinner spnLatSec;
     private javax.swing.JSpinner spnLonDecimal;
-    private javax.swing.JSpinner spnLonInteger1;
-    private javax.swing.JSpinner spnLonInteger2;
+    private javax.swing.JSpinner spnLonDeg;
+    private javax.swing.JSpinner spnLonMin;
+    private javax.swing.JSpinner spnLonSec;
     private javax.swing.JToggleButton tglDecimalDegrees;
-    private javax.swing.JToggleButton tglDecimalMinutes;
-    private javax.swing.JToggleButton tglDecimalSeconds;
+    private javax.swing.JToggleButton tglDegMinSec;
     private javax.swing.JToggleButton tglEast;
     private javax.swing.JToggleButton tglNorth;
     private javax.swing.JToggleButton tglSouth;

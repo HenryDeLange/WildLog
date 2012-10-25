@@ -4,6 +4,7 @@ import KmlGenerator.objects.KmlEntry;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -21,7 +22,7 @@ import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
 // Foundation for the Sighting class
-public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
+public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
     private Date date; // must include time
 //    private Element element;
 //    private Location location;
@@ -33,17 +34,6 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
     private int numberOfElements; // How many where present at sighting
     private String details;
 //    private List<Foto> fotos; // The difference between this and the Element foto is that Element fotos are the "good" ones, these are more foto records...
-    private Latitudes latitude;
-    private int latDegrees;
-    private int latMinutes;
-    //private int latSeconds;  // Old field not used anymore
-    // TODO: Make these double instead...
-    private float latSecondsFloat;
-    private Longitudes longitude;
-    private int lonDegrees;
-    private int lonMinutes;
-    //private int lonSeconds;  // Old field not used anymore
-    private float lonSecondsFloat;
     //private String subArea;
     private SightingEvidence sightingEvidence;
     private long sightingCounter;
@@ -105,8 +95,8 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
         htmlSighting.append("<br/><b>Creature:</b> ").append(elementName);
         htmlSighting.append("<br/><b>Location:</b> ").append(UtilsHTML.formatString(locationName));
         htmlSighting.append("<br/>");
-        htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsFloat);
-        htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsFloat);
+        htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsDouble);
+        htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsDouble);
         htmlSighting.append("<br/><b>Time of Day:</b> ").append(UtilsHTML.formatString(timeOfDay));
         htmlSighting.append("<br/><b>Weather:</b> ").append(UtilsHTML.formatString(weather));
         htmlSighting.append("<br/><b>Area Type:</b> ").append(UtilsHTML.formatString(areaType));
@@ -245,8 +235,8 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
             Location location = inApp.getDBI().find(new Location(locationName));
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsDouble()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsDouble()));
                 }
             }
             else {
@@ -259,8 +249,8 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
             Location location = inApp.getDBI().find(new Location(locationName));
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsFloat()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsFloat()));
+                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSecondsDouble()));
+                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSecondsDouble()));
                 }
             }
             else {
@@ -269,8 +259,8 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
             }
         }
         else {
-            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsFloat));
-            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsFloat));
+            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsDouble));
+            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsDouble));
         }
         return entry;
     }
@@ -323,38 +313,6 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
 //        if (fotos == null) fotos = new ArrayList<Foto>(1);
 //        return fotos;
 //    }
-
-    public int getLatDegrees() {
-        return latDegrees;
-    }
-
-    public int getLatMinutes() {
-        return latMinutes;
-    }
-
-    public float getLatSecondsFloat() {
-        return latSecondsFloat;
-    }
-
-    public Latitudes getLatitude() {
-        return latitude;
-    }
-
-    public int getLonDegrees() {
-        return lonDegrees;
-    }
-
-    public int getLonMinutes() {
-        return lonMinutes;
-    }
-
-    public float getLonSecondsFloat() {
-        return lonSecondsFloat;
-    }
-
-    public Longitudes getLongitude() {
-        return longitude;
-    }
 
 //    public String getSubArea() {
 //        if (subArea == null) subArea = "";
@@ -414,38 +372,6 @@ public class Sighting implements Comparable<Sighting>, DataObjectWithHTML, DataO
 //    public void setFotos(List<Foto> inFotos) {
 //        fotos = inFotos;
 //    }
-
-    public void setLatDegrees(int inLatDegrees) {
-        latDegrees = inLatDegrees;
-    }
-
-    public void setLatMinutes(int inLatMinutes) {
-        latMinutes = inLatMinutes;
-    }
-
-    public void setLatSecondsFloat(float inLatSeconds) {
-        latSecondsFloat = inLatSeconds;
-    }
-
-    public void setLatitude(Latitudes inLatitude) {
-        latitude = inLatitude;
-    }
-
-    public void setLonDegrees(int inLonDegrees) {
-        lonDegrees = inLonDegrees;
-    }
-
-    public void setLonMinutes(int inLonMinutes) {
-        lonMinutes = inLonMinutes;
-    }
-
-    public void setLonSecondsFloat(float inLonSeconds) {
-        lonSecondsFloat = inLonSeconds;
-    }
-
-    public void setLongitude(Longitudes inLongitude) {
-        longitude = inLongitude;
-    }
 
 //    public void setSubArea(String inSubArea) {
 //        subArea = inSubArea;

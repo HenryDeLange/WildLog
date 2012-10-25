@@ -10,7 +10,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
  */
 public final class UtilMapGenerator {
 
-    public static void addPoint(final Float inLatitude, final Float inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
+    public static void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
         if (inApp.isUseOnlineMap()) {
             inApp.getMapOnline().getPointLayer().addPoint(inLatitude, inLongitude, inColor, inObjectWithHTML, inApp);
         }

@@ -55,13 +55,13 @@ public class InfoBox extends JPanel {
                     sightingWrapper.getLatitude(),
                     sightingWrapper.getLatDegrees(),
                     sightingWrapper.getLatMinutes(),
-                    sightingWrapper.getLatSecondsFloat())));
+                    sightingWrapper.getLatSecondsDouble())));
         lblLongitude.setText(Double.toString(
                 LatLonConverter.getDecimalDegree(
                     sightingWrapper.getLongitude(),
                     sightingWrapper.getLonDegrees(),
                     sightingWrapper.getLonMinutes(),
-                    sightingWrapper.getLonSecondsFloat())));
+                    sightingWrapper.getLonSecondsDouble())));
         lblImage.setIcon(sightingWrapper.getIcon());
     }
 
@@ -86,8 +86,9 @@ public class InfoBox extends JPanel {
         lblLongitude = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         lblImage = new javax.swing.JLabel();
-        btnEdit = new javax.swing.JButton();
         btnChooseCreature = new javax.swing.JButton();
+        btnGPS = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(InfoBox.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -158,17 +159,7 @@ public class InfoBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 85, 150, 150));
 
-        btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
-        btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnEdit.setFocusPainted(false);
-        btnEdit.setName("btnEdit"); // NOI18N
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
-            }
-        });
-        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 165, 80, 70));
-
+        btnChooseCreature.setBackground(resourceMap.getColor("btnChooseCreature.background")); // NOI18N
         btnChooseCreature.setText(resourceMap.getString("btnChooseCreature.text")); // NOI18N
         btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -179,7 +170,24 @@ public class InfoBox extends JPanel {
                 btnChooseCreatureActionPerformed(evt);
             }
         });
-        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 70));
+        add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 50));
+
+        btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
+        btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
+        btnGPS.setName("btnGPS"); // NOI18N
+        add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 135, 80, 50));
+
+        btnEdit.setBackground(resourceMap.getColor("btnEdit.background")); // NOI18N
+        btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
+        btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEdit.setFocusPainted(false);
+        btnEdit.setName("btnEdit"); // NOI18N
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 185, 80, 50));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -243,6 +251,7 @@ public class InfoBox extends JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChooseCreature;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnGPS;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

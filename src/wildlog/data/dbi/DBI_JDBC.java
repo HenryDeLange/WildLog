@@ -47,7 +47,8 @@ import wildlog.data.enums.WishRating;
 public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
-    
+
+    // FIXME: Fix the queries to use double GPS points isntead of float... Also think of a way to include the double value in the CSV export...
     protected static final String tableElements = "CREATE TABLE ELEMENTS (   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,   OTHERNAME varchar(150),   SCIENTIFICNAME varchar(150),   DESCRIPTION longvarchar,   DISTRIBUTION longvarchar,   NUTRITION longvarchar,   WATERDEPENDANCE varchar(50),   SIZEMALEMIN float(52),   SIZEMALEMAX float(52),   SIZEFEMALEMIN float(52),   SIZEFEMALEMAX float(52),   SIZEUNIT varchar(10),   SIZETYPE varchar(50),   WEIGHTMALEMIN float(52),   WEIGHTMALEMAX float(52),   WEIGHTFEMALEMIN float(52),   WEIGHTFEMALEMAX float(52),   WEIGHTUNIT varchar(10),   BREEDINGDURATION varchar(50),   BREEDINGNUMBER varchar(50),   WISHLISTRATING varchar(50),   DIAGNOSTICDESCRIPTION longvarchar,   ACTIVETIME varchar(50),   ENDANGEREDSTATUS varchar(35),   BEHAVIOURDESCRIPTION longvarchar,   ADDFREQUENCY varchar(50),   ELEMENTTYPE varchar(50),   FEEDINGCLASS varchar(50),   LIFESPAN varchar(50),   REFERENCEID varchar(50))";
     protected static final String tableLocations = "CREATE TABLE LOCATIONS (   NAME varchar(150) PRIMARY KEY NOT NULL,   DESCRIPTION longvarchar,   PROVINCE varchar(35),   RATING varchar(50),   GAMEVIEWINGRATING varchar(50),   HABITATTYPE varchar(50),   ACCOMMODATIONTYPE varchar(150),   CATERING varchar(50),   CONTACTNUMBERS varchar(50),   WEBSITE varchar(100),   EMAIL varchar(100),   DIRECTIONS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52))";
     protected static final String tableVisits = "CREATE TABLE VISITS (   NAME varchar(150) PRIMARY KEY NOT NULL,   STARTDATE date,   ENDDATE date,   DESCRIPTION longvarchar,   GAMEWATCHINGINTENSITY varchar(50),   VISITTYPE varchar(50),   LOCATIONNAME varchar(150))";
@@ -83,7 +84,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteSighting = "DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
     protected static final String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
     protected static final String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
-    
+
     public DBI_JDBC() {
     }
 
@@ -182,11 +183,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempLocation.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
             }
         }
         catch (SQLException ex) {
@@ -253,11 +254,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -388,11 +389,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempLocation.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
                 tempList.add(tempLocation);
             }
         }
@@ -479,11 +480,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -564,11 +565,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -725,11 +726,11 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(13, DBUtils.stringFromObject(inLocation.getLatitude()));
             state.setInt(14, inLocation.getLatDegrees());
             state.setInt(15, inLocation.getLatMinutes());
-            state.setFloat(16, inLocation.getLatSecondsFloat());
+            state.setDouble(16, inLocation.getLatSecondsDouble());
             state.setString(17, DBUtils.stringFromObject(inLocation.getLongitude()));
             state.setInt(18, inLocation.getLonDegrees());
             state.setInt(19, inLocation.getLonMinutes());
-            state.setFloat(20, inLocation.getLonSecondsFloat());
+            state.setDouble(20, inLocation.getLonSecondsDouble());
             // Execute
             state.executeUpdate();
         }
@@ -859,11 +860,11 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(13, DBUtils.stringFromObject(inSighting.getLatitude()));
             state.setInt(14, inSighting.getLatDegrees());
             state.setInt(15, inSighting.getLatMinutes());
-            state.setFloat(16, inSighting.getLatSecondsFloat());
+            state.setDouble(16, inSighting.getLatSecondsDouble());
             state.setString(17, DBUtils.stringFromObject(inSighting.getLongitude()));
             state.setInt(18, inSighting.getLonDegrees());
             state.setInt(19, inSighting.getLonMinutes());
-            state.setFloat(20, inSighting.getLonSecondsFloat());
+            state.setDouble(20, inSighting.getLonSecondsDouble());
             state.setString(21, DBUtils.stringFromObject(inSighting.getSightingEvidence()));
             state.setInt(22, inSighting.getMoonPhase());
             state.setString(23, DBUtils.stringFromObject(inSighting.getMoonlight()));

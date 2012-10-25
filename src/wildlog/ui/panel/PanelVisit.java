@@ -982,14 +982,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             if (sighting.getLatitude() != null && sighting.getLongitude() != null)
             if (!sighting.getLatitude().equals(Latitudes.NONE) && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                float lat = sighting.getLatDegrees();
-                lat = lat + sighting.getLatMinutes()/60f;
-                lat = lat + (sighting.getLatSecondsFloat()/60f)/60f;
+                double lat = sighting.getLatDegrees();
+                lat = lat + sighting.getLatMinutes()/60.0;
+                lat = lat + (sighting.getLatSecondsDouble()/60.0)/60.0;
                 if (sighting.getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
-                float lon = sighting.getLonDegrees();
-                lon = lon + sighting.getLonMinutes()/60f;
-                lon = lon + (sighting.getLonSecondsFloat()/60f)/60f;
+                double lon = sighting.getLonDegrees();
+                lon = lon + sighting.getLonMinutes()/60.0;
+                lon = lon + (sighting.getLonSecondsDouble()/60.0)/60.0;
                 if (sighting.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sighting, app);
@@ -1038,14 +1038,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         for (int t = 0; t < sightings.size(); t++) {
             if (sightings.get(t).getLatitude() != null && sightings.get(t).getLongitude() != null)
             if (!sightings.get(t).getLatitude().equals(Latitudes.NONE) && !sightings.get(t).getLongitude().equals(Longitudes.NONE)) {
-                float lat = sightings.get(t).getLatDegrees();
-                lat = lat + sightings.get(t).getLatMinutes()/60f;
-                lat = lat + (sightings.get(t).getLatSecondsFloat()/60f)/60f;
+                double lat = sightings.get(t).getLatDegrees();
+                lat = lat + sightings.get(t).getLatMinutes()/60.0;
+                lat = lat + (sightings.get(t).getLatSecondsDouble()/60.0)/60.0;
                 if (sightings.get(t).getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
-                float lon = sightings.get(t).getLonDegrees();
-                lon = lon + sightings.get(t).getLonMinutes()/60f;
-                lon = lon + (sightings.get(t).getLonSecondsFloat()/60f)/60f;
+                double lon = sightings.get(t).getLonDegrees();
+                lon = lon + sightings.get(t).getLonMinutes()/60.0;
+                lon = lon + (sightings.get(t).getLonSecondsDouble()/60.0)/60.0;
                 if (sightings.get(t).getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightings.get(t), app);

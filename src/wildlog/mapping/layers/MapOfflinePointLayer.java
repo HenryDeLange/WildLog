@@ -36,9 +36,9 @@ public class MapOfflinePointLayer extends Layer {
         pointList = inList;
     }
 
-    public void addPoint(float inLat, float inLon, int inSize, Color inColor) {
+    public void addPoint(double inLat, double inLon, int inSize, Color inColor) {
         if (pointList == null) pointList = new ArrayList<OMPoint>(1);
-        OMPoint point = new OMPoint(inLat, inLon, inSize);
+        OMPoint point = new OMPoint((float)inLat, (float)inLon, inSize);
         point.setLinePaint(Color.BLACK);
         point.setFillColor(inColor);
         pointList.add(point);

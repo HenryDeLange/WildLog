@@ -30,11 +30,11 @@
     <Property name="useNullLayout" type="boolean" value="false"/>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="btnUsePrevious">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jButton1.text"/>
+        <Property name="text" type="java.lang.String" resourceKey="btnUsePrevious.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnUsePrevious" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -42,16 +42,16 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btnUseImage">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="jButton2.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="jButton2.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="jButton2.toolTipText"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnUseImage.icon"/>
+        <Property name="text" type="java.lang.String" resourceKey="btnUseImage.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnUseImage.toolTipText"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="jButton2" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnUseImage" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -59,12 +59,12 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="btnUseMap">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="jButton3.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="jButton3.text"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnUseMap.icon"/>
+        <Property name="text" type="java.lang.String" resourceKey="btnUseMap.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="jButton3" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnUseMap" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -72,15 +72,15 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton4">
+    <Component class="javax.swing.JButton" name="btnUseGPX">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="jButton4.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="jButton4.text"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnUseGPX.icon"/>
+        <Property name="text" type="java.lang.String" resourceKey="btnUseGPX.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="jButton4" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="btnUseGPX" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -101,6 +101,16 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="270" y="10" width="130" height="70"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+      <Properties>
+        <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="10" y="85" width="390" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -220,50 +230,39 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="340" y="170" width="60" height="30"/>
+          <AbsoluteConstraints x="340" y="110" width="60" height="45"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="tglDecimalMinutes">
+    <Component class="javax.swing.JToggleButton" name="tglDegMinSec">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="tglDecimalMinutes.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="tglDecimalMinutes.toolTipText"/>
+        <Property name="text" type="java.lang.String" resourceKey="tglDegMinSec.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="tglDegMinSec.toolTipText"/>
         <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="tglDecimalMinutes" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="tglDegMinSec" noResource="true"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tglDecimalMinutesActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tglDegMinSecActionPerformed"/>
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="340" y="140" width="60" height="30"/>
+          <AbsoluteConstraints x="340" y="155" width="60" height="45"/>
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JToggleButton" name="tglDecimalSeconds">
-      <Properties>
-        <Property name="selected" type="boolean" value="true"/>
-        <Property name="text" type="java.lang.String" resourceKey="tglDecimalSeconds.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="tglDecimalSeconds.toolTipText"/>
-        <Property name="focusPainted" type="boolean" value="false"/>
-        <Property name="name" type="java.lang.String" value="tglDecimalSeconds" noResource="true"/>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tglDecimalSecondsActionPerformed"/>
-      </Events>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="340" y="110" width="60" height="30"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JSpinner" name="spnLatInteger1">
+    <Component class="javax.swing.JSpinner" name="spnLatDeg">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0" maximum="90" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+        </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="spnLatInteger1" noResource="true"/>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLatDeg" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -271,13 +270,19 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSpinner" name="spnLatInteger2">
+    <Component class="javax.swing.JSpinner" name="spnLatMin">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0" maximum="59" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+        </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="spnLatInteger2" noResource="true"/>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLatMin" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -285,13 +290,19 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSpinner" name="spnLatDecimal">
+    <Component class="javax.swing.JSpinner" name="spnLatSec">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0.0" maximum="59.999999999" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-4" type="number"/>
+        </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="spnLatDecimal" noResource="true"/>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#.####" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLatSec" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -299,13 +310,39 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSpinner" name="spnLonInteger1">
+    <Component class="javax.swing.JSpinner" name="spnLatDecimal">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="font" type="java.awt.Font" resourceKey="spnLatDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0.0" maximum="90.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-5" type="number"/>
+        </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="spnLonInteger1" noResource="true"/>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#.############" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLatDecimal" noResource="true"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="140" y="110" width="190" height="30"/>
+        </Constraint>
+      </Constraints>
+    </Component>
+    <Component class="javax.swing.JSpinner" name="spnLonDeg">
+      <Properties>
+        <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0" maximum="180" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+        </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLonDeg" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -313,13 +350,19 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSpinner" name="spnLonInteger2">
+    <Component class="javax.swing.JSpinner" name="spnLonMin">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0" maximum="59" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
+        </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="spnLonInteger2" noResource="true"/>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLonMin" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -327,13 +370,19 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSpinner" name="spnLonDecimal">
+    <Component class="javax.swing.JSpinner" name="spnLonSec">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="font" type="java.awt.Font" resourceKey="spnLonSec.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0.0" maximum="59.999999999" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-4" type="number"/>
+        </Property>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="spnLonDecimal" noResource="true"/>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#.####" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLonSec" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -341,13 +390,23 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    <Component class="javax.swing.JSpinner" name="spnLonDecimal">
       <Properties>
-        <Property name="name" type="java.lang.String" value="jSeparator1" noResource="true"/>
+        <Property name="font" type="java.awt.Font" resourceKey="spnLonDecimal.font"/>
+        <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
+          <SpinnerModel initial="0.0" maximum="180.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0E-5" type="number"/>
+        </Property>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
+          <SpinnerEditor format="#.############" type="3"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="spnLonDecimal" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="10" y="85" width="390" height="-1"/>
+          <AbsoluteConstraints x="140" y="170" width="190" height="30"/>
         </Constraint>
       </Constraints>
     </Component>

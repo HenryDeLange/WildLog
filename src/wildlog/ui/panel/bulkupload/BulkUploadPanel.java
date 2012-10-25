@@ -524,8 +524,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
                                         && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
                                     // Sun
-                                    double latitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSecondsFloat());
-                                    double longitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSecondsFloat());
+                                    double latitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSecondsDouble());
+                                    double longitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSecondsDouble());
                                     sightingWrapper.setTimeOfDay(AstroUtils.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
                                     // Moon
                                     sightingWrapper.setMoonPhase(AstroUtils.getMoonPhase(sightingWrapper.getDate()));

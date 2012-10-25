@@ -55,7 +55,7 @@ public class DBI_h2 extends DBI_JDBC {
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
             conn = DriverManager.getConnection("jdbc:h2:" + FilePaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
-            
+
             // Create tables
             results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
             state = conn.createStatement();
@@ -244,11 +244,11 @@ public class DBI_h2 extends DBI_JDBC {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempLocation.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
 
                 createOrUpdate(tempLocation, null);
             }
@@ -271,7 +271,7 @@ public class DBI_h2 extends DBI_JDBC {
             results = state.executeQuery("CALL CSVREAD('" + inPath + "Sightings.csv')");
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
-                
+
                 tempSighting.setSightingCounter(0);
                 tempSighting.setDate(results.getTimestamp("SIGHTINGDATE"));
                 tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
@@ -287,11 +287,11 @@ public class DBI_h2 extends DBI_JDBC {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsFloat(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsFloat(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
 
                 createOrUpdate(tempSighting);

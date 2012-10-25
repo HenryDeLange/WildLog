@@ -29,15 +29,15 @@ import wildlog.utils.UtilsHTML;
  */
 public class MapOnlinePointLayer {
     class MapPoint {
-        public float latitude;
-        public float longitude;
+        public double latitude;
+        public double longitude;
         public DataObjectWithHTML objectWithHTML;
     }
     final private JXMapKit map;
     private List<MapPoint> points = new ArrayList<MapPoint>();
     private List<MapPoint> clickedPoints = new ArrayList<MapPoint>();
     private int clickedPointIndex = -1;
-    
+
     public MapOnlinePointLayer(JXMapKit inMap) {
         map = inMap;
     }
@@ -51,7 +51,7 @@ public class MapOnlinePointLayer {
 //                map.getMainMap().removeMouseListener(mouse);
     }
 
-    public void addPoint(final Float inLatitude, final Float inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
+    public void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
         MapPoint point = new MapPoint();
         point.latitude = inLatitude;
         point.longitude = inLongitude;
@@ -71,7 +71,7 @@ public class MapOnlinePointLayer {
             //check if near the mouse
             if(converted_gp_pt.distance(inEvent.getPoint()) < 12) {
                 clickedPoints.add(point);
-            } 
+            }
             else {
                 WildLogScrollPanel scrollPane = null;
                 for (Component comp : map.getMainMap().getComponents()) {
@@ -146,5 +146,5 @@ public class MapOnlinePointLayer {
         });
         map.getMainMap().setOverlayPainter(painter);
     }
-    
+
 }

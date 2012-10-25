@@ -2493,8 +2493,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             List<Sighting> sightings = app.getDBI().list(new Sighting());
             for (Sighting sighting : sightings) {
                 sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
-                double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsFloat());
-                double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsFloat());
+                double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsDouble());
+                double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsDouble());
                 if (lat != 0 && lon != 0 && !(sighting.getDate().getHours() == 0 && sighting.getDate().getMinutes() == 0)) {
                     sighting.setMoonlight(AstroUtils.getMoonlight(sighting.getDate(), lat, lon));
                     sighting.setTimeOfDay(AstroUtils.getSunCategory(sighting.getDate(), lat, lon));
