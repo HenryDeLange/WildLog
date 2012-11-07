@@ -12,7 +12,6 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -310,7 +309,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
         txtName.setText(visit.getName());
         txtName.setName("txtName"); // NOI18N
-        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 28, 505, -1));
+        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 28, 500, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -324,7 +323,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnUpdateActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 25, 110, 80));
+        visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 25, 110, 60));
 
         jLabel53.setText(resourceMap.getString("jLabel53.text")); // NOI18N
         jLabel53.setName("jLabel53"); // NOI18N
@@ -477,7 +476,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnAddSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 310, 100, 30));
+        visitIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 300, 100, 30));
 
         btnDeleteSighting.setBackground(resourceMap.getColor("btnDeleteSighting.background")); // NOI18N
         btnDeleteSighting.setIcon(resourceMap.getIcon("btnDeleteSighting.icon")); // NOI18N
@@ -491,7 +490,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnDeleteSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnDeleteSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 360, 100, 30));
+        visitIncludes.add(btnDeleteSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 350, 100, 30));
 
         btnEditSighting.setBackground(resourceMap.getColor("btnEditSighting.background")); // NOI18N
         btnEditSighting.setIcon(resourceMap.getIcon("btnEditSighting.icon")); // NOI18N
@@ -575,7 +574,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 150, 130, 35));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, 130, 35));
 
         btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
@@ -617,7 +616,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnMapVisitActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 110, 130, 35));
+        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 130, 35));
 
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -711,7 +710,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 35));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 150, 110, 35));
 
         btnChecklist.setBackground(resourceMap.getColor("btnChecklist.background")); // NOI18N
         btnChecklist.setFont(resourceMap.getFont("btnChecklist.font")); // NOI18N
@@ -726,7 +725,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnChecklistActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 440, 100, 33));
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 100, 33));
 
         btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
@@ -740,7 +739,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnHTMLActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 110, 35));
+        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 120, 110, 35));
 
         btnKmlExport.setBackground(resourceMap.getColor("btnKmlExport.background")); // NOI18N
         btnKmlExport.setIcon(resourceMap.getIcon("btnKmlExport.icon")); // NOI18N
@@ -754,7 +753,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnKmlExportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnKmlExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 55, 120, 30));
+        visitIncludes.add(btnKmlExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 120, 30));
 
         btnSlideshowSightings.setIcon(resourceMap.getIcon("btnSlideshowSightings.icon")); // NOI18N
         btnSlideshowSightings.setText(resourceMap.getString("btnSlideshowSightings.text")); // NOI18N
@@ -776,7 +775,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnSlideshowVisitActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnSlideshowVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 120, 120, 30));
+        visitIncludes.add(btnSlideshowVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 120, 30));
 
         btnBulkImport.setText(resourceMap.getString("btnBulkImport.text")); // NOI18N
         btnBulkImport.setName("btnBulkImport"); // NOI18N
@@ -1275,12 +1274,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             else
                 lblNumberOfSightingImages.setText("0 of 0");
         }
-    }
-
-    private Date parseDate(String inDate) {
-        // TODO: fix this deprication
-        Date date = new Date(inDate);
-        return date;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,9 +1,6 @@
 package wildlog.data.enums;
 
-/**
- *
- * @author Henry
- */
+
 public enum WildLogFileType {
     IMAGE("Image"),
     MOVIE("Movie"),

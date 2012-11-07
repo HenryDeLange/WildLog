@@ -656,6 +656,10 @@ public final class Utils {
     }
 
     public static void attachClipboardPopup(final JTextComponent inTextField) {
+        attachClipboardPopup(inTextField, false);
+    }
+
+    public static void attachClipboardPopup(final JTextComponent inTextField, final boolean inCopyOnly) {
         // TODO: Maak mooi icons vir die copy en paste opsies
         inTextField.addMouseListener(new MouseAdapter() {
             @Override
@@ -671,24 +675,29 @@ public final class Utils {
                     copyUserNameItem.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            Utils.doClipboardCopy(inTextField.getText());
+                            String text = inTextField.getSelectedText();
+                            if (text == null || text.isEmpty())
+                                text = inTextField.getText();
+                            Utils.doClipboardCopy(text);
                         }
                     });
                     clipboardPopup.add(copyUserNameItem);
-                    // Build the paste popup
-                    JMenuItem copyPasswordItem = new JMenuItem("Paste from clipboard.");
-                    copyPasswordItem.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent inNestedEvent) {
-                            try {
-                                inTextField.setText(doClipboardPaste());
+                    if (!inCopyOnly) {
+                        // Build the paste popup
+                        JMenuItem copyPasswordItem = new JMenuItem("Paste from clipboard.");
+                        copyPasswordItem.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent inNestedEvent) {
+                                try {
+                                    inTextField.setText(doClipboardPaste());
+                                }
+                                catch (UnsupportedFlavorException | IOException | ClassNotFoundException ex) {
+                                    ex.printStackTrace(System.err);
+                                }
                             }
-                            catch (UnsupportedFlavorException | IOException | ClassNotFoundException ex) {
-                                ex.printStackTrace(System.err);
-                            }
-                        }
-                    });
-                    clipboardPopup.add(copyPasswordItem);
+                        });
+                        clipboardPopup.add(copyPasswordItem);
+                    }
                     // Wrap up and show up the popup
                     clipboardPopup.pack();
                     clipboardPopup.show(inEvent.getComponent(), inEvent.getPoint().x, inEvent.getPoint().y);

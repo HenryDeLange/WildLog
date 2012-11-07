@@ -8,23 +8,19 @@ import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.utils.UtilsHTML;
 
-// Foundation for the Visit class
 public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     private String name; // Used as index (ID)
     private Date startDate;
     private Date endDate;
     private String description;
-    private GameWatchIntensity gameWatchingIntensity; // How intensely did we watch game (predefined values)
-    //private List<Sighting> sightings; // An ArrayList of sighting objects
-    private VisitType type; // Vacation, Remote Camera, Bird Atlasing, Other
-//    private List<Foto> fotos;
+    private GameWatchIntensity gameWatchingIntensity;
+    private VisitType type;
     private String locationName;
-
 
     // CONSTRUCTORS:
     public Visit() {
     }
-    
+
     public Visit(String inName) {
         name = inName;
     }
@@ -62,7 +58,6 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
                 sightingString.append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType)).append("<br/>");
             }
         }
-
         StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Visit: " + name + "</title></head>");
         htmlVisit.append("<body bgcolor='rgb(230,228,240)'>");
         htmlVisit.append("<table bgcolor='rgb(230,228,240)' width='100%'>");
@@ -108,25 +103,14 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     public String getDescription() {
         return description;
     }
-    
+
     public GameWatchIntensity getGameWatchingIntensity() {
         return gameWatchingIntensity;
     }
 
-//    public List<Sighting> getSightings() {
-//        if (sightings == null) sightings = new ArrayList<Sighting>();
-//        return sightings;
-//    }
-    
     public VisitType getType() {
         return type;
     }
-
-//    @Override
-//    public List<Foto> getFotos() {
-//        if (fotos == null) fotos = new ArrayList<Foto>(1);
-//        return fotos;
-//    }
 
     // SETTERS:
     public void setName(String inName) {
@@ -144,23 +128,14 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     public void setDescription(String inDescription) {
         description = inDescription;
     }
-    
+
     public void setGameWatchingIntensity(GameWatchIntensity inGameWatchingIntensity) {
         gameWatchingIntensity = inGameWatchingIntensity;
     }
 
-//    public void setSightings(List<Sighting> inSightings) {
-//        sightings = inSightings;
-//    }
-    
     public void setType(VisitType inType) {
         type = inType;
     }
-
-//    @Override
-//    public void setFotos(List<Foto> inFotos) {
-//        fotos = inFotos;
-//    }
 
     public String getLocationName() {
         return locationName;
@@ -169,5 +144,5 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     public void setLocationName(String locationName) {
         this.locationName = locationName;
     }
-    
+
 }

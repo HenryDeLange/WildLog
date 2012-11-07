@@ -39,7 +39,7 @@ public class ReportSighting extends javax.swing.JFrame {
         startDate = inStartDate;
         endDate = inEndDate;
         app = inApp;
-        
+
         initComponents();
 
         doReport1();
@@ -273,7 +273,7 @@ public class ReportSighting extends javax.swing.JFrame {
             }
             pj.print();
         } catch (PrinterException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 

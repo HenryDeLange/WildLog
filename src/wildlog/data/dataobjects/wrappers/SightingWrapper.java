@@ -1,10 +1,10 @@
 package wildlog.data.dataobjects.wrappers;
 
+import java.util.Calendar;
 import wildlog.data.dataobjects.Sighting;
 
 /**
  * This class wraps a Sighting object in order to return just the Creature name as the toString() value.
- * @author Henry
  */
 public class SightingWrapper {
     // Variables
@@ -20,10 +20,13 @@ public class SightingWrapper {
     // Methods
     @Override
     public String toString() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(sighting.getDate());
+        String dateString = " (" + calendar.get(Calendar.DAY_OF_MONTH) + "-" + (calendar.get(Calendar.MONTH)+1) + "-" + calendar.get(Calendar.YEAR) + ")";
         if (isForLocation)
-            return sighting.getElementName() + " (" + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900) + ")";
+            return sighting.getElementName() + dateString;
         else
-            return sighting.getLocationName() + " (" + sighting.getDate().getDate() + "-" + (sighting.getDate().getMonth()+1) + "-" + (sighting.getDate().getYear()+1900) + ")";
+            return sighting.getLocationName() + dateString;
     }
 
     public Sighting getSighting() {

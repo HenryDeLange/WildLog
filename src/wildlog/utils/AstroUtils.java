@@ -3,24 +3,20 @@ package wildlog.utils;
 import astro.MoonPhase;
 import astro.MoonTimes;
 import astro.SunTimes;
+import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 
-/**
- *
- * @author DeLangeH
- */
+
 public final class AstroUtils {
     public static ActiveTimeSpesific getSunCategory(Date inDate, double inLatitude, double inLongitude) {
         double[] day = SunTimes.calculateTimes(inDate, inLatitude, inLongitude, SunTimes.SUNRISE_AND_SET);
         //double[] twilight = SunTimes.calculateTimes(inDate, inLatitude, inLongitude, SunTimes.CIVIL_TWILIGHT);
         double[] nearnight = SunTimes.calculateTimes(inDate, inLatitude, inLongitude, SunTimes.NAUTICAL_TWILIGHT);
-//System.out.println(day[0] + "  " + day[1]);
-//System.out.println(twilight[0] + "  " + twilight[1]);
-//System.out.println(night[0] + "  " + night[1]);
-        double time = (double)(inDate.getHours() + ((double)inDate.getMinutes() / 60));
-//System.out.println(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(inDate);
+        double time = (double)(calendar.get(Calendar.HOUR_OF_DAY) + (((double)calendar.get(Calendar.MINUTE)) / 60.0));
         if (time >= day[SunTimes.RISE] && time <= day[SunTimes.SET]) {
             // Gedurende die dag
             double interval = (day[SunTimes.SET] - day[SunTimes.RISE])/5;
@@ -63,9 +59,9 @@ public final class AstroUtils {
 
     public static Moonlight getMoonlight(Date inDate, double inLatitude, double inLongitude) {
         double[] values = MoonTimes.calculateTimes(inDate, inLatitude, inLongitude);
-//System.out.println(values[0] + "  " + values[1]);
-        double time = (double)(inDate.getHours() + ((double)inDate.getMinutes() / 60));
-//System.out.println(time);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(inDate);
+        double time = (double)(calendar.get(Calendar.HOUR_OF_DAY) + (((double)calendar.get(Calendar.MINUTE)) / 60.0));
         if (values[MoonTimes.RISE] <= values[MoonTimes.SET]) {
             if (time >= values[MoonTimes.RISE] && time <= values[MoonTimes.SET])
                 return Moonlight.MOON_SHINING;

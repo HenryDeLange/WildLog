@@ -8,7 +8,6 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.enums.ActiveTimeSpesific;
-import wildlog.data.enums.AreaType;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.FeedingClass;
@@ -21,20 +20,14 @@ import wildlog.data.enums.Weather;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
-// Foundation for the Sighting class
 public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
     private Date date; // must include time
-//    private Element element;
-//    private Location location;
-    private ActiveTimeSpesific timeOfDay; // General description of the time (bv early morning, night, ens) Predefined
-    private Weather weather; // Predefined set of possible values
-    private AreaType areaType; // In what 'mini-habitat' was the element seen (bv river, open patch, ens) Predefined
-    private ViewRating viewRating; // How close, long, ens the element was seen
-    private Certainty certainty; // How sure you are that it was identified correctly
-    private int numberOfElements; // How many where present at sighting
+    private ActiveTimeSpesific timeOfDay;
+    private Weather weather;
+    private ViewRating viewRating;
+    private Certainty certainty;
+    private int numberOfElements;
     private String details;
-//    private List<Foto> fotos; // The difference between this and the Element foto is that Element fotos are the "good" ones, these are more foto records...
-    //private String subArea;
     private SightingEvidence sightingEvidence;
     private long sightingCounter;
     private String elementName;
@@ -42,7 +35,6 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     private String visitName;
     private int moonPhase = -1;
     private Moonlight moonlight;
-
 
     // CONSTRUCTORS:
     public Sighting() {
@@ -52,19 +44,10 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         sightingCounter = inSightingCounter;
     }
 
-//    public Sighting(Date inDate, Element inElement, Location inLocation, long inSightingCounter) {
-//        date = inDate;
-//        element = inElement;
-//        location = inLocation;
-//        sightingCounter = inSightingCounter;
-//    }
-
     // METHIDS:
     @Override
     public String toString() {
-        return locationName + " ("
-            /*+ " (" + date.getDate() + "-" + (date.getMonth()+1) + "-" + (date.getYear()+1900) + ") "*/
-            + elementName + ") [" + sightingCounter + "]";
+        return locationName + " (" + elementName + ") [" + sightingCounter + "]";
     }
 
     @Override
@@ -99,7 +82,6 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsDouble);
         htmlSighting.append("<br/><b>Time of Day:</b> ").append(UtilsHTML.formatString(timeOfDay));
         htmlSighting.append("<br/><b>Weather:</b> ").append(UtilsHTML.formatString(weather));
-        htmlSighting.append("<br/><b>Area Type:</b> ").append(UtilsHTML.formatString(areaType));
         htmlSighting.append("<br/><b>View Rating:</b> ").append(UtilsHTML.formatString(viewRating));
         htmlSighting.append("<br/><b>Certainty:</b> ").append(UtilsHTML.formatString(certainty));
         htmlSighting.append("<br/><b>Number of Creatures:</b> ").append(UtilsHTML.formatString(numberOfElements));
@@ -271,24 +253,12 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         return date;
     }
 
-//    public Element getElement() {
-//        return element;
-//    }
-
-//    public Location getLocation() {
-//        return location;
-//    }
-
     public ActiveTimeSpesific getTimeOfDay() {
         return timeOfDay;
     }
 
     public Weather getWeather() {
         return weather;
-    }
-
-    public AreaType getAreaType() {
-        return areaType;
     }
 
     public ViewRating getViewRating() {
@@ -308,17 +278,6 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         return details;
     }
 
-//    @Override
-//    public List<Foto> getFotos() {
-//        if (fotos == null) fotos = new ArrayList<Foto>(1);
-//        return fotos;
-//    }
-
-//    public String getSubArea() {
-//        if (subArea == null) subArea = "";
-//        return subArea;
-//    }
-
     public SightingEvidence getSightingEvidence() {
         return sightingEvidence;
     }
@@ -332,24 +291,12 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         date = inDate;
     }
 
-//    public void setElement(Element inElement) {
-//        element = inElement;
-//    }
-//
-//    public void setLocation(Location inLocation) {
-//        location = inLocation;
-//    }
-
     public void setTimeOfDay(ActiveTimeSpesific inTimeOfDay) {
         timeOfDay = inTimeOfDay;
     }
 
     public void setWeather(Weather inWeather) {
         weather = inWeather;
-    }
-
-    public void setAreaType(AreaType inAreaType) {
-        areaType = inAreaType;
     }
 
     public void setViewRating(ViewRating inViewRating) {
@@ -367,15 +314,6 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     public void setDetails(String inDetails) {
         details = inDetails;
     }
-
-//    @Override
-//    public void setFotos(List<Foto> inFotos) {
-//        fotos = inFotos;
-//    }
-
-//    public void setSubArea(String inSubArea) {
-//        subArea = inSubArea;
-//    }
 
     public void setSightingEvidence(SightingEvidence inSightingEvidence) {
         sightingEvidence = inSightingEvidence;

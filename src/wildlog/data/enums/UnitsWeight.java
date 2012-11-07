@@ -3,6 +3,8 @@ package wildlog.data.enums;
 public enum UnitsWeight {
     KILOGRAM("kg"),
     GRAM("g"),
+    OUNCES("os"),
+    POUNDS("pd"),
     NONE("None");
 
     private String text;
@@ -24,6 +26,8 @@ public enum UnitsWeight {
         if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(KILOGRAM.text)) return KILOGRAM;
         if (inText.equalsIgnoreCase(GRAM.text)) return GRAM;
+        if (inText.equalsIgnoreCase(OUNCES.text)) return OUNCES;
+        if (inText.equalsIgnoreCase(POUNDS.text)) return POUNDS;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }

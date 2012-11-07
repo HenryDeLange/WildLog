@@ -25,9 +25,9 @@ public class MapOfflinePointLayer extends Layer {
     public OMGraphicList createGraphics(OMGraphicList graphics) {
         graphics.clear();
         if (pointList != null) {
-            for (int t = 0; t < pointList.size(); t++) {
-                graphics.addOMGraphic(pointList.get(t));
-            }
+//            for (int t = 0; t < pointList.size(); t++) {
+                graphics.addAll(pointList);
+//            }
         }
         return graphics;
     }
@@ -40,7 +40,7 @@ public class MapOfflinePointLayer extends Layer {
         if (pointList == null) pointList = new ArrayList<OMPoint>(1);
         OMPoint point = new OMPoint((float)inLat, (float)inLon, inSize);
         point.setLinePaint(Color.BLACK);
-        point.setFillColor(inColor);
+        point.setFillPaint(inColor);
         pointList.add(point);
         createGraphics(omgraphics);
     }

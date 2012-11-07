@@ -2,6 +2,7 @@ package wildlog.data.enums;
 
 
 public enum SizeType {
+    BODY("Body"),
     SHOULDER("Shoulder"),
     TOTAL_LENGTH("Total Length"),
     TOTAL_HEIGHT("Total Height"),
@@ -20,6 +21,7 @@ public enum SizeType {
 
     public static SizeType getEnumFromText(String inText) {
         if (inText == null) inText = "";
+        if (inText.equalsIgnoreCase(BODY.text)) return BODY;
         if (inText.equalsIgnoreCase(SHOULDER.text)) return SHOULDER;
         if (inText.equalsIgnoreCase(TOTAL_LENGTH.text)) return TOTAL_LENGTH;
         if (inText.equalsIgnoreCase(TOTAL_HEIGHT.text)) return TOTAL_HEIGHT;

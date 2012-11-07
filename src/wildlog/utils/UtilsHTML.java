@@ -62,14 +62,14 @@ public final class UtilsHTML {
             fileOutput.flush();
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
         finally {
             try {
                 fileOutput.close();
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
         }
         return toFile.getPath();
@@ -87,14 +87,14 @@ public final class UtilsHTML {
             fileOutput.flush();
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
         finally {
             try {
                 fileOutput.close();
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
         }
         return toFile.getPath();
@@ -112,14 +112,14 @@ public final class UtilsHTML {
             fileOutput.flush();
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
         finally {
             try {
                 fileOutput.close();
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
         }
         return toFile.getPath();

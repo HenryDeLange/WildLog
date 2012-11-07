@@ -317,15 +317,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background")); // NOI18N
         txtPrimaryName.setText(element.getPrimaryName());
         txtPrimaryName.setName("txtPrimaryName"); // NOI18N
-        elementIncludes.add(txtPrimaryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 28, 490, -1));
+        elementIncludes.add(txtPrimaryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 28, 470, -1));
 
         txtOtherName.setText(element.getOtherName());
         txtOtherName.setName("txtOtherName"); // NOI18N
-        elementIncludes.add(txtOtherName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 52, 490, -1));
+        elementIncludes.add(txtOtherName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 52, 470, -1));
 
         txtScienceName.setText(element.getScientificName());
         txtScienceName.setName("txtScienceName"); // NOI18N
-        elementIncludes.add(txtScienceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 76, 330, -1));
+        elementIncludes.add(txtScienceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 76, 310, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N

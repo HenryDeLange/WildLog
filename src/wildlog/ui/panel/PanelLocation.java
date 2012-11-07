@@ -30,8 +30,6 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
-import wildlog.data.enums.Habitat;
-import wildlog.data.enums.Province;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
 import wildlog.utils.ui.Utils;
@@ -52,7 +50,6 @@ import wildlog.utils.FileDrop;
 import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
-import wildlog.utils.ui.SpinnerFixer;
 import wildlog.utils.ui.UtilMapGenerator;
 
 
@@ -184,12 +181,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         locationIncludes = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         lblLocation = new javax.swing.JLabel();
-        jLabel35 = new javax.swing.JLabel();
-        cmbProvince = new javax.swing.JComboBox();
         jLabel36 = new javax.swing.JLabel();
         cmbRating = new javax.swing.JComboBox();
         jSeparator6 = new javax.swing.JSeparator();
-        cmbHabitat = new javax.swing.JComboBox();
         cmbGameRating = new javax.swing.JComboBox();
         jScrollPane10 = new javax.swing.JScrollPane();
         txtDescription = new javax.swing.JTextArea();
@@ -246,6 +240,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnGPS = new javax.swing.JButton();
         txtLatitude = new javax.swing.JTextField();
         txtLongitude = new javax.swing.JTextField();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtHabitat = new javax.swing.JTextPane();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -278,16 +274,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         lblLocation.setName("lblLocation"); // NOI18N
         locationIncludes.add(lblLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 20));
 
-        jLabel35.setText(resourceMap.getString("jLabel35.text")); // NOI18N
-        jLabel35.setName("jLabel35"); // NOI18N
-        locationIncludes.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, -1));
-
-        cmbProvince.setMaximumRowCount(10);
-        cmbProvince.setModel(new DefaultComboBoxModel(Province.values()));
-        cmbProvince.setSelectedItem(locationWL.getProvince());
-        cmbProvince.setName("cmbProvince"); // NOI18N
-        locationIncludes.add(cmbProvince, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 52, 170, -1));
-
         jLabel36.setText(resourceMap.getString("jLabel36.text")); // NOI18N
         jLabel36.setName("jLabel36"); // NOI18N
         locationIncludes.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
@@ -302,12 +288,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         jSeparator6.setName("jSeparator6"); // NOI18N
         locationIncludes.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 361, 20, 220));
 
-        cmbHabitat.setMaximumRowCount(13);
-        cmbHabitat.setModel(new DefaultComboBoxModel(Habitat.values()));
-        cmbHabitat.setSelectedItem(locationWL.getHabitatType());
-        cmbHabitat.setName("cmbHabitat"); // NOI18N
-        locationIncludes.add(cmbHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 76, 170, -1));
-
         cmbGameRating.setModel(new DefaultComboBoxModel(GameViewRating.values()));
         cmbGameRating.setSelectedItem(locationWL.getGameViewingRating());
         cmbGameRating.setName("cmbGameRating"); // NOI18N
@@ -316,7 +296,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane10.setName("jScrollPane10"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(locationWL.getDescription());
@@ -370,7 +350,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         jLabel40.setText(resourceMap.getString("jLabel40.text")); // NOI18N
         jLabel40.setName("jLabel40"); // NOI18N
-        locationIncludes.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 76, -1, -1));
+        locationIncludes.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, -1));
 
         jLabel41.setText(resourceMap.getString("jLabel41.text")); // NOI18N
         jLabel41.setName("jLabel41"); // NOI18N
@@ -533,7 +513,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnAddVisitActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnAddVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 490, 90, 30));
+        locationIncludes.add(btnAddVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 480, 90, 30));
 
         btnDeleteVisit.setBackground(resourceMap.getColor("btnDeleteVisit.background")); // NOI18N
         btnDeleteVisit.setIcon(resourceMap.getIcon("btnDeleteVisit.icon")); // NOI18N
@@ -547,7 +527,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnDeleteVisitActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnDeleteVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 548, 90, 30));
+        locationIncludes.add(btnDeleteVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 530, 90, 30));
 
         btnGoElement.setBackground(resourceMap.getColor("btnGoElement.background")); // NOI18N
         btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
@@ -746,20 +726,19 @@ public class PanelLocation extends PanelCanSetupHeader {
         locationIncludes.add(btnKml, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 175, 110, 35));
 
         btnSunAndMoon.setBackground(resourceMap.getColor("btnSunAndMoon.background")); // NOI18N
-        btnSunAndMoon.setFont(resourceMap.getFont("btnSunAndMoon.font")); // NOI18N
         btnSunAndMoon.setIcon(resourceMap.getIcon("btnSunAndMoon.icon")); // NOI18N
         btnSunAndMoon.setText(resourceMap.getString("btnSunAndMoon.text")); // NOI18N
         btnSunAndMoon.setToolTipText(resourceMap.getString("btnSunAndMoon.toolTipText")); // NOI18N
         btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSunAndMoon.setFocusPainted(false);
-        btnSunAndMoon.setMargin(new java.awt.Insets(2, 10, 2, 10));
+        btnSunAndMoon.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
         btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSunAndMoonActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 295, 110, 30));
+        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 295, 110, 35));
 
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
@@ -788,6 +767,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLongitude.setName("txtLongitude"); // NOI18N
         locationIncludes.add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 320, 150, -1));
 
+        jScrollPane3.setName("jScrollPane3"); // NOI18N
+
+        txtHabitat.setName("txtHabitat"); // NOI18N
+        jScrollPane3.setViewportView(txtHabitat);
+
+        locationIncludes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 52, 240, 40));
+
         add(locationIncludes);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -797,10 +783,12 @@ public class PanelLocation extends PanelCanSetupHeader {
                 String oldName = locationWL.getName();
                 locationWL.setName(DBUtils.limitLength(txtName.getText(), 100));
                 locationWL.setDescription(txtDescription.getText());
-                locationWL.setProvince((Province)cmbProvince.getSelectedItem());
+                // TODO: Remove the province from DB, etc.
+//                locationWL.setProvince((Province)cmbProvince.getSelectedItem());
                 locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
                 locationWL.setCatering((CateringType)cmbCatering.getSelectedItem());
-                locationWL.setHabitatType((Habitat)cmbHabitat.getSelectedItem());
+                // TODO: Change habitat to a text field instead...
+//                locationWL.setHabitatType((Habitat)cmbHabitat.getSelectedItem());
                 locationWL.setGameViewingRating((GameViewRating)cmbGameRating.getSelectedItem());
                 locationWL.setContactNumbers(txtContactNumber.getText());
                 locationWL.setEmail(txtEmail.getText());
@@ -1179,14 +1167,11 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox cmbCatering;
     private javax.swing.JComboBox cmbGameRating;
-    private javax.swing.JComboBox cmbHabitat;
-    private javax.swing.JComboBox cmbProvince;
     private javax.swing.JComboBox cmbRating;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
@@ -1203,6 +1188,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
@@ -1221,6 +1207,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JTextArea txtDescription;
     private javax.swing.JTextArea txtDirections;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextPane txtHabitat;
     private javax.swing.JTextField txtLatitude;
     private javax.swing.JTextField txtLongitude;
     private javax.swing.JTextField txtName;

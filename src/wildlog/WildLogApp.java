@@ -194,7 +194,7 @@ public class WildLogApp extends SingleFrameApplication {
                     System.setErr(fileStream);
                 }
                 catch (FileNotFoundException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                 }
             }
         }
@@ -205,14 +205,14 @@ public class WildLogApp extends SingleFrameApplication {
             FilePaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
             FileWriter writer = null;
             try {
                 writer = new FileWriter(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome");
                 writer.write(File.separator);
             }
             catch (IOException ioex) {
-                ioex.printStackTrace();
+                ioex.printStackTrace(System.err);
             }
             finally {
                 if (writer != null) {
@@ -221,7 +221,7 @@ public class WildLogApp extends SingleFrameApplication {
                         writer.close();
                     }
                     catch (IOException ioex) {
-                        ioex.printStackTrace();
+                        ioex.printStackTrace(System.err);
                     }
                 }
             }
@@ -232,7 +232,7 @@ public class WildLogApp extends SingleFrameApplication {
                 FilePaths.setWorkspacePrefix(reader.readLine());
             }
             catch (IOException ioex) {
-                ioex.printStackTrace();
+                ioex.printStackTrace(System.err);
                 System.exit(-1);
             }
         }

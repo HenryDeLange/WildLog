@@ -15,15 +15,13 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
 import wildlog.utils.UtilsHTML;
 
-// Foundation for Elements classes
-// Use inheritance for animal, bird, plant, fish, insects, etc
 public class Element implements Comparable<Element>, DataObjectWithHTML {
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
-    private String description; // Should rename to HABITAT Discription
-    private String nutrition; // What food or soil the element preferes
-    private WaterDependancy waterDependance; // How dependant the element is on water
+    private String description;
+    private String nutrition;
+    private WaterDependancy waterDependance;
     private double sizeMaleMin;
     private double sizeMaleMax;
     private double sizeFemaleMin;
@@ -32,24 +30,16 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     private double weightMaleMax;
     private double weightFemaleMin;
     private double weightFemaleMax;
-    private String breedingDuration; // How long the young is developed and how long it takes to be independant
-    private String breedingNumber; // The number of young produced
-    //private String breedingAge; // CURRENTLY NOT USSED!!!
-    //private int numberOfSightings; // The number of times a sighting for this element has been recorded (don't need its own variable, can get in other ways)
-    private WishRating wishListRating; // How much I wish to see the element
-    //private Habitat habitat; // This needs to be improved to be more specific (maybe select from list of habitats, can create new ones)
-    private String diagnosticDescription; // A description of the element that will help to identify it in the field
-    private ActiveTime activeTime; // What time of day the element is most active (morning, night, day, evening, ens.)
-    private EndangeredStatus endangeredStatus; // The official endangered status of the element
-    private String behaviourDescription; // Used to describe some unique behaviour
-    private AddFrequency addFrequency; // How often the element is added when seen (bv always at any location, usualy only at new locations, sometimes at some locations, once, ... These values should be predefined)
-//    private List<Foto> fotos; // An ArrayList of Foto objects
-    //private Foto primaryFoto; // Not needed, the first image in the list will always be the main image...
-    private ElementType type; // Animal, Bird, etc
-    private FeedingClass feedingClass; // Carnivore, etc (this might need to be implemented on child class when converting to enums)
-    //private String wildPopulations; // Only seen in wild(protected) also in wild(unprotected) - Enums?
-    //private Date breedingSeasonStart;
-    //private Date breedingSeasonEnd;
+    private String breedingDuration;
+    private String breedingNumber;
+    private WishRating wishListRating;
+    private String diagnosticDescription;
+    private ActiveTime activeTime;
+    private EndangeredStatus endangeredStatus;
+    private String behaviourDescription;
+    private AddFrequency addFrequency;
+    private ElementType type;
+    private FeedingClass feedingClass;
     private UnitsSize sizeUnit;
     private UnitsWeight weightUnit;
     private String lifespan;
@@ -57,7 +47,6 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     private String distribution;
     private SizeType sizeType;
 
-   
     // CONSTRUCTORS:
     public Element() {
     }
@@ -65,12 +54,11 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     public Element(String inPrimaryName) {
         primaryName = inPrimaryName;
     }
-    
+
     public Element(ElementType inElementType) {
         type = inElementType;
     }
-    
-    
+
     // METHODS:
     @Override
     public String toString() {
@@ -205,18 +193,10 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         return breedingNumber;
     }
 
-//    public String getBreedingAge() {
-//        return breedingAge;
-//    }
-
     public WishRating getWishListRating() {
         return wishListRating;
     }
-/*
-    public Habitat getHabitat() {
-        return habitat;
-    }
-*/
+
     public String getDiagnosticDescription() {
         return diagnosticDescription;
     }
@@ -229,28 +209,18 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         return endangeredStatus;
     }
 
-//    @Override
-//    public List<Foto> getFotos() {
-//        if (fotos == null) fotos = new ArrayList<Foto>(1);
-//        return fotos;
-//    }
-    
     public String getBehaviourDescription() {
         return behaviourDescription;
     }
-    
+
     public AddFrequency getAddFrequency() {
         return addFrequency;
     }
-    
-//    public Foto getPrimaryFoto() {
-//        return primaryFoto;
-//    }
-    
+
     public ElementType getType() {
         return type;
     }
-    
+
     public FeedingClass getFeedingClass() {
         return feedingClass;
     }
@@ -266,7 +236,6 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     public String getLifespan() {
         return lifespan;
     }
-    
 
     // SETTERS:
     public void setPrimaryName(String inPrimaryName) {
@@ -321,18 +290,10 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         breedingNumber = inBreedingNumber;
     }
 
-//    public void setBreedingAge(String inBreedingAge) {
-//        breedingAge = inBreedingAge;
-//    }
-
     public void setWishListRating(WishRating inWishListRating) {
         wishListRating = inWishListRating;
     }
-/*
-    public void setHabitat(Habitat inHabitat) {
-        habitat = inHabitat;
-    }
-*/
+
     public void setDiagnosticDescription(String inDiagnosticDescription) {
         diagnosticDescription = inDiagnosticDescription;
     }
@@ -344,28 +305,19 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     public void setEndangeredStatus(EndangeredStatus inEndangeredStatus) {
         endangeredStatus = inEndangeredStatus;
     }
-    
+
     public void setBehaviourDescription(String inBehaviourDescription) {
         behaviourDescription = inBehaviourDescription;
     }
-    
+
     public void setAddFrequency(AddFrequency inAddFrequency) {
         addFrequency = inAddFrequency;
     }
 
-//    @Override
-//    public void setFotos(List<Foto> inFotos) {
-//        fotos = inFotos;
-//    }
-    
-//    public void setPrimaryfoto(Foto inFoto) {
-//        primaryFoto = inFoto;
-//    }
-    
     public void setType(ElementType inType) {
         type = inType;
     }
-    
+
     public void setFeedingClass(FeedingClass inFeedingClass) {
         feedingClass = inFeedingClass;
     }
@@ -429,7 +381,5 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     public void setSizeType(SizeType inSizeType) {
         sizeType = inSizeType;
     }
-
-
 
 }

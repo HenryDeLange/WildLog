@@ -19,7 +19,6 @@ import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AddFrequency;
-import wildlog.data.enums.AreaType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
@@ -28,12 +27,10 @@ import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.GameWatchIntensity;
-import wildlog.data.enums.Habitat;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
-import wildlog.data.enums.Province;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.SizeType;
 import wildlog.data.enums.UnitsSize;
@@ -44,17 +41,17 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
 
+// TODO: Write some JUnit tests to test the database queries so that I can have faith in them...
 public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
 
-    // FIXME: Fix the queries to use double GPS points isntead of float... Also think of a way to include the double value in the CSV export...
-    protected static final String tableElements = "CREATE TABLE ELEMENTS (   PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL,   OTHERNAME varchar(150),   SCIENTIFICNAME varchar(150),   DESCRIPTION longvarchar,   DISTRIBUTION longvarchar,   NUTRITION longvarchar,   WATERDEPENDANCE varchar(50),   SIZEMALEMIN float(52),   SIZEMALEMAX float(52),   SIZEFEMALEMIN float(52),   SIZEFEMALEMAX float(52),   SIZEUNIT varchar(10),   SIZETYPE varchar(50),   WEIGHTMALEMIN float(52),   WEIGHTMALEMAX float(52),   WEIGHTFEMALEMIN float(52),   WEIGHTFEMALEMAX float(52),   WEIGHTUNIT varchar(10),   BREEDINGDURATION varchar(50),   BREEDINGNUMBER varchar(50),   WISHLISTRATING varchar(50),   DIAGNOSTICDESCRIPTION longvarchar,   ACTIVETIME varchar(50),   ENDANGEREDSTATUS varchar(35),   BEHAVIOURDESCRIPTION longvarchar,   ADDFREQUENCY varchar(50),   ELEMENTTYPE varchar(50),   FEEDINGCLASS varchar(50),   LIFESPAN varchar(50),   REFERENCEID varchar(50))";
-    protected static final String tableLocations = "CREATE TABLE LOCATIONS (   NAME varchar(150) PRIMARY KEY NOT NULL,   DESCRIPTION longvarchar,   PROVINCE varchar(35),   RATING varchar(50),   GAMEVIEWINGRATING varchar(50),   HABITATTYPE varchar(50),   ACCOMMODATIONTYPE varchar(150),   CATERING varchar(50),   CONTACTNUMBERS varchar(50),   WEBSITE varchar(100),   EMAIL varchar(100),   DIRECTIONS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52))";
-    protected static final String tableVisits = "CREATE TABLE VISITS (   NAME varchar(150) PRIMARY KEY NOT NULL,   STARTDATE date,   ENDDATE date,   DESCRIPTION longvarchar,   GAMEWATCHINGINTENSITY varchar(50),   VISITTYPE varchar(50),   LOCATIONNAME varchar(150))";
-    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (   SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL,   LOCATIONNAME varchar(150) NOT NULL,   VISITNAME varchar(150) NOT NULL,   TIMEOFDAY varchar(50),   WEATHER varchar(50),   AREATYPE varchar(50),   VIEWRATING varchar(50),   CERTAINTY varchar(50),   NUMBEROFELEMENTS int,   DETAILS longvarchar,   LATITUDEINDICATOR varchar(10),   LATDEGREES int,   LATMINUTES int,   LATSECONDSFLOAT float(52),   LONGITUDEINDICATOR varchar(10),   LONDEGREES int,   LONMINUTES int,   LONSECONDSFLOAT float(52),   SIGHTINGEVIDENCE varchar(50),   MOONLIGHT varchar(50),   MOONPHASE int)";
-    protected static final String tableFiles = "CREATE TABLE FILES (   ID varchar(175),   FILENAME varchar(255),   FILEPATH varchar(500),   ORIGINALPATH varchar(500),   FILETYPE varchar(50),   UPLOADDATE date,   ISDEFAULT smallint)";
-    protected static final String tableWildLog = "CREATE TABLE WILDLOG (   VERSION int DEFAULT 2,   DEFAULTLATITUDE float(52) DEFAULT -28.7,   DEFAULTLONGITUDE float(52) DEFAULT 24.7,   DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5)";
+    protected static final String tableElements = "CREATE TABLE ELEMENTS (PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL, OTHERNAME varchar(150), SCIENTIFICNAME varchar(150), DESCRIPTION longvarchar, DISTRIBUTION longvarchar, NUTRITION longvarchar, WATERDEPENDANCE varchar(50), SIZEMALEMIN float(52), SIZEMALEMAX float(52), SIZEFEMALEMIN float(52), SIZEFEMALEMAX float(52), SIZEUNIT varchar(10), SIZETYPE varchar(50), WEIGHTMALEMIN float(52), WEIGHTMALEMAX float(52), WEIGHTFEMALEMIN float(52), WEIGHTFEMALEMAX float(52), WEIGHTUNIT varchar(10), BREEDINGDURATION varchar(50), BREEDINGNUMBER varchar(50), WISHLISTRATING varchar(50), DIAGNOSTICDESCRIPTION longvarchar, ACTIVETIME varchar(50), ENDANGEREDSTATUS varchar(35), BEHAVIOURDESCRIPTION longvarchar, ADDFREQUENCY varchar(50), ELEMENTTYPE varchar(50), FEEDINGCLASS varchar(50), LIFESPAN varchar(50), REFERENCEID varchar(50))";
+    protected static final String tableLocations = "CREATE TABLE LOCATIONS (NAME varchar(150) PRIMARY KEY NOT NULL, DESCRIPTION longvarchar, RATING varchar(50), GAMEVIEWINGRATING varchar(50), HABITATTYPE longvarchar, ACCOMMODATIONTYPE varchar(150), CATERING varchar(50), CONTACTNUMBERS varchar(50), WEBSITE varchar(100), EMAIL varchar(100), DIRECTIONS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double)";
+    protected static final String tableVisits = "CREATE TABLE VISITS (NAME varchar(150) PRIMARY KEY NOT NULL, STARTDATE date, ENDDATE date, DESCRIPTION longvarchar, GAMEWATCHINGINTENSITY varchar(50), VISITTYPE varchar(50), LOCATIONNAME varchar(150))";
+    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int)";
+    protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), FILEPATH varchar(500), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint)";
+    protected static final String tableWildLog = "CREATE TABLE WILDLOG (VERSION int DEFAULT 3, DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 500, DEFAULTLATOPTION varchar(5) DEFAULT 'South', DEFAULTLONOPTION varchar(5) DEFAULT 'East', DEFAULTONLINEMAP smallint DEFAULT true)";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
     protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
@@ -67,15 +64,15 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String listElement = "SELECT * FROM ELEMENTS";
     protected static final String listFile = "SELECT * FROM FILES";
     // Create
-    protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,PROVINCE,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
-    protected static final String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,AREATYPE,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDSFLOAT,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDSFLOAT,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected static final String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?,?)";
     // Update
-    protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, PROVINCE = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ? WHERE NAME = ?";
+    protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ? WHERE NAME = ?";
     protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
-    protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, AREATYPE = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDSFLOAT = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDSFLOAT = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ? WHERE SIGHTINGCOUNTER = ?";
+    protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ? WHERE SIGHTINGCOUNTER = ?";
     protected static final String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
     protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, FILEPATH = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
     // Delete
@@ -87,8 +84,6 @@ public abstract class DBI_JDBC implements DBI {
 
     public DBI_JDBC() {
     }
-
-// TODO: Write some JUnit tests to test the database queries so that I can have faith in them...
 
     // Methods
     @Override
@@ -170,10 +165,9 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation = new Location();
                 tempLocation.setName(results.getString("NAME"));
                 tempLocation.setDescription(results.getString("DESCRIPTION"));
-                tempLocation.setProvince(Province.getEnumFromText(results.getString("PROVINCE")));
                 tempLocation.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
                 tempLocation.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
-                tempLocation.setHabitatType(Habitat.getEnumFromText(results.getString("HABITATTYPE")));
+                tempLocation.setHabitatType(results.getString("HABITATTYPE"));
                 tempLocation.setAccommodationType(AccommodationType.getEnumFromText(results.getString("ACCOMMODATIONTYPE")));
                 tempLocation.setCatering(CateringType.getEnumFromText(results.getString("CATERING")));
                 tempLocation.setContactNumbers(results.getString("CONTACTNUMBERS"));
@@ -183,11 +177,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLatSecondsDouble(results.getDouble("LATSECONDS"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempLocation.setLonSecondsDouble(results.getDouble("LONSECONDS"));
             }
         }
         catch (SQLException ex) {
@@ -246,7 +240,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setVisitName(results.getString("VISITNAME"));
                 tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
                 tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
-                tempSighting.setAreaType(AreaType.getEnumFromText(results.getString("AREATYPE")));
                 tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
                 tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
                 tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
@@ -254,11 +247,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getDouble("LATSECONDS"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getDouble("LONSECONDS"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -376,10 +369,9 @@ public abstract class DBI_JDBC implements DBI {
                 Location tempLocation = new Location();
                 tempLocation.setName(results.getString("NAME"));
                 tempLocation.setDescription(results.getString("DESCRIPTION"));
-                tempLocation.setProvince(Province.getEnumFromText(results.getString("PROVINCE")));
                 tempLocation.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
                 tempLocation.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
-                tempLocation.setHabitatType(Habitat.getEnumFromText(results.getString("HABITATTYPE")));
+                tempLocation.setHabitatType(results.getString("HABITATTYPE"));
                 tempLocation.setAccommodationType(AccommodationType.getEnumFromText(results.getString("ACCOMMODATIONTYPE")));
                 tempLocation.setCatering(CateringType.getEnumFromText(results.getString("CATERING")));
                 tempLocation.setContactNumbers(results.getString("CONTACTNUMBERS"));
@@ -389,11 +381,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLatSecondsDouble(results.getDouble("LATSECONDS"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempLocation.setLonSecondsDouble(results.getDouble("LONSECONDS"));
                 tempList.add(tempLocation);
             }
         }
@@ -472,7 +464,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setVisitName(results.getString("VISITNAME"));
                 tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
                 tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
-                tempSighting.setAreaType(AreaType.getEnumFromText(results.getString("AREATYPE")));
                 tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
                 tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
                 tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
@@ -480,11 +471,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getDouble("LATSECONDS"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getDouble("LONSECONDS"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -557,7 +548,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setVisitName(results.getString("VISITNAME"));
                 tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
                 tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
-                tempSighting.setAreaType(AreaType.getEnumFromText(results.getString("AREATYPE")));
                 tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
                 tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
                 tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
@@ -565,11 +555,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSecondsDouble(results.getDouble("LATSECONDS"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSecondsDouble(results.getDouble("LONSECONDS"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -705,7 +695,7 @@ public abstract class DBI_JDBC implements DBI {
                 }
                 // Update
                 state = conn.prepareStatement(updateLocation);
-                state.setString(21, DBUtils.sanitizeString(inOldName));
+                state.setString(20, DBUtils.sanitizeString(inOldName));
             }
             else {
                 // Insert
@@ -713,24 +703,23 @@ public abstract class DBI_JDBC implements DBI {
             }
             state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getName()), 150));
             state.setString(2, DBUtils.sanitizeString(inLocation.getDescription()));
-            state.setString(3, DBUtils.stringFromObject(inLocation.getProvince()));
-            state.setString(4, DBUtils.stringFromObject(inLocation.getRating()));
-            state.setString(5, DBUtils.stringFromObject(inLocation.getGameViewingRating()));
-            state.setString(6, DBUtils.stringFromObject(inLocation.getHabitatType()));
-            state.setString(7, DBUtils.stringFromObject(inLocation.getAccommodationType()));
-            state.setString(8, DBUtils.stringFromObject(inLocation.getCatering()));
-            state.setString(9, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getContactNumbers()), 50));
-            state.setString(10, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getWebsite()), 100));
-            state.setString(11, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getEmail()), 100));
-            state.setString(12, DBUtils.sanitizeString(inLocation.getDirections()));
-            state.setString(13, DBUtils.stringFromObject(inLocation.getLatitude()));
-            state.setInt(14, inLocation.getLatDegrees());
-            state.setInt(15, inLocation.getLatMinutes());
-            state.setDouble(16, inLocation.getLatSecondsDouble());
-            state.setString(17, DBUtils.stringFromObject(inLocation.getLongitude()));
-            state.setInt(18, inLocation.getLonDegrees());
-            state.setInt(19, inLocation.getLonMinutes());
-            state.setDouble(20, inLocation.getLonSecondsDouble());
+            state.setString(3, DBUtils.stringFromObject(inLocation.getRating()));
+            state.setString(4, DBUtils.stringFromObject(inLocation.getGameViewingRating()));
+            state.setString(5, DBUtils.stringFromObject(inLocation.getHabitatType()));
+            state.setString(6, DBUtils.stringFromObject(inLocation.getAccommodationType()));
+            state.setString(7, DBUtils.stringFromObject(inLocation.getCatering()));
+            state.setString(8, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getContactNumbers()), 50));
+            state.setString(9, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getWebsite()), 100));
+            state.setString(10, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getEmail()), 100));
+            state.setString(11, DBUtils.sanitizeString(inLocation.getDirections()));
+            state.setString(12, DBUtils.stringFromObject(inLocation.getLatitude()));
+            state.setInt(13, inLocation.getLatDegrees());
+            state.setInt(14, inLocation.getLatMinutes());
+            state.setDouble(15, inLocation.getLatSecondsDouble());
+            state.setString(16, DBUtils.stringFromObject(inLocation.getLongitude()));
+            state.setInt(17, inLocation.getLonDegrees());
+            state.setInt(18, inLocation.getLonMinutes());
+            state.setDouble(19, inLocation.getLonSecondsDouble());
             // Execute
             state.executeUpdate();
         }
@@ -852,25 +841,24 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(5, DBUtils.sanitizeString(inSighting.getVisitName()));
             state.setString(6, DBUtils.stringFromObject(inSighting.getTimeOfDay()));
             state.setString(7, DBUtils.stringFromObject(inSighting.getWeather()));
-            state.setString(8, DBUtils.stringFromObject(inSighting.getAreaType()));
-            state.setString(9, DBUtils.stringFromObject(inSighting.getViewRating()));
-            state.setString(10, DBUtils.stringFromObject(inSighting.getCertainty()));
-            state.setInt(11, inSighting.getNumberOfElements());
-            state.setString(12, DBUtils.sanitizeString(inSighting.getDetails()));
-            state.setString(13, DBUtils.stringFromObject(inSighting.getLatitude()));
-            state.setInt(14, inSighting.getLatDegrees());
-            state.setInt(15, inSighting.getLatMinutes());
-            state.setDouble(16, inSighting.getLatSecondsDouble());
-            state.setString(17, DBUtils.stringFromObject(inSighting.getLongitude()));
-            state.setInt(18, inSighting.getLonDegrees());
-            state.setInt(19, inSighting.getLonMinutes());
-            state.setDouble(20, inSighting.getLonSecondsDouble());
-            state.setString(21, DBUtils.stringFromObject(inSighting.getSightingEvidence()));
-            state.setInt(22, inSighting.getMoonPhase());
-            state.setString(23, DBUtils.stringFromObject(inSighting.getMoonlight()));
+            state.setString(8, DBUtils.stringFromObject(inSighting.getViewRating()));
+            state.setString(9, DBUtils.stringFromObject(inSighting.getCertainty()));
+            state.setInt(10, inSighting.getNumberOfElements());
+            state.setString(11, DBUtils.sanitizeString(inSighting.getDetails()));
+            state.setString(12, DBUtils.stringFromObject(inSighting.getLatitude()));
+            state.setInt(13, inSighting.getLatDegrees());
+            state.setInt(14, inSighting.getLatMinutes());
+            state.setDouble(15, inSighting.getLatSecondsDouble());
+            state.setString(16, DBUtils.stringFromObject(inSighting.getLongitude()));
+            state.setInt(17, inSighting.getLonDegrees());
+            state.setInt(20, inSighting.getLonMinutes());
+            state.setDouble(21, inSighting.getLonSecondsDouble());
+            state.setString(22, DBUtils.stringFromObject(inSighting.getSightingEvidence()));
+            state.setInt(23, inSighting.getMoonPhase());
+            state.setString(24, DBUtils.stringFromObject(inSighting.getMoonlight()));
 
             if (isUpdate) {
-                state.setLong(24, inSighting.getSightingCounter());
+                state.setLong(25, inSighting.getSightingCounter());
             }
             // Execute
             state.executeUpdate();
@@ -1152,32 +1140,16 @@ public abstract class DBI_JDBC implements DBI {
                 if (results.getInt("VERSION") == 1) {
                     doUpdate2();
                 }
+                if (results.getInt("VERSION") == 2) {
+                    doUpdate3();
+                }
             }
         }
         catch (SQLException ex) {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // PreparedStatement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
     }
 
@@ -1223,26 +1195,7 @@ public abstract class DBI_JDBC implements DBI {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // PreparedStatement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
         }
     }
 
@@ -1261,26 +1214,43 @@ public abstract class DBI_JDBC implements DBI {
             printSQLException(ex);
         }
         finally {
-            // ResultSet
-            try {
-                if (results != null) {
-                    results.close();
-                    results = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
-            // PreparedStatement
-            try {
-                if (state != null) {
-                    state.close();
-                    state = null;
-                }
-            }
-            catch (SQLException sqle) {
-                printSQLException(sqle);
-            }
+            closeStatementAndResultset(state, results);
+        }
+    }
+
+    private void doUpdate3() {
+        // This update removes and alters some tables and adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Make changes
+            state.execute("ALTER TABLE LOCATIONS DROP COLUMN PROVINCE");
+            state.execute("ALTER TABLE SIGHTINGS DROP COLUMN AREATYPE");
+            state.execute("ALTER TABLE LOCATIONS ALTER COLUMN LATSECONDSFLOAT double");
+            state.execute("ALTER TABLE LOCATIONS ALTER COLUMN LATSECONDSFLOAT RENAME TO LATSECONDS");
+            state.execute("ALTER TABLE LOCATIONS ALTER COLUMN LONSECONDSFLOAT double");
+            state.execute("ALTER TABLE LOCATIONS ALTER COLUMN LONSECONDSFLOAT RENAME TO LONSECONDS");
+            state.execute("ALTER TABLE LOCATIONS ALTER COLUMN HABITATTYPE  longvarchar");
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN LATSECONDSFLOAT double");
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN LATSECONDSFLOAT RENAME TO LATSECONDS");
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN LONSECONDSFLOAT double");
+            state.execute("ALTER TABLE SIGHTINGS ALTER COLUMN LONSECONDSFLOAT RENAME TO LONSECONDS");
+            state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLATITUDE double");
+            state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLONGITUDE double");
+            // TODO: Make sure the code uses these values
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLATOPTION varchar(5) DEFAULT 'South'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLONOPTION varchar(5) DEFAULT 'East'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSIZE int DEFAULT 500");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTONLINEMAP smallint DEFAULT true");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=3");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
         }
     }
 

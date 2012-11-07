@@ -20,6 +20,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
+// FIXME: I should maybe re-look at this and see whether I can't optimize it (stop reloading everything unneccesarryliy)
 public final class UtilTableGenerator {
     private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
 
@@ -131,7 +132,6 @@ public final class UtilTableGenerator {
         // Load data
         String[] columnNames = {
                                 "Name",
-                                "Province",
                                 "Rating",
                                 "Wildlife",
                                 "Accommodation",
@@ -143,7 +143,6 @@ public final class UtilTableGenerator {
             Location tempLocation = tempList.get(t);
             int i = 0;
             tempTable[t][i++] = tempLocation.getName();
-            tempTable[t][i++] = tempLocation.getProvince();
             tempTable[t][i++] = tempLocation.getRating();
             tempTable[t][i++] = tempLocation.getGameViewingRating();
             tempTable[t][i++] = tempLocation.getAccommodationType();
@@ -578,7 +577,6 @@ public final class UtilTableGenerator {
         // Load data
         String[] columnNames = {
                                 "Name",
-                                "Province",
                                 "Wildlife"
                                 };
         List<String> allLocations = new ArrayList<String>();
@@ -597,7 +595,6 @@ public final class UtilTableGenerator {
                 Location tempLocation = dbi.find(new Location(allLocations.get(t)));
                 int i = 0;
                 tempTable[t][i++] = tempLocation.getName();
-                tempTable[t][i++] = tempLocation.getProvince();
                 tempTable[t][i++] = tempLocation.getGameViewingRating();
             }
         }
@@ -630,8 +627,7 @@ public final class UtilTableGenerator {
     public static void setupShortLocationTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
-                                "Name",
-                                "Province"
+                                "Name"
                                 };
         List<Location> tempList = null;
         tempList = dbi.list(inLocation);
@@ -641,7 +637,6 @@ public final class UtilTableGenerator {
             Location tempLocation = tempList.get(t);
             int i = 0;
             tempTable[t][i++] = tempLocation.getName();
-            tempTable[t][i++] = tempLocation.getProvince();
         }
         // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {

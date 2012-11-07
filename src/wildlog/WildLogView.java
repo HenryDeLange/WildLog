@@ -21,6 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -190,6 +191,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         // Attach clipboard
         Utils.attachClipboardPopup(txtSearch);
+        Utils.attachClipboardPopup(txtBrowseInfo, true);
     }
 
     @Action
@@ -264,7 +266,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         rdbBrowseDate = new javax.swing.JRadioButton();
         imgBrowsePhotos = new org.jdesktop.swingx.JXImageView();
         jScrollPane5 = new javax.swing.JScrollPane();
-        txtPhotoInformation = new javax.swing.JTextPane();
+        txtBrowseInfo = new javax.swing.JTextPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         treBrowsePhoto = new javax.swing.JTree();
         btnGoBrowseSelection = new javax.swing.JButton();
@@ -348,6 +350,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuMapStartMenuItem = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
@@ -368,7 +372,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         tabbedPanel.setFocusable(false);
-        tabbedPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
+        tabbedPanel.setMaximumSize(new java.awt.Dimension(3500, 1800));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
         tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
@@ -449,27 +453,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabHomeLayout.setHorizontalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(jLabel10)
-                .addGap(703, 703, 703)
-                .addComponent(jLabel5)
-                .addGap(15, 15, 15))
-            .addGroup(tabHomeLayout.createSequentialGroup()
                 .addGap(110, 110, 110)
                 .addComponent(jLabel11)
                 .addGap(16, 16, 16)
                 .addComponent(jLabel12))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                .addGap(810, 810, 810)
-                .addComponent(jLabel15)
-                .addGap(13, 13, 13))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                 .addContainerGap(858, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(502, Short.MAX_VALUE))
             .addGroup(tabHomeLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -488,19 +478,32 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addGap(18, 18, 18)
                 .addComponent(lblCreatures)
                 .addContainerGap(643, Short.MAX_VALUE))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(502, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                .addContainerGap(875, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                .addContainerGap(813, Short.MAX_VALUE)
+                .addComponent(jLabel15)
+                .addContainerGap())
         );
         tabHomeLayout.setVerticalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(11, 11, 11)
+                .addContainerGap()
                 .addComponent(jLabel15)
-                .addGap(6, 6, 6)
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel10))
-                    .addComponent(jLabel5))
-                .addGap(8, 8, 8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel11)
                     .addGroup(tabHomeLayout.createSequentialGroup()
@@ -518,20 +521,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
 
         tabFoto.setBackground(resourceMap.getColor("tabFoto.background")); // NOI18N
+        tabFoto.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabFoto.setName("tabFoto"); // NOI18N
+        tabFoto.setPreferredSize(new java.awt.Dimension(1000, 630));
         tabFoto.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabFotoComponentShown(evt);
             }
         });
-        tabFoto.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         rdbBrowseLocation.setBackground(resourceMap.getColor("rdbBrowseLocation.background")); // NOI18N
         buttonGroup1.add(rdbBrowseLocation);
@@ -544,7 +548,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseLocationItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, -1));
 
         rdbBrowseElement.setBackground(resourceMap.getColor("rdbBrowseElement.background")); // NOI18N
         buttonGroup1.add(rdbBrowseElement);
@@ -557,7 +560,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseElementItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, -1, -1));
 
         rdbBrowseDate.setBackground(resourceMap.getColor("rdbBrowseDate.background")); // NOI18N
         buttonGroup1.add(rdbBrowseDate);
@@ -570,34 +572,32 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 rdbBrowseDateItemStateChanged(evt);
             }
         });
-        tabFoto.add(rdbBrowseDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 0, -1, -1));
 
         imgBrowsePhotos.setBackground(resourceMap.getColor("imgBrowsePhotos.background")); // NOI18N
         imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        imgBrowsePhotos.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         imgBrowsePhotos.setName("imgBrowsePhotos"); // NOI18N
 
         javax.swing.GroupLayout imgBrowsePhotosLayout = new javax.swing.GroupLayout(imgBrowsePhotos);
         imgBrowsePhotos.setLayout(imgBrowsePhotosLayout);
         imgBrowsePhotosLayout.setHorizontalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
         );
         imgBrowsePhotosLayout.setVerticalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 498, Short.MAX_VALUE)
+            .addGap(0, 508, Short.MAX_VALUE)
         );
 
-        tabFoto.add(imgBrowsePhotos, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 500, 500));
-
         jScrollPane5.setName("jScrollPane5"); // NOI18N
+        jScrollPane5.setPreferredSize(new java.awt.Dimension(230, 600));
 
-        txtPhotoInformation.setContentType(resourceMap.getString("txtPhotoInformation.contentType")); // NOI18N
-        txtPhotoInformation.setEditable(false);
-        txtPhotoInformation.setText(resourceMap.getString("txtPhotoInformation.text")); // NOI18N
-        txtPhotoInformation.setName("txtPhotoInformation"); // NOI18N
-        jScrollPane5.setViewportView(txtPhotoInformation);
-
-        tabFoto.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, 235, 570));
+        txtBrowseInfo.setContentType(resourceMap.getString("txtBrowseInfo.contentType")); // NOI18N
+        txtBrowseInfo.setEditable(false);
+        txtBrowseInfo.setText(resourceMap.getString("txtBrowseInfo.text")); // NOI18N
+        txtBrowseInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtBrowseInfo.setName("txtBrowseInfo"); // NOI18N
+        jScrollPane5.setViewportView(txtBrowseInfo);
 
         jScrollPane4.setName("jScrollPane4"); // NOI18N
 
@@ -612,8 +612,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
-        tabFoto.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 50, 250, 500));
-
         btnGoBrowseSelection.setBackground(resourceMap.getColor("btnGoBrowseSelection.background")); // NOI18N
         btnGoBrowseSelection.setIcon(resourceMap.getIcon("btnGoBrowseSelection.icon")); // NOI18N
         btnGoBrowseSelection.setText(resourceMap.getString("btnGoBrowseSelection.text")); // NOI18N
@@ -626,7 +624,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoBrowseSelectionActionPerformed(evt);
             }
         });
-        tabFoto.add(btnGoBrowseSelection, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 550, 250, 30));
 
         btnZoomIn.setAction(imgBrowsePhotos.getZoomInAction());
         btnZoomIn.setBackground(resourceMap.getColor("btnZoomIn.background")); // NOI18N
@@ -636,7 +633,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setFocusPainted(false);
         btnZoomIn.setName("btnZoomIn"); // NOI18N
-        tabFoto.add(btnZoomIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 40, 80, 30));
 
         btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
         btnZoomOut.setBackground(resourceMap.getColor("btnZoomOut.background")); // NOI18N
@@ -646,7 +642,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setFocusPainted(false);
         btnZoomOut.setName("btnZoomOut"); // NOI18N
-        tabFoto.add(btnZoomOut, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 40, 80, 30));
 
         btnViewImage.setBackground(resourceMap.getColor("btnViewImage.background")); // NOI18N
         btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
@@ -659,7 +654,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnViewImageActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 50, 120, 25));
 
         btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
         btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
@@ -673,7 +667,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnBrowsePrevActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowsePrev, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, -1, 65));
 
         btnBrowseNext.setBackground(resourceMap.getColor("btnBrowseNext.background")); // NOI18N
         btnBrowseNext.setIcon(resourceMap.getIcon("btnBrowseNext.icon")); // NOI18N
@@ -687,15 +680,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnBrowseNextActionPerformed(evt);
             }
         });
-        tabFoto.add(btnBrowseNext, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, -1, 65));
 
         dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        tabFoto.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, 100, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        tabFoto.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 25, 100, -1));
 
         btnRefreshDates.setBackground(resourceMap.getColor("btnRefreshDates.background")); // NOI18N
         btnRefreshDates.setIcon(resourceMap.getIcon("btnRefreshDates.icon")); // NOI18N
@@ -709,12 +699,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnRefreshDatesActionPerformed(evt);
             }
         });
-        tabFoto.add(btnRefreshDates, new org.netbeans.lib.awtextra.AbsoluteConstraints(215, 23, 40, 25));
 
         lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
-        tabFoto.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 40, 80, 30));
 
         btnReport.setBackground(resourceMap.getColor("btnReport.background")); // NOI18N
         btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
@@ -728,7 +716,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnReportActionPerformed(evt);
             }
         });
-        tabFoto.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 10, 120, 35));
 
         btnDefault.setBackground(resourceMap.getColor("btnDefault.background")); // NOI18N
         btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
@@ -741,7 +728,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnDefaultActionPerformed(evt);
             }
         });
-        tabFoto.add(btnDefault, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 90, -1));
 
         cmbElementTypesBrowseTab.setBackground(resourceMap.getColor("cmbElementTypesBrowseTab.background")); // NOI18N
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
@@ -754,7 +740,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 cmbElementTypesBrowseTabActionPerformed(evt);
             }
         });
-        tabFoto.add(cmbElementTypesBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 25, 210, -1));
 
         chkElementTypeBrowseTab.setBackground(resourceMap.getColor("chkElementTypeBrowseTab.background")); // NOI18N
         chkElementTypeBrowseTab.setText(resourceMap.getString("chkElementTypeBrowseTab.text")); // NOI18N
@@ -764,7 +749,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 chkElementTypeBrowseTabActionPerformed(evt);
             }
         });
-        tabFoto.add(chkElementTypeBrowseTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
 
         btnRotate.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
         btnRotate.setBackground(resourceMap.getColor("btnRotate.background")); // NOI18N
@@ -774,7 +758,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRotate.setFocusPainted(false);
         btnRotate.setName("btnRotate"); // NOI18N
-        tabFoto.add(btnRotate, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 10, 80, 30));
 
         btnViewEXIF.setBackground(resourceMap.getColor("btnViewEXIF.background")); // NOI18N
         btnViewEXIF.setIcon(resourceMap.getIcon("btnViewEXIF.icon")); // NOI18N
@@ -789,7 +772,116 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnViewEXIFActionPerformed(evt);
             }
         });
-        tabFoto.add(btnViewEXIF, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 10, 80, 30));
+
+        javax.swing.GroupLayout tabFotoLayout = new javax.swing.GroupLayout(tabFoto);
+        tabFoto.setLayout(tabFotoLayout);
+        tabFotoLayout.setHorizontalGroup(
+            tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabFotoLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addComponent(rdbBrowseLocation)
+                        .addGap(5, 5, 5)
+                        .addComponent(rdbBrowseElement)
+                        .addGap(1, 1, 1)
+                        .addComponent(rdbBrowseDate))
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(chkElementTypeBrowseTab)
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addComponent(btnBrowsePrev)
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(btnDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(2, 2, 2)
+                        .addComponent(btnBrowseNext)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnViewImage))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        tabFotoLayout.setVerticalGroup(
+            tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabFotoLayout.createSequentialGroup()
+                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rdbBrowseLocation)
+                            .addComponent(rdbBrowseElement)
+                            .addComponent(rdbBrowseDate))
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(chkElementTypeBrowseTab))
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(2, 2, 2)
+                                .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnBrowsePrev, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(tabFotoLayout.createSequentialGroup()
+                                        .addComponent(btnDefault)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnBrowseNext, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(tabFotoLayout.createSequentialGroup()
+                                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(tabFotoLayout.createSequentialGroup()
+                                        .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(tabFotoLayout.createSequentialGroup()
+                                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(11, 11, 11)
+                                .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
 
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
@@ -1347,7 +1439,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
         jMenu1.add(mnuSetSlideshowSpeed);
 
+        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
+        jMenuItem3.setName("jMenuItem3"); // NOI18N
+        jMenu1.add(jMenuItem3);
+
         settingsMenu.add(jMenu1);
+
+        jMenuItem2.setIcon(resourceMap.getIcon("jMenuItem2.icon")); // NOI18N
+        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
+        jMenuItem2.setName("jMenuItem2"); // NOI18N
+        settingsMenu.add(jMenuItem2);
 
         menuBar.add(settingsMenu);
 
@@ -1629,7 +1730,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
 
-        txtPhotoInformation.setText("");
+        txtBrowseInfo.setText("");
         lblNumberOfImages.setText("");
         try {
             imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
@@ -1641,7 +1742,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }//GEN-LAST:event_tabFotoComponentShown
 
@@ -1706,18 +1807,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void treBrowsePhotoValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treBrowsePhotoValueChanged
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("");
+            txtBrowseInfo.setText("");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                txtBrowseInfo.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
                 setupFile(fotos);
@@ -1726,7 +1827,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                txtBrowseInfo.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
                 setupFile(fotos);
@@ -1735,7 +1836,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtPhotoInformation.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                txtBrowseInfo.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
                 setupFile(fotos);
@@ -1744,7 +1845,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                txtPhotoInformation.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                txtBrowseInfo.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                 setupFile(fotos);
@@ -1756,7 +1857,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnReport.setVisible(true);
             }
             // Maak paar display issues reg
-            txtPhotoInformation.getCaret().setDot(0);
+            txtBrowseInfo.getCaret().setDot(0);
         }
     }//GEN-LAST:event_treBrowsePhotoValueChanged
 
@@ -1769,7 +1870,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             cmbElementTypesBrowseTab.setVisible(false);
             chkElementTypeBrowseTab.setVisible(false);
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("<body bgcolor='rgb(255,255,255)'></body>");
+            txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
@@ -1782,7 +1883,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
             browseByLocation();
             this.getComponent().setCursor(Cursor.getDefaultCursor());
@@ -1798,7 +1899,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             chkElementTypeBrowseTab.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(true);
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("<body bgcolor='rgb(255,255,255)'></body>");
+            txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
@@ -1811,7 +1912,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
             browseByElement();
             this.getComponent().setCursor(Cursor.getDefaultCursor());
@@ -1827,7 +1928,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             cmbElementTypesBrowseTab.setVisible(false);
             chkElementTypeBrowseTab.setVisible(false);
             btnReport.setVisible(false);
-            txtPhotoInformation.setText("<body bgcolor='rgb(255,255,255)'></body>");
+            txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
                 lblNumberOfImages.setText("");
@@ -1840,7 +1941,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
             }
             browseByDate();
             this.getComponent().setCursor(Cursor.getDefaultCursor());
@@ -2381,7 +2482,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void openDBConsole() {
-        Utils.openFile(System.getProperty("user.dir") + "/lib/h2.jar");
+        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.3.168.jar");
     }
 
 @Action
@@ -2418,7 +2519,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             imgBrowsePhotos.setToolTipText("");
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -2440,7 +2541,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace();
+                            ex.printStackTrace(System.err);
                         }
                         finally {
                             imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
@@ -2452,7 +2553,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                             lblNumberOfImages.setText("0 of 0");
                         }
                         catch (IOException ex) {
-                            ex.printStackTrace();
+                            ex.printStackTrace(System.err);
                         }
                         finally {
                             imgBrowsePhotos.setToolTipText("");
@@ -2465,7 +2566,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         lblNumberOfImages.setText("");
                     }
                     catch (IOException ex) {
-                        ex.printStackTrace();
+                        ex.printStackTrace(System.err);
                     }
                     finally {
                         imgBrowsePhotos.setToolTipText("");
@@ -2473,10 +2574,29 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
                 // Scale image
                 if (imgBrowsePhotos.getImage() != null) {
-                    if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                    else
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
+                    double scale = 1.0;
+                    int imageHeight = imgBrowsePhotos.getImage().getHeight(null);
+                    int imageWidth = imgBrowsePhotos.getImage().getWidth(null);
+                    double componentHeight = imgBrowsePhotos.getSize().getHeight();
+                    double componentWidth = imgBrowsePhotos.getSize().getWidth();
+                    if (imageHeight > 0 && imageWidth > 0) {
+                        if (imageHeight >= imageWidth) {
+                            // Dealing with Portrait image
+                            scale = componentHeight / (double)imageHeight;
+                            if (imageWidth * scale > componentWidth)
+                                scale = componentWidth / (double)imageWidth;
+                        }
+                        else {
+                            // Dealing with Landscape image
+                            scale = componentWidth / (double)imageWidth;
+                            if (imageHeight * scale > componentHeight)
+                                scale = componentHeight / (double)imageHeight;
+                        }
+                    }
+                    else {
+                        System.out.println("WARNING: Trying to get the size of an image before it is known...");
+                    }
+                    imgBrowsePhotos.setScale(scale);
                 }
 //                return null;
 //            }
@@ -2495,7 +2615,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
                 double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsDouble());
                 double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsDouble());
-                if (lat != 0 && lon != 0 && !(sighting.getDate().getHours() == 0 && sighting.getDate().getMinutes() == 0)) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(sighting.getDate());
+                // TODO: Change this to propperly cater for "unknown times"
+                if (lat != 0 && lon != 0 && !(calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0)) {
                     sighting.setMoonlight(AstroUtils.getMoonlight(sighting.getDate(), lat, lon));
                     sighting.setTimeOfDay(AstroUtils.getSunCategory(sighting.getDate(), lat, lon));
                 }
@@ -2585,7 +2708,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
         finally {
             if (writer != null)
@@ -2593,7 +2716,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     writer.close();
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                 }
         }
         // Then try to read
@@ -2604,7 +2727,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             FilePaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
             JOptionPane.showMessageDialog(this.getComponent(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
         }
         finally {
@@ -2613,7 +2736,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     reader.close();
                 }
                 catch (IOException ex) {
-                    ex.printStackTrace();
+                    ex.printStackTrace(System.err);
                 }
         }
         // Shutdown
@@ -2640,7 +2763,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 Utils.deleteRecursive(new File(FilePaths.WILDLOG_EXPORT.getFullPath()));
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
                 JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
             }
             // Check for unused empty folders
@@ -2650,7 +2773,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_OTHER.getFullPath()));
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                ex.printStackTrace(System.err);
                 JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
             }
             // Done
@@ -2777,6 +2900,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2832,7 +2957,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JTable tblLocation_EleTab;
     private javax.swing.JTable tblVisit;
     private javax.swing.JTree treBrowsePhoto;
-    private javax.swing.JTextPane txtPhotoInformation;
+    private javax.swing.JTextPane txtBrowseInfo;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JMenu workspaceMenu;
     // End of variables declaration//GEN-END:variables

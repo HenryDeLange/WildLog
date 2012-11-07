@@ -1,25 +1,19 @@
 package wildlog.data.dataobjects;
 
-import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.utils.FilePaths;
 
-
-// Foundation for the Foto class
 public class WildLogFile {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
-    private String filename; // Automatically made from file name
-    //private String description;
+    private String filename;
     private String fileLocation; // This is sort of used as a primary key
     private String originalFotoLocation;
-    //private FotoRating rating;
     private Date date;
     private WildLogFileType fotoType;
     private boolean defaultFile = false;
-
 
     // CONSTRUCTORS:
     public WildLogFile() {
@@ -28,7 +22,7 @@ public class WildLogFile {
     public WildLogFile(String inID) {
         id = inID;
     }
-    
+
     public WildLogFile(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, WildLogFileType inFotoType) {
         id = inID;
         filename = inName;
@@ -67,11 +61,7 @@ public class WildLogFile {
             return "";
     }
 
-    // GETTERS:
-//    public String getDescription() {
-//        return description;
-//    }
-
+    // GETTERS and SETTERS
     public String getFileLocation(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
@@ -80,10 +70,6 @@ public class WildLogFile {
             return fileLocation;
     }
 
-//    public FotoRating getRating() {
-//        return rating;
-//    }
-    
     public Date getDate() {
         return date;
     }
@@ -100,19 +86,10 @@ public class WildLogFile {
         return fotoType;
     }
 
-    // SETTERS:
-//    public void setDescription(String inDescription) {
-//            description = inDescription;
-//    }
-
     public void setFileLocation(String inFileLocation) {
             fileLocation = inFileLocation;
     }
 
-//    public void setRating(FotoRating inRating) {
-//            rating = inRating;
-//    }
-    
     public void setDate(Date inDate) {
         date = inDate;
     }

@@ -9,36 +9,22 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
-import wildlog.data.enums.Habitat;
 import wildlog.data.enums.LocationRating;
-import wildlog.data.enums.Province;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.UtilsHTML;
 
-// Foundation for the Location class
 public class Location extends DataObjectWithGPS implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML {
     private String name; // Used as index (ID)
     private String description;
-    private Province province; // For locations outside south africa the country name must be used
-    //private int numberOfVisits; // (This can be determined from the ArrayList of visits' size)
     private LocationRating rating;
     private GameViewRating gameViewingRating;
-    private Habitat habitatType; // Select from predefined list what the locations habitat is like (bv semi-desert, fynbos, ens)
-//    private List<Foto> fotos; // An ArrayList of Foto objects of the location
-    //private Foto primaryFoto; // Primary fotos and maps of the location (String of the path)
-    //private List<Visit> visits; // An ArrayList of visit objects
-    //private ArrayList wantedElements; // An ArrayList of wanted Elements that are possible to see at the location (some are links, others are string). This will be a arraylist of type <Element> and not the derived types
-    //private Date accommodationLastUpdated; // This date indicates how old the other information regarding the accommodation is
-    private List<AccommodationType> accommodationType; // For example tent, timeshare, ens
-    private CateringType catering; // Self catering or not
-    //private ArrayList accommodationPrice; // The price for each of the types
-    private String contactNumbers; // <main>(code) ### #### / <other>(code) ### ####
-    //private String address;
+    private String habitatType;
+    private List<AccommodationType> accommodationType;
+    private CateringType catering;
+    private String contactNumbers;
     private String website;
     private String email;
     private String directions;
-    //private List<String> subAreas;
-
 
     // CONSTRUCTORS:
     public Location() {
@@ -72,11 +58,6 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
                 fotoString.append(fotos.get(t).toHTML(inExportType));
             }
         }
-//        String subAreasString = "";
-//        if (subAreas != null)
-//            for (int t = 0; t < subAreas.size(); t++) {
-//                subAreasString = subAreasString + subAreas.get(t);
-//            }
         StringBuilder visitsString = new StringBuilder();
         if (inIsRecursive) {
             Visit tempVisit = new Visit();
@@ -95,7 +76,6 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         htmlLocation.append("<br/>");
         htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsDouble);
         htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsDouble);
-        htmlLocation.append("<br/><b>Province:</b> ").append(UtilsHTML.formatString(province));
         htmlLocation.append("<br/><b>General Rating:</b> ").append(UtilsHTML.formatString(rating));
         htmlLocation.append("<br/><b>Wildlife Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
         htmlLocation.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(habitatType));
@@ -151,10 +131,6 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         return description;
     }
 
-    public Province getProvince() {
-        return province;
-    }
-
     public LocationRating getRating() {
         return rating;
     }
@@ -163,24 +139,9 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         return gameViewingRating;
     }
 
-    public Habitat getHabitatType() {
+    public String getHabitatType() {
         return habitatType;
     }
-
-//    @Override
-//    public List<Foto> getFotos() {
-//        if (fotos == null) fotos = new ArrayList<Foto>(1);
-//        return fotos;
-//    }
-
-//    public Foto getPrimaryFoto() {
-//        return primaryFoto;
-//    }
-
-//    public List<Visit> getVisits() {
-//        if (visits == null) visits = new ArrayList<Visit>();
-//        return visits;
-//    }
 
     public List<AccommodationType> getAccommodationType() {
         return accommodationType;
@@ -206,16 +167,6 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         return website;
     }
 
-//    public List<String> getSubAreas() {
-//        if (subAreas == null) subAreas = new ArrayList<String>();
-//        if (subAreas.size() == 0) subAreas.add("None");
-//        if (subAreas.size() > 0)
-//            if (!subAreas.contains("None"))
-//                subAreas.add("None");
-//        return subAreas;
-//    }
-
-
     // SETTERS:
     public void setName(String inName) {
         name = inName;
@@ -223,10 +174,6 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
 
     public void setDescription(String inDescription) {
         description = inDescription;
-    }
-
-    public void setProvince(Province inProvince) {
-        province = inProvince;
     }
 
     public void setRating(LocationRating inRating) {
@@ -237,22 +184,9 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         gameViewingRating = inGameViewingRating;
     }
 
-    public void setHabitatType(Habitat inHabitatType) {
+    public void setHabitatType(String inHabitatType) {
         habitatType = inHabitatType;
     }
-
-//    @Override
-//    public void setFotos(List<Foto> inFotos) {
-//        fotos = inFotos;
-//    }
-
-//    public void setPrimaryFoto(Foto inFoto) {
-//        primaryFoto = inFoto;
-//    }
-
-//    public void setVisits(List<Visit> inVisits) {
-//        visits = inVisits;
-//    }
 
     public void setAccommodationType(List<AccommodationType> inAccommodationType) {
         accommodationType = inAccommodationType;
@@ -277,9 +211,5 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
     public void setWebsite(String inWebsite) {
         website = inWebsite;
     }
-
-//    public void setSubAreas(List<String> inSubAreas) {
-//        subAreas = inSubAreas;
-//    }
 
 }

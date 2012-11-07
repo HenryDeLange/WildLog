@@ -490,7 +490,7 @@ public class ReportElement extends javax.swing.JFrame {
             }
             pj.print();
         } catch (PrinterException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 

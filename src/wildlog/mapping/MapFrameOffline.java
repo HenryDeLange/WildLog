@@ -1,6 +1,5 @@
 package wildlog.mapping;
 
-import com.bbn.openmap.LatLonPoint;
 import com.bbn.openmap.LayerHandler;
 import com.bbn.openmap.MapBean;
 import com.bbn.openmap.MapHandler;
@@ -148,7 +147,7 @@ public class MapFrameOffline {
             // Get the default MapBean that the BasicMapPanel created.
             MapBean mapBean = mapPanel.getMapBean();
             // Set the map's center and scale
-            mapBean.setCenter(new LatLonPoint(defaultLatitude, defaultLongitude));
+            mapBean.setCenter(defaultLatitude, defaultLongitude);
             mapBean.setScale(8500000f);
 
             // Add the points layer.
@@ -211,7 +210,7 @@ public class MapFrameOffline {
         }
         catch (Exception e) {
             System.out.println("Problem with Mapping...");
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
     }
 
@@ -220,7 +219,7 @@ public class MapFrameOffline {
             // Get the default MapBean that the BasicMapPanel created.
             MapBean mapBean = mapPanel.getMapBean();
             // Set the map's center and scale
-            mapBean.setCenter(new LatLonPoint(-28.7f, 24.7f));
+            mapBean.setCenter(-28.7, 24.7);
             mapBean.setScale(inScale);
 
             // Add the points layer.
@@ -242,7 +241,7 @@ public class MapFrameOffline {
         }
         catch (Exception e) {
             System.out.println("Problem with Mapping...");
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
     }
 

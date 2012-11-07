@@ -1,7 +1,6 @@
 package wildlog.utils.ui;
 
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 
 
@@ -9,14 +8,6 @@ public abstract class ProgressbarTask<T extends Object, V extends Object> extend
 
     public ProgressbarTask(Application application) {
         super(application);
-    }
-
-    public ProgressbarTask(Application application, ResourceMap resourceMap, String resourcePrefix) {
-        super(application, resourceMap, resourcePrefix);
-    }
-
-    public ProgressbarTask(Application application, String resourcePrefix) {
-        super(application, resourcePrefix);
     }
 
     @Override

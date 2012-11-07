@@ -18,7 +18,6 @@ import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.AddFrequency;
-import wildlog.data.enums.AreaType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
@@ -26,11 +25,9 @@ import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.GameWatchIntensity;
-import wildlog.data.enums.Habitat;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.Province;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
@@ -57,6 +54,7 @@ public class DBI_h2 extends DBI_JDBC {
             conn = DriverManager.getConnection("jdbc:h2:" + FilePaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
 
             // Create tables
+            // FIXME: EK kan ook 'n H2 "if not exists" command gebruik in die query in plaas van die story...
             results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
             state = conn.createStatement();
             if (!results.next()) {
@@ -111,6 +109,7 @@ public class DBI_h2 extends DBI_JDBC {
             started = false;
         }
         finally {
+            closeStatementAndResultset(state, results);
             if (!started) {
                 JOptionPane.showMessageDialog(null, "The database could not be opened. Make sure it is not in use or broken.", "WildLog Error: Initialize Database", JOptionPane.ERROR_MESSAGE);
                 Application.getInstance().exit();
@@ -231,10 +230,9 @@ public class DBI_h2 extends DBI_JDBC {
 
                 tempLocation.setName(inPrefix + results.getString("NAME"));
                 tempLocation.setDescription(results.getString("DESCRIPTION"));
-                tempLocation.setProvince(Province.getEnumFromText(results.getString("PROVINCE")));
                 tempLocation.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
                 tempLocation.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
-                tempLocation.setHabitatType(Habitat.getEnumFromText(results.getString("HABITATTYPE")));
+                tempLocation.setHabitatType(results.getString("HABITATTYPE"));
                 tempLocation.setAccommodationType(AccommodationType.getEnumFromText(results.getString("ACCOMMODATIONTYPE")));
                 tempLocation.setCatering(CateringType.getEnumFromText(results.getString("CATERING")));
                 tempLocation.setContactNumbers(results.getString("CONTACTNUMBERS"));
@@ -279,7 +277,6 @@ public class DBI_h2 extends DBI_JDBC {
                 tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
                 tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
                 tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
-                tempSighting.setAreaType(AreaType.getEnumFromText(results.getString("AREATYPE")));
                 tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
                 tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
                 tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));

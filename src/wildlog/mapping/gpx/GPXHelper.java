@@ -14,7 +14,7 @@ import javax.xml.bind.Unmarshaller;
 
 
 public class GPXHelper {
-    
+
     public static void testGPX() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select GPX file");
@@ -26,7 +26,7 @@ public class GPXHelper {
                     return (inFile.isDirectory() || inFile.getName().toLowerCase().endsWith("gpx"));
                 return false;
             }
-            
+
             @Override
             public String getDescription() {
                 return "GPX";
@@ -35,22 +35,22 @@ public class GPXHelper {
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            GpxType gpx = null; 
+            GpxType gpx = null;
             try {
-                JAXBContext jc = JAXBContext.newInstance("com.topografix.gpx._1._1"); 
-                Unmarshaller unmarshaller = jc.createUnmarshaller(); 
-                JAXBElement<GpxType> root = (JAXBElement<GpxType>)unmarshaller.unmarshal(fileChooser.getSelectedFile()); 
-                gpx = root.getValue(); 
-            } catch(JAXBException ex) { 
-               ex.printStackTrace();
-            } 
+                JAXBContext jc = JAXBContext.newInstance("com.topografix.gpx._1._1");
+                Unmarshaller unmarshaller = jc.createUnmarshaller();
+                JAXBElement<GpxType> root = (JAXBElement<GpxType>)unmarshaller.unmarshal(fileChooser.getSelectedFile());
+                gpx = root.getValue();
+            } catch(JAXBException ex) {
+               ex.printStackTrace(System.err);
+            }
             if (gpx != null) {
-                List<WptType> waypoints = gpx.getWpt(); 
-                for(WptType waypoint : waypoints) { 
+                List<WptType> waypoints = gpx.getWpt();
+                for(WptType waypoint : waypoints) {
                     System.out.println(waypoint.getName() + " -> " + waypoint.getLat() + " | " + waypoint.getLon());
                 }
             }
         }
     }
-    
+
 }

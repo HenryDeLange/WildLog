@@ -3,18 +3,28 @@ package wildlog.data.enums;
 
 public enum FeedingClass {
     CARNIVORE("Carnivore"),
+//    CARNIVORE_MAMMAL("Carnivore - Mostly Mammals"),
+//    CARNIVORE_BIRD("Carnivore - Mostly Birds"),
+//    CARNIVORE_INSECT("Carnivore - Mostly Insects, etc."),
+//    CARNIVORE_FISH("Carnivore - Mostly Fish"),
+//    CARNIVORE_SCAVENGER("Carnivore - Mostly Scavenger"),
     HERBIVORE("Herbivore"),
+//    HERBIVORE_BROWSER("Herbivore - Mostly Browser"),
+//    HERBIVORE_GRAZER("Herbivore - Mostly Grazer"),
+//    HERBIVORE_ROOTS("Herbivore - Mostly Roots, etc."),
+//    HERBIVORE_SEED("Herbivore - Mostly Seeds"),
+//    HERBIVORE_NECTAR("Herbivore - Mostly Nectar, etc."),
     OMNIVORE("Omnivore"),
-    PHOTOSYNTHESYS("Photo-Synthesis"),
     PARASITE("Parasite"),
+    PHOTOSYNTHESYS("Photo-Synthesis"),
     NONE("None");
-    
+
     private String text;
-    
+
     FeedingClass(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;

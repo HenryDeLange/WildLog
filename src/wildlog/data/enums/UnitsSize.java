@@ -3,6 +3,8 @@ package wildlog.data.enums;
 public enum UnitsSize {
     METER("m"),
     CENTI_METER("cm"),
+    FEET("ft"),
+    INCHES("in"),
     NONE("None");
 
     private String text;
@@ -24,6 +26,8 @@ public enum UnitsSize {
         if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(METER.text)) return METER;
         if (inText.equalsIgnoreCase(CENTI_METER.text)) return CENTI_METER;
+        if (inText.equalsIgnoreCase(FEET.text)) return FEET;
+        if (inText.equalsIgnoreCase(INCHES.text)) return INCHES;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }

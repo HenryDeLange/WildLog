@@ -9,6 +9,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,7 +52,7 @@ public class ReportLocation extends javax.swing.JFrame {
     public ReportLocation(Location inLocation, WildLogApp inApp) {
         app = inApp;
         location = inLocation;
-        
+
         initComponents();
 
         Visit tempVisit = new Visit();
@@ -407,7 +408,7 @@ public class ReportLocation extends javax.swing.JFrame {
             }
             pj.print();
         } catch (PrinterException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }//GEN-LAST:event_mnuPrintReportActionPerformed
 
@@ -950,7 +951,15 @@ public class ReportLocation extends javax.swing.JFrame {
                     numOfElements.add(sighting.getElementName());
                     //if (!numOfElements.contains(sighting.getElement().getPrimaryName()))
                     //    chartSpecies.addBar(new BarChartEntity(sighting.getElement().getPrimaryName() + "-" + sighting.getDate(), visit.getName(), (numOfElements.size()), Color.yellow));
-                    tempData.add(new ReportData(new Date(sighting.getDate().getYear(), sighting.getDate().getMonth(), sighting.getDate().getDate()), numOfElements.size(), sighting.getElementName()));
+                    // Get a Date object containing only the day part, not the time.
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(sighting.getDate());
+                    Calendar dayCalendar = Calendar.getInstance();
+                    dayCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                    tempData.add(new ReportData(
+                            dayCalendar.getTime(),
+                            numOfElements.size(),
+                            sighting.getElementName()));
 
                     if (sighting.getTimeOfDay() != null) {
                         if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
