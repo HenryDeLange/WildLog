@@ -1109,12 +1109,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             if (!sightingList.get(t).getLatitude().equals(Latitudes.NONE) && !sightingList.get(t).getLongitude().equals(Longitudes.NONE)) {
                 double lat = sightingList.get(t).getLatDegrees();
                 lat = lat + sightingList.get(t).getLatMinutes()/60.0;
-                lat = lat + (sightingList.get(t).getLatSecondsDouble()/60.0)/60.0;
+                lat = lat + (sightingList.get(t).getLatSeconds()/60.0)/60.0;
                 if (sightingList.get(t).getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
                 double lon = sightingList.get(t).getLonDegrees();
                 lon = lon + sightingList.get(t).getLonMinutes()/60.0;
-                lon = lon + (sightingList.get(t).getLonSecondsDouble()/60.0)/60.0;
+                lon = lon + (sightingList.get(t).getLonSeconds()/60.0)/60.0;
                 if (sightingList.get(t).getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sightingList.get(t), app);
@@ -1125,12 +1125,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 Location location = app.getDBI().find(new Location(sightingList.get(t).getLocationName()));
                 double lat = location.getLatDegrees();
                 lat = lat + location.getLatMinutes()/60.0;
-                lat = lat + (location.getLatSecondsDouble()/60.0)/60.0;
+                lat = lat + (location.getLatSeconds()/60.0)/60.0;
                 if (location.getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
                 double lon = location.getLonDegrees();
                 lon = lon + location.getLonMinutes()/60.0;
-                lon = lon + (location.getLonSecondsDouble()/60.0)/60.0;
+                lon = lon + (location.getLonSeconds()/60.0)/60.0;
                 if (location.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightingList.get(t), app);

@@ -1,7 +1,13 @@
 package wildlog.data.enums;
 
 public enum Longitudes {
+    /**
+     * For + coordinates.
+     */
     EAST("E", "East (+)"),
+    /**
+     * For - coordinates.
+     */
     WEST("W", "West (-)"),
     NONE("", "None");
 

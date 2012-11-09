@@ -74,8 +74,8 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         htmlLocation.append("<tr><td>");
         htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");
-        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSecondsDouble);
-        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSecondsDouble);
+        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSeconds);
+        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSeconds);
         htmlLocation.append("<br/><b>General Rating:</b> ").append(UtilsHTML.formatString(rating));
         htmlLocation.append("<br/><b>Wildlife Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
         htmlLocation.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(habitatType));
@@ -116,8 +116,8 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         entry.setName(name);
         entry.setDescription(this.toHTML(false, true, inApp, UtilsHTML.ImageExportTypes.ForKML));
         entry.setStyle("locationStyle");
-        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSecondsDouble));
-        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSecondsDouble));
+        entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+        entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         return entry;
     }
 

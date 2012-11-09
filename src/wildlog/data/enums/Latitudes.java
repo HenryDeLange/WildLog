@@ -1,7 +1,13 @@
 package wildlog.data.enums;
 
 public enum Latitudes {
+    /**
+     * For + coordinates.
+     */
     NORTH("N", "North (+)", "+"),
+    /**
+     * For - coordinates.
+     */
     SOUTH("S", "South (-)", "-"),
     NONE("", "None", "");
 
@@ -36,10 +42,13 @@ public enum Latitudes {
         if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(NORTH.text)) return NORTH;
         if (inText.equalsIgnoreCase(NORTH.key)) return NORTH;
+        if (inText.equalsIgnoreCase(NORTH.sign)) return NORTH;
         if (inText.equalsIgnoreCase(SOUTH.text)) return SOUTH;
         if (inText.equalsIgnoreCase(SOUTH.key)) return SOUTH;
+        if (inText.equalsIgnoreCase(SOUTH.sign)) return SOUTH;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         if (inText.equalsIgnoreCase(NONE.key)) return NONE;
+        if (inText.equalsIgnoreCase(NONE.sign)) return NONE;
         return NONE;
     }
 }

@@ -928,12 +928,12 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (!locationWL.getLatitude().equals(Latitudes.NONE) && !locationWL.getLongitude().equals(Longitudes.NONE)) {
                 double lat = locationWL.getLatDegrees();
                 lat = lat + locationWL.getLatMinutes()/60.0;
-                lat = lat + (locationWL.getLatSecondsDouble()/60.0)/60.0;
+                lat = lat + (locationWL.getLatSeconds()/60.0)/60.0;
                 if (locationWL.getLatitude().equals(Latitudes.SOUTH))
                     lat = -1 * lat;
                 double lon = locationWL.getLonDegrees();
                 lon = lon + locationWL.getLonMinutes()/60.0;
-                lon = lon + (locationWL.getLonSecondsDouble()/60.0)/60.0;
+                lon = lon + (locationWL.getLonSeconds()/60.0)/60.0;
                 if (locationWL.getLongitude().equals(Longitudes.WEST))
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), locationWL, app);
@@ -975,12 +975,12 @@ public class PanelLocation extends PanelCanSetupHeader {
                         if (!sightings.get(i).getLatitude().equals(Latitudes.NONE) && !sightings.get(i).getLongitude().equals(Longitudes.NONE)) {
                             double lat = sightings.get(i).getLatDegrees();
                             lat = lat + sightings.get(i).getLatMinutes()/60.0;
-                            lat = lat + (sightings.get(i).getLatSecondsDouble()/60.0)/60.0;
+                            lat = lat + (sightings.get(i).getLatSeconds()/60.0)/60.0;
                             if (sightings.get(i).getLatitude().equals(Latitudes.SOUTH))
                                 lat = -1 * lat;
                             double lon = sightings.get(i).getLonDegrees();
                             lon = lon + sightings.get(i).getLonMinutes()/60.0;
-                            lon = lon + (sightings.get(i).getLonSecondsDouble()/60.0)/60.0;
+                            lon = lon + (sightings.get(i).getLonSeconds()/60.0)/60.0;
                             if (sightings.get(i).getLongitude().equals(Longitudes.WEST))
                                 lon = -1 * lon;
                             UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sightings.get(i), app);
@@ -1113,8 +1113,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnKmlActionPerformed
 
     private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
-        double lat = LatLonConverter.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSecondsDouble());
-        double lon = LatLonConverter.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSecondsDouble());
+        double lat = LatLonConverter.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSeconds());
+        double lon = LatLonConverter.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSeconds());
         if (lat != 0 && lon != 0) {
             String temp = "Curent Moon Phase: " + AstroUtils.getMoonPhase(Calendar.getInstance().getTime()) + " % Full " + System.getProperty("line.separator");
             temp = temp + "Current Moonlight: " + AstroUtils.getMoonlight(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");

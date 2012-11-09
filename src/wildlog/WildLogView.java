@@ -2619,8 +2619,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             List<Sighting> sightings = app.getDBI().list(new Sighting());
             for (Sighting sighting : sightings) {
                 sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
-                double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsDouble());
-                double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsDouble());
+                double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(sighting.getDate());
                 // TODO: Change this to propperly cater for "unknown times"

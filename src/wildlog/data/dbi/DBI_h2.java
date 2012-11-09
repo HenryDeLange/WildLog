@@ -242,11 +242,11 @@ public class DBI_h2 extends DBI_JDBC {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempLocation.setLatSeconds(results.getFloat("LATSECONDSFLOAT"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempLocation.setLonSeconds(results.getFloat("LONSECONDSFLOAT"));
 
                 createOrUpdate(tempLocation, null);
             }
@@ -284,11 +284,11 @@ public class DBI_h2 extends DBI_JDBC {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getFloat("LATSECONDSFLOAT"));
+                tempSighting.setLatSeconds(results.getFloat("LATSECONDSFLOAT"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getFloat("LONSECONDSFLOAT"));
+                tempSighting.setLonSeconds(results.getFloat("LONSECONDSFLOAT"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
 
                 createOrUpdate(tempSighting);

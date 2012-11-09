@@ -8,11 +8,11 @@ public abstract class DataObjectWithGPS {
     protected Latitudes latitude;
     protected int latDegrees;
     protected int latMinutes;
-    protected double latSecondsDouble;
+    protected double latSeconds;
     protected Longitudes longitude;
     protected int lonDegrees;
     protected int lonMinutes;
-    protected double lonSecondsDouble;
+    protected double lonSeconds;
 
     public int getLatDegrees() {
         return latDegrees;
@@ -22,8 +22,8 @@ public abstract class DataObjectWithGPS {
         return latMinutes;
     }
 
-    public double getLatSecondsDouble() {
-        return latSecondsDouble;
+    public double getLatSeconds() {
+        return latSeconds;
     }
 
     public Latitudes getLatitude() {
@@ -38,8 +38,8 @@ public abstract class DataObjectWithGPS {
         return lonMinutes;
     }
 
-    public double getLonSecondsDouble() {
-        return lonSecondsDouble;
+    public double getLonSeconds() {
+        return lonSeconds;
     }
 
     public Longitudes getLongitude() {
@@ -54,8 +54,8 @@ public abstract class DataObjectWithGPS {
         latMinutes = inLatMinutes;
     }
 
-    public void setLatSecondsDouble(double inLatSeconds) {
-        latSecondsDouble = inLatSeconds;
+    public void setLatSeconds(double inLatSeconds) {
+        latSeconds = inLatSeconds;
     }
 
     public void setLatitude(Latitudes inLatitude) {
@@ -70,8 +70,8 @@ public abstract class DataObjectWithGPS {
         lonMinutes = inLonMinutes;
     }
 
-    public void setLonSecondsDouble(double inLonSeconds) {
-        lonSecondsDouble = inLonSeconds;
+    public void setLonSeconds(double inLonSeconds) {
+        lonSeconds = inLonSeconds;
     }
 
     public void setLongitude(Longitudes inLongitude) {

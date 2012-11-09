@@ -55,13 +55,13 @@ public class InfoBox extends JPanel {
                     sightingWrapper.getLatitude(),
                     sightingWrapper.getLatDegrees(),
                     sightingWrapper.getLatMinutes(),
-                    sightingWrapper.getLatSecondsDouble())));
+                    sightingWrapper.getLatSeconds())));
         lblLongitude.setText(Double.toString(
                 LatLonConverter.getDecimalDegree(
                     sightingWrapper.getLongitude(),
                     sightingWrapper.getLonDegrees(),
                     sightingWrapper.getLonMinutes(),
-                    sightingWrapper.getLonSecondsDouble())));
+                    sightingWrapper.getLonSeconds())));
         lblImage.setIcon(sightingWrapper.getIcon());
     }
 

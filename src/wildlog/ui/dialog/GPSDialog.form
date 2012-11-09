@@ -32,10 +32,14 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnUsePrevious">
       <Properties>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnUsePrevious.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUsePrevious.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="btnUsePrevious" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUsePreviousActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="11" width="120" height="30"/>
@@ -53,6 +57,9 @@
         </Property>
         <Property name="name" type="java.lang.String" value="btnUseImage" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUseImageActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="10" y="50" width="120" height="30"/>
@@ -66,6 +73,9 @@
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="btnUseMap" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUseMapActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="140" y="10" width="120" height="30"/>
@@ -82,6 +92,9 @@
         </Property>
         <Property name="name" type="java.lang.String" value="btnUseGPX" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUseGPXActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="140" y="50" width="120" height="30"/>

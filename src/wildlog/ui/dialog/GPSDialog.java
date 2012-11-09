@@ -1,29 +1,50 @@
 package wildlog.ui.dialog;
 
+import com.drew.imaging.jpeg.JpegMetadataReader;
+import com.drew.imaging.jpeg.JpegProcessingException;
+import com.drew.metadata.Directory;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.Tag;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.mapping.gpx.GpxUtils;
+import wildlog.utils.FileDrop;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.ui.GpxFilter;
+import wildlog.utils.ui.ImageFilter;
 import wildlog.utils.ui.SpinnerFixer;
 
 
 public class GPSDialog extends JDialog {
+    private static String lastFilePath = "";
     private boolean selectionMade = false;
     private DataObjectWithGPS dataObjectWithGPS;
     private double uiLatitude = 0.0;
     private double uiLongitude = 0.0;
+    private WildLogApp app;
 
     /** Creates new form GPSDialog */
     public GPSDialog(Frame parent, boolean modal, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent, modal);
+        app = (WildLogApp)Application.getInstance();
         dataObjectWithGPS = inDataObjectWithGPS;
         if (dataObjectWithGPS == null)
             dispose();
@@ -78,16 +99,38 @@ public class GPSDialog extends JDialog {
             tglEast.setSelected(true);
         }
         // Get existing value from passed in dataObjectWithGPS
+        loadUIValues(dataObjectWithGPS);
+
+        // Setup the drag and drop on the butons
+        FileDrop.SetupFileDrop(btnUseGPX, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                if (inFiles != null && inFiles.size() > 0) {
+                    doGpxInput(inFiles.get(0));
+                }
+            }
+        });
+        FileDrop.SetupFileDrop(btnUseImage, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                if (inFiles != null && inFiles.size() > 0) {
+                    doExifInput(inFiles.get(0));
+                }
+            }
+        });
+    }
+
+    private void loadUIValues(DataObjectWithGPS inDataObjectWithGPS) {
         uiLatitude = LatLonConverter.getDecimalDegree(
                 Latitudes.NONE,
-                dataObjectWithGPS.getLatDegrees(),
-                dataObjectWithGPS.getLatMinutes(),
-                dataObjectWithGPS.getLatSecondsDouble());
+                inDataObjectWithGPS.getLatDegrees(),
+                inDataObjectWithGPS.getLatMinutes(),
+                inDataObjectWithGPS.getLatSeconds());
         uiLongitude = LatLonConverter.getDecimalDegree(
                 Longitudes.NONE,
-                dataObjectWithGPS.getLonDegrees(),
-                dataObjectWithGPS.getLonMinutes(),
-                dataObjectWithGPS.getLonSecondsDouble());
+                inDataObjectWithGPS.getLonDegrees(),
+                inDataObjectWithGPS.getLonMinutes(),
+                inDataObjectWithGPS.getLonSeconds());
         // Populate the initial values into the spinners
         tglDecimalDegrees.setSelected(true);
         setupDD();
@@ -133,9 +176,15 @@ public class GPSDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        btnUsePrevious.setIcon(resourceMap.getIcon("btnUsePrevious.icon")); // NOI18N
         btnUsePrevious.setText(resourceMap.getString("btnUsePrevious.text")); // NOI18N
         btnUsePrevious.setFocusPainted(false);
         btnUsePrevious.setName("btnUsePrevious"); // NOI18N
+        btnUsePrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUsePreviousActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 120, 30));
 
         btnUseImage.setIcon(resourceMap.getIcon("btnUseImage.icon")); // NOI18N
@@ -144,12 +193,22 @@ public class GPSDialog extends JDialog {
         btnUseImage.setFocusPainted(false);
         btnUseImage.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseImage.setName("btnUseImage"); // NOI18N
+        btnUseImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseImageActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 120, 30));
 
         btnUseMap.setIcon(resourceMap.getIcon("btnUseMap.icon")); // NOI18N
         btnUseMap.setText(resourceMap.getString("btnUseMap.text")); // NOI18N
         btnUseMap.setFocusPainted(false);
         btnUseMap.setName("btnUseMap"); // NOI18N
+        btnUseMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseMapActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 120, 30));
 
         btnUseGPX.setIcon(resourceMap.getIcon("btnUseGPX.icon")); // NOI18N
@@ -157,6 +216,11 @@ public class GPSDialog extends JDialog {
         btnUseGPX.setFocusPainted(false);
         btnUseGPX.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnUseGPX.setName("btnUseGPX"); // NOI18N
+        btnUseGPX.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseGPXActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnUseGPX, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 120, 30));
 
         btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
@@ -327,8 +391,8 @@ public class GPSDialog extends JDialog {
             dataObjectWithGPS.setLonDegrees(LatLonConverter.getDegrees(Longitudes.NONE, lonDecimalDegree));
             dataObjectWithGPS.setLatMinutes(LatLonConverter.getMinutes(latDecimalDegree));
             dataObjectWithGPS.setLonMinutes(LatLonConverter.getMinutes(lonDecimalDegree));
-            dataObjectWithGPS.setLatSecondsDouble(LatLonConverter.getSeconds(latDecimalDegree));
-            dataObjectWithGPS.setLonSecondsDouble(LatLonConverter.getSeconds(lonDecimalDegree));
+            dataObjectWithGPS.setLatSeconds(LatLonConverter.getSeconds(latDecimalDegree));
+            dataObjectWithGPS.setLonSeconds(LatLonConverter.getSeconds(lonDecimalDegree));
         }
         else {
             // Use degrees minutes seconds
@@ -336,10 +400,20 @@ public class GPSDialog extends JDialog {
             dataObjectWithGPS.setLonDegrees((int)spnLonDeg.getValue());
             dataObjectWithGPS.setLatMinutes((int)spnLatMin.getValue());
             dataObjectWithGPS.setLonMinutes((int)spnLonMin.getValue());
-            dataObjectWithGPS.setLatSecondsDouble((Double)spnLatSec.getValue());
-            dataObjectWithGPS.setLonSecondsDouble((Double)spnLonSec.getValue());
+            dataObjectWithGPS.setLatSeconds((Double)spnLatSec.getValue());
+            dataObjectWithGPS.setLonSeconds((Double)spnLonSec.getValue());
         }
         selectionMade = true;
+        // Now update the "previous" GPS value
+        app.setPrevLat(dataObjectWithGPS.getLatitude());
+        app.setPrevLatDeg(dataObjectWithGPS.getLatDegrees());
+        app.setPrevLatMin(dataObjectWithGPS.getLatMinutes());
+        app.setPrevLatSec(dataObjectWithGPS.getLatSeconds());
+        app.setPrevLon(dataObjectWithGPS.getLongitude());
+        app.setPrevLonDeg(dataObjectWithGPS.getLonDegrees());
+        app.setPrevLonMin(dataObjectWithGPS.getLonMinutes());
+        app.setPrevLonSec(dataObjectWithGPS.getLonSeconds());
+        // We are done, dispose this dialog
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -392,6 +466,119 @@ public class GPSDialog extends JDialog {
             tglDegMinSec.setSelected(true);
         }
     }//GEN-LAST:event_tglDegMinSecActionPerformed
+
+    private void btnUseGPXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseGPXActionPerformed
+        JFileChooser fileChooser;
+        if (lastFilePath != null && lastFilePath.length() > 0)
+            fileChooser = new JFileChooser(lastFilePath);
+        else
+            fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(true);
+        fileChooser.setFileFilter(new GpxFilter());
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        int result = fileChooser.showOpenDialog(this);
+        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
+            File file = fileChooser.getSelectedFile();
+            lastFilePath = file.getAbsolutePath();
+            doGpxInput(file);
+        }
+    }//GEN-LAST:event_btnUseGPXActionPerformed
+
+    private void btnUsePreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsePreviousActionPerformed
+        DataObjectWithGPS temp = new DataObjectWithGPS() {};
+        temp.setLatitude(app.getPrevLat());
+        temp.setLatDegrees(app.getPrevLatDeg());
+        temp.setLatMinutes(app.getPrevLatMin());
+        temp.setLatSeconds(app.getPrevLatSec());
+        temp.setLongitude(app.getPrevLon());
+        temp.setLonDegrees(app.getPrevLonDeg());
+        temp.setLonMinutes(app.getPrevLonMin());
+        temp.setLonSeconds(app.getPrevLonSec());
+        loadUIValues(temp);
+    }//GEN-LAST:event_btnUsePreviousActionPerformed
+
+    private void btnUseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseImageActionPerformed
+        JFileChooser fileChooser;
+        if (lastFilePath != null && lastFilePath.length() > 0)
+            fileChooser = new JFileChooser(lastFilePath);
+        else
+            fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(true);
+        fileChooser.setFileFilter(new ImageFilter());
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        int result = fileChooser.showOpenDialog(this);
+        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
+            File file = fileChooser.getSelectedFile();
+            lastFilePath = file.getAbsolutePath();
+            doExifInput(file);
+        }
+    }//GEN-LAST:event_btnUseImageActionPerformed
+
+    private void btnUseMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseMapActionPerformed
+        // TODO: Ek sal die deel later moet uitfigure en doen...
+        JOptionPane.showConfirmDialog(this, "TODO", "TODO", JOptionPane.ERROR_MESSAGE);
+    }//GEN-LAST:event_btnUseMapActionPerformed
+
+    private void doGpxInput(File inFile) {
+        String gpxValue = JOptionPane.showInputDialog(this, "Please enter the GPX Waypoint's name:", "Load Coordinates From GPX", JOptionPane.INFORMATION_MESSAGE);
+        if (gpxValue != null) {
+            DataObjectWithGPS temp = new DataObjectWithGPS() {};
+            GpxUtils.populateGPSFromGpxFile(inFile, gpxValue, temp);
+            loadUIValues(temp);
+        }
+    }
+
+    private void doExifInput(File inFile) {
+        try {
+            DataObjectWithGPS tempDO = new DataObjectWithGPS() {};
+            Metadata metadata = JpegMetadataReader.readMetadata(inFile);
+            Iterator<Directory> directories = metadata.getDirectories().iterator();
+            while (directories.hasNext()) {
+                Directory directory = (Directory)directories.next();
+                Collection<Tag> tags = directory.getTags();
+                for (Tag tag : tags) {
+                    try {
+                        if (tag.getTagName().equalsIgnoreCase("GPS Latitude Ref")) {
+                            // Voorbeeld S
+                            tempDO.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
+                        }
+                        else
+                        if (tag.getTagName().equalsIgnoreCase("GPS Longitude Ref")) {
+                            // Voorbeeld E
+                            tempDO.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
+                        }
+                        else
+                        if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
+                            // Voorbeeld -33°44'57.0"
+                            String temp = tag.getDescription();
+                            tempDO.setLatDegrees((int)Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim()));
+                            tempDO.setLatMinutes((int)Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim()));
+                            tempDO.setLatSeconds(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim()));
+                        }
+                        else
+                        if (tag.getTagName().equalsIgnoreCase("GPS Longitude")) {
+                            // Voorbeeld 26°28'7.0"
+                            String temp = tag.getDescription();
+                            tempDO.setLonDegrees((int)Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim()));
+                            tempDO.setLonMinutes((int)Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim()));
+                            tempDO.setLonSeconds(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim()));
+                        }
+                    }
+                    catch (NumberFormatException ex) {
+                        System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
+                    }
+                }
+            }
+            loadUIValues(tempDO);
+        }
+        catch (JpegProcessingException | IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+     }
 
     private void setupDD() {
         // Update UI

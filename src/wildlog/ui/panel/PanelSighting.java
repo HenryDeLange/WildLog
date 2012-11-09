@@ -1158,8 +1158,8 @@ public class PanelSighting extends JPanel {
                 && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !LatLonConverter.NO_GPS_POINT.equals(txtLongitude.getText())) {
             // Sun
             btnUpdateSightingActionPerformed(null);
-            double latitude = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSecondsDouble());
-            double longitude = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSecondsDouble());
+            double latitude = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+            double longitude = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
             cmbTimeOfDay.setSelectedItem(AstroUtils.getSunCategory(setSightingDateFromUIFields(), latitude, longitude));
             // Moon
             spnMoonPhase.setValue(AstroUtils.getMoonPhase(sighting.getDate()));

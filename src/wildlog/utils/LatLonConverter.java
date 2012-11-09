@@ -78,7 +78,7 @@ public final class LatLonConverter {
                         Latitudes.NONE,
                         inDataObjectWithGPS.getLatDegrees(),
                         inDataObjectWithGPS.getLatMinutes(),
-                        inDataObjectWithGPS.getLatSecondsDouble()));
+                        inDataObjectWithGPS.getLatSeconds()));
         }
         else {
             return NO_GPS_POINT;
@@ -92,7 +92,7 @@ public final class LatLonConverter {
                         Longitudes.NONE,
                         inDataObjectWithGPS.getLonDegrees(),
                         inDataObjectWithGPS.getLonMinutes(),
-                        inDataObjectWithGPS.getLonSecondsDouble()));
+                        inDataObjectWithGPS.getLonSeconds()));
         }
         else {
             return NO_GPS_POINT;

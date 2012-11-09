@@ -182,11 +182,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsDouble(results.getDouble("LATSECONDS"));
+                tempLocation.setLatSeconds(results.getDouble("LATSECONDS"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsDouble(results.getDouble("LONSECONDS"));
+                tempLocation.setLonSeconds(results.getDouble("LONSECONDS"));
             }
         }
         catch (SQLException ex) {
@@ -252,11 +252,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getDouble("LATSECONDS"));
+                tempSighting.setLatSeconds(results.getDouble("LATSECONDS"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getDouble("LONSECONDS"));
+                tempSighting.setLonSeconds(results.getDouble("LONSECONDS"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -391,11 +391,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
                 tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSecondsDouble(results.getDouble("LATSECONDS"));
+                tempLocation.setLatSeconds(results.getDouble("LATSECONDS"));
                 tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
                 tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSecondsDouble(results.getDouble("LONSECONDS"));
+                tempLocation.setLonSeconds(results.getDouble("LONSECONDS"));
                 tempList.add(tempLocation);
             }
         }
@@ -481,11 +481,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getDouble("LATSECONDS"));
+                tempSighting.setLatSeconds(results.getDouble("LATSECONDS"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getDouble("LONSECONDS"));
+                tempSighting.setLonSeconds(results.getDouble("LONSECONDS"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -570,11 +570,11 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
                 tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
                 tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSecondsDouble(results.getDouble("LATSECONDS"));
+                tempSighting.setLatSeconds(results.getDouble("LATSECONDS"));
                 tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
                 tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
                 tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSecondsDouble(results.getDouble("LONSECONDS"));
+                tempSighting.setLonSeconds(results.getDouble("LONSECONDS"));
                 tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
                 tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
                 tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
@@ -730,11 +730,11 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(12, DBUtils.stringFromObject(inLocation.getLatitude()));
             state.setInt(13, inLocation.getLatDegrees());
             state.setInt(14, inLocation.getLatMinutes());
-            state.setDouble(15, inLocation.getLatSecondsDouble());
+            state.setDouble(15, inLocation.getLatSeconds());
             state.setString(16, DBUtils.stringFromObject(inLocation.getLongitude()));
             state.setInt(17, inLocation.getLonDegrees());
             state.setInt(18, inLocation.getLonMinutes());
-            state.setDouble(19, inLocation.getLonSecondsDouble());
+            state.setDouble(19, inLocation.getLonSeconds());
             // Execute
             state.executeUpdate();
         }
@@ -863,11 +863,11 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(12, DBUtils.stringFromObject(inSighting.getLatitude()));
             state.setInt(13, inSighting.getLatDegrees());
             state.setInt(14, inSighting.getLatMinutes());
-            state.setDouble(15, inSighting.getLatSecondsDouble());
+            state.setDouble(15, inSighting.getLatSeconds());
             state.setString(16, DBUtils.stringFromObject(inSighting.getLongitude()));
             state.setInt(17, inSighting.getLonDegrees());
             state.setInt(18, inSighting.getLonMinutes());
-            state.setDouble(19, inSighting.getLonSecondsDouble());
+            state.setDouble(19, inSighting.getLonSeconds());
             state.setString(20, DBUtils.stringFromObject(inSighting.getSightingEvidence()));
             state.setInt(21, inSighting.getMoonPhase());
             state.setString(22, DBUtils.stringFromObject(inSighting.getMoonlight()));
