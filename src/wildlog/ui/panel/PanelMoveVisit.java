@@ -66,6 +66,7 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        lstFromLocation.setFocusable(false);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
         lstFromLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -78,6 +79,7 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        lstVisit.setFocusable(false);
         lstVisit.setName("lstVisit"); // NOI18N
         jScrollPane2.setViewportView(lstVisit);
 
@@ -85,6 +87,7 @@ public class PanelMoveVisit extends javax.swing.JPanel {
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
+        lstToLocation.setFocusable(false);
         lstToLocation.setName("lstToLocation"); // NOI18N
         jScrollPane3.setViewportView(lstToLocation);
 
@@ -93,6 +96,7 @@ public class PanelMoveVisit extends javax.swing.JPanel {
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
         btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
+        btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

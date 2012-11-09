@@ -72,6 +72,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
 
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
+        btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConfirmActionPerformed(evt);
@@ -81,6 +82,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        lstReplaceElement.setFocusable(false);
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
 
@@ -88,6 +90,7 @@ public class PanelMergeElements extends javax.swing.JPanel {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        lstKeepElement.setFocusable(false);
         lstKeepElement.setName("lstKeepElement"); // NOI18N
         jScrollPane1.setViewportView(lstKeepElement);
 

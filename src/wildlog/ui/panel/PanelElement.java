@@ -80,13 +80,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             Utils.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+            lblImage.setIcon(Utils.getScaledIconForNoImage(300));
         }
         setupNumberOfImages();
 
         // Setup the table
         tblLocation.getTableHeader().setReorderingAllowed(false);
-        tblLocation.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation));
+        Utils.attachKeyListernerToSelectKeyedRows(tblLocation);
 
         fixSelectAllForSpinners(spnSizeMaleMin);
         fixSelectAllForSpinners(spnSizeMaleMax);
@@ -393,6 +393,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane15.setName("jScrollPane15"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
+        tblLocation.setFocusable(false);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -541,16 +542,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setSelectedItem(element.getType());
+        cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
         elementIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 220, -1));
 
         cmbWaterDependance.setModel(new DefaultComboBoxModel(wildlog.data.enums.WaterDependancy.values()));
         cmbWaterDependance.setSelectedItem(element.getWaterDependance());
+        cmbWaterDependance.setFocusable(false);
         cmbWaterDependance.setName("cmbWaterDependance"); // NOI18N
         elementIncludes.add(cmbWaterDependance, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 172, 220, -1));
 
         cmbActiveTime.setModel(new DefaultComboBoxModel(wildlog.data.enums.ActiveTime.values()));
         cmbActiveTime.setSelectedItem(element.getActiveTime());
+        cmbActiveTime.setFocusable(false);
         cmbActiveTime.setName("cmbActiveTime"); // NOI18N
         elementIncludes.add(cmbActiveTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 148, 220, -1));
 
@@ -580,16 +584,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbWishList.setModel(new DefaultComboBoxModel(wildlog.data.enums.WishRating.values()));
         cmbWishList.setSelectedItem(element.getWishListRating());
+        cmbWishList.setFocusable(false);
         cmbWishList.setName("cmbWishList"); // NOI18N
         elementIncludes.add(cmbWishList, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 124, 150, -1));
 
         cmbAddFrequency.setModel(new DefaultComboBoxModel(wildlog.data.enums.AddFrequency.values()));
         cmbAddFrequency.setSelectedItem(element.getAddFrequency());
+        cmbAddFrequency.setFocusable(false);
         cmbAddFrequency.setName("cmbAddFrequency"); // NOI18N
         elementIncludes.add(cmbAddFrequency, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 124, 220, -1));
 
         cmbEndangeredStatus.setModel(new DefaultComboBoxModel(EndangeredStatus.values()));
         cmbEndangeredStatus.setSelectedItem(element.getEndangeredStatus());
+        cmbEndangeredStatus.setFocusable(false);
         cmbEndangeredStatus.setName("cmbEndangeredStatus"); // NOI18N
         elementIncludes.add(cmbEndangeredStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 197, 220, -1));
 
@@ -599,6 +606,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
+        cmbFeedingClass.setFocusable(false);
         cmbFeedingClass.setName("cmbFeedingClass"); // NOI18N
         elementIncludes.add(cmbFeedingClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 150, -1));
 
@@ -646,6 +654,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbSizeUnits.setModel(new DefaultComboBoxModel(UnitsSize.values()));
         cmbSizeUnits.setSelectedItem(element.getSizeUnit());
+        cmbSizeUnits.setFocusable(false);
         cmbSizeUnits.setName("cmbSizeUnits"); // NOI18N
         elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 510, 70, -1));
 
@@ -655,6 +664,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbWeightUnits.setModel(new DefaultComboBoxModel(UnitsWeight.values()));
         cmbWeightUnits.setSelectedItem(element.getWeightUnit());
+        cmbWeightUnits.setFocusable(false);
         cmbWeightUnits.setName("cmbWeightUnits"); // NOI18N
         elementIncludes.add(cmbWeightUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 530, 70, -1));
 
@@ -734,6 +744,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         rdbLocations.setText(resourceMap.getString("rdbLocations.text")); // NOI18N
         rdbLocations.setToolTipText(resourceMap.getString("rdbLocations.toolTipText")); // NOI18N
         rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLocations.setFocusPainted(false);
         rdbLocations.setName("rdbLocations"); // NOI18N
         elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, 30));
 
@@ -742,6 +753,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         rdbSightings.setText(resourceMap.getString("rdbSightings.text")); // NOI18N
         rdbSightings.setToolTipText(resourceMap.getString("rdbSightings.toolTipText")); // NOI18N
         rdbSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbSightings.setFocusPainted(false);
         rdbSightings.setName("rdbSightings"); // NOI18N
         rdbSightings.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -887,6 +899,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         cmbSizeType.setModel(new DefaultComboBoxModel(SizeType.values()));
         cmbSizeType.setSelectedItem(element.getSizeType());
+        cmbSizeType.setFocusable(false);
         cmbSizeType.setName("cmbSizeType"); // NOI18N
         elementIncludes.add(cmbSizeType, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 110, -1));
 
@@ -1041,7 +1054,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 dialog.setSize(965, 625);
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
                 Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
-                dialog.add(new PanelSighting(sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+                dialog.add(new PanelSighting(sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
                 dialog.setLocationRelativeTo(this);
                 ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
                 dialog.setIconImage(icon.getImage());
@@ -1137,7 +1150,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
+        imageIndex = Utils.removeImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -1150,7 +1163,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, null, null, element, this, true, false), new AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, null, null, element, this, true, false, false), new AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());

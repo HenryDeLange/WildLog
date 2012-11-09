@@ -180,11 +180,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblVisit.getTableHeader().setReorderingAllowed(false);
 
         // Add key listeners to table to allow the selection of rows based on key events.
-        tblLocation.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation));
-        tblLocation_EleTab.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblLocation_EleTab));
-        tblElement.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement));
-        tblElement_LocTab.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement_LocTab));
-        tblVisit.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblVisit));
+        Utils.attachKeyListernerToSelectKeyedRows(tblLocation);
+        Utils.attachKeyListernerToSelectKeyedRows(tblLocation_EleTab);
+        Utils.attachKeyListernerToSelectKeyedRows(tblElement);
+        Utils.attachKeyListernerToSelectKeyedRows(tblElement_LocTab);
+        Utils.attachKeyListernerToSelectKeyedRows(tblVisit);
+        // Add key listener for textfields to auto search the tables
+        Utils.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
 
         // Set the minimum size of the frame
         this.getFrame().setMinimumSize(new Dimension(1024, 705));
@@ -312,16 +314,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation_EleTab = new javax.swing.JTable();
         cmbType = new javax.swing.JComboBox();
         btnGoLocation = new javax.swing.JButton();
-        ckbTypeFilter = new javax.swing.JCheckBox();
         lblImage = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        btnClearSearch = new javax.swing.JButton();
-        lblSearchResults = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
@@ -886,31 +883,31 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
 
         tabLocation.setBackground(resourceMap.getColor("tabLocation.background")); // NOI18N
-        tabLocation.setMaximumSize(new java.awt.Dimension(1000, 630));
-        tabLocation.setMinimumSize(new java.awt.Dimension(1000, 630));
+        tabLocation.setMaximumSize(new java.awt.Dimension(1000, 600));
+        tabLocation.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabLocation.setName("tabLocation"); // NOI18N
-        tabLocation.setPreferredSize(new java.awt.Dimension(1000, 630));
+        tabLocation.setPreferredSize(new java.awt.Dimension(1000, 600));
         tabLocation.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabLocationComponentShown(evt);
             }
         });
-        tabLocation.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
         tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+        tblLocation.setFocusable(false);
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                tblLocationMouseReleased(evt);
-            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocationMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblLocationMouseReleased(evt);
             }
         });
         tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -923,23 +920,20 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane1.setViewportView(tblLocation);
 
-        tabLocation.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 850, 260));
-
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
-        tabLocation.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 280, -1, -1));
 
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        tabLocation.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 280, -1, -1));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+        tblVisit.setFocusable(false);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -954,8 +948,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane2.setViewportView(tblVisit);
 
-        tabLocation.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, 360, 250));
-
         btnGoLocation_LocTab.setBackground(resourceMap.getColor("btnGoLocation_LocTab.background")); // NOI18N
         btnGoLocation_LocTab.setIcon(resourceMap.getIcon("btnGoLocation_LocTab.icon")); // NOI18N
         btnGoLocation_LocTab.setText(resourceMap.getString("btnGoLocation_LocTab.text")); // NOI18N
@@ -968,7 +960,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoLocation_LocTabActionPerformed(evt);
             }
         });
-        tabLocation.add(btnGoLocation_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 130, 80));
 
         btnGoElement_LocTab.setBackground(resourceMap.getColor("btnGoElement_LocTab.background")); // NOI18N
         btnGoElement_LocTab.setIcon(resourceMap.getIcon("btnGoElement_LocTab.icon")); // NOI18N
@@ -982,7 +973,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoElement_LocTabActionPerformed(evt);
             }
         });
-        tabLocation.add(btnGoElement_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 550, 300, 30));
 
         btnAddLocation.setBackground(resourceMap.getColor("btnAddLocation.background")); // NOI18N
         btnAddLocation.setIcon(resourceMap.getIcon("btnAddLocation.icon")); // NOI18N
@@ -996,7 +986,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnAddLocationActionPerformed(evt);
             }
         });
-        tabLocation.add(btnAddLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 130, 30));
 
         btnDeleteLocation.setBackground(resourceMap.getColor("btnDeleteLocation.background")); // NOI18N
         btnDeleteLocation.setIcon(resourceMap.getIcon("btnDeleteLocation.icon")); // NOI18N
@@ -1010,13 +999,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnDeleteLocationActionPerformed(evt);
             }
         });
-        tabLocation.add(btnDeleteLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 130, 30));
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         tblElement_LocTab.setAutoCreateRowSorter(true);
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+        tblElement_LocTab.setFocusable(false);
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
         tblElement_LocTab.setSelectionBackground(resourceMap.getColor("tblElement_LocTab.selectionBackground")); // NOI18N
         tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1031,8 +1020,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane3.setViewportView(tblElement_LocTab);
 
-        tabLocation.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 300, 300, 250));
-
         btnGoVisit_LocTab.setBackground(resourceMap.getColor("btnGoVisit_LocTab.background")); // NOI18N
         btnGoVisit_LocTab.setIcon(resourceMap.getIcon("btnGoVisit_LocTab.icon")); // NOI18N
         btnGoVisit_LocTab.setText(resourceMap.getString("btnGoVisit_LocTab.text")); // NOI18N
@@ -1045,7 +1032,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoVisit_LocTabActionPerformed(evt);
             }
         });
-        tabLocation.add(btnGoVisit_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 550, 360, 30));
 
         lblImage_LocTab.setBackground(resourceMap.getColor("lblImage_LocTab.background")); // NOI18N
         lblImage_LocTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1062,27 +1048,85 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 lblImage_LocTabMouseReleased(evt);
             }
         });
-        tabLocation.add(lblImage_LocTab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
-        tabLocation.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, -1));
+
+        javax.swing.GroupLayout tabLocationLayout = new javax.swing.GroupLayout(tabLocation);
+        tabLocation.setLayout(tabLocationLayout);
+        tabLocationLayout.setHorizontalGroup(
+            tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabLocationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabLocationLayout.createSequentialGroup()
+                        .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGoLocation_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE))
+                    .addGroup(tabLocationLayout.createSequentialGroup()
+                        .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                            .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)
+                        .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        tabLocationLayout.setVerticalGroup(
+            tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabLocationLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabLocationLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(13, 13, 13)
+                        .addComponent(btnGoLocation_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabLocationLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(tabLocationLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
 
         tabbedPanel.addTab(resourceMap.getString("tabLocation.TabConstraints.tabTitle"), tabLocation); // NOI18N
 
         tabElement.setBackground(resourceMap.getColor("tabElement.background")); // NOI18N
-        tabElement.setMaximumSize(new java.awt.Dimension(1000, 630));
-        tabElement.setMinimumSize(new java.awt.Dimension(1000, 630));
+        tabElement.setMaximumSize(new java.awt.Dimension(1000, 600));
+        tabElement.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabElement.setName("tabElement"); // NOI18N
-        tabElement.setPreferredSize(new java.awt.Dimension(1000, 630));
+        tabElement.setPreferredSize(new java.awt.Dimension(1000, 600));
         tabElement.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 tabElementComponentShown(evt);
             }
         });
-        tabElement.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         scrlElement.setName("scrlElement"); // NOI18N
 
@@ -1090,6 +1134,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
         tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
+        tblElement.setFocusable(false);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1110,12 +1155,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         scrlElement.setViewportView(tblElement);
 
-        tabElement.add(scrlElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 10, 850, 260));
-
         jLabel6.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
-        tabElement.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 280, -1, -1));
 
         btnGoElement.setBackground(resourceMap.getColor("btnGoElement.background")); // NOI18N
         btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
@@ -1129,7 +1171,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoElementActionPerformed(evt);
             }
         });
-        tabElement.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 130, 80));
 
         btnAddElement.setBackground(resourceMap.getColor("btnAddElement.background")); // NOI18N
         btnAddElement.setIcon(resourceMap.getIcon("btnAddElement.icon")); // NOI18N
@@ -1143,7 +1184,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnAddElementActionPerformed(evt);
             }
         });
-        tabElement.add(btnAddElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 130, 30));
 
         btnDeleteElement.setBackground(resourceMap.getColor("btnDeleteElement.background")); // NOI18N
         btnDeleteElement.setIcon(resourceMap.getIcon("btnDeleteElement.icon")); // NOI18N
@@ -1157,13 +1197,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnDeleteElementActionPerformed(evt);
             }
         });
-        tabElement.add(btnDeleteElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 130, 30));
 
         jScrollPane6.setName("jScrollPane6"); // NOI18N
 
         tblLocation_EleTab.setAutoCreateRowSorter(true);
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+        tblLocation_EleTab.setFocusable(false);
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
         tblLocation_EleTab.setSelectionBackground(resourceMap.getColor("tblLocation_EleTab.selectionBackground")); // NOI18N
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1178,8 +1218,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane6.setViewportView(tblLocation_EleTab);
 
-        tabElement.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 330, 250));
-
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -1190,7 +1228,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 cmbTypeActionPerformed(evt);
             }
         });
-        tabElement.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 330, 150, -1));
 
         btnGoLocation.setBackground(resourceMap.getColor("btnGoLocation.background")); // NOI18N
         btnGoLocation.setIcon(resourceMap.getIcon("btnGoLocation.icon")); // NOI18N
@@ -1204,18 +1241,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 btnGoLocationActionPerformed(evt);
             }
         });
-        tabElement.add(btnGoLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 550, 330, 30));
-
-        ckbTypeFilter.setBackground(resourceMap.getColor("ckbTypeFilter.background")); // NOI18N
-        ckbTypeFilter.setText(resourceMap.getString("ckbTypeFilter.text")); // NOI18N
-        ckbTypeFilter.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        ckbTypeFilter.setName("ckbTypeFilter"); // NOI18N
-        ckbTypeFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ckbTypeFilterActionPerformed(evt);
-            }
-        });
-        tabElement.add(ckbTypeFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 330, -1, -1));
 
         lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -1232,71 +1257,88 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 lblImageMouseReleased(evt);
             }
         });
-        tabElement.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         jLabel9.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
-        tabElement.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
-        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtSearchKeyPressed(evt);
-            }
-        });
-        tabElement.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, 310, -1));
-
-        btnSearch.setBackground(resourceMap.getColor("btnSearch.background")); // NOI18N
-        btnSearch.setIcon(resourceMap.getIcon("btnSearch.icon")); // NOI18N
-        btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
-        btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
-        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSearch.setFocusPainted(false);
-        btnSearch.setName("btnSearch"); // NOI18N
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSearchActionPerformed(evt);
-            }
-        });
-        tabElement.add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, 150, 30));
 
         jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
         jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
         jLabel14.setName("jLabel14"); // NOI18N
-        tabElement.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 310, 280, -1));
-
-        jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
-        jLabel8.setName("jLabel8"); // NOI18N
-        tabElement.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(324, 280, 340, -1));
 
         jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
-        tabElement.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, 340, 10));
 
-        btnClearSearch.setBackground(resourceMap.getColor("btnClearSearch.background")); // NOI18N
-        btnClearSearch.setIcon(resourceMap.getIcon("btnClearSearch.icon")); // NOI18N
-        btnClearSearch.setText(resourceMap.getString("btnClearSearch.text")); // NOI18N
-        btnClearSearch.setToolTipText(resourceMap.getString("btnClearSearch.toolTipText")); // NOI18N
-        btnClearSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnClearSearch.setFocusPainted(false);
-        btnClearSearch.setName("btnClearSearch"); // NOI18N
-        btnClearSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnClearSearchActionPerformed(evt);
-            }
-        });
-        tabElement.add(btnClearSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 400, 150, 30));
-
-        lblSearchResults.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSearchResults.setText(resourceMap.getString("lblSearchResults.text")); // NOI18N
-        lblSearchResults.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblSearchResults.border.lineColor"))); // NOI18N
-        lblSearchResults.setName("lblSearchResults"); // NOI18N
-        tabElement.add(lblSearchResults, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 120, 20));
+        javax.swing.GroupLayout tabElementLayout = new javax.swing.GroupLayout(tabElement);
+        tabElement.setLayout(tabElementLayout);
+        tabElementLayout.setHorizontalGroup(
+            tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tabElementLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabElementLayout.createSequentialGroup()
+                        .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE))
+                    .addGroup(tabElementLayout.createSequentialGroup()
+                        .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(tabElementLayout.createSequentialGroup()
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabElementLayout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)))
+                        .addGap(10, 10, 10)
+                        .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE)
+                            .addComponent(jLabel6)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 325, Short.MAX_VALUE))
+                        .addGap(12, 12, 12)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        tabElementLayout.setVerticalGroup(
+            tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabElementLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(tabElementLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(13, 13, 13)
+                        .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnAddElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20)
+                        .addComponent(btnDeleteElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(tabElementLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(5, 5, 5)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                        .addGap(4, 4, 4)
+                        .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(tabElementLayout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(5, 5, 5)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
 
         tabbedPanel.addTab(resourceMap.getString("tabElement.TabConstraints.tabTitle"), tabElement); // NOI18N
 
@@ -1547,8 +1589,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
-        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
-        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
+        lblImage.setIcon(Utils.getScaledIconForNoImage(300));
+//        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
 }//GEN-LAST:event_tabElementComponentShown
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
@@ -1575,7 +1617,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilTableGenerator.setupCompleteLocationTable(tblLocation, searchLocation);
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
-        lblImage_LocTab.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+        lblImage_LocTab.setIcon(Utils.getScaledIconForNoImage(300));
     }//GEN-LAST:event_tabLocationComponentShown
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
@@ -1587,25 +1629,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
 
-    private void ckbTypeFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckbTypeFilterActionPerformed
-        searchElement = new Element();
-        if (!cmbType.isEnabled())
-            searchElement.setType((ElementType)cmbType.getSelectedItem());
-        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
-        cmbType.setEnabled(!cmbType.isEnabled());
-        txtSearch.setText("");
-        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
-        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
-        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
-    }//GEN-LAST:event_ckbTypeFilterActionPerformed
-
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element((ElementType)cmbType.getSelectedItem());
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         txtSearch.setText("");
         UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
-        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
-        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
+        lblImage.setIcon(Utils.getScaledIconForNoImage(300));
+//        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
@@ -1655,12 +1685,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             if (fotos.size() > 0)
                 Utils.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, 300, app);
             else
-                lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+                lblImage.setIcon(Utils.getScaledIconForNoImage(300));
             // Get Locations
             UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, tempElement);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+            lblImage.setIcon(Utils.getScaledIconForNoImage(300));
             tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         }
     }//GEN-LAST:event_tblElementMouseReleased
@@ -1673,33 +1703,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             if (fotos.size() > 0)
                 Utils.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, 300, app);
             else
-                lblImage_LocTab.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+                lblImage_LocTab.setIcon(Utils.getScaledIconForNoImage(300));
             // Get Visits
             UtilTableGenerator.setupShortVisitTable(tblVisit, tempLocation);
             // Get All Elements seen
             UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, tempLocation);
         }
         else {
-            lblImage_LocTab.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+            lblImage_LocTab.setIcon(Utils.getScaledIconForNoImage(300));
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
             tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         }
     }//GEN-LAST:event_tblLocationMouseReleased
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        searchElement = new Element();
-        if (ckbTypeFilter.isSelected())
-            searchElement.setType((ElementType)cmbType.getSelectedItem());
-        if (txtSearch.getText() != null) {
-            if (txtSearch.getText().length() > 0)
-                searchElement.setPrimaryName(txtSearch.getText());
-        }
-        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
-        // Reset the Image and Location table
-        lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
-        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
-        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
-    }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
         lblLocations.setText("Locations: " + app.getDBI().list(new Location()).size());
@@ -1745,15 +1760,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             ex.printStackTrace(System.err);
         }
     }//GEN-LAST:event_tabFotoComponentShown
-
-    private void btnClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSearchActionPerformed
-        ckbTypeFilter.setSelected(false);
-        txtSearch.setText("");
-        cmbType.setEnabled(false);
-        searchElement = new Element();
-        // Reset everything
-        tabElementComponentShown(null);
-    }//GEN-LAST:event_btnClearSearchActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
@@ -1974,9 +1980,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 dialog.setLayout(new AbsoluteLayout());
                 dialog.setSize(965, 625);
                 dialog.add(new PanelSighting(
-                        tempSighting, app.getDBI().find(new Location(tempSighting.getLocationName())),
-                        app.getDBI().find(new Visit(tempSighting.getVisitName())), app.getDBI().find(new Element(tempSighting.getElementName())),
-                        this, false, false),
+                        tempSighting,
+                        app.getDBI().find(new Location(tempSighting.getLocationName())),
+                        app.getDBI().find(new Visit(tempSighting.getVisitName())),
+                        app.getDBI().find(new Element(tempSighting.getElementName())),
+                        this,
+                        false,
+                        false,
+                        false),
                         new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
                 dialog.setLocationRelativeTo(this.getComponent());
                 ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
@@ -2084,11 +2095,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void btnRefreshDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshDatesActionPerformed
         rdbBrowseDateItemStateChanged(null);
     }//GEN-LAST:event_btnRefreshDatesActionPerformed
-
-    private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-            btnSearchActionPerformed(null);
-    }//GEN-LAST:event_txtSearchKeyPressed
 
     private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
         if (evt.getClickCount() == 2) {
@@ -2850,7 +2856,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnAddLocation;
     private javax.swing.JButton btnBrowseNext;
     private javax.swing.JButton btnBrowsePrev;
-    private javax.swing.JButton btnClearSearch;
     private javax.swing.JButton btnDefault;
     private javax.swing.JButton btnDeleteElement;
     private javax.swing.JButton btnDeleteLocation;
@@ -2863,7 +2868,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnRotate;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnViewEXIF;
     private javax.swing.JButton btnViewImage;
     private javax.swing.JButton btnZoomIn;
@@ -2873,7 +2877,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem calcSunMoonMenuItem;
     private javax.swing.JCheckBox chkElementTypeBrowseTab;
     private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
-    private javax.swing.JCheckBox ckbTypeFilter;
     private javax.swing.JComboBox cmbElementTypesBrowseTab;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JMenuItem csvExportMenuItem;
@@ -2896,7 +2899,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
@@ -2918,7 +2920,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel lblImage_LocTab;
     private javax.swing.JLabel lblLocations;
     private javax.swing.JLabel lblNumberOfImages;
-    private javax.swing.JLabel lblSearchResults;
     private javax.swing.JLabel lblSightings;
     private javax.swing.JLabel lblVisits;
     private javax.swing.JLabel lblWorkspace;

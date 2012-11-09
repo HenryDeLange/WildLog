@@ -273,6 +273,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         chkShowInactiveTimes.setBackground(resourceMap.getColor("chkShowInactiveTimes.background")); // NOI18N
         chkShowInactiveTimes.setText(resourceMap.getString("chkShowInactiveTimes.text")); // NOI18N
+        chkShowInactiveTimes.setFocusable(false);
         chkShowInactiveTimes.setName("chkShowInactiveTimes"); // NOI18N
         pnlTop.add(chkShowInactiveTimes, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
 
@@ -335,6 +336,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstLocation.setFocusable(false);
         lstLocation.setName("lstLocation"); // NOI18N
         lstLocation.setSelectionBackground(resourceMap.getColor("lstLocation.selectionBackground")); // NOI18N
         lstLocation.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -356,6 +358,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders.setBackground(resourceMap.getColor("chkIncludeSubfolders.background")); // NOI18N
         chkIncludeSubfolders.setSelected(true);
         chkIncludeSubfolders.setText(resourceMap.getString("chkIncludeSubfolders.text")); // NOI18N
+        chkIncludeSubfolders.setFocusable(false);
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
         pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
 
@@ -367,6 +370,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         cmbVisitType.setBackground(resourceMap.getColor("cmbVisitType.background")); // NOI18N
         cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.values()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
+        cmbVisitType.setFocusable(false);
         cmbVisitType.setName("cmbVisitType"); // NOI18N
         pnlTop.add(cmbVisitType, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 120, -1));
 
@@ -422,11 +426,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 Utils.setupFoto("LOCATION-" + selectedName, imageIndex, lblLocationImage, 100, app);
             }
             else {
-                lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
+                lblLocationImage.setIcon(Utils.getScaledIconForNoImage(100));
             }
         }
         else {
-            lblLocationImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 100));
+            lblLocationImage.setIcon(Utils.getScaledIconForNoImage(100));
         }
     }//GEN-LAST:event_lstLocationValueChanged
 
@@ -511,9 +515,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // FIXME: Clean/refactor up this (and related sighting saving) code to be "robust" and re-useable...
                                 BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(counter, 0);
                                 // Check wether the Creature exists or not
-                                if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
-                                    synchronized (saveElementLock) {
-                                        app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
+                                synchronized (saveElementLock) {
+                                    if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
+                                            app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
                                     }
                                 }
                                 // Continue processing the Sighting

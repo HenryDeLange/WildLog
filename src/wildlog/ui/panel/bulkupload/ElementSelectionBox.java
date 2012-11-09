@@ -74,6 +74,7 @@ public class ElementSelectionBox extends JDialog {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstElements.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstElements.setFocusable(false);
         lstElements.setName("lstElements"); // NOI18N
         lstElements.setSelectionBackground(resourceMap.getColor("lstElements.selectionBackground")); // NOI18N
         lstElements.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -108,8 +109,9 @@ public class ElementSelectionBox extends JDialog {
         jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 150, 150));
 
         btnSelect.setBackground(resourceMap.getColor("btnSelect.background")); // NOI18N
-        btnSelect.setText(resourceMap.getString("btnSelect.text")); // NOI18N
+        btnSelect.setIcon(resourceMap.getIcon("btnSelect.icon")); // NOI18N
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSelect.setFocusPainted(false);
         btnSelect.setName("btnSelect"); // NOI18N
         btnSelect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -155,7 +157,7 @@ public class ElementSelectionBox extends JDialog {
             Utils.setupFoto("ELEMENT-" + selectedName, 0, lblElementImage, 150, app);
         }
         else {
-            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+            lblElementImage.setIcon(Utils.getScaledIconForNoImage(150));
         }
     }//GEN-LAST:event_lstElementsValueChanged
 

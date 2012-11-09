@@ -69,15 +69,15 @@ public class PanelLocation extends PanelCanSetupHeader {
             Utils.setupFoto("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+            lblImage.setIcon(Utils.getScaledIconForNoImage(300));
         }
         setupNumberOfImages();
 
         // Setup the tables
         tblElement.getTableHeader().setReorderingAllowed(false);
-        tblElement.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblElement));
+        Utils.attachKeyListernerToSelectKeyedRows(tblElement);
         tblVisit.getTableHeader().setReorderingAllowed(false);
-        tblVisit.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblVisit));
+        Utils.attachKeyListernerToSelectKeyedRows(tblVisit);
 
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
@@ -280,6 +280,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbRating.setModel(new DefaultComboBoxModel(LocationRating.values()));
         cmbRating.setSelectedItem(locationWL.getRating());
+        cmbRating.setFocusable(false);
         cmbRating.setName("cmbRating"); // NOI18N
         locationIncludes.add(cmbRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 52, 160, -1));
 
@@ -290,13 +291,14 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbGameRating.setModel(new DefaultComboBoxModel(GameViewRating.values()));
         cmbGameRating.setSelectedItem(locationWL.getGameViewingRating());
+        cmbGameRating.setFocusable(false);
         cmbGameRating.setName("cmbGameRating"); // NOI18N
         locationIncludes.add(cmbGameRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 76, 160, -1));
 
         jScrollPane10.setName("jScrollPane10"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(locationWL.getDescription());
@@ -330,6 +332,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstAccommodationType.setModel(new DefaultComboBoxModel(AccommodationType.values()));
+        lstAccommodationType.setFocusable(false);
         lstAccommodationType.setName("lstAccommodationType"); // NOI18N
         lstAccommodationType.setSelectedIndices(selectedAccommodationTypes());
         lstAccommodationType.setSelectionBackground(resourceMap.getColor("lstAccommodationType.selectionBackground")); // NOI18N
@@ -345,6 +348,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         cmbCatering.setModel(new DefaultComboBoxModel(CateringType.values()));
         cmbCatering.setSelectedItem(locationWL.getCatering());
+        cmbCatering.setFocusable(false);
         cmbCatering.setName("cmbCatering"); // NOI18N
         locationIncludes.add(cmbCatering, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 272, 240, -1));
 
@@ -368,6 +372,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
+        tblVisit.setFocusable(false);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -393,6 +398,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
+        tblElement.setFocusable(false);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -655,6 +661,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbLocation.setText(resourceMap.getString("rdbLocation.text")); // NOI18N
         rdbLocation.setToolTipText(resourceMap.getString("rdbLocation.toolTipText")); // NOI18N
         rdbLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbLocation.setFocusPainted(false);
         rdbLocation.setName("rdbLocation"); // NOI18N
         rdbLocation.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -668,6 +675,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbVisit.setText(resourceMap.getString("rdbVisit.text")); // NOI18N
         rdbVisit.setToolTipText(resourceMap.getString("rdbVisit.toolTipText")); // NOI18N
         rdbVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbVisit.setFocusPainted(false);
         rdbVisit.setName("rdbVisit"); // NOI18N
         locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, 30));
 
@@ -783,18 +791,15 @@ public class PanelLocation extends PanelCanSetupHeader {
                 String oldName = locationWL.getName();
                 locationWL.setName(DBUtils.limitLength(txtName.getText(), 100));
                 locationWL.setDescription(txtDescription.getText());
-                // TODO: Remove the province from DB, etc.
-//                locationWL.setProvince((Province)cmbProvince.getSelectedItem());
                 locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
                 locationWL.setCatering((CateringType)cmbCatering.getSelectedItem());
-                // TODO: Change habitat to a text field instead...
-//                locationWL.setHabitatType((Habitat)cmbHabitat.getSelectedItem());
                 locationWL.setGameViewingRating((GameViewRating)cmbGameRating.getSelectedItem());
                 locationWL.setContactNumbers(txtContactNumber.getText());
                 locationWL.setEmail(txtEmail.getText());
                 locationWL.setWebsite(txtWebsite.getText());
                 locationWL.setDirections(txtDirections.getText());
                 locationWL.setAccommodationType(lstAccommodationType.getSelectedValuesList());
+                // NOTE: The GPS info is already set on the Location object by the GPS popup component
 
                 // Save the location
                 if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {
@@ -947,7 +952,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
+        imageIndex = Utils.removeImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -1135,6 +1140,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             txtLatitude.setText(LatLonConverter.getLatitudeString(locationWL));
             txtLongitude.setText(LatLonConverter.getLongitudeString(locationWL));
         }
+        btnUpdate.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed
 
     private void setupNumberOfImages() {

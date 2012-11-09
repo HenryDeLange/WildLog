@@ -12,9 +12,12 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
+import wildlog.data.enums.Sex;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 import wildlog.utils.LatLonConverter;
@@ -35,6 +38,11 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     private String visitName;
     private int moonPhase = -1;
     private Moonlight moonlight;
+    private Sex sex;
+    private LifeStatus lifeStatus;
+    private String tag; // For individual's names, etc.
+    private double temperature;
+    private UnitsTemperature unitsTemperature;
 
     // CONSTRUCTORS:
     public Sighting() {
@@ -248,7 +256,7 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     }
 
 
-    // GETTERS:
+    // GETTERS and SETTERS:
     public Date getDate() {
         return date;
     }
@@ -286,7 +294,6 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         return sightingCounter;
     }
 
-    // SETTERS:
     public void setDate(Date inDate) {
         date = inDate;
     }
@@ -361,6 +368,46 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
 
     public void setMoonlight(Moonlight inMoonlight) {
         moonlight = inMoonlight;
+    }
+
+    public LifeStatus getLifeStatus() {
+        return lifeStatus;
+    }
+
+    public void setLifeStatus(LifeStatus inLifeStatus) {
+        lifeStatus = inLifeStatus;
+    }
+
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex inSex) {
+        sex = inSex;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String inTag) {
+        tag = inTag;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double inTemperature) {
+        temperature = inTemperature;
+    }
+
+    public UnitsTemperature getUnitsTemperature() {
+        return unitsTemperature;
+    }
+
+    public void setUnitsTemperature(UnitsTemperature inUnitsTemperature) {
+        unitsTemperature = inUnitsTemperature;
     }
 
 }

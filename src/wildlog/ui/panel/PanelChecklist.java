@@ -84,6 +84,7 @@ public class PanelChecklist extends javax.swing.JPanel {
 
         lstFromCreatures.setFont(resourceMap.getFont("lstFromCreatures.font")); // NOI18N
         lstFromCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstFromCreatures.setFocusable(false);
         lstFromCreatures.setName("lstFromCreatures"); // NOI18N
         lstFromCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -103,6 +104,7 @@ public class PanelChecklist extends javax.swing.JPanel {
 
         lstSightedCreatures.setFont(resourceMap.getFont("lstSightedCreatures.font")); // NOI18N
         lstSightedCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        lstSightedCreatures.setFocusable(false);
         lstSightedCreatures.setName("lstSightedCreatures"); // NOI18N
         lstSightedCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -122,6 +124,7 @@ public class PanelChecklist extends javax.swing.JPanel {
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
         btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
+        btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,6 +140,7 @@ public class PanelChecklist extends javax.swing.JPanel {
 
         chkElementType.setText(resourceMap.getString("chkElementType.text")); // NOI18N
         chkElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkElementType.setFocusPainted(false);
         chkElementType.setName("chkElementType"); // NOI18N
         chkElementType.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -154,6 +158,7 @@ public class PanelChecklist extends javax.swing.JPanel {
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setEnabled(false);
+        cmbElementType.setFocusable(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
         cmbElementType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,6 +180,7 @@ public class PanelChecklist extends javax.swing.JPanel {
         btnSearch.setText(resourceMap.getString("btnSearch.text")); // NOI18N
         btnSearch.setToolTipText(resourceMap.getString("btnSearch.toolTipText")); // NOI18N
         btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSearch.setFocusPainted(false);
         btnSearch.setName("btnSearch"); // NOI18N
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

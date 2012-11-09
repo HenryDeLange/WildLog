@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -40,6 +39,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -67,7 +67,6 @@ import org.jdesktop.application.TaskService;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
-import wildlog.data.dbi.DBI;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.utils.FilePaths;
 import wildlog.utils.jpegmovie.JpgToMovie;
@@ -198,49 +197,57 @@ public final class Utils {
         return 0;
     }
 
-    public static void performFileUpload(String inID, String inFolderName, File[] inFiles, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static void performFileUpload(final String inID, final String inFolderName, final File[] inFiles, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
+        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
         for (int t = 0; t < inFiles.length; t++) {
-            File fromFile = inFiles[t];
-            if (fromFile != null && fromFile.isFile()) {
-                lastFilePath = fromFile.getPath();
-                // Is an image
-                if (new ImageFilter().accept(fromFile)) {
-                    // Get the thumbnail first
-                    // Make the folder
-                    new File(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath() + inFolderName).mkdirs();
-                    // Setup the output files
-                    File toFile_Thumbnail = new File(FilePaths.concatPaths(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), inFolderName, fromFile.getName()));
-                    // Check that the filename is unique
-                    while (toFile_Thumbnail.exists()) {
-                        toFile_Thumbnail = new File(FilePaths.concatPaths(toFile_Thumbnail.getParent(), "wl_" + toFile_Thumbnail.getName()));
+            final File fromFile = inFiles[t];
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    if (fromFile != null && fromFile.isFile()) {
+                        lastFilePath = fromFile.getPath();
+                        // Is an image
+                        if (new ImageFilter().accept(fromFile)) {
+                            // Get the thumbnail first
+                            // Make the folder
+                            new File(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath() + inFolderName).mkdirs();
+                            // Setup the output files
+                            File toFile_Thumbnail = new File(FilePaths.concatPaths(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), inFolderName, fromFile.getName()));
+                            // Check that the filename is unique
+                            while (toFile_Thumbnail.exists()) {
+                                toFile_Thumbnail = new File(FilePaths.concatPaths(toFile_Thumbnail.getParent(), "wl_" + toFile_Thumbnail.getName()));
+                            }
+                            // Resize the file and then save the thumbnail to into WildLog's folders
+                            ImageIcon thumbnail = getScaledIcon(fromFile, THUMBNAIL_SIZE);
+                            try {
+                                BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = bufferedImage.createGraphics();
+                                graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
+                                ImageIO.write(bufferedImage, "jpg", toFile_Thumbnail);
+                                graphics2D.dispose();
+                            }
+                            catch (IOException ex) {
+                                ex.printStackTrace(System.err);
+                            }
+                            saveOriginalFile(FilePaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID, toFile_Thumbnail.getAbsolutePath());
+                        }
+                        else
+                        // Is a movie
+                        if (new MovieFilter().accept(fromFile)) {
+                            saveOriginalFile(FilePaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID, null);
+                        }
+                        else {
+                            saveOriginalFile(FilePaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID, null);
+                        }
                     }
-                    // Resize the file and then save the thumbnail to into WildLog's folders
-                    ImageIcon thumbnail = getScaledIcon(fromFile, THUMBNAIL_SIZE);
-                    try {
-                        BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-                        Graphics2D graphics2D = bufferedImage.createGraphics();
-                        graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
-                        ImageIO.write(bufferedImage, "jpg", toFile_Thumbnail);
-                        graphics2D.dispose();
-                    }
-                    catch (IOException ex) {
-                        ex.printStackTrace(System.err);
-                    }
-                    saveOriginalFile(FilePaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID, toFile_Thumbnail.getAbsolutePath(), inImageLabel, inSize);
                 }
-                else
-                // Is a movie
-                if (new MovieFilter().accept(fromFile)) {
-                    saveOriginalFile(FilePaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID, null, inImageLabel, inSize);
-                }
-                else {
-                    saveOriginalFile(FilePaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID, null, inImageLabel, inSize);
-                }
-            }
+            });
         }
+        tryAndWaitToShutdownExecutorService(executorService);
+        setupFoto(inID, 0, inImageLabel, inSize, inApp);
     }
 
-    private static void saveOriginalFile(FilePaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID, String inThumbnailPath, JLabel inImageLabel, int inSize) {
+    private static void saveOriginalFile(FilePaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID, String inThumbnailPath) {
         // Make the folder
         new File(inFilePaths.getFullPath() + inFolderName).mkdirs();
         // Setup the output files
@@ -263,7 +270,6 @@ public final class Utils {
                         stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
                         inFileType)
                 , false);
-        setupFoto(inID, 0, inImageLabel, inSize, inApp);
     }
 
     // Methods for the buttons on the panels that work with the images
@@ -308,21 +314,21 @@ public final class Utils {
         return inImageIndex;
     }
 
-    public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, DBI inDBI, URL inDefaultImageURL, int inSize, WildLogApp inApp) {
+    public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
             WildLogFile tempFoto = fotos.get(inImageIndex);
-            inDBI.delete(tempFoto);
+            inApp.getDBI().delete(tempFoto);
             if (fotos.size() > 1) {
                 inImageIndex--;
                 inImageIndex = nextImage(inID, inImageIndex, inImageLabel, inSize, inApp);
             }
             else {
-                inImageLabel.setIcon(Utils.getScaledIcon(inDefaultImageURL.getPath(), inSize));
+                inImageLabel.setIcon(Utils.getScaledIconForNoImage(inSize));
             }
         }
         else {
-            inImageLabel.setIcon(Utils.getScaledIcon(inDefaultImageURL.getPath(), inSize));
+            inImageLabel.setIcon(Utils.getScaledIconForNoImage(inSize));
         }
         return inImageIndex;
     }
@@ -343,12 +349,12 @@ public final class Utils {
                     inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
                 }
                 else {
-                    inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/NoImage.gif"), inSize));
+                    inImageLabel.setIcon(getScaledIconForNoImage(inSize));
                     inImageLabel.setToolTipText("");
                 }
             }
             else {
-                inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/NoImage.gif"), inSize));
+                inImageLabel.setIcon(getScaledIconForNoImage(inSize));
                 inImageLabel.setToolTipText("");
             }
         }
@@ -707,10 +713,8 @@ public final class Utils {
         });
     }
 
-    // TODO: Kyk dalk om eerder die sorter te gebruik vir alle tables met search boxes...
-    public static KeyListener getKeyListernerToFilterTableRows(final JTextComponent inTxtSearch, final JTable inTable) {
-//        txtSearchField.addKeyListener(new KeyAdapter() {
-        return new KeyAdapter() {
+    public static void attachKeyListernerToFilterTableRows(final JTextComponent inTxtSearch, final JTable inTable) {
+        inTxtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent inEvent) {
                 if (inEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
@@ -727,19 +731,13 @@ public final class Utils {
                 //sorter.setRowFilter(RowFilter.regexFilter(Pattern.compile(txtSearchField.getText(), Pattern.CASE_INSENSITIVE).toString()));
                 inTable.setRowSorter(sorter);
             }
-        };
+        });
     }
 
-    public static KeyListener getKeyListernerToSelectKeyedRows(final JTable inTable) {
-//        table.addKeyListener(new KeyAdapter() {
-        return new KeyAdapter() {
+    public static void attachKeyListernerToSelectKeyedRows(final JTable inTable) {
+        inTable.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent inEvent) {
-//                if (e.getKeyChar() == KeyEvent.VK_ENTER) {
-//                    // Consume the event to prevent the default behavior of moving the cursor.
-//                    e.consume();
-//                }
-//                else
                 if ((inEvent.getKeyChar() >= 'A' && inEvent.getKeyChar() <= 'z') || (inEvent.getKeyChar() >= '0' && inEvent.getKeyChar() <= '9')) {
                     int select = -1;
                     for (int t = 0; t < inTable.getRowSorter().getViewRowCount(); t++) {
@@ -760,14 +758,6 @@ public final class Utils {
                     if (select >= 0) {
                         inTable.getSelectionModel().setSelectionInterval(select, select);
                         inTable.scrollRectToVisible(inTable.getCellRect(select, 0, true));
-//                        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-//                                new KeyEvent(
-//                                        inTable,
-//                                        KeyEvent.KEY_PRESSED,
-//                                        new Date().getTime(),
-//                                        0,
-//                                        KeyEvent.VK_ENTER,
-//                                        (char)KeyEvent.VK_ENTER));
                         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
                                 new MouseEvent(
                                         inTable,
@@ -781,7 +771,7 @@ public final class Utils {
                     }
                 }
             }
-        };
+        });
     }
 
 }

@@ -81,14 +81,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         }
         else {
-            lblImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 300));
+            lblImage.setIcon(Utils.getScaledIconForNoImage(300));
             lblNumberOfImages.setText("0 of 0");
         }
         imageSightingIndex = 0;
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         // Setup the table
         tblSightings.getTableHeader().setReorderingAllowed(false);
-        tblSightings.addKeyListener(Utils.getKeyListernerToSelectKeyedRows(tblSightings));
+        Utils.attachKeyListernerToSelectKeyedRows(tblSightings);
 
         // setup the file dropping
         FileDrop.SetupFileDrop(lblImage, false, new FileDrop.Listener() {
@@ -183,10 +183,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 if (fotos.size() > 0)
                     Utils.setupFoto("ELEMENT-" + temp.getPrimaryName(), 0, lblElementImage, 150, app);
                 else
-                    lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+                    lblElementImage.setIcon(Utils.getScaledIconForNoImage(150));
             }
             else {
-                lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+                lblElementImage.setIcon(Utils.getScaledIconForNoImage(150));
             }
             imageSightingIndex = 0;
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
@@ -194,13 +194,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 Utils.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageSightingIndex, lblSightingImage, 150, app);
             }
             else {
-                lblSightingImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+                lblSightingImage.setIcon(Utils.getScaledIconForNoImage(150));
             }
             setupNumberOfSightingImages();
         }
         else {
-            lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
-            lblSightingImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+            lblElementImage.setIcon(Utils.getScaledIconForNoImage(150));
+            lblSightingImage.setIcon(Utils.getScaledIconForNoImage(150));
             lblNumberOfSightingImages.setText("");
         }
     }
@@ -349,6 +349,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         cmbType.setBackground(resourceMap.getColor("cmbType.background")); // NOI18N
         cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
         cmbType.setSelectedItem(visit.getType());
+        cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
         visitIncludes.add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 130, -1));
 
@@ -367,6 +368,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         cmbGameWatchIntensity.setBackground(resourceMap.getColor("cmbGameWatchIntensity.background")); // NOI18N
         cmbGameWatchIntensity.setModel(new DefaultComboBoxModel(GameWatchIntensity.values()));
         cmbGameWatchIntensity.setSelectedItem(visit.getGameWatchingIntensity());
+        cmbGameWatchIntensity.setFocusable(false);
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
         visitIncludes.add(cmbGameWatchIntensity, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 52, 130, -1));
 
@@ -422,6 +424,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         tblSightings.setAutoCreateRowSorter(true);
         tblSightings.setFont(resourceMap.getFont("tblSightings.font")); // NOI18N
+        tblSightings.setFocusable(false);
         tblSightings.setName("tblSightings"); // NOI18N
         tblSightings.setSelectionBackground(resourceMap.getColor("tblSightings.selectionBackground")); // NOI18N
         tblSightings.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -828,8 +831,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        lblSightingImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
-        lblElementImage.setIcon(Utils.getScaledIcon(app.getClass().getResource("resources/images/NoImage.gif"), 150));
+        lblSightingImage.setIcon(Utils.getScaledIconForNoImage(150));
+        lblElementImage.setIcon(Utils.getScaledIconForNoImage(150));
         if (visit.getName() != null) {
             UtilTableGenerator.setupCompleteSightingTable(tblSightings, visit);
             Sighting tempSighting = new Sighting();
@@ -896,7 +899,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, locationForVisit, visit, null, this, true, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, locationForVisit, visit, null, this, true, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());
@@ -923,7 +926,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
             dialog.setLayout(new AbsoluteLayout());
             dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+            dialog.add(new PanelSighting(sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
             dialog.setLocationRelativeTo(this);
             ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
             dialog.setIconImage(icon.getImage());
@@ -1008,7 +1011,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnMapSightingActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = Utils.removeImage("VISIT-" + visit.getName(), imageIndex, lblImage, app.getDBI(), app.getClass().getResource("resources/images/NoImage.gif"), 300, app);
+        imageIndex = Utils.removeImage("VISIT-" + visit.getName(), imageIndex, lblImage, 300, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed

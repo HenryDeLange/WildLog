@@ -1,8 +1,8 @@
 package wildlog.data.enums;
 
 public enum UnitsTemperature {
-    FAHRENHEIT("F", "Fahrenheit"),
     CELSIUS("C", "Celsius"),
+    FAHRENHEIT("F", "Fahrenheit"),
     NONE("", "None");
 
     private String key;
@@ -28,10 +28,10 @@ public enum UnitsTemperature {
 
     public static UnitsTemperature getEnumFromText(String inText) {
         if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(FAHRENHEIT.text)) return FAHRENHEIT;
-        if (inText.equalsIgnoreCase(FAHRENHEIT.key)) return FAHRENHEIT;
         if (inText.equalsIgnoreCase(CELSIUS.text)) return CELSIUS;
         if (inText.equalsIgnoreCase(CELSIUS.key)) return CELSIUS;
+        if (inText.equalsIgnoreCase(FAHRENHEIT.text)) return FAHRENHEIT;
+        if (inText.equalsIgnoreCase(FAHRENHEIT.key)) return FAHRENHEIT;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }

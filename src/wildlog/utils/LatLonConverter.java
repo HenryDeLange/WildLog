@@ -1,13 +1,14 @@
 package wildlog.utils;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
 public final class LatLonConverter {
+    public static final String NO_GPS_POINT = "No GPS";
+
 
     public static double getDecimalDegree(Latitudes inLatitudes, int inDegrees, int inMinutes, double inSeconds) {
         if (inLatitudes != null) {
@@ -80,7 +81,7 @@ public final class LatLonConverter {
                         inDataObjectWithGPS.getLatSecondsDouble()));
         }
         else {
-            return "No GPS";
+            return NO_GPS_POINT;
         }
     }
 
@@ -94,7 +95,7 @@ public final class LatLonConverter {
                         inDataObjectWithGPS.getLonSecondsDouble()));
         }
         else {
-            return "No GPS";
+            return NO_GPS_POINT;
         }
     }
 
