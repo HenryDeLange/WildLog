@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
@@ -96,6 +97,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         // Attach clipboard
         Utils.attachClipboardPopup(txtName);
         Utils.attachClipboardPopup(txtContactNumber);
+        Utils.attachClipboardPopup(txtHabitat);
         Utils.attachClipboardPopup(txtDescription);
         Utils.attachClipboardPopup(txtDirections);
         Utils.attachClipboardPopup(txtEmail);
@@ -298,7 +300,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane10.setName("jScrollPane10"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(locationWL.getDescription());
@@ -777,6 +779,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
+        txtHabitat.setText(locationWL.getHabitatType());
         txtHabitat.setName("txtHabitat"); // NOI18N
         jScrollPane3.setViewportView(txtHabitat);
 
@@ -790,6 +793,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (txtName.getText().length() > 0) {
                 String oldName = locationWL.getName();
                 locationWL.setName(DBUtils.limitLength(txtName.getText(), 100));
+                locationWL.setHabitatType(txtHabitat.getText());
                 locationWL.setDescription(txtDescription.getText());
                 locationWL.setRating((LocationRating)cmbRating.getSelectedItem());
                 locationWL.setCatering((CateringType)cmbCatering.getSelectedItem());
@@ -803,7 +807,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
                 // Save the location
                 if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {
-                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
+                    ResourceMap resourceMap = Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
                     txtName.setBackground(resourceMap.getColor("txtName.background"));
                     txtName.setText(locationWL.getName());
                 }
@@ -921,7 +925,6 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         // Clear old points
         UtilMapGenerator.clearMap(app);
-
         // Load points
         // TODO: Hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
         if (locationWL.getLatitude() != null && locationWL.getLongitude() != null)
@@ -940,7 +943,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
 
         // Open Map
-        if (app.isUseOnlineMap()) {
+        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + locationWL.getName());
             app.getMapOnline().setLocationRelativeTo(this);
             app.getMapOnline().showMap(Color.yellow);
@@ -991,7 +994,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 //        }
 
         // Open Map
-        if (app.isUseOnlineMap()) {
+        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + locationWL.getName() + " (Sightings)");
             app.getMapOnline().setLocationRelativeTo(this);
             app.getMapOnline().showMap(Color.yellow);

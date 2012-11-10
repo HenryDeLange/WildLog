@@ -45,23 +45,22 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
 
-// TODO: Write some JUnit tests to test the database queries so that I can have faith in them...
 public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
 
-    // TODO: Maybe use "IF NOT EXISTS"
     protected static final String tableElements = "CREATE TABLE ELEMENTS (PRIMARYNAME varchar(150) PRIMARY KEY NOT NULL, OTHERNAME varchar(150), SCIENTIFICNAME varchar(150), DESCRIPTION longvarchar, DISTRIBUTION longvarchar, NUTRITION longvarchar, WATERDEPENDANCE varchar(50), SIZEMALEMIN float(52), SIZEMALEMAX float(52), SIZEFEMALEMIN float(52), SIZEFEMALEMAX float(52), SIZEUNIT varchar(10), SIZETYPE varchar(50), WEIGHTMALEMIN float(52), WEIGHTMALEMAX float(52), WEIGHTFEMALEMIN float(52), WEIGHTFEMALEMAX float(52), WEIGHTUNIT varchar(10), BREEDINGDURATION varchar(50), BREEDINGNUMBER varchar(50), WISHLISTRATING varchar(50), DIAGNOSTICDESCRIPTION longvarchar, ACTIVETIME varchar(50), ENDANGEREDSTATUS varchar(35), BEHAVIOURDESCRIPTION longvarchar, ADDFREQUENCY varchar(50), ELEMENTTYPE varchar(50), FEEDINGCLASS varchar(50), LIFESPAN varchar(50), REFERENCEID varchar(50))";
     protected static final String tableLocations = "CREATE TABLE LOCATIONS (NAME varchar(150) PRIMARY KEY NOT NULL, DESCRIPTION longvarchar, RATING varchar(50), GAMEVIEWINGRATING varchar(50), HABITATTYPE longvarchar, ACCOMMODATIONTYPE varchar(150), CATERING varchar(50), CONTACTNUMBERS varchar(50), WEBSITE varchar(100), EMAIL varchar(100), DIRECTIONS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double)";
     protected static final String tableVisits = "CREATE TABLE VISITS (NAME varchar(150) PRIMARY KEY NOT NULL, STARTDATE date, ENDDATE date, DESCRIPTION longvarchar, GAMEWATCHINGINTENSITY varchar(50), VISITTYPE varchar(50), LOCATIONNAME varchar(150))";
-    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar)";
+    protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, UNKNOWNTIME smallint)";
     protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), FILEPATH varchar(500), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint)";
-    protected static final String tableWildLog = "CREATE TABLE WILDLOG (VERSION int DEFAULT 3, DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 500, DEFAULTLATOPTION varchar(5) DEFAULT 'South', DEFAULTLONOPTION varchar(5) DEFAULT 'East', DEFAULTONLINEMAP smallint DEFAULT true)";
+    protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT 3, DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, DEFAULTLATOPTION varchar(10) DEFAULT '', DEFAULTLONOPTION varchar(10) DEFAULT '', DEFAULTONLINEMAP smallint DEFAULT true)";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
     protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
     protected static final String findSighting = "SELECT * FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
     protected static final String findElement = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = ?";
+    protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
@@ -71,15 +70,17 @@ public abstract class DBI_JDBC implements DBI {
     // Create
     protected static final String createLocation = "INSERT INTO LOCATIONS (NAME,DESCRIPTION,RATING,GAMEVIEWINGRATING,HABITATTYPE,ACCOMMODATIONTYPE,CATERING,CONTACTNUMBERS,WEBSITE,EMAIL,DIRECTIONS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
-    protected static final String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT,TEMPERATURE,TEMPERATUREUNIT,LIFESTATUS,SEX,TAG) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    protected static final String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT,TEMPERATURE,TEMPERATUREUNIT,LIFESTATUS,SEX,TAG,UNKNOWNTIME) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?,?)";
+    protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ? WHERE NAME = ?";
     protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
-    protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ?, TEMPERATURE = ?, TEMPERATUREUNIT = ?, LIFESTATUS = ?, SEX = ?, TAG = ? WHERE SIGHTINGCOUNTER = ?";
+    protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ?, TEMPERATURE = ?, TEMPERATUREUNIT = ?, LIFESTATUS = ?, SEX = ?, TAG = ?, UNKNOWNTIME = ? WHERE SIGHTINGCOUNTER = ?";
     protected static final String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
     protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, FILEPATH = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
+    protected static final String updateWildLogOptions = "UPDATE WILDLOG SET DEFAULTLATITUDE = ?, DEFAULTLONGITUDE = ?, DEFAULTSLIDESHOWSPEED = ?, DEFAULTSLIDESHOWSIZE = ?, DEFAULTLATOPTION = ?, DEFAULTLONOPTION = ?, DEFAULTONLINEMAP = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
     protected static final String deleteVisit = "DELETE FROM VISITS WHERE NAME = ?";
@@ -265,6 +266,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLifeStatus(LifeStatus.getEnumFromText(results.getString("LIFESTATUS")));
                 tempSighting.setSex(Sex.getEnumFromText(results.getString("SEX")));
                 tempSighting.setTag(results.getString("TAG"));
+                tempSighting.setTimeUnknown(results.getBoolean("UNKNOWNTIME"));
             }
         }
         catch (SQLException ex) {
@@ -281,14 +283,17 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         ResultSet results = null;
         try {
-            String sql = "SELECT * FROM WILDLOG";
-            state = conn.prepareStatement(sql);
+            state = conn.prepareStatement(findWildLogOptions);
             results = state.executeQuery();
             if (results.next()) {
                 inWildLogOptions.setDatabaseVersion(results.getInt("VERSION"));
                 inWildLogOptions.setDefaultLatitude(results.getDouble("DEFAULTLATITUDE"));
                 inWildLogOptions.setDefaultLongitude(results.getDouble("DEFAULTLONGITUDE"));
                 inWildLogOptions.setDefaultSlideshowSpeed(results.getFloat("DEFAULTSLIDESHOWSPEED"));
+                inWildLogOptions.setDefaultSlideshowSize(results.getInt("DEFAULTSLIDESHOWSIZE"));
+                inWildLogOptions.setDefaultInputLatitude(Latitudes.getEnumFromText(results.getString("DEFAULTLATOPTION")));
+                inWildLogOptions.setDefaultInputLongitude(Longitudes.getEnumFromText(results.getString("DEFAULTLONOPTION")));
+                inWildLogOptions.setIsOnlinemapTheDefault(results.getBoolean("DEFAULTONLINEMAP"));
             }
         }
         catch (SQLException ex) {
@@ -494,6 +499,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setLifeStatus(LifeStatus.getEnumFromText(results.getString("LIFESTATUS")));
                 tempSighting.setSex(Sex.getEnumFromText(results.getString("SEX")));
                 tempSighting.setTag(results.getString("TAG"));
+                tempSighting.setTimeUnknown(results.getBoolean("UNKNOWNTIME"));
                 tempList.add(tempSighting);
             }
 
@@ -876,9 +882,10 @@ public abstract class DBI_JDBC implements DBI {
             state.setString(25, DBUtils.stringFromObject(inSighting.getLifeStatus()));
             state.setString(26, DBUtils.stringFromObject(inSighting.getSex()));
             state.setString(27, DBUtils.stringFromObject(inSighting.getTag()));
+            state.setBoolean(28, inSighting.isTimeUnknown());
 
             if (isUpdate) {
-                state.setLong(28, inSighting.getSightingCounter());
+                state.setLong(29, inSighting.getSightingCounter());
             }
             // Execute
             state.executeUpdate();
@@ -943,20 +950,43 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         try {
             state = conn.createStatement();
-            results = state.executeQuery("SELECT * FROM WILDLOG");
-            if (results.next()) {
-                // Update
-                StringBuilder sql = new StringBuilder("UPDATE WILDLOG SET ")
-                        .append("VERSION = ").append(inWildLogOptions.getDatabaseVersion())
-                        .append(", ").append("DEFAULTLATITUDE = ").append(inWildLogOptions.getDefaultLatitude())
-                        .append(", ").append("DEFAULTLONGITUDE = ").append(inWildLogOptions.getDefaultLongitude())
-                        .append(", ").append("DEFAULTSLIDESHOWSPEED = ").append(inWildLogOptions.getDefaultSlideshowSpeed()).append("");
-                state.executeUpdate(sql.toString());
+            results = state.executeQuery(findWildLogOptions);
+            if (!results.next()) {
+                // Insert
+                PreparedStatement prepState = null;
+                try {
+                    prepState = conn.prepareStatement(createWildLogOptions);
+                    prepState.executeUpdate();
+                }
+                catch (SQLException ex) {
+                    printSQLException(ex);
+                    return false;
+                }
+                finally {
+                    closeStatement(prepState);
+                }
             }
             else {
-                // Insert
-                StringBuilder sql = new StringBuilder("INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT)");
-                state.execute(sql.toString());
+                // Update
+                PreparedStatement prepState = null;
+                try {
+                    prepState = conn.prepareStatement(updateWildLogOptions);
+                    prepState.setDouble(1, inWildLogOptions.getDefaultLatitude());
+                    prepState.setDouble(2, inWildLogOptions.getDefaultLongitude());
+                    prepState.setFloat(3, inWildLogOptions.getDefaultSlideshowSpeed());
+                    prepState.setInt(4, inWildLogOptions.getDefaultSlideshowSize());
+                    prepState.setString(5, DBUtils.stringFromObject(inWildLogOptions.getDefaultInputLatitude()));
+                    prepState.setString(6, DBUtils.stringFromObject(inWildLogOptions.getDefaultInputLongitude()));
+                    prepState.setBoolean(7, inWildLogOptions.isIsOnlinemapTheDefault());
+                    prepState.executeUpdate();
+                }
+                catch (SQLException ex) {
+                    printSQLException(ex);
+                    return false;
+                }
+                finally {
+                    closeStatement(prepState);
+                }
             }
         }
         catch (SQLException ex) {
@@ -1262,13 +1292,13 @@ public abstract class DBI_JDBC implements DBI {
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN LIFESTATUS varchar(15)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN SEX varchar(15)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TAG longvarchar");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN UNKNOWNTIME smallint");
             // Make changes to Wildlog settings
             state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLATITUDE double");
             state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLONGITUDE double");
-            // TODO: Make sure the code uses these values
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLATOPTION varchar(5) DEFAULT 'South'");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLONOPTION varchar(5) DEFAULT 'East'");
-            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSIZE int DEFAULT 500");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLATOPTION varchar(10) DEFAULT 'South'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLONOPTION varchar(10) DEFAULT 'East'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSIZE int DEFAULT 750");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTONLINEMAP smallint DEFAULT true");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=3");

@@ -12,10 +12,10 @@ public class DBUtils {
             return inString.trim();
     }
 
-    // TODO: Is this still needed when using SQL params (maybe I can remove this..)
     public static String sanitizeString(String inString) {
         if (inString != null)
-            return inString.trim().replaceAll("'", "''");
+            // Ek dink nie ek het die ' check meer nodig nie want ek gebruik nou JDBC params
+            return inString.trim()/*.replaceAll("'", "''")*/;
         else
             return null;
     }

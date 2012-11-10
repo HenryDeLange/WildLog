@@ -47,6 +47,7 @@ import wildlog.ui.panel.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.LatLonConverter;
+import wildlog.utils.ui.ImageFilter;
 import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
@@ -145,13 +146,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fileChooser.setMultiSelectionEnabled(false);
-        // TODO: Maak dat mens die image files kan sien, maar net folders kan kies...
-//        fileChooser.setFileFilter(new ImageFilter());
+        fileChooser.setFileFilter(new ImageFilter());
         fileChooser.showOpenDialog(this.getParent());
-        // FIXME: Die fiels moet slegs return word as mens OK druk, tans lyk dit my selfs as mens cancle maar steeds 'n folder gekies het sal hy die import doen. Die hele prosess moet gestop word as mens die dialog cancle.
-        return fileChooser.getSelectedFile();
+        if (fileChooser.getSelectedFile() == null)
+            return null;
+        else
+        if (fileChooser.getSelectedFile().isDirectory())
+            return fileChooser.getSelectedFile();
+        else
+            return fileChooser.getSelectedFile().getParentFile();
     }
 
     /** This method is called from within the constructor to
@@ -552,7 +557,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                             null, 300, app);
                                 // Update the progress
                                 try {
-                                    // TODO: Try to improve this progress bar to be more accurate, but not a big deal...
                                     progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());
                                 }
                                 catch (Exception e) {

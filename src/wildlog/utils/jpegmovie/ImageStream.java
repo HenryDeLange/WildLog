@@ -28,9 +28,9 @@ public class ImageStream implements PullBufferStream {
 		frameRate = inFrameRate;
 		format = new VideoFormat(
 			VideoFormat.JPEG,
-			new Dimension(size, size), 
+			new Dimension(size, size),
 			Format.NOT_SPECIFIED,
-			Format.byteArray, 
+			Format.byteArray,
 			frameRate
 			);
 	}
@@ -86,16 +86,15 @@ public class ImageStream implements PullBufferStream {
 		Graphics2D graphics2D = resizedBufferedImage.createGraphics();
 		graphics2D.drawImage(originalBufferedImage, (size - finalWidth)/2, (size - finalHeight)/2, finalWidth, finalHeight, null);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		// TODO: Fix this to cater for other image types as well...?
 		ImageIO.write(resizedBufferedImage, "JPEG", outputStream);
 		inBuffer.setData(outputStream.toByteArray());
 		graphics2D.dispose();
 		inBuffer.setLength(outputStream.size());
 		inBuffer.setFormat(new VideoFormat(
 			format.getEncoding(),
-			new Dimension(size, size), 
+			new Dimension(size, size),
 			format.getMaxDataLength(),
-			format.getDataType(), 
+			format.getDataType(),
 			format.getFrameRate()
 			));
 //		}
@@ -103,12 +102,12 @@ public class ImageStream implements PullBufferStream {
 		inBuffer.setOffset(0);
 		inBuffer.setFlags(inBuffer.getFlags() | Buffer.FLAG_KEY_FRAME);
 	}
-	
+
 	@Override
 	public boolean endOfStream() {
 		return ended;
 	}
-	
+
 	@Override
 	public Format getFormat() {
 		// Return the format of each video frame.
@@ -121,7 +120,7 @@ public class ImageStream implements PullBufferStream {
 	}
 
 	// NOTE: The rest of the methods are not fully implemented (I don't think they are really needed)...
-	
+
 	@Override
 	public long getContentLength() {
 		// Do nothing
@@ -139,5 +138,5 @@ public class ImageStream implements PullBufferStream {
 		// Do nothing
 		return null;
 	}
-	
+
 }

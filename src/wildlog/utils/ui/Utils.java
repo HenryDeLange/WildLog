@@ -149,7 +149,7 @@ public final class Utils {
         return getScaledIcon(WildLogApp.class.getResource("resources/images/NoImage.gif"), inSize);
     }
 
-    public static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
+    private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
         return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_DEFAULT);
     }
 
@@ -637,7 +637,7 @@ public final class Utils {
         tempFile.mkdirs();
         JpgToMovie jpgToMovie = new JpgToMovie();
         if (inList.size() > 0) {
-            if (jpgToMovie.createMovieFromJpgs(750, inApp.getDBI().find(new WildLogOptions()).getDefaultSlideshowSpeed(), inList, inOutputFilename)) {
+            if (jpgToMovie.createMovieFromJpgs(inApp.getWildLogOptions().getDefaultSlideshowSize(), inApp.getWildLogOptions().getDefaultSlideshowSpeed(), inList, inOutputFilename)) {
                 // Lastly launch the file
                 Utils.openFile(inOutputFilename);
             }
@@ -666,7 +666,6 @@ public final class Utils {
     }
 
     public static void attachClipboardPopup(final JTextComponent inTextField, final boolean inCopyOnly) {
-        // TODO: Maak mooi icons vir die copy en paste opsies
         inTextField.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {

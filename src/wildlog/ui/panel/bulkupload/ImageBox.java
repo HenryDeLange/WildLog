@@ -25,7 +25,8 @@ public class ImageBox extends JPanel {
     public final void populateUI() {
         // Setup the image label
         lblImage.setIcon(imageWrapper.getIcon());
-        // TODO: Tooltips aren't wotking. It makes other rows dissapear after viewing a tooltip and then moving the mouse to a new row... See http://stackoverflow.com/questions/10854831/tool-tip-in-jpanel-in-jtable-not-working
+        // Tooltips aren't wotking. It makes other rows dissapear after viewing a tooltip and then moving the mouse to a new row...
+        // See http://stackoverflow.com/questions/10854831/tool-tip-in-jpanel-in-jtable-not-working
 //        lblImage.setToolTipText(imageWrapper.getFile().getName());
     }
 
@@ -140,8 +141,6 @@ public class ImageBox extends JPanel {
             moveImageToNewRow(+1);
         }
     }//GEN-LAST:event_btnDownActionPerformed
-
-    // TODO: Sommige van die methods share code (veral "remove") wat refactor moet word om code te share...
 
     private void btnNewSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewSightingActionPerformed
         // Make sure to call stop editing after getting the row and col

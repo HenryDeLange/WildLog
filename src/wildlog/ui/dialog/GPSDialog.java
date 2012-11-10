@@ -56,7 +56,6 @@ public class GPSDialog extends JDialog {
         spnLatDecimal.setVisible(false);
         spnLonDecimal.setVisible(false);
         // Setup the escape key
-        // TODO: Maybe move this into a util method that can apply it to any dialog (or similar component)
         final JDialog thisHandler = this;
         getRootPane().registerKeyboardAction(
                 new ActionListener() {
@@ -76,6 +75,9 @@ public class GPSDialog extends JDialog {
         SpinnerFixer.fixSelectAllForSpinners(spnLonMin);
         SpinnerFixer.fixSelectAllForSpinners(spnLonSec);
         // Setup the ui Lat and Lon
+        Latitudes tempLat = dataObjectWithGPS.getLatitude();
+        if (tempLat == null || Latitudes.NONE.equals(tempLat))
+            tempLat = app.getWildLogOptions().getDefaultInputLatitude();
         if (Latitudes.NORTH.equals(dataObjectWithGPS.getLatitude())) {
             tglNorth.setSelected(true);
         }
@@ -83,20 +85,15 @@ public class GPSDialog extends JDialog {
         if (Latitudes.SOUTH.equals(dataObjectWithGPS.getLatitude())) {
             tglSouth.setSelected(true);
         }
-        else {
-            // TODO: Use DB defaults to set the initial lat/lon
-            tglSouth.setSelected(true);
-        }
-        if (Longitudes.EAST.equals(dataObjectWithGPS.getLongitude())) {
+        Longitudes tempLon = dataObjectWithGPS.getLongitude();
+        if (tempLon == null || Longitudes.NONE.equals(tempLon))
+            tempLon = app.getWildLogOptions().getDefaultInputLongitude();
+        if (Longitudes.EAST.equals(tempLon)) {
             tglEast.setSelected(true);
         }
         else
-        if (Longitudes.WEST.equals(dataObjectWithGPS.getLongitude())) {
+        if (Longitudes.WEST.equals(tempLon)) {
             tglWest.setSelected(true);
-        }
-        else {
-            // TODO: Use DB defaults to set the initial lat/lon
-            tglEast.setSelected(true);
         }
         // Get existing value from passed in dataObjectWithGPS
         loadUIValues(dataObjectWithGPS);
@@ -314,7 +311,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(tglDegMinSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 155, 60, 45));
 
         spnLatDeg.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
-        spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
+        spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, -90, 90, 1));
         spnLatDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDeg, "#"));
         spnLatDeg.setName("spnLatDeg"); // NOI18N
@@ -519,7 +516,7 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnUseImageActionPerformed
 
     private void btnUseMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseMapActionPerformed
-        // TODO: Ek sal die deel later moet uitfigure en doen...
+        // TODO: GPS point from map - Ek sal die deel later moet uitfigure en doen...
         JOptionPane.showConfirmDialog(this, "TODO", "TODO", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnUseMapActionPerformed
 

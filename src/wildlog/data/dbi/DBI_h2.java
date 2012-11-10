@@ -83,7 +83,7 @@ public class DBI_h2 extends DBI_JDBC {
             results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
             state = conn.createStatement();
             if (!results.next()) {
-                state.execute(tableWildLog);
+                state.execute(tableWildLogOptions);
             }
 
             super.doUpdates(); // This also creates the WildLogOptions row the first time
@@ -159,7 +159,11 @@ public class DBI_h2 extends DBI_JDBC {
             // Export Visits
             state.execute("CALL CSVWRITE('" + inPath + "Visits.csv', 'SELECT * FROM VISITS')");
             // Export Sightings
-            state.execute("CALL CSVWRITE('" + inPath + "Sightings.csv', 'SELECT * FROM SIGHTINGS')");
+            state.execute("CALL CSVWRITE('" + inPath + "Sightings.csv', "
+                    + "'SELECT * "
+                    + ", ((CASE WHEN LATITUDEINDICATOR like 'North (+)' THEN +1  WHEN LATITUDEINDICATOR like 'South (-)' THEN -1 END) * LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0) LatDecDeg"
+                    + ", ((CASE WHEN LONGITUDEINDICATOR like 'East (+)' THEN +1  WHEN LONGITUDEINDICATOR like 'West (-)' THEN -1 END) * LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0) LonDecDeg"
+                    + " FROM SIGHTINGS')");
             // Export Files
             state.execute("CALL CSVWRITE('" + inPath + "Files.csv', 'SELECT * FROM FILES')");
         }
@@ -293,7 +297,7 @@ public class DBI_h2 extends DBI_JDBC {
 
                 createOrUpdate(tempSighting);
             }
-            // TODO: Import Files
+            // TODO: CSV Import of Files
 //            results = state.executeQuery("CALL CSVREAD('" + inPath + "Files.csv')");
 //            while (results.next()) {
 //                Foto tempFoto = new Foto();

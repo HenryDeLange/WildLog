@@ -11,7 +11,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 public final class UtilMapGenerator {
 
     public static void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
-        if (inApp.isUseOnlineMap()) {
+        if (inApp.getWildLogOptions().isIsOnlinemapTheDefault()) {
             inApp.getMapOnline().getPointLayer().addPoint(inLatitude, inLongitude, inColor, inObjectWithHTML, inApp);
         }
         else {
@@ -20,7 +20,7 @@ public final class UtilMapGenerator {
     }
 
     public static void clearMap(WildLogApp inApp) {
-        if (inApp.isUseOnlineMap()) {
+        if (inApp.getWildLogOptions().isIsOnlinemapTheDefault()) {
             inApp.getMapOnline().getPointLayer().clearPoints();
             inApp.clearOnlinemap();
         }

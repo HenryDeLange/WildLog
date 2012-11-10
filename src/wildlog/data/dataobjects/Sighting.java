@@ -25,6 +25,7 @@ import wildlog.utils.UtilsHTML;
 
 public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
     private Date date; // must include time
+    private boolean timeUnknown;
     private ActiveTimeSpesific timeOfDay;
     private Weather weather;
     private ViewRating viewRating;
@@ -408,6 +409,14 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
 
     public void setUnitsTemperature(UnitsTemperature inUnitsTemperature) {
         unitsTemperature = inUnitsTemperature;
+    }
+
+    public boolean isTimeUnknown() {
+        return timeUnknown;
+    }
+
+    public void setTimeUnknown(boolean inTimeUnknown) {
+        timeUnknown = inTimeUnknown;
     }
 
 }

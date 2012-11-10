@@ -34,7 +34,7 @@ import wildlog.utils.FilePaths;
  * The main class of the application.
  */
 public class WildLogApp extends SingleFrameApplication {
-    // Variables - This is actualy a very bad hack, but its the easiest and quickest to do for now...
+    // FIXME: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
     private Latitudes prevLat;
     private int prevLatDeg;
     private int prevLatMin;
@@ -43,11 +43,12 @@ public class WildLogApp extends SingleFrameApplication {
     private int prevLonDeg;
     private int prevLonMin;
     private double prevLonSec;
-    private boolean useOnlineMap = true;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
     private JXMapKit mapOnline;
     private MapFrameOnline mapOnlineFrame;
+    // Other settings
+    private WildLogOptions wildLogOptions;
     private int threadCount;
     // Make sure the application uses the same DBI instance...
     // The DBI is initialized in startup() and closed in shutdown()
@@ -143,6 +144,8 @@ public class WildLogApp extends SingleFrameApplication {
         if (!dirs.exists()) {
             dbi.doBackup(FilePaths.WILDLOG_BACKUPS_MONTHLY);
         }
+        // Load the WildLogOptions
+        wildLogOptions = dbi.find(new WildLogOptions());
     }
 
     /**
@@ -258,8 +261,7 @@ public class WildLogApp extends SingleFrameApplication {
     public MapFrameOffline getMapOffline() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
         if (mapOffline == null) {
-            WildLogOptions options = getDBI().find(new WildLogOptions());
-            mapOffline = new MapFrameOffline("WildLog Map - Offline", options.getDefaultLatitude(), options.getDefaultLongitude()/*, useOnlineMap*/);
+            mapOffline = new MapFrameOffline("WildLog Map - Offline", getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude()/*, useOnlineMap*/);
         }
         return mapOffline;
     }
@@ -267,8 +269,7 @@ public class WildLogApp extends SingleFrameApplication {
     public MapFrameOnline getMapOnline() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
         if (mapOnlineFrame == null) {
-            WildLogOptions options = getDBI().find(new WildLogOptions());
-            final GeoPosition defaultPosition = new GeoPosition(options.getDefaultLatitude(), options.getDefaultLongitude());
+            final GeoPosition defaultPosition = new GeoPosition(getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude());
 
             mapOnline = new JXMapKit();
 
@@ -317,12 +318,13 @@ public class WildLogApp extends SingleFrameApplication {
         mapOnlineFrame = null;
     }
 
-    public boolean isUseOnlineMap() {
-        return useOnlineMap;
+    public WildLogOptions getWildLogOptions() {
+        return wildLogOptions;
     }
 
-    public void setUseOnlineMap(boolean useOnlineMap) {
-        this.useOnlineMap = useOnlineMap;
+    public void setWildLogOptions(WildLogOptions inWildLogOptions) {
+        wildLogOptions = inWildLogOptions;
+        dbi.createOrUpdate(wildLogOptions);
     }
 
     public int getThreadCount() {

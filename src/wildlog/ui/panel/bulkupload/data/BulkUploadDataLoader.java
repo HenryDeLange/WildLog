@@ -36,7 +36,6 @@ public class BulkUploadDataLoader {
                         public void run() {
                             loadFileData(tempFile, imageList);
                             try {
-                                // TODO: Try to improve this progress bar to be more accurate, but not a big deal...
                                 inProgressbarTask.setTaskProgress(counter, 0, files.size());
                             }
                             catch (Exception e) {

@@ -59,6 +59,8 @@ import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.PanelElement;
@@ -76,7 +78,6 @@ import wildlog.ui.report.ReportVisit;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.FilePaths;
 import wildlog.utils.LatLonConverter;
-import wildlog.utils.jpegmovie.JpgToMovie;
 import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.UtilPanelGenerator;
 import wildlog.utils.ui.UtilTableGenerator;
@@ -87,7 +88,6 @@ import wildlog.utils.ui.WildLogTreeCellRenderer;
  * The application's main frame.
  */
 public final class WildLogView extends FrameView implements PanelNeedsRefreshWhenSightingAdded {
-
     // This section contains all the custom initializations that needs to happen...
     private WildLogApp app;
     private Element searchElement;
@@ -342,13 +342,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
-        subMenu2 = new javax.swing.JMenu();
+        mappingMenu = new javax.swing.JMenu();
         chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         mnuMapStartMenuItem = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
+        slideshowMenu = new javax.swing.JMenu();
         mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
+        mnuSetSlideshowSize = new javax.swing.JMenuItem();
+        otherMenu = new javax.swing.JMenu();
+        mnuGPSInput = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
@@ -479,9 +480,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addGap(50, 50, 50)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
-                    .addGroup(tabHomeLayout.createSequentialGroup()
-                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(502, Short.MAX_VALUE))))
+                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(502, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                 .addContainerGap(875, Short.MAX_VALUE)
                 .addComponent(jLabel5)
@@ -579,7 +579,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         imgBrowsePhotos.setLayout(imgBrowsePhotosLayout);
         imgBrowsePhotosLayout.setHorizontalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 499, Short.MAX_VALUE)
+            .addGap(0, 497, Short.MAX_VALUE)
         );
         imgBrowsePhotosLayout.setVerticalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1451,11 +1451,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
         settingsMenu.setName("settingsMenu"); // NOI18N
 
-        subMenu2.setIcon(resourceMap.getIcon("subMenu2.icon")); // NOI18N
-        subMenu2.setText(resourceMap.getString("subMenu2.text")); // NOI18N
-        subMenu2.setName("subMenu2"); // NOI18N
+        mappingMenu.setIcon(resourceMap.getIcon("mappingMenu.icon")); // NOI18N
+        mappingMenu.setText(resourceMap.getString("mappingMenu.text")); // NOI18N
+        mappingMenu.setName("mappingMenu"); // NOI18N
 
-        chkMnuUseWMS.setSelected(true);
+        chkMnuUseWMS.setSelected(app.getWildLogOptions().isIsOnlinemapTheDefault());
         chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
         chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
         chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
@@ -1463,43 +1463,71 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 chkMnuUseWMSItemStateChanged(evt);
             }
         });
-        subMenu2.add(chkMnuUseWMS);
+        mappingMenu.add(chkMnuUseWMS);
 
-        mnuMapStartMenuItem.setAction(actionMap.get("setupMapStartLocation")); // NOI18N
         mnuMapStartMenuItem.setText(resourceMap.getString("mnuMapStartMenuItem.text")); // NOI18N
         mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
-        subMenu2.add(mnuMapStartMenuItem);
+        mnuMapStartMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuMapStartMenuItemActionPerformed(evt);
+            }
+        });
+        mappingMenu.add(mnuMapStartMenuItem);
 
-        settingsMenu.add(subMenu2);
+        settingsMenu.add(mappingMenu);
 
-        jMenu1.setIcon(resourceMap.getIcon("jMenu1.icon")); // NOI18N
-        jMenu1.setText(resourceMap.getString("jMenu1.text")); // NOI18N
-        jMenu1.setName("jMenu1"); // NOI18N
+        slideshowMenu.setIcon(resourceMap.getIcon("slideshowMenu.icon")); // NOI18N
+        slideshowMenu.setText(resourceMap.getString("slideshowMenu.text")); // NOI18N
+        slideshowMenu.setName("slideshowMenu"); // NOI18N
 
-        mnuSetSlideshowSpeed.setAction(actionMap.get("SetSlideshowSpeed")); // NOI18N
         mnuSetSlideshowSpeed.setText(resourceMap.getString("mnuSetSlideshowSpeed.text")); // NOI18N
         mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
-        jMenu1.add(mnuSetSlideshowSpeed);
+        mnuSetSlideshowSpeed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSetSlideshowSpeedActionPerformed(evt);
+            }
+        });
+        slideshowMenu.add(mnuSetSlideshowSpeed);
 
-        jMenuItem3.setText(resourceMap.getString("jMenuItem3.text")); // NOI18N
-        jMenuItem3.setName("jMenuItem3"); // NOI18N
-        jMenu1.add(jMenuItem3);
+        mnuSetSlideshowSize.setText(resourceMap.getString("mnuSetSlideshowSize.text")); // NOI18N
+        mnuSetSlideshowSize.setName("mnuSetSlideshowSize"); // NOI18N
+        mnuSetSlideshowSize.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSetSlideshowSizeActionPerformed(evt);
+            }
+        });
+        slideshowMenu.add(mnuSetSlideshowSize);
 
-        settingsMenu.add(jMenu1);
+        settingsMenu.add(slideshowMenu);
 
-        jMenuItem2.setIcon(resourceMap.getIcon("jMenuItem2.icon")); // NOI18N
-        jMenuItem2.setText(resourceMap.getString("jMenuItem2.text")); // NOI18N
-        jMenuItem2.setName("jMenuItem2"); // NOI18N
-        settingsMenu.add(jMenuItem2);
+        otherMenu.setIcon(resourceMap.getIcon("otherMenu.icon")); // NOI18N
+        otherMenu.setText(resourceMap.getString("otherMenu.text")); // NOI18N
+        otherMenu.setName("otherMenu"); // NOI18N
+
+        mnuGPSInput.setText(resourceMap.getString("mnuGPSInput.text")); // NOI18N
+        mnuGPSInput.setName("mnuGPSInput"); // NOI18N
+        mnuGPSInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuGPSInputActionPerformed(evt);
+            }
+        });
+        otherMenu.add(mnuGPSInput);
+
+        settingsMenu.add(otherMenu);
 
         menuBar.add(settingsMenu);
 
         extraMenu.setText(resourceMap.getString("extraMenu.text")); // NOI18N
         extraMenu.setName("extraMenu"); // NOI18N
 
-        mnuExifMenuItem.setAction(actionMap.get("exifReader")); // NOI18N
+        mnuExifMenuItem.setIcon(resourceMap.getIcon("mnuExifMenuItem.icon")); // NOI18N
         mnuExifMenuItem.setText(resourceMap.getString("mnuExifMenuItem.text")); // NOI18N
         mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
+        mnuExifMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExifMenuItemActionPerformed(evt);
+            }
+        });
         extraMenu.add(mnuExifMenuItem);
 
         mnuCreateSlideshow.setAction(actionMap.get("CreateSlideshow")); // NOI18N
@@ -1724,27 +1752,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_tabHomeComponentShown
 
     private void tabFotoComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabFotoComponentShown
-//        if (!buttonGroup1.isSelected(rdbBrowseLocation.getModel()) && !buttonGroup1.isSelected(rdbBrowseElement.getModel()) && !buttonGroup1.isSelected(rdbBrowseDate.getModel()))
-//            rdbBrowseLocation.setSelected(true);
-
         dtpStartDate.setVisible(false);
         dtpEndDate.setVisible(false);
         btnRefreshDates.setVisible(false);
         btnReport.setVisible(false);
         cmbElementTypesBrowseTab.setVisible(false);
         chkElementTypeBrowseTab.setVisible(false);
-
         rdbBrowseLocationItemStateChanged(null);
         rdbBrowseElementItemStateChanged(null);
         rdbBrowseDateItemStateChanged(null);
-
         if (!rdbBrowseElement.isSelected() && !rdbBrowseLocation.isSelected() && !rdbBrowseDate.isSelected()) {
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("Please select a category to browse");
             treBrowsePhoto.setModel(new DefaultTreeModel(root));
         }
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
-
         txtBrowseInfo.setText("");
         lblNumberOfImages.setText("");
         try {
@@ -1976,31 +1998,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                final JDialog dialog = new JDialog(app.getMainFrame(), "View an Existing Sighting", true);
-                dialog.setLayout(new AbsoluteLayout());
-                dialog.setSize(965, 625);
-                dialog.add(new PanelSighting(
+                PanelSighting dialog = new PanelSighting(
+                        app.getMainFrame(), "Edit an Existing Sighting",
                         tempSighting,
                         app.getDBI().find(new Location(tempSighting.getLocationName())),
                         app.getDBI().find(new Visit(tempSighting.getVisitName())),
                         app.getDBI().find(new Element(tempSighting.getElementName())),
                         this,
-                        false,
-                        false,
-                        false),
-                        new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-                dialog.setLocationRelativeTo(this.getComponent());
-                ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-                dialog.setIconImage(icon.getImage());
-                ActionListener escListener = new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        tabFotoComponentShown(null);
-                        dialog.dispose();
-                    }
-                };
-                dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-                dialog.setResizable(false);
+                        false, false, false);
                 dialog.setVisible(true);
             }
         }
@@ -2008,7 +2013,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Override
     public void refreshTableForSightings() {
-        // TODO: Do a smarter refresh without clearing the whole tree
         tabFotoComponentShown(null);
     }
 
@@ -2204,7 +2208,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_cmbElementTypesBrowseTabActionPerformed
 
     private void chkMnuUseWMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseWMSItemStateChanged
-        app.setUseOnlineMap(chkMnuUseWMS.isSelected());
+        WildLogOptions options = app.getWildLogOptions();
+        options.setIsOnlinemapTheDefault(chkMnuUseWMS.isSelected());
+        app.setWildLogOptions(options);
     }//GEN-LAST:event_chkMnuUseWMSItemStateChanged
 
     private void btnViewEXIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEXIFActionPerformed
@@ -2230,6 +2236,118 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         }
     }//GEN-LAST:event_btnViewEXIFActionPerformed
+
+    private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
+        WildLogOptions options = app.getWildLogOptions();
+        String inputLat = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Latitude to use for the map. (As decimal degrees, for example -33.4639)", options.getDefaultLatitude());
+        if (inputLat != null) {
+            try {
+                options.setDefaultLatitude(Double.parseDouble(inputLat));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        String inputLon = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Longitude to use for the map. (As decimal degrees, for example 20.9562)", options.getDefaultLongitude());
+        if (inputLon != null) {
+            try {
+                options.setDefaultLongitude(Double.parseDouble(inputLon));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        app.setWildLogOptions(options);
+    }//GEN-LAST:event_mnuMapStartMenuItemActionPerformed
+
+    private void mnuExifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExifMenuItemActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                }
+                String extension = Utils.getExtension(f);
+                if (extension != null) {
+                    if (extension.equalsIgnoreCase(Utils.jpeg) ||
+                        extension.equalsIgnoreCase(Utils.jpg)) {
+                            return true;
+                    }
+                }
+                return false;
+            }
+            @Override
+            public String getDescription() {
+                return "JPG Images";
+            }
+        });
+        int result = fileChooser.showOpenDialog(this.getComponent());
+        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
+            Utils.showExifPopup(fileChooser.getSelectedFile());
+        }
+    }//GEN-LAST:event_mnuExifMenuItemActionPerformed
+
+    private void mnuSetSlideshowSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSizeActionPerformed
+        WildLogOptions options = app.getWildLogOptions();
+        String inputFramerate = JOptionPane.showInputDialog(this.getComponent(),
+                "Please specify the default frame size to use for the slideshows. \n (This can be any positive decimal value, for example 500)",
+                options.getDefaultSlideshowSize());
+        if (inputFramerate != null) {
+            try {
+                options.setDefaultSlideshowSize(Math.abs(Integer.parseInt(inputFramerate)));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        app.setWildLogOptions(options);
+    }//GEN-LAST:event_mnuSetSlideshowSizeActionPerformed
+
+    private void mnuSetSlideshowSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSpeedActionPerformed
+        WildLogOptions options = app.getWildLogOptions();
+        String inputFramerate = JOptionPane.showInputDialog(this.getComponent(),
+                "Please specify the default framerate to use for the slideshows. \n (This can be any positive decimal value, for example 1 or 0.3)",
+                options.getDefaultSlideshowSpeed());
+        if (inputFramerate != null) {
+            try {
+                options.setDefaultSlideshowSpeed(Math.abs(Float.parseFloat(inputFramerate)));
+            }
+            catch (NumberFormatException e) {
+                // Do Nothing
+            }
+        }
+        app.setWildLogOptions(options);
+    }//GEN-LAST:event_mnuSetSlideshowSpeedActionPerformed
+
+    private void mnuGPSInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGPSInputActionPerformed
+        WildLogOptions options = app.getWildLogOptions();
+        int latOption = JOptionPane.showOptionDialog(
+                this.getComponent(),
+                "Please select the Default Latitude to use for GPS input:",
+                "Default GPS Input Latitude",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                Latitudes.values(),
+                options.getDefaultInputLatitude());
+        if (latOption != JOptionPane.CLOSED_OPTION) {
+            options.setDefaultInputLatitude(Latitudes.values()[latOption]);
+        }
+        int lonOption = JOptionPane.showOptionDialog(
+                this.getComponent(),
+                "Please select the Default Longitude to use for GPS input:",
+                "Default GPS Input Longitude",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                Longitudes.values(),
+                options.getDefaultInputLongitude());
+        if (lonOption != JOptionPane.CLOSED_OPTION) {
+            options.setDefaultInputLongitude(Longitudes.values()[lonOption]);
+        }
+        app.setWildLogOptions(options);
+    }//GEN-LAST:event_mnuGPSInputActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -2277,8 +2395,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             for (Sighting tempSighting : sightings) {
                 DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, false));
                 tempElementNode.add(tempSightingNode);
+                // Add Location and Element under the sighting node
                 tempSightingNode.add(new DefaultMutableTreeNode(app.getDBI().find(new Location(tempSighting.getLocationName()))));
-
+                tempSightingNode.add(new DefaultMutableTreeNode(app.getDBI().find(new Visit(tempSighting.getVisitName()))));
             }
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
@@ -2530,83 +2649,82 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }
 
     private void setupFile(final List<WildLogFile> inFotos) {
-//        new SwingWorker() {
-//            @Override
-//            protected Object doInBackground() throws Exception {
-                if (inFotos != null) {
-                    if (inFotos.size() > 0) {
-                        try {
-                            lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
-                            if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.IMAGE))
-                                imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)));
-                            else
-                            if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.MOVIE))
-                                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
-                            else
-                            if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.OTHER))
-                                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
-                        finally {
-                            imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
-                        }
+        if (inFotos != null) {
+            if (inFotos.size() > 0) {
+                try {
+                    lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
+                    if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.IMAGE)) {
+//                        int size = (int)imgBrowsePhotos.getSize().getWidth();
+//                        if (imgBrowsePhotos.getSize().getHeight() > size)
+//                            size = (int)imgBrowsePhotos.getSize().getHeight();
+//                        imgBrowsePhotos.setImage(Utils.getScaledIcon(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)), size).getImage());
+                        imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)));
                     }
-                    else {
-                        try {
-                            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                            lblNumberOfImages.setText("0 of 0");
-                        }
-                        catch (IOException ex) {
-                            ex.printStackTrace(System.err);
-                        }
-                        finally {
-                            imgBrowsePhotos.setToolTipText("");
-                        }
-                    }
+                    else
+                    if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.MOVIE))
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.gif"));
+                    else
+                    if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.OTHER))
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.gif"));
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+                finally {
+                    imgBrowsePhotos.setToolTipText(inFotos.get(imageIndex).getFilename());
+                }
+            }
+            else {
+                try {
+                    imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                    lblNumberOfImages.setText("0 of 0");
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+                finally {
+                    imgBrowsePhotos.setToolTipText("");
+                }
+            }
+        }
+        else {
+            try {
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
+                lblNumberOfImages.setText("");
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                imgBrowsePhotos.setToolTipText("");
+            }
+        }
+        // Scale image
+        if (imgBrowsePhotos.getImage() != null) {
+            double scale = 1.0;
+            int imageHeight = imgBrowsePhotos.getImage().getHeight(null);
+            int imageWidth = imgBrowsePhotos.getImage().getWidth(null);
+            double componentHeight = imgBrowsePhotos.getSize().getHeight();
+            double componentWidth = imgBrowsePhotos.getSize().getWidth();
+            if (imageHeight > 0 && imageWidth > 0) {
+                if (imageHeight >= imageWidth) {
+                    // Dealing with Portrait image
+                    scale = componentHeight / (double)imageHeight;
+                    if (imageWidth * scale > componentWidth)
+                        scale = componentWidth / (double)imageWidth;
                 }
                 else {
-                    try {
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoImage.gif"));
-                        lblNumberOfImages.setText("");
-                    }
-                    catch (IOException ex) {
-                        ex.printStackTrace(System.err);
-                    }
-                    finally {
-                        imgBrowsePhotos.setToolTipText("");
-                    }
+                    // Dealing with Landscape image
+                    scale = componentWidth / (double)imageWidth;
+                    if (imageHeight * scale > componentHeight)
+                        scale = componentHeight / (double)imageHeight;
                 }
-                // Scale image
-                if (imgBrowsePhotos.getImage() != null) {
-                    double scale = 1.0;
-                    int imageHeight = imgBrowsePhotos.getImage().getHeight(null);
-                    int imageWidth = imgBrowsePhotos.getImage().getWidth(null);
-                    double componentHeight = imgBrowsePhotos.getSize().getHeight();
-                    double componentWidth = imgBrowsePhotos.getSize().getWidth();
-                    if (imageHeight > 0 && imageWidth > 0) {
-                        if (imageHeight >= imageWidth) {
-                            // Dealing with Portrait image
-                            scale = componentHeight / (double)imageHeight;
-                            if (imageWidth * scale > componentWidth)
-                                scale = componentWidth / (double)imageWidth;
-                        }
-                        else {
-                            // Dealing with Landscape image
-                            scale = componentWidth / (double)imageWidth;
-                            if (imageHeight * scale > componentHeight)
-                                scale = componentHeight / (double)imageHeight;
-                        }
-                    }
-                    else {
-                        System.out.println("WARNING: Trying to get the size of an image before it is known...");
-                    }
-                    imgBrowsePhotos.setScale(scale);
-                }
-//                return null;
-//            }
-//        }.execute();
+            }
+            else {
+                System.out.println("WARNING: Trying to get the size of an image before it is known...");
+            }
+            imgBrowsePhotos.setScale(scale);
+        }
     }
 
     @Action
@@ -2619,70 +2737,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             List<Sighting> sightings = app.getDBI().list(new Sighting());
             for (Sighting sighting : sightings) {
                 sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
-                double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(sighting.getDate());
-                // TODO: Change this to propperly cater for "unknown times"
-                if (lat != 0 && lon != 0 && !(calendar.get(Calendar.HOUR_OF_DAY) == 0 && calendar.get(Calendar.MINUTE) == 0)) {
+                if (!Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude()) && !sighting.isTimeUnknown()) {
+                    double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                    double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                     sighting.setMoonlight(AstroUtils.getMoonlight(sighting.getDate(), lat, lon));
                     sighting.setTimeOfDay(AstroUtils.getSunCategory(sighting.getDate(), lat, lon));
+                    app.getDBI().createOrUpdate(sighting);
                 }
-                app.getDBI().createOrUpdate(sighting);
             }
-        }
-    }
-
-    @Action
-    public void setupMapStartLocation() {
-        WildLogOptions options = app.getDBI().find(new WildLogOptions());
-        String inputLat = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Latitude to use for the map. (As decimal degrees.)", options.getDefaultLatitude());
-        if (inputLat != null) {
-            try {
-                options.setDefaultLatitude(Double.parseDouble(inputLat));
-            }
-            catch (NumberFormatException e) {
-                // Do Nothing
-            }
-        }
-        String inputLon = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Longitude to use for the map. (As decimal degrees.)", options.getDefaultLongitude());
-        if (inputLon != null) {
-            try {
-                options.setDefaultLongitude(Double.parseDouble(inputLon));
-            }
-            catch (NumberFormatException e) {
-                // Do Nothing
-            }
-        }
-        app.getDBI().createOrUpdate(options);
-    }
-
-    @Action
-    public void exifReader() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new FileFilter() {
-            @Override
-            public boolean accept(File f) {
-                if (f.isDirectory()) {
-                    return true;
-                }
-                String extension = Utils.getExtension(f);
-                if (extension != null) {
-                    if (extension.equalsIgnoreCase(Utils.jpeg) ||
-                        extension.equalsIgnoreCase(Utils.jpg)) {
-                            return true;
-                    }
-                }
-                return false;
-            }
-            @Override
-            public String getDescription() {
-                return "JPG Images";
-            }
-        });
-        int result = fileChooser.showOpenDialog(this.getComponent());
-        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            Utils.showExifPopup(fileChooser.getSelectedFile());
         }
     }
 
@@ -2704,8 +2766,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     // I'll use the Data folder to test for the actual WildLog folder structure
                     File testFile = new File(path + FilePaths.WILDLOG_DATA.toString().replace(FilePaths.WILDLOG.toString(), File.separator));
                     if (testFile.exists() && testFile.isDirectory()) {
-                        // I assume the user selected the WildLog folder an we need to strip it from the path
-                        // TODO: I need to improve this. Move the code out of here and write some unit tests
+                        // I assume the user selected the WildLog folder and we need to strip it from the path
                         path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1)) + File.separator;
                     }
                 }
@@ -2785,21 +2846,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             // Done
             JOptionPane.showMessageDialog(this.getComponent(), "Finished checking and cleaning the Workspace Folder.", "Done!", JOptionPane.INFORMATION_MESSAGE);
         }
-    }
-
-    @Action
-    public void SetSlideshowSpeed() {
-        WildLogOptions options = app.getDBI().find(new WildLogOptions());
-        String inputFramerate = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default framerate to use for the slideshows. \n (This can be any positive decimal value, for example 1 or 0.3)", options.getDefaultSlideshowSpeed());
-        if (inputFramerate != null) {
-            try {
-                options.setDefaultSlideshowSpeed(Math.abs(Float.parseFloat(inputFramerate)));
-            }
-            catch (NumberFormatException e) {
-                // Do Nothing
-            }
-        }
-        app.getDBI().createOrUpdate(options);
     }
 
     @Action
@@ -2900,10 +2946,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -2925,27 +2968,31 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel lblWorkspace;
     private javax.swing.JMenuItem linkElementsMenuItem;
     private javax.swing.JPanel mainPanel;
+    private javax.swing.JMenu mappingMenu;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuBackupMenuItem;
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuExifMenuItem;
+    private javax.swing.JMenuItem mnuGPSInput;
     private javax.swing.JMenuItem mnuMapStartMenuItem;
     private javax.swing.JMenuItem mnuOpenMapApp;
+    private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem moveVisitsMenuItem;
+    private javax.swing.JMenu otherMenu;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JRadioButton rdbBrowseDate;
     private javax.swing.JRadioButton rdbBrowseElement;
     private javax.swing.JRadioButton rdbBrowseLocation;
     private javax.swing.JScrollPane scrlElement;
     private javax.swing.JMenu settingsMenu;
+    private javax.swing.JMenu slideshowMenu;
     private javax.swing.JLabel statusAnimationLabel;
     private javax.swing.JLabel statusMessageLabel;
     private javax.swing.JPanel statusPanel;
     private javax.swing.JMenu subMenu1;
-    private javax.swing.JMenu subMenu2;
     private javax.swing.JMenu subMenu3;
     private javax.swing.JPanel tabElement;
     private javax.swing.JPanel tabFoto;

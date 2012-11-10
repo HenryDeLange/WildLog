@@ -1042,30 +1042,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             for (int t = 0; t < selectedRows.length; t++) {
                 tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
                 UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
-//                parent.add(tempPanel);
-//                tempPanel.setupTabHeader();
             }
-//            if (tempPanel != null) parent.setSelectedComponent(tempPanel);
         }
         else {
             if (tblLocation.getSelectedRowCount() == 1) {
-                final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
-                dialog.setLayout(new AbsoluteLayout());
-                dialog.setSize(965, 625);
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
                 Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
-                dialog.add(new PanelSighting(sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-                dialog.setLocationRelativeTo(this);
-                ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-                dialog.setIconImage(icon.getImage());
-                ActionListener escListener = new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        dialog.dispose();
-                    }
-                };
-                dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-                dialog.setResizable(false);
+                PanelSighting dialog = new PanelSighting(
+                        app.getMainFrame(), "Edit an Existing Sighting",
+                        sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false, false);
                 dialog.setVisible(true);
             }
             else {
@@ -1138,7 +1123,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
 
         // Open Map
-        if (app.isUseOnlineMap()) {
+        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + element.getPrimaryName());
             app.getMapOnline().setLocationRelativeTo(this);
             app.getMapOnline().showMap(Color.yellow);
@@ -1160,22 +1145,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
             Sighting sighting = new Sighting();
             sighting.setElementName(element.getPrimaryName());
-            final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
-            dialog.setLayout(new AbsoluteLayout());
-            dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, null, null, element, this, true, false, false), new AbsoluteConstraints(0, 0, -1, -1));
-            dialog.setLocationRelativeTo(this);
-            ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-            dialog.setIconImage(icon.getImage());
-            ActionListener escListener = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    refreshTableForSightings();
-                    dialog.dispose();
-                }
-            };
-            dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-            dialog.setResizable(false);
+            PanelSighting dialog = new PanelSighting(
+                    app.getMainFrame(), "Add a New Sighting",
+                    sighting, null, null, element, this, true, false, false);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnAddSightingActionPerformed

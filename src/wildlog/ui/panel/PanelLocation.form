@@ -1065,6 +1065,9 @@
           <SubComponents>
             <Component class="javax.swing.JTextPane" name="txtHabitat">
               <Properties>
+                <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                  <Connection code="locationWL.getHabitatType()" type="code"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="txtHabitat" noResource="true"/>
               </Properties>
             </Component>

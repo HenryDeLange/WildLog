@@ -191,31 +191,14 @@ public class InfoBox extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO: Copied from Element Panel, need to centralise all of these similar sighting popup code segments
-        final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
-        dialog.setLayout(new AbsoluteLayout());
-        dialog.setSize(965, 625);
-        dialog.add(new PanelSighting(
+        PanelSighting dialog = new PanelSighting(
+                app.getMainFrame(), "Edit the Sighting",
                 sightingWrapper,
                 new Location(txtLocation.getText()),
                 new Visit(txtVisit.getText()),
                 new Element(sightingWrapper.getElementName()),
                 null,
-                false,
-                false,
-                true), new AbsoluteConstraints(0, 0, -1, -1));
-        //dialog.setLocationRelativeTo(this.getParent().getParent());
-        Utils.setDialogToCenter(app.getMainFrame(), dialog);
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-        dialog.setIconImage(icon.getImage());
-        ActionListener escListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
-            }
-        };
-        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        dialog.setResizable(false);
+                false, false, true);
         dialog.setVisible(true);
         // Update the UI
         table.getCellEditor().stopCellEditing();
@@ -226,15 +209,6 @@ public class InfoBox extends JPanel {
 
     private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
         final ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app, sightingWrapper.getElementName());
-        ActionListener escListener = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.setSelectionMade(false);
-                dialog.dispose();
-            }
-        };
-        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        Utils.setDialogToCenter(app.getMainFrame(), dialog);
         dialog.setVisible(true);
         // Set the label to the selected text
         table.getCellEditor().stopCellEditing();

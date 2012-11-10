@@ -896,22 +896,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             sighting.setLocationName(locationForVisit.getName());
             tblSightings.clearSelection();
             refreshSightingInfo();
-            final JDialog dialog = new JDialog(app.getMainFrame(), "Add a New Sighting", true);
-            dialog.setLayout(new AbsoluteLayout());
-            dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, locationForVisit, visit, null, this, true, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-            dialog.setLocationRelativeTo(this);
-            ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-            dialog.setIconImage(icon.getImage());
-            ActionListener escListener = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    refreshTableForSightings();
-                    dialog.dispose();
-                }
-            };
-            dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-            dialog.setResizable(false);
+            PanelSighting dialog = new PanelSighting(
+                    app.getMainFrame(), "Add a New Sighting",
+                    sighting, locationForVisit, visit, null, this, true, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
             sighting = null;
@@ -922,23 +909,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSightingActionPerformed
         if (sighting != null) {
             tblSightings.clearSelection();
-            // TODO: Move this dialog wrapping code into a central class and let everything call the same code
-            final JDialog dialog = new JDialog(app.getMainFrame(), "Edit an Existing Sighting", true);
-            dialog.setLayout(new AbsoluteLayout());
-            dialog.setSize(965, 625);
-            dialog.add(new PanelSighting(sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-            dialog.setLocationRelativeTo(this);
-            ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
-            dialog.setIconImage(icon.getImage());
-            ActionListener escListener = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    refreshTableForSightings();
-                    dialog.dispose();
-                }
-            };
-            dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-            dialog.setResizable(false);
+            PanelSighting dialog = new PanelSighting(
+                    app.getMainFrame(), "Edit an Existing Sighting",
+                    sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
             sighting = null;
@@ -999,7 +972,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
 
         // Open Map
-        if (app.isUseOnlineMap()) {
+        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName() + " (Sightings)");
             app.getMapOnline().setLocationRelativeTo(this);
             app.getMapOnline().showMap(Color.yellow);
@@ -1055,7 +1028,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
 
         // Open Map
-        if (app.isUseOnlineMap()) {
+        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName());
             app.getMapOnline().setLocationRelativeTo(this);
             app.getMapOnline().showMap(Color.yellow);
@@ -1205,7 +1178,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 Collections.sort(sightingList);
                 for (int t = 0; t < sightingList.size(); t++) {
                     Sighting tempSighting = sightingList.get(t);
-                    // TODO: Put these strange name formats somewhere central... Maybe have a method on WildlogFile that will get a propper ID for a provided type (Location, sighting, etc.)
                     List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                     for (WildLogFile tempFile : files) {
                         if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
@@ -1231,7 +1203,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
                 List<String> slideshowList = new ArrayList<String>();
-                // TODO: Put these strange name formats somewhere central... Maybe have a method on WildlogFile that will get a propper ID for a provided type (Location, sighting, etc.)
                 List<WildLogFile> files = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
                 for (WildLogFile tempFile : files) {
                     if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {

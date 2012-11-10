@@ -20,7 +20,6 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
-// FIXME: I should maybe re-look at this and see whether I can't optimize it (stop reloading everything unneccesarryliy)
 public final class UtilTableGenerator {
     private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
 
