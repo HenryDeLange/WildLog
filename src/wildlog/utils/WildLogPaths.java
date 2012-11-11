@@ -2,13 +2,14 @@ package wildlog.utils;
 
 import java.io.File;
 
-public enum FilePaths {
+public enum WildLogPaths {
     WILDLOG (File.separatorChar + "WildLog" + File.separatorChar),
     WILDLOG_DATA (File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar),
     WILDLOG_IMAGES (File.separatorChar + "WildLog" + File.separatorChar + "Images" + File.separatorChar),
     WILDLOG_IMAGES_THUMBNAILS (File.separatorChar + "WildLog" + File.separatorChar + "Thumbnails" + File.separatorChar),
     WILDLOG_MOVIES (File.separatorChar + "WildLog" + File.separatorChar + "Movies" + File.separatorChar),
     WILDLOG_OTHER (File.separatorChar + "WildLog" + File.separatorChar + "Other Uploads" + File.separatorChar),
+    WILDLOG_MAPS (File.separatorChar + "WildLog" + File.separatorChar + "Maps" + File.separatorChar),
     WILDLOG_BACKUPS (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar),
     WILDLOG_BACKUPS_MONTHLY (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "Auto" + File.separatorChar),
     WILDLOG_EXPORT (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar),
@@ -22,7 +23,7 @@ public enum FilePaths {
     private static String currentWorkspacePrefix;
     private String path;
 
-    private FilePaths(String inPath) {
+    private WildLogPaths(String inPath) {
         path = inPath;
     }
 

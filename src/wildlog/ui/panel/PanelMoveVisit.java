@@ -12,10 +12,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 
-/**
- *
- * @author Delangeh
- */
+
 public class PanelMoveVisit extends javax.swing.JPanel {
      // Variables:
     private WildLogApp app;

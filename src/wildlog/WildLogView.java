@@ -76,7 +76,7 @@ import wildlog.ui.report.ReportLocation;
 import wildlog.ui.report.ReportSighting;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.AstroUtils;
-import wildlog.utils.FilePaths;
+import wildlog.utils.WildLogPaths;
 import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.UtilPanelGenerator;
@@ -369,13 +369,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mainPanel.setPreferredSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
 
+        tabbedPanel.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(WildLogView.class);
+        tabbedPanel.setToolTipText(resourceMap.getString("tabbedPanel.toolTipText")); // NOI18N
         tabbedPanel.setFocusable(false);
         tabbedPanel.setMaximumSize(new java.awt.Dimension(3500, 1800));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
         tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(WildLogView.class);
         tabHome.setBackground(resourceMap.getColor("tabHome.background")); // NOI18N
         tabHome.setMaximumSize(new java.awt.Dimension(1000, 630));
         tabHome.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -439,7 +441,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         lblWorkspace.setFont(resourceMap.getFont("lblWorkspace.font")); // NOI18N
         lblWorkspace.setForeground(resourceMap.getColor("lblWorkspace.foreground")); // NOI18N
         lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblWorkspace.setText(FilePaths.WILDLOG.getFullPath());
+        lblWorkspace.setText(WildLogPaths.WILDLOG.getFullPath());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
 
         jSeparator6.setBackground(resourceMap.getColor("jSeparator6.background")); // NOI18N
@@ -2428,7 +2430,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     @Action
     public void backup() {
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        app.getDBI().doBackup(FilePaths.WILDLOG_BACKUPS);
+        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
         JOptionPane.showMessageDialog(this.getComponent(), "Done. The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. (Note: This only backup the database entries, the image, etc. files have to done manually.)", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }
@@ -2496,7 +2498,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             @Override
             protected Object doInBackground() throws Exception {
                 // Then do KML export
-                String path = FilePaths.WILDLOG_EXPORT_KML.getFullPath();
+                String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
                 File tempFile = new File(path);
                 tempFile.mkdirs();
                 // Make sure icons exist in the KML folder
@@ -2537,7 +2539,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     @Action
     public void exportToCSV() {
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String path = FilePaths.WILDLOG_EXPORT_CSV.getFullPath();
+        String path = WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath();
         File tempFile = new File(path);
         tempFile.mkdirs();
         app.getDBI().doExportCSV(path);
@@ -2760,14 +2762,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 writer = new BufferedWriter(
                         new FileWriter(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
                 String path = fileChooser.getSelectedFile().getPath();
-                if (path.toLowerCase().endsWith(FilePaths.WILDLOG.toString().toLowerCase().substring(1, FilePaths.WILDLOG.toString().length() - 1))) {
+                if (path.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase().substring(1, WildLogPaths.WILDLOG.toString().length() - 1))) {
                     // The name might be tricky to parse if it ends with WildLog so we have to do some extra checks...
                     // Because the user can selecte either c:\MyWildLog(\WildLog\Data) or c:\MyWildLog\WildLog(\Data)...
                     // I'll use the Data folder to test for the actual WildLog folder structure
-                    File testFile = new File(path + FilePaths.WILDLOG_DATA.toString().replace(FilePaths.WILDLOG.toString(), File.separator));
+                    File testFile = new File(path + WildLogPaths.WILDLOG_DATA.toString().replace(WildLogPaths.WILDLOG.toString(), File.separator));
                     if (testFile.exists() && testFile.isDirectory()) {
                         // I assume the user selected the WildLog folder and we need to strip it from the path
-                        path = path.substring(0, path.length() - (FilePaths.WILDLOG.toString().length() - 1)) + File.separator;
+                        path = path.substring(0, path.length() - (WildLogPaths.WILDLOG.toString().length() - 1)) + File.separator;
                     }
                 }
                 writer.write(path);
@@ -2791,7 +2793,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         try {
             reader = new BufferedReader(
                     new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
-            FilePaths.setWorkspacePrefix(reader.readLine());
+            WildLogPaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
@@ -2827,7 +2829,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
             // Delete temporary folders
             try {
-                Utils.deleteRecursive(new File(FilePaths.WILDLOG_EXPORT.getFullPath()));
+                Utils.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -2835,9 +2837,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
             // Check for unused empty folders
             try {
-                Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_IMAGES.getFullPath()));
-                Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_MOVIES.getFullPath()));
-                Utils.deleteRecursiveOnlyEmptyFolders(new File(FilePaths.WILDLOG_OTHER.getFullPath()));
+                Utils.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
+                Utils.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
+                Utils.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);

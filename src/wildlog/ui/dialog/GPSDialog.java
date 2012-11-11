@@ -31,6 +31,7 @@ import wildlog.utils.LatLonConverter;
 import wildlog.utils.ui.GpxFilter;
 import wildlog.utils.ui.ImageFilter;
 import wildlog.utils.ui.SpinnerFixer;
+import wildlog.utils.ui.Utils;
 
 
 public class GPSDialog extends JDialog {
@@ -97,7 +98,6 @@ public class GPSDialog extends JDialog {
         }
         // Get existing value from passed in dataObjectWithGPS
         loadUIValues(dataObjectWithGPS);
-
         // Setup the drag and drop on the butons
         FileDrop.SetupFileDrop(btnUseGPX, false, new FileDrop.Listener() {
             @Override
@@ -115,6 +115,8 @@ public class GPSDialog extends JDialog {
                 }
             }
         });
+        // Centre the dialog
+        Utils.setDialogToCenter(app.getMainFrame(), this);
     }
 
     private void loadUIValues(DataObjectWithGPS inDataObjectWithGPS) {

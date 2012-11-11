@@ -11,6 +11,7 @@ import com.bbn.openmap.gui.MapPanel;
 import com.bbn.openmap.gui.OpenMapFrame;
 import com.bbn.openmap.layer.shape.ShapeLayer;
 import java.awt.Color;
+import java.io.File;
 import java.util.Properties;
 import javax.swing.ImageIcon;
 import org.jdesktop.application.Application;
@@ -19,6 +20,7 @@ import wildlog.mapping.layers.MapOfflinePointLayer;
 public class MapFrameOffline {
     // Variables:
     private MapOfflinePointLayer pointLayer;
+    private ShapeLayer shapeLayerDistribution;
     private String title;
     // The BasicMapPanel automatically creates many default components, including the MapBean and the MapHandler.
     // You can extend the BasicMapPanel class if you like to add different functionality or different types of objects.
@@ -28,7 +30,6 @@ public class MapFrameOffline {
     private MapHandler mapHandler;
     private double defaultLatitude;
     private double defaultLongitude;
-
 
 
     // Constructor:
@@ -200,6 +201,7 @@ public class MapFrameOffline {
             frame.setSize(950, 700);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+            frame.toFront();
 
         } catch (MultipleSoloMapComponentException msmce) {
             // The MapHandler is only allowed to have one of certain items. These items implement the SoloMapComponent
@@ -263,6 +265,24 @@ public class MapFrameOffline {
     public OpenMapFrame getFrameForImageDrawing() {
         frame.validate();
         return frame;
+    }
+
+    public void addDistributionMap(File inFile) {
+        shapeLayerDistribution = new ShapeLayer();
+        Properties shapeLayerPropsDistribution = new Properties();
+        shapeLayerPropsDistribution.put("prettyName", "Distribution Map");
+        shapeLayerPropsDistribution.put("lineColor", "553322");
+        shapeLayerPropsDistribution.put("fillColor", "AA5445");
+        shapeLayerPropsDistribution.put("shapeFile", inFile.getAbsolutePath());
+        shapeLayerDistribution.setProperties(shapeLayerPropsDistribution);
+        shapeLayerDistribution.setVisible(true);
+        mapHandler.add(shapeLayerDistribution);
+    }
+
+    public void clearDistributionMap() {
+        if (mapHandler.contains(shapeLayerDistribution)) {
+            mapHandler.remove(shapeLayerDistribution);
+        }
     }
 
 /*
@@ -343,4 +363,5 @@ public class MapFrameOffline {
         }
     }
 */
+
 }

@@ -68,7 +68,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.utils.FilePaths;
+import wildlog.utils.WildLogPaths;
 import wildlog.utils.jpegmovie.JpgToMovie;
 
 public final class Utils {
@@ -210,12 +210,12 @@ public final class Utils {
                         if (new ImageFilter().accept(fromFile)) {
                             // Get the thumbnail first
                             // Make the folder
-                            new File(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath() + inFolderName).mkdirs();
+                            new File(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath() + inFolderName).mkdirs();
                             // Setup the output files
-                            File toFile_Thumbnail = new File(FilePaths.concatPaths(FilePaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), inFolderName, fromFile.getName()));
+                            File toFile_Thumbnail = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), inFolderName, fromFile.getName()));
                             // Check that the filename is unique
                             while (toFile_Thumbnail.exists()) {
-                                toFile_Thumbnail = new File(FilePaths.concatPaths(toFile_Thumbnail.getParent(), "wl_" + toFile_Thumbnail.getName()));
+                                toFile_Thumbnail = new File(WildLogPaths.concatPaths(toFile_Thumbnail.getParent(), "wl_" + toFile_Thumbnail.getName()));
                             }
                             // Resize the file and then save the thumbnail to into WildLog's folders
                             ImageIcon thumbnail = getScaledIcon(fromFile, THUMBNAIL_SIZE);
@@ -229,15 +229,15 @@ public final class Utils {
                             catch (IOException ex) {
                                 ex.printStackTrace(System.err);
                             }
-                            saveOriginalFile(FilePaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID, toFile_Thumbnail.getAbsolutePath());
+                            saveOriginalFile(WildLogPaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID, toFile_Thumbnail.getAbsolutePath());
                         }
                         else
                         // Is a movie
                         if (new MovieFilter().accept(fromFile)) {
-                            saveOriginalFile(FilePaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID, null);
+                            saveOriginalFile(WildLogPaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID, null);
                         }
                         else {
-                            saveOriginalFile(FilePaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID, null);
+                            saveOriginalFile(WildLogPaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID, null);
                         }
                     }
                 }
@@ -247,27 +247,27 @@ public final class Utils {
         setupFoto(inID, 0, inImageLabel, inSize, inApp);
     }
 
-    private static void saveOriginalFile(FilePaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID, String inThumbnailPath) {
+    private static void saveOriginalFile(WildLogPaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID, String inThumbnailPath) {
         // Make the folder
         new File(inFilePaths.getFullPath() + inFolderName).mkdirs();
         // Setup the output files
-        File toFile_Original = new File(FilePaths.concatPaths(inFilePaths.getFullPath(), inFolderName, inFromFile.getName()));
+        File toFile_Original = new File(WildLogPaths.concatPaths(inFilePaths.getFullPath(), inFolderName, inFromFile.getName()));
         // Check that the filename is unique
         while (toFile_Original.exists()) {
-            toFile_Original = new File(FilePaths.concatPaths(toFile_Original.getParent(), "wl_" + toFile_Original.getName()));
+            toFile_Original = new File(WildLogPaths.concatPaths(toFile_Original.getParent(), "wl_" + toFile_Original.getName()));
         }
         // Copy the original file into WildLog's folders
         copyFile(inFromFile, toFile_Original);
         // Save the database entry
         String thumbnailPath = "No Thumbnail";
         if (inThumbnailPath != null)
-            thumbnailPath = stripRootFromPath(inThumbnailPath, FilePaths.getFullWorkspacePrefix());
+            thumbnailPath = stripRootFromPath(inThumbnailPath, WildLogPaths.getFullWorkspacePrefix());
         inApp.getDBI().createOrUpdate(
                 new WildLogFile(
                         inID,
                         toFile_Original.getName(),
                         thumbnailPath,
-                        stripRootFromPath(toFile_Original.getAbsolutePath(), FilePaths.getFullWorkspacePrefix()),
+                        stripRootFromPath(toFile_Original.getAbsolutePath(), WildLogPaths.getFullWorkspacePrefix()),
                         inFileType)
                 , false);
     }
@@ -633,7 +633,7 @@ public final class Utils {
 
     public static void generateSlideshow(List<String> inList, WildLogApp inApp, String inOutputFilename) {
         // Now create the slideshow
-        File tempFile = new File(FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
+        File tempFile = new File(WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
         tempFile.mkdirs();
         JpgToMovie jpgToMovie = new JpgToMovie();
         if (inList.size() > 0) {

@@ -51,7 +51,7 @@ import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.FileDrop;
-import wildlog.utils.FilePaths;
+import wildlog.utils.WildLogPaths;
 import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.ProgressbarTask;
 import wildlog.utils.ui.UtilMapGenerator;
@@ -251,7 +251,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnMapSighting = new javax.swing.JButton();
         btnSetMainImage = new javax.swing.JButton();
         btnGoElement = new javax.swing.JButton();
-        btnMapVisit = new javax.swing.JButton();
         lblNumberOfSightings = new javax.swing.JLabel();
         btnPreviousImageSighting = new javax.swing.JButton();
         btnNextImageSighting = new javax.swing.JButton();
@@ -265,7 +264,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnReport = new javax.swing.JButton();
         btnChecklist = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
-        btnKmlExport = new javax.swing.JButton();
         btnSlideshowSightings = new javax.swing.JButton();
         btnSlideshowVisit = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
@@ -571,13 +569,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnMapSighting.setToolTipText(resourceMap.getString("btnMapSighting.toolTipText")); // NOI18N
         btnMapSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMapSighting.setFocusPainted(false);
+        btnMapSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnMapSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnMapSighting.setName("btnMapSighting"); // NOI18N
         btnMapSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, 130, 35));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 110, 35));
 
         btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
@@ -606,20 +606,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
         visitIncludes.add(btnGoElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 550, 150, 30));
-
-        btnMapVisit.setBackground(resourceMap.getColor("btnMapVisit.background")); // NOI18N
-        btnMapVisit.setIcon(resourceMap.getIcon("btnMapVisit.icon")); // NOI18N
-        btnMapVisit.setText(resourceMap.getString("btnMapVisit.text")); // NOI18N
-        btnMapVisit.setToolTipText(resourceMap.getString("btnMapVisit.toolTipText")); // NOI18N
-        btnMapVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnMapVisit.setFocusPainted(false);
-        btnMapVisit.setName("btnMapVisit"); // NOI18N
-        btnMapVisit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMapVisitActionPerformed(evt);
-            }
-        });
-        visitIncludes.add(btnMapVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, 130, 35));
 
         lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -713,7 +699,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 150, 110, 35));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 35));
 
         btnChecklist.setBackground(resourceMap.getColor("btnChecklist.background")); // NOI18N
         btnChecklist.setFont(resourceMap.getFont("btnChecklist.font")); // NOI18N
@@ -728,7 +714,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnChecklistActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 100, 33));
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 100, 33));
 
         btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
@@ -742,21 +728,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnHTMLActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 120, 110, 35));
-
-        btnKmlExport.setBackground(resourceMap.getColor("btnKmlExport.background")); // NOI18N
-        btnKmlExport.setIcon(resourceMap.getIcon("btnKmlExport.icon")); // NOI18N
-        btnKmlExport.setText(resourceMap.getString("btnKmlExport.text")); // NOI18N
-        btnKmlExport.setToolTipText(resourceMap.getString("btnKmlExport.toolTipText")); // NOI18N
-        btnKmlExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnKmlExport.setFocusPainted(false);
-        btnKmlExport.setName("btnKmlExport"); // NOI18N
-        btnKmlExport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnKmlExportActionPerformed(evt);
-            }
-        });
-        visitIncludes.add(btnKmlExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 130, 120, 30));
+        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 110, 35));
 
         btnSlideshowSightings.setIcon(resourceMap.getIcon("btnSlideshowSightings.icon")); // NOI18N
         btnSlideshowSightings.setText(resourceMap.getString("btnSlideshowSightings.text")); // NOI18N
@@ -778,7 +750,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnSlideshowVisitActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnSlideshowVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 120, 30));
+        visitIncludes.add(btnSlideshowVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 120, 120, 30));
 
         btnBulkImport.setText(resourceMap.getString("btnBulkImport.text")); // NOI18N
         btnBulkImport.setName("btnBulkImport"); // NOI18N
@@ -950,37 +922,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
-        // Clear old points
-        UtilMapGenerator.clearMap(app);
-
-        // Load points
-        if (sighting != null) {
-            if (sighting.getLatitude() != null && sighting.getLongitude() != null)
-            if (!sighting.getLatitude().equals(Latitudes.NONE) && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                double lat = sighting.getLatDegrees();
-                lat = lat + sighting.getLatMinutes()/60.0;
-                lat = lat + (sighting.getLatSeconds()/60.0)/60.0;
-                if (sighting.getLatitude().equals(Latitudes.SOUTH))
-                    lat = -1 * lat;
-                double lon = sighting.getLonDegrees();
-                lon = lon + sighting.getLonMinutes()/60.0;
-                lon = lon + (sighting.getLonSeconds()/60.0)/60.0;
-                if (sighting.getLongitude().equals(Longitudes.WEST))
-                    lon = -1 * lon;
-                UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sighting, app);
-            }
-        }
-
-        // Open Map
-        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
-            app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName() + " (Sightings)");
-            app.getMapOnline().setLocationRelativeTo(this);
-            app.getMapOnline().showMap(Color.yellow);
-        }
-        else {
-            app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName() + " (Sightings)");
-            app.getMapOffline().showMap();
-        }
+        MappingDialog dialog = new MappingDialog(app.getMainFrame(),
+                null, null, visit, sighting);
+        dialog.setVisible(true);
 }//GEN-LAST:event_btnMapSightingActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
@@ -1001,43 +945,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
-
-    private void btnMapVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapVisitActionPerformed
-        // Clear old points
-        UtilMapGenerator.clearMap(app);
-
-        // Load points
-        Sighting tempSighting = new Sighting();
-        tempSighting.setVisitName(visit.getName());
-        List<Sighting> sightings = app.getDBI().list(tempSighting);
-        for (int t = 0; t < sightings.size(); t++) {
-            if (sightings.get(t).getLatitude() != null && sightings.get(t).getLongitude() != null)
-            if (!sightings.get(t).getLatitude().equals(Latitudes.NONE) && !sightings.get(t).getLongitude().equals(Longitudes.NONE)) {
-                double lat = sightings.get(t).getLatDegrees();
-                lat = lat + sightings.get(t).getLatMinutes()/60.0;
-                lat = lat + (sightings.get(t).getLatSeconds()/60.0)/60.0;
-                if (sightings.get(t).getLatitude().equals(Latitudes.SOUTH))
-                    lat = -1 * lat;
-                double lon = sightings.get(t).getLonDegrees();
-                lon = lon + sightings.get(t).getLonMinutes()/60.0;
-                lon = lon + (sightings.get(t).getLonSeconds()/60.0)/60.0;
-                if (sightings.get(t).getLongitude().equals(Longitudes.WEST))
-                    lon = -1 * lon;
-                UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightings.get(t), app);
-            }
-        }
-
-        // Open Map
-        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
-            app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName());
-            app.getMapOnline().setLocationRelativeTo(this);
-            app.getMapOnline().showMap(Color.yellow);
-        }
-        else {
-            app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName());
-            app.getMapOffline().showMap();
-        }
-}//GEN-LAST:event_btnMapVisitActionPerformed
 
     private void btnPreviousImageSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageSightingActionPerformed
         if (sighting != null) {
@@ -1128,44 +1035,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         Utils.openFile(UtilsHTML.exportHTML(visit, app));
     }//GEN-LAST:event_btnHTMLActionPerformed
 
-    private void btnKmlExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKmlExportActionPerformed
-        // First export to HTML to create the images
-        UtilsHTML.exportHTML(visit, app);
-        // Nou doen die KML deel
-        String path = FilePaths.WILDLOG_EXPORT_KML.getFullPath();
-        File tempFile = new File(path);
-        tempFile.mkdirs();
-        // Make sure icons exist in the KML folder
-        KmlUtil.copyKmlIcons(app, path);
-        // KML Stuff
-        KmlGenerator kmlgen = new KmlGenerator();
-        String finalPath = path + "WildLogMarkers - Visit (" + visit.getName() + ").kml";
-        kmlgen.setKmlPath(finalPath);
-        // Get entries for Sightings and Locations
-        Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
-        // Sightings
-        Sighting tempSighting = new Sighting();
-        tempSighting.setVisitName(visit.getName());
-        List<Sighting> listSightings = app.getDBI().list(tempSighting);
-        for (int t = 0; t < listSightings.size(); t++) {
-            String key = listSightings.get(t).getElementName();
-            if (!entries.containsKey(key)) {
-                entries.put(key, new ArrayList<KmlEntry>());
-             }
-            entries.get(key).add(listSightings.get(t).toKML(t, app));
-        }
-        // Location
-        String key = visit.getLocationName();
-        if (!entries.containsKey(key)) {
-            entries.put(key, new ArrayList<KmlEntry>());
-         }
-        entries.get(key).add(app.getDBI().find(new Location(visit.getLocationName())).toKML(listSightings.size()+1, app));
-        // Generate KML
-        kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
-        // Try to open the Kml file
-        Utils.openFile(finalPath);
-    }//GEN-LAST:event_btnKmlExportActionPerformed
-
     private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
         Utils.kickoffProgressbarTask(new Task(app) {
             @Override
@@ -1190,7 +1059,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
                 // Now create the slideshow
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                Utils.generateSlideshow(slideshowList, app, FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Sightings.mov");
+                Utils.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Sightings.mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }
@@ -1213,7 +1082,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     }
                 }
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                Utils.generateSlideshow(slideshowList, app, FilePaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + ".mov");
+                Utils.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + ".mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }
@@ -1259,9 +1128,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnEditSighting;
     private javax.swing.JButton btnGoElement;
     private javax.swing.JButton btnHTML;
-    private javax.swing.JButton btnKmlExport;
     private javax.swing.JButton btnMapSighting;
-    private javax.swing.JButton btnMapVisit;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnNextImageSighting;
     private javax.swing.JButton btnPreviousImage;

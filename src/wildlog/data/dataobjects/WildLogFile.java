@@ -4,7 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import wildlog.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.utils.FilePaths;
+import wildlog.utils.WildLogPaths;
 
 public class WildLogFile {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
@@ -65,7 +65,7 @@ public class WildLogFile {
     public String getFileLocation(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
-            return FilePaths.getFullWorkspacePrefix() + fileLocation;
+            return WildLogPaths.getFullWorkspacePrefix() + fileLocation;
         else
             return fileLocation;
     }
@@ -77,7 +77,7 @@ public class WildLogFile {
     public String getOriginalFotoLocation(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
-            return FilePaths.getFullWorkspacePrefix() + originalFotoLocation;
+            return WildLogPaths.getFullWorkspacePrefix() + originalFotoLocation;
         else
             return originalFotoLocation;
     }

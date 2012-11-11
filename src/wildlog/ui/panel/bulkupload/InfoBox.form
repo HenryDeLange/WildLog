@@ -206,6 +206,9 @@
         <Property name="text" type="java.lang.String" resourceKey="btnGPS.text"/>
         <Property name="name" type="java.lang.String" value="btnGPS" noResource="true"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGPSActionPerformed"/>
+      </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="155" y="135" width="80" height="50"/>

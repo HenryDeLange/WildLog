@@ -22,26 +22,26 @@ public final class UtilsHTML {
     public static String generateHTMLImages(String inFileLocation, ImageExportTypes inExportType) {
         File fromFile = new File(inFileLocation);
         File toDir = new File(
-                FilePaths.concatPaths(
-                    FilePaths.concatPaths(FilePaths.WILDLOG_EXPORT_HTML.getFullPath(), "Images"),
+                WildLogPaths.concatPaths(
+                    WildLogPaths.concatPaths(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath(), "Images"),
                     Utils.stripRootFromPath(inFileLocation.substring(0, inFileLocation.lastIndexOf(File.separatorChar)),
-                                            FilePaths.getFullWorkspacePrefix())));
+                                            WildLogPaths.getFullWorkspacePrefix())));
         toDir.mkdirs();
         File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
         Utils.copyFile(fromFile, toFile);
         // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
         String fullpath = toFile.getAbsolutePath().toLowerCase();
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForHTML))
-            //return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + FilePaths.WILDLOG_EXPORT_HTML), "..") + "\"/>  ";
+            //return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + WildLogPaths.WILDLOG_EXPORT_HTML), "..") + "\"/>  ";
             return "<img src=\"..\\"
                     + Utils.stripRootFromPath(fullpath,
-                        FilePaths.concatPaths(FilePaths.getFullWorkspacePrefix(), FilePaths.WILDLOG_EXPORT_HTML.getRelativePath()))
+                        WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
                     + "\"/>  ";
         else
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML))
             return "<img src=\"..\\html\\"
                     + Utils.stripRootFromPath(fullpath,
-                        FilePaths.concatPaths(FilePaths.getFullWorkspacePrefix(), FilePaths.WILDLOG_EXPORT_HTML.getRelativePath()))
+                        WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
                     + "\"/>  ";
         else
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap))
@@ -51,7 +51,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Element inElement, WildLogApp inApp) {
-        File toFile = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath() + "Creatures"  + File.separatorChar + inElement.getPrimaryName() + ".html");
+        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Creatures"  + File.separatorChar + inElement.getPrimaryName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -76,7 +76,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Location inLocation, WildLogApp inApp) {
-        File toFile = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath() + "Locations"  + File.separatorChar + inLocation.getName() + ".html");
+        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Locations"  + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -101,7 +101,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Visit inVisit, WildLogApp inApp) {
-        File toFile = new File(FilePaths.WILDLOG_EXPORT_HTML.getFullPath() + "Visits" + File.separatorChar + inVisit.getName() + ".html");
+        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Visits" + File.separatorChar + inVisit.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {

@@ -36,7 +36,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
-import wildlog.utils.FilePaths;
+import wildlog.utils.WildLogPaths;
 
 
 public class DBI_h2 extends DBI_JDBC {
@@ -51,7 +51,7 @@ public class DBI_h2 extends DBI_JDBC {
             Properties props = new Properties();
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
-            conn = DriverManager.getConnection("jdbc:h2:" + FilePaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+            conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
 
             // Create tables
             // FIXME: EK kan ook 'n H2 "if not exists" command gebruik in die query in plaas van die story...
@@ -118,7 +118,7 @@ public class DBI_h2 extends DBI_JDBC {
     }
 
     @Override
-    public void doBackup(FilePaths inFolder) {
+    public void doBackup(WildLogPaths inFolder) {
         Statement state = null;
         try {
             state = conn.createStatement();

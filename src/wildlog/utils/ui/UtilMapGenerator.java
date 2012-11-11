@@ -1,32 +1,36 @@
 package wildlog.utils.ui;
 
 import java.awt.Color;
+import java.io.File;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 
-/**
- *
- * @author Henry
- */
+
 public final class UtilMapGenerator {
 
-    public static void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp) {
-        if (inApp.getWildLogOptions().isIsOnlinemapTheDefault()) {
-            inApp.getMapOnline().getPointLayer().addPoint(inLatitude, inLongitude, inColor, inObjectWithHTML, inApp);
+    public static void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp, boolean inIsDistributionMap) {
+        if (!inApp.getWildLogOptions().isIsOnlinemapTheDefault() || inIsDistributionMap) {
+            inApp.getMapOffline().addPoint(inLatitude, inLongitude, inColor);
         }
         else {
-            inApp.getMapOffline().addPoint(inLatitude, inLongitude, inColor);
+            inApp.getMapOnline().getPointLayer().addPoint(inLatitude, inLongitude, inColor, inObjectWithHTML, inApp);
         }
     }
 
-    public static void clearMap(WildLogApp inApp) {
-        if (inApp.getWildLogOptions().isIsOnlinemapTheDefault()) {
+    public static void clearMap(WildLogApp inApp, boolean inIsDistributionMap) {
+        if (!inApp.getWildLogOptions().isIsOnlinemapTheDefault() || inIsDistributionMap) {
+            inApp.getMapOffline().clearDistributionMap();
+            inApp.getMapOffline().clearPoints();
+        }
+        else {
             inApp.getMapOnline().getPointLayer().clearPoints();
             inApp.clearOnlinemap();
         }
-        else {
-            inApp.getMapOffline().clearPoints();
-        }
+    }
+
+    public static void addDistributionMap(WildLogApp inApp, File inFile) {
+        inApp.getMapOffline().clearDistributionMap();
+        inApp.getMapOffline().addDistributionMap(inFile);
     }
 
 }

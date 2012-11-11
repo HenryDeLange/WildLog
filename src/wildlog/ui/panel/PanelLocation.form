@@ -794,7 +794,6 @@
         <Component class="javax.swing.JButton" name="btnMap">
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnMap.background"/>
-            <Property name="font" type="java.awt.Font" resourceKey="btnMap.font"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnMap.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnMap.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnMap.toolTipText"/>
@@ -802,6 +801,10 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnMap" noResource="true"/>
           </Properties>
           <Events>
@@ -810,28 +813,6 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="580" y="95" width="110" height="35"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnMapSightings">
-          <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnMapSightings.background"/>
-            <Property name="font" type="java.awt.Font" resourceKey="btnMapSightings.font"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnMapSightings.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnMapSightings.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnMapSightings.toolTipText"/>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="btnMapSightings" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMapSightingsActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="135" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -921,6 +902,10 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 4]"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
           </Properties>
           <Events>
@@ -928,7 +913,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="255" width="110" height="35"/>
+              <AbsoluteConstraints x="580" y="140" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -949,28 +934,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="215" width="110" height="35"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnKml">
-          <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnKml.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnKml.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnKml.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnKml.toolTipText"/>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="btnKml" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnKmlActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="175" width="110" height="35"/>
+              <AbsoluteConstraints x="580" y="250" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>

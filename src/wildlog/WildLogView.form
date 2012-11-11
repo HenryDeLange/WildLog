@@ -20,6 +20,8 @@
       <SubComponents>
         <Container class="javax.swing.JTabbedPane" name="tabbedPanel">
           <Properties>
+            <Property name="tabLayoutPolicy" type="int" value="1"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="tabbedPanel.toolTipText"/>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[3500, 1800]"/>
@@ -239,7 +241,7 @@
                     <Property name="foreground" type="java.awt.Color" resourceKey="lblWorkspace.foreground"/>
                     <Property name="horizontalAlignment" type="int" value="4"/>
                     <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="FilePaths.WILDLOG.getFullPath()" type="code"/>
+                      <Connection code="wildlog.utils.WildLogPaths.WILDLOG.getFullPath()" type="code"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblWorkspace" noResource="true"/>
                   </Properties>

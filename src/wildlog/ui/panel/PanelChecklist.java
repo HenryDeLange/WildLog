@@ -20,10 +20,7 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 
-/**
- *
- * @author Delangeh
- */
+
 public class PanelChecklist extends javax.swing.JPanel {
      // Variables:
     private WildLogApp app;

@@ -28,7 +28,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
-import wildlog.utils.FilePaths;
+import wildlog.utils.WildLogPaths;
 
 /**
  * The main class of the application.
@@ -133,16 +133,16 @@ public class WildLogApp extends SingleFrameApplication {
         threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
         if (threadCount < 3)
             threadCount = 3;
-        File dataFolder = new File(FilePaths.WILDLOG_DATA.getFullPath());
+        File dataFolder = new File(WildLogPaths.WILDLOG_DATA.getFullPath());
         dataFolder.mkdirs();
-        File imagesFolder = new File(FilePaths.WILDLOG_IMAGES.getFullPath());
+        File imagesFolder = new File(WildLogPaths.WILDLOG_IMAGES.getFullPath());
         imagesFolder.mkdirs();
         //dbi = new DBI_derby();
         dbi = new DBI_h2();
         // Check to do monthly backup
-        File dirs = new File(FilePaths.WILDLOG_BACKUPS_MONTHLY.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
         if (!dirs.exists()) {
-            dbi.doBackup(FilePaths.WILDLOG_BACKUPS_MONTHLY);
+            dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY);
         }
         // Load the WildLogOptions
         wildLogOptions = dbi.find(new WildLogOptions());
@@ -182,7 +182,7 @@ public class WildLogApp extends SingleFrameApplication {
      */
     public static void main(String[] args) {
         // Make sure the Settings folder exists
-        File folder = new File(FilePaths.WILDLOG_SETTINGS.toString());
+        File folder = new File(WildLogPaths.WILDLOG_SETTINGS.toString());
         folder.mkdirs();
         // Configure to log to a logging file
         if (args != null && args.length == 1) {
@@ -190,7 +190,7 @@ public class WildLogApp extends SingleFrameApplication {
                 try {
                     PrintStream fileStream = null;
                     // Saving the orginal stream
-                    fileStream = new PrintStream(new FileOutputStream(FilePaths.WILDLOG_SETTINGS.toString() + "errorlog.txt", true));
+                    fileStream = new PrintStream(new FileOutputStream(WildLogPaths.WILDLOG_SETTINGS.toString() + "errorlog.txt", true));
                     // Redirecting console output to file
                     System.setOut(fileStream);
                     // Redirecting runtime exceptions to file
@@ -204,14 +204,14 @@ public class WildLogApp extends SingleFrameApplication {
         // Try to read the workspace file
         try {
             BufferedReader reader = new BufferedReader(
-                    new FileReader(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
-            FilePaths.setWorkspacePrefix(reader.readLine());
+                    new FileReader(WildLogPaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
+            WildLogPaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
             FileWriter writer = null;
             try {
-                writer = new FileWriter(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome");
+                writer = new FileWriter(WildLogPaths.WILDLOG_SETTINGS.toString() + "wildloghome");
                 writer.write(File.separator);
             }
             catch (IOException ioex) {
@@ -231,8 +231,8 @@ public class WildLogApp extends SingleFrameApplication {
             // Try to load the new file
             try {
                 BufferedReader reader = new BufferedReader(
-                        new FileReader(FilePaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
-                FilePaths.setWorkspacePrefix(reader.readLine());
+                        new FileReader(WildLogPaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
+                WildLogPaths.setWorkspacePrefix(reader.readLine());
             }
             catch (IOException ioex) {
                 ioex.printStackTrace(System.err);

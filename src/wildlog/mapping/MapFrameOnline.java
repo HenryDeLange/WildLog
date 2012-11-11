@@ -68,6 +68,7 @@ public class MapFrameOnline extends JFrame{
     public void showMap(Color inColor) {
         pointLayer.loadPoints(inColor);
         this.setVisible(true);
+        this.toFront();
     }
-    
+
 }

@@ -17,6 +17,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.ui.dialog.GPSDialog;
 import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.LatLonConverter;
@@ -175,6 +176,11 @@ public class InfoBox extends JPanel {
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
         btnGPS.setName("btnGPS"); // NOI18N
+        btnGPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGPSActionPerformed(evt);
+            }
+        });
         add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 135, 80, 50));
 
         btnEdit.setBackground(resourceMap.getColor("btnEdit.background")); // NOI18N
@@ -221,6 +227,15 @@ public class InfoBox extends JPanel {
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         Utils.openFile("ELEMENT-" + sightingWrapper.getElementName(), 0, app);
     }//GEN-LAST:event_lblImageMouseReleased
+
+    private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, sightingWrapper);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lblLatitude.setText(LatLonConverter.getLatitudeString(sightingWrapper));
+            lblLongitude.setText(LatLonConverter.getLongitudeString(sightingWrapper));
+        }
+    }//GEN-LAST:event_btnGPSActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChooseCreature;

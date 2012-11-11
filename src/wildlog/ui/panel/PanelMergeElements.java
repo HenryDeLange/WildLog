@@ -10,10 +10,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 
-/**
- *
- * @author DeLange
- */
+
 public class PanelMergeElements extends javax.swing.JPanel {
     // Variables:
     private WildLogApp app;
