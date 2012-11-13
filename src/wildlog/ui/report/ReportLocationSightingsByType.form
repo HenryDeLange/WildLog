@@ -24,49 +24,6 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="mnuReports">
-          <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="mnuReports.text"/>
-            <Property name="name" type="java.lang.String" value="mnuReports" noResource="true"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuLoadReport1">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="mnuLoadReport1.text"/>
-                <Property name="name" type="java.lang.String" value="mnuLoadReport1" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLoadReport1ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuLoadReport4">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="mnuLoadReport4.text"/>
-                <Property name="name" type="java.lang.String" value="mnuLoadReport4" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLoadReport4ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuLoadReport2">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="mnuLoadReport2.text"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLoadReport2ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuLoadReport3">
-              <Properties>
-                <Property name="text" type="java.lang.String" resourceKey="mnuLoadReport3.text"/>
-                <Property name="name" type="java.lang.String" value="mnuLoadReport3" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuLoadReport3ActionPerformed"/>
-              </Events>
-            </MenuItem>
-          </SubComponents>
-        </Menu>
         <Menu class="javax.swing.JMenu" name="mnuExtra">
           <Properties>
             <Property name="text" type="java.lang.String" resourceKey="mnuExtra.text"/>
@@ -94,6 +51,9 @@
     </Property>
     <Property name="background" type="java.awt.Color" resourceKey="Form.background"/>
     <Property name="foreground" type="java.awt.Color" resourceKey="Form.foreground"/>
+    <Property name="iconImage" type="java.awt.Image" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+      <Connection code="new ImageIcon(app.getClass().getResource(&quot;resources/icons/Report Icon.gif&quot;)).getImage()" type="code"/>
+    </Property>
     <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[550, 750]"/>
     </Property>
@@ -329,6 +289,34 @@
         </Constraint>
       </Constraints>
     </Component>
+    <Container class="javax.swing.JScrollPane" name="scrReport">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="null"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="scrReport" noResource="true"/>
+      </Properties>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="0" y="90" width="600" height="630"/>
+        </Constraint>
+      </Constraints>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Container class="javax.swing.JPanel" name="pnlScrollPane">
+          <Properties>
+            <Property name="background" type="java.awt.Color" resourceKey="pnlScrollPane.background"/>
+            <Property name="name" type="java.lang.String" value="pnlScrollPane" noResource="true"/>
+          </Properties>
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
+            <Property name="alignment" type="int" value="0"/>
+            <Property name="verticalGap" type="int" value="0"/>
+          </Layout>
+        </Container>
+      </SubComponents>
+    </Container>
     <Component class="javax.swing.JLabel" name="lblRemoteCamera">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="lblRemoteCamera.font"/>
@@ -381,112 +369,6 @@
         </Constraint>
       </Constraints>
     </Component>
-    <Container class="javax.swing.JScrollPane" name="scrReport">
-      <Properties>
-        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="null"/>
-        </Property>
-        <Property name="name" type="java.lang.String" value="scrReport" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="0" y="90" width="600" height="630"/>
-        </Constraint>
-      </Constraints>
-
-      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-      <SubComponents>
-        <Container class="javax.swing.JPanel" name="pnlScrollPane">
-          <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="pnlScrollPane.background"/>
-            <Property name="name" type="java.lang.String" value="pnlScrollPane" noResource="true"/>
-          </Properties>
-
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
-            <Property name="alignment" type="int" value="0"/>
-            <Property name="verticalGap" type="int" value="0"/>
-          </Layout>
-        </Container>
-      </SubComponents>
-    </Container>
-    <Component class="javax.swing.JLabel" name="lblNight">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblNight.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblNight.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblNight.text"/>
-        <Property name="name" type="java.lang.String" value="lblNight" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="60" y="725" width="60" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDawn">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblDawn.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblDawn.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblDawn.text"/>
-        <Property name="name" type="java.lang.String" value="lblDawn" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="130" y="725" width="60" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblMorning">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblMorning.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblMorning.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblMorning.text"/>
-        <Property name="name" type="java.lang.String" value="lblMorning" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="200" y="725" width="80" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblMidDay">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblMidDay.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblMidDay.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblMidDay.text"/>
-        <Property name="name" type="java.lang.String" value="lblMidDay" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="290" y="725" width="70" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblAfternoon">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblAfternoon.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblAfternoon.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblAfternoon.text"/>
-        <Property name="name" type="java.lang.String" value="lblAfternoon" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="370" y="725" width="90" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDusk">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblDusk.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblDusk.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblDusk.text"/>
-        <Property name="name" type="java.lang.String" value="lblDusk" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="470" y="725" width="50" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblOther">
       <Properties>
         <Property name="font" type="java.awt.Font" resourceKey="lblOther.font"/>
@@ -497,58 +379,6 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="530" y="725" width="60" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblMoonlightDay">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightDay.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblMoonlightDay.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblMoonlightDay.text"/>
-        <Property name="name" type="java.lang.String" value="lblMoonlightDay" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="50" y="725" width="140" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblNoMoonDay">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblNoMoonDay.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblNoMoonDay.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblNoMoonDay.text"/>
-        <Property name="name" type="java.lang.String" value="lblNoMoonDay" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="170" y="725" width="100" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblMoonlightNight">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightNight.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblMoonlightNight.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblMoonlightNight.text"/>
-        <Property name="name" type="java.lang.String" value="lblMoonlightNight" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="280" y="725" width="130" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblNoMoonNight">
-      <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblNoMoonNight.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="lblNoMoonNight.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblNoMoonNight.text"/>
-        <Property name="name" type="java.lang.String" value="lblNoMoonNight" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="410" y="725" width="120" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

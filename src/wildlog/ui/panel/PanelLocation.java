@@ -45,7 +45,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.dialog.GPSDialog;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
-import wildlog.ui.report.ReportLocation;
+import wildlog.ui.report.ReportLocationSightingsByMoon;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.FileDrop;
 import wildlog.utils.WildLogPaths;
@@ -895,10 +895,11 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
-        MappingDialog dialog = new MappingDialog(app.getMainFrame(),
-                locationWL, null, null, null);
-        dialog.setVisible(true);
-
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
+                    locationWL, null, null, null);
+            dialog.setVisible(true);
+        }
 }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
@@ -965,14 +966,10 @@ public class PanelLocation extends PanelCanSetupHeader {
 }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        if (locationWL.getName() != null) {
-            if (locationWL.getName().length() > 0) {
-                JFrame report = new ReportLocation(locationWL, app);
-                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-                report.setPreferredSize(new Dimension(550, 750));
-                report.setLocationRelativeTo(null);
-                report.setVisible(true);
-            }
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(),
+            locationWL, null);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed
 

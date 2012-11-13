@@ -922,9 +922,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
-        MappingDialog dialog = new MappingDialog(app.getMainFrame(),
-                null, null, visit, sighting);
-        dialog.setVisible(true);
+        if (visit.getName() != null && !visit.getName().isEmpty()) {
+            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
+                    null, null, visit, sighting);
+            dialog.setVisible(true);
+        }
 }//GEN-LAST:event_btnMapSightingActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed

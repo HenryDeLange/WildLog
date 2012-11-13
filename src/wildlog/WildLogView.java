@@ -72,7 +72,7 @@ import wildlog.ui.panel.PanelVisit;
 import wildlog.ui.panel.bulkupload.BulkUploadPanel;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.report.ReportElement;
-import wildlog.ui.report.ReportLocation;
+import wildlog.ui.report.ReportLocationSightingsByMoon;
 import wildlog.ui.report.ReportSighting;
 import wildlog.ui.report.ReportVisit;
 import wildlog.utils.AstroUtils;
@@ -2136,7 +2136,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                JFrame report = new ReportLocation(tempLocation, app);
+                JFrame report = new ReportLocationSightingsByMoon(tempLocation, app);
                 report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
                 report.setPreferredSize(new Dimension(550, 750));
                 report.setLocationRelativeTo(null);

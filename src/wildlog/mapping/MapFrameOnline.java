@@ -12,11 +12,8 @@ import wildlog.mapping.layers.MapOnlinePointLayer;
 import wildlog.mapping.other.WildLogMapMouseListener;
 import wildlog.mapping.other.WildLogScrollPanel;
 
-/**
- *
- * @author Henry
- */
-public class MapFrameOnline extends JFrame{
+
+public class MapFrameOnline extends JFrame {
     private JXMapKit map;
     private MapOnlinePointLayer pointLayer;
 

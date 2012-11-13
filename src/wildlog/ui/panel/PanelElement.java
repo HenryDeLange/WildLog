@@ -1059,9 +1059,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
-        MappingDialog dialog = new MappingDialog(app.getMainFrame(),
-                null, element, null, null);
-        dialog.setVisible(true);
+        if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
+            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
+                    null, element, null, null);
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed

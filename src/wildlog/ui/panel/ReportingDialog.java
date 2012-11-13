@@ -1,16 +1,23 @@
 package wildlog.ui.panel;
 
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.ui.report.ReportLocationSightingsBySun;
+import wildlog.ui.report.ReportLocationSightingsByMoon;
+import wildlog.ui.report.ReportLocationSightingsByType;
+import wildlog.ui.report.ReportLocationSpeciesCurve;
 import wildlog.utils.ui.Utils;
 
 
@@ -33,7 +40,10 @@ public class ReportingDialog extends JDialog {
 
         // Determine what buttons to show
         if (location == null) {
-            btnViewLocation.setVisible(false);
+            btnLocationMoon.setVisible(false);
+            btnLocationSun.setVisible(false);
+            btnLocationType.setVisible(false);
+            btnLocationSpeciesCurve.setVisible(false);
         }
 
         // Setup the escape key
@@ -66,8 +76,10 @@ public class ReportingDialog extends JDialog {
     private void initComponents() {
 
         jButton5 = new javax.swing.JButton();
-        btnViewSingleSighting = new javax.swing.JButton();
-        btnViewLocation = new javax.swing.JButton();
+        btnLocationMoon = new javax.swing.JButton();
+        btnLocationSun = new javax.swing.JButton();
+        btnLocationType = new javax.swing.JButton();
+        btnLocationSpeciesCurve = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportingDialog.class);
         jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
@@ -75,40 +87,124 @@ public class ReportingDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnViewSingleSighting.setIcon(resourceMap.getIcon("btnViewSightingsAndDistributionMap.icon")); // NOI18N
-        btnViewSingleSighting.setText(resourceMap.getString("btnViewSingleSighting.text")); // NOI18N
-        btnViewSingleSighting.setFocusPainted(false);
-        btnViewSingleSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewSingleSighting.setIconTextGap(10);
-        btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(230, 35));
-        btnViewSingleSighting.setName("btnViewSingleSighting"); // NOI18N
-        btnViewSingleSighting.setPreferredSize(new java.awt.Dimension(230, 35));
-        getContentPane().add(btnViewSingleSighting);
+        btnLocationMoon.setIcon(resourceMap.getIcon("btnLocationElementType.icon")); // NOI18N
+        btnLocationMoon.setText(resourceMap.getString("btnLocationMoon.text")); // NOI18N
+        btnLocationMoon.setFocusPainted(false);
+        btnLocationMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLocationMoon.setIconTextGap(10);
+        btnLocationMoon.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnLocationMoon.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnLocationMoon.setName("btnLocationMoon"); // NOI18N
+        btnLocationMoon.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnLocationMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocationMoonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLocationMoon);
 
-        btnViewLocation.setIcon(resourceMap.getIcon("btnViewLocation.icon")); // NOI18N
-        btnViewLocation.setText(resourceMap.getString("btnViewLocation.text")); // NOI18N
-        btnViewLocation.setFocusPainted(false);
-        btnViewLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewLocation.setIconTextGap(10);
-        btnViewLocation.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnViewLocation.setMinimumSize(new java.awt.Dimension(230, 35));
-        btnViewLocation.setName("btnViewLocation"); // NOI18N
-        btnViewLocation.setPreferredSize(new java.awt.Dimension(230, 35));
-        getContentPane().add(btnViewLocation);
+        btnLocationSun.setIcon(resourceMap.getIcon("btnLocationElementType.icon")); // NOI18N
+        btnLocationSun.setText(resourceMap.getString("btnLocationSun.text")); // NOI18N
+        btnLocationSun.setFocusPainted(false);
+        btnLocationSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLocationSun.setIconTextGap(10);
+        btnLocationSun.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnLocationSun.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnLocationSun.setName("btnLocationSun"); // NOI18N
+        btnLocationSun.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnLocationSun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocationSunActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLocationSun);
+
+        btnLocationType.setIcon(resourceMap.getIcon("btnLocationType.icon")); // NOI18N
+        btnLocationType.setText(resourceMap.getString("btnLocationType.text")); // NOI18N
+        btnLocationType.setFocusPainted(false);
+        btnLocationType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLocationType.setIconTextGap(10);
+        btnLocationType.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnLocationType.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnLocationType.setName("btnLocationType"); // NOI18N
+        btnLocationType.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnLocationType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocationTypeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLocationType);
+
+        btnLocationSpeciesCurve.setIcon(resourceMap.getIcon("btnLocationElementType.icon")); // NOI18N
+        btnLocationSpeciesCurve.setText(resourceMap.getString("btnLocationSpeciesCurve.text")); // NOI18N
+        btnLocationSpeciesCurve.setFocusPainted(false);
+        btnLocationSpeciesCurve.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnLocationSpeciesCurve.setIconTextGap(10);
+        btnLocationSpeciesCurve.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnLocationSpeciesCurve.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnLocationSpeciesCurve.setName("btnLocationSpeciesCurve"); // NOI18N
+        btnLocationSpeciesCurve.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnLocationSpeciesCurve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocationSpeciesCurveActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLocationSpeciesCurve);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnLocationMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationMoonActionPerformed
+        JFrame report = new ReportLocationSightingsByMoon(location, app);
+//        report.setPreferredSize(new Dimension(550, 750));
+//        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnLocationMoonActionPerformed
+
+    private void btnLocationSunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationSunActionPerformed
+        JFrame report = new ReportLocationSightingsBySun(location, app);
+//        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
+//        report.setPreferredSize(new Dimension(550, 750));
+//        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnLocationSunActionPerformed
+
+    private void btnLocationTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationTypeActionPerformed
+        JFrame report = new ReportLocationSightingsByType(location, app);
+//        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
+//        report.setPreferredSize(new Dimension(550, 750));
+//        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnLocationTypeActionPerformed
+
+    private void btnLocationSpeciesCurveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationSpeciesCurveActionPerformed
+        JFrame report = new ReportLocationSpeciesCurve(location, app);
+//        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
+//        report.setPreferredSize(new Dimension(550, 750));
+//        report.setLocationRelativeTo(null);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnLocationSpeciesCurveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnViewLocation;
-    private javax.swing.JButton btnViewSingleSighting;
+    private javax.swing.JButton btnLocationMoon;
+    private javax.swing.JButton btnLocationSpeciesCurve;
+    private javax.swing.JButton btnLocationSun;
+    private javax.swing.JButton btnLocationType;
     private javax.swing.JButton jButton5;
     // End of variables declaration//GEN-END:variables
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
@@ -29,7 +30,7 @@ import wildlog.utils.UtilsHTML;
 import wildlog.utils.ui.UtilMapGenerator;
 import wildlog.utils.ui.Utils;
 
-
+// TODO: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
 public class MappingDialog extends JDialog {
     private WildLogApp app;
     private Location location;
@@ -134,6 +135,7 @@ public class MappingDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/images/Map_Small.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
@@ -282,7 +284,6 @@ public class MappingDialog extends JDialog {
         // Clear old points
         UtilMapGenerator.clearMap(app, false);
         // Load points
-        // TODO: Hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
         if (location.getLatitude() != null && location.getLongitude() != null)
             if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
                 double lat = location.getLatDegrees();
@@ -297,7 +298,7 @@ public class MappingDialog extends JDialog {
                     lon = -1 * lon;
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), location, app, false);
             }
-
+        this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + location.getName());
@@ -308,8 +309,6 @@ public class MappingDialog extends JDialog {
             app.getMapOffline().changeTitle("WildLog Map - Offline: " + location.getName());
             app.getMapOffline().showMap();
         }
-        // TODO: Fixure uit hoekom die map panels agtertoe gaan...
-        this.dispose();
     }//GEN-LAST:event_btnViewLocationActionPerformed
 
     private void btnViewAllSightingsForLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllSightingsForLocationActionPerformed
@@ -336,7 +335,7 @@ public class MappingDialog extends JDialog {
                 }
             }
         }
-
+        this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + location.getName() + " (Sightings)");
@@ -347,14 +346,11 @@ public class MappingDialog extends JDialog {
             app.getMapOffline().changeTitle("WildLog Map - Offline: " + location.getName() + " (Sightings)");
             app.getMapOffline().showMap();
         }
-
-        this.dispose();
     }//GEN-LAST:event_btnViewAllSightingsForLocationActionPerformed
 
     private void btnViewAllSightingsForElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllSightingsForElementActionPerformed
         // Clear old points
         UtilMapGenerator.clearMap(app, false);
-
         // Load points
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
@@ -393,7 +389,7 @@ public class MappingDialog extends JDialog {
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightingList.get(t), app, false);
             }
         }
-
+        this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + element.getPrimaryName());
@@ -404,8 +400,6 @@ public class MappingDialog extends JDialog {
             app.getMapOffline().changeTitle("WildLog Map - Offline: " + element.getPrimaryName());
             app.getMapOffline().showMap();
         }
-
-        this.dispose();
     }//GEN-LAST:event_btnViewAllSightingsForElementActionPerformed
 
     private void btnOpenKmlViewerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenKmlViewerActionPerformed
@@ -521,24 +515,22 @@ public class MappingDialog extends JDialog {
     }//GEN-LAST:event_btnOpenKmlViewerActionPerformed
 
     private void btnViewDistributionMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDistributionMapActionPerformed
-         // Clear old points
+        // Clear old points
         UtilMapGenerator.clearMap(app, true);
         File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
         UtilMapGenerator.addDistributionMap(app, file);
         // Open Map
         app.getMapOffline().changeTitle("WildLog Map - Offline: " + element.getPrimaryName() + " - Distribution");
         app.getMapOffline().showMap();
-       this.dispose();
+        this.dispose();
     }//GEN-LAST:event_btnViewDistributionMapActionPerformed
 
     private void btnViewSightingsAndDistributionMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewSightingsAndDistributionMapActionPerformed
         // Clear old points
         UtilMapGenerator.clearMap(app, true);
-
-        //
+        // Load distribution map
         File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
         UtilMapGenerator.addDistributionMap(app, file);
-
         // Load points
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
@@ -577,18 +569,15 @@ public class MappingDialog extends JDialog {
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightingList.get(t), app, true);
             }
         }
-
+        this.dispose();
         // Open Map
         app.getMapOffline().changeTitle("WildLog Map - Offline: " + element.getPrimaryName() + " - Distribution");
         app.getMapOffline().showMap();
-
-        this.dispose();
     }//GEN-LAST:event_btnViewSightingsAndDistributionMapActionPerformed
 
     private void btnViewAllSightingsForVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewAllSightingsForVisitActionPerformed
         // Clear old points
         UtilMapGenerator.clearMap(app, false);
-
         // Load points
         Sighting tempSighting = new Sighting();
         tempSighting.setVisitName(visit.getName());
@@ -609,7 +598,7 @@ public class MappingDialog extends JDialog {
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 190, 50), sightings.get(t), app, false);
             }
         }
-
+        this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName());
@@ -620,14 +609,11 @@ public class MappingDialog extends JDialog {
             app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName());
             app.getMapOffline().showMap();
         }
-
-        this.dispose();
     }//GEN-LAST:event_btnViewAllSightingsForVisitActionPerformed
 
     private void btnViewSingleSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewSingleSightingActionPerformed
         // Clear old points
         UtilMapGenerator.clearMap(app, false);
-
         // Load points
         if (sighting != null) {
             if (sighting.getLatitude() != null && sighting.getLongitude() != null)
@@ -645,7 +631,7 @@ public class MappingDialog extends JDialog {
                 UtilMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sighting, app, false);
             }
         }
-
+        this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
             app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName() + " (Sightings)");
@@ -656,8 +642,6 @@ public class MappingDialog extends JDialog {
             app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName() + " (Sightings)");
             app.getMapOffline().showMap();
         }
-
-        this.dispose();
     }//GEN-LAST:event_btnViewSingleSightingActionPerformed
 
 
