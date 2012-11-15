@@ -69,12 +69,13 @@ import wildlog.ui.panel.PanelMergeElements;
 import wildlog.ui.panel.PanelMoveVisit;
 import wildlog.ui.panel.PanelSighting;
 import wildlog.ui.panel.PanelVisit;
+import wildlog.ui.panel.ReportingDialog;
 import wildlog.ui.panel.bulkupload.BulkUploadPanel;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.ui.report.ReportElement;
+import wildlog.ui.report.ReportElementSightingsBySun;
 import wildlog.ui.report.ReportLocationSightingsByMoon;
-import wildlog.ui.report.ReportSighting;
-import wildlog.ui.report.ReportVisit;
+import wildlog.ui.report.ReportSightingByElement;
+import wildlog.ui.report.ReportVisitSightingsBySun;
 import wildlog.utils.AstroUtils;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.LatLonConverter;
@@ -2136,37 +2137,26 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                JFrame report = new ReportLocationSightingsByMoon(tempLocation, app);
-                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-                report.setPreferredSize(new Dimension(550, 750));
-                report.setLocationRelativeTo(null);
-                report.setVisible(true);
+                ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), tempLocation, null, null, null, null);
+                dialog.setVisible(true);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                JFrame report = new ReportElement(tempElement, app);
-                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-                report.setPreferredSize(new Dimension(550, 750));
-                report.setLocationRelativeTo(null);
-                report.setVisible(true);
+                ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, tempElement, null, null, null);
+                dialog.setVisible(true);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                JFrame report = new ReportVisit(tempVisit, app);
-                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-                report.setPreferredSize(new Dimension(550, 750));
-                report.setLocationRelativeTo(null);
-                report.setVisible(true);
+                ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, tempVisit, null, null);
+                dialog.setVisible(true);
             }
         }
+        // TODO: Die sighting reports is bietjie kripties versteek, probeer dit dalk erns anders ook meer duidelik wys
         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-            JFrame report = new ReportSighting(dtpStartDate.getDate(), dtpEndDate.getDate(), app);
-            report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-            report.setPreferredSize(new Dimension(550, 750));
-            report.setLocationRelativeTo(null);
-            report.setVisible(true);
+            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, null, dtpStartDate.getDate(), dtpEndDate.getDate());
+            dialog.setVisible(true);
         }
 }//GEN-LAST:event_btnReportActionPerformed
 

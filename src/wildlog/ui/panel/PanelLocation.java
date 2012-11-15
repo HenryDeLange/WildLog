@@ -639,7 +639,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnMapActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 95, 110, 35));
+        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
 
         rdbLocation.setBackground(resourceMap.getColor("rdbLocation.background")); // NOI18N
         buttonGroup1.add(rdbLocation);
@@ -967,8 +967,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(),
-            locationWL, null);
+            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), locationWL, null, null, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

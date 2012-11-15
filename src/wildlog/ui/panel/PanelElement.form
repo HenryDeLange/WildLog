@@ -1011,7 +1011,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="140" width="110" height="35"/>
+              <AbsoluteConstraints x="580" y="180" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1125,6 +1125,10 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 4]"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
           </Properties>
           <Events>
@@ -1132,7 +1136,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="255" width="110" height="35"/>
+              <AbsoluteConstraints x="580" y="140" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1153,7 +1157,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="215" width="110" height="35"/>
+              <AbsoluteConstraints x="580" y="220" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>

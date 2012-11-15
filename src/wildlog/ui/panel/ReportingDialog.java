@@ -1,10 +1,10 @@
 package wildlog.ui.panel;
 
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -14,10 +14,16 @@ import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Visit;
+import wildlog.ui.report.ReportElementSightingsByMoon;
+import wildlog.ui.report.ReportElementSightingsBySun;
 import wildlog.ui.report.ReportLocationSightingsBySun;
 import wildlog.ui.report.ReportLocationSightingsByMoon;
 import wildlog.ui.report.ReportLocationSightingsByType;
 import wildlog.ui.report.ReportLocationSpeciesCurve;
+import wildlog.ui.report.ReportSightingByElement;
+import wildlog.ui.report.ReportSightingByLocation;
+import wildlog.ui.report.ReportVisitSightingsBySun;
 import wildlog.utils.ui.Utils;
 
 
@@ -25,15 +31,24 @@ public class ReportingDialog extends JDialog {
     private WildLogApp app;
     private Location location;
     private Element element;
+    private Visit visit;
+    private Date startDate;
+    private Date endDate;
 
     public ReportingDialog(Frame inParent,
             Location inLocationToMap,
-            Element inElementToMap) {
+            Element inElementToMap,
+            Visit inVisit,
+            Date inStartDate,
+            Date inEndDate) {
         super(inParent);
         // Set passed in values
         app = (WildLogApp) Application.getInstance();
         location = inLocationToMap;
         element = inElementToMap;
+        visit = inVisit;
+        startDate = inStartDate;
+        endDate = inEndDate;
 
         // Auto generated code
         initComponents();
@@ -44,6 +59,17 @@ public class ReportingDialog extends JDialog {
             btnLocationSun.setVisible(false);
             btnLocationType.setVisible(false);
             btnLocationSpeciesCurve.setVisible(false);
+        }
+        if (element == null) {
+            btnElementMoon.setVisible(false);
+            btnElementSun.setVisible(false);
+        }
+        if (visit == null) {
+            btnVisitSun.setVisible(false);
+        }
+        if (startDate == null || endDate == null) {
+            btnSightingDateElement.setVisible(false);
+            btnSightingDateLocation.setVisible(false);
         }
 
         // Setup the escape key
@@ -80,6 +106,11 @@ public class ReportingDialog extends JDialog {
         btnLocationSun = new javax.swing.JButton();
         btnLocationType = new javax.swing.JButton();
         btnLocationSpeciesCurve = new javax.swing.JButton();
+        btnElementMoon = new javax.swing.JButton();
+        btnElementSun = new javax.swing.JButton();
+        btnVisitSun = new javax.swing.JButton();
+        btnSightingDateLocation = new javax.swing.JButton();
+        btnSightingDateElement = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportingDialog.class);
         jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
@@ -93,7 +124,7 @@ public class ReportingDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnLocationMoon.setIcon(resourceMap.getIcon("btnLocationElementType.icon")); // NOI18N
+        btnLocationMoon.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
         btnLocationMoon.setText(resourceMap.getString("btnLocationMoon.text")); // NOI18N
         btnLocationMoon.setFocusPainted(false);
         btnLocationMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -109,7 +140,7 @@ public class ReportingDialog extends JDialog {
         });
         getContentPane().add(btnLocationMoon);
 
-        btnLocationSun.setIcon(resourceMap.getIcon("btnLocationElementType.icon")); // NOI18N
+        btnLocationSun.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
         btnLocationSun.setText(resourceMap.getString("btnLocationSun.text")); // NOI18N
         btnLocationSun.setFocusPainted(false);
         btnLocationSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -125,7 +156,7 @@ public class ReportingDialog extends JDialog {
         });
         getContentPane().add(btnLocationSun);
 
-        btnLocationType.setIcon(resourceMap.getIcon("btnLocationType.icon")); // NOI18N
+        btnLocationType.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
         btnLocationType.setText(resourceMap.getString("btnLocationType.text")); // NOI18N
         btnLocationType.setFocusPainted(false);
         btnLocationType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -141,7 +172,7 @@ public class ReportingDialog extends JDialog {
         });
         getContentPane().add(btnLocationType);
 
-        btnLocationSpeciesCurve.setIcon(resourceMap.getIcon("btnLocationElementType.icon")); // NOI18N
+        btnLocationSpeciesCurve.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
         btnLocationSpeciesCurve.setText(resourceMap.getString("btnLocationSpeciesCurve.text")); // NOI18N
         btnLocationSpeciesCurve.setFocusPainted(false);
         btnLocationSpeciesCurve.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -157,13 +188,91 @@ public class ReportingDialog extends JDialog {
         });
         getContentPane().add(btnLocationSpeciesCurve);
 
+        btnElementMoon.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
+        btnElementMoon.setText(resourceMap.getString("btnElementMoon.text")); // NOI18N
+        btnElementMoon.setFocusPainted(false);
+        btnElementMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnElementMoon.setIconTextGap(10);
+        btnElementMoon.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnElementMoon.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnElementMoon.setName("btnElementMoon"); // NOI18N
+        btnElementMoon.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnElementMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnElementMoonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnElementMoon);
+
+        btnElementSun.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
+        btnElementSun.setText(resourceMap.getString("btnElementSun.text")); // NOI18N
+        btnElementSun.setFocusPainted(false);
+        btnElementSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnElementSun.setIconTextGap(10);
+        btnElementSun.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnElementSun.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnElementSun.setName("btnElementSun"); // NOI18N
+        btnElementSun.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnElementSun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnElementSunActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnElementSun);
+
+        btnVisitSun.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
+        btnVisitSun.setText(resourceMap.getString("btnVisitSun.text")); // NOI18N
+        btnVisitSun.setFocusPainted(false);
+        btnVisitSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnVisitSun.setIconTextGap(10);
+        btnVisitSun.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnVisitSun.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnVisitSun.setName("btnVisitSun"); // NOI18N
+        btnVisitSun.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnVisitSun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVisitSunActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVisitSun);
+
+        btnSightingDateLocation.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
+        btnSightingDateLocation.setText(resourceMap.getString("btnSightingDateLocation.text")); // NOI18N
+        btnSightingDateLocation.setFocusPainted(false);
+        btnSightingDateLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSightingDateLocation.setIconTextGap(10);
+        btnSightingDateLocation.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnSightingDateLocation.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnSightingDateLocation.setName("btnSightingDateLocation"); // NOI18N
+        btnSightingDateLocation.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnSightingDateLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSightingDateLocationActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSightingDateLocation);
+
+        btnSightingDateElement.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
+        btnSightingDateElement.setText(resourceMap.getString("btnSightingDateElement.text")); // NOI18N
+        btnSightingDateElement.setFocusPainted(false);
+        btnSightingDateElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSightingDateElement.setIconTextGap(10);
+        btnSightingDateElement.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnSightingDateElement.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnSightingDateElement.setName("btnSightingDateElement"); // NOI18N
+        btnSightingDateElement.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnSightingDateElement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSightingDateElementActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSightingDateElement);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLocationMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationMoonActionPerformed
         JFrame report = new ReportLocationSightingsByMoon(location, app);
-//        report.setPreferredSize(new Dimension(550, 750));
-//        report.setLocationRelativeTo(null);
         report.setVisible(true);
         this.dispose();
         report.toFront();
@@ -171,9 +280,6 @@ public class ReportingDialog extends JDialog {
 
     private void btnLocationSunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationSunActionPerformed
         JFrame report = new ReportLocationSightingsBySun(location, app);
-//        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-//        report.setPreferredSize(new Dimension(550, 750));
-//        report.setLocationRelativeTo(null);
         report.setVisible(true);
         this.dispose();
         report.toFront();
@@ -181,9 +287,6 @@ public class ReportingDialog extends JDialog {
 
     private void btnLocationTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationTypeActionPerformed
         JFrame report = new ReportLocationSightingsByType(location, app);
-//        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-//        report.setPreferredSize(new Dimension(550, 750));
-//        report.setLocationRelativeTo(null);
         report.setVisible(true);
         this.dispose();
         report.toFront();
@@ -191,20 +294,57 @@ public class ReportingDialog extends JDialog {
 
     private void btnLocationSpeciesCurveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocationSpeciesCurveActionPerformed
         JFrame report = new ReportLocationSpeciesCurve(location, app);
-//        report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-//        report.setPreferredSize(new Dimension(550, 750));
-//        report.setLocationRelativeTo(null);
         report.setVisible(true);
         this.dispose();
         report.toFront();
     }//GEN-LAST:event_btnLocationSpeciesCurveActionPerformed
 
+    private void btnElementMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElementMoonActionPerformed
+        JFrame report = new ReportElementSightingsByMoon(element, app);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnElementMoonActionPerformed
+
+    private void btnElementSunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElementSunActionPerformed
+        JFrame report = new ReportElementSightingsBySun(element, app);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnElementSunActionPerformed
+
+    private void btnVisitSunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisitSunActionPerformed
+        JFrame report = new ReportVisitSightingsBySun(visit, app);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnVisitSunActionPerformed
+
+    private void btnSightingDateLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSightingDateLocationActionPerformed
+        JFrame report = new ReportSightingByLocation(startDate, endDate, app);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnSightingDateLocationActionPerformed
+
+    private void btnSightingDateElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSightingDateElementActionPerformed
+        JFrame report = new ReportSightingByElement(startDate, endDate, app);
+        report.setVisible(true);
+        this.dispose();
+        report.toFront();
+    }//GEN-LAST:event_btnSightingDateElementActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnElementMoon;
+    private javax.swing.JButton btnElementSun;
     private javax.swing.JButton btnLocationMoon;
     private javax.swing.JButton btnLocationSpeciesCurve;
     private javax.swing.JButton btnLocationSun;
     private javax.swing.JButton btnLocationType;
+    private javax.swing.JButton btnSightingDateElement;
+    private javax.swing.JButton btnSightingDateLocation;
+    private javax.swing.JButton btnVisitSun;
     private javax.swing.JButton jButton5;
     // End of variables declaration//GEN-END:variables
 }

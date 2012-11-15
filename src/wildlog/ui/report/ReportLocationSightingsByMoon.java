@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.KeyStroke;
@@ -240,9 +239,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
         getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 725, 120, -1));
 
-        lblOther.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
-        lblOther.setForeground(resourceMap.getColor("lblOther.foreground")); // NOI18N
-        lblOther.setText(resourceMap.getString("lblOther.text")); // NOI18N
         lblOther.setName("lblOther"); // NOI18N
         getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 725, 60, -1));
 

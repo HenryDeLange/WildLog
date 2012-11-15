@@ -3,6 +3,9 @@ package wildlog.ui.report;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
@@ -12,8 +15,10 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.KeyStroke;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
@@ -23,28 +28,39 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.report.chart.BarChart;
 import wildlog.ui.report.chart.BarChartEntity;
-import wildlog.ui.report.helpers.MoonReportHelper;
+import wildlog.utils.ui.Utils;
 
-/**
- *
- * @author Henry
- */
-public class ReportElement extends javax.swing.JFrame {
+
+public class ReportElementSightingsBySun extends javax.swing.JFrame {
     private boolean usePrimaryName = true;
-    private boolean viewReport1 = true;
-    private boolean viewReport2 = false;
     private Element element;
     private BarChart chartTime;
     private WildLogApp app;
 
-    /** Creates new form ReportElement */
-    public ReportElement(Element inElement, WildLogApp inApp) {
+    /** Creates new form ReportElementSightingsBySun */
+    public ReportElementSightingsBySun(Element inElement, WildLogApp inApp) {
         element = inElement;
         app = inApp;
 
         initComponents();
 
-        doReport1();
+        // Setup the escape key
+        final JFrame thisHandler = (JFrame)this;
+        ActionListener escListiner = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        thisHandler.dispose();
+                    }
+                };
+        thisHandler.getRootPane().registerKeyboardAction(
+                escListiner,
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        // Position the dialog
+        Utils.setDialogToCenter(app.getMainFrame(), thisHandler);
+
+        doReport();
     }
 
     /** This method is called from within the constructor to
@@ -109,24 +125,18 @@ public class ReportElement extends javax.swing.JFrame {
         lblDawn = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         lblTotalVisits = new javax.swing.JLabel();
-        lblMoonlightDay = new javax.swing.JLabel();
-        lblNoMoonDay = new javax.swing.JLabel();
-        lblMoonlightNight = new javax.swing.JLabel();
-        lblNoMoonNight = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        mnuReport = new javax.swing.JMenu();
-        mnuSunlight = new javax.swing.JMenuItem();
-        mnuMoonlight = new javax.swing.JMenuItem();
+        mnuPrintReport = new javax.swing.JMenuItem();
         mnuExtra = new javax.swing.JMenu();
         mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Creature Report: " + element.getPrimaryName());
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportElement.class);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportElementSightingsBySun.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
         setForeground(resourceMap.getColor("Form.foreground")); // NOI18N
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(550, 750));
         setName("Form"); // NOI18N
         setResizable(false);
@@ -383,68 +393,21 @@ public class ReportElement extends javax.swing.JFrame {
         lblTotalVisits.setName("lblTotalVisits"); // NOI18N
         getContentPane().add(lblTotalVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, 50, -1));
 
-        lblMoonlightDay.setFont(resourceMap.getFont("lblMoonlightDay.font")); // NOI18N
-        lblMoonlightDay.setForeground(resourceMap.getColor("lblMoonlightDay.foreground")); // NOI18N
-        lblMoonlightDay.setText(resourceMap.getString("lblMoonlightDay.text")); // NOI18N
-        lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
-        getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 705, 140, -1));
-
-        lblNoMoonDay.setFont(resourceMap.getFont("lblNoMoonDay.font")); // NOI18N
-        lblNoMoonDay.setForeground(resourceMap.getColor("lblNoMoonDay.foreground")); // NOI18N
-        lblNoMoonDay.setText(resourceMap.getString("lblNoMoonDay.text")); // NOI18N
-        lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
-        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 705, 100, -1));
-
-        lblMoonlightNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
-        lblMoonlightNight.setForeground(resourceMap.getColor("lblMoonlightNight.foreground")); // NOI18N
-        lblMoonlightNight.setText(resourceMap.getString("lblMoonlightNight.text")); // NOI18N
-        lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
-        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 705, 130, -1));
-
-        lblNoMoonNight.setFont(resourceMap.getFont("lblNoMoonNight.font")); // NOI18N
-        lblNoMoonNight.setForeground(resourceMap.getColor("lblNoMoonNight.foreground")); // NOI18N
-        lblNoMoonNight.setText(resourceMap.getString("lblNoMoonNight.text")); // NOI18N
-        lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
-        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 705, 120, -1));
-
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
         mnuPrint.setText(resourceMap.getString("mnuPrint.text")); // NOI18N
         mnuPrint.setName("mnuPrint"); // NOI18N
 
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        mnuPrintReport.setText(resourceMap.getString("mnuPrintReport.text")); // NOI18N
+        mnuPrintReport.setName("mnuPrintReport"); // NOI18N
+        mnuPrintReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                mnuPrintReportActionPerformed(evt);
             }
         });
-        mnuPrint.add(jMenuItem1);
+        mnuPrint.add(mnuPrintReport);
 
         jMenuBar1.add(mnuPrint);
-
-        mnuReport.setText(resourceMap.getString("mnuReport.text")); // NOI18N
-        mnuReport.setName("mnuReport"); // NOI18N
-
-        mnuSunlight.setText(resourceMap.getString("mnuSunlight.text")); // NOI18N
-        mnuSunlight.setName("mnuSunlight"); // NOI18N
-        mnuSunlight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSunlightActionPerformed(evt);
-            }
-        });
-        mnuReport.add(mnuSunlight);
-
-        mnuMoonlight.setText(resourceMap.getString("mnuMoonlight.text")); // NOI18N
-        mnuMoonlight.setName("mnuMoonlight"); // NOI18N
-        mnuMoonlight.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuMoonlightActionPerformed(evt);
-            }
-        });
-        mnuReport.add(mnuMoonlight);
-
-        jMenuBar1.add(mnuReport);
 
         mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
         mnuExtra.setName("mnuExtra"); // NOI18N
@@ -465,7 +428,7 @@ public class ReportElement extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void mnuPrintReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrintReportActionPerformed
         try {
             final JFrame frame = this;
             PrinterJob pj = PrinterJob.getPrinterJob();
@@ -492,46 +455,17 @@ public class ReportElement extends javax.swing.JFrame {
         } catch (PrinterException ex) {
             ex.printStackTrace(System.err);
         }
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_mnuPrintReportActionPerformed
 
     private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
         usePrimaryName = ! usePrimaryName;
-        if (viewReport1) {
-            doReport1();
-            // Re-Draw
-            repaint();
-            setVisible(true);
-        }
-        else
-        if (viewReport2) {
-            doReport2();
-            // Re-Draw
-            repaint();
-            setVisible(true);
-        }
+        doReport();
+        // Re-Draw
+        repaint();
+        setVisible(true);
     }//GEN-LAST:event_mnuNameActionPerformed
 
-    private void mnuSunlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSunlightActionPerformed
-        viewReport1 = true;
-        viewReport2 = false;
-        usePrimaryName = true;
-        doReport1();
-        // Re-Draw
-        repaint();
-        setVisible(true);
-    }//GEN-LAST:event_mnuSunlightActionPerformed
-
-    private void mnuMoonlightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMoonlightActionPerformed
-        viewReport1 = false;
-        viewReport2 = true;
-        usePrimaryName = true;
-        doReport2();
-        // Re-Draw
-        repaint();
-        setVisible(true);
-    }//GEN-LAST:event_mnuMoonlightActionPerformed
-
-    private void doReport1() {
+    private void doReport() {
         // Init report fields
         if (usePrimaryName)
             lblName.setText(element.getPrimaryName());
@@ -706,188 +640,6 @@ public class ReportElement extends javax.swing.JFrame {
         lblAtlasing.setText(Integer.toString(atlas));
         lblOtherVisit.setText(Integer.toString(other));
 
-        lblNight.setVisible(true);
-        lblDawn.setVisible(true);
-        lblMorning.setVisible(true);
-        lblMidDay.setVisible(true);
-        lblAfternoon.setVisible(true);
-        lblDusk.setVisible(true);
-        //lblOther.setVisible(true);
-        lblMoonlightDay.setVisible(false);
-        lblNoMoonDay.setVisible(false);
-        lblMoonlightNight.setVisible(false);
-        lblNoMoonNight.setVisible(false);
-
-        // Setup Frame Look and Feel
-        this.getContentPane().setBackground(Color.WHITE);
-    }
-
-    private void doReport2() {
-        // Init report fields
-        if (usePrimaryName)
-            lblName.setText(element.getPrimaryName());
-        else
-            lblName.setText(element.getOtherName());
-        if (element.getWishListRating() != null)
-            lblWishList.setText(element.getWishListRating().toString());
-        else
-            lblWishList.setText("Unknown");
-        if (element.getAddFrequency() != null)
-            lblAddFrequency.setText(element.getAddFrequency().toString());
-        else
-            lblAddFrequency.setText("Unknown");
-        Sighting tempSighting = new Sighting();
-        tempSighting.setElementName(element.getPrimaryName());
-        List<Sighting> sightings = app.getDBI().list(tempSighting);
-        lblNumberOfSightings.setText(Integer.toString(sightings.size()));
-        Set<String> numOfLocations = new HashSet<String>();
-        int numDaySightings = 0;
-        int numNightSightings = 0;
-        Date firstDate = null;
-        Date lastDate = null;
-        String firstLocation = "Unknown";
-        String lastLocation = "Unknown";
-        int verygood = 0;
-        int good = 0;
-        int normal = 0;
-        int bad = 0;
-        int verybad = 0;
-        int remotecamera = 0;
-        int dayvisit = 0;
-        int vacation = 0;
-        int atlas = 0;
-        int other = 0;
-
-        Set<String> visits = new HashSet<String>();
-
-        // Add Charts
-        if (chartTime != null)
-            pnlScrollPane.remove(chartTime);
-        chartTime = new BarChart(580, 515);
-        for (Sighting sighting : sightings) {
-            visits.add(sighting.getVisitName());
-            // Locations
-            numOfLocations.add(sighting.getLocationName());
-            // Dates
-            if (sighting.getDate() != null) {
-                if (firstDate == null) {
-                    firstDate = sighting.getDate();
-                    firstLocation = sighting.getLocationName();
-                }
-                else
-                if (sighting.getDate().before(firstDate)) {
-                    firstDate = sighting.getDate();
-                    firstLocation = sighting.getLocationName();
-                }
-            }
-            if (sighting.getDate() != null) {
-                if (lastDate == null) {
-                    lastDate = sighting.getDate();
-                    lastLocation = sighting.getLocationName();
-                }
-                else
-                if (sighting.getDate().after(lastDate)) {
-                    lastDate = sighting.getDate();
-                    lastLocation = sighting.getLocationName();
-                }
-            }
-            // Time
-            if (sighting.getTimeOfDay() != null) {
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
-                    // Night
-                    numNightSightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                    // Do nothing
-                }
-                else {
-                    // Day
-                    numDaySightings++;
-                }
-            }
-            // Moon
-            MoonReportHelper.addMoonInfoToChart(chartTime, sighting, new JLabel[]{lblMoonlightNight, lblNoMoonNight, lblMoonlightDay, lblNoMoonDay, lblOther});
-            // Rating
-            if (sighting.getViewRating().equals(ViewRating.VERY_GOOD))
-                verygood++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.GOOD))
-                good++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.NORMAL))
-                normal++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.BAD))
-                bad++;
-            else
-            if (sighting.getViewRating().equals(ViewRating.VERY_BAD))
-                verybad++;
-        }
-
-        pnlScrollPane.add(chartTime);
-        chartTime.paintComponent(pnlScrollPane.getGraphics());
-        pnlScrollPane.setPreferredSize(new Dimension(580, chartTime.getChartHeight()));
-
-        // Visit Type
-        for (String tempVisitName : visits) {
-        Visit tempVisit = new Visit(tempVisitName);
-        tempVisit = app.getDBI().find(tempVisit);
-            if (tempVisit.getType() != null) {
-                if (tempVisit.getType().equals(VisitType.REMOTE_CAMERA))
-                    remotecamera++;
-                else
-                if (tempVisit.getType().equals(VisitType.DAY_VISIT))
-                    dayvisit++;
-                else
-                if (tempVisit.getType().equals(VisitType.VACATION))
-                    vacation++;
-                else
-                if (tempVisit.getType().equals(VisitType.BIRD_ATLASSING))
-                    atlas++;
-                else
-                if (tempVisit.getType().equals(VisitType.NONE))
-                    other++;
-            }
-            else
-                other++;
-        }
-
-        lblTotalVisits.setText(Integer.toString(visits.size()));
-
-        // Wrap up report fields
-        lblDaySightings.setText(Integer.toString(numDaySightings));
-        lblNightSightings.setText(Integer.toString(numNightSightings));
-        lblNumberOfLocations.setText(Integer.toString(numOfLocations.size()));
-        if (firstDate != null)
-            lblFirstDate.setText(new SimpleDateFormat("dd MMM yyyy").format(firstDate));
-        if (lastDate != null)
-            lblLastDate.setText(new SimpleDateFormat("dd MMM yyyy").format(lastDate));
-        lblFirstLocation.setText(firstLocation);
-        lblLastLocation.setText(lastLocation);
-        lblVeryGood.setText(Integer.toString(verygood));
-        lblGood.setText(Integer.toString(good));
-        lblNormal.setText(Integer.toString(normal));
-        lblBad.setText(Integer.toString(bad));
-        lblVeryBad.setText(Integer.toString(verybad));
-        lblRemoteCamera.setText(Integer.toString(remotecamera));
-        lblDayVisit.setText(Integer.toString(dayvisit));
-        lblVacation.setText(Integer.toString(vacation));
-        lblAtlasing.setText(Integer.toString(atlas));
-        lblOtherVisit.setText(Integer.toString(other));
-
-        lblNight.setVisible(false);
-        lblDawn.setVisible(false);
-        lblMorning.setVisible(false);
-        lblMidDay.setVisible(false);
-        lblAfternoon.setVisible(false);
-        lblDusk.setVisible(false);
-        //lblOther.setVisible(false);
-        lblMoonlightDay.setVisible(true);
-        lblNoMoonDay.setVisible(true);
-        lblMoonlightNight.setVisible(true);
-        lblNoMoonNight.setVisible(true);
-
         // Setup Frame Look and Feel
         this.getContentPane().setBackground(Color.WHITE);
     }
@@ -916,7 +668,6 @@ public class ReportElement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lblAddFrequency;
     private javax.swing.JLabel lblAfternoon;
     private javax.swing.JLabel lblAtlasing;
@@ -931,14 +682,10 @@ public class ReportElement extends javax.swing.JFrame {
     private javax.swing.JLabel lblLastDate;
     private javax.swing.JLabel lblLastLocation;
     private javax.swing.JLabel lblMidDay;
-    private javax.swing.JLabel lblMoonlightDay;
-    private javax.swing.JLabel lblMoonlightNight;
     private javax.swing.JLabel lblMorning;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNight;
     private javax.swing.JLabel lblNightSightings;
-    private javax.swing.JLabel lblNoMoonDay;
-    private javax.swing.JLabel lblNoMoonNight;
     private javax.swing.JLabel lblNormal;
     private javax.swing.JLabel lblNumberOfLocations;
     private javax.swing.JLabel lblNumberOfSightings;
@@ -951,11 +698,9 @@ public class ReportElement extends javax.swing.JFrame {
     private javax.swing.JLabel lblVeryGood;
     private javax.swing.JLabel lblWishList;
     private javax.swing.JMenu mnuExtra;
-    private javax.swing.JMenuItem mnuMoonlight;
     private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
-    private javax.swing.JMenu mnuReport;
-    private javax.swing.JMenuItem mnuSunlight;
+    private javax.swing.JMenuItem mnuPrintReport;
     private javax.swing.JPanel pnlScrollPane;
     private javax.swing.JScrollPane scrReport;
     // End of variables declaration//GEN-END:variables

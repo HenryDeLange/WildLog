@@ -49,7 +49,7 @@ import wildlog.mapping.kml.util.KmlUtil;
 import wildlog.ui.panel.bulkupload.BulkUploadPanel;
 import wildlog.ui.panel.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.ui.report.ReportVisit;
+import wildlog.ui.report.ReportVisitSightingsBySun;
 import wildlog.utils.FileDrop;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.UtilsHTML;
@@ -577,7 +577,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 110, 35));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
 
         btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
@@ -693,13 +693,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
+        btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReport.setMargin(new java.awt.Insets(2, 8, 2, 4));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 35));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
 
         btnChecklist.setBackground(resourceMap.getColor("btnChecklist.background")); // NOI18N
         btnChecklist.setFont(resourceMap.getFont("btnChecklist.font")); // NOI18N
@@ -1001,14 +1003,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_tblSightingsMouseClicked
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        if (visit.getName() != null) {
-            if (visit.getName().length() > 0) {
-                JFrame report = new ReportVisit(visit, app);
-                report.setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
-                report.setPreferredSize(new Dimension(550, 750));
-                report.setLocationRelativeTo(null);
-                report.setVisible(true);
-            }
+        if (visit.getName() != null && !visit.getName().isEmpty()) {
+            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, visit, null, null);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed
 

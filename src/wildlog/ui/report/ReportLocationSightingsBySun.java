@@ -96,15 +96,15 @@ public class ReportLocationSightingsBySun extends JFrame {
         jLabel12 = new javax.swing.JLabel();
         lblActiveDays = new javax.swing.JLabel();
         lblLegend = new javax.swing.JLabel();
-        scrReport = new javax.swing.JScrollPane();
-        pnlScrollPane = new javax.swing.JPanel();
-        lblNight = new javax.swing.JLabel();
         lblDawn = new javax.swing.JLabel();
         lblMorning = new javax.swing.JLabel();
         lblMidDay = new javax.swing.JLabel();
         lblAfternoon = new javax.swing.JLabel();
         lblDusk = new javax.swing.JLabel();
         lblOther = new javax.swing.JLabel();
+        lblNight = new javax.swing.JLabel();
+        scrReport = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
@@ -204,22 +204,6 @@ public class ReportLocationSightingsBySun extends JFrame {
         lblLegend.setName("lblLegend"); // NOI18N
         getContentPane().add(lblLegend, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 725, -1, -1));
 
-        scrReport.setBorder(null);
-        scrReport.setName("scrReport"); // NOI18N
-
-        pnlScrollPane.setBackground(resourceMap.getColor("pnlScrollPane.background")); // NOI18N
-        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
-        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-        scrReport.setViewportView(pnlScrollPane);
-
-        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 600, 630));
-
-        lblNight.setFont(resourceMap.getFont("lblNight.font")); // NOI18N
-        lblNight.setForeground(resourceMap.getColor("lblNight.foreground")); // NOI18N
-        lblNight.setText(resourceMap.getString("lblNight.text")); // NOI18N
-        lblNight.setName("lblNight"); // NOI18N
-        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 725, 60, -1));
-
         lblDawn.setFont(resourceMap.getFont("lblDawn.font")); // NOI18N
         lblDawn.setForeground(resourceMap.getColor("lblDawn.foreground")); // NOI18N
         lblDawn.setText(resourceMap.getString("lblDawn.text")); // NOI18N
@@ -255,6 +239,22 @@ public class ReportLocationSightingsBySun extends JFrame {
         lblOther.setText(resourceMap.getString("lblOther.text")); // NOI18N
         lblOther.setName("lblOther"); // NOI18N
         getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 725, 60, -1));
+
+        lblNight.setFont(resourceMap.getFont("lblNight.font")); // NOI18N
+        lblNight.setForeground(resourceMap.getColor("lblNight.foreground")); // NOI18N
+        lblNight.setText(resourceMap.getString("lblNight.text")); // NOI18N
+        lblNight.setName("lblNight"); // NOI18N
+        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 725, 60, -1));
+
+        scrReport.setBorder(null);
+        scrReport.setName("scrReport"); // NOI18N
+
+        pnlScrollPane.setBackground(resourceMap.getColor("pnlScrollPane.background")); // NOI18N
+        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        scrReport.setViewportView(pnlScrollPane);
+
+        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 600, 630));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
