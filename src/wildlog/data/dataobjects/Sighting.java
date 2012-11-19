@@ -20,8 +20,8 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
-import wildlog.utils.LatLonConverter;
-import wildlog.utils.UtilsHTML;
+import wildlog.mapping.utils.LatLonConverter;
+import wildlog.html.utils.UtilsHTML;
 
 public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
     private Date date; // must include time

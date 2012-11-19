@@ -17,7 +17,8 @@ import javax.swing.ImageIcon;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.mapping.layers.MapOfflinePointLayer;
-import wildlog.utils.ui.Utils;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public class MapFrameOffline {
     // Variables:
@@ -201,7 +202,7 @@ public class MapFrameOffline {
 
             // Display the frame
             frame.setSize(950, 700);
-            Utils.setDialogToCenter(((WildLogApp)Application.getInstance()).getMainFrame(), frame);
+            UtilsDialog.setDialogToCenter(((WildLogApp)Application.getInstance()).getMainFrame(), frame);
             frame.setVisible(true);
             frame.toFront();
 

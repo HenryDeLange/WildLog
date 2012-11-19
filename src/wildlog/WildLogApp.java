@@ -1,5 +1,7 @@
 package wildlog;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
@@ -162,6 +165,12 @@ public class WildLogApp extends SingleFrameApplication {
         WildLogView view = new WildLogView(this);
         view.getFrame().setIconImage(icon.getImage());
         show(view);
+        // Setup the glassPane for modal popups
+        JPanel glassPane = (JPanel)this.getMainFrame().getGlassPane();
+        glassPane.setLayout(new BorderLayout());
+        JPanel background = new JPanel();
+        background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+        glassPane.add(background, BorderLayout.CENTER);
     }
 
     /**

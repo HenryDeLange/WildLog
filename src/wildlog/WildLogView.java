@@ -1,5 +1,6 @@
 package wildlog;
 
+import wildlog.ui.dialogs.WildLogAboutBox;
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
@@ -21,7 +22,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -57,33 +57,34 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
-import wildlog.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTML;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.mapping.kml.util.KmlUtil;
-import wildlog.ui.panel.PanelElement;
-import wildlog.ui.panel.PanelLocation;
-import wildlog.ui.panel.PanelMergeElements;
-import wildlog.ui.panel.PanelMoveVisit;
-import wildlog.ui.panel.PanelSighting;
-import wildlog.ui.panel.PanelVisit;
-import wildlog.ui.panel.ReportingDialog;
-import wildlog.ui.panel.bulkupload.BulkUploadPanel;
-import wildlog.ui.panel.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.ui.report.ReportElementSightingsBySun;
-import wildlog.ui.report.ReportLocationSightingsByMoon;
-import wildlog.ui.report.ReportSightingByElement;
-import wildlog.ui.report.ReportVisitSightingsBySun;
-import wildlog.utils.AstroUtils;
+import wildlog.mapping.kml.utils.UtilsKML;
+import wildlog.ui.panels.PanelElement;
+import wildlog.ui.panels.PanelLocation;
+import wildlog.ui.dialogs.MergeElementsDialog;
+import wildlog.ui.dialogs.MoveVisitDialog;
+import wildlog.ui.panels.PanelSighting;
+import wildlog.ui.panels.PanelVisit;
+import wildlog.ui.dialogs.ReportingDialog;
+import wildlog.ui.panels.bulkupload.BulkUploadPanel;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.astro.AstroCalculator;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.LatLonConverter;
-import wildlog.utils.ui.ProgressbarTask;
-import wildlog.utils.ui.UtilPanelGenerator;
-import wildlog.utils.ui.UtilTableGenerator;
-import wildlog.utils.ui.Utils;
-import wildlog.utils.ui.WildLogTreeCellRenderer;
+import wildlog.mapping.utils.LatLonConverter;
+import wildlog.movies.utils.UtilsMovies;
+import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.UtilPanelGenerator;
+import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.ui.helpers.WildLogTreeCellRenderer;
+import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsImageProcessing;
 
 /**
  * The application's main frame.
@@ -181,20 +182,20 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblVisit.getTableHeader().setReorderingAllowed(false);
 
         // Add key listeners to table to allow the selection of rows based on key events.
-        Utils.attachKeyListernerToSelectKeyedRows(tblLocation);
-        Utils.attachKeyListernerToSelectKeyedRows(tblLocation_EleTab);
-        Utils.attachKeyListernerToSelectKeyedRows(tblElement);
-        Utils.attachKeyListernerToSelectKeyedRows(tblElement_LocTab);
-        Utils.attachKeyListernerToSelectKeyedRows(tblVisit);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation_EleTab);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement_LocTab);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
         // Add key listener for textfields to auto search the tables
-        Utils.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
+        UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
 
         // Set the minimum size of the frame
         this.getFrame().setMinimumSize(new Dimension(1024, 705));
 
         // Attach clipboard
-        Utils.attachClipboardPopup(txtSearch);
-        Utils.attachClipboardPopup(txtBrowseInfo, true);
+        UtilsUI.attachClipboardPopup(txtSearch);
+        UtilsUI.attachClipboardPopup(txtBrowseInfo, true);
     }
 
     @Action
@@ -1620,7 +1621,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
-        lblImage.setIcon(Utils.getScaledIconForNoImage(300));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
 //        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
 }//GEN-LAST:event_tabElementComponentShown
 
@@ -1648,7 +1649,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilTableGenerator.setupCompleteLocationTable(tblLocation, searchLocation);
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
-        lblImage_LocTab.setIcon(Utils.getScaledIconForNoImage(300));
+        lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
     }//GEN-LAST:event_tabLocationComponentShown
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
@@ -1665,7 +1666,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         txtSearch.setText("");
         UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
-        lblImage.setIcon(Utils.getScaledIconForNoImage(300));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
 //        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -1714,14 +1715,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
             if (fotos.size() > 0)
-                Utils.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, 300, app);
+                UtilsImageProcessing.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, 300, app);
             else
-                lblImage.setIcon(Utils.getScaledIconForNoImage(300));
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
             // Get Locations
             UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, tempElement);
         }
         else {
-            lblImage.setIcon(Utils.getScaledIconForNoImage(300));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
             tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         }
     }//GEN-LAST:event_tblElementMouseReleased
@@ -1732,16 +1733,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
             if (fotos.size() > 0)
-                Utils.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, 300, app);
+                UtilsImageProcessing.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, 300, app);
             else
-                lblImage_LocTab.setIcon(Utils.getScaledIconForNoImage(300));
+                lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
             // Get Visits
             UtilTableGenerator.setupShortVisitTable(tblVisit, tempLocation);
             // Get All Elements seen
             UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, tempLocation);
         }
         else {
-            lblImage_LocTab.setIcon(Utils.getScaledIconForNoImage(300));
+            lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
             tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Location Selected"}, 0));
         }
@@ -1789,14 +1790,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-                Utils.openFile("ELEMENT-" + tempElement.getPrimaryName(), 0, app);
+                UtilsFileProcessing.openFile("ELEMENT-" + tempElement.getPrimaryName(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblImage_LocTabMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage_LocTabMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-            Utils.openFile("LOCATION-" + tempLocation.getName(), 0, app);
+            UtilsFileProcessing.openFile("LOCATION-" + tempLocation.getName(), 0, app);
         }
     }//GEN-LAST:event_lblImage_LocTabMouseReleased
 
@@ -2023,22 +2024,22 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openFile("LOCATION-" + temp.getName(), imageIndex, app);
+                UtilsFileProcessing.openFile("LOCATION-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openFile("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                UtilsFileProcessing.openFile("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openFile("VISIT-" + temp.getName(), imageIndex, app);
+                UtilsFileProcessing.openFile("VISIT-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.openFile("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                UtilsFileProcessing.openFile("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
             }
         }
     }//GEN-LAST:event_btnViewImageActionPerformed
@@ -2164,22 +2165,22 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = Utils.setMainImage("LOCATION-" + temp.getName(), imageIndex, app);
+                imageIndex = UtilsImageProcessing.setMainImage("LOCATION-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = Utils.setMainImage("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                imageIndex = UtilsImageProcessing.setMainImage("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = Utils.setMainImage("VISIT-" + temp.getName(), imageIndex, app);
+                imageIndex = UtilsImageProcessing.setMainImage("VISIT-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = Utils.setMainImage("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                imageIndex = UtilsImageProcessing.setMainImage("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
             }
             imageIndex--;
             btnBrowseNextActionPerformed(evt);
@@ -2209,22 +2210,22 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.showExifPopup("LOCATION-" + temp.getName(), imageIndex, app);
+                UtilsDialog.showExifPopup("LOCATION-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.showExifPopup("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                UtilsDialog.showExifPopup("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.showExifPopup("VISIT-" + temp.getName(), imageIndex, app);
+                UtilsDialog.showExifPopup("VISIT-" + temp.getName(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                Utils.showExifPopup("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                UtilsDialog.showExifPopup("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
             }
         }
     }//GEN-LAST:event_btnViewEXIFActionPerformed
@@ -2260,10 +2261,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 if (f.isDirectory()) {
                     return true;
                 }
-                String extension = Utils.getExtension(f);
+                String extension = UtilsFileProcessing.getExtension(f);
                 if (extension != null) {
-                    if (extension.equalsIgnoreCase(Utils.jpeg) ||
-                        extension.equalsIgnoreCase(Utils.jpg)) {
+                    if (extension.equalsIgnoreCase(UtilsFileProcessing.jpeg) ||
+                        extension.equalsIgnoreCase(UtilsFileProcessing.jpg)) {
                             return true;
                     }
                 }
@@ -2276,7 +2277,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         int result = fileChooser.showOpenDialog(this.getComponent());
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            Utils.showExifPopup(fileChooser.getSelectedFile());
+            UtilsDialog.showExifPopup(fileChooser.getSelectedFile());
         }
     }//GEN-LAST:event_mnuExifMenuItemActionPerformed
 
@@ -2427,7 +2428,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void exportToHTML() {
-        Utils.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 messageTimer.stop();
@@ -2492,7 +2493,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 File tempFile = new File(path);
                 tempFile.mkdirs();
                 // Make sure icons exist in the KML folder
-                KmlUtil.copyKmlIcons(app, path);
+                UtilsKML.copyKmlIcons(app, path);
                 // KML Stuff
                 KmlGenerator kmlgen = new KmlGenerator();
                 kmlgen.setKmlPath(path + "WildLogMarkers.kml");
@@ -2517,10 +2518,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
                 }
                 // Generate KML
-                kmlgen.generateFile(entries, KmlUtil.getKmlStyles());
+                kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
                 // Try to open the Kml file
                 JOptionPane.showMessageDialog(null, "Done: The KML file will automatically be opened.", "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
-                Utils.openFile(path + "WildLogMarkers.kml");
+                UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
                 return null;
             }
         }.execute();
@@ -2546,7 +2547,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         final JDialog dialog = new JDialog(app.getMainFrame(), "Link Creatures", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(790, 540);
-        dialog.add(new PanelMergeElements(), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        dialog.add(new MergeElementsDialog(), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(tabbedPanel);
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Element.gif"));
         dialog.setIconImage(icon.getImage());
@@ -2569,7 +2570,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         final JDialog dialog = new JDialog(app.getMainFrame(), "Move Visits", true);
         dialog.setLayout(new AbsoluteLayout());
         dialog.setSize(750, 560);
-        dialog.add(new PanelMoveVisit(), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        dialog.add(new MoveVisitDialog(), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         dialog.setLocationRelativeTo(tabbedPanel);
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif"));
         dialog.setIconImage(icon.getImage());
@@ -2599,12 +2600,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void openDBConsole() {
-        Utils.openFile(System.getProperty("user.dir") + "/lib/h2-1.3.168.jar");
+        UtilsFileProcessing.openFile(System.getProperty("user.dir") + "/lib/h2-1.3.168.jar");
     }
 
 @Action
     public void openOpenMapApp() {
-        Utils.openFile(System.getProperty("user.dir") + "/lib/openmap.jar");
+        UtilsFileProcessing.openFile(System.getProperty("user.dir") + "/lib/openmap.jar");
     }
 
     private void loadPrevFile(List<WildLogFile> inFotos) {
@@ -2649,7 +2650,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 //                        int size = (int)imgBrowsePhotos.getSize().getWidth();
 //                        if (imgBrowsePhotos.getSize().getHeight() > size)
 //                            size = (int)imgBrowsePhotos.getSize().getHeight();
-//                        imgBrowsePhotos.setImage(Utils.getScaledIcon(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)), size).getImage());
+//                        imgBrowsePhotos.setImage(UtilsFileProcessing.getScaledIcon(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)), size).getImage());
                         imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getOriginalFotoLocation(true)));
                     }
                     else
@@ -2728,12 +2729,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (JOptionPane.showConfirmDialog(this.getComponent(), "Please backup your data before proceding. This will replace the Sun and Moon information for all your Sightings with the auto generated values.", "Calculate Sun and Moon Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
             List<Sighting> sightings = app.getDBI().list(new Sighting());
             for (Sighting sighting : sightings) {
-                sighting.setMoonPhase(AstroUtils.getMoonPhase(sighting.getDate()));
+                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
                 if (!Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude()) && !sighting.isTimeUnknown()) {
                     double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
                     double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                    sighting.setMoonlight(AstroUtils.getMoonlight(sighting.getDate(), lat, lon));
-                    sighting.setTimeOfDay(AstroUtils.getSunCategory(sighting.getDate(), lat, lon));
+                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
+                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
                     app.getDBI().createOrUpdate(sighting);
                 }
             }
@@ -2819,7 +2820,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
             // Delete temporary folders
             try {
-                Utils.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
+                UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -2827,9 +2828,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
             // Check for unused empty folders
             try {
-                Utils.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
-                Utils.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
-                Utils.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -2848,7 +2849,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         fileChooser.setDialogTitle("Select the images to use for the slideshow...");
         final Component parent = this.getComponent();
         if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this.getComponent())) {
-            Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
+            UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setMessage("Creating the Slideshow");
@@ -2865,7 +2866,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         // Now create the slideshow
                         setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
                         String outputFile = fileChooser.getSelectedFile().getPath().substring(2);
-                        Utils.generateSlideshow(fileNames, app, outputFile);
+                        UtilsMovies.generateSlideshow(fileNames, app, outputFile);
                         setMessage("Done with the Slideshow");
                     }
                     return null;
@@ -2876,7 +2877,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     @Action
     public void bulkImportAction() {
-        Utils.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, null);

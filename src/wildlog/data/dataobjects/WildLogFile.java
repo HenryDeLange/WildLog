@@ -2,7 +2,7 @@ package wildlog.data.dataobjects;
 
 import java.util.Calendar;
 import java.util.Date;
-import wildlog.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.utils.WildLogPaths;
 

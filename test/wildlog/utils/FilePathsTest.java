@@ -200,4 +200,19 @@ public class FilePathsTest {
         assertEquals(expectedResult, result);
     }
 
+    @Test
+    public void testStripRootFromPath() {
+        String inPath = "123456789";
+        String inRoot = "123";
+        String expResult = "456789";
+        String result = WildLogPaths.stripRootFromPath(inPath, inRoot);
+        assertEquals(expResult, result);
+        // Also test
+        inPath = "123456789";
+        inRoot = "";
+        expResult = "123456789";
+        result = WildLogPaths.stripRootFromPath(inPath, inRoot);
+        assertEquals(expResult, result);
+    }
+
 }

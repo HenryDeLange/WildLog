@@ -1,7 +1,7 @@
 package wildlog.data.dataobjects.interfaces;
 
 import wildlog.WildLogApp;
-import wildlog.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTML;
 
 /**
  *

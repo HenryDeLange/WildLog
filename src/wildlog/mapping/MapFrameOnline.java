@@ -9,8 +9,8 @@ import javax.swing.JTextPane;
 import org.jdesktop.swingx.JXMapKit;
 import wildlog.WildLogApp;
 import wildlog.mapping.layers.MapOnlinePointLayer;
-import wildlog.mapping.other.WildLogMapMouseListener;
-import wildlog.mapping.other.WildLogScrollPanel;
+import wildlog.mapping.helpers.WildLogMapMouseListener;
+import wildlog.mapping.helpers.WildLogScrollPanel;
 
 
 public class MapFrameOnline extends JFrame {

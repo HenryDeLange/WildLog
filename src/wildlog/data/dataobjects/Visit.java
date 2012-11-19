@@ -6,7 +6,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
-import wildlog.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTML;
 
 public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     private String name; // Used as index (ID)

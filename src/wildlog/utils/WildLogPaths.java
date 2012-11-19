@@ -115,4 +115,13 @@ public enum WildLogPaths {
         return getRelativePath();
     }
 
+    /**
+     * This method will strip the first root part from the path.
+     * WARNING: This method assumes that both the inPath and inRoot are
+     * absolute proper paths.
+     */
+    public static String stripRootFromPath(String inPath, String inRoot) {
+        return inPath.substring(inRoot.length());
+    }
+
 }

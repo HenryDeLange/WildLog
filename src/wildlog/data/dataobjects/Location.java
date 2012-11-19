@@ -10,8 +10,8 @@ import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
-import wildlog.utils.LatLonConverter;
-import wildlog.utils.UtilsHTML;
+import wildlog.mapping.utils.LatLonConverter;
+import wildlog.html.utils.UtilsHTML;
 
 public class Location extends DataObjectWithGPS implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML {
     private String name; // Used as index (ID)

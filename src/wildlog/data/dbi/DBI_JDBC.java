@@ -1,5 +1,6 @@
 package wildlog.data.dbi;
 
+import wildlog.data.utils.UtilsData;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -113,7 +114,7 @@ public abstract class DBI_JDBC implements DBI {
         Element tempElement = null;
         try {
             state = conn.prepareStatement(findElement);
-            state.setString(1, DBUtils.sanitizeString(inElement.getPrimaryName()));
+            state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
             results = state.executeQuery();
             if (results.next()) {
                 tempElement = new Element();
@@ -165,7 +166,7 @@ public abstract class DBI_JDBC implements DBI {
         ResultSet results = null;
         try {
             state = conn.prepareStatement(findLocation);
-            state.setString(1, DBUtils.sanitizeString(inLocation.getName()));
+            state.setString(1, UtilsData.sanitizeString(inLocation.getName()));
             results = state.executeQuery();
             if (results.next()) {
                 tempLocation = new Location();
@@ -206,7 +207,7 @@ public abstract class DBI_JDBC implements DBI {
         Visit tempVisit = null;
         try {
             state = conn.prepareStatement(findVisit);
-            state.setString(1, DBUtils.sanitizeString(inVisit.getName()));
+            state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
             results = state.executeQuery();
             if (results.next()) {
                 tempVisit = new Visit();
@@ -313,13 +314,13 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listElement;
             if (inElement.getPrimaryName() != null && inElement.getType() == null) {
-                sql = sql + " WHERE PRIMARYNAME like '%" + DBUtils.sanitizeString(inElement.getPrimaryName()) + "%'";
+                sql = sql + " WHERE PRIMARYNAME like '%" + UtilsData.sanitizeString(inElement.getPrimaryName()) + "%'";
             }
             else if (inElement.getPrimaryName() == null && inElement.getType() != null) {
                 sql = sql + " WHERE ELEMENTTYPE = '" + inElement.getType() + "'";
             }
             else if (inElement.getPrimaryName() != null && inElement.getType() != null) {
-                sql = sql + " WHERE PRIMARYNAME like '%" + DBUtils.sanitizeString(inElement.getPrimaryName())
+                sql = sql + " WHERE PRIMARYNAME like '%" + UtilsData.sanitizeString(inElement.getPrimaryName())
                         + "%' AND ELEMENTTYPE = '" + inElement.getType() + "'";
             }
             state = conn.prepareStatement(sql);
@@ -376,7 +377,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listLocation;
             if (inLocation.getName() != null) {
-                sql = sql + " WHERE NAME like '%" + DBUtils.sanitizeString(inLocation.getName()) + "%'";
+                sql = sql + " WHERE NAME like '%" + UtilsData.sanitizeString(inLocation.getName()) + "%'";
             }
             state = conn.prepareStatement(sql);
             results = state.executeQuery();
@@ -421,10 +422,10 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listVisit;
             if (inVisit.getName() != null) {
-                sql = sql + " WHERE NAME = '" + DBUtils.sanitizeString(inVisit.getName()) + "'";
+                sql = sql + " WHERE NAME = '" + UtilsData.sanitizeString(inVisit.getName()) + "'";
             }
             else if (inVisit.getLocationName() != null) {
-                sql = sql + " WHERE LOCATIONNAME = '" + DBUtils.sanitizeString(inVisit.getLocationName()) + "'";
+                sql = sql + " WHERE LOCATIONNAME = '" + UtilsData.sanitizeString(inVisit.getLocationName()) + "'";
             }
             state = conn.prepareStatement(sql);
             results = state.executeQuery();
@@ -460,13 +461,13 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
             }
             else if (inSighting.getElementName() != null) {
-                sql = sql + " WHERE ELEMENTNAME = '" + DBUtils.sanitizeString(inSighting.getElementName()) + "'";
+                sql = sql + " WHERE ELEMENTNAME = '" + UtilsData.sanitizeString(inSighting.getElementName()) + "'";
             }
             else if (inSighting.getLocationName() != null) {
-                sql = sql + " WHERE LOCATIONNAME = '" + DBUtils.sanitizeString(inSighting.getLocationName()) + "'";
+                sql = sql + " WHERE LOCATIONNAME = '" + UtilsData.sanitizeString(inSighting.getLocationName()) + "'";
             }
             else if (inSighting.getVisitName() != null) {
-                sql = sql + " WHERE VISITNAME = '" + DBUtils.sanitizeString(inSighting.getVisitName()) + "'";
+                sql = sql + " WHERE VISITNAME = '" + UtilsData.sanitizeString(inSighting.getVisitName()) + "'";
             }
             state = conn.prepareStatement(sql);
             results = state.executeQuery();
@@ -521,7 +522,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listFile;
             if (inFile.getId() != null) {
-                sql = sql + " WHERE ID = '" + DBUtils.sanitizeString(inFile.getId()) + "'";
+                sql = sql + " WHERE ID = '" + UtilsData.sanitizeString(inFile.getId()) + "'";
             }
             sql = sql + " ORDER BY ISDEFAULT desc, FILEPATH";
             state = conn.prepareStatement(sql);
@@ -602,7 +603,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                List<Element> list = list(new Element(DBUtils.sanitizeString(inElement.getPrimaryName())));
+                List<Element> list = list(new Element(UtilsData.sanitizeString(inElement.getPrimaryName())));
                 if (!list.isEmpty()) {
                     return false;
                 }
@@ -620,50 +621,50 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp);
                     }
                     // Update the Files
-                    List<WildLogFile> wildLogFiles = list(new WildLogFile("ELEMENT-" + DBUtils.sanitizeString(inOldName)));
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile("ELEMENT-" + UtilsData.sanitizeString(inOldName)));
                     for (WildLogFile temp : wildLogFiles) {
-                        temp.setId("ELEMENT-" + DBUtils.limitLength(DBUtils.sanitizeString(inElement.getPrimaryName()), 150));
+                        temp.setId("ELEMENT-" + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
                         createOrUpdate(temp, true);
                     }
                 }
                 // Update
                 state = conn.prepareStatement(updateElement);
-                state.setString(31, DBUtils.sanitizeString(inOldName));
+                state.setString(31, UtilsData.sanitizeString(inOldName));
             }
             else {
                 // Insert
                 state = conn.prepareStatement(createElement);
             }
-            state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getPrimaryName()), 150));
-            state.setString(2, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getOtherName()), 150));
-            state.setString(3, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getScientificName()), 150));
-            state.setString(4, DBUtils.sanitizeString(inElement.getDescription()));
-            state.setString(5, DBUtils.sanitizeString(inElement.getDistribution()));
-            state.setString(6, DBUtils.sanitizeString(inElement.getNutrition()));
-            state.setString(7, DBUtils.stringFromObject(inElement.getWaterDependance()));
+            state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
+            state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getOtherName()), 150));
+            state.setString(3, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getScientificName()), 150));
+            state.setString(4, UtilsData.sanitizeString(inElement.getDescription()));
+            state.setString(5, UtilsData.sanitizeString(inElement.getDistribution()));
+            state.setString(6, UtilsData.sanitizeString(inElement.getNutrition()));
+            state.setString(7, UtilsData.stringFromObject(inElement.getWaterDependance()));
             state.setDouble(8, inElement.getSizeMaleMin());
             state.setDouble(9, inElement.getSizeMaleMax());
             state.setDouble(10, inElement.getSizeFemaleMin());
             state.setDouble(11, inElement.getSizeFemaleMax());
-            state.setString(12, DBUtils.stringFromObject(inElement.getSizeUnit()));
-            state.setString(13, DBUtils.stringFromObject(inElement.getSizeType()));
+            state.setString(12, UtilsData.stringFromObject(inElement.getSizeUnit()));
+            state.setString(13, UtilsData.stringFromObject(inElement.getSizeType()));
             state.setDouble(14, inElement.getWeightMaleMin());
             state.setDouble(15, inElement.getWeightMaleMax());
             state.setDouble(16, inElement.getWeightFemaleMin());
             state.setDouble(17, inElement.getWeightFemaleMax());
-            state.setString(18, DBUtils.stringFromObject(inElement.getWeightUnit()));
-            state.setString(19, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getBreedingDuration()), 50));
-            state.setString(20, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getBreedingNumber()), 50));
-            state.setString(21, DBUtils.stringFromObject(inElement.getWishListRating()));
-            state.setString(22, DBUtils.sanitizeString(inElement.getDiagnosticDescription()));
-            state.setString(23, DBUtils.stringFromObject(inElement.getActiveTime()));
-            state.setString(24, DBUtils.stringFromObject(inElement.getEndangeredStatus()));
-            state.setString(25, DBUtils.sanitizeString(inElement.getBehaviourDescription()));
-            state.setString(26, DBUtils.stringFromObject(inElement.getAddFrequency()));
-            state.setString(27, DBUtils.stringFromObject(inElement.getType()));
-            state.setString(28, DBUtils.stringFromObject(inElement.getFeedingClass()));
-            state.setString(29, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getLifespan()), 50));
-            state.setString(30, DBUtils.limitLength(DBUtils.sanitizeString(inElement.getReferenceID()), 50));
+            state.setString(18, UtilsData.stringFromObject(inElement.getWeightUnit()));
+            state.setString(19, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getBreedingDuration()), 50));
+            state.setString(20, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getBreedingNumber()), 50));
+            state.setString(21, UtilsData.stringFromObject(inElement.getWishListRating()));
+            state.setString(22, UtilsData.sanitizeString(inElement.getDiagnosticDescription()));
+            state.setString(23, UtilsData.stringFromObject(inElement.getActiveTime()));
+            state.setString(24, UtilsData.stringFromObject(inElement.getEndangeredStatus()));
+            state.setString(25, UtilsData.sanitizeString(inElement.getBehaviourDescription()));
+            state.setString(26, UtilsData.stringFromObject(inElement.getAddFrequency()));
+            state.setString(27, UtilsData.stringFromObject(inElement.getType()));
+            state.setString(28, UtilsData.stringFromObject(inElement.getFeedingClass()));
+            state.setString(29, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getLifespan()), 50));
+            state.setString(30, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getReferenceID()), 50));
             // Execute
             state.executeUpdate();
         }
@@ -684,7 +685,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                List<Location> list = list(new Location(DBUtils.sanitizeString(inLocation.getName())));
+                List<Location> list = list(new Location(UtilsData.sanitizeString(inLocation.getName())));
                 if (!list.isEmpty()) {
                     return false;
                 }
@@ -708,36 +709,36 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp, temp.getName());
                     }
                     // Update the Files
-                    List<WildLogFile> wildLogFiles = list(new WildLogFile("LOCATION-" + DBUtils.sanitizeString(inOldName)));
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile("LOCATION-" + UtilsData.sanitizeString(inOldName)));
                     for (WildLogFile temp : wildLogFiles) {
-                        temp.setId("LOCATION-" + DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getName()), 150));
+                        temp.setId("LOCATION-" + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
                         createOrUpdate(temp, true);
                     }
                 }
                 // Update
                 state = conn.prepareStatement(updateLocation);
-                state.setString(20, DBUtils.sanitizeString(inOldName));
+                state.setString(20, UtilsData.sanitizeString(inOldName));
             }
             else {
                 // Insert
                 state = conn.prepareStatement(createLocation);
             }
-            state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getName()), 150));
-            state.setString(2, DBUtils.sanitizeString(inLocation.getDescription()));
-            state.setString(3, DBUtils.stringFromObject(inLocation.getRating()));
-            state.setString(4, DBUtils.stringFromObject(inLocation.getGameViewingRating()));
-            state.setString(5, DBUtils.stringFromObject(inLocation.getHabitatType()));
-            state.setString(6, DBUtils.stringFromObject(inLocation.getAccommodationType()));
-            state.setString(7, DBUtils.stringFromObject(inLocation.getCatering()));
-            state.setString(8, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getContactNumbers()), 50));
-            state.setString(9, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getWebsite()), 100));
-            state.setString(10, DBUtils.limitLength(DBUtils.sanitizeString(inLocation.getEmail()), 100));
-            state.setString(11, DBUtils.sanitizeString(inLocation.getDirections()));
-            state.setString(12, DBUtils.stringFromObject(inLocation.getLatitude()));
+            state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
+            state.setString(2, UtilsData.sanitizeString(inLocation.getDescription()));
+            state.setString(3, UtilsData.stringFromObject(inLocation.getRating()));
+            state.setString(4, UtilsData.stringFromObject(inLocation.getGameViewingRating()));
+            state.setString(5, UtilsData.stringFromObject(inLocation.getHabitatType()));
+            state.setString(6, UtilsData.stringFromObject(inLocation.getAccommodationType()));
+            state.setString(7, UtilsData.stringFromObject(inLocation.getCatering()));
+            state.setString(8, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getContactNumbers()), 50));
+            state.setString(9, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getWebsite()), 100));
+            state.setString(10, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getEmail()), 100));
+            state.setString(11, UtilsData.sanitizeString(inLocation.getDirections()));
+            state.setString(12, UtilsData.stringFromObject(inLocation.getLatitude()));
             state.setInt(13, inLocation.getLatDegrees());
             state.setInt(14, inLocation.getLatMinutes());
             state.setDouble(15, inLocation.getLatSeconds());
-            state.setString(16, DBUtils.stringFromObject(inLocation.getLongitude()));
+            state.setString(16, UtilsData.stringFromObject(inLocation.getLongitude()));
             state.setInt(17, inLocation.getLonDegrees());
             state.setInt(18, inLocation.getLonMinutes());
             state.setDouble(19, inLocation.getLonSeconds());
@@ -760,7 +761,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                List<Visit> list = list(new Visit(DBUtils.sanitizeString(inVisit.getName())));
+                List<Visit> list = list(new Visit(UtilsData.sanitizeString(inVisit.getName())));
                 if (!list.isEmpty()) {
                     return false;
                 }
@@ -778,21 +779,21 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp);
                     }
                     // Update the Files
-                    List<WildLogFile> wildLogFiles = list(new WildLogFile("VISIT-" + DBUtils.sanitizeString(inOldName)));
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile("VISIT-" + UtilsData.sanitizeString(inOldName)));
                     for (WildLogFile temp : wildLogFiles) {
-                        temp.setId("VISIT-" + DBUtils.limitLength(DBUtils.sanitizeString(inVisit.getName()), 150));
+                        temp.setId("VISIT-" + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
                         createOrUpdate(temp, true);
                     }
                 }
                 // Update
                 state = conn.prepareStatement(updateVisit);
-                state.setString(8, DBUtils.sanitizeString(inOldName));
+                state.setString(8, UtilsData.sanitizeString(inOldName));
             }
             else {
                 // Insert
                 state = conn.prepareStatement(createVisit);
             }
-            state.setString(1, DBUtils.limitLength(DBUtils.sanitizeString(inVisit.getName()), 150));
+            state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
             if (inVisit.getStartDate() != null) {
                 state.setDate(2, new java.sql.Date(inVisit.getStartDate().getTime()));
             }
@@ -805,10 +806,10 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 state.setDate(3, null);
             }
-            state.setString(4, DBUtils.sanitizeString(inVisit.getDescription()));
-            state.setString(5, DBUtils.stringFromObject(inVisit.getGameWatchingIntensity()));
-            state.setString(6, DBUtils.stringFromObject(inVisit.getType()));
-            state.setString(7, DBUtils.sanitizeString(inVisit.getLocationName()));
+            state.setString(4, UtilsData.sanitizeString(inVisit.getDescription()));
+            state.setString(5, UtilsData.stringFromObject(inVisit.getGameWatchingIntensity()));
+            state.setString(6, UtilsData.stringFromObject(inVisit.getType()));
+            state.setString(7, UtilsData.sanitizeString(inVisit.getLocationName()));
             // Execute
             state.executeUpdate();
         }
@@ -857,31 +858,31 @@ public abstract class DBI_JDBC implements DBI {
             	state.setTimestamp(2, new Timestamp(inSighting.getDate().getTime()));
             else
             	state.setTimestamp(2, null);
-            state.setString(3, DBUtils.sanitizeString(inSighting.getElementName()));
-            state.setString(4, DBUtils.sanitizeString(inSighting.getLocationName()));
-            state.setString(5, DBUtils.sanitizeString(inSighting.getVisitName()));
-            state.setString(6, DBUtils.stringFromObject(inSighting.getTimeOfDay()));
-            state.setString(7, DBUtils.stringFromObject(inSighting.getWeather()));
-            state.setString(8, DBUtils.stringFromObject(inSighting.getViewRating()));
-            state.setString(9, DBUtils.stringFromObject(inSighting.getCertainty()));
+            state.setString(3, UtilsData.sanitizeString(inSighting.getElementName()));
+            state.setString(4, UtilsData.sanitizeString(inSighting.getLocationName()));
+            state.setString(5, UtilsData.sanitizeString(inSighting.getVisitName()));
+            state.setString(6, UtilsData.stringFromObject(inSighting.getTimeOfDay()));
+            state.setString(7, UtilsData.stringFromObject(inSighting.getWeather()));
+            state.setString(8, UtilsData.stringFromObject(inSighting.getViewRating()));
+            state.setString(9, UtilsData.stringFromObject(inSighting.getCertainty()));
             state.setInt(10, inSighting.getNumberOfElements());
-            state.setString(11, DBUtils.sanitizeString(inSighting.getDetails()));
-            state.setString(12, DBUtils.stringFromObject(inSighting.getLatitude()));
+            state.setString(11, UtilsData.sanitizeString(inSighting.getDetails()));
+            state.setString(12, UtilsData.stringFromObject(inSighting.getLatitude()));
             state.setInt(13, inSighting.getLatDegrees());
             state.setInt(14, inSighting.getLatMinutes());
             state.setDouble(15, inSighting.getLatSeconds());
-            state.setString(16, DBUtils.stringFromObject(inSighting.getLongitude()));
+            state.setString(16, UtilsData.stringFromObject(inSighting.getLongitude()));
             state.setInt(17, inSighting.getLonDegrees());
             state.setInt(18, inSighting.getLonMinutes());
             state.setDouble(19, inSighting.getLonSeconds());
-            state.setString(20, DBUtils.stringFromObject(inSighting.getSightingEvidence()));
+            state.setString(20, UtilsData.stringFromObject(inSighting.getSightingEvidence()));
             state.setInt(21, inSighting.getMoonPhase());
-            state.setString(22, DBUtils.stringFromObject(inSighting.getMoonlight()));
+            state.setString(22, UtilsData.stringFromObject(inSighting.getMoonlight()));
             state.setDouble(23, inSighting.getTemperature());
-            state.setString(24, DBUtils.stringFromObject(inSighting.getUnitsTemperature()));
-            state.setString(25, DBUtils.stringFromObject(inSighting.getLifeStatus()));
-            state.setString(26, DBUtils.stringFromObject(inSighting.getSex()));
-            state.setString(27, DBUtils.stringFromObject(inSighting.getTag()));
+            state.setString(24, UtilsData.stringFromObject(inSighting.getUnitsTemperature()));
+            state.setString(25, UtilsData.stringFromObject(inSighting.getLifeStatus()));
+            state.setString(26, UtilsData.stringFromObject(inSighting.getSex()));
+            state.setString(27, UtilsData.stringFromObject(inSighting.getTag()));
             state.setBoolean(28, inSighting.isTimeUnknown());
 
             if (isUpdate) {
@@ -911,11 +912,11 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 state = conn.prepareStatement(createFile);
             }
-            state.setString(1, DBUtils.sanitizeString(inFoto.getId()));
-            state.setString(2, DBUtils.sanitizeString(inFoto.getFilename()));
-            state.setString(3, DBUtils.sanitizeString(inFoto.getFileLocation(false)));
-            state.setString(4, DBUtils.sanitizeString(inFoto.getOriginalFotoLocation(false)));
-            state.setString(5, DBUtils.stringFromObject(inFoto.getFotoType()));
+            state.setString(1, UtilsData.sanitizeString(inFoto.getId()));
+            state.setString(2, UtilsData.sanitizeString(inFoto.getFilename()));
+            state.setString(3, UtilsData.sanitizeString(inFoto.getFileLocation(false)));
+            state.setString(4, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            state.setString(5, UtilsData.stringFromObject(inFoto.getFotoType()));
             if (inFoto.getDate() != null) {
                 state.setDate(6, new java.sql.Date(inFoto.getDate().getTime()));
             }
@@ -930,7 +931,7 @@ public abstract class DBI_JDBC implements DBI {
             }
 
             if (inUpdate) {
-                state.setString(8, DBUtils.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+                state.setString(8, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
             }
             state.executeUpdate();
         }
@@ -975,8 +976,8 @@ public abstract class DBI_JDBC implements DBI {
                     prepState.setDouble(2, inWildLogOptions.getDefaultLongitude());
                     prepState.setFloat(3, inWildLogOptions.getDefaultSlideshowSpeed());
                     prepState.setInt(4, inWildLogOptions.getDefaultSlideshowSize());
-                    prepState.setString(5, DBUtils.stringFromObject(inWildLogOptions.getDefaultInputLatitude()));
-                    prepState.setString(6, DBUtils.stringFromObject(inWildLogOptions.getDefaultInputLongitude()));
+                    prepState.setString(5, UtilsData.stringFromObject(inWildLogOptions.getDefaultInputLatitude()));
+                    prepState.setString(6, UtilsData.stringFromObject(inWildLogOptions.getDefaultInputLongitude()));
                     prepState.setBoolean(7, inWildLogOptions.isIsOnlinemapTheDefault());
                     prepState.executeUpdate();
                 }
@@ -1005,7 +1006,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Delete the Element
             state = conn.prepareStatement(deleteElement);
-            state.setString(1, DBUtils.sanitizeString(inElement.getPrimaryName()));
+            state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
             state.executeUpdate();
             // Delete all Sightings for this Element
             Sighting sighting = new Sighting();
@@ -1016,7 +1017,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("ELEMENT-" + DBUtils.sanitizeString(inElement.getPrimaryName()));
+            file.setId("ELEMENT-" + UtilsData.sanitizeString(inElement.getPrimaryName()));
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);
@@ -1037,7 +1038,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteLocation);
-            state.setString(1, DBUtils.sanitizeString(inLocation.getName()));
+            state.setString(1, UtilsData.sanitizeString(inLocation.getName()));
             // Delete Location
             state.executeUpdate();
             state.close();
@@ -1050,7 +1051,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("LOCATION-" + DBUtils.sanitizeString(inLocation.getName()));
+            file.setId("LOCATION-" + UtilsData.sanitizeString(inLocation.getName()));
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);
@@ -1071,7 +1072,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteVisit);
-            state.setString(1, DBUtils.sanitizeString(inVisit.getName()));
+            state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
             // Delete Visit
             state.executeUpdate();
             // Delete Sightings for this Visit
@@ -1083,7 +1084,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("VISIT-" + DBUtils.sanitizeString(inVisit.getName()));
+            file.setId("VISIT-" + UtilsData.sanitizeString(inVisit.getName()));
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);
@@ -1132,7 +1133,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Note: Do not use FilePath, because it is not unique
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, DBUtils.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            state.setString(1, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
             // Delete File from database
             state.executeUpdate();
             // Delete the file on the PC

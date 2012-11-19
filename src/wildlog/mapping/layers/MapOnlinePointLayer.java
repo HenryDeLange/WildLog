@@ -20,8 +20,8 @@ import org.jdesktop.swingx.mapviewer.WaypointPainter;
 import org.jdesktop.swingx.mapviewer.WaypointRenderer;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
-import wildlog.mapping.other.WildLogScrollPanel;
-import wildlog.utils.UtilsHTML;
+import wildlog.mapping.helpers.WildLogScrollPanel;
+import wildlog.html.utils.UtilsHTML;
 
 /**
  *

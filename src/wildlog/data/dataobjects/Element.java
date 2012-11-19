@@ -13,7 +13,7 @@ import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
-import wildlog.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTML;
 
 public class Element implements Comparable<Element>, DataObjectWithHTML {
     private String primaryName; // Used for indexing (ID)
