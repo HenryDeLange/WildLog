@@ -46,7 +46,9 @@ import wildlog.ui.panels.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.astro.AstroCalculator;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.mapping.utils.LatLonConverter;
+import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
@@ -191,7 +193,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         txtLocationName = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstLocation = new javax.swing.JList();
-        jButton3 = new javax.swing.JButton();
+        btnGPSForAll = new javax.swing.JButton();
         chkIncludeSubfolders = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         cmbVisitType = new javax.swing.JComboBox();
@@ -261,7 +263,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
-        btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
@@ -270,7 +271,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 btnUpdateActionPerformed(evt);
             }
         });
-        pnlTop.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 10, 130, 80));
+        pnlTop.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 10, 110, 60));
 
         txtVisitName.setBackground(resourceMap.getColor("txtVisitName.background")); // NOI18N
         txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()));
@@ -303,7 +304,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 btnReloadActionPerformed(evt);
             }
         });
-        pnlTop.add(btnReload, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 95, 130, 30));
+        pnlTop.add(btnReload, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 80, 110, 40));
 
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
@@ -347,16 +348,21 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         pnlTop.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 80));
 
-        jButton3.setBackground(resourceMap.getColor("jButton3.background")); // NOI18N
-        jButton3.setIcon(resourceMap.getIcon("jButton3.icon")); // NOI18N
-        jButton3.setText(resourceMap.getString("jButton3.text")); // NOI18N
-        jButton3.setToolTipText(resourceMap.getString("jButton3.toolTipText")); // NOI18N
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.setFocusPainted(false);
-        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton3.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        jButton3.setName("jButton3"); // NOI18N
-        pnlTop.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 100, 60));
+        btnGPSForAll.setBackground(resourceMap.getColor("btnGPSForAll.background")); // NOI18N
+        btnGPSForAll.setIcon(resourceMap.getIcon("btnGPSForAll.icon")); // NOI18N
+        btnGPSForAll.setText(resourceMap.getString("btnGPSForAll.text")); // NOI18N
+        btnGPSForAll.setToolTipText(resourceMap.getString("btnGPSForAll.toolTipText")); // NOI18N
+        btnGPSForAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGPSForAll.setFocusPainted(false);
+        btnGPSForAll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGPSForAll.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnGPSForAll.setName("btnGPSForAll"); // NOI18N
+        btnGPSForAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGPSForAllActionPerformed(evt);
+            }
+        });
+        pnlTop.add(btnGPSForAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 100, 60));
 
         chkIncludeSubfolders.setBackground(resourceMap.getColor("chkIncludeSubfolders.background")); // NOI18N
         chkIncludeSubfolders.setSelected(true);
@@ -482,7 +488,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     // Make sure all sightings have a creature set
                     final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(0, 0);
+                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
                         if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
                             JOptionPane.showMessageDialog(thisParentHandle, "Please assign a Creature to each of the Sightings.", "Can't Save", JOptionPane.ERROR_MESSAGE);
                             return null;
@@ -608,7 +614,27 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_formComponentShown
 
+    private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
+        Sighting tempSighting = new Sighting();
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, tempSighting);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            for (int t = 0; t < tblBulkImport.getModel().getRowCount(); t++) {
+                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)tblBulkImport.getModel().getValueAt(t, 0);
+                sightingWrapper.setLatitude(tempSighting.getLatitude());
+                sightingWrapper.setLatDegrees(tempSighting.getLatDegrees());
+                sightingWrapper.setLatMinutes(tempSighting.getLatMinutes());
+                sightingWrapper.setLatSeconds(tempSighting.getLatSeconds());
+                sightingWrapper.setLongitude(tempSighting.getLongitude());
+                sightingWrapper.setLonDegrees(tempSighting.getLonDegrees());
+                sightingWrapper.setLonMinutes(tempSighting.getLonMinutes());
+                sightingWrapper.setLonSeconds(tempSighting.getLonSeconds());
+            }
+        }
+    }//GEN-LAST:event_btnGPSForAllActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGPSForAll;
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkIncludeSubfolders;
@@ -616,7 +642,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JComboBox cmbVisitType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

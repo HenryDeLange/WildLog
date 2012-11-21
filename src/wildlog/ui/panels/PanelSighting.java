@@ -615,6 +615,7 @@ public class PanelSighting extends JDialog {
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setEnabled(!disableEditing && !bulkUploadMode);
         btnDeleteImage.setFocusPainted(false);
+        btnDeleteImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnDeleteImage.setName("btnDeleteImage"); // NOI18N
         btnDeleteImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

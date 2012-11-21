@@ -554,6 +554,9 @@
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnDeleteImage" noResource="true"/>
           </Properties>
           <Events>

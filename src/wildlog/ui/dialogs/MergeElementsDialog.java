@@ -90,7 +90,7 @@ public class MergeElementsDialog extends JDialog {
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
 
-        elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 250, 400));
+        elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 300, 400));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -98,7 +98,7 @@ public class MergeElementsDialog extends JDialog {
         lstKeepElement.setName("lstKeepElement"); // NOI18N
         jScrollPane1.setViewportView(lstKeepElement);
 
-        elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 260, 400));
+        elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 320, 400));
 
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N

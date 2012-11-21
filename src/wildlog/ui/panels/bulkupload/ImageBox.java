@@ -66,6 +66,7 @@ public class ImageBox extends JPanel {
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
         btnUp.setBackground(resourceMap.getColor("btnUp.background")); // NOI18N
+        btnUp.setIcon(resourceMap.getIcon("btnUp.icon")); // NOI18N
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setFocusPainted(false);
@@ -79,6 +80,7 @@ public class ImageBox extends JPanel {
         add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 100));
 
         btnDown.setBackground(resourceMap.getColor("btnDown.background")); // NOI18N
+        btnDown.setIcon(resourceMap.getIcon("btnDown.icon")); // NOI18N
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setFocusPainted(false);
@@ -92,39 +94,48 @@ public class ImageBox extends JPanel {
         add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
 
         btnRemove.setBackground(resourceMap.getColor("btnRemove.background")); // NOI18N
+        btnRemove.setIcon(resourceMap.getIcon("btnRemove.icon")); // NOI18N
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
+        btnRemove.setIconTextGap(2);
+        btnRemove.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRemove.setName("btnRemove"); // NOI18N
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
             }
         });
-        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 80, 30));
+        add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
         btnNewSighting.setBackground(resourceMap.getColor("btnNewSighting.background")); // NOI18N
+        btnNewSighting.setIcon(resourceMap.getIcon("btnNewSighting.icon")); // NOI18N
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setFocusPainted(false);
+        btnNewSighting.setIconTextGap(2);
+        btnNewSighting.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnNewSighting.setName("btnNewSighting"); // NOI18N
         btnNewSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNewSightingActionPerformed(evt);
             }
         });
-        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
+        add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 90, 30));
 
         btnClone.setBackground(resourceMap.getColor("btnClone.background")); // NOI18N
+        btnClone.setIcon(resourceMap.getIcon("btnClone.icon")); // NOI18N
         btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
         btnClone.setFocusPainted(false);
+        btnClone.setIconTextGap(2);
+        btnClone.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnClone.setName("btnClone"); // NOI18N
         btnClone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloneActionPerformed(evt);
             }
         });
-        add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 205, 80, 30));
+        add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 205, 70, 30));
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased

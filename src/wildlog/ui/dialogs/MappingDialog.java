@@ -177,7 +177,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewAllSightingsForLocation);
 
-        btnViewAllSightingsForVisit.setIcon(resourceMap.getIcon("btnViewAllSightingsForVisit.icon")); // NOI18N
+        btnViewAllSightingsForVisit.setIcon(resourceMap.getIcon("btnViewSightingsAndDistributionMap.icon")); // NOI18N
         btnViewAllSightingsForVisit.setText(resourceMap.getString("btnViewAllSightingsForVisit.text")); // NOI18N
         btnViewAllSightingsForVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForVisit.setFocusPainted(false);
@@ -194,7 +194,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewAllSightingsForVisit);
 
-        btnViewAllSightingsForElement.setIcon(resourceMap.getIcon("btnViewAllSightingsForElement.icon")); // NOI18N
+        btnViewAllSightingsForElement.setIcon(resourceMap.getIcon("btnViewSightingsAndDistributionMap.icon")); // NOI18N
         btnViewAllSightingsForElement.setText(resourceMap.getString("btnViewAllSightingsForElement.text")); // NOI18N
         btnViewAllSightingsForElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForElement.setFocusPainted(false);
@@ -250,7 +250,8 @@ public class MappingDialog extends JDialog {
         btnOpenKmlViewer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnOpenKmlViewer.setFocusPainted(false);
         btnOpenKmlViewer.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnOpenKmlViewer.setIconTextGap(10);
+        btnOpenKmlViewer.setIconTextGap(11);
+        btnOpenKmlViewer.setMargin(new java.awt.Insets(2, 16, 2, 14));
         btnOpenKmlViewer.setMaximumSize(new java.awt.Dimension(230, 35));
         btnOpenKmlViewer.setMinimumSize(new java.awt.Dimension(230, 35));
         btnOpenKmlViewer.setName("btnOpenKmlViewer"); // NOI18N

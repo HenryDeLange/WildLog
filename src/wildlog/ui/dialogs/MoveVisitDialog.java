@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
@@ -21,8 +22,8 @@ public class MoveVisitDialog extends JDialog {
 
     /** Creates new form MoveVisitDialog */
     public MoveVisitDialog() {
-        initComponents();
         app = (WildLogApp) Application.getInstance();
+        initComponents();
         loadLists();
 
         // Setup the default behavior
@@ -51,11 +52,16 @@ public class MoveVisitDialog extends JDialog {
         btnConfirm = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(750, 520));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MoveVisitDialog.class);
+        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
+        setMinimumSize(new java.awt.Dimension(750, 550));
+        setModal(true);
         setName("Form"); // NOI18N
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MoveVisitDialog.class);
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -64,12 +70,13 @@ public class MoveVisitDialog extends JDialog {
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 270, -1, -1));
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstFromLocation.setFocusable(false);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
+        lstFromLocation.setSelectionBackground(resourceMap.getColor("lstFromLocation.selectionBackground")); // NOI18N
         lstFromLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 lstFromLocationMouseReleased(evt);
@@ -77,23 +84,25 @@ public class MoveVisitDialog extends JDialog {
         });
         jScrollPane1.setViewportView(lstFromLocation);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 370, 230));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 350, 220));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstVisit.setFocusable(false);
         lstVisit.setName("lstVisit"); // NOI18N
+        lstVisit.setSelectionBackground(resourceMap.getColor("lstVisit.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(lstVisit);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 370, 230));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 360, 400));
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         lstToLocation.setFocusable(false);
         lstToLocation.setName("lstToLocation"); // NOI18N
+        lstToLocation.setSelectionBackground(resourceMap.getColor("lstToLocation.selectionBackground")); // NOI18N
         jScrollPane3.setViewportView(lstToLocation);
 
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 290, 340, 220));
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 350, 230));
 
         btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
         btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
@@ -105,12 +114,12 @@ public class MoveVisitDialog extends JDialog {
                 btnConfirmActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 110, 60));
+        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 110, 60));
 
         jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void lstFromLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromLocationMouseReleased

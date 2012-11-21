@@ -673,6 +673,10 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="iconTextGap" type="int" value="0"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[0, 0, 0, 0]"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="btnRefreshDates" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1535,30 +1539,36 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="csvExportMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToCSV" methodName="exportToCSV"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="csvExportMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="csvExportMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="csvExportMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="csvExportMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="csvExportMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="htmlExportMenuItem1">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToHTML" methodName="exportToHTML"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="htmlExportMenuItem1.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="htmlExportMenuItem1.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="htmlExportMenuItem1.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="htmlExportMenuItem1" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="htmlExportMenuItem1ActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="kmlExportMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="exportToKML" methodName="exportToKML"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="kmlExportMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="kmlExportMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="kmlExportMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="kmlExportMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="kmlExportMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -1570,22 +1580,25 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="csvImportMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="importFromCSV" methodName="importFromCSV"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="csvImportMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="csvImportMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="csvImportMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="csvImportMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="csvImportMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="bulkImportMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="bulkImportAction" methodName="bulkImportAction"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="bulkImportMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="bulkImportMenuItem.text"/>
                 <Property name="toolTipText" type="java.lang.String" resourceKey="bulkImportMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="bulkImportMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bulkImportMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -1596,30 +1609,33 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="calcSunMoonMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="calculateSunAndMoon" methodName="calculateSunAndMoon"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="calcSunMoonMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="calcSunMoonMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="calcSunMoonMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="calcSunMoonMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="advancedMoveVisits" methodName="advancedMoveVisits"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="moveVisitsMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="moveVisitsMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="moveVisitsMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="moveVisitsMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="linkElementsMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="advancedLinkElements" methodName="advancedLinkElements"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="linkElementsMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="linkElementsMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="linkElementsMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkElementsMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -1724,13 +1740,13 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuCreateSlideshow">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="CreateSlideshow" methodName="CreateSlideshow"/>
-                </Property>
                 <Property name="icon" type="javax.swing.Icon" resourceKey="mnuCreateSlideshow.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="mnuCreateSlideshow.text"/>
                 <Property name="name" type="java.lang.String" value="mnuCreateSlideshow" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateSlideshowActionPerformed"/>
+              </Events>
             </MenuItem>
             <Menu class="javax.swing.JMenu" name="subMenu1">
               <Properties>
@@ -1740,13 +1756,13 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuDBConsole">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="openDBConsole" methodName="openDBConsole"/>
-                    </Property>
                     <Property name="text" type="java.lang.String" resourceKey="mnuDBConsole.text"/>
                     <Property name="toolTipText" type="java.lang.String" resourceKey="mnuDBConsole.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuDBConsoleActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -1758,13 +1774,13 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuOpenMapApp">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="openOpenMapApp" methodName="openOpenMapApp"/>
-                    </Property>
                     <Property name="text" type="java.lang.String" resourceKey="mnuOpenMapApp.text"/>
                     <Property name="toolTipText" type="java.lang.String" resourceKey="mnuOpenMapApp.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuOpenMapApp" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOpenMapAppActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

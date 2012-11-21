@@ -116,7 +116,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnViewAllSightingsForVisit">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnViewAllSightingsForVisit.icon"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnViewSightingsAndDistributionMap.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnViewAllSightingsForVisit.text"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -141,7 +141,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnViewAllSightingsForElement">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnViewAllSightingsForElement.icon"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnViewSightingsAndDistributionMap.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnViewAllSightingsForElement.text"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -223,7 +223,10 @@
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="iconTextGap" type="int" value="10"/>
+        <Property name="iconTextGap" type="int" value="11"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 16, 2, 14]"/>
+        </Property>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[230, 35]"/>
         </Property>

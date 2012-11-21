@@ -35,6 +35,10 @@
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnUsePrevious.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUsePrevious.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="btnUsePrevious" noResource="true"/>
       </Properties>
       <Events>
@@ -52,6 +56,7 @@
         <Property name="text" type="java.lang.String" resourceKey="btnUseImage.text"/>
         <Property name="toolTipText" type="java.lang.String" resourceKey="btnUseImage.toolTipText"/>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>
@@ -70,7 +75,12 @@
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnUseMap.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUseMap.text"/>
+        <Property name="enabled" type="boolean" value="false"/>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 6, 2, 6]"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="btnUseMap" noResource="true"/>
       </Properties>
       <Events>
@@ -87,6 +97,7 @@
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnUseGPX.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUseGPX.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
           <Insets value="[2, 6, 2, 6]"/>
         </Property>
@@ -113,7 +124,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="270" y="10" width="130" height="70"/>
+          <AbsoluteConstraints x="290" y="10" width="110" height="60"/>
         </Constraint>
       </Constraints>
     </Component>

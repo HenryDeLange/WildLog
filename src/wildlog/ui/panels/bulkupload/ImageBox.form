@@ -49,6 +49,7 @@
     <Component class="javax.swing.JButton" name="btnUp">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnUp.background"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnUp.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUp.text"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -71,6 +72,7 @@
     <Component class="javax.swing.JButton" name="btnDown">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnDown.background"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnDown.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnDown.text"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
@@ -93,11 +95,16 @@
     <Component class="javax.swing.JButton" name="btnRemove">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnRemove.background"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnRemove.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnRemove.text"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 2, 2, 2]"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="btnRemove" noResource="true"/>
       </Properties>
       <Events>
@@ -105,18 +112,23 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="5" y="205" width="80" height="30"/>
+          <AbsoluteConstraints x="165" y="205" width="70" height="30"/>
         </Constraint>
       </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="btnNewSighting">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnNewSighting.background"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnNewSighting.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnNewSighting.text"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 2, 2, 2]"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="btnNewSighting" noResource="true"/>
       </Properties>
       <Events>
@@ -124,15 +136,20 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="165" y="205" width="70" height="30"/>
+          <AbsoluteConstraints x="5" y="205" width="90" height="30"/>
         </Constraint>
       </Constraints>
     </Component>
     <Component class="javax.swing.JButton" name="btnClone">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnClone.background"/>
+        <Property name="icon" type="javax.swing.Icon" resourceKey="btnClone.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnClone.text"/>
         <Property name="focusPainted" type="boolean" value="false"/>
+        <Property name="iconTextGap" type="int" value="2"/>
+        <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+          <Insets value="[2, 2, 2, 2]"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="btnClone" noResource="true"/>
       </Properties>
       <Events>
@@ -140,7 +157,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="85" y="205" width="80" height="30"/>
+          <AbsoluteConstraints x="95" y="205" width="70" height="30"/>
         </Constraint>
       </Constraints>
     </Component>

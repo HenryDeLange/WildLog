@@ -84,7 +84,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForNoImage(int inSize) {
-        return getScaledIcon(WildLogApp.class.getResource("resources/images/NoImage.gif"), inSize);
+        return getScaledIcon(WildLogApp.class.getResource("resources/images/NoFile.png"), inSize);
     }
 
     private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
@@ -161,10 +161,10 @@ public class UtilsImageProcessing {
                         inImageLabel.setIcon(getScaledIcon(fotos.get(inImageIndex).getFileLocation(true), inSize));
                     else
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
-                        inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/Movie.gif"), inSize));
+                        inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/Movie.png"), inSize));
                     else
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.OTHER))
-                        inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/OtherFile.gif"), inSize));
+                        inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/OtherFile.png"), inSize));
                     inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
                 }
                 else {
