@@ -173,7 +173,7 @@ public class GPSDialog extends JDialog {
                 btnUsePreviousActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 120, 30));
+        getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 130, 30));
 
         btnUseImage.setIcon(resourceMap.getIcon("btnUseImage.icon")); // NOI18N
         btnUseImage.setText(resourceMap.getString("btnUseImage.text")); // NOI18N
@@ -187,7 +187,7 @@ public class GPSDialog extends JDialog {
                 btnUseImageActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 120, 30));
+        getContentPane().add(btnUseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 45, 130, 30));
 
         btnUseMap.setIcon(resourceMap.getIcon("btnUseMap.icon")); // NOI18N
         btnUseMap.setText(resourceMap.getString("btnUseMap.text")); // NOI18N
@@ -201,7 +201,7 @@ public class GPSDialog extends JDialog {
                 btnUseMapActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 10, 120, 30));
+        getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 10, 130, 30));
 
         btnUseGPX.setIcon(resourceMap.getIcon("btnUseGPX.icon")); // NOI18N
         btnUseGPX.setText(resourceMap.getString("btnUseGPX.text")); // NOI18N
@@ -214,7 +214,7 @@ public class GPSDialog extends JDialog {
                 btnUseGPXActionPerformed(evt);
             }
         });
-        getContentPane().add(btnUseGPX, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 120, 30));
+        getContentPane().add(btnUseGPX, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 45, 130, 30));
 
         btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
         btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N

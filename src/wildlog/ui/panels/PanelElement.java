@@ -48,6 +48,7 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -267,6 +268,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         spnWeightFemaleMax = new javax.swing.JSpinner();
         jLabel10 = new javax.swing.JLabel();
         cmbSizeType = new javax.swing.JComboBox();
+        btnSlideshow = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -713,7 +715,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 btnAddSightingActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 35));
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
 
         lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -787,7 +789,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 btnHTMLActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
@@ -879,6 +881,20 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbSizeType.setFocusable(false);
         cmbSizeType.setName("cmbSizeType"); // NOI18N
         elementIncludes.add(cmbSizeType, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 110, -1));
+
+        btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
+        btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
+        btnSlideshow.setToolTipText(resourceMap.getString("btnSlideshow.toolTipText")); // NOI18N
+        btnSlideshow.setFocusPainted(false);
+        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnSlideshow.setName("btnSlideshow"); // NOI18N
+        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowActionPerformed(evt);
+            }
+        });
+        elementIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 35));
 
         add(elementIncludes);
     }// </editor-fold>//GEN-END:initComponents
@@ -1128,6 +1144,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
     }//GEN-LAST:event_btnReportActionPerformed
 
+    private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
+        if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
+            SlideshowDialog dialog = new SlideshowDialog(null, null, element);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnSlideshowActionPerformed
+
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
@@ -1172,6 +1195,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
+    private javax.swing.JButton btnSlideshow;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.ButtonGroup buttonGroup1;

@@ -622,7 +622,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="100" width="110" height="35"/>
+              <AbsoluteConstraints x="460" y="140" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -855,20 +855,20 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="140" width="110" height="35"/>
+              <AbsoluteConstraints x="460" y="100" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JButton" name="btnChecklist">
           <Properties>
             <Property name="background" type="java.awt.Color" resourceKey="btnChecklist.background"/>
-            <Property name="font" type="java.awt.Font" resourceKey="btnChecklist.font"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnChecklist.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnChecklist.text"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnChecklist.toolTipText"/>
             <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 5, 2, 5]"/>
+              <Insets value="[2, 8, 2, 8]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnChecklist" noResource="true"/>
           </Properties>
@@ -877,7 +877,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="460" y="50" width="100" height="33"/>
+              <AbsoluteConstraints x="580" y="100" width="110" height="33"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -898,45 +898,43 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="330" y="120" width="110" height="35"/>
+              <AbsoluteConstraints x="340" y="100" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JButton" name="btnSlideshowSightings">
+        <Component class="javax.swing.JButton" name="btnSlideshow">
           <Properties>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSlideshowSightings.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnSlideshowSightings.text"/>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSlideshow.icon"/>
+            <Property name="text" type="java.lang.String" resourceKey="btnSlideshow.text"/>
             <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="btnSlideshowSightings" noResource="true"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="btnSlideshow" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowSightingsActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowActionPerformed"/>
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="455" y="155" width="120" height="30"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnSlideshowVisit">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSlideshowVisit.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnSlideshowVisit.text"/>
-            <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="btnSlideshowVisit" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSlideshowVisitActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="450" y="120" width="120" height="30"/>
+              <AbsoluteConstraints x="320" y="140" width="120" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
         <Component class="javax.swing.JButton" name="btnBulkImport">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" resourceKey="btnBulkImport.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnBulkImport.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnBulkImport.toolTipText"/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 8, 2, 8]"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="btnBulkImport" noResource="true"/>
           </Properties>
           <Events>
@@ -944,7 +942,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="460" y="90" width="110" height="30"/>
+              <AbsoluteConstraints x="580" y="140" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>

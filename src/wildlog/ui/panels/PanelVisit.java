@@ -48,6 +48,7 @@ import wildlog.utils.WildLogPaths;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
@@ -260,8 +261,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnReport = new javax.swing.JButton();
         btnChecklist = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
-        btnSlideshowSightings = new javax.swing.JButton();
-        btnSlideshowVisit = new javax.swing.JButton();
+        btnSlideshow = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
@@ -574,7 +574,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 110, 35));
 
         btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
@@ -698,22 +698,22 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, 110, 35));
 
         btnChecklist.setBackground(resourceMap.getColor("btnChecklist.background")); // NOI18N
-        btnChecklist.setFont(resourceMap.getFont("btnChecklist.font")); // NOI18N
         btnChecklist.setIcon(resourceMap.getIcon("btnChecklist.icon")); // NOI18N
         btnChecklist.setText(resourceMap.getString("btnChecklist.text")); // NOI18N
         btnChecklist.setToolTipText(resourceMap.getString("btnChecklist.toolTipText")); // NOI18N
         btnChecklist.setFocusPainted(false);
-        btnChecklist.setMargin(new java.awt.Insets(2, 5, 2, 5));
+        btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnChecklist.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnChecklist.setName("btnChecklist"); // NOI18N
         btnChecklist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChecklistActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 50, 100, 33));
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 33));
 
         btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
@@ -727,38 +727,35 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnHTMLActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 120, 110, 35));
+        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 110, 35));
 
-        btnSlideshowSightings.setIcon(resourceMap.getIcon("btnSlideshowSightings.icon")); // NOI18N
-        btnSlideshowSightings.setText(resourceMap.getString("btnSlideshowSightings.text")); // NOI18N
-        btnSlideshowSightings.setFocusPainted(false);
-        btnSlideshowSightings.setName("btnSlideshowSightings"); // NOI18N
-        btnSlideshowSightings.addActionListener(new java.awt.event.ActionListener() {
+        btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
+        btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
+        btnSlideshow.setFocusPainted(false);
+        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnSlideshow.setName("btnSlideshow"); // NOI18N
+        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowSightingsActionPerformed(evt);
+                btnSlideshowActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnSlideshowSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(455, 155, 120, 30));
+        visitIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 120, 35));
 
-        btnSlideshowVisit.setIcon(resourceMap.getIcon("btnSlideshowVisit.icon")); // NOI18N
-        btnSlideshowVisit.setText(resourceMap.getString("btnSlideshowVisit.text")); // NOI18N
-        btnSlideshowVisit.setFocusPainted(false);
-        btnSlideshowVisit.setName("btnSlideshowVisit"); // NOI18N
-        btnSlideshowVisit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowVisitActionPerformed(evt);
-            }
-        });
-        visitIncludes.add(btnSlideshowVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 120, 120, 30));
-
+        btnBulkImport.setIcon(resourceMap.getIcon("btnBulkImport.icon")); // NOI18N
         btnBulkImport.setText(resourceMap.getString("btnBulkImport.text")); // NOI18N
+        btnBulkImport.setToolTipText(resourceMap.getString("btnBulkImport.toolTipText")); // NOI18N
+        btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBulkImport.setFocusPainted(false);
+        btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnBulkImport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnBulkImport.setName("btnBulkImport"); // NOI18N
         btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBulkImportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnBulkImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 90, 110, 30));
+        visitIncludes.add(btnBulkImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
 
         add(visitIncludes);
     }// </editor-fold>//GEN-END:initComponents
@@ -1017,59 +1014,12 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         UtilsFileProcessing.openFile(UtilsHTML.exportHTML(visit, app));
     }//GEN-LAST:event_btnHTMLActionPerformed
 
-    private void btnSlideshowSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
-                Sighting temp = new Sighting();
-                temp.setVisitName(visit.getName());
-                List<Sighting> sightingList = app.getDBI().list(temp);
-                Collections.sort(sightingList);
-                for (int t = 0; t < sightingList.size(); t++) {
-                    Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
-                    for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
-                                tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
-                                slideshowList.add(tempFile.getOriginalFotoLocation(true));
-                            }
-                        }
-                    }
-                }
-                // Now create the slideshow
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Sightings.mov");
-                setMessage("Done with the Slideshow");
-                return null;
-            }
-        });
-    }//GEN-LAST:event_btnSlideshowSightingsActionPerformed
-
-    private void btnSlideshowVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
-                for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                        if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getOriginalFotoLocation(true));
-                        }
-                    }
-                }
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + ".mov");
-                setMessage("Done with the Slideshow");
-                return null;
-            }
-        });
-    }//GEN-LAST:event_btnSlideshowVisitActionPerformed
+    private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
+        if (visit.getName() != null && !visit.getName().isEmpty()) {
+            SlideshowDialog dialog = new SlideshowDialog(visit, null, null);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnSlideshowActionPerformed
 
     private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
          UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
@@ -1117,8 +1067,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnPreviousImageSighting;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
-    private javax.swing.JButton btnSlideshowSightings;
-    private javax.swing.JButton btnSlideshowVisit;
+    private javax.swing.JButton btnSlideshow;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.JComboBox cmbGameWatchIntensity;

@@ -700,6 +700,10 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 8, 2, 8]"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
                   </Properties>
                   <Events>
@@ -772,6 +776,7 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[2, 2, 2, 2]"/>
                     </Property>

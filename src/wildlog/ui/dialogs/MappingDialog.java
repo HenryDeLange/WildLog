@@ -132,6 +132,7 @@ public class MappingDialog extends JDialog {
         btnViewLocation.setFocusPainted(false);
         btnViewLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewLocation.setIconTextGap(10);
+        btnViewLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewLocation.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewLocation.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewLocation.setName("btnViewLocation"); // NOI18N
@@ -149,6 +150,7 @@ public class MappingDialog extends JDialog {
         btnViewSingleSighting.setFocusPainted(false);
         btnViewSingleSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewSingleSighting.setIconTextGap(10);
+        btnViewSingleSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewSingleSighting.setName("btnViewSingleSighting"); // NOI18N
@@ -166,6 +168,7 @@ public class MappingDialog extends JDialog {
         btnViewAllSightingsForLocation.setFocusPainted(false);
         btnViewAllSightingsForLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewAllSightingsForLocation.setIconTextGap(10);
+        btnViewAllSightingsForLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewAllSightingsForLocation.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewAllSightingsForLocation.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewAllSightingsForLocation.setName("btnViewAllSightingsForLocation"); // NOI18N
@@ -183,6 +186,7 @@ public class MappingDialog extends JDialog {
         btnViewAllSightingsForVisit.setFocusPainted(false);
         btnViewAllSightingsForVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewAllSightingsForVisit.setIconTextGap(10);
+        btnViewAllSightingsForVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewAllSightingsForVisit.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewAllSightingsForVisit.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewAllSightingsForVisit.setName("btnViewAllSightingsForVisit"); // NOI18N
@@ -200,6 +204,7 @@ public class MappingDialog extends JDialog {
         btnViewAllSightingsForElement.setFocusPainted(false);
         btnViewAllSightingsForElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewAllSightingsForElement.setIconTextGap(10);
+        btnViewAllSightingsForElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewAllSightingsForElement.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewAllSightingsForElement.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewAllSightingsForElement.setName("btnViewAllSightingsForElement"); // NOI18N
@@ -217,6 +222,7 @@ public class MappingDialog extends JDialog {
         btnViewSightingsAndDistributionMap.setFocusPainted(false);
         btnViewSightingsAndDistributionMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewSightingsAndDistributionMap.setIconTextGap(10);
+        btnViewSightingsAndDistributionMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewSightingsAndDistributionMap.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewSightingsAndDistributionMap.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewSightingsAndDistributionMap.setName("btnViewSightingsAndDistributionMap"); // NOI18N
@@ -234,6 +240,7 @@ public class MappingDialog extends JDialog {
         btnViewDistributionMap.setFocusPainted(false);
         btnViewDistributionMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewDistributionMap.setIconTextGap(10);
+        btnViewDistributionMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnViewDistributionMap.setMaximumSize(new java.awt.Dimension(230, 35));
         btnViewDistributionMap.setMinimumSize(new java.awt.Dimension(230, 35));
         btnViewDistributionMap.setName("btnViewDistributionMap"); // NOI18N
@@ -251,7 +258,7 @@ public class MappingDialog extends JDialog {
         btnOpenKmlViewer.setFocusPainted(false);
         btnOpenKmlViewer.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenKmlViewer.setIconTextGap(11);
-        btnOpenKmlViewer.setMargin(new java.awt.Insets(2, 16, 2, 14));
+        btnOpenKmlViewer.setMargin(new java.awt.Insets(2, 11, 2, 8));
         btnOpenKmlViewer.setMaximumSize(new java.awt.Dimension(230, 35));
         btnOpenKmlViewer.setMinimumSize(new java.awt.Dimension(230, 35));
         btnOpenKmlViewer.setName("btnOpenKmlViewer"); // NOI18N

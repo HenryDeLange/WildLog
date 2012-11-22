@@ -119,6 +119,7 @@ public class ReportingDialog extends JDialog {
         btnLocationMoon.setFocusPainted(false);
         btnLocationMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationMoon.setIconTextGap(10);
+        btnLocationMoon.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnLocationMoon.setMaximumSize(new java.awt.Dimension(250, 35));
         btnLocationMoon.setMinimumSize(new java.awt.Dimension(250, 35));
         btnLocationMoon.setName("btnLocationMoon"); // NOI18N
@@ -135,6 +136,7 @@ public class ReportingDialog extends JDialog {
         btnLocationSun.setFocusPainted(false);
         btnLocationSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationSun.setIconTextGap(10);
+        btnLocationSun.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnLocationSun.setMaximumSize(new java.awt.Dimension(250, 35));
         btnLocationSun.setMinimumSize(new java.awt.Dimension(250, 35));
         btnLocationSun.setName("btnLocationSun"); // NOI18N
@@ -151,6 +153,7 @@ public class ReportingDialog extends JDialog {
         btnLocationType.setFocusPainted(false);
         btnLocationType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationType.setIconTextGap(10);
+        btnLocationType.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnLocationType.setMaximumSize(new java.awt.Dimension(250, 35));
         btnLocationType.setMinimumSize(new java.awt.Dimension(250, 35));
         btnLocationType.setName("btnLocationType"); // NOI18N
@@ -167,6 +170,7 @@ public class ReportingDialog extends JDialog {
         btnLocationSpeciesCurve.setFocusPainted(false);
         btnLocationSpeciesCurve.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationSpeciesCurve.setIconTextGap(10);
+        btnLocationSpeciesCurve.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnLocationSpeciesCurve.setMaximumSize(new java.awt.Dimension(250, 35));
         btnLocationSpeciesCurve.setMinimumSize(new java.awt.Dimension(250, 35));
         btnLocationSpeciesCurve.setName("btnLocationSpeciesCurve"); // NOI18N
@@ -183,6 +187,7 @@ public class ReportingDialog extends JDialog {
         btnElementMoon.setFocusPainted(false);
         btnElementMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnElementMoon.setIconTextGap(10);
+        btnElementMoon.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnElementMoon.setMaximumSize(new java.awt.Dimension(250, 35));
         btnElementMoon.setMinimumSize(new java.awt.Dimension(250, 35));
         btnElementMoon.setName("btnElementMoon"); // NOI18N
@@ -199,6 +204,7 @@ public class ReportingDialog extends JDialog {
         btnElementSun.setFocusPainted(false);
         btnElementSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnElementSun.setIconTextGap(10);
+        btnElementSun.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnElementSun.setMaximumSize(new java.awt.Dimension(250, 35));
         btnElementSun.setMinimumSize(new java.awt.Dimension(250, 35));
         btnElementSun.setName("btnElementSun"); // NOI18N
@@ -215,6 +221,7 @@ public class ReportingDialog extends JDialog {
         btnVisitSun.setFocusPainted(false);
         btnVisitSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnVisitSun.setIconTextGap(10);
+        btnVisitSun.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnVisitSun.setMaximumSize(new java.awt.Dimension(250, 35));
         btnVisitSun.setMinimumSize(new java.awt.Dimension(250, 35));
         btnVisitSun.setName("btnVisitSun"); // NOI18N
@@ -231,6 +238,7 @@ public class ReportingDialog extends JDialog {
         btnSightingDateLocation.setFocusPainted(false);
         btnSightingDateLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSightingDateLocation.setIconTextGap(10);
+        btnSightingDateLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnSightingDateLocation.setMaximumSize(new java.awt.Dimension(250, 35));
         btnSightingDateLocation.setMinimumSize(new java.awt.Dimension(250, 35));
         btnSightingDateLocation.setName("btnSightingDateLocation"); // NOI18N
@@ -247,6 +255,7 @@ public class ReportingDialog extends JDialog {
         btnSightingDateElement.setFocusPainted(false);
         btnSightingDateElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSightingDateElement.setIconTextGap(10);
+        btnSightingDateElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnSightingDateElement.setMaximumSize(new java.awt.Dimension(250, 35));
         btnSightingDateElement.setMinimumSize(new java.awt.Dimension(250, 35));
         btnSightingDateElement.setName("btnSightingDateElement"); // NOI18N

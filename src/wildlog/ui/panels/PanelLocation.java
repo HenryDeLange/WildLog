@@ -41,6 +41,7 @@ import wildlog.astro.AstroCalculator;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.mapping.utils.LatLonConverter;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -233,6 +234,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLongitude = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         txtHabitat = new javax.swing.JTextPane();
+        btnSlideshow = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -751,6 +753,20 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         locationIncludes.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 52, 240, 40));
 
+        btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
+        btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
+        btnSlideshow.setToolTipText(resourceMap.getString("btnSlideshow.toolTipText")); // NOI18N
+        btnSlideshow.setFocusPainted(false);
+        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnSlideshow.setName("btnSlideshow"); // NOI18N
+        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowActionPerformed(evt);
+            }
+        });
+        locationIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 35));
+
         add(locationIncludes);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -996,6 +1012,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnUpdate.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed
 
+    private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            SlideshowDialog dialog = new SlideshowDialog(null, locationWL, null);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnSlideshowActionPerformed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
         if (fotos.size() > 0)
@@ -1017,6 +1040,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnSetMainImage;
+    private javax.swing.JButton btnSlideshow;
     private javax.swing.JButton btnSunAndMoon;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;

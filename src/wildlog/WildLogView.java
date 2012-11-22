@@ -713,6 +713,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
+        btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReport.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -768,6 +770,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnViewEXIF.setToolTipText(resourceMap.getString("btnViewEXIF.toolTipText")); // NOI18N
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewEXIF.setFocusPainted(false);
+        btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnViewEXIF.setName("btnViewEXIF"); // NOI18N
         btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
