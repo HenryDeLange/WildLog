@@ -693,13 +693,16 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
+        btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHTML.setIconTextGap(5);
+        btnHTML.setMargin(new java.awt.Insets(2, 10, 2, 8));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHTMLActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 110, 35));
+        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
 
         btnSunAndMoon.setBackground(resourceMap.getColor("btnSunAndMoon.background")); // NOI18N
         btnSunAndMoon.setIcon(resourceMap.getIcon("btnSunAndMoon.icon")); // NOI18N
@@ -714,7 +717,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnSunAndMoonActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 295, 110, 35));
+        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
 
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N

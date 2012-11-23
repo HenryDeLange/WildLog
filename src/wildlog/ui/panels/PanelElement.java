@@ -715,7 +715,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 btnAddSightingActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
+        elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
 
         lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -783,13 +783,16 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
+        btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHTML.setIconTextGap(5);
+        btnHTML.setMargin(new java.awt.Insets(2, 10, 2, 8));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHTMLActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
+        elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
 
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N

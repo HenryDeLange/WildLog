@@ -102,7 +102,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     @Override
     public void setupTabHeader() {
         JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"))));
+        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Bulk Import.png"))));
         tabHeader.add(new JLabel("Bulk Upload"));
         JButton btnClose = new JButton();
         btnClose.setFocusPainted(false);
@@ -461,6 +461,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
+        // FIXME: When reloading the talbe if the mouse is over the rows it creates lots of exceptions until done reloading...
         // You can only use a task once, hence for the saving we need to create a new task
         UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override

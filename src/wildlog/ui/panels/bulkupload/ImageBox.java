@@ -1,5 +1,9 @@
 package wildlog.ui.panels.bulkupload;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -26,9 +30,7 @@ public class ImageBox extends JPanel {
     public final void populateUI() {
         // Setup the image label
         lblImage.setIcon(imageWrapper.getIcon());
-        // Tooltips aren't wotking. It makes other rows dissapear after viewing a tooltip and then moving the mouse to a new row...
-        // See http://stackoverflow.com/questions/10854831/tool-tip-in-jpanel-in-jtable-not-working
-//        lblImage.setToolTipText(imageWrapper.getFile().getName());
+        lblImage.setToolTipText(imageWrapper.getFile().getName());
     }
 
     /** This method is called from within the constructor to
@@ -40,7 +42,12 @@ public class ImageBox extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblImage = new javax.swing.JLabel();
+        lblImage = new JLabel() {
+            public Point getToolTipLocation(MouseEvent e) {
+                Rectangle rectangle = getBounds();
+                return new Point(rectangle.width, rectangle.y);
+            }
+        };
         btnUp = new javax.swing.JButton();
         btnDown = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();

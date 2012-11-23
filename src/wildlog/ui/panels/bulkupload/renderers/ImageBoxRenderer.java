@@ -20,7 +20,6 @@ public class ImageBoxRenderer implements TableCellRenderer {
     }
 
     public static JPanel drawImageBoxes(Object inValue, JTable inTable, int inRow, int inColumn) {
-// FIXME: Possible issue still present where for some reason (after this "performance increases") a cell sometimes does not render or only slow rendering, but it seems to show again when scrolling or hovering over...
         // Note: Java alsready only calls this method for visible rows, so no need to check that
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
         JPanel panel = new JPanel(new AbsoluteLayout());
@@ -36,11 +35,12 @@ public class ImageBoxRenderer implements TableCellRenderer {
             if (posX == 0)
                 posY++;
             // Try to use the old panel if possible (I'm assuming it will be faster, but might use more memory and cause issues)
-            ImageBox imageBox = imageWrapper.getImageBox();
-            if (imageBox == null)
-                imageBox = new ImageBox(imageWrapper, inTable);
-            else
-                imageBox.populateUI();
+//            ImageBox imageBox = imageWrapper.getImageBox();
+//            if (imageBox == null)
+//                imageBox = new ImageBox(imageWrapper, inTable);
+//            else
+//                imageBox.populateUI();
+            ImageBox imageBox = new ImageBox(imageWrapper, inTable);
             imageBox.setBackground(panel.getBackground());
             panel.add(imageBox, new AbsoluteConstraints(imageBoxSize*posX++, imageBoxSize*posY, imageBoxSize, imageBoxSize));
             if (posX == imagesPerRow)

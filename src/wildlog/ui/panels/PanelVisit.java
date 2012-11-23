@@ -574,7 +574,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 110, 35));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 150, 110, 35));
 
         btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
@@ -698,7 +698,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, 110, 35));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 110, 35));
 
         btnChecklist.setBackground(resourceMap.getColor("btnChecklist.background")); // NOI18N
         btnChecklist.setIcon(resourceMap.getIcon("btnChecklist.icon")); // NOI18N
@@ -713,7 +713,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnChecklistActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 33));
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 110, 33));
 
         btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
@@ -721,13 +721,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
+        btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnHTML.setIconTextGap(5);
+        btnHTML.setMargin(new java.awt.Insets(2, 10, 2, 8));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHTMLActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 110, 35));
+        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 110, 35));
 
         btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
         btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
@@ -740,7 +743,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnSlideshowActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 140, 120, 35));
+        visitIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 110, 35));
 
         btnBulkImport.setIcon(resourceMap.getIcon("btnBulkImport.icon")); // NOI18N
         btnBulkImport.setText(resourceMap.getString("btnBulkImport.text")); // NOI18N
@@ -755,7 +758,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnBulkImportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnBulkImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
+        visitIncludes.add(btnBulkImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 35));
 
         add(visitIncludes);
     }// </editor-fold>//GEN-END:initComponents
