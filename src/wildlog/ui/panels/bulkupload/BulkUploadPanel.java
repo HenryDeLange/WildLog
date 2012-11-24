@@ -53,12 +53,14 @@ import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
 import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.CustomMouseWheelScroller;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
+    private CustomMouseWheelScroller mouseWheel;
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
     public final static Color tableBackgroundColor2 = new Color(215, 226, 200);
 
@@ -69,6 +71,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         imageIndex = 0;
         // Init auto generated code
         initComponents();
+        // Set table scroling to only one row at a time
+        mouseWheel = new CustomMouseWheelScroller(scrTable);
+        mouseWheel.install();
         // "Hack" to make the buttons clickable when teh mouse scrolles over the cell (very performance intensive, but "better" now...)
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
@@ -197,7 +202,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         cmbVisitType = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrTable = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -385,9 +390,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
 
-        jScrollPane1.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
+        scrTable.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrTable.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrTable.setName("scrTable"); // NOI18N
 
         tblBulkImport.setBackground(resourceMap.getColor("tblBulkImport.background")); // NOI18N
         tblBulkImport.setModel(new javax.swing.table.DefaultTableModel(
@@ -410,7 +415,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblBulkImport.getTableHeader().setResizingAllowed(false);
         tblBulkImport.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(tblBulkImport);
+        scrTable.setViewportView(tblBulkImport);
         tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
         tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
         tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
@@ -421,7 +426,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
         tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());
 
-        add(jScrollPane1, java.awt.BorderLayout.CENTER);
+        add(scrTable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void lstLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstLocationValueChanged
@@ -651,13 +656,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblLocationImage;
     private javax.swing.JList lstLocation;
     private javax.swing.JPanel pnlTop;
+    private javax.swing.JScrollPane scrTable;
     private javax.swing.JSpinner spnInactivityTime;
     private javax.swing.JTable tblBulkImport;
     private javax.swing.JTextField txtLocationName;
