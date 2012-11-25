@@ -9,6 +9,21 @@ import wildlog.data.enums.Longitudes;
 public final class LatLonConverter {
     public static final String NO_GPS_POINT = "No GPS";
 
+    public static double getLatDecimalDegree(DataObjectWithGPS inDataObjectWithGPS) {
+        return getDecimalDegree(
+                inDataObjectWithGPS.getLatitude(),
+                inDataObjectWithGPS.getLatDegrees(),
+                inDataObjectWithGPS.getLatMinutes(),
+                inDataObjectWithGPS.getLatSeconds());
+    }
+
+    public static double getLonDecimalDegree(DataObjectWithGPS inDataObjectWithGPS) {
+        return getDecimalDegree(
+                inDataObjectWithGPS.getLongitude(),
+                inDataObjectWithGPS.getLonDegrees(),
+                inDataObjectWithGPS.getLonMinutes(),
+                inDataObjectWithGPS.getLonSeconds());
+    }
 
     public static double getDecimalDegree(Latitudes inLatitudes, int inDegrees, int inMinutes, double inSeconds) {
         if (inLatitudes != null) {

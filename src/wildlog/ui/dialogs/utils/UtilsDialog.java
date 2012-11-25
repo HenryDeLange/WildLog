@@ -39,10 +39,12 @@ public class UtilsDialog {
         final JPanel glassPane = (JPanel)inParentContainer.getGlassPane();
         glassPane.setVisible(true);
         inWindow.addWindowListener(new WindowAdapter() {
-            public void windowDeactivated(WindowEvent we) {
-                super.windowDeactivated(we);
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
                 glassPane.setVisible(false);
             }
+
         });
     }
 

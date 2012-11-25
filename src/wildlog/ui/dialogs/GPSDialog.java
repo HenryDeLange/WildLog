@@ -5,12 +5,14 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -37,9 +39,26 @@ public class GPSDialog extends JDialog {
     private double uiLongitude = 0.0;
     private WildLogApp app;
 
-    /** Creates new form GPSDialog */
+
     public GPSDialog(JFrame parent, boolean modal, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent, modal);
+        // Do the setup
+        doSetup(inDataObjectWithGPS);
+        // Setup the default behavior
+        UtilsDialog.setDialogToCenter(parent, this);
+        UtilsDialog.addModalBackgroundPanel(parent, this);
+    }
+
+    public GPSDialog(Dialog parent, DataObjectWithGPS inDataObjectWithGPS) {
+        super(parent);
+        // Do the setup
+        doSetup(inDataObjectWithGPS);
+        // Setup the default behavior
+        UtilsDialog.setDialogToCenter(parent, this);
+        app.getMainFrame().getGlassPane().setVisible(true);
+    }
+
+    private void doSetup(DataObjectWithGPS inDataObjectWithGPS) {
         app = (WildLogApp)Application.getInstance();
         dataObjectWithGPS = inDataObjectWithGPS;
         if (dataObjectWithGPS == null)
@@ -101,9 +120,7 @@ public class GPSDialog extends JDialog {
             }
         });
         // Setup the default behavior
-        UtilsDialog.setDialogToCenter(parent, this);
         UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.addModalBackgroundPanel(parent, this);
     }
 
     private void loadUIValues(DataObjectWithGPS inDataObjectWithGPS) {
@@ -157,7 +174,9 @@ public class GPSDialog extends JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(GPSDialog.class);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/GPS.png")).getImage());
         setMinimumSize(new java.awt.Dimension(410, 210));
+        setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

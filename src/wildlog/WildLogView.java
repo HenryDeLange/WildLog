@@ -76,6 +76,7 @@ import wildlog.astro.AstroCalculator;
 import wildlog.utils.WildLogPaths;
 import wildlog.mapping.utils.LatLonConverter;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
@@ -355,6 +356,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
+        mnuSunAndMoon = new javax.swing.JMenuItem();
         subMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
         subMenu3 = new javax.swing.JMenu();
@@ -1593,6 +1595,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         extraMenu.add(mnuCreateSlideshow);
 
+        mnuSunAndMoon.setIcon(resourceMap.getIcon("mnuSunAndMoon.icon")); // NOI18N
+        mnuSunAndMoon.setText(resourceMap.getString("mnuSunAndMoon.text")); // NOI18N
+        mnuSunAndMoon.setName("mnuSunAndMoon"); // NOI18N
+        mnuSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSunAndMoonActionPerformed(evt);
+            }
+        });
+        extraMenu.add(mnuSunAndMoon);
+
         subMenu1.setText(resourceMap.getString("subMenu1.text")); // NOI18N
         subMenu1.setName("subMenu1"); // NOI18N
 
@@ -2532,6 +2544,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         // TODO add your handling code here:
     }//GEN-LAST:event_kmlExportMenuItemActionPerformed
 
+    private void mnuSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSunAndMoonActionPerformed
+        SunMoonDialog dialog = new SunMoonDialog(null);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuSunAndMoonActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -3051,6 +3068,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem mnuOpenMapApp;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
+    private javax.swing.JMenuItem mnuSunAndMoon;
     private javax.swing.JMenuItem moveVisitsMenuItem;
     private javax.swing.JMenu otherMenu;
     private javax.swing.JProgressBar progressBar;

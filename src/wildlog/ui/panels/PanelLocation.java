@@ -42,6 +42,7 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.mapping.utils.LatLonConverter;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
+import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -986,23 +987,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
-        double lat = LatLonConverter.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSeconds());
-        double lon = LatLonConverter.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSeconds());
-        if (lat != 0 && lon != 0) {
-            String temp = "Curent Moon Phase: " + AstroCalculator.getMoonPhase(Calendar.getInstance().getTime()) + " % Full " + System.getProperty("line.separator");
-            temp = temp + "Current Moonlight: " + AstroCalculator.getMoonlight(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Moonrise : " + MoonTimes.getMoonrise(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Moonset  : " + MoonTimes.getMoonset(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Sunlight: " + AstroCalculator.getSunCategory(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Dawn    : " + SunTimes.getDawn(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Sunrise : " + SunTimes.getSunrise(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Sunset  : " + SunTimes.getSunset(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            temp = temp + "Current Dusk    : " + SunTimes.getDusk(Calendar.getInstance().getTime(), lat, lon) + System.getProperty("line.separator");
-            JOptionPane.showMessageDialog(this, temp, "Sun and Moon Information for " + locationWL.getName(), JOptionPane.INFORMATION_MESSAGE);
-        }
-        else {
-            JOptionPane.showMessageDialog(this, "Please specify the GPS co-ordinates.", "Sun and Moon Information for " + locationWL.getName(), JOptionPane.ERROR_MESSAGE);
-        }
+        SunMoonDialog dialog = new SunMoonDialog(locationWL);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnSunAndMoonActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed

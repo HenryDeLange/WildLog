@@ -1206,7 +1206,6 @@ public class PanelSighting extends JDialog {
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
         GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, sighting);
-        UtilsDialog.setDialogToCenter(app.getMainFrame(), dialog);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(LatLonConverter.getLatitudeString(sighting));

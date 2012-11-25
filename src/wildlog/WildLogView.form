@@ -1753,6 +1753,16 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateSlideshowActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSunAndMoon">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="mnuSunAndMoon.icon"/>
+                <Property name="text" type="java.lang.String" resourceKey="mnuSunAndMoon.text"/>
+                <Property name="name" type="java.lang.String" value="mnuSunAndMoon" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSunAndMoonActionPerformed"/>
+              </Events>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="subMenu1">
               <Properties>
                 <Property name="text" type="java.lang.String" resourceKey="subMenu1.text"/>

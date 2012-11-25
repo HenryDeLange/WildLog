@@ -84,7 +84,7 @@ public class SlideshowDialog extends JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(resourceMap.getString("Form.title")); // NOI18N
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/images/Map_Small.gif")).getImage());
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/images/Slideshow.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
