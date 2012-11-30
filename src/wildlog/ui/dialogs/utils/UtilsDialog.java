@@ -5,6 +5,8 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -44,7 +46,25 @@ public class UtilsDialog {
                 super.windowClosed(e);
                 glassPane.setVisible(false);
             }
+        });
+    }
 
+    public static void addModalBackgroundPanel(JDialog inParentContainer, Window inWindow) {
+        // Setup the glassPane for modal popups
+        final JPanel glassPane = (JPanel)inParentContainer.getGlassPane();
+        glassPane.setLayout(new BorderLayout());
+        JPanel background = new JPanel();
+        background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+        glassPane.removeAll();
+        glassPane.add(background, BorderLayout.CENTER);
+        glassPane.setVisible(true);
+        // Setup the hiding of the pane
+        inWindow.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                super.windowClosed(e);
+                glassPane.setVisible(false);
+            }
         });
     }
 

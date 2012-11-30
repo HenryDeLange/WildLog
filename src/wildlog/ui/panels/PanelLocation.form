@@ -806,7 +806,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 8, 2, 8]"/>
+              <Insets value="[2, 6, 2, 8]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnMap" noResource="true"/>
           </Properties>
@@ -907,7 +907,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 8, 2, 4]"/>
+              <Insets value="[2, 6, 2, 4]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
           </Properties>
@@ -933,7 +933,7 @@
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="iconTextGap" type="int" value="5"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 10, 2, 8]"/>
+              <Insets value="[2, 8, 2, 8]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnHTML" noResource="true"/>
           </Properties>
@@ -956,8 +956,9 @@
               <Color id="Hand Cursor"/>
             </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="iconTextGap" type="int" value="5"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 2, 2, 2]"/>
+              <Insets value="[2, 8, 2, 2]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnSunAndMoon" noResource="true"/>
           </Properties>
@@ -1055,7 +1056,7 @@
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 8, 2, 8]"/>
+              <Insets value="[2, 6, 2, 8]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnSlideshow" noResource="true"/>
           </Properties>

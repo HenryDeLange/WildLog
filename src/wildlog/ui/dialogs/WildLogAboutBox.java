@@ -1,18 +1,20 @@
 package wildlog.ui.dialogs;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
+import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public class WildLogAboutBox extends JDialog {
 
-    public WildLogAboutBox(JFrame parent) {
-        super(parent);
+    public WildLogAboutBox() {
+        super();
         initComponents();
         // Setup the default behavior
-        UtilsDialog.setDialogToCenter(parent, this);
+        WildLogApp app = (WildLogApp)Application.getInstance();
+        UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.addModalBackgroundPanel(parent, this);
+        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
     }
 
     /** This method is called from within the constructor to
@@ -23,7 +25,7 @@ public class WildLogAboutBox extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        appTitleLabel = new javax.swing.JLabel();
+        javax.swing.JLabel appTitleLabel = new javax.swing.JLabel();
         javax.swing.JLabel versionLabel = new javax.swing.JLabel();
         javax.swing.JLabel appVersionLabel = new javax.swing.JLabel();
         javax.swing.JLabel vendorLabel = new javax.swing.JLabel();
@@ -139,7 +141,6 @@ public class WildLogAboutBox extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel appTitleLabel;
     // End of variables declaration//GEN-END:variables
 
 }

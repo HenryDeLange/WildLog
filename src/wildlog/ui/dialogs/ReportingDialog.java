@@ -1,15 +1,10 @@
 package wildlog.ui.dialogs;
 
 import java.awt.Frame;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.KeyStroke;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -24,7 +19,6 @@ import wildlog.ui.reports.ReportLocationSpeciesCurve;
 import wildlog.ui.reports.ReportSightingByElement;
 import wildlog.ui.reports.ReportSightingByLocation;
 import wildlog.ui.reports.ReportVisitSightingsBySun;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
@@ -73,13 +67,13 @@ public class ReportingDialog extends JDialog {
             btnSightingDateLocation.setVisible(false);
         }
 
+        // Pack
+        pack();
+
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
-
-        // Pack
-        pack();
     }
 
     /** This method is called from within the constructor to

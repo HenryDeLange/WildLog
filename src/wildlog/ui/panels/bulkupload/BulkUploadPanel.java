@@ -622,7 +622,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
         Sighting tempSighting = new Sighting();
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, tempSighting);
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), tempSighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             for (int t = 0; t < tblBulkImport.getModel().getRowCount(); t++) {

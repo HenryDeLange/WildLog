@@ -845,13 +845,13 @@ public class PanelSighting extends JDialog {
         txtLatitude.setDisabledTextColor(resourceMap.getColor("txtLatitude.disabledTextColor")); // NOI18N
         txtLatitude.setEnabled(false);
         txtLatitude.setName("txtLatitude"); // NOI18N
-        sightingIncludes.add(txtLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 110, -1));
+        sightingIncludes.add(txtLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 105, -1));
 
         txtLongitude.setText(resourceMap.getString("txtLongitude.text")); // NOI18N
         txtLongitude.setDisabledTextColor(resourceMap.getColor("txtLongitude.disabledTextColor")); // NOI18N
         txtLongitude.setEnabled(false);
         txtLongitude.setName("txtLongitude"); // NOI18N
-        sightingIncludes.add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 110, -1));
+        sightingIncludes.add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 105, -1));
 
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
@@ -1205,7 +1205,7 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, sighting);
+        GPSDialog dialog = new GPSDialog(this, sighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(LatLonConverter.getLatitudeString(sighting));

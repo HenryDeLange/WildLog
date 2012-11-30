@@ -627,7 +627,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMap.setFocusPainted(false);
         btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnMap.setMargin(new java.awt.Insets(2, 6, 2, 8));
         btnMap.setName("btnMap"); // NOI18N
         btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -679,7 +679,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnReport.setMargin(new java.awt.Insets(2, 8, 2, 4));
+        btnReport.setMargin(new java.awt.Insets(2, 6, 2, 4));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -696,7 +696,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnHTML.setIconTextGap(5);
-        btnHTML.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnHTML.setName("btnHTML"); // NOI18N
         btnHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -711,7 +711,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSunAndMoon.setToolTipText(resourceMap.getString("btnSunAndMoon.toolTipText")); // NOI18N
         btnSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSunAndMoon.setFocusPainted(false);
-        btnSunAndMoon.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnSunAndMoon.setIconTextGap(5);
+        btnSunAndMoon.setMargin(new java.awt.Insets(2, 8, 2, 2));
         btnSunAndMoon.setName("btnSunAndMoon"); // NOI18N
         btnSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -762,7 +763,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnSlideshow.setToolTipText(resourceMap.getString("btnSlideshow.toolTipText")); // NOI18N
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnSlideshow.setMargin(new java.awt.Insets(2, 6, 2, 8));
         btnSlideshow.setName("btnSlideshow"); // NOI18N
         btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -992,7 +993,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnSunAndMoonActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, locationWL);
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), locationWL);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(LatLonConverter.getLatitudeString(locationWL));

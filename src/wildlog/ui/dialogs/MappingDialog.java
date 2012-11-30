@@ -86,13 +86,13 @@ public class MappingDialog extends JDialog {
             btnViewSingleSighting.setVisible(false);
         }
 
+        // Pack
+        pack();
+        
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
-
-        // Pack
-        pack();
     }
 
     /** This method is called from within the constructor to

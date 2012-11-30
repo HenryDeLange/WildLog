@@ -7,8 +7,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.net.URISyntaxException;
-import org.jdesktop.application.Action;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
 import java.awt.event.ActionEvent;
@@ -104,7 +102,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         searchLocation = new Location();
     }
 
-
     public WildLogView(SingleFrameApplication app) {
         super(app);
         init();
@@ -197,16 +194,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
         UtilsUI.attachClipboardPopup(txtBrowseInfo, true);
-    }
-
-    @Action
-    public void showAboutBox() {
-        if (aboutBox == null) {
-            JFrame mainFrame = WildLogApp.getApplication().getMainFrame();
-            aboutBox = new WildLogAboutBox(mainFrame);
-            aboutBox.setLocationRelativeTo(mainFrame);
-        }
-        WildLogApp.getApplication().show(aboutBox);
     }
 
     public void setupTabHeaderHome() {
@@ -326,9 +313,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mnuCleanWorkspace = new javax.swing.JMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem mnuCboutMenuItem = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem mnuAboutMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
@@ -1360,37 +1347,59 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
+        workspaceMenu.setIcon(resourceMap.getIcon("workspaceMenu.icon")); // NOI18N
         workspaceMenu.setText(resourceMap.getString("workspaceMenu.text")); // NOI18N
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getActionMap(WildLogView.class, this);
-        mnuChangeWorkspaceMenuItem.setAction(actionMap.get("changeWorkspace")); // NOI18N
+        mnuChangeWorkspaceMenuItem.setIcon(resourceMap.getIcon("mnuChangeWorkspaceMenuItem.icon")); // NOI18N
         mnuChangeWorkspaceMenuItem.setText(resourceMap.getString("mnuChangeWorkspaceMenuItem.text")); // NOI18N
         mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
+        mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuChangeWorkspaceMenuItemActionPerformed(evt);
+            }
+        });
         workspaceMenu.add(mnuChangeWorkspaceMenuItem);
 
-        jMenuItem1.setAction(actionMap.get("cleanWorkspace")); // NOI18N
-        jMenuItem1.setText(resourceMap.getString("jMenuItem1.text")); // NOI18N
-        jMenuItem1.setName("jMenuItem1"); // NOI18N
-        workspaceMenu.add(jMenuItem1);
+        mnuCleanWorkspace.setIcon(resourceMap.getIcon("mnuCleanWorkspace.icon")); // NOI18N
+        mnuCleanWorkspace.setText(resourceMap.getString("mnuCleanWorkspace.text")); // NOI18N
+        mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
+        mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCleanWorkspaceActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuCleanWorkspace);
 
         fileMenu.add(workspaceMenu);
 
+        helpMenu.setIcon(resourceMap.getIcon("helpMenu.icon")); // NOI18N
         helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
         helpMenu.setName("helpMenu"); // NOI18N
 
-        mnuCboutMenuItem.setAction(actionMap.get("showAboutBox")); // NOI18N
-        mnuCboutMenuItem.setText(resourceMap.getString("mnuCboutMenuItem.text")); // NOI18N
-        mnuCboutMenuItem.setName("mnuCboutMenuItem"); // NOI18N
-        helpMenu.add(mnuCboutMenuItem);
+        mnuAboutMenuItem.setIcon(resourceMap.getIcon("mnuAboutMenuItem.icon")); // NOI18N
+        mnuAboutMenuItem.setText(resourceMap.getString("mnuAboutMenuItem.text")); // NOI18N
+        mnuAboutMenuItem.setName("mnuAboutMenuItem"); // NOI18N
+        mnuAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(mnuAboutMenuItem);
 
         fileMenu.add(helpMenu);
 
         jSeparator2.setName("jSeparator2"); // NOI18N
         fileMenu.add(jSeparator2);
 
-        exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
+        exitMenuItem.setIcon(resourceMap.getIcon("exitMenuItem.icon")); // NOI18N
+        exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
+        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
@@ -1398,9 +1407,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         backupMenu.setText(resourceMap.getString("backupMenu.text")); // NOI18N
         backupMenu.setName("backupMenu"); // NOI18N
 
-        mnuBackupMenuItem.setAction(actionMap.get("backup")); // NOI18N
+        mnuBackupMenuItem.setIcon(resourceMap.getIcon("mnuBackupMenuItem.icon")); // NOI18N
         mnuBackupMenuItem.setText(resourceMap.getString("mnuBackupMenuItem.text")); // NOI18N
         mnuBackupMenuItem.setName("mnuBackupMenuItem"); // NOI18N
+        mnuBackupMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuBackupMenuItemActionPerformed(evt);
+            }
+        });
         backupMenu.add(mnuBackupMenuItem);
 
         menuBar.add(backupMenu);
@@ -1670,10 +1684,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             for (int t = 0; t < selectedRows.length; t++) {
                 tempPanel = UtilPanelGenerator.getVisitPanel(tempLocation, (String)tblVisit.getValueAt(selectedRows[t], 0));
                 UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
-//                tabbedPanel.add(tempPanel);
-//                tempPanel.setupTabHeader();
             }
-//            if (tempPanel != null) tabbedPanel.setSelectedComponent(tempPanel);
         }
 }//GEN-LAST:event_btnGoVisit_LocTabActionPerformed
 
@@ -1695,7 +1706,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
-//        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
 }//GEN-LAST:event_tabElementComponentShown
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
@@ -1740,7 +1750,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         txtSearch.setText("");
         UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
-//        lblSearchResults.setText("Found " + tblElement.getModel().getRowCount() + " Creatures");
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
@@ -2533,21 +2542,213 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
     private void csvExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvExportMenuItemActionPerformed
-        // TODO add your handling code here:
+        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        String path = WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath();
+        File tempFile = new File(path);
+        tempFile.mkdirs();
+        app.getDBI().doExportCSV(path);
+        JOptionPane.showMessageDialog(this.getComponent(), "Done: You can find the files under the '\\WildLog\\Export\\CSV\\' folder.' folder.", "Finished Generating CSV", JOptionPane.INFORMATION_MESSAGE);
+        this.getComponent().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_csvExportMenuItemActionPerformed
 
     private void htmlExportMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlExportMenuItem1ActionPerformed
-        // TODO add your handling code here:
+        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                messageTimer.stop();
+                setMessage("Starting the HTML Export");
+                JOptionPane.showMessageDialog(getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                setProgress(0);
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    UtilsHTML.exportHTML(listElements.get(t), app);
+                    setProgress(0 + (int)((t/(double)listElements.size())*50));
+                    setMessage("HTML Export: " + getProgress() + "%");
+                }
+                setProgress(50);
+                setMessage("HTML Export: " + getProgress() + "%");
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    UtilsHTML.exportHTML(listLocations.get(t), app);
+                    setProgress(50 + (int)((t/(double)listLocations.size())*50));
+                    setMessage("HTML Export: " + getProgress() + "%");
+                }
+                setProgress(100);
+                setMessage("HTML Export: " + getProgress());
+                JOptionPane.showMessageDialog(getComponent(), "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                setMessage("Done with the HTML Export");
+                messageTimer.start();
+                return null;
+            }
+        });
     }//GEN-LAST:event_htmlExportMenuItem1ActionPerformed
 
     private void kmlExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kmlExportMenuItemActionPerformed
-        // TODO add your handling code here:
+        // First do the HTML export to generate the Images in the right place
+        exportToHTML(false);
+        JOptionPane.showMessageDialog(this.getComponent(), "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.", "Generating KML", JOptionPane.INFORMATION_MESSAGE);
+        new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                // Then do KML export
+                String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
+                File tempFile = new File(path);
+                tempFile.mkdirs();
+                // Make sure icons exist in the KML folder
+                UtilsKML.copyKmlIcons(app, path);
+                // KML Stuff
+                KmlGenerator kmlgen = new KmlGenerator();
+                kmlgen.setKmlPath(path + "WildLogMarkers.kml");
+                // Get entries for Sightings and Locations
+                Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
+                // Sightings
+                List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                for (int t = 0; t < listSightings.size(); t++) {
+                    String key = listSightings.get(t).getElementName();
+                    if (!entries.containsKey(key)) {
+                        entries.put(key, new ArrayList<KmlEntry>());
+                     }
+                    entries.get(key).add(listSightings.get(t).toKML(t, app));
+                }
+                // Locations
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    String key = listLocations.get(t).getName();
+                    if (!entries.containsKey(key)) {
+                        entries.put(key, new ArrayList<KmlEntry>());
+                     }
+                    entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
+                }
+                // Generate KML
+                kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
+                // Try to open the Kml file
+                JOptionPane.showMessageDialog(null, "Done: The KML file will automatically be opened.", "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
+                UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
+                return null;
+            }
+        }.execute();
     }//GEN-LAST:event_kmlExportMenuItemActionPerformed
 
     private void mnuSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSunAndMoonActionPerformed
         SunMoonDialog dialog = new SunMoonDialog(null);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSunAndMoonActionPerformed
+
+    private void mnuBackupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupMenuItemActionPerformed
+        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
+        JOptionPane.showMessageDialog(this.getComponent(), "Done. The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. (Note: This only backup the database entries, the image, etc. files have to done manually.)", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+        this.getComponent().setCursor(Cursor.getDefaultCursor());
+    }//GEN-LAST:event_mnuBackupMenuItemActionPerformed
+
+    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        app.quit(evt);
+    }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void mnuAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutMenuItemActionPerformed
+        if (aboutBox == null) {
+            aboutBox = new WildLogAboutBox();
+        }
+        WildLogApp.getApplication().show(aboutBox);
+    }//GEN-LAST:event_mnuAboutMenuItemActionPerformed
+
+    private void mnuChangeWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceMenuItemActionPerformed
+        // Write first
+        BufferedWriter writer = null;
+        try {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Select the directory with to use as the new Workspace Folder.");
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
+                writer = new BufferedWriter(
+                        new FileWriter(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
+                String path = fileChooser.getSelectedFile().getPath();
+                if (path.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase().substring(1, WildLogPaths.WILDLOG.toString().length() - 1))) {
+                    // The name might be tricky to parse if it ends with WildLog so we have to do some extra checks...
+                    // Because the user can selecte either c:\MyWildLog(\WildLog\Data) or c:\MyWildLog\WildLog(\Data)...
+                    // I'll use the Data folder to test for the actual WildLog folder structure
+                    File testFile = new File(path + WildLogPaths.WILDLOG_DATA.toString().replace(WildLogPaths.WILDLOG.toString(), File.separator));
+                    if (testFile.exists() && testFile.isDirectory()) {
+                        // I assume the user selected the WildLog folder and we need to strip it from the path
+                        path = path.substring(0, path.length() - (WildLogPaths.WILDLOG.toString().length() - 1)) + File.separator;
+                    }
+                }
+                writer.write(path);
+                writer.flush();
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            if (writer != null)
+                try {
+                    writer.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+        }
+        // Then try to read
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(
+                    new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
+            WildLogPaths.setWorkspacePrefix(reader.readLine());
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(this.getComponent(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
+        }
+        finally {
+            if (reader != null)
+                try {
+                    reader.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+        }
+        // Shutdown
+        JOptionPane.showMessageDialog(this.getComponent(), "The Workspace Folder has been changed. Please restart the application", "Done!", JOptionPane.INFORMATION_MESSAGE);
+        app.quit(null);
+    }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
+
+    private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
+        if (JOptionPane.showConfirmDialog(this.getComponent(), "It is recommended to backup the entire WildLog folder before you continue.", "Warning!",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+            // Check database files
+            List<WildLogFile> files = app.getDBI().list(new WildLogFile());
+            for (WildLogFile file : files) {
+                if (!new File(file.getFileLocation(true)).isFile()) {
+                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getFileLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                }
+                if (!new File(file.getOriginalFotoLocation(true)).isFile()) {
+                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getOriginalFotoLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+            // Delete temporary folders
+            try {
+                UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
+            }
+            // Check for unused empty folders
+            try {
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
+                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
+            }
+            // Done
+            JOptionPane.showMessageDialog(this.getComponent(), "Finished checking and cleaning the Workspace Folder.", "Done!", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -2625,47 +2826,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
 
-    @Action
-    public void backup() {
-        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
-        JOptionPane.showMessageDialog(this.getComponent(), "Done. The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. (Note: This only backup the database entries, the image, etc. files have to done manually.)", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
-        this.getComponent().setCursor(Cursor.getDefaultCursor());
-    }
-
-    @Action
-    public void exportToHTML() {
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                messageTimer.stop();
-                setMessage("Starting the HTML Export");
-                JOptionPane.showMessageDialog(getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
-                setProgress(0);
-                List<Element> listElements = app.getDBI().list(new Element());
-                for (int t = 0; t < listElements.size(); t++) {
-                    UtilsHTML.exportHTML(listElements.get(t), app);
-                    setProgress(0 + (int)((t/(double)listElements.size())*50));
-                    setMessage("HTML Export: " + getProgress() + "%");
-                }
-                setProgress(50);
-                setMessage("HTML Export: " + getProgress() + "%");
-                List<Location> listLocations = app.getDBI().list(new Location());
-                for (int t = 0; t < listLocations.size(); t++) {
-                    UtilsHTML.exportHTML(listLocations.get(t), app);
-                    setProgress(50 + (int)((t/(double)listLocations.size())*50));
-                    setMessage("HTML Export: " + getProgress() + "%");
-                }
-                setProgress(100);
-                setMessage("HTML Export: " + getProgress());
-                JOptionPane.showMessageDialog(getComponent(), "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
-                setMessage("Done with the HTML Export");
-                messageTimer.start();
-                return null;
-            }
-        });
-    }
-
     private void exportToHTML(final boolean inShowDialog) {
         if (inShowDialog)
             JOptionPane.showMessageDialog(this.getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
@@ -2685,79 +2845,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 return null;
             }
         }.execute();
-    }
-
-    @Action
-    public void exportToKML() {
-        // First do the HTML export to generate the Images in the right place
-        exportToHTML(false);
-        JOptionPane.showMessageDialog(this.getComponent(), "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.", "Generating KML", JOptionPane.INFORMATION_MESSAGE);
-        new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                // Then do KML export
-                String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
-                File tempFile = new File(path);
-                tempFile.mkdirs();
-                // Make sure icons exist in the KML folder
-                UtilsKML.copyKmlIcons(app, path);
-                // KML Stuff
-                KmlGenerator kmlgen = new KmlGenerator();
-                kmlgen.setKmlPath(path + "WildLogMarkers.kml");
-                // Get entries for Sightings and Locations
-                Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
-                // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting());
-                for (int t = 0; t < listSightings.size(); t++) {
-                    String key = listSightings.get(t).getElementName();
-                    if (!entries.containsKey(key)) {
-                        entries.put(key, new ArrayList<KmlEntry>());
-                     }
-                    entries.get(key).add(listSightings.get(t).toKML(t, app));
-                }
-                // Locations
-                List<Location> listLocations = app.getDBI().list(new Location());
-                for (int t = 0; t < listLocations.size(); t++) {
-                    String key = listLocations.get(t).getName();
-                    if (!entries.containsKey(key)) {
-                        entries.put(key, new ArrayList<KmlEntry>());
-                     }
-                    entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
-                }
-                // Generate KML
-                kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
-                // Try to open the Kml file
-                JOptionPane.showMessageDialog(null, "Done: The KML file will automatically be opened.", "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
-                UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
-                return null;
-            }
-        }.execute();
-    }
-
-    @Action
-    public void exportToCSV() {
-        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String path = WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath();
-        File tempFile = new File(path);
-        tempFile.mkdirs();
-        app.getDBI().doExportCSV(path);
-        JOptionPane.showMessageDialog(this.getComponent(), "Done: You can find the files under the '\\WildLog\\Export\\CSV\\' folder.' folder.", "Finished Generating CSV", JOptionPane.INFORMATION_MESSAGE);
-        this.getComponent().setCursor(Cursor.getDefaultCursor());
-    }
-
-    @Action
-    public void importFromCSV() {
-
-    }
-
-    @Action
-    public void openDBConsole() {
-
-    }
-
-@Action
-    public void openOpenMapApp() {
-
     }
 
     private void loadPrevFile(List<WildLogFile> inFotos) {
@@ -2872,116 +2959,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
     }
 
-    @Action
-    public void changeWorkspace() {
-        // Write first
-        BufferedWriter writer = null;
-        try {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Select the directory with to use as the new Workspace Folder.");
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
-                writer = new BufferedWriter(
-                        new FileWriter(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
-                String path = fileChooser.getSelectedFile().getPath();
-                if (path.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase().substring(1, WildLogPaths.WILDLOG.toString().length() - 1))) {
-                    // The name might be tricky to parse if it ends with WildLog so we have to do some extra checks...
-                    // Because the user can selecte either c:\MyWildLog(\WildLog\Data) or c:\MyWildLog\WildLog(\Data)...
-                    // I'll use the Data folder to test for the actual WildLog folder structure
-                    File testFile = new File(path + WildLogPaths.WILDLOG_DATA.toString().replace(WildLogPaths.WILDLOG.toString(), File.separator));
-                    if (testFile.exists() && testFile.isDirectory()) {
-                        // I assume the user selected the WildLog folder and we need to strip it from the path
-                        path = path.substring(0, path.length() - (WildLogPaths.WILDLOG.toString().length() - 1)) + File.separator;
-                    }
-                }
-                writer.write(path);
-                writer.flush();
-            }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
-        finally {
-            if (writer != null)
-                try {
-                    writer.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                }
-        }
-        // Then try to read
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
-            WildLogPaths.setWorkspacePrefix(reader.readLine());
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(this.getComponent(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
-        }
-        finally {
-            if (reader != null)
-                try {
-                    reader.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                }
-        }
-        // Shutdown
-        JOptionPane.showMessageDialog(this.getComponent(), "The Workspace Folder has been changed. Please restart the application", "Done!", JOptionPane.INFORMATION_MESSAGE);
-        app.quit(null);
-    }
-
-    @Action
-    public void cleanWorkspace() {
-        if (JOptionPane.showConfirmDialog(this.getComponent(), "It is recommended to backup the entire WildLog folder before you continue.", "Warning!",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
-            // Check database files
-            List<WildLogFile> files = app.getDBI().list(new WildLogFile());
-            for (WildLogFile file : files) {
-                if (!new File(file.getFileLocation(true)).isFile()) {
-                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getFileLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
-                }
-                if (!new File(file.getOriginalFotoLocation(true)).isFile()) {
-                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getOriginalFotoLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-            // Delete temporary folders
-            try {
-                UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
-            }
-            catch (IOException ex) {
-                ex.printStackTrace(System.err);
-                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
-            }
-            // Check for unused empty folders
-            try {
-                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
-                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
-                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
-            }
-            catch (IOException ex) {
-                ex.printStackTrace(System.err);
-                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
-            }
-            // Done
-            JOptionPane.showMessageDialog(this.getComponent(), "Finished checking and cleaning the Workspace Folder.", "Done!", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-
-    @Action
-    public void CreateSlideshow() throws IOException, URISyntaxException {
-
-    }
-
-    @Action
-    public void bulkImportAction() {
-
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
@@ -3034,7 +3011,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -3060,6 +3036,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem mnuBackupMenuItem;
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
+    private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuExifMenuItem;

@@ -230,7 +230,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), true, sightingWrapper);
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), sightingWrapper);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             lblLatitude.setText(LatLonConverter.getLatitudeString(sightingWrapper));

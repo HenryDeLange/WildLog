@@ -1452,32 +1452,36 @@
           <SubComponents>
             <Menu class="javax.swing.JMenu" name="workspaceMenu">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="workspaceMenu.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="workspaceMenu.text"/>
                 <Property name="name" type="java.lang.String" value="workspaceMenu" noResource="true"/>
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuChangeWorkspaceMenuItem">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="changeWorkspace" methodName="changeWorkspace"/>
-                    </Property>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="mnuChangeWorkspaceMenuItem.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="mnuChangeWorkspaceMenuItem.text"/>
                     <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceMenuItem" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuChangeWorkspaceMenuItemActionPerformed"/>
+                  </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
+                <MenuItem class="javax.swing.JMenuItem" name="mnuCleanWorkspace">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="cleanWorkspace" methodName="cleanWorkspace"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" resourceKey="jMenuItem1.text"/>
-                    <Property name="name" type="java.lang.String" value="jMenuItem1" noResource="true"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="mnuCleanWorkspace.icon"/>
+                    <Property name="text" type="java.lang.String" resourceKey="mnuCleanWorkspace.text"/>
+                    <Property name="name" type="java.lang.String" value="mnuCleanWorkspace" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCleanWorkspaceActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="helpMenu">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="helpMenu.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="helpMenu.text"/>
                 <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
               </Properties>
@@ -1486,14 +1490,15 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
               </AuxValues>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuCboutMenuItem">
+                <MenuItem class="javax.swing.JMenuItem" name="mnuAboutMenuItem">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                      <action class="wildlog.WildLogView" id="showAboutBox" methodName="showAboutBox"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" resourceKey="mnuCboutMenuItem.text"/>
-                    <Property name="name" type="java.lang.String" value="mnuCboutMenuItem" noResource="true"/>
+                    <Property name="icon" type="javax.swing.Icon" resourceKey="mnuAboutMenuItem.icon"/>
+                    <Property name="text" type="java.lang.String" resourceKey="mnuAboutMenuItem.text"/>
+                    <Property name="name" type="java.lang.String" value="mnuAboutMenuItem" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutMenuItemActionPerformed"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -1508,11 +1513,13 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="exitMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="org.jdesktop.application.Application" id="quit" methodName="quit"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="exitMenuItem.icon"/>
+                <Property name="text" type="java.lang.String" resourceKey="exitMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="exitMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exitMenuItemActionPerformed"/>
+              </Events>
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -1528,12 +1535,13 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="mnuBackupMenuItem">
               <Properties>
-                <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.swingapp.ActionEditor">
-                  <action class="wildlog.WildLogView" id="backup" methodName="backup"/>
-                </Property>
+                <Property name="icon" type="javax.swing.Icon" resourceKey="mnuBackupMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="mnuBackupMenuItem.text"/>
                 <Property name="name" type="java.lang.String" value="mnuBackupMenuItem" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupMenuItemActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

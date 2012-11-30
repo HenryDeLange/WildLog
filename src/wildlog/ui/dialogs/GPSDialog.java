@@ -5,7 +5,6 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
-import java.awt.Dialog;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -40,8 +39,8 @@ public class GPSDialog extends JDialog {
     private WildLogApp app;
 
 
-    public GPSDialog(JFrame parent, boolean modal, DataObjectWithGPS inDataObjectWithGPS) {
-        super(parent, modal);
+    public GPSDialog(JFrame parent, DataObjectWithGPS inDataObjectWithGPS) {
+        super(parent);
         // Do the setup
         doSetup(inDataObjectWithGPS);
         // Setup the default behavior
@@ -49,13 +48,13 @@ public class GPSDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(parent, this);
     }
 
-    public GPSDialog(Dialog parent, DataObjectWithGPS inDataObjectWithGPS) {
+    public GPSDialog(JDialog parent, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent);
         // Do the setup
         doSetup(inDataObjectWithGPS);
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(parent, this);
-        app.getMainFrame().getGlassPane().setVisible(true);
+        UtilsDialog.addModalBackgroundPanel(parent, this);
     }
 
     private void doSetup(DataObjectWithGPS inDataObjectWithGPS) {
@@ -83,11 +82,11 @@ public class GPSDialog extends JDialog {
         Latitudes tempLat = dataObjectWithGPS.getLatitude();
         if (tempLat == null || Latitudes.NONE.equals(tempLat))
             tempLat = app.getWildLogOptions().getDefaultInputLatitude();
-        if (Latitudes.NORTH.equals(dataObjectWithGPS.getLatitude())) {
+        if (Latitudes.NORTH.equals(tempLat)) {
             tglNorth.setSelected(true);
         }
         else
-        if (Latitudes.SOUTH.equals(dataObjectWithGPS.getLatitude())) {
+        if (Latitudes.SOUTH.equals(tempLat)) {
             tglSouth.setSelected(true);
         }
         Longitudes tempLon = dataObjectWithGPS.getLongitude();
