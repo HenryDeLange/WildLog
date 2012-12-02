@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.RootPaneContainer;
+import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 
@@ -57,15 +58,18 @@ public class UtilsDialog {
         background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
         glassPane.removeAll();
         glassPane.add(background, BorderLayout.CENTER);
-        glassPane.setVisible(true);
-        // Setup the hiding of the pane
-        inWindow.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                super.windowClosed(e);
-                glassPane.setVisible(false);
-            }
-        });
+        // The inWindow will be null if we just want to set the background on a dialog's own GlassPane (for JOptionPane popups).
+        if (inWindow != null) {
+            glassPane.setVisible(true);
+            // Setup the hiding of the pane
+            inWindow.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    super.windowClosed(e);
+                    glassPane.setVisible(false);
+                }
+            });
+        }
     }
 
     public static void setDialogToCenter(Component inParentComponent, Component inComponentToCenter) {
@@ -123,15 +127,42 @@ public class UtilsDialog {
                 }
                 catch (JpegProcessingException ex) {
                     ex.printStackTrace(System.err);
-                    JOptionPane.showMessageDialog(null, "Could not process the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
+                    final WildLogApp app = (WildLogApp)Application.getInstance();
+                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "Could not process the file.",
+                                    "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
+                            return -1;
+                        }
+                    });
                 }
             }
             else {
-                JOptionPane.showMessageDialog(null, "Could not access the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
+                final WildLogApp app = (WildLogApp)Application.getInstance();
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Could not access the file.",
+                                "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
             }
         }
         else {
-            JOptionPane.showMessageDialog(null, "Could not access the file.", "Trying to show image meta data", JOptionPane.ERROR_MESSAGE);
+            final WildLogApp app = (WildLogApp)Application.getInstance();
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Could not access the file.",
+                            "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+            });
         }
     }
 
@@ -141,6 +172,19 @@ public class UtilsDialog {
             String fileName = fotos.get(inIndex).getOriginalFotoLocation(true);
             showExifPopup(new File(fileName));
         }
+    }
+
+    public interface DialogWrapper {
+        public int showDialog();
+    }
+
+    // TODO: It might be a good idea to replace this method with a propper custom message/dialog class that
+    // will work in a similar way to the JOptionPane, but is setup to use the Glasspane, etc.
+    public static int showDialogBackgroundWrapper(RootPaneContainer inParentContainer, DialogWrapper inDialogWrapper) {
+        inParentContainer.getGlassPane().setVisible(true);
+        int result = inDialogWrapper.showDialog();
+        inParentContainer.getGlassPane().setVisible(false);
+        return result;
     }
 
 }

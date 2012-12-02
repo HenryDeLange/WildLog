@@ -49,6 +49,7 @@ import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -1050,7 +1051,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 dialog.setVisible(true);
             }
             else {
-                JOptionPane.showMessageDialog(this, "Sorry you can't view multiple Sightings at once.", "Viewing Multiple Sightings", JOptionPane.WARNING_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "You can't view multiple Sightings at once.",
+                                "Please Note", JOptionPane.INFORMATION_MESSAGE);
+                        return -1;
+                    }
+                });
             }
         }
     }//GEN-LAST:event_btnGoLocationActionPerformed

@@ -28,7 +28,6 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package wildlog.ui.helpers;
 
 import javax.swing.*;
@@ -36,13 +35,14 @@ import java.beans.*;
 import java.awt.*;
 import java.io.File;
 
-public class ImagePreview extends JComponent implements PropertyChangeListener {
-    ImageIcon thumbnail = null;
-    File file = null;
 
-    public ImagePreview(JFileChooser fc) {
-        setPreferredSize(new Dimension(100, 50));
-        fc.addPropertyChangeListener(this);
+public class ImagePreview extends JComponent implements PropertyChangeListener {
+    private ImageIcon thumbnail = null;
+    private File file = null;
+
+    public ImagePreview(JFileChooser fileChooser) {
+        setPreferredSize(new Dimension(210, 210));
+        fileChooser.addPropertyChangeListener(this);
     }
 
     public void loadImage() {
@@ -55,10 +55,8 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
         //of this program's own resources.
         ImageIcon tmpIcon = new ImageIcon(file.getPath());
         if (tmpIcon != null) {
-            if (tmpIcon.getIconWidth() > 90) {
-                thumbnail = new ImageIcon(tmpIcon.getImage().
-                                          getScaledInstance(90, -1,
-                                                      Image.SCALE_DEFAULT));
+            if (tmpIcon.getIconWidth() > 200) {
+                thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance(200, -1, Image.SCALE_DEFAULT));
             } else { //no need to miniaturize
                 thumbnail = tmpIcon;
             }
@@ -66,16 +64,16 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent e) {
+    public void propertyChange(PropertyChangeEvent event) {
         boolean update = false;
-        String prop = e.getPropertyName();
+        String prop = event.getPropertyName();
         //If the directory changed, don't show an image.
         if (JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(prop)) {
             file = null;
             update = true;
         //If a file became selected, find out which one.
         } else if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(prop)) {
-            file = (File) e.getNewValue();
+            file = (File) event.getNewValue();
             update = true;
         }
         //Update the preview accordingly.

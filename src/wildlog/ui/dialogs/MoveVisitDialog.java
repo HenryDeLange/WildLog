@@ -138,7 +138,15 @@ public class MoveVisitDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                            "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.OK_OPTION) {
                 this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 Location tempLocation = (Location)lstToLocation.getSelectedValue();
                 // Update the Visit
@@ -160,7 +168,15 @@ public class MoveVisitDialog extends JDialog {
             }
         }
         else {
-            JOptionPane.showMessageDialog(null, "Please select a From Location, Visit and To Location.", "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please select a From Location, Visit and To Location.",
+                            "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+                    return -1;
+                }
+            });
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

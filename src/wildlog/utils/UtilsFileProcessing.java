@@ -6,6 +6,7 @@ import wildlog.ui.helpers.MovieFilter;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,6 +24,7 @@ import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public final class UtilsFileProcessing {
     public final static String jpeg = "jpeg";
@@ -47,14 +49,14 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a FileChooser dialog.
      */
-    public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
         if (inComponent != null)
             inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
 //        d.setDirectory(lastFilePath);
 //        d.setVisible(true);
-        JFileChooser fileChooser;
+        final JFileChooser fileChooser;
         if (lastFilePath.length() > 0)
             fileChooser = new JFileChooser(lastFilePath);
         else
@@ -65,7 +67,13 @@ public final class UtilsFileProcessing {
         fileChooser.setAccessory(new ImagePreview(fileChooser));
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        int result = fileChooser.showOpenDialog(inComponent);
+        fileChooser.setPreferredSize(new Dimension(950, 550));
+        int result = UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return fileChooser.showOpenDialog(inApp.getMainFrame().getContentPane());
+            }
+        });
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             performFileUpload(inID, inFolderName, fileChooser.getSelectedFiles(), inImageLabel, inSize, inApp);
         }

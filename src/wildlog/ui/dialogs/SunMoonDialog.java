@@ -57,6 +57,8 @@ public class SunMoonDialog extends JDialog {
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         ActionListener escListener = UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
+        // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(this, null);
         // Hack to fix the wierd focus issue to get the ESC to work (related to the datepicker)
         this.setFocusable(true);
         dtpDate.getEditor().registerKeyboardAction(
@@ -84,11 +86,15 @@ public class SunMoonDialog extends JDialog {
                 lblMoonset.setText(MoonTimes.getMoonset(dtpDate.getDate(), lat, lon));
             }
             else {
-                JOptionPane.showMessageDialog(this, "Please select a valid date.", "Date Error", JOptionPane.ERROR_MESSAGE);
+                getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(app.getMainFrame(), "Please select a valid date.", "Date Error", JOptionPane.ERROR_MESSAGE);
+                getGlassPane().setVisible(false);
             }
         }
         else {
-            JOptionPane.showMessageDialog(this, "Please select a valid GPS point.", "GPS Error", JOptionPane.ERROR_MESSAGE);
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(), "Please select a valid GPS point.", "GPS Error", JOptionPane.ERROR_MESSAGE);
+            getGlassPane().setVisible(false);
         }
     }
 

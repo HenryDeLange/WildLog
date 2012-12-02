@@ -43,6 +43,7 @@ import wildlog.mapping.utils.LatLonConverter;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -887,7 +888,15 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
         if (tblVisit.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Visit(s)? This will delete all Sightings and photos linked to this Visit.", "Delete Visit(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "Are you sure you want to delete the Visit(s)? This will delete all Sightings and photos linked to this Visit as well.",
+                                "Delete Visit(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    }
+            });
+            if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 PanelVisit tempPanel = null;
                 for (int t = 0; t < selectedRows.length; t++) {

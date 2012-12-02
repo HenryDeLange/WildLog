@@ -120,6 +120,8 @@ public class GPSDialog extends JDialog {
         });
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
+        // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(this, null);
     }
 
     private void loadUIValues(DataObjectWithGPS inDataObjectWithGPS) {
@@ -489,7 +491,9 @@ public class GPSDialog extends JDialog {
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        int result = fileChooser.showOpenDialog(this);
+        getGlassPane().setVisible(true);
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
+        getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();
             lastFilePath = file.getAbsolutePath();
@@ -521,7 +525,9 @@ public class GPSDialog extends JDialog {
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        int result = fileChooser.showOpenDialog(this);
+        getGlassPane().setVisible(true);
+        int result = fileChooser.showOpenDialog(app.getMainFrame());
+        getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();
             lastFilePath = file.getAbsolutePath();
@@ -531,11 +537,12 @@ public class GPSDialog extends JDialog {
 
     private void btnUseMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseMapActionPerformed
         // TODO: GPS point from map - Ek sal die deel later moet uitfigure en doen...
-        JOptionPane.showConfirmDialog(this, "TODO", "TODO", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnUseMapActionPerformed
 
     private void doGpxInput(File inFile) {
+        getGlassPane().setVisible(true);
         String gpxValue = JOptionPane.showInputDialog(this, "Please enter the GPX Waypoint's name:", "Load Coordinates From GPX", JOptionPane.INFORMATION_MESSAGE);
+        getGlassPane().setVisible(false);
         if (gpxValue != null) {
             DataObjectWithGPS temp = new DataObjectWithGPS() {};
             GpxReader.populateGPSFromGpxFile(inFile, gpxValue, temp);

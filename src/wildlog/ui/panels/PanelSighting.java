@@ -972,7 +972,15 @@ public class PanelSighting extends JDialog {
             }
         }
         else {
-            JOptionPane.showMessageDialog(this, "Please fill in all of the required fields.", "Can't Save Sighting", JOptionPane.WARNING_MESSAGE);
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please fill in all of the required fields.",
+                            "Can't Save Sighting", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+            });
         }
 }//GEN-LAST:event_btnUpdateSightingActionPerformed
 
@@ -1021,7 +1029,15 @@ public class PanelSighting extends JDialog {
         // SAVE (Only save to DB if not in bulk upload mode)
         if (!bulkUploadMode) {
             if (app.getDBI().createOrUpdate(sighting) == false) {
-                JOptionPane.showMessageDialog(this, "Could not save the Sighting", "Error Saving", JOptionPane.ERROR_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Could not save the Sighting",
+                                "Error Saving", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
                 return false;
             }
         }
@@ -1199,8 +1215,17 @@ public class PanelSighting extends JDialog {
         }
         else {
             // Only show the error if the user clicked the button
-            if (evt != null)
-                JOptionPane.showMessageDialog(this, "Please make sure to first specify details for the Creature, Location, Visit and GPS values.", "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
+            if (evt != null) {
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Please make sure to first specify details for the Creature, Location, Visit and GPS values.",
+                                "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
+            }
         }
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
 

@@ -30,7 +30,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -1619,6 +1618,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         extraMenu.add(mnuSunAndMoon);
 
+        subMenu1.setIcon(resourceMap.getIcon("subMenu1.icon")); // NOI18N
         subMenu1.setText(resourceMap.getString("subMenu1.text")); // NOI18N
         subMenu1.setName("subMenu1"); // NOI18N
 
@@ -1634,6 +1634,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         extraMenu.add(subMenu1);
 
+        subMenu3.setIcon(resourceMap.getIcon("subMenu3.icon")); // NOI18N
         subMenu3.setText(resourceMap.getString("subMenu3.text")); // NOI18N
         subMenu3.setName("subMenu3"); // NOI18N
 
@@ -1710,7 +1711,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
         if (tblElement.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this.getComponent(), "Are you sure you want to delete the Creature(s)?  This will delete all Sightings and photos linked to this Creature.", "Delete Creature(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "Are you sure you want to delete the Creature(s)?  This will delete all Sightings and photos linked to this Creature.",
+                            "Delete Creature(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblElement.getSelectedRows();
                 PanelElement tempPanel = null;
                 for (int t = 0; t < selectedRows.length; t++) {
@@ -1772,7 +1781,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
         if (tblLocation.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this.getComponent(), "Are you sure you want to delete the Location(s)? This will delete all Visits, Sightings and photos linked to this Location.", "Delete Location(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "Are you sure you want to delete the Location(s)? This will delete all Visits, Sightings and photos linked to this Location.",
+                            "Delete Location(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
                     Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 0)));
@@ -2314,7 +2331,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
         WildLogOptions options = app.getWildLogOptions();
-        String inputLat = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Latitude to use for the map. (As decimal degrees, for example -33.4639)", options.getDefaultLatitude());
+        app.getMainFrame().getGlassPane().setVisible(true);
+        String inputLat = JOptionPane.showInputDialog(app.getMainFrame(),
+                "Please specify the default Latitude to use for the map. (As decimal degrees, for example -33.4639)",
+                options.getDefaultLatitude());
+        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputLat != null) {
             try {
                 options.setDefaultLatitude(Double.parseDouble(inputLat));
@@ -2323,7 +2344,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 // Do Nothing
             }
         }
-        String inputLon = JOptionPane.showInputDialog(this.getComponent(), "Please specify the default Longitude to use for the map. (As decimal degrees, for example 20.9562)", options.getDefaultLongitude());
+        app.getMainFrame().getGlassPane().setVisible(true);
+        String inputLon = JOptionPane.showInputDialog(app.getMainFrame(),
+                "Please specify the default Longitude to use for the map. (As decimal degrees, for example 20.9562)",
+                options.getDefaultLongitude());
+        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputLon != null) {
             try {
                 options.setDefaultLongitude(Double.parseDouble(inputLon));
@@ -2336,7 +2361,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuMapStartMenuItemActionPerformed
 
     private void mnuExifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExifMenuItemActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileFilter() {
             @Override
             public boolean accept(File f) {
@@ -2357,7 +2382,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 return "JPG Images";
             }
         });
-        int result = fileChooser.showOpenDialog(this.getComponent());
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return fileChooser.showOpenDialog(app.getMainFrame());
+                }
+            });
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             UtilsDialog.showExifPopup(fileChooser.getSelectedFile());
         }
@@ -2365,9 +2395,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void mnuSetSlideshowSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSizeActionPerformed
         WildLogOptions options = app.getWildLogOptions();
+        app.getMainFrame().getGlassPane().setVisible(true);
         String inputFramerate = JOptionPane.showInputDialog(this.getComponent(),
                 "Please specify the default frame size to use for the slideshows. \n (This can be any positive decimal value, for example 500)",
                 options.getDefaultSlideshowSize());
+        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputFramerate != null) {
             try {
                 options.setDefaultSlideshowSize(Math.abs(Integer.parseInt(inputFramerate)));
@@ -2381,9 +2413,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void mnuSetSlideshowSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSpeedActionPerformed
         WildLogOptions options = app.getWildLogOptions();
+        app.getMainFrame().getGlassPane().setVisible(true);
         String inputFramerate = JOptionPane.showInputDialog(this.getComponent(),
                 "Please specify the default framerate to use for the slideshows. \n (This can be any positive decimal value, for example 1 or 0.3)",
                 options.getDefaultSlideshowSpeed());
+        app.getMainFrame().getGlassPane().setVisible(false);
         if (inputFramerate != null) {
             try {
                 options.setDefaultSlideshowSpeed(Math.abs(Float.parseFloat(inputFramerate)));
@@ -2397,6 +2431,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void mnuGPSInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGPSInputActionPerformed
         WildLogOptions options = app.getWildLogOptions();
+        app.getMainFrame().getGlassPane().setVisible(true);
         int latOption = JOptionPane.showOptionDialog(
                 this.getComponent(),
                 "Please select the Default Latitude to use for GPS input:",
@@ -2406,9 +2441,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 null,
                 Latitudes.values(),
                 options.getDefaultInputLatitude());
+        app.getMainFrame().getGlassPane().setVisible(false);
         if (latOption != JOptionPane.CLOSED_OPTION) {
             options.setDefaultInputLatitude(Latitudes.values()[latOption]);
         }
+        app.getMainFrame().getGlassPane().setVisible(true);
         int lonOption = JOptionPane.showOptionDialog(
                 this.getComponent(),
                 "Please select the Default Longitude to use for GPS input:",
@@ -2418,6 +2455,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 null,
                 Longitudes.values(),
                 options.getDefaultInputLongitude());
+        app.getMainFrame().getGlassPane().setVisible(false);
         if (lonOption != JOptionPane.CLOSED_OPTION) {
             options.setDefaultInputLongitude(Longitudes.values()[lonOption]);
         }
@@ -2461,7 +2499,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         while (tabbedPanel.getTabCount() > 4) {
             tabbedPanel.remove(4);
         }
-        if (JOptionPane.showConfirmDialog(this.getComponent(), "Please backup your data before proceding. This will replace the Sun and Moon information for all your Sightings with the auto generated values.", "Calculate Sun and Moon Information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "Please backup your data before proceding. This will replace the Sun and Moon information for all your Sightings with the auto generated values.",
+                            "Calculate Sun and Moon Information",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+        });
+        if (result == JOptionPane.OK_OPTION) {
             List<Sighting> sightings = app.getDBI().list(new Sighting());
             for (Sighting sighting : sightings) {
                 sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
@@ -2488,13 +2535,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_bulkImportMenuItemActionPerformed
 
     private void csvImportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvImportMenuItemActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select the directory with the CSV files");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return fileChooser.showOpenDialog(app.getMainFrame());
+                }
+            });
+        if (result == JFileChooser.APPROVE_OPTION) {
             this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             String path = fileChooser.getSelectedFile().getPath() + File.separatorChar;
+            app.getMainFrame().getGlassPane().setVisible(true);
             String prefix = JOptionPane.showInputDialog(this.getComponent(), "Provide a prefix to use for the imported data.", "Import CSV Data", JOptionPane.PLAIN_MESSAGE);
+            app.getMainFrame().getGlassPane().setVisible(false);
             app.getDBI().doImportCSV(path, prefix);
             this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
@@ -2505,8 +2560,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileFilter(new FileNameExtensionFilter("Jpeg images", "jpg", "jpeg", "JPG", "JPEG"));
         fileChooser.setDialogTitle("Select the images to use for the slideshow...");
-        final Component parent = this.getComponent();
-        if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(this.getComponent())) {
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return fileChooser.showOpenDialog(app.getMainFrame());
+                }
+            });
+        if (result == JFileChooser.APPROVE_OPTION) {
             UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
@@ -2520,7 +2580,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     fileChooser.setMultiSelectionEnabled(false);
                     fileChooser.setSelectedFile(new File("movie.mov"));
                     fileChooser.setFileFilter(new FileNameExtensionFilter("Slideshow movie", "mov"));
-                    if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(parent)) {
+                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return fileChooser.showSaveDialog(app.getMainFrame());
+                            }
+                        });
+                    if (result == JFileChooser.APPROVE_OPTION) {
                         // Now create the slideshow
                         setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
                         String outputFile = fileChooser.getSelectedFile().getPath().substring(2);
@@ -2547,7 +2613,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         File tempFile = new File(path);
         tempFile.mkdirs();
         app.getDBI().doExportCSV(path);
-        JOptionPane.showMessageDialog(this.getComponent(), "Done: You can find the files under the '\\WildLog\\Export\\CSV\\' folder.' folder.", "Finished Generating CSV", JOptionPane.INFORMATION_MESSAGE);
+        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Done: You can find the files under the '\\WildLog\\Export\\CSV\\' folder.' folder.",
+                        "Finished Generating CSV",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return -1;
+            }
+        });
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_csvExportMenuItemActionPerformed
 
@@ -2557,7 +2632,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             protected Object doInBackground() throws Exception {
                 messageTimer.stop();
                 setMessage("Starting the HTML Export");
-                JOptionPane.showMessageDialog(getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "The HTML files will be generated in the backround. It might take a while.",
+                                "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                        return -1;
+                    }
+                });
                 setProgress(0);
                 List<Element> listElements = app.getDBI().list(new Element());
                 for (int t = 0; t < listElements.size(); t++) {
@@ -2575,7 +2658,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
                 setProgress(100);
                 setMessage("HTML Export: " + getProgress());
-                JOptionPane.showMessageDialog(getComponent(), "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.",
+                                "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                        return -1;
+                    }
+                });
                 setMessage("Done with the HTML Export");
                 messageTimer.start();
                 return null;
@@ -2586,7 +2677,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void kmlExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kmlExportMenuItemActionPerformed
         // First do the HTML export to generate the Images in the right place
         exportToHTML(false);
-        JOptionPane.showMessageDialog(this.getComponent(), "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.", "Generating KML", JOptionPane.INFORMATION_MESSAGE);
+        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.",
+                        "Generating KML", JOptionPane.INFORMATION_MESSAGE);
+                return -1;
+            }
+        });
         new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
@@ -2622,7 +2721,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 // Generate KML
                 kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
                 // Try to open the Kml file
-                JOptionPane.showMessageDialog(null, "Done: The KML file will automatically be opened.", "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Done: The KML file will automatically be opened.",
+                                "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
+                        return -1;
+                    }
+                });
                 UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
                 return null;
             }
@@ -2637,7 +2744,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void mnuBackupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupMenuItemActionPerformed
         this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
-        JOptionPane.showMessageDialog(this.getComponent(), "Done. The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. (Note: This only backup the database entries, the image, etc. files have to done manually.)", "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
+                        "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+                return -1;
+            }
+        });
         this.getComponent().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuBackupMenuItemActionPerformed
 
@@ -2656,10 +2771,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         // Write first
         BufferedWriter writer = null;
         try {
-            JFileChooser fileChooser = new JFileChooser();
+            final JFileChooser fileChooser = new JFileChooser();
             fileChooser.setDialogTitle("Select the directory with to use as the new Workspace Folder.");
             fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            if (fileChooser.showOpenDialog(this.getComponent()) == JFileChooser.APPROVE_OPTION) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return fileChooser.showOpenDialog(app.getMainFrame());
+                }
+            });
+            if (result == JFileChooser.APPROVE_OPTION) {
                 writer = new BufferedWriter(
                         new FileWriter(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
                 String path = fileChooser.getSelectedFile().getPath();
@@ -2698,7 +2819,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
-            JOptionPane.showMessageDialog(this.getComponent(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+            });
         }
         finally {
             if (reader != null)
@@ -2710,30 +2837,68 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
         }
         // Shutdown
-        JOptionPane.showMessageDialog(this.getComponent(), "The Workspace Folder has been changed. Please restart the application", "Done!", JOptionPane.INFORMATION_MESSAGE);
+        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                JOptionPane.showMessageDialog(app.getMainFrame(), "The Workspace Folder has been changed. Please restart the application", "Done!", JOptionPane.INFORMATION_MESSAGE);
+                return -1;
+            }
+        });
         app.quit(null);
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
-        if (JOptionPane.showConfirmDialog(this.getComponent(), "It is recommended to backup the entire WildLog folder before you continue.", "Warning!",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "It is recommended to backup the entire WildLog folder before you continue.",
+                        "Warning!",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        if (result == JOptionPane.OK_OPTION) {
             // Check database files
             List<WildLogFile> files = app.getDBI().list(new WildLogFile());
-            for (WildLogFile file : files) {
+            for (final WildLogFile file : files) {
                 if (!new File(file.getFileLocation(true)).isFile()) {
-                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getFileLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "The file does not exist: " + file.getFileLocation(true),
+                                    "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                            return -1;
+                        }
+                    });
                 }
                 if (!new File(file.getOriginalFotoLocation(true)).isFile()) {
-                    JOptionPane.showMessageDialog(this.getComponent(), "The file does not exist: " + file.getOriginalFotoLocation(true), "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "The file does not exist: " + file.getOriginalFotoLocation(true),
+                                    "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                            return -1;
+                        }
+                    });
                 }
             }
             // Delete temporary folders
             try {
                 UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
             }
-            catch (IOException ex) {
+            catch (final IOException ex) {
                 ex.printStackTrace(System.err);
-                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                ex.getMessage(),
+                                "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
             }
             // Check for unused empty folders
             try {
@@ -2741,12 +2906,28 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
                 UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
             }
-            catch (IOException ex) {
+            catch (final IOException ex) {
                 ex.printStackTrace(System.err);
-                JOptionPane.showMessageDialog(this.getComponent(), ex.getMessage(), "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                ex.getMessage(),
+                                "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
             }
             // Done
-            JOptionPane.showMessageDialog(this.getComponent(), "Finished checking and cleaning the Workspace Folder.", "Done!", JOptionPane.INFORMATION_MESSAGE);
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Finished checking and cleaning the Workspace Folder.",
+                            "Done!", JOptionPane.INFORMATION_MESSAGE);
+                    return -1;
+                }
+            });
         }
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 
@@ -2827,8 +3008,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }
 
     private void exportToHTML(final boolean inShowDialog) {
-        if (inShowDialog)
-            JOptionPane.showMessageDialog(this.getComponent(), "The HTML files will be generated in the backround. It might take a while.", "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+        if (inShowDialog) {
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "The HTML files will be generated in the backround. It might take a while.",
+                            "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                    return -1;
+                }
+            });
+        }
         new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
@@ -2840,8 +3030,17 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app);
                 }
-                if (inShowDialog)
-                    JOptionPane.showMessageDialog(null, "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.", "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                if (inShowDialog) {
+                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.",
+                                    "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
+                            return -1;
+                        }
+                    });
+                }
                 return null;
             }
         }.execute();

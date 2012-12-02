@@ -49,6 +49,7 @@ import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.SlideshowDialog;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
@@ -850,7 +851,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
        if (tblSightings.getSelectedRowCount() > 0) {
-            if (JOptionPane.showConfirmDialog(this, "Are you sure you want to delete the Sighting(s)?", "Delete Sighting(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.YES_OPTION) {
+           int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "Are you sure you want to delete the Sighting(s)?",
+                                "Delete Sighting(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    }
+           });
+            if (result == JOptionPane.YES_OPTION) {
                 sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
                 app.getDBI().delete(sighting);
                 sighting = null;

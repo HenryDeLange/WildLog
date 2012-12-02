@@ -49,6 +49,7 @@ import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.mapping.utils.LatLonConverter;
 import wildlog.ui.dialogs.GPSDialog;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
@@ -152,14 +153,19 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private File showFileChooser() {
-        JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileFilter(new ImageFilter());
-        fileChooser.showOpenDialog(this.getParent());
-        if (fileChooser.getSelectedFile() == null)
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return fileChooser.showOpenDialog(app.getMainFrame());
+            }
+        });
+        if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFile() == null)
             return null;
         else
         if (fileChooser.getSelectedFile().isDirectory())
@@ -489,14 +495,31 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     // Make sure the visit is OK
                     final Visit visit = new Visit(txtVisitName.getText());
                     if (app.getDBI().find(visit) != null) {
-                        JOptionPane.showMessageDialog(thisParentHandle, "The Visit name is not unique, please specify another one.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                JOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "The Visit name is not unique, please specify another one.",
+                                        "Can't Save", JOptionPane.ERROR_MESSAGE);
+                                return -1;
+                            }
+                        });
+                        return null;
                     }
                     // Make sure all sightings have a creature set
                     final DefaultTableModel model = (DefaultTableModel)tblBulkImport.getModel();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
                         if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
-                            JOptionPane.showMessageDialog(thisParentHandle, "Please assign a Creature to each of the Sightings.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                @Override
+                                public int showDialog() {
+                                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                                            "Please assign a Creature to each of the Sightings.",
+                                            "Can't Save", JOptionPane.ERROR_MESSAGE);
+                                    return -1;
+                                }
+                            });
                             return null;
                         }
                     }
@@ -576,7 +599,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         });
                     }
                     if (!UtilsConcurency.tryAndWaitToShutdownExecutorService(executorService)) {
-                        JOptionPane.showMessageDialog(thisParentHandle, "There was an unexpected problem while saving.", "Problem Saving", JOptionPane.ERROR_MESSAGE);
+                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                JOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "There was an unexpected problem while saving.",
+                                        "Problem Saving", JOptionPane.ERROR_MESSAGE);
+                                return -1;
+                            }
+                        });
                     }
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");
@@ -586,7 +617,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         ((JTabbedPane)thisParentHandle));
                 }
                 else {
-                    JOptionPane.showMessageDialog(thisParentHandle, "Please provide a Location name and Visit name before saving.", "Can't Save", JOptionPane.ERROR_MESSAGE);
+                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "Please provide a Location name and Visit name before saving.",
+                                    "Can't Save", JOptionPane.ERROR_MESSAGE);
+                            return -1;
+                        }
+                    });
                 }
                 return null;
             }

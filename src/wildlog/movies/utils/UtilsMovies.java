@@ -5,12 +5,13 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
 import wildlog.movies.jpegmovie.JpgToMovie;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
 public class UtilsMovies {
-    public static void generateSlideshow(List<String> inList, WildLogApp inApp, String inOutputFilename) {
+    public static void generateSlideshow(List<String> inList, final WildLogApp inApp, String inOutputFilename) {
         // Now create the slideshow
         File tempFile = new File(WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath());
         tempFile.mkdirs();
@@ -21,11 +22,27 @@ public class UtilsMovies {
                 UtilsFileProcessing.openFile(inOutputFilename);
             }
             else {
-                JOptionPane.showMessageDialog(null, "There was a problem generating the slideshow.", "Warning", JOptionPane.WARNING_MESSAGE);
+                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
+                                "There was a problem generating the slideshow.",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
             }
         }
         else {
-            JOptionPane.showMessageDialog(null, "Can't generate slideshow if there aren't any images.", "No Images", JOptionPane.INFORMATION_MESSAGE);
+            UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(inApp.getMainFrame(),
+                            "Can't generate slideshow if there aren't any images.",
+                            "No Images", JOptionPane.INFORMATION_MESSAGE);
+                    return -1;
+                }
+            });
         }
     }
 }

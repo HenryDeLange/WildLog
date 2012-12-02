@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -36,6 +37,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.WildLogPaths;
 
 
@@ -111,7 +113,16 @@ public class DBI_h2 extends DBI_JDBC {
         finally {
             closeStatementAndResultset(state, results);
             if (!started) {
-                JOptionPane.showMessageDialog(null, "The database could not be opened. Make sure it is not in use or broken.", "WildLog Error: Initialize Database", JOptionPane.ERROR_MESSAGE);
+                final WildLogApp app = (WildLogApp)Application.getInstance();
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "The database could not be opened. Make sure it is not in use or broken.",
+                                "WildLog Error: Initialize Database", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
                 Application.getInstance().exit();
             }
         }

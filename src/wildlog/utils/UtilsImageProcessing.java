@@ -61,6 +61,7 @@ public class UtilsImageProcessing {
             }
             imageReader.dispose();
             inputStream.close();
+            // FIXME: Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou, so ek hoef dit nie dan self uit te werk nie...
             return new ImageIcon(getScaledImage(Toolkit.getDefaultToolkit().createImage(inFile.getAbsolutePath()), finalWidth, finalHeight));
         }
         catch (IOException ex) {

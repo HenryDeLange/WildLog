@@ -118,7 +118,15 @@ public class MergeElementsDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
-            if (JOptionPane.showConfirmDialog(null, "It is strongly recommended that you backup your data (WildLog folder). Do you want to continue now?", "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                            "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.OK_OPTION) {
                 this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
                 Element keepElement = (Element)lstKeepElement.getSelectedValue();
@@ -138,7 +146,15 @@ public class MergeElementsDialog extends JDialog {
             //dialog.dispose();
         }
         else {
-            JOptionPane.showMessageDialog(null, "Please select two Creatures to merge.", "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please select two Creatures to merge.",
+                            "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+                    return -1;
+                }
+            });
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
