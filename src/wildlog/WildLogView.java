@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -2463,63 +2464,86 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuGPSInputActionPerformed
 
     private void linkElementsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkElementsMenuItemActionPerformed
-        tabbedPanel.setSelectedIndex(0);
-        while (tabbedPanel.getTabCount() > 4) {
-            tabbedPanel.remove(4);
-        }
-        final JDialog dialog = new JDialog(app.getMainFrame(), "Link Creatures", true);
-        dialog.setLayout(new AbsoluteLayout());
-        dialog.setSize(790, 540);
-        dialog.add(new MergeElementsDialog(), new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-        dialog.setLocationRelativeTo(tabbedPanel);
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Element.gif"));
-        dialog.setIconImage(icon.getImage());
-        ActionListener escListener = new ActionListener() {
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                dialog.dispose();
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
-        };
-        dialog.getRootPane().registerKeyboardAction(escListener, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        dialog.setVisible(true);
+        });
+        if (result == JOptionPane.OK_OPTION) {
+            tabbedPanel.setSelectedIndex(0);
+            while (tabbedPanel.getTabCount() > 4) {
+                tabbedPanel.remove(4);
+            }
+            MergeElementsDialog dialog = new MergeElementsDialog();
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_linkElementsMenuItemActionPerformed
 
     private void moveVisitsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moveVisitsMenuItemActionPerformed
-        // TODO: Add a popup worning here to confirm what wil happen and whether to continue or not
-        tabbedPanel.setSelectedIndex(0);
-        while (tabbedPanel.getTabCount() > 4) {
-            tabbedPanel.remove(4);
-        }
-        MoveVisitDialog dialog = new MoveVisitDialog();
-        dialog.setVisible(true);
-    }//GEN-LAST:event_moveVisitsMenuItemActionPerformed
-
-    private void calcSunMoonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcSunMoonMenuItemActionPerformed
-        tabbedPanel.setSelectedIndex(0);
-        while (tabbedPanel.getTabCount() > 4) {
-            tabbedPanel.remove(4);
-        }
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "Please backup your data before proceding. This will replace the Sun and Moon information for all your Sightings with the auto generated values.",
-                            "Calculate Sun and Moon Information",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>"
+                        + "Do you want to continue now?</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
         });
         if (result == JOptionPane.OK_OPTION) {
-            List<Sighting> sightings = app.getDBI().list(new Sighting());
-            for (Sighting sighting : sightings) {
-                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                if (!Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude()) && !sighting.isTimeUnknown()) {
-                    double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                    double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
-                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
-                    app.getDBI().createOrUpdate(sighting);
-                }
+            tabbedPanel.setSelectedIndex(0);
+            while (tabbedPanel.getTabCount() > 4) {
+                tabbedPanel.remove(4);
             }
+            MoveVisitDialog dialog = new MoveVisitDialog();
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_moveVisitsMenuItemActionPerformed
+
+    private void calcSunMoonMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcSunMoonMenuItemActionPerformed
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>Please backup your data before proceding. <br>"
+                        + "This will replace the Sun and Moon information for all your Sightings with the auto generated values.</html>",
+                        "Calculate Sun and Moon Information",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        if (result == JOptionPane.OK_OPTION) {
+            UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    messageTimer.stop();
+                    setMessage("Starting the Sun and Moon Calculation");
+                    setProgress(0);
+                    tabbedPanel.setSelectedIndex(0);
+                    while (tabbedPanel.getTabCount() > 4) {
+                        tabbedPanel.remove(4);
+                    }
+                    List<Sighting> sightings = app.getDBI().list(new Sighting());
+                    for (int t = 0; t < sightings.size(); t++) {
+                        Sighting sighting = sightings.get(t);
+                        sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                        if (!Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude()) && !sighting.isTimeUnknown()) {
+                            double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                            double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                            sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
+                            sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
+                            app.getDBI().createOrUpdate(sighting);
+                        }
+                        setProgress(0 + (int)((t/(double)sightings.size())*100));
+                        setMessage("Sun and Moon Calculation: " + getProgress() + "%");
+                    }
+                    setProgress(100);
+                    setMessage("Done with the Sun and Moon Calculation");
+                    messageTimer.start();
+                    return null;
+                }
+            });
         }
     }//GEN-LAST:event_calcSunMoonMenuItemActionPerformed
 
@@ -2535,24 +2559,49 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_bulkImportMenuItemActionPerformed
 
     private void csvImportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvImportMenuItemActionPerformed
-        final JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select the directory with the CSV files");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return fileChooser.showOpenDialog(app.getMainFrame());
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                messageTimer.stop();
+                setMessage("Starting the CSV Import");
+                final JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Select the directory with the CSV files to import");
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            return fileChooser.showOpenDialog(app.getMainFrame());
+                        }
+                    });
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    tabbedPanel.setSelectedIndex(0);
+                    String path = fileChooser.getSelectedFile().getPath() + File.separatorChar;
+                    app.getMainFrame().getGlassPane().setVisible(true);
+                    String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
+                            "<html>Please provide a prefix to use for the imported data. "
+                            + "<br>The prefix will be chosen to map the data to unique new records. "
+                            + "<br>You should manually merge Creatures and move Visits afterwards.</html>",
+                            "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
+                    if (prefix != null && !prefix.isEmpty()) {
+                    app.getMainFrame().getGlassPane().setVisible(false);
+                        if (!app.getDBI().doImportCSV(path, prefix)) {
+                            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                @Override
+                                public int showDialog() {
+                                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                                            "Not all of the data could be successfully imported.",
+                                            "Error Importing From CSV!", JOptionPane.ERROR_MESSAGE);
+                                    return -1;
+                                }
+                            });
+                        }
+                    }
                 }
-            });
-        if (result == JFileChooser.APPROVE_OPTION) {
-            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            String path = fileChooser.getSelectedFile().getPath() + File.separatorChar;
-            app.getMainFrame().getGlassPane().setVisible(true);
-            String prefix = JOptionPane.showInputDialog(this.getComponent(), "Provide a prefix to use for the imported data.", "Import CSV Data", JOptionPane.PLAIN_MESSAGE);
-            app.getMainFrame().getGlassPane().setVisible(false);
-            app.getDBI().doImportCSV(path, prefix);
-            this.getComponent().setCursor(Cursor.getDefaultCursor());
-        }
+                setMessage("Done with the CSV Import");
+                messageTimer.start();
+                return null;
+            }
+        });
     }//GEN-LAST:event_csvImportMenuItemActionPerformed
 
     private void mnuCreateSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateSlideshowActionPerformed
@@ -2608,22 +2657,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
     private void csvExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvExportMenuItemActionPerformed
-        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        String path = WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath();
-        File tempFile = new File(path);
-        tempFile.mkdirs();
-        app.getDBI().doExportCSV(path);
-        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
             @Override
-            public int showDialog() {
-                JOptionPane.showMessageDialog(app.getMainFrame(),
-                        "Done: You can find the files under the '\\WildLog\\Export\\CSV\\' folder.' folder.",
-                        "Finished Generating CSV",
-                        JOptionPane.INFORMATION_MESSAGE);
-                return -1;
+            protected Object doInBackground() throws Exception {
+                messageTimer.stop();
+                setMessage("Starting the CSV Export");
+                String path = WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath();
+                File tempFile = new File(path);
+                tempFile.mkdirs();
+                app.getDBI().doExportCSV(path);
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath());
+                setMessage("Done with the CSV Export");
+                messageTimer.start();
+                return null;
             }
         });
-        this.getComponent().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_csvExportMenuItemActionPerformed
 
     private void htmlExportMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlExportMenuItem1ActionPerformed
@@ -2632,15 +2680,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             protected Object doInBackground() throws Exception {
                 messageTimer.stop();
                 setMessage("Starting the HTML Export");
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "The HTML files will be generated in the backround. It might take a while.",
-                                "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
-                        return -1;
-                    }
-                });
                 setProgress(0);
                 List<Element> listElements = app.getDBI().list(new Element());
                 for (int t = 0; t < listElements.size(); t++) {
@@ -2658,15 +2697,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 }
                 setProgress(100);
                 setMessage("HTML Export: " + getProgress());
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.",
-                                "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
-                        return -1;
-                    }
-                });
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath());
                 setMessage("Done with the HTML Export");
                 messageTimer.start();
                 return null;
@@ -2675,20 +2706,27 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_htmlExportMenuItem1ActionPerformed
 
     private void kmlExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kmlExportMenuItemActionPerformed
-        // First do the HTML export to generate the Images in the right place
-        exportToHTML(false);
-        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                JOptionPane.showMessageDialog(app.getMainFrame(),
-                        "The KML file will be generated in the backround. It might take a while. The file will automatically be opened when finished.",
-                        "Generating KML", JOptionPane.INFORMATION_MESSAGE);
-                return -1;
-            }
-        });
-        new SwingWorker() {
+        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                messageTimer.stop();
+                setMessage("Starting the KML Export");
+                setProgress(0);
+                // First do the HTML export to generate the Images in the right place
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    UtilsHTML.exportHTML(listElements.get(t), app);
+                    setProgress(0 + (int)((t/(double)listElements.size())*32));
+                    setMessage("KML Export: " + getProgress() + "%");
+                }
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    UtilsHTML.exportHTML(listLocations.get(t), app);
+                    setProgress(32 + (int)((t/(double)listElements.size())*32));
+                    setMessage("KML Export: " + getProgress() + "%");
+                }
+                setProgress(65);
+                setMessage("KML Export: " + getProgress() + "%");
                 // Then do KML export
                 String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
                 File tempFile = new File(path);
@@ -2700,6 +2738,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 kmlgen.setKmlPath(path + "WildLogMarkers.kml");
                 // Get entries for Sightings and Locations
                 Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
+                setProgress(70);
+                setMessage("KML Export: " + getProgress() + "%");
                 // Sightings
                 List<Sighting> listSightings = app.getDBI().list(new Sighting());
                 for (int t = 0; t < listSightings.size(); t++) {
@@ -2708,32 +2748,29 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         entries.put(key, new ArrayList<KmlEntry>());
                      }
                     entries.get(key).add(listSightings.get(t).toKML(t, app));
+                    setProgress(70 + (int)((t/(double)listElements.size())*20));
+                    setMessage("KML Export: " + getProgress() + "%");
                 }
                 // Locations
-                List<Location> listLocations = app.getDBI().list(new Location());
                 for (int t = 0; t < listLocations.size(); t++) {
                     String key = listLocations.get(t).getName();
                     if (!entries.containsKey(key)) {
                         entries.put(key, new ArrayList<KmlEntry>());
                      }
                     entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
+                    setProgress(90 + (int)((t/(double)listElements.size())*10));
+                    setMessage("KML Export: " + getProgress() + "%");
                 }
                 // Generate KML
                 kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
                 // Try to open the Kml file
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Done: The KML file will automatically be opened.",
-                                "Finished Generating KML", JOptionPane.INFORMATION_MESSAGE);
-                        return -1;
-                    }
-                });
                 UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
+                setProgress(100);
+                setMessage("Done with the KML Export");
+                messageTimer.start();
                 return null;
             }
-        }.execute();
+        });
     }//GEN-LAST:event_kmlExportMenuItemActionPerformed
 
     private void mnuSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSunAndMoonActionPerformed
@@ -2742,18 +2779,26 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuSunAndMoonActionPerformed
 
     private void mnuBackupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupMenuItemActionPerformed
-        this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
-        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
             @Override
-            public int showDialog() {
-                JOptionPane.showMessageDialog(app.getMainFrame(),
-                        "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
-                        "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
-                return -1;
+            protected Object doInBackground() throws Exception {
+                messageTimer.stop();
+                setMessage("Starting the Database Backup");
+                app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
+                setMessage("Done with the Database Backup");
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "<html>The backup can be found in the 'WildLog\\Backup\\Backup (date)\\' folder. <br>(Note: This only backed up the database entries, the images and other files have to be backed up manually.)</html>",
+                                "Backup Completed", JOptionPane.INFORMATION_MESSAGE);
+                        return -1;
+                    }
+                });
+                messageTimer.start();
+                return null;
             }
         });
-        this.getComponent().setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_mnuBackupMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
@@ -3005,45 +3050,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             root.add(new DefaultMutableTreeNode("Please select dates first"));
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
-    }
-
-    private void exportToHTML(final boolean inShowDialog) {
-        if (inShowDialog) {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "The HTML files will be generated in the backround. It might take a while.",
-                            "Generating HTML", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
-                }
-            });
-        }
-        new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                List<Element> listElements = app.getDBI().list(new Element());
-                for (int t = 0; t < listElements.size(); t++) {
-                    UtilsHTML.exportHTML(listElements.get(t), app);
-                }
-                List<Location> listLocations = app.getDBI().list(new Location());
-                for (int t = 0; t < listLocations.size(); t++) {
-                    UtilsHTML.exportHTML(listLocations.get(t), app);
-                }
-                if (inShowDialog) {
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Done: You can view the files under the '\\WildLog\\Export\\HTML\\' folder.",
-                                    "Finished Generating HTML", JOptionPane.INFORMATION_MESSAGE);
-                            return -1;
-                        }
-                    });
-                }
-                return null;
-            }
-        }.execute();
     }
 
     private void loadPrevFile(List<WildLogFile> inFotos) {

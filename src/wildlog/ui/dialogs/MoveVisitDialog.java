@@ -1,6 +1,5 @@
 package wildlog.ui.dialogs;
 
-import java.awt.Cursor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,11 +24,12 @@ public class MoveVisitDialog extends JDialog {
         app = (WildLogApp) Application.getInstance();
         initComponents();
         loadLists();
-
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
+        // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(this, null);
     }
 
     /** This method is called from within the constructor to
@@ -74,6 +74,7 @@ public class MoveVisitDialog extends JDialog {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        lstFromLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstFromLocation.setFocusable(false);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
         lstFromLocation.setSelectionBackground(resourceMap.getColor("lstFromLocation.selectionBackground")); // NOI18N
@@ -88,6 +89,7 @@ public class MoveVisitDialog extends JDialog {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        lstVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstVisit.setFocusable(false);
         lstVisit.setName("lstVisit"); // NOI18N
         lstVisit.setSelectionBackground(resourceMap.getColor("lstVisit.selectionBackground")); // NOI18N
@@ -97,6 +99,7 @@ public class MoveVisitDialog extends JDialog {
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
+        lstToLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstToLocation.setFocusable(false);
         lstToLocation.setName("lstToLocation"); // NOI18N
         lstToLocation.setSelectionBackground(resourceMap.getColor("lstToLocation.selectionBackground")); // NOI18N
@@ -138,45 +141,28 @@ public class MoveVisitDialog extends JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
-                            "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
-            if (result == JOptionPane.OK_OPTION) {
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                Location tempLocation = (Location)lstToLocation.getSelectedValue();
-                // Update the Visit
-                Visit tempVisit = (Visit)lstVisit.getSelectedValue();
-                tempVisit.setLocationName(tempLocation.getName());
-                app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
-                // Update the sightings
-                Sighting temp = new Sighting();
-                temp.setVisitName(tempVisit.getName());
-                List<Sighting> sightings = app.getDBI().list(temp);
-                for (Sighting tempSighting : sightings) {
-                    tempSighting.setLocationName(tempLocation.getName());
-                    tempSighting.setVisitName(tempVisit.getName());
-                    app.getDBI().createOrUpdate(tempSighting);
-                }
-                // Reload the lists
-                loadLists();
-                this.setCursor(Cursor.getDefaultCursor());
+            Location tempLocation = (Location)lstToLocation.getSelectedValue();
+            // Update the Visit
+            Visit tempVisit = (Visit)lstVisit.getSelectedValue();
+            tempVisit.setLocationName(tempLocation.getName());
+            app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
+            // Update the sightings
+            Sighting temp = new Sighting();
+            temp.setVisitName(tempVisit.getName());
+            List<Sighting> sightings = app.getDBI().list(temp);
+            for (Sighting tempSighting : sightings) {
+                tempSighting.setLocationName(tempLocation.getName());
+                tempSighting.setVisitName(tempVisit.getName());
+                app.getDBI().createOrUpdate(tempSighting);
             }
+            this.dispose();
         }
         else {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please select a From Location, Visit and To Location.",
-                            "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
-                }
-            });
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(this,
+                    "Please select a From Location, Visit and To Location.",
+                    "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

@@ -208,7 +208,7 @@ public final class UtilsFileProcessing {
                     }
                 }
                 catch (IOException e) {
-                    ex.printStackTrace(System.err);
+                    e.printStackTrace(System.err);
                 }
             }
         }

@@ -12,21 +12,16 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.Task;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -39,19 +34,13 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.utils.UtilsData;
-import wildlog.data.enums.WildLogFileType;
-import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.utils.WildLogPaths;
 import wildlog.html.utils.UtilsHTML;
-import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsUI;
-import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 /**
@@ -263,7 +252,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnChecklist = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
         btnSlideshow = new javax.swing.JButton();
-        btnBulkImport = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -318,7 +306,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnUpdateActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 25, 110, 60));
+        visitIncludes.add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 28, 110, 60));
 
         jLabel53.setText(resourceMap.getString("jLabel53.text")); // NOI18N
         jLabel53.setName("jLabel53"); // NOI18N
@@ -335,7 +323,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 240, 75));
+        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 380, 75));
 
         jLabel54.setText(resourceMap.getString("jLabel54.text")); // NOI18N
         jLabel54.setName("jLabel54"); // NOI18N
@@ -575,7 +563,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnMapSightingActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 150, 110, 35));
+        visitIncludes.add(btnMapSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
 
         btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
         btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
@@ -699,7 +687,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnReportActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 110, 110, 35));
+        visitIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 60, 110, 35));
 
         btnChecklist.setBackground(resourceMap.getColor("btnChecklist.background")); // NOI18N
         btnChecklist.setIcon(resourceMap.getIcon("btnChecklist.icon")); // NOI18N
@@ -707,14 +695,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnChecklist.setToolTipText(resourceMap.getString("btnChecklist.toolTipText")); // NOI18N
         btnChecklist.setFocusPainted(false);
         btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnChecklist.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnChecklist.setIconTextGap(5);
+        btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 4));
         btnChecklist.setName("btnChecklist"); // NOI18N
         btnChecklist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChecklistActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 110, 110, 33));
+        visitIncludes.add(btnChecklist, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
 
         btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
@@ -731,7 +720,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnHTMLActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 110, 35));
+        visitIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 140, 110, 35));
 
         btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
         btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
@@ -744,22 +733,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnSlideshowActionPerformed(evt);
             }
         });
-        visitIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 150, 110, 35));
-
-        btnBulkImport.setIcon(resourceMap.getIcon("btnBulkImport.icon")); // NOI18N
-        btnBulkImport.setText(resourceMap.getString("btnBulkImport.text")); // NOI18N
-        btnBulkImport.setToolTipText(resourceMap.getString("btnBulkImport.toolTipText")); // NOI18N
-        btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBulkImport.setFocusPainted(false);
-        btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnBulkImport.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnBulkImport.setName("btnBulkImport"); // NOI18N
-        btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBulkImportActionPerformed(evt);
-            }
-        });
-        visitIncludes.add(btnBulkImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 150, 110, 35));
+        visitIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, 110, 35));
 
         add(visitIncludes);
     }// </editor-fold>//GEN-END:initComponents
@@ -1033,17 +1007,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
-    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
-         UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, visit.getName());
-                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, (JTabbedPane)getParent());
-                return null;
-            }
-        });
-    }//GEN-LAST:event_btnBulkImportActionPerformed
-
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
@@ -1065,7 +1028,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
-    private javax.swing.JButton btnBulkImport;
     private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteSighting;

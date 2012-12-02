@@ -13,9 +13,11 @@ import wildlog.utils.WildLogPaths;
 
 public interface DBI {
     public void close();
+    
     public void doBackup(WildLogPaths inFolder);
     public void doExportCSV(String inPath);
-    public void doImportCSV(String inPath, String inPrefix);
+
+    public boolean doImportCSV(String inPath, String inPrefix);
 
     public Element find(Element inElement);
     public Location find(Location inLocation);

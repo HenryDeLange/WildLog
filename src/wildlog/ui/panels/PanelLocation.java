@@ -2,8 +2,6 @@ package wildlog.ui.panels;
 
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
-import astro.MoonTimes;
-import astro.SunTimes;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -11,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -37,14 +34,16 @@ import wildlog.data.utils.UtilsData;
 import wildlog.data.enums.LocationRating;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
-import wildlog.astro.AstroCalculator;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.mapping.utils.LatLonConverter;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 
@@ -237,6 +236,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane3 = new javax.swing.JScrollPane();
         txtHabitat = new javax.swing.JTextPane();
         btnSlideshow = new javax.swing.JButton();
+        btnBulkImport = new javax.swing.JButton();
 
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
@@ -635,7 +635,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnMapActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
+        locationIncludes.add(btnMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
 
         rdbLocation.setBackground(resourceMap.getColor("rdbLocation.background")); // NOI18N
         buttonGroup1.add(rdbLocation);
@@ -687,7 +687,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnReportActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 140, 110, 35));
+        locationIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 35));
 
         btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
         btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
@@ -704,7 +704,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnHTMLActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
+        locationIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
 
         btnSunAndMoon.setBackground(resourceMap.getColor("btnSunAndMoon.background")); // NOI18N
         btnSunAndMoon.setIcon(resourceMap.getIcon("btnSunAndMoon.icon")); // NOI18N
@@ -720,7 +720,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnSunAndMoonActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
+        locationIncludes.add(btnSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 300, 110, 35));
 
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
@@ -771,7 +771,23 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnSlideshowActionPerformed(evt);
             }
         });
-        locationIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 35));
+        locationIncludes.add(btnSlideshow, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 220, 110, 35));
+
+        btnBulkImport.setIcon(resourceMap.getIcon("btnBulkImport.icon")); // NOI18N
+        btnBulkImport.setText(resourceMap.getString("btnBulkImport.text")); // NOI18N
+        btnBulkImport.setToolTipText(resourceMap.getString("btnBulkImport.toolTipText")); // NOI18N
+        btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBulkImport.setFocusPainted(false);
+        btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnBulkImport.setIconTextGap(5);
+        btnBulkImport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnBulkImport.setName("btnBulkImport"); // NOI18N
+        btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBulkImportActionPerformed(evt);
+            }
+        });
+        locationIncludes.add(btnBulkImport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
 
         add(locationIncludes);
     }// </editor-fold>//GEN-END:initComponents
@@ -1018,6 +1034,17 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
+    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, locationWL.getName());
+                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, (JTabbedPane)getParent());
+                return null;
+            }
+        });
+    }//GEN-LAST:event_btnBulkImportActionPerformed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));
         if (fotos.size() > 0)
@@ -1028,6 +1055,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddVisit;
+    private javax.swing.JButton btnBulkImport;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteVisit;
     private javax.swing.JButton btnGPS;

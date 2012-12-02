@@ -1,9 +1,9 @@
 package wildlog.ui.dialogs;
 
-import java.awt.Cursor;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.jdesktop.application.Application;
@@ -20,14 +20,15 @@ public class MergeElementsDialog extends JDialog {
 
     /** Creates new form MergeElementsDialog */
     public MergeElementsDialog() {
+        app = (WildLogApp)Application.getInstance();
         initComponents();
-        app = (WildLogApp) Application.getInstance();
         loadLists();
-
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
+        // Setup the glasspane on this dialog as well for the JOptionPane's
+        UtilsDialog.addModalBackgroundPanel(this, null);
     }
 
     /** This method is called from within the constructor to
@@ -50,7 +51,15 @@ public class MergeElementsDialog extends JDialog {
         lstKeepElement = new javax.swing.JList();
         jLabel5 = new javax.swing.JLabel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MergeElementsDialog.class);
+        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif")).getImage());
+        setMinimumSize(new java.awt.Dimension(775, 530));
+        setModal(true);
         setName("Form"); // NOI18N
+        setResizable(false);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         elementIncludes.setMaximumSize(new java.awt.Dimension(775, 495));
         elementIncludes.setMinimumSize(new java.awt.Dimension(775, 495));
@@ -58,7 +67,6 @@ public class MergeElementsDialog extends JDialog {
         elementIncludes.setPreferredSize(new java.awt.Dimension(775, 495));
         elementIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MergeElementsDialog.class);
         jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
@@ -86,16 +94,20 @@ public class MergeElementsDialog extends JDialog {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
+        lstReplaceElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstReplaceElement.setFocusable(false);
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
+        lstReplaceElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
 
         elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 300, 400));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        lstKeepElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstKeepElement.setFocusable(false);
         lstKeepElement.setName("lstKeepElement"); // NOI18N
+        lstKeepElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
         jScrollPane1.setViewportView(lstKeepElement);
 
         elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 320, 400));
@@ -104,57 +116,30 @@ public class MergeElementsDialog extends JDialog {
         jLabel5.setName("jLabel5"); // NOI18N
         elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, 560, 40));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(elementIncludes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        getContentPane().add(elementIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 770, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstReplaceElement.getSelectedIndex() >= 0 && lstKeepElement.getSelectedIndex() >= 0) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>Do you want to continue now?</html>",
-                            "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
-            if (result == JOptionPane.OK_OPTION) {
-                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
-                Element keepElement = (Element)lstKeepElement.getSelectedValue();
-                Sighting templateSighting = new Sighting();
-                templateSighting.setElementName(replaceElement.getPrimaryName());
-                List<Sighting> sightings = app.getDBI().list(templateSighting);
-                for (Sighting tempSighting : sightings) {
-                    tempSighting.setElementName(keepElement.getPrimaryName());
-                    app.getDBI().createOrUpdate(tempSighting);
-                }
-                app.getDBI().delete(replaceElement);
-                loadLists();
-                this.setCursor(Cursor.getDefaultCursor());
+            Element replaceElement = (Element)lstReplaceElement.getSelectedValue();
+            Element keepElement = (Element)lstKeepElement.getSelectedValue();
+            Sighting templateSighting = new Sighting();
+            templateSighting.setElementName(replaceElement.getPrimaryName());
+            List<Sighting> sightings = app.getDBI().list(templateSighting);
+            for (Sighting tempSighting : sightings) {
+                tempSighting.setElementName(keepElement.getPrimaryName());
+                app.getDBI().createOrUpdate(tempSighting);
             }
+            app.getDBI().delete(replaceElement);
             // Close the window
-            //JDialog dialog = (JDialog)getParent().getParent().getParent().getParent();
-            //dialog.dispose();
+            this.dispose();
         }
         else {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please select two Creatures to merge.",
-                            "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
-                }
-            });
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(this,
+                    "Please select two Creatures to merge.",
+                    "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
+            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 

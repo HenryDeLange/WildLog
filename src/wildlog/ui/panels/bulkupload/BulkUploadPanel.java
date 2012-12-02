@@ -55,6 +55,7 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
 import wildlog.ui.helpers.UtilTableGenerator;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
+import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
@@ -67,7 +68,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
 
     /** Creates new form BulkUploadPanel */
-    public BulkUploadPanel(ProgressbarTask inProgressbarTask, String inVisitName) {
+    public BulkUploadPanel(ProgressbarTask inProgressbarTask, String inLocationName) {
         app = (WildLogApp) Application.getInstance();
         imageIndex = 0;
         // Init auto generated code
@@ -87,11 +88,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 }
             }
         });
-        if (inVisitName != null && !inVisitName.isEmpty()) {
-            txtVisitName.setText(inVisitName);
-        }
+        txtLocationName.setText(inLocationName);
         // Setup the tab's content
         setupTab(inProgressbarTask);
+        // Pre-select the location if present
+        if (inLocationName != null && !inLocationName.isEmpty()) {
+            txtLocationNameKeyReleased(null);
+        }
+        // Setup clipboard
+        UtilsUI.attachClipboardPopup(txtLocationName);
+        UtilsUI.attachClipboardPopup(txtVisitName);
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
@@ -455,13 +461,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lstLocationValueChanged
 
     private void txtLocationNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLocationNameKeyReleased
-        for (int t = 0; t < lstLocation.getModel().getSize(); t++) {
-            if (lstLocation.getModel().getElementAt(t).toString().equalsIgnoreCase(txtLocationName.getText())) {
-                lstLocation.setSelectedIndex(t);
-                break;
+        if (evt != null && !evt.isActionKey()) {
+            for (int t = 0; t < lstLocation.getModel().getSize(); t++) {
+                if (lstLocation.getModel().getElementAt(t).toString().equalsIgnoreCase(txtLocationName.getText())) {
+                    lstLocation.setSelectedIndex(t);
+                    break;
+                }
+                else
+                    lstLocation.getSelectionModel().clearSelection();
             }
-            else
-                lstLocation.getSelectionModel().clearSelection();
         }
     }//GEN-LAST:event_txtLocationNameKeyReleased
 

@@ -129,7 +129,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="25" width="110" height="60"/>
+              <AbsoluteConstraints x="580" y="28" width="110" height="60"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -153,7 +153,7 @@
           </AuxValues>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="70" y="110" width="240" height="75"/>
+              <AbsoluteConstraints x="70" y="110" width="380" height="75"/>
             </Constraint>
           </Constraints>
 
@@ -622,7 +622,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="460" y="150" width="110" height="35"/>
+              <AbsoluteConstraints x="580" y="140" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -855,7 +855,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="460" y="110" width="110" height="35"/>
+              <AbsoluteConstraints x="460" y="60" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -867,8 +867,9 @@
             <Property name="toolTipText" type="java.lang.String" resourceKey="btnChecklist.toolTipText"/>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="iconTextGap" type="int" value="5"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 8, 2, 8]"/>
+              <Insets value="[2, 10, 2, 4]"/>
             </Property>
             <Property name="name" type="java.lang.String" value="btnChecklist" noResource="true"/>
           </Properties>
@@ -877,7 +878,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="110" width="110" height="33"/>
+              <AbsoluteConstraints x="580" y="100" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -903,7 +904,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="110" width="110" height="35"/>
+              <AbsoluteConstraints x="460" y="140" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -923,31 +924,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="340" y="150" width="110" height="35"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnBulkImport">
-          <Properties>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnBulkImport.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnBulkImport.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnBulkImport.toolTipText"/>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 8, 2, 8]"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="btnBulkImport" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBulkImportActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="580" y="150" width="110" height="35"/>
+              <AbsoluteConstraints x="460" y="100" width="110" height="35"/>
             </Constraint>
           </Constraints>
         </Component>
