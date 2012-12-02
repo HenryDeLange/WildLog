@@ -198,8 +198,10 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
         }
         else
         if(evt instanceof EndOfMediaEvent) {
-            evt.getSourceController().stop();
-            evt.getSourceController().close();
+            if (evt != null) {
+                evt.getSourceController().stop();
+                evt.getSourceController().close();
+            }
         }
     }
 

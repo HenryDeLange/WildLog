@@ -1002,7 +1002,15 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_tblVisitKeyReleased
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsFileProcessing.openFile(UtilsHTML.exportHTML(locationWL, app));
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the HTML Export");
+                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(locationWL, app));
+                setMessage("Done with the HTML Export");
+                return null;
+            }
+        });
 }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed

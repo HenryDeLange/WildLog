@@ -50,7 +50,9 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 
@@ -1146,7 +1148,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_tblLocationMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsFileProcessing.openFile(UtilsHTML.exportHTML(element, app));
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the HTML Export");
+                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(element, app));
+                setMessage("Done with the HTML Export");
+                return null;
+            }
+        });
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed

@@ -40,7 +40,9 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 /**
@@ -997,7 +999,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnChecklistActionPerformed
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsFileProcessing.openFile(UtilsHTML.exportHTML(visit, app));
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the HTML Export");
+                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(visit, app));
+                setMessage("Done with the HTML Export");
+                return null;
+            }
+        });
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed

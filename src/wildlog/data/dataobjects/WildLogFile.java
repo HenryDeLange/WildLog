@@ -65,7 +65,7 @@ public class WildLogFile {
     public String getFileLocation(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
-            return WildLogPaths.getFullWorkspacePrefix() + fileLocation;
+            return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), fileLocation);
         else
             return fileLocation;
     }
@@ -77,7 +77,7 @@ public class WildLogFile {
     public String getOriginalFotoLocation(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
-            return WildLogPaths.getFullWorkspacePrefix() + originalFotoLocation;
+            return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), originalFotoLocation);
         else
             return originalFotoLocation;
     }

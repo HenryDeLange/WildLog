@@ -66,7 +66,7 @@ public class MappingDialog extends JDialog {
             if (element.getScientificName() != null && !element.getScientificName().isEmpty()) {
                 // FIXME: Case sensitivaty mag dalk 'n issue wees op ander opperating systems
                 File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
-                if (!file.exists() && file.isDirectory()) {
+                if (!file.exists() || file.isDirectory()) {
                     btnViewDistributionMap.setVisible(false);
                     btnViewSightingsAndDistributionMap.setVisible(false);
                 }
@@ -76,7 +76,7 @@ public class MappingDialog extends JDialog {
                 btnViewSightingsAndDistributionMap.setVisible(false);
             }
         }
-        if (location == null && element == null) {
+        if (location == null && element == null && visit == null) {
             btnOpenKmlViewer.setVisible(false);
         }
         if (visit == null) {
@@ -88,7 +88,7 @@ public class MappingDialog extends JDialog {
 
         // Pack
         pack();
-        
+
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
@@ -512,10 +512,10 @@ public class MappingDialog extends JDialog {
         UtilsMapGenerator.clearMap(app, true);
         File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
         UtilsMapGenerator.addDistributionMap(app, file);
+        this.dispose();
         // Open Map
         app.getMapOffline().changeTitle("WildLog Map - Offline: " + element.getPrimaryName() + " - Distribution");
         app.getMapOffline().showMap();
-        this.dispose();
     }//GEN-LAST:event_btnViewDistributionMapActionPerformed
 
     private void btnViewSightingsAndDistributionMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewSightingsAndDistributionMapActionPerformed

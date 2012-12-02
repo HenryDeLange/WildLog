@@ -2813,21 +2813,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuAboutMenuItemActionPerformed
 
     private void mnuChangeWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceMenuItemActionPerformed
-        // Write first
-        BufferedWriter writer = null;
-        try {
-            final JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Select the directory with to use as the new Workspace Folder.");
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return fileChooser.showOpenDialog(app.getMainFrame());
-                }
-            });
-            if (result == JFileChooser.APPROVE_OPTION) {
-                writer = new BufferedWriter(
-                        new FileWriter(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select the new or existing Workspace Folder.");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return fileChooser.showOpenDialog(app.getMainFrame());
+            }
+        });
+        if (result == JFileChooser.APPROVE_OPTION) {
+            // Write first
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(
+                        WildLogPaths.concatPaths(System.getProperty("user.home"),"WildLog Settings","wildloghome")));
                 String path = fileChooser.getSelectedFile().getPath();
                 if (path.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase().substring(1, WildLogPaths.WILDLOG.toString().length() - 1))) {
                     // The name might be tricky to parse if it ends with WildLog so we have to do some extra checks...
@@ -2842,54 +2842,58 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 writer.write(path);
                 writer.flush();
             }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
-        finally {
-            if (writer != null)
-                try {
-                    writer.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                }
-        }
-        // Then try to read
-        BufferedReader reader = null;
-        try {
-            reader = new BufferedReader(
-                    new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
-            WildLogPaths.setWorkspacePrefix(reader.readLine());
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                if (writer != null)
+                    try {
+                        writer.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+            }
+            // Then try to read
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(
+                        new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
+                WildLogPaths.setWorkspacePrefix(reader.readLine());
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Could not change the Workspace Folder.",
+                                "Error!", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
+            }
+            finally {
+                if (reader != null)
+                    try {
+                        reader.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+            }
+            // Shutdown
             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(), "Could not change the Workspace Folder.", "Error!", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "The Workspace Folder has been changed. Please restart the application.",
+                            "Done!", JOptionPane.INFORMATION_MESSAGE);
                     return -1;
                 }
             });
+            app.quit(null);
         }
-        finally {
-            if (reader != null)
-                try {
-                    reader.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                }
-        }
-        // Shutdown
-        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-            @Override
-            public int showDialog() {
-                JOptionPane.showMessageDialog(app.getMainFrame(), "The Workspace Folder has been changed. Please restart the application", "Done!", JOptionPane.INFORMATION_MESSAGE);
-                return -1;
-            }
-        });
-        app.quit(null);
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
@@ -2897,11 +2901,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             @Override
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "It is recommended to backup the entire WildLog folder before you continue.",
+                        "<html>It is <b>HIGHLY</b> recommended to backup the entire WildLog folder before you continue! <br>"
+                        + "This task will check that all links between the data and files are correct. <br>"
+                        + "In addition all unnessasary files will be removed from the Workspace.</html>",
                         "Warning!",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
         });
+        app.getMainFrame().getGlassPane().setVisible(true);
         if (result == JOptionPane.OK_OPTION) {
             // Check database files
             List<WildLogFile> files = app.getDBI().list(new WildLogFile());
@@ -2963,16 +2970,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     }
                 });
             }
+            app.getMainFrame().getGlassPane().setVisible(false);
             // Done
             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
                     JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Finished checking and cleaning the Workspace Folder.",
+                            "Finished checking and cleaning the Workspace Folder. Please restart the application.",
                             "Done!", JOptionPane.INFORMATION_MESSAGE);
                     return -1;
                 }
             });
+            // Open the summary document
+            UtilsFileProcessing.openFile(null);
+            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+            app.quit(null);
         }
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 
