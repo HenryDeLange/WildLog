@@ -75,7 +75,6 @@ public class MoveVisitDialog extends JDialog {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstFromLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstFromLocation.setFocusable(false);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
         lstFromLocation.setSelectionBackground(resourceMap.getColor("lstFromLocation.selectionBackground")); // NOI18N
         lstFromLocation.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -90,7 +89,6 @@ public class MoveVisitDialog extends JDialog {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstVisit.setFocusable(false);
         lstVisit.setName("lstVisit"); // NOI18N
         lstVisit.setSelectionBackground(resourceMap.getColor("lstVisit.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(lstVisit);
@@ -100,7 +98,6 @@ public class MoveVisitDialog extends JDialog {
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         lstToLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstToLocation.setFocusable(false);
         lstToLocation.setName("lstToLocation"); // NOI18N
         lstToLocation.setSelectionBackground(resourceMap.getColor("lstToLocation.selectionBackground")); // NOI18N
         jScrollPane3.setViewportView(lstToLocation);

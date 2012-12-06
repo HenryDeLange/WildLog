@@ -410,7 +410,6 @@ public class PanelSighting extends JDialog {
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
         tblElement.setEnabled(!disableEditing);
-        tblElement.setFocusable(false);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -656,7 +655,6 @@ public class PanelSighting extends JDialog {
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
         tblLocation.setEnabled(!disableEditing && !bulkUploadMode);
-        tblLocation.setFocusable(false);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -680,7 +678,6 @@ public class PanelSighting extends JDialog {
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setEnabled(!disableEditing && !bulkUploadMode);
-        tblVisit.setFocusable(false);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

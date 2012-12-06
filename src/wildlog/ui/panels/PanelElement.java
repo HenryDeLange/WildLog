@@ -384,7 +384,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane15.setName("jScrollPane15"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFocusable(false);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {

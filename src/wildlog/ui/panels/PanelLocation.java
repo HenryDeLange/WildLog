@@ -367,7 +367,6 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
-        tblVisit.setFocusable(false);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -393,7 +392,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane11.setName("jScrollPane11"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFocusable(false);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {

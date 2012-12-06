@@ -95,7 +95,6 @@ public class MergeElementsDialog extends JDialog {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstReplaceElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstReplaceElement.setFocusable(false);
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
         lstReplaceElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
@@ -105,7 +104,6 @@ public class MergeElementsDialog extends JDialog {
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstKeepElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstKeepElement.setFocusable(false);
         lstKeepElement.setName("lstKeepElement"); // NOI18N
         lstKeepElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
         jScrollPane1.setViewportView(lstKeepElement);

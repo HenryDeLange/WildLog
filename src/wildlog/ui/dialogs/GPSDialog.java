@@ -144,11 +144,11 @@ public class GPSDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnSave = new javax.swing.JButton();
         btnUsePrevious = new javax.swing.JButton();
         btnUseImage = new javax.swing.JButton();
         btnUseMap = new javax.swing.JButton();
         btnUseGPX = new javax.swing.JButton();
-        btnSave = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         tglNorth = new javax.swing.JToggleButton();
@@ -176,6 +176,17 @@ public class GPSDialog extends JDialog {
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
+        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setFocusPainted(false);
+        btnSave.setName("btnSave"); // NOI18N
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 60));
 
         btnUsePrevious.setIcon(resourceMap.getIcon("btnUsePrevious.icon")); // NOI18N
         btnUsePrevious.setText(resourceMap.getString("btnUsePrevious.text")); // NOI18N
@@ -230,17 +241,6 @@ public class GPSDialog extends JDialog {
             }
         });
         getContentPane().add(btnUseGPX, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 45, 130, 30));
-
-        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
-        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
-        btnSave.setFocusPainted(false);
-        btnSave.setName("btnSave"); // NOI18N
-        btnSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 60));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 390, -1));

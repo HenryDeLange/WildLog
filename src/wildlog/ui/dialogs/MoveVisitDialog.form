@@ -79,7 +79,6 @@
               <StringArray count="0"/>
             </Property>
             <Property name="selectionMode" type="int" value="0"/>
-            <Property name="focusable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="lstFromLocation" noResource="true"/>
             <Property name="selectionBackground" type="java.awt.Color" resourceKey="lstFromLocation.selectionBackground"/>
           </Properties>
@@ -110,7 +109,6 @@
               <StringArray count="0"/>
             </Property>
             <Property name="selectionMode" type="int" value="0"/>
-            <Property name="focusable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="lstVisit" noResource="true"/>
             <Property name="selectionBackground" type="java.awt.Color" resourceKey="lstVisit.selectionBackground"/>
           </Properties>
@@ -138,7 +136,6 @@
               <StringArray count="0"/>
             </Property>
             <Property name="selectionMode" type="int" value="0"/>
-            <Property name="focusable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="lstToLocation" noResource="true"/>
             <Property name="selectionBackground" type="java.awt.Color" resourceKey="lstToLocation.selectionBackground"/>
           </Properties>

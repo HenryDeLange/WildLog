@@ -409,7 +409,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         tblSightings.setAutoCreateRowSorter(true);
         tblSightings.setFont(resourceMap.getFont("tblSightings.font")); // NOI18N
-        tblSightings.setFocusable(false);
         tblSightings.setName("tblSightings"); // NOI18N
         tblSightings.setSelectionBackground(resourceMap.getColor("tblSightings.selectionBackground")); // NOI18N
         tblSightings.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);

@@ -892,7 +892,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
         tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblLocation.setFocusable(false);
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
@@ -927,7 +926,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblVisit.setAutoCreateRowSorter(true);
         tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
         tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblVisit.setFocusable(false);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -999,7 +997,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblElement_LocTab.setAutoCreateRowSorter(true);
         tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblElement_LocTab.setFocusable(false);
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
         tblElement_LocTab.setSelectionBackground(resourceMap.getColor("tblElement_LocTab.selectionBackground")); // NOI18N
         tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1128,7 +1125,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
         tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
-        tblElement.setFocusable(false);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1197,7 +1193,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tblLocation_EleTab.setAutoCreateRowSorter(true);
         tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblLocation_EleTab.setFocusable(false);
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
         tblLocation_EleTab.setSelectionBackground(resourceMap.getColor("tblLocation_EleTab.selectionBackground")); // NOI18N
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1215,7 +1210,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbType.setEnabled(false);
         cmbType.setName("cmbType"); // NOI18N
         cmbType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
