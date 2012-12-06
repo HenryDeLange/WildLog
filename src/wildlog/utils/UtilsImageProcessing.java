@@ -5,8 +5,10 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Directory;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,10 +27,24 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
 
 
 public class UtilsImageProcessing {
+    // Thumbnail sizes
+    /** 100px */
+    public static final int THUMBNAIL_SIZE_SMALL = 100;
+    /** 300px */
+    public static final int THUMBNAIL_SIZE_MEDIUM = 300;
+    /** 500px */
+    public static final int THUMBNAIL_SIZE_LARGE = 500;
+    /** 850px */
+    public static final int THUMBNAIL_SIZE_EXTRA_LARGE = 850;
+
+
     public static ImageIcon getScaledIcon(File inFile, int inSize) {
         try {
             FileImageInputStream inputStream = new FileImageInputStream(inFile);
@@ -159,7 +175,7 @@ public class UtilsImageProcessing {
             if (fotos.size() > inImageIndex) {
                 if (fotos.get(inImageIndex).getFotoType() != null) {
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
-                        inImageLabel.setIcon(getScaledIcon(fotos.get(inImageIndex).getFileLocation(true), inSize));
+                        inImageLabel.setIcon(new ImageIcon(fotos.get(inImageIndex).getThumbnailPath(inSize)));
                     else
                     if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
                         inImageLabel.setIcon(getScaledIcon(inApp.getClass().getResource("resources/images/Movie.png"), inSize));
@@ -180,7 +196,7 @@ public class UtilsImageProcessing {
         }
     }
 
-    private static Date getExifDateFromJpeg(Metadata inMeta) {
+    public static Date getExifDateFromJpeg(Metadata inMeta) {
         Iterator<Directory> directories = inMeta.getDirectories().iterator();
         while (directories.hasNext()) {
             Directory directory = (Directory)directories.next();
@@ -212,6 +228,48 @@ public class UtilsImageProcessing {
         return null;
     }
 
+    public static DataObjectWithGPS getExifGpsFromJpeg(Metadata inMeta) {
+        DataObjectWithGPS tempDataObjectWithGPS = new DataObjectWithGPS() {};
+        Iterator<Directory> directories = inMeta.getDirectories().iterator();
+        while (directories.hasNext()) {
+            Directory directory = (Directory)directories.next();
+            Collection<Tag> tags = directory.getTags();
+            for (Tag tag : tags) {
+                try {
+                    if (tag.getTagName().equalsIgnoreCase("GPS Latitude Ref")) {
+                        // Voorbeeld S
+                        tempDataObjectWithGPS.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
+                    }
+                    else
+                    if (tag.getTagName().equalsIgnoreCase("GPS Longitude Ref")) {
+                        // Voorbeeld E
+                        tempDataObjectWithGPS.setLongitude(Longitudes.getEnumFromText(tag.getDescription()));
+                    }
+                    else
+                    if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
+                        // Voorbeeld -33°44'57.0"
+                        String temp = tag.getDescription();
+                        tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
+                        tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
+                        tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                    }
+                    else
+                    if (tag.getTagName().equalsIgnoreCase("GPS Longitude")) {
+                        // Voorbeeld 26°28'7.0"
+                        String temp = tag.getDescription();
+                        tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
+                        tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
+                        tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                    }
+                }
+                catch (NumberFormatException ex) {
+                    System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
+                }
+            }
+        }
+        return tempDataObjectWithGPS;
+     }
+
     public static Date getExifDateFromJpeg(File inFile) {
         try {
             return getExifDateFromJpeg(JpegMetadataReader.readMetadata(inFile));
@@ -233,6 +291,72 @@ public class UtilsImageProcessing {
             ex.printStackTrace(System.err);
         }
         return null;
+    }
+
+    public static DataObjectWithGPS getExifGpsFromJpeg(File inFile) {
+        try {
+            return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inFile));
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (JpegProcessingException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+
+    public static DataObjectWithGPS getExifGpsFromJpeg(InputStream inInputStream) {
+        try {
+            return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inInputStream));
+        }
+        catch (JpegProcessingException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
+
+    private static void createThumbnailOnDisk(File inOriginalFile, int inSize) {
+        // Get the thumbnail name
+        File toFileThumbnail = new File(getThumbnailPath(inOriginalFile, inSize));
+        // Make the folder
+        toFileThumbnail.getParentFile().mkdirs();
+        // Resize the file and then save the thumbnail to into WildLog's folders
+        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalFile, inSize);
+        try {
+            BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics2D = bufferedImage.createGraphics();
+            graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
+            ImageIO.write(bufferedImage, "jpg", toFileThumbnail);
+            graphics2D.dispose();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    private static String getThumbnailPath(File inOriginalFile, int inSize) {
+        File thumbnail = new File(WildLogPaths.concatPaths(
+                WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(),
+                WildLogPaths.stripRootFromPath(
+                    inOriginalFile.getParent(),
+                    WildLogPaths.WILDLOG_IMAGES.getFullPath()),
+                inOriginalFile.getName()
+            ));
+        String path = thumbnail.getAbsolutePath();
+        return path.substring(0, path.lastIndexOf('.')) + "_" + inSize + "px" + path.substring(path.lastIndexOf('.'));
+    }
+
+    public static String getThumbnail(File inFile, int inSize) {
+        File thumbnail = new File(getThumbnailPath(inFile, inSize));
+        if (!thumbnail.exists()) {
+            createThumbnailOnDisk(inFile, inSize);
+        }
+        return thumbnail.getAbsolutePath();
+    }
+
+    public static String getThumbnail(String inPath, int inSize) {
+        return getThumbnail(new File(inPath), inSize);
     }
 
 }

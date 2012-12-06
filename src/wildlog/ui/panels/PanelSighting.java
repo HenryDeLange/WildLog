@@ -43,7 +43,7 @@ import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.astro.AstroCalculator;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -183,8 +183,8 @@ public class PanelSighting extends JDialog {
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
 
         // Lat Lon stuff
-        txtLatitude.setText(LatLonConverter.getLatitudeString(sighting));
-        txtLongitude.setText(LatLonConverter.getLatitudeString(sighting));
+        txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+        txtLongitude.setText(UtilsGps.getLatitudeString(sighting));
 
         // Spinners stuff
         SpinnerFixer.fixSelectAllForSpinners(spnNumberOfElements);
@@ -255,8 +255,8 @@ public class PanelSighting extends JDialog {
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbViewRating.setSelectedItem(sighting.getViewRating());
         cmbWeather.setSelectedItem(sighting.getWeather());
-        txtLatitude.setText(LatLonConverter.getLatitudeString(sighting));
-        txtLongitude.setText(LatLonConverter.getLongitudeString(sighting));
+        txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+        txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
         spnMoonPhase.setValue(sighting.getMoonPhase());
         cmbMoonlight.setSelectedItem(sighting.getMoonlight());
         spnTemperature.setValue(sighting.getTemperature());
@@ -1066,13 +1066,13 @@ public class PanelSighting extends JDialog {
             // Now upload the files
             if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 if (inFiles == null) {
-                    imageIndex = UtilsFileProcessing.uploadImage(
+                    imageIndex = UtilsFileProcessing.uploadFile(
                             "SIGHTING-" + sighting.getSightingCounter(),
                             "Sightings" + File.separatorChar + sighting.toString(),
                             this, lblImage, 300, app);
                 }
                 else {
-                    imageIndex = UtilsFileProcessing.uploadImage(
+                    imageIndex = UtilsFileProcessing.uploadFiles(
                             "SIGHTING-" + sighting.getSightingCounter(),
                             "Sightings" + File.separatorChar + sighting.toString(),
                             this, lblImage, 300, app,
@@ -1202,12 +1202,12 @@ public class PanelSighting extends JDialog {
     private void btnCalculateSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateSunAndMoonActionPerformed
         if (sighting.getDate() != null && sighting.getLatitude() != null && sighting.getLongitude() != null
                 && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
-                && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !LatLonConverter.NO_GPS_POINT.equals(txtLatitude.getText())
-                && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !LatLonConverter.NO_GPS_POINT.equals(txtLongitude.getText())) {
+                && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
+                && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
             // Sun
             btnUpdateSightingActionPerformed(null);
-            double latitude = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-            double longitude = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+            double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+            double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
             cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(setSightingDateFromUIFields(), latitude, longitude));
             // Moon
             spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
@@ -1233,8 +1233,8 @@ public class PanelSighting extends JDialog {
         GPSDialog dialog = new GPSDialog(this, sighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            txtLatitude.setText(LatLonConverter.getLatitudeString(sighting));
-            txtLongitude.setText(LatLonConverter.getLongitudeString(sighting));
+            txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+            txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
         }
         btnUpdateSighting.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed

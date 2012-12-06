@@ -2,17 +2,18 @@ package wildlog.data.dataobjects;
 
 import java.util.Calendar;
 import java.util.Date;
+import wildlog.WildLogApp;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
 public class WildLogFile {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
     private String filename;
-    private String fileLocation; // This is sort of used as a primary key
-    private String originalFotoLocation;
-    private Date date;
-    private WildLogFileType fotoType;
+    private String originalFileLocation;
+    private Date uploadDate;
+    private WildLogFileType fileType;
     private boolean defaultFile = false;
 
     // CONSTRUCTORS:
@@ -23,83 +24,86 @@ public class WildLogFile {
         id = inID;
     }
 
-    public WildLogFile(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, WildLogFileType inFotoType) {
+    public WildLogFile(String inID, String inName, String inOriginalFileLocation, WildLogFileType inFotoType) {
         id = inID;
         filename = inName;
-        fileLocation = inFileLocation;
-        originalFotoLocation = inOriginalFotoLocation;
-        date = Calendar.getInstance().getTime();
-        fotoType = inFotoType;
+        originalFileLocation = inOriginalFileLocation;
+        uploadDate = Calendar.getInstance().getTime();
+        fileType = inFotoType;
     }
 
-    public WildLogFile(String inID, String inName, String inFileLocation, String inOriginalFotoLocation, WildLogFileType inFotoType, Date inDate) {
+    public WildLogFile(String inID, String inName, String inOriginalFileLocation, WildLogFileType inFotoType, Date inUploadDate) {
         id = inID;
         filename = inName;
-        fileLocation = inFileLocation;
-        originalFotoLocation = inOriginalFotoLocation;
-        date = inDate;
-        fotoType = inFotoType;
+        originalFileLocation = inOriginalFileLocation;
+        uploadDate = inUploadDate;
+        fileType = inFotoType;
     }
 
     // METHODS:
     @Override
     public String toString() {
-        return filename + " - " + fileLocation;
+        return filename + " - " + originalFileLocation;
     }
 
     public String toHTML(UtilsHTML.ImageExportTypes inExportType) {
-        if (fotoType.equals(WildLogFileType.IMAGE))
+        if (fileType.equals(WildLogFileType.IMAGE))
             // Moet die getter hier gebruik want ek wil die File().exists() doen...
-            return UtilsHTML.generateHTMLImages(getFileLocation(true), inExportType);
+            return "<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
+                    + UtilsHTML.generateHTMLImages(getThumbnailPath(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a>";
         else
-        if (fotoType.equals(WildLogFileType.MOVIE))
-            return "[Movie] ";
+        if (fileType.equals(WildLogFileType.MOVIE))
+            return "[<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
+                    // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
+//                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
+//                        WildLogApp.class.getResource("resources/images/Movie.png").toString(),
+//                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType)
+                    + "Movie</a>] ";
         else
-        if (fotoType.equals(WildLogFileType.OTHER))
-            return "[Other File] ";
+        if (fileType.equals(WildLogFileType.OTHER))
+            return "[<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
+                    // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
+//                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
+//                        WildLogApp.class.getResource("resources/images/OtherFile.png").toString(),
+//                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType)
+                    + "Other File</a>] ";
         else
             return "";
     }
 
-    // GETTERS and SETTERS
-    public String getFileLocation(boolean inGetFullpath) {
-        // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
-        if (inGetFullpath)
-            return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), fileLocation);
-        else
-            return fileLocation;
+    public String getThumbnailPath(int inSize) {
+        return UtilsImageProcessing.getThumbnail(
+                WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(),originalFileLocation),
+                inSize);
     }
 
-    public Date getDate() {
-        return date;
+    // GETTERS and SETTERS
+    public Date getUploadDate() {
+        return uploadDate;
     }
 
     public String getOriginalFotoLocation(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
-            return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), originalFotoLocation);
+            return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), originalFileLocation);
         else
-            return originalFotoLocation;
+            return originalFileLocation;
     }
 
     public WildLogFileType getFotoType() {
-        return fotoType;
-    }
-
-    public void setFileLocation(String inFileLocation) {
-            fileLocation = inFileLocation;
+        return fileType;
     }
 
     public void setDate(Date inDate) {
-        date = inDate;
+        uploadDate = inDate;
     }
 
     public void setOriginalFotoLocation(String inOriginalFotoLocation) {
-        originalFotoLocation = inOriginalFotoLocation;
+        originalFileLocation = inOriginalFotoLocation;
     }
 
     public void setFotoType(WildLogFileType inFotoType) {
-        fotoType = inFotoType;
+        fileType = inFotoType;
     }
 
     public String getId() {

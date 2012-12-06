@@ -20,7 +20,7 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.html.utils.UtilsHTML;
 
 public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
@@ -226,8 +226,8 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
             Location location = inApp.getDBI().find(new Location(locationName));
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                    entry.setLatitude(UtilsGps.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
+                    entry.setLongitude(UtilsGps.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
                 }
             }
             else {
@@ -240,8 +240,8 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
             Location location = inApp.getDBI().find(new Location(locationName));
             if (location.getLatitude() != null && location.getLongitude() != null) {
                 if (!location.getLatitude().equals(Latitudes.NONE) && !location.getLongitude().equals(Longitudes.NONE)) {
-                    entry.setLatitude(LatLonConverter.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
-                    entry.setLongitude(LatLonConverter.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
+                    entry.setLatitude(UtilsGps.getDecimalDegree(location.getLatitude(), location.getLatDegrees(), location.getLatMinutes(), location.getLatSeconds()));
+                    entry.setLongitude(UtilsGps.getDecimalDegree(location.getLongitude(), location.getLonDegrees(), location.getLonMinutes(), location.getLonSeconds()));
                 }
             }
             else {
@@ -250,8 +250,8 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
             }
         }
         else {
-            entry.setLatitude(LatLonConverter.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
-            entry.setLongitude(LatLonConverter.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
+            entry.setLatitude(UtilsGps.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
+            entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         }
         return entry;
     }

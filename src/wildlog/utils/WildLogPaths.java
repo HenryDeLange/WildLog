@@ -121,7 +121,10 @@ public enum WildLogPaths {
      * absolute proper paths.
      */
     public static String stripRootFromPath(String inPath, String inRoot) {
-        return inPath.substring(inRoot.length());
+        if (inPath.toLowerCase().startsWith(inRoot.toLowerCase()))
+            return inPath.substring(inRoot.length());
+        else
+            return inPath;
     }
 
 }

@@ -7,8 +7,6 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,8 +15,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import wildlog.WildLogApp;
@@ -27,13 +23,14 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public final class UtilsFileProcessing {
+    // Extentions
     public final static String jpeg = "jpeg";
     public final static String jpg = "jpg";
     public final static String gif = "gif";
     public final static String tiff = "tiff";
     public final static String tif = "tif";
     public final static String png = "png";
-    private static final int THUMBNAIL_SIZE = 300;
+    // private variables
     private static String lastFilePath = "";
 
     /** Get the extension of a file. */
@@ -49,7 +46,7 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a FileChooser dialog.
      */
-    public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
+    public static int uploadFile(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
         if (inComponent != null)
             inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
@@ -86,7 +83,7 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a List of Files. (Used with FileDrop.)
      */
-    public static int uploadImage(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
+    public static int uploadFiles(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
         if (inComponent != null)
             inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         performFileUpload(inID, inFolderName, inFiles.toArray(new File[inFiles.size()]), inImageLabel, inSize, inApp);
@@ -107,36 +104,15 @@ public final class UtilsFileProcessing {
                         lastFilePath = fromFile.getPath();
                         // Is an image
                         if (new ImageFilter().accept(fromFile)) {
-                            // Get the thumbnail first
-                            // Make the folder
-                            new File(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath() + inFolderName).mkdirs();
-                            // Setup the output files
-                            File toFile_Thumbnail = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), inFolderName, fromFile.getName()));
-                            // Check that the filename is unique
-                            while (toFile_Thumbnail.exists()) {
-                                toFile_Thumbnail = new File(WildLogPaths.concatPaths(toFile_Thumbnail.getParent(), "wl_" + toFile_Thumbnail.getName()));
-                            }
-                            // Resize the file and then save the thumbnail to into WildLog's folders
-                            ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(fromFile, THUMBNAIL_SIZE);
-                            try {
-                                BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
-                                Graphics2D graphics2D = bufferedImage.createGraphics();
-                                graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
-                                ImageIO.write(bufferedImage, "jpg", toFile_Thumbnail);
-                                graphics2D.dispose();
-                            }
-                            catch (IOException ex) {
-                                ex.printStackTrace(System.err);
-                            }
-                            saveOriginalFile(WildLogPaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID, toFile_Thumbnail.getAbsolutePath());
+                            saveOriginalFile(WildLogPaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID);
                         }
                         else
                         // Is a movie
                         if (new MovieFilter().accept(fromFile)) {
-                            saveOriginalFile(WildLogPaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID, null);
+                            saveOriginalFile(WildLogPaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID);
                         }
                         else {
-                            saveOriginalFile(WildLogPaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID, null);
+                            saveOriginalFile(WildLogPaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID);
                         }
                     }
                 }
@@ -146,7 +122,7 @@ public final class UtilsFileProcessing {
         UtilsImageProcessing.setupFoto(inID, 0, inImageLabel, inSize, inApp);
     }
 
-    private static void saveOriginalFile(WildLogPaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID, String inThumbnailPath) {
+    private static void saveOriginalFile(WildLogPaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID) {
         // Make the folder
         new File(inFilePaths.getFullPath() + inFolderName).mkdirs();
         // Setup the output files
@@ -158,14 +134,10 @@ public final class UtilsFileProcessing {
         // Copy the original file into WildLog's folders
         copyFile(inFromFile, toFile_Original);
         // Save the database entry
-        String thumbnailPath = "No Thumbnail";
-        if (inThumbnailPath != null)
-            thumbnailPath = WildLogPaths.stripRootFromPath(inThumbnailPath, WildLogPaths.getFullWorkspacePrefix());
         inApp.getDBI().createOrUpdate(
                 new WildLogFile(
                         inID,
                         toFile_Original.getName(),
-                        thumbnailPath,
                         WildLogPaths.stripRootFromPath(toFile_Original.getAbsolutePath(), WildLogPaths.getFullWorkspacePrefix()),
                         inFileType)
                 , false);

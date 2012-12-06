@@ -11,7 +11,7 @@ import javax.xml.bind.Unmarshaller;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 
 
 public class GpxReader {
@@ -44,12 +44,12 @@ public class GpxReader {
                     // Get the values
                     double decimalLat = waypoint.getLat().doubleValue();
                     double decimalLon = waypoint.getLon().doubleValue();
-                    inDataObjectWithGPS.setLatDegrees(LatLonConverter.getDegrees(Latitudes.NONE, decimalLat));
-                    inDataObjectWithGPS.setLonDegrees(LatLonConverter.getDegrees(Longitudes.NONE, decimalLon));
-                    inDataObjectWithGPS.setLatMinutes(LatLonConverter.getMinutes(decimalLat));
-                    inDataObjectWithGPS.setLonMinutes(LatLonConverter.getMinutes(decimalLon));
-                    inDataObjectWithGPS.setLatSeconds(LatLonConverter.getSeconds(decimalLat));
-                    inDataObjectWithGPS.setLonSeconds(LatLonConverter.getSeconds(decimalLon));
+                    inDataObjectWithGPS.setLatDegrees(UtilsGps.getDegrees(Latitudes.NONE, decimalLat));
+                    inDataObjectWithGPS.setLonDegrees(UtilsGps.getDegrees(Longitudes.NONE, decimalLon));
+                    inDataObjectWithGPS.setLatMinutes(UtilsGps.getMinutes(decimalLat));
+                    inDataObjectWithGPS.setLonMinutes(UtilsGps.getMinutes(decimalLon));
+                    inDataObjectWithGPS.setLatSeconds(UtilsGps.getSeconds(decimalLat));
+                    inDataObjectWithGPS.setLonSeconds(UtilsGps.getSeconds(decimalLon));
                     break;
                 }
             }

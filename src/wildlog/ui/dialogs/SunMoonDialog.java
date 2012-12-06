@@ -15,7 +15,7 @@ import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
@@ -35,21 +35,14 @@ public class SunMoonDialog extends JDialog {
         // Moennie die oorspronklikke gebruik nie want ek wil nie die GPS punt laat verander nie
         dataObjectWithGPS = new DataObjectWithGPS() {};
         if (inDataObjectWithGPS != null) {
-            dataObjectWithGPS.setLatitude(inDataObjectWithGPS.getLatitude());
-            dataObjectWithGPS.setLatDegrees(inDataObjectWithGPS.getLatDegrees());
-            dataObjectWithGPS.setLatMinutes(inDataObjectWithGPS.getLatMinutes());
-            dataObjectWithGPS.setLatSeconds(inDataObjectWithGPS.getLatSeconds());
-            dataObjectWithGPS.setLongitude(inDataObjectWithGPS.getLongitude());
-            dataObjectWithGPS.setLonDegrees(inDataObjectWithGPS.getLonDegrees());
-            dataObjectWithGPS.setLonMinutes(inDataObjectWithGPS.getLonMinutes());
-            dataObjectWithGPS.setLonSeconds(inDataObjectWithGPS.getLonSeconds());
+            UtilsGps.copyGpsBetweenDOs(dataObjectWithGPS, inDataObjectWithGPS);
         }
         // Populate the initial UI values
-        txtLatitude.setText(LatLonConverter.getLatitudeString(dataObjectWithGPS));
-        txtLongitude.setText(LatLonConverter.getLongitudeString(dataObjectWithGPS));
+        txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));
+        txtLongitude.setText(UtilsGps.getLongitudeString(dataObjectWithGPS));
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
-        if (!LatLonConverter.NO_GPS_POINT.equals(txtLatitude.getText())
-            && !LatLonConverter.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
+            && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
             populateUI();
         }
 
@@ -68,10 +61,10 @@ public class SunMoonDialog extends JDialog {
     }
 
     private void populateUI() {
-        if (!LatLonConverter.NO_GPS_POINT.equals(txtLatitude.getText())
-                && !LatLonConverter.NO_GPS_POINT.equals(txtLongitude.getText())) {
-            double lat = LatLonConverter.getLatDecimalDegree(dataObjectWithGPS);
-            double lon = LatLonConverter.getLonDecimalDegree(dataObjectWithGPS);
+        if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
+                && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+            double lat = UtilsGps.getLatDecimalDegree(dataObjectWithGPS);
+            double lon = UtilsGps.getLonDecimalDegree(dataObjectWithGPS);
             if (dtpDate.getDate() != null) {
                 // Sun
                 lblSunlight.setText(AstroCalculator.getSunCategory(dtpDate.getDate(), lat, lon).toString());
@@ -323,8 +316,8 @@ public class SunMoonDialog extends JDialog {
         GPSDialog dialog = new GPSDialog(this, dataObjectWithGPS);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            txtLatitude.setText(LatLonConverter.getLatitudeString(dataObjectWithGPS));
-            txtLongitude.setText(LatLonConverter.getLongitudeString(dataObjectWithGPS));
+            txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));
+            txtLongitude.setText(UtilsGps.getLongitudeString(dataObjectWithGPS));
             populateUI();
         }
         btnRefresh.requestFocus();

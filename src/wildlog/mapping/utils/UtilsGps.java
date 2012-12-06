@@ -6,7 +6,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
 
-public final class LatLonConverter {
+public final class UtilsGps {
     public static final String NO_GPS_POINT = "No GPS";
 
     public static double getLatDecimalDegree(DataObjectWithGPS inDataObjectWithGPS) {
@@ -111,6 +111,19 @@ public final class LatLonConverter {
         }
         else {
             return NO_GPS_POINT;
+        }
+    }
+
+    public static void copyGpsBetweenDOs(DataObjectWithGPS inToDO, DataObjectWithGPS inFromDO) {
+        if (inFromDO != null && inToDO != null) {
+            inToDO.setLatitude(inFromDO.getLatitude());
+            inToDO.setLatDegrees(inFromDO.getLatDegrees());
+            inToDO.setLatMinutes(inFromDO.getLatMinutes());
+            inToDO.setLatSeconds(inFromDO.getLatSeconds());
+            inToDO.setLongitude(inFromDO.getLongitude());
+            inToDO.setLonDegrees(inFromDO.getLonDegrees());
+            inToDO.setLonMinutes(inFromDO.getLonMinutes());
+            inToDO.setLonSeconds(inFromDO.getLonSeconds());
         }
     }
 

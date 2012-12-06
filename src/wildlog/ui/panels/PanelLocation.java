@@ -35,7 +35,7 @@ import wildlog.data.enums.LocationRating;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
@@ -79,7 +79,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadImage("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFiles("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -838,7 +838,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadImage("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFile("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -870,8 +870,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        txtLatitude.setText(LatLonConverter.getLatitudeString(locationWL));
-        txtLongitude.setText(LatLonConverter.getLongitudeString(locationWL));
+        txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
+        txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
 
         rdbLocation.setSelected(true);
         //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
@@ -1029,8 +1029,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         GPSDialog dialog = new GPSDialog(app.getMainFrame(), locationWL);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            txtLatitude.setText(LatLonConverter.getLatitudeString(locationWL));
-            txtLongitude.setText(LatLonConverter.getLongitudeString(locationWL));
+            txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
+            txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
         }
         btnUpdate.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed

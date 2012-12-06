@@ -4,7 +4,6 @@ import wildlog.ui.dialogs.WildLogAboutBox;
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import org.jdesktop.application.SingleFrameApplication;
@@ -18,25 +17,23 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-import javax.swing.SwingWorker;
 import javax.swing.Timer;
+import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -47,7 +44,6 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
@@ -72,7 +68,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.astro.AstroCalculator;
 import wildlog.utils.WildLogPaths;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -2529,8 +2525,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         Sighting sighting = sightings.get(t);
                         sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
                         if (!Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude()) && !sighting.isTimeUnknown()) {
-                            double lat = LatLonConverter.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                            double lon = LatLonConverter.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                            double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                            double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                             sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
                             sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
                             app.getDBI().createOrUpdate(sighting);
@@ -2908,83 +2904,116 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
         });
-        app.getMainFrame().getGlassPane().setVisible(true);
         if (result == JOptionPane.OK_OPTION) {
-            // Check database files
-            List<WildLogFile> files = app.getDBI().list(new WildLogFile());
-            for (final WildLogFile file : files) {
-                if (!new File(file.getFileLocation(true)).isFile()) {
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "The file does not exist: " + file.getFileLocation(true),
-                                    "Can't Find File!", JOptionPane.ERROR_MESSAGE);
-                            return -1;
-                        }
-                    });
-                }
-                if (!new File(file.getOriginalFotoLocation(true)).isFile()) {
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                        @Override
-                        public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "The file does not exist: " + file.getOriginalFotoLocation(true),
-                                    "Can't Find File!", JOptionPane.ERROR_MESSAGE);
-                            return -1;
-                        }
-                    });
-                }
-            }
-            // Delete temporary folders
+            FileWriter feedback = null;
             try {
-                UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace(System.err);
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                ex.getMessage(),
-                                "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
-                        return -1;
+                feedback = new FileWriter(new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG.getFullPath()), "WorkspaceCleanupFeedback.txt"));
+                // Lock the input/display and show busy message
+                // Note: we never remove the Busy dialog and greyed out background since the app wil be restarted anyway when done
+                tabbedPanel.setSelectedIndex(0);
+                JDialog dialog = new JDialog(app.getMainFrame());
+                JPanel panel = new JPanel();
+                panel.setPreferredSize(new Dimension(400, 50));
+                panel.setBorder(new LineBorder(new Color(235, 90, 80), 3));
+                JLabel label = new JLabel("<html>Busy cleaning workspace. <br>Please be patient and don't close the application until the process is finished.</html>");
+                panel.add(label);
+                dialog.add(panel);
+                dialog.setModal(true);
+                dialog.setUndecorated(true);
+                dialog.pack();
+                UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), dialog);
+                UtilsDialog.setDialogToCenter(app.getMainFrame(), dialog);
+                dialog.setVisible(true);
+                // Check database files
+                feedback.write("1) Make sure all files int he database are present.");
+//                Files.m
+                List<WildLogFile> files = app.getDBI().list(new WildLogFile());
+                for (final WildLogFile file : files) {
+    //                if (!new File(file.getFileLocation(true)).isFile()) {
+                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+    //                            JOptionPane.showMessageDialog(app.getMainFrame(),
+    //                                    "The file does not exist: " + file.getFileLocation(true),
+    //                                    "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                                return -1;
+                            }
+                        });
+    //                }
+                    if (!new File(file.getOriginalFotoLocation(true)).isFile()) {
+                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                JOptionPane.showMessageDialog(app.getMainFrame(),
+                                        "The file does not exist: " + file.getOriginalFotoLocation(true),
+                                        "Can't Find File!", JOptionPane.ERROR_MESSAGE);
+                                return -1;
+                            }
+                        });
                     }
-                });
-            }
-            // Check for unused empty folders
-            try {
-                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
-                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
-                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace(System.err);
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                ex.getMessage(),
-                                "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
-                        return -1;
-                    }
-                });
-            }
-            app.getMainFrame().getGlassPane().setVisible(false);
-            // Done
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Finished checking and cleaning the Workspace Folder. Please restart the application.",
-                            "Done!", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
                 }
-            });
-            // Open the summary document
-            UtilsFileProcessing.openFile(null);
-            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-            app.quit(null);
+    //            // Delete temporary folders
+    //            try {
+    //                UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
+    //            }
+    //            catch (final IOException ex) {
+    //                ex.printStackTrace(System.err);
+    //                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+    //                    @Override
+    //                    public int showDialog() {
+    //                        JOptionPane.showMessageDialog(app.getMainFrame(),
+    //                                ex.getMessage(),
+    //                                "Can't Delete File!", JOptionPane.ERROR_MESSAGE);
+    //                        return -1;
+    //                    }
+    //                });
+    //            }
+    //            // Check for unused empty folders
+    //            try {
+    //                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_IMAGES.getFullPath()));
+    //                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_MOVIES.getFullPath()));
+    //                UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_OTHER.getFullPath()));
+    //            }
+    //            catch (final IOException ex) {
+    //                ex.printStackTrace(System.err);
+    //                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+    //                    @Override
+    //                    public int showDialog() {
+    //                        JOptionPane.showMessageDialog(app.getMainFrame(),
+    //                                ex.getMessage(),
+    //                                "Can't Delete Folder!", JOptionPane.ERROR_MESSAGE);
+    //                        return -1;
+    //                    }
+    //                });
+    //            }
+    //            app.getMainFrame().getGlassPane().setVisible(false);
+    //            // Done
+    //            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+    //                @Override
+    //                public int showDialog() {
+    //                    JOptionPane.showMessageDialog(app.getMainFrame(),
+    //                            "Finished checking and cleaning the Workspace Folder. Please restart the application.",
+    //                            "Done!", JOptionPane.INFORMATION_MESSAGE);
+    //                    return -1;
+    //                }
+    //            });
+    //            // Open the summary document
+    //            UtilsFileProcessing.openFile(null);
+    //            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+    //            app.quit(null);
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                try {
+                    feedback.flush();
+                    feedback.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+            }
         }
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 

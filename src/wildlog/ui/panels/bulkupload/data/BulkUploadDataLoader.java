@@ -1,6 +1,10 @@
 package wildlog.ui.panels.bulkupload.data;
 
+import com.drew.imaging.jpeg.JpegMetadataReader;
+import com.drew.imaging.jpeg.JpegProcessingException;
+import com.drew.metadata.Metadata;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -11,7 +15,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
@@ -62,6 +69,11 @@ public class BulkUploadDataLoader {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
                     sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
+                    // Set the GPS details
+                    if ((sightingKey.getLatitude() == null || Latitudes.NONE.equals(sightingKey.getLatitude()))
+                            && (sightingKey.getLongitude() == null || Longitudes.NONE.equals(sightingKey.getLongitude()))) {
+                        UtilsGps.copyGpsBetweenDOs(sightingKey, temp.getDataObjectWithGPS());
+                    }
                     // Set the date for this sighting
                     sightingKey.setDate(currentSightingDate);
                     // Set other defaults for the sighting
@@ -87,9 +99,20 @@ public class BulkUploadDataLoader {
     }
 
     private static void loadFileData(File inFile, List<BulkUploadImageFileWrapper> inImageList) {
-        // Note: Ek load die file twee keer, maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
-        Date date = UtilsImageProcessing.getExifDateFromJpeg(inFile);
-        inImageList.add(new BulkUploadImageFileWrapper(inFile, UtilsImageProcessing.getScaledIcon(inFile, 200), date));
+        try {
+            // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
+            Metadata metadata = JpegMetadataReader.readMetadata(inFile);
+            Date date = UtilsImageProcessing.getExifDateFromJpeg(metadata);
+            BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(inFile, UtilsImageProcessing.getScaledIcon(inFile, 200), date);
+            wrapper.setDataObjectWithGPS(UtilsImageProcessing.getExifGpsFromJpeg(metadata));
+            inImageList.add(wrapper);
+        }
+        catch (JpegProcessingException ex) {
+            ex.printStackTrace();
+        }
+        catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private static Object[][] getArrayFromHash(Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> inData){

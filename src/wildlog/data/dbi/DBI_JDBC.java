@@ -54,7 +54,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String tableLocations = "CREATE TABLE LOCATIONS (NAME varchar(150) PRIMARY KEY NOT NULL, DESCRIPTION longvarchar, RATING varchar(50), GAMEVIEWINGRATING varchar(50), HABITATTYPE longvarchar, ACCOMMODATIONTYPE varchar(150), CATERING varchar(50), CONTACTNUMBERS varchar(50), WEBSITE varchar(100), EMAIL varchar(100), DIRECTIONS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double)";
     protected static final String tableVisits = "CREATE TABLE VISITS (NAME varchar(150) PRIMARY KEY NOT NULL, STARTDATE date, ENDDATE date, DESCRIPTION longvarchar, GAMEWATCHINGINTENSITY varchar(50), VISITTYPE varchar(50), LOCATIONNAME varchar(150))";
     protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, UNKNOWNTIME smallint)";
-    protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), FILEPATH varchar(500), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint)";
+    protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT 3, DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, DEFAULTLATOPTION varchar(10) DEFAULT '', DEFAULTLONOPTION varchar(10) DEFAULT '', DEFAULTONLINEMAP smallint DEFAULT true)";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
@@ -73,14 +73,14 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String createVisit = "INSERT INTO VISITS (NAME,STARTDATE,ENDDATE,DESCRIPTION,GAMEWATCHINGINTENSITY,VISITTYPE,LOCATIONNAME) VALUES (?,?,?,?,?,?,?)";
     protected static final String createSighting = "INSERT INTO SIGHTINGS (SIGHTINGCOUNTER,SIGHTINGDATE,ELEMENTNAME,LOCATIONNAME,VISITNAME,TIMEOFDAY,WEATHER,VIEWRATING,CERTAINTY,NUMBEROFELEMENTS,DETAILS,LATITUDEINDICATOR,LATDEGREES,LATMINUTES,LATSECONDS,LONGITUDEINDICATOR,LONDEGREES,LONMINUTES,LONSECONDS,SIGHTINGEVIDENCE,MOONPHASE,MOONLIGHT,TEMPERATURE,TEMPERATUREUNIT,LIFESTATUS,SEX,TAG,UNKNOWNTIME) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     protected static final String createElement = "INSERT INTO ELEMENTS (PRIMARYNAME,OTHERNAME,SCIENTIFICNAME,DESCRIPTION,DISTRIBUTION,NUTRITION,WATERDEPENDANCE,SIZEMALEMIN,SIZEMALEMAX,SIZEFEMALEMIN,SIZEFEMALEMAX,SIZEUNIT,SIZETYPE,WEIGHTMALEMIN,WEIGHTMALEMAX,WEIGHTFEMALEMIN,WEIGHTFEMALEMAX,WEIGHTUNIT,BREEDINGDURATION,BREEDINGNUMBER,WISHLISTRATING,DIAGNOSTICDESCRIPTION,ACTIVETIME,ENDANGEREDSTATUS,BEHAVIOURDESCRIPTION,ADDFREQUENCY,ELEMENTTYPE,FEEDINGCLASS,LIFESPAN,REFERENCEID) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,FILEPATH,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?,?)";
+    protected static final String createFile = "INSERT INTO FILES (ID,FILENAME,ORIGINALPATH,FILETYPE,UPLOADDATE,ISDEFAULT) VALUES (?,?,?,?,?,?)";
     protected static final String createWildLogOptions = "INSERT INTO WILDLOG VALUES (DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)";
     // Update
     protected static final String updateLocation = "UPDATE LOCATIONS SET NAME = ?, DESCRIPTION = ?, RATING = ?, GAMEVIEWINGRATING = ?, HABITATTYPE = ?, ACCOMMODATIONTYPE = ?, CATERING = ?, CONTACTNUMBERS = ?, WEBSITE = ?, EMAIL = ?, DIRECTIONS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ? WHERE NAME = ?";
     protected static final String updateVisit = "UPDATE VISITS SET NAME = ?, STARTDATE = ?, ENDDATE = ?, DESCRIPTION = ?, GAMEWATCHINGINTENSITY = ?, VISITTYPE = ?, LOCATIONNAME = ? WHERE NAME = ?";
     protected static final String updateSighting = "UPDATE SIGHTINGS SET SIGHTINGCOUNTER = ?, SIGHTINGDATE = ?, ELEMENTNAME = ?, LOCATIONNAME = ?, VISITNAME = ?, TIMEOFDAY = ?, WEATHER = ?, VIEWRATING = ?, CERTAINTY = ?, NUMBEROFELEMENTS = ?, DETAILS = ?, LATITUDEINDICATOR = ?, LATDEGREES = ?, LATMINUTES = ?, LATSECONDS = ?, LONGITUDEINDICATOR = ?, LONDEGREES = ?, LONMINUTES = ?, LONSECONDS = ?, SIGHTINGEVIDENCE = ?, MOONPHASE = ?, MOONLIGHT = ?, TEMPERATURE = ?, TEMPERATUREUNIT = ?, LIFESTATUS = ?, SEX = ?, TAG = ?, UNKNOWNTIME = ? WHERE SIGHTINGCOUNTER = ?";
     protected static final String updateElement = "UPDATE ELEMENTS SET PRIMARYNAME = ?, OTHERNAME = ?, SCIENTIFICNAME = ?, DESCRIPTION = ?, DISTRIBUTION = ?, NUTRITION = ?, WATERDEPENDANCE = ?, SIZEMALEMIN = ?, SIZEMALEMAX = ?, SIZEFEMALEMIN = ?, SIZEFEMALEMAX = ?, SIZEUNIT = ?, SIZETYPE = ?, WEIGHTMALEMIN = ?, WEIGHTMALEMAX = ?, WEIGHTFEMALEMIN = ?, WEIGHTFEMALEMAX = ?, WEIGHTUNIT = ?, BREEDINGDURATION = ?, BREEDINGNUMBER = ?, WISHLISTRATING = ?, DIAGNOSTICDESCRIPTION = ?, ACTIVETIME = ?, ENDANGEREDSTATUS = ?, BEHAVIOURDESCRIPTION = ?, ADDFREQUENCY = ?, ELEMENTTYPE = ?, FEEDINGCLASS = ?, LIFESPAN = ?, REFERENCEID = ? WHERE PRIMARYNAME = ?";
-    protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, FILEPATH = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
+    protected static final String updateFile = "UPDATE FILES SET ID = ?, FILENAME = ?, ORIGINALPATH = ?, FILETYPE = ?, UPLOADDATE = ?, ISDEFAULT = ? WHERE ORIGINALPATH = ?";
     protected static final String updateWildLogOptions = "UPDATE WILDLOG SET DEFAULTLATITUDE = ?, DEFAULTLONGITUDE = ?, DEFAULTSLIDESHOWSPEED = ?, DEFAULTSLIDESHOWSIZE = ?, DEFAULTLATOPTION = ?, DEFAULTLONOPTION = ?, DEFAULTONLINEMAP = ?";
     // Delete
     protected static final String deleteLocation = "DELETE FROM LOCATIONS WHERE NAME = ?";
@@ -524,14 +524,13 @@ public abstract class DBI_JDBC implements DBI {
             if (inFile.getId() != null) {
                 sql = sql + " WHERE ID = '" + UtilsData.sanitizeString(inFile.getId()) + "'";
             }
-            sql = sql + " ORDER BY ISDEFAULT desc, FILEPATH";
+            sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
             state = conn.prepareStatement(sql);
             results = state.executeQuery();
             while (results.next()) {
                 WildLogFile tempFoto = new WildLogFile();
                 tempFoto.setId(results.getString("ID"));
                 tempFoto.setFilename(results.getString("FILENAME"));
-                tempFoto.setFileLocation(results.getString("FILEPATH"));
                 tempFoto.setOriginalFotoLocation(results.getString("ORIGINALPATH"));
                 tempFoto.setFotoType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
                 tempFoto.setDate(results.getDate("UPLOADDATE"));
@@ -914,24 +913,22 @@ public abstract class DBI_JDBC implements DBI {
             }
             state.setString(1, UtilsData.sanitizeString(inFoto.getId()));
             state.setString(2, UtilsData.sanitizeString(inFoto.getFilename()));
-            state.setString(3, UtilsData.sanitizeString(inFoto.getFileLocation(false)));
-            state.setString(4, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
-            state.setString(5, UtilsData.stringFromObject(inFoto.getFotoType()));
-            if (inFoto.getDate() != null) {
-                state.setDate(6, new java.sql.Date(inFoto.getDate().getTime()));
+            state.setString(3, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            state.setString(4, UtilsData.stringFromObject(inFoto.getFotoType()));
+            if (inFoto.getUploadDate() != null) {
+                state.setDate(5, new java.sql.Date(inFoto.getUploadDate().getTime()));
             }
             else {
-                state.setDate(6, null);
+                state.setDate(5, null);
             }
             if (inFoto.isDefaultFile()) {
-                state.setBoolean(7, true);
+                state.setBoolean(6, true);
             }
             else {
-                state.setBoolean(7, false);
+                state.setBoolean(6, false);
             }
-
             if (inUpdate) {
-                state.setString(8, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+                state.setString(7, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
             }
             state.executeUpdate();
         }
@@ -1131,16 +1128,14 @@ public abstract class DBI_JDBC implements DBI {
         // Note: this method only deletes one file at a time
         PreparedStatement state = null;
         try {
-            // Note: Do not use FilePath, because it is not unique
             state = conn.prepareStatement(deleteFile);
             state.setString(1, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
             // Delete File from database
             state.executeUpdate();
             // Delete the file on the PC
-            File tempFile = new File(inFoto.getFileLocation(true));
+            File tempFile = new File(inFoto.getOriginalFotoLocation(true));
             tempFile.delete();
-            tempFile = new File(inFoto.getOriginalFotoLocation(true));
-            tempFile.delete();
+            // FIXME: Huidiglik gaan dit die thumbnails agter los, dis OK vir nou want mens kan alle thumbnails delete soos mens wil, maar sal nice wees om dit ook skoon te maak
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -1294,6 +1289,8 @@ public abstract class DBI_JDBC implements DBI {
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN SEX varchar(15)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TAG longvarchar");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN UNKNOWNTIME smallint");
+            // Make changes to Files
+            state.execute("ALTER TABLE FILES DROP COLUMN FILEPATH");
             // Make changes to Wildlog settings
             state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLATITUDE double");
             state.execute("ALTER TABLE WILDLOG ALTER COLUMN DEFAULTLONGITUDE double");

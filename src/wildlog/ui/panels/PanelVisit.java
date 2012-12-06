@@ -85,7 +85,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadImage("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFiles("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -878,7 +878,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadImage("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFile("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);

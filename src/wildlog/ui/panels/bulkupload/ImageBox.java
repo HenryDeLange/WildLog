@@ -133,6 +133,7 @@ public class ImageBox extends JPanel {
         btnClone.setBackground(resourceMap.getColor("btnClone.background")); // NOI18N
         btnClone.setIcon(resourceMap.getIcon("btnClone.icon")); // NOI18N
         btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
+        btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClone.setFocusPainted(false);
         btnClone.setIconTextGap(2);
         btnClone.setMargin(new java.awt.Insets(2, 2, 2, 2));

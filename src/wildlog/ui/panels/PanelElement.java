@@ -94,7 +94,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadImage("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFiles("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -1011,7 +1011,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadImage("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFile("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);

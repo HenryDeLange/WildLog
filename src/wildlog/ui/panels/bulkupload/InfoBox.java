@@ -11,7 +11,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -44,13 +44,13 @@ public class InfoBox extends JPanel {
         }
         lblElementName.setText(sightingWrapper.getElementName());
         lblLatitude.setText(Double.toString(
-                LatLonConverter.getDecimalDegree(
+                UtilsGps.getDecimalDegree(
                     sightingWrapper.getLatitude(),
                     sightingWrapper.getLatDegrees(),
                     sightingWrapper.getLatMinutes(),
                     sightingWrapper.getLatSeconds())));
         lblLongitude.setText(Double.toString(
-                LatLonConverter.getDecimalDegree(
+                UtilsGps.getDecimalDegree(
                     sightingWrapper.getLongitude(),
                     sightingWrapper.getLonDegrees(),
                     sightingWrapper.getLonMinutes(),
@@ -233,8 +233,8 @@ public class InfoBox extends JPanel {
         GPSDialog dialog = new GPSDialog(app.getMainFrame(), sightingWrapper);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            lblLatitude.setText(LatLonConverter.getLatitudeString(sightingWrapper));
-            lblLongitude.setText(LatLonConverter.getLongitudeString(sightingWrapper));
+            lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
+            lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
         }
     }//GEN-LAST:event_btnGPSActionPerformed
 

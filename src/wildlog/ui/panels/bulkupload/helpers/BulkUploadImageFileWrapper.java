@@ -3,6 +3,7 @@ package wildlog.ui.panels.bulkupload.helpers;
 import java.io.File;
 import java.util.Date;
 import javax.swing.Icon;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.ui.panels.bulkupload.ImageBox;
 
 
@@ -11,6 +12,7 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
     private ImageBox imageBox;
     private File file;
     private Date date;
+    private DataObjectWithGPS dataObjectWithGPS;
 
 
     public BulkUploadImageFileWrapper(File inFile, Icon inIcon, Date inDate) {
@@ -76,6 +78,14 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
 
     public void setImageBox(ImageBox inImageBox) {
         imageBox = inImageBox;
+    }
+
+    public DataObjectWithGPS getDataObjectWithGPS() {
+        return dataObjectWithGPS;
+    }
+
+    public void setDataObjectWithGPS(DataObjectWithGPS inDataObjectWithGPS) {
+        dataObjectWithGPS = inDataObjectWithGPS;
     }
 
 }

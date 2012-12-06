@@ -47,7 +47,7 @@ import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ImageFilter;
@@ -574,8 +574,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
                                         && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
                                     // Sun
-                                    double latitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
-                                    double longitude = LatLonConverter.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
+                                    double latitude = UtilsGps.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
+                                    double longitude = UtilsGps.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
                                     sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
                                     // Moon
                                     sightingWrapper.setMoonPhase(AstroCalculator.getMoonPhase(sightingWrapper.getDate()));

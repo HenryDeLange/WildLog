@@ -1,15 +1,7 @@
 package wildlog.ui.dialogs;
 
-import com.drew.imaging.jpeg.JpegMetadataReader;
-import com.drew.imaging.jpeg.JpegProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Metadata;
-import com.drew.metadata.Tag;
 import java.awt.Dimension;
 import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -23,11 +15,12 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.gpx.GpxReader;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.mapping.utils.LatLonConverter;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.GpxFilter;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.utils.UtilsImageProcessing;
 
 
 public class GPSDialog extends JDialog {
@@ -114,7 +107,7 @@ public class GPSDialog extends JDialog {
             @Override
             public void filesDropped(List<File> inFiles) {
                 if (inFiles != null && inFiles.size() > 0) {
-                    doExifInput(inFiles.get(0));
+                    loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(inFiles.get(0)));
                 }
             }
         });
@@ -125,19 +118,21 @@ public class GPSDialog extends JDialog {
     }
 
     private void loadUIValues(DataObjectWithGPS inDataObjectWithGPS) {
-        uiLatitude = LatLonConverter.getDecimalDegree(
-                Latitudes.NONE,
-                inDataObjectWithGPS.getLatDegrees(),
-                inDataObjectWithGPS.getLatMinutes(),
-                inDataObjectWithGPS.getLatSeconds());
-        uiLongitude = LatLonConverter.getDecimalDegree(
-                Longitudes.NONE,
-                inDataObjectWithGPS.getLonDegrees(),
-                inDataObjectWithGPS.getLonMinutes(),
-                inDataObjectWithGPS.getLonSeconds());
-        // Populate the initial values into the spinners
-        tglDecimalDegrees.setSelected(true);
-        setupDD();
+        if (inDataObjectWithGPS != null) {
+            uiLatitude = UtilsGps.getDecimalDegree(
+                    Latitudes.NONE,
+                    inDataObjectWithGPS.getLatDegrees(),
+                    inDataObjectWithGPS.getLatMinutes(),
+                    inDataObjectWithGPS.getLatSeconds());
+            uiLongitude = UtilsGps.getDecimalDegree(
+                    Longitudes.NONE,
+                    inDataObjectWithGPS.getLonDegrees(),
+                    inDataObjectWithGPS.getLonMinutes(),
+                    inDataObjectWithGPS.getLonSeconds());
+            // Populate the initial values into the spinners
+            tglDecimalDegrees.setSelected(true);
+            setupDD();
+        }
     }
 
     /** This method is called from within the constructor to
@@ -400,12 +395,12 @@ public class GPSDialog extends JDialog {
             // Use decimal degrees
             double latDecimalDegree = (double)spnLatDecimal.getValue();
             double lonDecimalDegree = (double)spnLonDecimal.getValue();
-            dataObjectWithGPS.setLatDegrees(LatLonConverter.getDegrees(Latitudes.NONE, latDecimalDegree));
-            dataObjectWithGPS.setLonDegrees(LatLonConverter.getDegrees(Longitudes.NONE, lonDecimalDegree));
-            dataObjectWithGPS.setLatMinutes(LatLonConverter.getMinutes(latDecimalDegree));
-            dataObjectWithGPS.setLonMinutes(LatLonConverter.getMinutes(lonDecimalDegree));
-            dataObjectWithGPS.setLatSeconds(LatLonConverter.getSeconds(latDecimalDegree));
-            dataObjectWithGPS.setLonSeconds(LatLonConverter.getSeconds(lonDecimalDegree));
+            dataObjectWithGPS.setLatDegrees(UtilsGps.getDegrees(Latitudes.NONE, latDecimalDegree));
+            dataObjectWithGPS.setLonDegrees(UtilsGps.getDegrees(Longitudes.NONE, lonDecimalDegree));
+            dataObjectWithGPS.setLatMinutes(UtilsGps.getMinutes(latDecimalDegree));
+            dataObjectWithGPS.setLonMinutes(UtilsGps.getMinutes(lonDecimalDegree));
+            dataObjectWithGPS.setLatSeconds(UtilsGps.getSeconds(latDecimalDegree));
+            dataObjectWithGPS.setLonSeconds(UtilsGps.getSeconds(lonDecimalDegree));
         }
         else {
             // Use degrees minutes seconds
@@ -531,7 +526,7 @@ public class GPSDialog extends JDialog {
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();
             lastFilePath = file.getAbsolutePath();
-            doExifInput(file);
+            loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(file));
         }
     }//GEN-LAST:event_btnUseImageActionPerformed
 
@@ -549,54 +544,6 @@ public class GPSDialog extends JDialog {
             loadUIValues(temp);
         }
     }
-
-    private void doExifInput(File inFile) {
-        try {
-            DataObjectWithGPS tempDO = new DataObjectWithGPS() {};
-            Metadata metadata = JpegMetadataReader.readMetadata(inFile);
-            Iterator<Directory> directories = metadata.getDirectories().iterator();
-            while (directories.hasNext()) {
-                Directory directory = (Directory)directories.next();
-                Collection<Tag> tags = directory.getTags();
-                for (Tag tag : tags) {
-                    try {
-                        if (tag.getTagName().equalsIgnoreCase("GPS Latitude Ref")) {
-                            // Voorbeeld S
-                            tempDO.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
-                        }
-                        else
-                        if (tag.getTagName().equalsIgnoreCase("GPS Longitude Ref")) {
-                            // Voorbeeld E
-                            tempDO.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
-                        }
-                        else
-                        if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
-                            // Voorbeeld -33°44'57.0"
-                            String temp = tag.getDescription();
-                            tempDO.setLatDegrees((int)Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim()));
-                            tempDO.setLatMinutes((int)Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim()));
-                            tempDO.setLatSeconds(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim()));
-                        }
-                        else
-                        if (tag.getTagName().equalsIgnoreCase("GPS Longitude")) {
-                            // Voorbeeld 26°28'7.0"
-                            String temp = tag.getDescription();
-                            tempDO.setLonDegrees((int)Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim()));
-                            tempDO.setLonMinutes((int)Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim()));
-                            tempDO.setLonSeconds(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim()));
-                        }
-                    }
-                    catch (NumberFormatException ex) {
-                        System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
-                    }
-                }
-            }
-            loadUIValues(tempDO);
-        }
-        catch (JpegProcessingException | IOException ex) {
-            ex.printStackTrace(System.err);
-        }
-     }
 
     private void setupDD() {
         // Update UI
@@ -624,12 +571,12 @@ public class GPSDialog extends JDialog {
         spnLonSec.setVisible(true);
         spnLonDecimal.setVisible(false);
         // Setup values
-        spnLatDeg.setValue(LatLonConverter.getDegrees(Latitudes.NONE, uiLatitude));
-        spnLatMin.setValue(LatLonConverter.getMinutes(uiLatitude));
-        spnLatSec.setValue(LatLonConverter.getSeconds(uiLatitude));
-        spnLonDeg.setValue(LatLonConverter.getDegrees(Longitudes.NONE, uiLongitude));
-        spnLonMin.setValue(LatLonConverter.getMinutes(uiLongitude));
-        spnLonSec.setValue(LatLonConverter.getSeconds(uiLongitude));
+        spnLatDeg.setValue(UtilsGps.getDegrees(Latitudes.NONE, uiLatitude));
+        spnLatMin.setValue(UtilsGps.getMinutes(uiLatitude));
+        spnLatSec.setValue(UtilsGps.getSeconds(uiLatitude));
+        spnLonDeg.setValue(UtilsGps.getDegrees(Longitudes.NONE, uiLongitude));
+        spnLonMin.setValue(UtilsGps.getMinutes(uiLongitude));
+        spnLonSec.setValue(UtilsGps.getSeconds(uiLongitude));
     }
 
     private void loadValuesFromDD() {
@@ -638,12 +585,12 @@ public class GPSDialog extends JDialog {
     }
 
     private void loadValuesFromDMS() {
-        uiLatitude = LatLonConverter.getDecimalDegree(
+        uiLatitude = UtilsGps.getDecimalDegree(
             Latitudes.NONE,
             (int)spnLatDeg.getValue(),
             (int)spnLatMin.getValue(),
             (double)spnLatSec.getValue());
-        uiLongitude = LatLonConverter.getDecimalDegree(
+        uiLongitude = UtilsGps.getDecimalDegree(
             Longitudes.NONE,
             (int)spnLonDeg.getValue(),
             (int)spnLonMin.getValue(),
