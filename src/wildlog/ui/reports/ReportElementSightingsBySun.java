@@ -28,7 +28,6 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 

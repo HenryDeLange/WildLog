@@ -29,7 +29,6 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.helpers.MoonReportHelper;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
@@ -296,11 +295,11 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
         lblVeryBad.setName("lblVeryBad"); // NOI18N
         getContentPane().add(lblVeryBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(315, 130, 70, -1));
 
-        lblOther.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
+        lblOther.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
         lblOther.setForeground(resourceMap.getColor("lblOther.foreground")); // NOI18N
         lblOther.setText(resourceMap.getString("lblOther.text")); // NOI18N
         lblOther.setName("lblOther"); // NOI18N
-        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 705, 60, -1));
+        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(545, 705, 50, -1));
 
         jLabel4.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
@@ -357,29 +356,29 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
         lblTotalVisits.setName("lblTotalVisits"); // NOI18N
         getContentPane().add(lblTotalVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 90, 50, -1));
 
-        lblMoonlightDay.setFont(resourceMap.getFont("lblMoonlightDay.font")); // NOI18N
+        lblMoonlightDay.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
         lblMoonlightDay.setForeground(resourceMap.getColor("lblMoonlightDay.foreground")); // NOI18N
         lblMoonlightDay.setText(resourceMap.getString("lblMoonlightDay.text")); // NOI18N
         lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
         getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 705, 140, -1));
 
-        lblNoMoonDay.setFont(resourceMap.getFont("lblNoMoonDay.font")); // NOI18N
+        lblNoMoonDay.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
         lblNoMoonDay.setForeground(resourceMap.getColor("lblNoMoonDay.foreground")); // NOI18N
         lblNoMoonDay.setText(resourceMap.getString("lblNoMoonDay.text")); // NOI18N
         lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
-        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 705, 100, -1));
+        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 705, 100, -1));
 
         lblMoonlightNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
         lblMoonlightNight.setForeground(resourceMap.getColor("lblMoonlightNight.foreground")); // NOI18N
         lblMoonlightNight.setText(resourceMap.getString("lblMoonlightNight.text")); // NOI18N
         lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
-        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 705, 130, -1));
+        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 705, 130, -1));
 
-        lblNoMoonNight.setFont(resourceMap.getFont("lblNoMoonNight.font")); // NOI18N
+        lblNoMoonNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
         lblNoMoonNight.setForeground(resourceMap.getColor("lblNoMoonNight.foreground")); // NOI18N
         lblNoMoonNight.setText(resourceMap.getString("lblNoMoonNight.text")); // NOI18N
         lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
-        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 705, 120, -1));
+        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 705, 120, -1));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 

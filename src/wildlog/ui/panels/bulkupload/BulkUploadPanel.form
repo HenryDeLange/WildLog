@@ -307,9 +307,9 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Container class="javax.swing.JScrollPane" name="jScrollPane2">
+        <Container class="javax.swing.JScrollPane" name="scrLocation">
           <Properties>
-            <Property name="name" type="java.lang.String" value="jScrollPane2" noResource="true"/>
+            <Property name="name" type="java.lang.String" value="scrLocation" noResource="true"/>
           </Properties>
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
@@ -325,7 +325,6 @@
             <Component class="javax.swing.JList" name="lstLocation">
               <Properties>
                 <Property name="selectionMode" type="int" value="0"/>
-                <Property name="focusable" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="lstLocation" noResource="true"/>
                 <Property name="selectionBackground" type="java.awt.Color" resourceKey="lstLocation.selectionBackground"/>
               </Properties>

@@ -18,12 +18,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
 
 
 public class UtilsUI {
+    private static Timer timer = new Timer(30, null);
+
     public static void doClipboardCopy(String inText) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection text = new StringSelection(inText);
@@ -146,5 +149,43 @@ public class UtilsUI {
             }
         });
     }
+
+    // Voorbeeld van animations in swing
+//    public static void doAnimationSaveSuccess(final Color inFromColor, final Color inToColor, final JTextComponent inFeedbackField) {
+//        if (!timer.isRunning()) {
+//            timer.addActionListener(new ActionListener() {
+//                private int counter = 0;
+//                private boolean lastHalf = false;
+//                @Override
+//                public void actionPerformed(ActionEvent e) {
+//                    counter++;
+//                    if (!lastHalf) {
+//                        Color newColor = new Color(
+//                                inFromColor.getRed() - (inFromColor.getRed()-inToColor.getRed())/10*counter,
+//                                inFromColor.getGreen() - (inFromColor.getGreen()-inToColor.getGreen())/10*counter,
+//                                inFromColor.getBlue() - (inFromColor.getBlue()-inToColor.getBlue())/10*counter);
+//                        inFeedbackField.setBackground(newColor);
+//                    }
+//                    else {
+//                        Color newColor = new Color(
+//                                inToColor.getRed() + (inFromColor.getRed()-inToColor.getRed())/10*counter,
+//                                inToColor.getGreen() + (inFromColor.getGreen()-inToColor.getGreen())/10*counter,
+//                                inToColor.getBlue() + (inFromColor.getBlue()-inToColor.getBlue())/10*counter);
+//                        inFeedbackField.setBackground(newColor);
+//                    }
+//                    if (counter >= 10) {
+//                        counter = 0;
+//                        if (lastHalf) {
+//                            timer.stop();
+//                        }
+//                        else {
+//                            lastHalf = true;
+//                        }
+//                    }
+//                }
+//            });
+//            timer.start();
+//        }
+//    }
 
 }

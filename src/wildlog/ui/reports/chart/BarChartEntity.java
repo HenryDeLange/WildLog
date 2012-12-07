@@ -2,10 +2,7 @@ package wildlog.ui.reports.chart;
 
 import java.awt.Color;
 
-/**
- *
- * @author DeLangeH
- */
+
 public final class BarChartEntity implements Comparable<BarChartEntity> {
     // Variables
     private Color color;

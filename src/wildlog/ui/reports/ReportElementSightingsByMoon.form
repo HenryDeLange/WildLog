@@ -475,14 +475,14 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblOther">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblOther.font"/>
+        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightNight.font"/>
         <Property name="foreground" type="java.awt.Color" resourceKey="lblOther.foreground"/>
         <Property name="text" type="java.lang.String" resourceKey="lblOther.text"/>
         <Property name="name" type="java.lang.String" value="lblOther" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="540" y="705" width="60" height="-1"/>
+          <AbsoluteConstraints x="545" y="705" width="50" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -631,7 +631,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblMoonlightDay">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightDay.font"/>
+        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightNight.font"/>
         <Property name="foreground" type="java.awt.Color" resourceKey="lblMoonlightDay.foreground"/>
         <Property name="text" type="java.lang.String" resourceKey="lblMoonlightDay.text"/>
         <Property name="name" type="java.lang.String" value="lblMoonlightDay" noResource="true"/>
@@ -644,14 +644,14 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblNoMoonDay">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblNoMoonDay.font"/>
+        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightNight.font"/>
         <Property name="foreground" type="java.awt.Color" resourceKey="lblNoMoonDay.foreground"/>
         <Property name="text" type="java.lang.String" resourceKey="lblNoMoonDay.text"/>
         <Property name="name" type="java.lang.String" value="lblNoMoonDay" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="170" y="705" width="100" height="-1"/>
+          <AbsoluteConstraints x="175" y="705" width="100" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -664,20 +664,20 @@
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="280" y="705" width="130" height="-1"/>
+          <AbsoluteConstraints x="290" y="705" width="130" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
     <Component class="javax.swing.JLabel" name="lblNoMoonNight">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblNoMoonNight.font"/>
+        <Property name="font" type="java.awt.Font" resourceKey="lblMoonlightNight.font"/>
         <Property name="foreground" type="java.awt.Color" resourceKey="lblNoMoonNight.foreground"/>
         <Property name="text" type="java.lang.String" resourceKey="lblNoMoonNight.text"/>
         <Property name="name" type="java.lang.String" value="lblNoMoonNight" noResource="true"/>
       </Properties>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="410" y="705" width="120" height="-1"/>
+          <AbsoluteConstraints x="425" y="705" width="120" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

@@ -208,7 +208,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         txtLocationName = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        scrLocation = new javax.swing.JScrollPane();
         lstLocation = new javax.swing.JList();
         btnGPSForAll = new javax.swing.JButton();
         chkIncludeSubfolders = new javax.swing.JCheckBox();
@@ -350,10 +350,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
         pnlTop.add(txtLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 310, -1));
 
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
+        scrLocation.setName("scrLocation"); // NOI18N
 
         lstLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstLocation.setFocusable(false);
         lstLocation.setName("lstLocation"); // NOI18N
         lstLocation.setSelectionBackground(resourceMap.getColor("lstLocation.selectionBackground")); // NOI18N
         lstLocation.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -361,9 +360,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 lstLocationValueChanged(evt);
             }
         });
-        jScrollPane2.setViewportView(lstLocation);
+        scrLocation.setViewportView(lstLocation);
 
-        pnlTop.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 80));
+        pnlTop.add(scrLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 190, 80));
 
         btnGPSForAll.setBackground(resourceMap.getColor("btnGPSForAll.background")); // NOI18N
         btnGPSForAll.setIcon(resourceMap.getIcon("btnGPSForAll.icon")); // NOI18N
@@ -461,10 +460,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lstLocationValueChanged
 
     private void txtLocationNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLocationNameKeyReleased
-        if (evt != null && !evt.isActionKey()) {
+        if (evt == null || (evt != null && !evt.isActionKey())) {
             for (int t = 0; t < lstLocation.getModel().getSize(); t++) {
                 if (lstLocation.getModel().getElementAt(t).toString().equalsIgnoreCase(txtLocationName.getText())) {
                     lstLocation.setSelectedIndex(t);
+                    lstLocation.scrollRectToVisible(lstLocation.getCellBounds(t, t));
                     break;
                 }
                 else
@@ -703,12 +703,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblLocationImage;
     private javax.swing.JList lstLocation;
     private javax.swing.JPanel pnlTop;
+    private javax.swing.JScrollPane scrLocation;
     private javax.swing.JScrollPane scrTable;
     private javax.swing.JSpinner spnInactivityTime;
     private javax.swing.JTable tblBulkImport;

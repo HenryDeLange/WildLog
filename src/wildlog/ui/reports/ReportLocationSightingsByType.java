@@ -28,16 +28,13 @@ import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportLocationSightingsByType extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;
-    private BarChart chartTime;
     private BarChart chartType;
-    private BarChart chartSpecies;
     private List<Visit> visits;
     private WildLogApp app;
 
@@ -329,12 +326,8 @@ public class ReportLocationSightingsByType extends JFrame {
         int activeDays = 0;
 
         // Add Charts
-        if (chartTime != null)
-            pnlScrollPane.remove(chartTime);
         if (chartType != null)
             pnlScrollPane.remove(chartType);
-        if (chartSpecies != null)
-            pnlScrollPane.remove(chartSpecies);
         chartType = new BarChart(580, 630);
         for (Visit visit : visits) {
             if (visit.getStartDate() != null) {

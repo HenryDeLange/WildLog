@@ -24,12 +24,10 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportSightingByLocation extends javax.swing.JFrame {
-    private boolean usePrimaryName = true;
     private Date startDate;
     private Date endDate;
     private BarChart chartTime;
@@ -94,8 +92,6 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
-        mnuExtra = new javax.swing.JMenu();
-        mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Sighting Report: " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
@@ -222,20 +218,6 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuPrint);
 
-        mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
-        mnuExtra.setName("mnuExtra"); // NOI18N
-
-        mnuName.setText(resourceMap.getString("mnuName.text")); // NOI18N
-        mnuName.setName("mnuName"); // NOI18N
-        mnuName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuNameActionPerformed(evt);
-            }
-        });
-        mnuExtra.add(mnuName);
-
-        jMenuBar1.add(mnuExtra);
-
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -269,14 +251,6 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
             ex.printStackTrace(System.err);
         }
     }//GEN-LAST:event_mnuPrintReportActionPerformed
-
-    private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
-        usePrimaryName = ! usePrimaryName;
-        doReport();
-        // Re-Draw
-        repaint();
-        setVisible(true);
-    }//GEN-LAST:event_mnuNameActionPerformed
 
     private void doReport() {
         // Init report fields
@@ -365,8 +339,6 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblOther;
-    private javax.swing.JMenu mnuExtra;
-    private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
     private javax.swing.JMenuItem mnuPrintReport;
     private javax.swing.JPanel pnlScrollPane;

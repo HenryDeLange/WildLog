@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -31,15 +32,12 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportLocationSpeciesCurve extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;
-    private BarChart chartTime;
-    private BarChart chartType;
     private BarChart chartSpecies;
     private List<Visit> visits;
     private WildLogApp app;
@@ -105,8 +103,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
-        mnuExtra = new javax.swing.JMenu();
-        mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Location Species Curve Report: " + location.getName());
@@ -223,20 +219,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
 
         jMenuBar1.add(mnuPrint);
 
-        mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
-        mnuExtra.setName("mnuExtra"); // NOI18N
-
-        mnuName.setText(resourceMap.getString("mnuName.text")); // NOI18N
-        mnuName.setName("mnuName"); // NOI18N
-        mnuName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuNameActionPerformed(evt);
-            }
-        });
-        mnuExtra.add(mnuName);
-
-        jMenuBar1.add(mnuExtra);
-
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -271,14 +253,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
         }
     }//GEN-LAST:event_mnuPrintReportActionPerformed
 
-    private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
-        usePrimaryName = ! usePrimaryName;
-        doReport();
-        // Re-Draw
-        repaint();
-        setVisible(true);
-    }//GEN-LAST:event_mnuNameActionPerformed
-
     private void doReport() {
         class ReportData implements Comparable<ReportData> {
             public Date dateAsDay;
@@ -309,10 +283,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
         int activeDays = 0;
 
         // Add Charts
-        if (chartTime != null)
-            pnlScrollPane.remove(chartTime);
-        if (chartType != null)
-            pnlScrollPane.remove(chartType);
         if (chartSpecies != null)
             pnlScrollPane.remove(chartSpecies);
         chartSpecies = new BarChart(580, 630);
@@ -360,8 +330,7 @@ public class ReportLocationSpeciesCurve extends JFrame {
                     // Get a Date object containing only the day part, not the time.
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(sighting.getDate());
-                    Calendar dayCalendar = Calendar.getInstance();
-                    dayCalendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                    Calendar dayCalendar = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                     tempData.add(new ReportData(
                             dayCalendar.getTime(),
                             numOfElements.size(),
@@ -468,8 +437,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblNumberOfVisits;
-    private javax.swing.JMenu mnuExtra;
-    private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
     private javax.swing.JMenuItem mnuPrintReport;
     private javax.swing.JPanel pnlScrollPane;

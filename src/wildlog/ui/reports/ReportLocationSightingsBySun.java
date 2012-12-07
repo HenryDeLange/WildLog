@@ -27,7 +27,6 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
@@ -35,8 +34,6 @@ public class ReportLocationSightingsBySun extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;
     private BarChart chartTime;
-    private BarChart chartType;
-    private BarChart chartSpecies;
     private List<Visit> visits;
     private WildLogApp app;
 
@@ -344,10 +341,6 @@ public class ReportLocationSightingsBySun extends JFrame {
         // Add Charts
         if (chartTime != null)
             pnlScrollPane.remove(chartTime);
-        if (chartType != null)
-            pnlScrollPane.remove(chartType);
-        if (chartSpecies != null)
-            pnlScrollPane.remove(chartSpecies);
         chartTime = new BarChart(580, 630);
         for (Visit visit : visits) {
             if (visit.getStartDate() != null) {

@@ -28,7 +28,6 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.helpers.MoonReportHelper;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
@@ -37,8 +36,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;
     private BarChart chartTime;
-    private BarChart chartType;
-    private BarChart chartSpecies;
     private List<Visit> visits;
     private WildLogApp app;
 
@@ -110,8 +107,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
-        mnuExtra = new javax.swing.JMenu();
-        mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Location Moonphase Report: " + location.getName());
@@ -216,32 +211,35 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 600, 630));
 
-        lblMoonlightDay.setFont(resourceMap.getFont("lblMoonlightDay.font")); // NOI18N
+        lblMoonlightDay.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
         lblMoonlightDay.setForeground(resourceMap.getColor("lblMoonlightDay.foreground")); // NOI18N
         lblMoonlightDay.setText(resourceMap.getString("lblMoonlightDay.text")); // NOI18N
         lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
         getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 725, 140, -1));
 
-        lblNoMoonDay.setFont(resourceMap.getFont("lblNoMoonDay.font")); // NOI18N
+        lblNoMoonDay.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
         lblNoMoonDay.setForeground(resourceMap.getColor("lblNoMoonDay.foreground")); // NOI18N
         lblNoMoonDay.setText(resourceMap.getString("lblNoMoonDay.text")); // NOI18N
         lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
-        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 725, 100, -1));
+        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 725, 100, -1));
 
-        lblMoonlightNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
+        lblMoonlightNight.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
         lblMoonlightNight.setForeground(resourceMap.getColor("lblMoonlightNight.foreground")); // NOI18N
         lblMoonlightNight.setText(resourceMap.getString("lblMoonlightNight.text")); // NOI18N
         lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
-        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 725, 130, -1));
+        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 725, 130, -1));
 
-        lblNoMoonNight.setFont(resourceMap.getFont("lblNoMoonNight.font")); // NOI18N
+        lblNoMoonNight.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
         lblNoMoonNight.setForeground(resourceMap.getColor("lblNoMoonNight.foreground")); // NOI18N
         lblNoMoonNight.setText(resourceMap.getString("lblNoMoonNight.text")); // NOI18N
         lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
-        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 725, 120, -1));
+        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 725, 120, -1));
 
+        lblOther.setFont(resourceMap.getFont("lblOther.font")); // NOI18N
+        lblOther.setForeground(resourceMap.getColor("lblOther.foreground")); // NOI18N
+        lblOther.setText(resourceMap.getString("lblOther.text")); // NOI18N
         lblOther.setName("lblOther"); // NOI18N
-        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 725, 60, -1));
+        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 725, 50, -1));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -258,20 +256,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         mnuPrint.add(mnuPrintReport);
 
         jMenuBar1.add(mnuPrint);
-
-        mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
-        mnuExtra.setName("mnuExtra"); // NOI18N
-
-        mnuName.setText(resourceMap.getString("mnuName.text")); // NOI18N
-        mnuName.setName("mnuName"); // NOI18N
-        mnuName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuNameActionPerformed(evt);
-            }
-        });
-        mnuExtra.add(mnuName);
-
-        jMenuBar1.add(mnuExtra);
 
         setJMenuBar(jMenuBar1);
 
@@ -307,15 +291,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         }
     }//GEN-LAST:event_mnuPrintReportActionPerformed
 
-    private void mnuNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNameActionPerformed
-        usePrimaryName = ! usePrimaryName;
-            doReport();
-            // Re-Draw
-            repaint();
-            setVisible(true);
-
-    }//GEN-LAST:event_mnuNameActionPerformed
-
     private void doReport() {
         // Init report fields
         lblName.setText(location.getName());
@@ -331,10 +306,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         // Add Charts
         if (chartTime != null)
             pnlScrollPane.remove(chartTime);
-        if (chartType != null)
-            pnlScrollPane.remove(chartType);
-        if (chartSpecies != null)
-            pnlScrollPane.remove(chartSpecies);
         chartTime = new BarChart(580, 630);
         for (Visit visit : visits) {
             if (visit.getStartDate() != null) {
@@ -393,6 +364,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         pnlScrollPane.add(chartTime);
         chartTime.paintComponent(pnlScrollPane.getGraphics());
+//        pnlScrollPane.setPreferredSize(new Dimension(chartTime.getChartWidth(), chartTime.getChartHeight()));
         pnlScrollPane.setPreferredSize(new Dimension(580, chartTime.getChartHeight()));
 
         // Wrap up report fields
@@ -439,8 +411,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblNumberOfVisits;
     private javax.swing.JLabel lblOther;
-    private javax.swing.JMenu mnuExtra;
-    private javax.swing.JMenuItem mnuName;
     private javax.swing.JMenu mnuPrint;
     private javax.swing.JMenuItem mnuPrintReport;
     private javax.swing.JPanel pnlScrollPane;
