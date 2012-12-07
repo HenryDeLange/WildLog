@@ -41,6 +41,7 @@ import wildlog.utils.WildLogPaths;
  * The main class of the application.
  */
 public class WildLogApp extends SingleFrameApplication {
+    private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
     // FIXME: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
     private Latitudes prevLat;
     private int prevLatDeg;
@@ -194,37 +195,47 @@ public class WildLogApp extends SingleFrameApplication {
      * Main method launching the application.
      */
     public static void main(String[] args) {
-        // Make sure the Settings folder exists
-        File folder = new File(WildLogPaths.WILDLOG_SETTINGS.toString());
-        folder.mkdirs();
+        boolean logToFile = false;
         // Configure to log to a logging file
-        if (args != null && args.length == 1) {
-            if ("log_to_file".equalsIgnoreCase(args[0])) {
-                try {
-                    PrintStream fileStream = null;
-                    // Saving the orginal stream
-                    fileStream = new PrintStream(new FileOutputStream(WildLogPaths.WILDLOG_SETTINGS.toString() + "errorlog.txt", true));
-                    // Redirecting console output to file
-                    System.setOut(fileStream);
-                    // Redirecting runtime exceptions to file
-                    System.setErr(fileStream);
+        if (args != null && args.length >= 1) {
+            for (String arg : args) {
+                if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {
+                    WILDLOG_SETTINGS_FOLDER = arg.substring("settings_folder_location=".length());
                 }
-                catch (FileNotFoundException ex) {
-                    ex.printStackTrace(System.err);
+                else
+                if (arg != null && "log_to_file".equalsIgnoreCase(arg.toLowerCase())) {
+                    logToFile = true;
                 }
+            }
+        }
+        // Make sure the Settings folder exists
+        File folder = new File(WILDLOG_SETTINGS_FOLDER);
+        folder.mkdirs();
+        // Enable logging to file
+        if (logToFile) {
+            try {
+                PrintStream fileStream = null;
+                // Saving the orginal stream
+                fileStream = new PrintStream(new FileOutputStream(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "errorlog.txt"), true));
+                // Redirecting console output to file
+                System.setOut(fileStream);
+                // Redirecting runtime exceptions to file
+                System.setErr(fileStream);
+            }
+            catch (FileNotFoundException ex) {
+                ex.printStackTrace(System.err);
             }
         }
         // Try to read the workspace file
         try {
-            BufferedReader reader = new BufferedReader(
-                    new FileReader(WildLogPaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
+            BufferedReader reader = new BufferedReader(new FileReader(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "wildloghome")));
             WildLogPaths.setWorkspacePrefix(reader.readLine());
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
             FileWriter writer = null;
             try {
-                writer = new FileWriter(WildLogPaths.WILDLOG_SETTINGS.toString() + "wildloghome");
+                writer = new FileWriter(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "wildloghome"));
                 writer.write(File.separator);
             }
             catch (IOException ioex) {
@@ -244,7 +255,7 @@ public class WildLogApp extends SingleFrameApplication {
             // Try to load the new file
             try {
                 BufferedReader reader = new BufferedReader(
-                        new FileReader(WildLogPaths.WILDLOG_SETTINGS.toString() + "wildloghome"));
+                        new FileReader(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "wildloghome")));
                 WildLogPaths.setWorkspacePrefix(reader.readLine());
             }
             catch (IOException ioex) {

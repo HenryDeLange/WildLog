@@ -31,7 +31,7 @@ import wildlog.ui.reports.helpers.MoonReportHelper;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
-// TODO: Inheritance might be used to specialise the reports... or maybe better to just have unique ones...
+// FIXME: Inheritance might be used to specialise the reports... or maybe better to just have unique ones...
 public class ReportLocationSightingsByMoon extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;

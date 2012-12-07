@@ -558,7 +558,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         executorService.execute(new Runnable() {
                             @Override
                             public void run() {
-                                // FIXME: Clean/refactor up this (and related sighting saving) code to be "robust" and re-useable...
                                 BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(counter, 0);
                                 // Check wether the Creature exists or not
                                 synchronized (saveElementLock) {

@@ -2244,7 +2244,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 dialog.setVisible(true);
             }
         }
-        // TODO: Die sighting reports is bietjie kripties versteek, probeer dit dalk erns anders ook meer duidelik wys
         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
             ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, null, dtpStartDate.getDate(), dtpEndDate.getDate());
             dialog.setVisible(true);

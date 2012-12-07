@@ -17,7 +17,6 @@ import javax.swing.ImageIcon;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.mapping.layers.MapOfflinePointLayer;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public class MapFrameOffline {
@@ -121,25 +120,10 @@ public class MapFrameOffline {
         shapeLayerProtectedLand.setProperties(shapeLayerPropsProtectedLand);
         shapeLayerProtectedLand.setVisible(true);
 
-        // TODO: Use this to add the spesies distribution maps
-//        ShapeLayer shapeLayerMammals = new ShapeLayer();
-//        Properties shapeLayerPropsMammals = new Properties();
-//        shapeLayerPropsMammals.put("prettyName", "Mammals SA");
-//        shapeLayerPropsMammals.put("lineColor", "4E7F12");
-//        shapeLayerPropsMammals.put("fillColor", "AA5577");
-//        shapeLayerPropsMammals.put("shapeFile", "Mammals(SA).shp");
-//        // TODO Need to either select only one shape, or prefferabily load only the relevant shape file
-//        // TODO: Are these ssx file still needed?
-////        shapeLayerPropsMammals.put("spatialIndex", "protected_land.ssx");
-//        shapeLayerMammals.setProperties(shapeLayerPropsMammals);
-//        shapeLayerMammals.setVisible(true);
-
         // Last on top
         mapHandler.add(shapeLayerBase);
         mapHandler.add(shapeLayerSouthAfrica);
         mapHandler.add(shapeLayerRoads);
-        //mapHandler.add(shapeLayerTowns); // Baie punte, so los dit tot ek layers kan aan en af sit met die mapping
-//        mapHandler.add(shapeLayerMammals);
         mapHandler.add(shapeLayerProtectedLand);
 
         //if (inUseWMS) doWMS();

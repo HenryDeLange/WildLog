@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JPanel;
 
-// TODO: Die code werk nou so half (dink ek), maar dit kan doen met baie refactoring en performance/rebustness improvements as ek eendag tyd/moed kry.
+// FIXME: Die code werk nou so half (dink ek), maar dit kan doen met baie refactoring en performance/rebustness improvements as ek eendag tyd/moed kry.
 public class BarChart extends JPanel {
         // Variables
         private static final int MIN_BAR_HEIGHT = 20;

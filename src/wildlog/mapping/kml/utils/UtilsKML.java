@@ -2,7 +2,6 @@ package wildlog.mapping.kml.utils;
 
 import KmlGenerator.objects.KmlStyle;
 import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import wildlog.WildLogApp;
@@ -147,37 +146,32 @@ public final class UtilsKML {
     }
 
     public static void copyKmlIcons(WildLogApp inApp, String inPath) {
-        try {
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/AnimalCarnivore.gif").toURI()), new File(inPath + "AnimalCarnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/AnimalHerbivore.gif").toURI()), new File(inPath + "AnimalHerbivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/AnimalOmnivore.gif").toURI()), new File(inPath + "AnimalOmnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/AnimalOther.gif").toURI()), new File(inPath + "AnimalOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/BirdCarnivore.gif").toURI()), new File(inPath + "BirdCarnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/BirdHerbivore.gif").toURI()), new File(inPath + "BirdHerbivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/BirdOmnivore.gif").toURI()), new File(inPath + "BirdOmnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/BirdOther.gif").toURI()), new File(inPath + "BirdOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/Plant.gif").toURI()), new File(inPath + "Plant.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/PlantOther.gif").toURI()), new File(inPath + "PlantOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/Amphibian.gif").toURI()), new File(inPath + "Amphibian.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/AmphibianOther.gif").toURI()), new File(inPath + "AmphibianOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/FishCarnivore.gif").toURI()), new File(inPath + "FishCarnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/FishHerbivore.gif").toURI()), new File(inPath + "FishHerbivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/FishOmnivore.gif").toURI()), new File(inPath + "FishOmnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/FishOther.gif").toURI()), new File(inPath + "FishOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/InsectCarnivore.gif").toURI()), new File(inPath + "InsectCarnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/InsectHerbivore.gif").toURI()), new File(inPath + "InsectHerbivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/InsectOmnivore.gif").toURI()), new File(inPath + "InsectOmnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/InsectOther.gif").toURI()), new File(inPath + "InsectOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/ReptileCarnivore.gif").toURI()), new File(inPath + "ReptileCarnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/ReptileHerbivore.gif").toURI()), new File(inPath + "ReptileHerbivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/ReptileOmnivore.gif").toURI()), new File(inPath + "ReptileOmnivore.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/ReptileOther.gif").toURI()), new File(inPath + "ReptileOther.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/Other.gif").toURI()), new File(inPath + "Other.gif"));
-            UtilsFileProcessing.copyFile(new File(inApp.getClass().getResource("resources/mapping/Location.gif").toURI()), new File(inPath + "Location.gif"));
-        }
-        catch (URISyntaxException ex) {
-            ex.printStackTrace(System.err);
-        }
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/AnimalCarnivore.gif"), new File(inPath + "AnimalCarnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/AnimalHerbivore.gif"), new File(inPath + "AnimalHerbivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/AnimalOmnivore.gif"), new File(inPath + "AnimalOmnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/AnimalOther.gif"), new File(inPath + "AnimalOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/BirdCarnivore.gif"), new File(inPath + "BirdCarnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/BirdHerbivore.gif"), new File(inPath + "BirdHerbivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/BirdOmnivore.gif"), new File(inPath + "BirdOmnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/BirdOther.gif"), new File(inPath + "BirdOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/Plant.gif"), new File(inPath + "Plant.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/PlantOther.gif"), new File(inPath + "PlantOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/Amphibian.gif"), new File(inPath + "Amphibian.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/AmphibianOther.gif"), new File(inPath + "AmphibianOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/FishCarnivore.gif"), new File(inPath + "FishCarnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/FishHerbivore.gif"), new File(inPath + "FishHerbivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/FishOmnivore.gif"), new File(inPath + "FishOmnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/FishOther.gif"), new File(inPath + "FishOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/InsectCarnivore.gif"), new File(inPath + "InsectCarnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/InsectHerbivore.gif"), new File(inPath + "InsectHerbivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/InsectOmnivore.gif"), new File(inPath + "InsectOmnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/InsectOther.gif"), new File(inPath + "InsectOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/ReptileCarnivore.gif"), new File(inPath + "ReptileCarnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/ReptileHerbivore.gif"), new File(inPath + "ReptileHerbivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/ReptileOmnivore.gif"), new File(inPath + "ReptileOmnivore.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/ReptileOther.gif"), new File(inPath + "ReptileOther.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/Other.gif"), new File(inPath + "Other.gif"));
+        UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/mapping/Location.gif"), new File(inPath + "Location.gif"));
     }
 
 }

@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -212,6 +213,39 @@ public final class UtilsFileProcessing {
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
                 }
+        }
+    }
+
+    public static void copyFile(InputStream inFileToRead, File inFileToWrite) {
+        if (!inFileToWrite.exists()) {
+            InputStream fileInput = null;
+            FileOutputStream fileOutput = null;
+            try {
+                fileInput = inFileToRead;
+                if (fileInput != null) {
+                    fileOutput = new FileOutputStream(inFileToWrite);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = fileInput.read(buf)) > 0) {
+                        fileOutput.write(buf, 0, len);
+                    }
+                    fileOutput.flush();
+                }
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                try {
+                    if (fileInput != null)
+                        fileInput.close();
+                    if (fileOutput != null)
+                        fileOutput.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+            }
         }
     }
 

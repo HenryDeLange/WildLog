@@ -178,8 +178,7 @@ public class UtilsDialog {
         public int showDialog();
     }
 
-    // TODO: It might be a good idea to replace this method with a propper custom message/dialog class that
-    // will work in a similar way to the JOptionPane, but is setup to use the Glasspane, etc.
+    // FIXME: It might be a good idea to replace this method with a propper custom message/dialog class that will work in a similar way to the JOptionPane, but is setup to use the Glasspane, etc.
     public static int showDialogBackgroundWrapper(RootPaneContainer inParentContainer, DialogWrapper inDialogWrapper) {
         inParentContainer.getGlassPane().setVisible(true);
         int result = inDialogWrapper.showDialog();

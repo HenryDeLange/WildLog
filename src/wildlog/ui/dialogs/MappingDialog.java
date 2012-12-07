@@ -26,7 +26,7 @@ import wildlog.mapping.utils.UtilsMapGenerator;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
-// TODO: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
+// FIXME: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
 public class MappingDialog extends JDialog {
     private WildLogApp app;
     private Location location;

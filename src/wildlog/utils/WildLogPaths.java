@@ -16,8 +16,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_KML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML" + File.separatorChar),
     WILDLOG_EXPORT_CSV (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV" + File.separatorChar),
     WILDLOG_EXPORT_HTML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar),
-    WILDLOG_EXPORT_SLIDESHOW (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "Slideshow" + File.separatorChar),
-    WILDLOG_SETTINGS (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar)
+    WILDLOG_EXPORT_SLIDESHOW (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "Slideshow" + File.separatorChar)
     ;
 
     private static String currentWorkspacePrefix;
