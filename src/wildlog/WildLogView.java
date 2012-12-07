@@ -2816,7 +2816,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             BufferedWriter writer = null;
             try {
                 writer = new BufferedWriter(new FileWriter(
-                        WildLogPaths.concatPaths(System.getProperty("user.home"),"WildLog Settings","wildloghome")));
+                        WildLogPaths.concatPaths(WildLogApp.getWILDLOG_SETTINGS_FOLDER(),"wildloghome")));
                 String path = fileChooser.getSelectedFile().getPath();
                 if (path.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase().substring(1, WildLogPaths.WILDLOG.toString().length() - 1))) {
                     // The name might be tricky to parse if it ends with WildLog so we have to do some extra checks...
@@ -2828,6 +2828,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         path = path.substring(0, path.length() - (WildLogPaths.WILDLOG.toString().length() - 1)) + File.separator;
                     }
                 }
+                // FIXME: Maak dat die path altyd gesave world met die WildLog deel aan die einde (sodat dit mooi display op die home tab en vir consistancy)
                 writer.write(path);
                 writer.flush();
             }
@@ -2846,8 +2847,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             // Then try to read
             BufferedReader reader = null;
             try {
-                reader = new BufferedReader(
-                        new FileReader(System.getProperty("user.home") + File.separator + "WildLog Settings" + File.separator + "wildloghome"));
+                reader = new BufferedReader(new FileReader(WildLogPaths.concatPaths(WildLogApp.getWILDLOG_SETTINGS_FOLDER(), "wildloghome")));
                 WildLogPaths.setWorkspacePrefix(reader.readLine());
             }
             catch (IOException ex) {

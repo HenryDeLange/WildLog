@@ -200,6 +200,7 @@ public class WildLogApp extends SingleFrameApplication {
         if (args != null && args.length >= 1) {
             for (String arg : args) {
                 if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {
+                    // Voorbeeld: "settings_folder_location=./settings/"
                     WILDLOG_SETTINGS_FOLDER = arg.substring("settings_folder_location=".length());
                 }
                 else
@@ -377,6 +378,10 @@ public class WildLogApp extends SingleFrameApplication {
 
     public int getThreadCount() {
         return threadCount;
+    }
+
+    public static String getWILDLOG_SETTINGS_FOLDER() {
+        return WILDLOG_SETTINGS_FOLDER;
     }
 
 }
