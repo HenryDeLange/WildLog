@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
 import javax.swing.JOptionPane;
+import org.h2.jdbc.JdbcSQLException;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -58,7 +59,20 @@ public class DBI_h2 extends DBI_JDBC {
             Properties props = new Properties();
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
-            conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+            try {
+                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+            }
+            catch (JdbcSQLException ex) {
+                ex.printStackTrace(System.err);
+                // Might be trying to use the wrong password, try again with old password and update it
+                System.out.println("Going to try to update database username and password...");
+                props = new Properties();
+                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+                state = conn.createStatement();
+                state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
+                state.close();
+                System.out.println("Database username and password updated");
+            }
 
             // Create tables
             // FIXME: EK kan ook 'n H2 "if not exists" command gebruik in die query in plaas van die story...

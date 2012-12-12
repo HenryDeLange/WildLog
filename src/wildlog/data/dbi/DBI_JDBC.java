@@ -11,6 +11,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
+import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -45,6 +48,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public abstract class DBI_JDBC implements DBI {
     // Variables
@@ -55,7 +59,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String tableVisits = "CREATE TABLE VISITS (NAME varchar(150) PRIMARY KEY NOT NULL, STARTDATE date, ENDDATE date, DESCRIPTION longvarchar, GAMEWATCHINGINTENSITY varchar(50), VISITTYPE varchar(50), LOCATIONNAME varchar(150))";
     protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, UNKNOWNTIME smallint)";
     protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint)";
-    protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT 3, DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, DEFAULTLATOPTION varchar(10) DEFAULT '', DEFAULTLONOPTION varchar(10) DEFAULT '', DEFAULTONLINEMAP smallint DEFAULT true)";
+    protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT 1, DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, DEFAULTLATOPTION varchar(10) DEFAULT '', DEFAULTLONOPTION varchar(10) DEFAULT '', DEFAULTONLINEMAP smallint DEFAULT true)";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
     protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
@@ -1178,17 +1182,37 @@ public abstract class DBI_JDBC implements DBI {
                 createOrUpdate(new WildLogOptions());
             }
             // Read the row
-            results = state.executeQuery("SELECT VERSION FROM WILDLOG");
-            while (results.next()) {
-                if (results.getInt("VERSION") == 0) {
-                    doUpdate1();
+            boolean fullyUpdated = false;
+            for (int t = 0; t < 4; t++) {
+                results = state.executeQuery("SELECT VERSION FROM WILDLOG");
+                if (results.next()) {
+                    if (results.getInt("VERSION") == 0) {
+                        doUpdate1();
+                    }
+                    if (results.getInt("VERSION") == 1) {
+                        doUpdate2();
+                    }
+                    if (results.getInt("VERSION") == 2) {
+                        doUpdate3();
+                    }
+                    if (results.getInt("VERSION") == 3) {
+                        fullyUpdated = true;
+                        break;
+                    }
                 }
-                if (results.getInt("VERSION") == 1) {
-                    doUpdate2();
-                }
-                if (results.getInt("VERSION") == 2) {
-                    doUpdate3();
-                }
+            }
+            if (!fullyUpdated) {
+                final WildLogApp app = (WildLogApp)Application.getInstance();
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "The database could not be fully updated. Make sure it is not in use or broken.",
+                                "WildLog Error: Initialize Database", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
+                Application.getInstance().exit();
             }
         }
         catch (SQLException ex) {
@@ -1201,6 +1225,7 @@ public abstract class DBI_JDBC implements DBI {
 
     // Private update methods
     private void doUpdate1() {
+        System.out.println("Starting update 1");
         // This update recreates the tables with IGNORECASE enabled
         // This update might only be relevant for H2, but it is the main
         // supported database...
@@ -1243,9 +1268,11 @@ public abstract class DBI_JDBC implements DBI {
         finally {
             closeStatementAndResultset(state, results);
         }
+        System.out.println("Finished update 1");
     }
 
     private void doUpdate2() {
+        System.out.println("Starting update 2");
         // This update adds a column to the options table
         Statement state = null;
         ResultSet results = null;
@@ -1253,6 +1280,12 @@ public abstract class DBI_JDBC implements DBI {
             state = conn.createStatement();
             // Add the column with default value etc.
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5");
+            // Extra stuff om van v1 na v3 te gaan (stuff vir pa se data)
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLATITUDE double DEFAULT -28.7");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTLONGITUDE double DEFAULT 24.7");
+            state.execute("ALTER TABLE ELEMENTS ADD COLUMN SIZETYPE varchar(50)");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN MOONLIGHT varchar(50)");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN MOONPHASE int");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=2");
         }
@@ -1262,9 +1295,11 @@ public abstract class DBI_JDBC implements DBI {
         finally {
             closeStatementAndResultset(state, results);
         }
+        System.out.println("Finished update 2");
     }
 
     private void doUpdate3() {
+        System.out.println("Starting update 3");
         // This update removes and alters some tables and adds new wildlog options
         Statement state = null;
         ResultSet results = null;
@@ -1307,6 +1342,7 @@ public abstract class DBI_JDBC implements DBI {
         finally {
             closeStatementAndResultset(state, results);
         }
+        System.out.println("Finished update 3");
     }
 
     protected static void closeStatementAndResultset(Statement inStatement, ResultSet inResultSet) {
