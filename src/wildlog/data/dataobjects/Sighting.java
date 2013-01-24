@@ -44,6 +44,8 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     private String tag; // For individual's names, etc.
     private double temperature;
     private UnitsTemperature unitsTemperature;
+    private int durationMinutes;
+    private double durationSeconds;
 
     // CONSTRUCTORS:
     public Sighting() {
@@ -417,6 +419,22 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
 
     public void setTimeUnknown(boolean inTimeUnknown) {
         timeUnknown = inTimeUnknown;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int inDurationMinutes) {
+        durationMinutes = inDurationMinutes;
+    }
+
+    public double getDurationSeconds() {
+        return durationSeconds;
+    }
+
+    public void setDurationSeconds(double inDurationSeconds) {
+        durationSeconds = inDurationSeconds;
     }
 
 }

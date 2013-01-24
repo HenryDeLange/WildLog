@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
@@ -20,6 +21,7 @@ import wildlog.ui.helpers.GpxFilter;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
 
@@ -39,6 +41,15 @@ public class GPSDialog extends JDialog {
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(parent, this);
         UtilsDialog.addModalBackgroundPanel(parent, this);
+        // Attach clipboard
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatDecimal.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatDeg.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatSec.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonDecimal.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonDeg.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonSec.getEditor().getComponent(0));
     }
 
     public GPSDialog(JDialog parent, DataObjectWithGPS inDataObjectWithGPS) {
@@ -129,6 +140,33 @@ public class GPSDialog extends JDialog {
                     inDataObjectWithGPS.getLonDegrees(),
                     inDataObjectWithGPS.getLonMinutes(),
                     inDataObjectWithGPS.getLonSeconds());
+            // Select the correct sign
+            if (Latitudes.NORTH.equals(inDataObjectWithGPS.getLatitude())) {
+                tglNorth.setSelected(true);
+                tglSouth.setSelected(false);
+            }
+            else
+            if (Latitudes.SOUTH.equals(inDataObjectWithGPS.getLatitude())) {
+                tglNorth.setSelected(false);
+                tglSouth.setSelected(true);
+            }
+            else {
+                tglNorth.setSelected(false);
+                tglSouth.setSelected(false);
+            }
+            if (Longitudes.EAST.equals(inDataObjectWithGPS.getLongitude())) {
+                tglEast.setSelected(true);
+                tglWest.setSelected(false);
+            }
+            else
+            if (Longitudes.WEST.equals(inDataObjectWithGPS.getLongitude())) {
+                tglEast.setSelected(false);
+                tglWest.setSelected(true);
+            }
+            else {
+                tglEast.setSelected(false);
+                tglWest.setSelected(false);
+            }
             // Populate the initial values into the spinners
             tglDecimalDegrees.setSelected(true);
             setupDD();

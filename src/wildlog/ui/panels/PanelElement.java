@@ -115,6 +115,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         UtilsUI.attachClipboardPopup(txtNutrition);
         UtilsUI.attachClipboardPopup(txtReferenceID);
         UtilsUI.attachClipboardPopup(txtbreedingDuration);
+        UtilsUI.attachClipboardPopup((JTextComponent)spnSizeFemaleMax.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnSizeFemaleMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnSizeMaleMax.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnSizeMaleMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnWeightFemaleMax.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnWeightFemaleMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnWeightMaleMax.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnWeightMaleMin.getEditor().getComponent(0));
     }
 
     public Element getElement() {
