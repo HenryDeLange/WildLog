@@ -4,15 +4,21 @@ import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
+import javax.swing.RowFilter;
+import org.jdesktop.swingx.sort.ListSortController;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.enums.ElementType;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsImageProcessing;
@@ -27,13 +33,7 @@ public class ElementSelectionBox extends JDialog {
         super(inParent, inIsModal);
         app = inApp;
         initComponents();
-        List<Element> elements = app.getDBI().list(new Element());
-        Collections.sort(elements);
-        lstElements.setListData(elements.toArray());
-        if (inSelectedElement != null && !inSelectedElement.isEmpty()) {
-            txtElementName.setText(inSelectedElement);
-            txtElementNameKeyReleased(null);
-        }
+        loadElementList();
         // Setup the escape key
         final ElementSelectionBox thisHandler = (ElementSelectionBox)this;
         thisHandler.getRootPane().registerKeyboardAction(
@@ -63,9 +63,10 @@ public class ElementSelectionBox extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtElementName = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstElements = new javax.swing.JList();
+        lstElements = new org.jdesktop.swingx.JXList();
         lblElementImage = new javax.swing.JLabel();
         btnSelect = new javax.swing.JButton();
+        cmbElementType = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ElementSelectionBox.class);
@@ -91,12 +92,12 @@ public class ElementSelectionBox extends JDialog {
                 txtElementNameKeyReleased(evt);
             }
         });
-        jPanel1.add(txtElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 250, -1));
+        jPanel1.add(txtElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 130, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
+        lstElements.setModel(new DefaultListModel());
         lstElements.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstElements.setFocusable(false);
         lstElements.setName("lstElements"); // NOI18N
         lstElements.setSelectionBackground(resourceMap.getColor("lstElements.selectionBackground")); // NOI18N
         lstElements.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -132,6 +133,7 @@ public class ElementSelectionBox extends JDialog {
 
         btnSelect.setBackground(resourceMap.getColor("btnSelect.background")); // NOI18N
         btnSelect.setIcon(resourceMap.getIcon("btnSelect.icon")); // NOI18N
+        btnSelect.setToolTipText(resourceMap.getString("btnSelect.toolTipText")); // NOI18N
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelect.setFocusPainted(false);
         btnSelect.setName("btnSelect"); // NOI18N
@@ -141,6 +143,19 @@ public class ElementSelectionBox extends JDialog {
             }
         });
         jPanel1.add(btnSelect, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 10, 150, 70));
+
+        cmbElementType.setMaximumRowCount(9);
+        cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
+        cmbElementType.setSelectedItem(ElementType.NONE);
+        cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cmbElementType.setFocusable(false);
+        cmbElementType.setName("cmbElementType"); // NOI18N
+        cmbElementType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbElementTypeActionPerformed(evt);
+            }
+        });
+        jPanel1.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 110, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 430));
 
@@ -156,18 +171,15 @@ public class ElementSelectionBox extends JDialog {
     }
 
     private void txtElementNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtElementNameKeyReleased
-        for (int t = 0; t < lstElements.getModel().getSize(); t++) {
-            if (lstElements.getModel().getElementAt(t).toString().equalsIgnoreCase(txtElementName.getText())) {
-                lstElements.setSelectedIndex(t);
-                if (t > 3) {
-                    lstElements.scrollRectToVisible(lstElements.getCellBounds(t, t));
-                }
-                break;
-            }
-            else {
-                lstElements.getSelectionModel().clearSelection();
-            }
+        if (evt == null || evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+           txtElementName.setText("");
         }
+        ListSortController sorter = (ListSortController) lstElements.getRowSorter();
+        if (sorter == null) {
+            sorter = new ListSortController(lstElements.getModel());
+        }
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + txtElementName.getText()));
+        lstElements.setRowSorter(sorter);
     }//GEN-LAST:event_txtElementNameKeyReleased
 
     private void lstElementsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstElementsValueChanged
@@ -205,6 +217,28 @@ public class ElementSelectionBox extends JDialog {
         }
     }//GEN-LAST:event_lstElementsMouseClicked
 
+    private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
+        txtElementNameKeyReleased(null);
+        loadElementList();
+	}//GEN-LAST:event_cmbElementTypeActionPerformed
+
+    private void loadElementList() {
+        // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
+        Element searchElement = new Element();
+        searchElement.setType((ElementType)cmbElementType.getSelectedItem());
+        if (ElementType.NONE.equals(searchElement.getType()))
+            searchElement.setType(null);
+        if (txtElementName.getText().length() > 0)
+            searchElement.setPrimaryName(txtElementName.getText());
+        List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElement));
+        Collections.sort(elements);
+        DefaultListModel model = (DefaultListModel)lstElements.getModel();
+        model.clear();
+        for (Element tempElement : elements) {
+            model.addElement(tempElement.getPrimaryName());
+        }
+    }
+
     public boolean isSelectionMade() {
         return selectionMade;
     }
@@ -215,11 +249,12 @@ public class ElementSelectionBox extends JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSelect;
+    private javax.swing.JComboBox cmbElementType;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblElementImage;
-    private javax.swing.JList lstElements;
+    private org.jdesktop.swingx.JXList lstElements;
     private javax.swing.JTextField txtElementName;
     // End of variables declaration//GEN-END:variables
 }

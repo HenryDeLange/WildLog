@@ -242,12 +242,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
-        pnlTop.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, -1, 20));
+        pnlTop.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 10, -1, 20));
 
         jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
-        pnlTop.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 40, -1, 20));
+        pnlTop.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 40, -1, 20));
 
         jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
         jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
@@ -280,6 +280,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
+        btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
@@ -297,6 +298,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         chkShowInactiveTimes.setBackground(resourceMap.getColor("chkShowInactiveTimes.background")); // NOI18N
         chkShowInactiveTimes.setText(resourceMap.getString("chkShowInactiveTimes.text")); // NOI18N
+        chkShowInactiveTimes.setEnabled(false);
         chkShowInactiveTimes.setFocusable(false);
         chkShowInactiveTimes.setName("chkShowInactiveTimes"); // NOI18N
         pnlTop.add(chkShowInactiveTimes, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
@@ -313,6 +315,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnReload.setBackground(resourceMap.getColor("btnReload.background")); // NOI18N
         btnReload.setIcon(resourceMap.getIcon("btnReload.icon")); // NOI18N
         btnReload.setText(resourceMap.getString("btnReload.text")); // NOI18N
+        btnReload.setToolTipText(resourceMap.getString("btnReload.toolTipText")); // NOI18N
         btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReload.setFocusPainted(false);
         btnReload.setName("btnReload"); // NOI18N
@@ -331,7 +334,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel8.setName("jLabel8"); // NOI18N
-        pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 80, 70, 40));
+        pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 80, 70, 40));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(422, 70, 440, 10));
@@ -348,7 +351,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 txtLocationNameKeyReleased(evt);
             }
         });
-        pnlTop.add(txtLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, 310, -1));
+        pnlTop.add(txtLocationName, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 10, 330, -1));
 
         scrLocation.setName("scrLocation"); // NOI18N
 
@@ -378,10 +381,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 btnGPSForAllActionPerformed(evt);
             }
         });
-        pnlTop.add(btnGPSForAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 100, 60));
+        pnlTop.add(btnGPSForAll, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 105, 60));
 
         chkIncludeSubfolders.setBackground(resourceMap.getColor("chkIncludeSubfolders.background")); // NOI18N
-        chkIncludeSubfolders.setSelected(true);
         chkIncludeSubfolders.setText(resourceMap.getString("chkIncludeSubfolders.text")); // NOI18N
         chkIncludeSubfolders.setFocusable(false);
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
@@ -507,7 +509,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             @Override
                             public int showDialog() {
                                 JOptionPane.showMessageDialog(app.getMainFrame(),
-                                        "The Visit name is not unique, please specify another one.",
+                                        "The Period name is not unique, please specify another one.",
                                         "Can't Save", JOptionPane.ERROR_MESSAGE);
                                 return -1;
                             }
@@ -523,7 +525,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 @Override
                                 public int showDialog() {
                                     JOptionPane.showMessageDialog(app.getMainFrame(),
-                                            "Please assign a Creature to each of the Sightings.",
+                                            "Please assign a Creature to each of the Observations.",
                                             "Can't Save", JOptionPane.ERROR_MESSAGE);
                                     return -1;
                                 }
@@ -592,7 +594,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 UtilsFileProcessing.performFileUpload(
                                             "SIGHTING-" + sightingWrapper.getSightingCounter(),
-                                            "Sightings" + File.separatorChar + sightingWrapper.toString(),
+                                            "Observations" + File.separatorChar + sightingWrapper.toString(),
                                             files.toArray(new File[files.size()]),
                                             null, 300, app);
                                 // Update the progress
@@ -628,7 +630,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         @Override
                         public int showDialog() {
                             JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "Please provide a Location name and Visit name before saving.",
+                                    "Please provide a Place name and Period name before saving.",
                                     "Can't Save", JOptionPane.ERROR_MESSAGE);
                             return -1;
                         }

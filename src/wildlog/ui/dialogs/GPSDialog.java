@@ -217,6 +217,7 @@ public class GPSDialog extends JDialog {
 
         btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
         btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
+        btnSave.setToolTipText(resourceMap.getString("btnSave.toolTipText")); // NOI18N
         btnSave.setFocusPainted(false);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -228,6 +229,7 @@ public class GPSDialog extends JDialog {
 
         btnUsePrevious.setIcon(resourceMap.getIcon("btnUsePrevious.icon")); // NOI18N
         btnUsePrevious.setText(resourceMap.getString("btnUsePrevious.text")); // NOI18N
+        btnUsePrevious.setToolTipText(resourceMap.getString("btnUsePrevious.toolTipText")); // NOI18N
         btnUsePrevious.setFocusPainted(false);
         btnUsePrevious.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUsePrevious.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -269,6 +271,7 @@ public class GPSDialog extends JDialog {
 
         btnUseGPX.setIcon(resourceMap.getIcon("btnUseGPX.icon")); // NOI18N
         btnUseGPX.setText(resourceMap.getString("btnUseGPX.text")); // NOI18N
+        btnUseGPX.setToolTipText(resourceMap.getString("btnUseGPX.toolTipText")); // NOI18N
         btnUseGPX.setFocusPainted(false);
         btnUseGPX.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseGPX.setMargin(new java.awt.Insets(2, 6, 2, 6));

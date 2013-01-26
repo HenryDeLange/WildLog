@@ -331,12 +331,12 @@ public class MappingDialog extends JDialog {
         this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
-            app.getMapOnline().setTitle("WildLog Map - Online: " + location.getName() + " (Sightings)");
+            app.getMapOnline().setTitle("WildLog Map - Online: " + location.getName() + " (Observations)");
             app.getMapOnline().setLocationRelativeTo(app.getMainFrame());
             app.getMapOnline().showMap(Color.yellow);
         }
         else {
-            app.getMapOffline().changeTitle("WildLog Map - Offline: " + location.getName() + " (Sightings)");
+            app.getMapOffline().changeTitle("WildLog Map - Offline: " + location.getName() + " (Observations)");
             app.getMapOffline().showMap();
         }
     }//GEN-LAST:event_btnViewAllSightingsForLocationActionPerformed
@@ -407,7 +407,7 @@ public class MappingDialog extends JDialog {
             UtilsKML.copyKmlIcons(app, path);
             // KML Stuff
             KmlGenerator kmlgen = new KmlGenerator();
-            String finalPath = path + "WildLogMarkers - Location (" + location.getName() + ").kml";
+            String finalPath = path + "WildLogMarkers - Place (" + location.getName() + ").kml";
             kmlgen.setKmlPath(finalPath);
             // Get entries for Sightings and Locations
             Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
@@ -478,7 +478,7 @@ public class MappingDialog extends JDialog {
             UtilsKML.copyKmlIcons(app, path);
             // KML Stuff
             KmlGenerator kmlgen = new KmlGenerator();
-            String finalPath = path + "WildLogMarkers - Visit (" + visit.getName() + ").kml";
+            String finalPath = path + "WildLogMarkers - Period (" + visit.getName() + ").kml";
             kmlgen.setKmlPath(finalPath);
             // Get entries for Sightings and Locations
             Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
@@ -627,12 +627,12 @@ public class MappingDialog extends JDialog {
         this.dispose();
         // Open Map
         if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
-            app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName() + " (Sightings)");
+            app.getMapOnline().setTitle("WildLog Map - Online: " + visit.getName() + " (Observations)");
             app.getMapOnline().setLocationRelativeTo(this);
             app.getMapOnline().showMap(Color.yellow);
         }
         else {
-            app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName() + " (Sightings)");
+            app.getMapOffline().changeTitle("WildLog Map - Offline: " + visit.getName() + " (Observations)");
             app.getMapOffline().showMap();
         }
     }//GEN-LAST:event_btnViewSingleSightingActionPerformed

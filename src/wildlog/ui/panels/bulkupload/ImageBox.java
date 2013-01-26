@@ -75,6 +75,7 @@ public class ImageBox extends JPanel {
         btnUp.setBackground(resourceMap.getColor("btnUp.background")); // NOI18N
         btnUp.setIcon(resourceMap.getIcon("btnUp.icon")); // NOI18N
         btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
+        btnUp.setToolTipText(resourceMap.getString("btnUp.toolTipText")); // NOI18N
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setFocusPainted(false);
         btnUp.setMargin(new java.awt.Insets(1, 1, 1, 1));
@@ -89,6 +90,7 @@ public class ImageBox extends JPanel {
         btnDown.setBackground(resourceMap.getColor("btnDown.background")); // NOI18N
         btnDown.setIcon(resourceMap.getIcon("btnDown.icon")); // NOI18N
         btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
+        btnDown.setToolTipText(resourceMap.getString("btnDown.toolTipText")); // NOI18N
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setFocusPainted(false);
         btnDown.setMargin(new java.awt.Insets(1, 1, 1, 1));
@@ -101,8 +103,10 @@ public class ImageBox extends JPanel {
         add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
 
         btnRemove.setBackground(resourceMap.getColor("btnRemove.background")); // NOI18N
+        btnRemove.setFont(resourceMap.getFont("btnRemove.font")); // NOI18N
         btnRemove.setIcon(resourceMap.getIcon("btnRemove.icon")); // NOI18N
         btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
+        btnRemove.setToolTipText(resourceMap.getString("btnRemove.toolTipText")); // NOI18N
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
         btnRemove.setIconTextGap(2);
@@ -116,8 +120,10 @@ public class ImageBox extends JPanel {
         add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
         btnNewSighting.setBackground(resourceMap.getColor("btnNewSighting.background")); // NOI18N
+        btnNewSighting.setFont(resourceMap.getFont("btnNewSighting.font")); // NOI18N
         btnNewSighting.setIcon(resourceMap.getIcon("btnNewSighting.icon")); // NOI18N
         btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
+        btnNewSighting.setToolTipText(resourceMap.getString("btnNewSighting.toolTipText")); // NOI18N
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setFocusPainted(false);
         btnNewSighting.setIconTextGap(2);
@@ -131,8 +137,10 @@ public class ImageBox extends JPanel {
         add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 90, 30));
 
         btnClone.setBackground(resourceMap.getColor("btnClone.background")); // NOI18N
+        btnClone.setFont(resourceMap.getFont("btnClone.font")); // NOI18N
         btnClone.setIcon(resourceMap.getIcon("btnClone.icon")); // NOI18N
         btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
+        btnClone.setToolTipText(resourceMap.getString("btnClone.toolTipText")); // NOI18N
         btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClone.setFocusPainted(false);
         btnClone.setIconTextGap(2);

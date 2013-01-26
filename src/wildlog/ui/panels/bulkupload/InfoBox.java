@@ -155,6 +155,7 @@ public class InfoBox extends JPanel {
         btnChooseCreature.setBackground(resourceMap.getColor("btnChooseCreature.background")); // NOI18N
         btnChooseCreature.setIcon(resourceMap.getIcon("btnChooseCreature.icon")); // NOI18N
         btnChooseCreature.setText(resourceMap.getString("btnChooseCreature.text")); // NOI18N
+        btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseCreature.setFocusPainted(false);
         btnChooseCreature.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -170,6 +171,7 @@ public class InfoBox extends JPanel {
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
+        btnGPS.setToolTipText(resourceMap.getString("btnGPS.toolTipText")); // NOI18N
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -184,6 +186,7 @@ public class InfoBox extends JPanel {
         btnEdit.setBackground(resourceMap.getColor("btnEdit.background")); // NOI18N
         btnEdit.setIcon(resourceMap.getIcon("btnEdit.icon")); // NOI18N
         btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
+        btnEdit.setToolTipText(resourceMap.getString("btnEdit.toolTipText")); // NOI18N
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setFocusPainted(false);
         btnEdit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -199,7 +202,7 @@ public class InfoBox extends JPanel {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         PanelSighting dialog = new PanelSighting(
-                app.getMainFrame(), "Edit the Sighting",
+                app.getMainFrame(), "Edit the Observation",
                 sightingWrapper,
                 new Location(txtLocation.getText()),
                 new Visit(txtVisit.getText()),

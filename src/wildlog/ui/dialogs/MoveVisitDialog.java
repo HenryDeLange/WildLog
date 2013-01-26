@@ -157,7 +157,7 @@ public class MoveVisitDialog extends JDialog {
         else {
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(this,
-                    "Please select a From Location, Visit and To Location.",
+                    "Please select a From Place and Period. Then select a To Place.",
                     "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
             getGlassPane().setVisible(false);
         }

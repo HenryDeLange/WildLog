@@ -187,8 +187,8 @@ public final class UtilTableGenerator {
                                 "Start Date",
                                 "End Date",
                                 "Game Watching",
-                                "Visit Type",
-                                "Sightings"
+                                "Period Type",
+                                "Observations"
                                 };
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
@@ -262,7 +262,7 @@ public final class UtilTableGenerator {
         String[] columnNames = {
                                 "Period Name",
                                 "Start Date",
-                                "Sightings"
+                                "Observations"
                                 };
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
@@ -323,7 +323,7 @@ public final class UtilTableGenerator {
         String[] columnNames = {
                                 "Name",
                                 "Start Date",
-                                "Visit Type"
+                                "Period Type"
                                 };
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());

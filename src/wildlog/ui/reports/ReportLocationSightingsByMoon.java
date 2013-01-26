@@ -109,7 +109,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
         mnuPrintReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Location Moonphase Report: " + location.getName());
+        setTitle("Place Moonphase Report: " + location.getName());
         org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportLocationSightingsByMoon.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
         setForeground(resourceMap.getColor("Form.foreground")); // NOI18N
@@ -132,7 +132,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         lblNumberOfVisits.setText(resourceMap.getString("lblNumberOfVisits.text")); // NOI18N
         lblNumberOfVisits.setName("lblNumberOfVisits"); // NOI18N
-        getContentPane().add(lblNumberOfVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 90, -1));
+        getContentPane().add(lblNumberOfVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, 80, -1));
 
         jLabel3.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
@@ -141,7 +141,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
-        getContentPane().add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 30, 90, -1));
+        getContentPane().add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, 60, -1));
 
         jLabel5.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
@@ -159,7 +159,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         lblDaySightings.setText(resourceMap.getString("lblDaySightings.text")); // NOI18N
         lblDaySightings.setName("lblDaySightings"); // NOI18N
-        getContentPane().add(lblDaySightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(158, 50, 50, -1));
+        getContentPane().add(lblDaySightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 50, -1));
 
         jLabel2.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
@@ -168,7 +168,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         lblNightSightings.setText(resourceMap.getString("lblNightSightings.text")); // NOI18N
         lblNightSightings.setName("lblNightSightings"); // NOI18N
-        getContentPane().add(lblNightSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(365, 50, 60, -1));
+        getContentPane().add(lblNightSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 50, 60, -1));
 
         jLabel6.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
         jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
@@ -266,7 +266,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
         try {
             final JFrame frame = this;
             PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setJobName("WildLog Location Report");
+            pj.setJobName("WildLog Place Report");
             pj.setCopies(1);
             PageFormat format = pj.defaultPage();
             format.setOrientation(PageFormat.PORTRAIT);

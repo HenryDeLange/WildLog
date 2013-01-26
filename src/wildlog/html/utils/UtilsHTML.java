@@ -77,7 +77,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Location inLocation, WildLogApp inApp) {
-        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Locations"  + File.separatorChar + inLocation.getName() + ".html");
+        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Places"  + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {
@@ -102,7 +102,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Visit inVisit, WildLogApp inApp) {
-        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Visits" + File.separatorChar + inVisit.getName() + ".html");
+        File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Periods" + File.separatorChar + inVisit.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
         try {

@@ -61,14 +61,14 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JList" name="lstFromCreatures">
+        <Component class="org.jdesktop.swingx.JXList" name="lstFromCreatures">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="lstFromCreatures.font"/>
-            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
-              <StringArray count="0"/>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="new DefaultListModel()" type="code"/>
             </Property>
             <Property name="selectionMode" type="int" value="0"/>
             <Property name="toolTipText" type="java.lang.String" resourceKey="lstFromCreatures.toolTipText"/>
+            <Property name="font" type="java.awt.Font" resourceKey="lstFromCreatures.font"/>
             <Property name="name" type="java.lang.String" value="lstFromCreatures" noResource="true"/>
             <Property name="selectionBackground" type="java.awt.Color" resourceKey="lstFromCreatures.selectionBackground"/>
           </Properties>
@@ -168,7 +168,7 @@
       </Events>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="220" y="30" width="130" height="-1"/>
+          <AbsoluteConstraints x="230" y="30" width="120" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>

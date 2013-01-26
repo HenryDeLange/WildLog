@@ -2515,7 +2515,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
                         "<html>Please backup your data before proceding. <br>"
-                        + "This will replace the Sun and Moon information for all your Sightings with the auto generated values.</html>",
+                        + "This will replace the Sun and Moon information for all your Observations with the auto generated values.</html>",
                         "Calculate Sun and Moon Information",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
@@ -2587,7 +2587,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
                             "<html>Please provide a prefix to use for the imported data. "
                             + "<br>The prefix will be chosen to map the data to unique new records. "
-                            + "<br>You should manually merge Creatures and move Visits afterwards.</html>",
+                            + "<br>You should manually merge Creatures and move Periods afterwards.</html>",
                             "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
                     if (prefix != null && !prefix.isEmpty()) {
                     app.getMainFrame().getGlassPane().setVisible(false);

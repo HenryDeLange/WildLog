@@ -54,6 +54,7 @@
         <Property name="background" type="java.awt.Color" resourceKey="btnUp.background"/>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnUp.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUp.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnUp.toolTipText"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -77,6 +78,7 @@
         <Property name="background" type="java.awt.Color" resourceKey="btnDown.background"/>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnDown.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnDown.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnDown.toolTipText"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -98,8 +100,10 @@
     <Component class="javax.swing.JButton" name="btnRemove">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnRemove.background"/>
+        <Property name="font" type="java.awt.Font" resourceKey="btnRemove.font"/>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnRemove.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnRemove.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnRemove.toolTipText"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -122,8 +126,10 @@
     <Component class="javax.swing.JButton" name="btnNewSighting">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnNewSighting.background"/>
+        <Property name="font" type="java.awt.Font" resourceKey="btnNewSighting.font"/>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnNewSighting.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnNewSighting.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnNewSighting.toolTipText"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -146,8 +152,10 @@
     <Component class="javax.swing.JButton" name="btnClone">
       <Properties>
         <Property name="background" type="java.awt.Color" resourceKey="btnClone.background"/>
+        <Property name="font" type="java.awt.Font" resourceKey="btnClone.font"/>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnClone.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnClone.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnClone.toolTipText"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

@@ -71,14 +71,6 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
     private void initComponents() {
 
         lblName = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblNumberOfSightings = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblNumberOfElements = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        lblDaySightings = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        lblNightSightings = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         scrReport = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
@@ -89,6 +81,14 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
         lblAfternoon = new javax.swing.JLabel();
         lblDusk = new javax.swing.JLabel();
         lblOther = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lblNumberOfSightings = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblNumberOfElements = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        lblDaySightings = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lblNightSightings = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
@@ -109,42 +109,6 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
         lblName.setText(resourceMap.getString("lblName.text")); // NOI18N
         lblName.setName("lblName"); // NOI18N
         getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
-
-        jLabel3.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
-        jLabel3.setName("jLabel3"); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, -1, -1));
-
-        lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
-        lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
-        getContentPane().add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(485, 30, 100, -1));
-
-        jLabel5.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
-        jLabel5.setName("jLabel5"); // NOI18N
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 50, -1, -1));
-
-        lblNumberOfElements.setText(resourceMap.getString("lblNumberOfElements.text")); // NOI18N
-        lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
-        getContentPane().add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 50, 100, -1));
-
-        jLabel7.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
-        jLabel7.setName("jLabel7"); // NOI18N
-        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
-
-        lblDaySightings.setText(resourceMap.getString("lblDaySightings.text")); // NOI18N
-        lblDaySightings.setName("lblDaySightings"); // NOI18N
-        getContentPane().add(lblDaySightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 50, 130, -1));
-
-        jLabel2.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
-        jLabel2.setName("jLabel2"); // NOI18N
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
-
-        lblNightSightings.setText(resourceMap.getString("lblNightSightings.text")); // NOI18N
-        lblNightSightings.setName("lblNightSightings"); // NOI18N
-        getContentPane().add(lblNightSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 30, 130, -1));
 
         jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
@@ -202,6 +166,42 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
         lblOther.setName("lblOther"); // NOI18N
         getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 705, 60, -1));
 
+        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, -1, -1));
+
+        lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
+        lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
+        getContentPane().add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 100, -1));
+
+        jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
+        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setName("jLabel5"); // NOI18N
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, -1, -1));
+
+        lblNumberOfElements.setText(resourceMap.getString("lblNumberOfElements.text")); // NOI18N
+        lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
+        getContentPane().add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 50, 100, -1));
+
+        jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
+        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+        jLabel7.setName("jLabel7"); // NOI18N
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
+
+        lblDaySightings.setText(resourceMap.getString("lblDaySightings.text")); // NOI18N
+        lblDaySightings.setName("lblDaySightings"); // NOI18N
+        getContentPane().add(lblDaySightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 130, -1));
+
+        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
+        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setName("jLabel2"); // NOI18N
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+
+        lblNightSightings.setText(resourceMap.getString("lblNightSightings.text")); // NOI18N
+        lblNightSightings.setName("lblNightSightings"); // NOI18N
+        getContentPane().add(lblNightSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 130, -1));
+
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
         mnuPrint.setText(resourceMap.getString("mnuPrint.text")); // NOI18N
@@ -227,7 +227,7 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
         try {
             final JFrame frame = this;
             PrinterJob pj = PrinterJob.getPrinterJob();
-            pj.setJobName("WildLog Sighting Report");
+            pj.setJobName("WildLog Observation Report");
             pj.setCopies(1);
             PageFormat format = pj.defaultPage();
             format.setOrientation(PageFormat.PORTRAIT);

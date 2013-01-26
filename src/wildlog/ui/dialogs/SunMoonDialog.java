@@ -180,6 +180,7 @@ public class SunMoonDialog extends JDialog {
 
         btnRefresh.setIcon(resourceMap.getIcon("btnRefresh.icon")); // NOI18N
         btnRefresh.setText(resourceMap.getString("btnRefresh.text")); // NOI18N
+        btnRefresh.setToolTipText(resourceMap.getString("btnRefresh.toolTipText")); // NOI18N
         btnRefresh.setFocusPainted(false);
         btnRefresh.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRefresh.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -194,6 +195,7 @@ public class SunMoonDialog extends JDialog {
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
+        btnGPS.setToolTipText(resourceMap.getString("btnGPS.toolTipText")); // NOI18N
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

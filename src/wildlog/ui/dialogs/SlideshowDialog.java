@@ -250,7 +250,7 @@ public class SlideshowDialog extends JDialog {
                 }
                 // Now create the slideshow
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Sightings.mov");
+                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Observations.mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }
@@ -307,7 +307,7 @@ public class SlideshowDialog extends JDialog {
                 }
                 // Now create the slideshow
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + location.getName() + "_Sightings.mov");
+                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + location.getName() + "_Observations.mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }
@@ -364,7 +364,7 @@ public class SlideshowDialog extends JDialog {
                 }
                 // Now create the slideshow
                 setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + element.getPrimaryName() + "_Sightings.mov");
+                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + element.getPrimaryName() + "_Observations.mov");
                 setMessage("Done with the Slideshow");
                 return null;
             }

@@ -38,6 +38,7 @@
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnSave.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnSave.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnSave.toolTipText"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="btnSave" noResource="true"/>
       </Properties>
@@ -54,6 +55,7 @@
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnUsePrevious.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUsePrevious.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnUsePrevious.toolTipText"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -116,6 +118,7 @@
       <Properties>
         <Property name="icon" type="javax.swing.Icon" resourceKey="btnUseGPX.icon"/>
         <Property name="text" type="java.lang.String" resourceKey="btnUseGPX.text"/>
+        <Property name="toolTipText" type="java.lang.String" resourceKey="btnUseGPX.toolTipText"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">

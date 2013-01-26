@@ -13,8 +13,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
+import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
 import org.jdesktop.application.Application;
+import org.jdesktop.swingx.sort.ListSortController;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -72,7 +74,7 @@ public class ChecklistDialog extends JDialog {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        lstFromCreatures = new javax.swing.JList();
+        lstFromCreatures = new org.jdesktop.swingx.JXList();
         jScrollPane2 = new javax.swing.JScrollPane();
         lstSightedCreatures = new javax.swing.JList();
         btnConfirm = new javax.swing.JButton();
@@ -99,9 +101,10 @@ public class ChecklistDialog extends JDialog {
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-        lstFromCreatures.setFont(resourceMap.getFont("lstFromCreatures.font")); // NOI18N
+        lstFromCreatures.setModel(new DefaultListModel());
         lstFromCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstFromCreatures.setToolTipText(resourceMap.getString("lstFromCreatures.toolTipText")); // NOI18N
+        lstFromCreatures.setFont(resourceMap.getFont("lstFromCreatures.font")); // NOI18N
         lstFromCreatures.setName("lstFromCreatures"); // NOI18N
         lstFromCreatures.setSelectionBackground(resourceMap.getColor("lstFromCreatures.selectionBackground")); // NOI18N
         lstFromCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -168,7 +171,7 @@ public class ChecklistDialog extends JDialog {
                 cmbElementTypeActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, 130, -1));
+        getContentPane().add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 120, -1));
 
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
@@ -242,6 +245,7 @@ public class ChecklistDialog extends JDialog {
     }//GEN-LAST:event_lstSightedCreaturesMouseClicked
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
+        txtSearchKeyReleased(null);
         loadElementList();
     }//GEN-LAST:event_cmbElementTypeActionPerformed
 
@@ -256,21 +260,16 @@ public class ChecklistDialog extends JDialog {
     }//GEN-LAST:event_lstSightedCreaturesKeyPressed
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            lstFromCreaturesKeyPressed(evt);
+        if (evt == null || evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
+           txtSearch.setText("");
         }
-        else {
-            for (int t = 0; t < lstFromCreatures.getModel().getSize(); t++) {
-                if (lstFromCreatures.getModel().getElementAt(t).toString().equalsIgnoreCase(txtSearch.getText())) {
-                    lstFromCreatures.setSelectedIndex(t);
-                    break;
-                }
-                else
-                    lstFromCreatures.getSelectionModel().clearSelection();
-            }
+        ListSortController sorter = (ListSortController) lstFromCreatures.getRowSorter();
+        if (sorter == null) {
+            sorter = new ListSortController(lstFromCreatures.getModel());
         }
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + txtSearch.getText()));
+        lstFromCreatures.setRowSorter(sorter);
     }//GEN-LAST:event_txtSearchKeyReleased
-
 
     // Private Methods
     private void loadElementList() {
@@ -283,11 +282,11 @@ public class ChecklistDialog extends JDialog {
             searchElement.setPrimaryName(txtSearch.getText());
         List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElement));
         Collections.sort(elements);
-        DefaultListModel fromModel = new DefaultListModel();
+        DefaultListModel model = (DefaultListModel)lstFromCreatures.getModel();
+        model.clear();
         for (Element tempElement : elements) {
-            fromModel.addElement(tempElement.getPrimaryName());
+            model.addElement(tempElement.getPrimaryName());
         }
-        lstFromCreatures.setModel(fromModel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -299,7 +298,7 @@ public class ChecklistDialog extends JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JList lstFromCreatures;
+    private org.jdesktop.swingx.JXList lstFromCreatures;
     private javax.swing.JList lstSightedCreatures;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables

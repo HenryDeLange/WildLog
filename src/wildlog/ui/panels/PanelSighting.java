@@ -1265,7 +1265,7 @@ public class PanelSighting extends JDialog {
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Please make sure to first provide values for the Creature, Place, Period and GPS location.",
+                                "Please make sure to first provide values for the Creature, Place, Period and GPS point.",
                                 "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
                         return -1;
                     }
