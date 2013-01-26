@@ -85,7 +85,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadFiles("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFiles("VISIT-" + visit.getName(), "Periods"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -279,7 +279,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblVisitName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVisitName.setText(resourceMap.getString("lblVisitName.text")); // NOI18N
         lblVisitName.setName("lblVisitName"); // NOI18N
-        visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
+        visitIncludes.add(lblVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 20));
 
         jSeparator8.setName("jSeparator8"); // NOI18N
         visitIncludes.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -294,7 +294,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
         txtName.setText(visit.getName());
         txtName.setName("txtName"); // NOI18N
-        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 28, 500, -1));
+        visitIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 28, 495, -1));
 
         btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
         btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
@@ -325,7 +325,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 380, 75));
+        visitIncludes.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 110, 375, 75));
 
         jLabel54.setText(resourceMap.getString("jLabel54.text")); // NOI18N
         jLabel54.setName("jLabel54"); // NOI18N
@@ -361,13 +361,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 52, 140, -1));
+        visitIncludes.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 52, 140, -1));
 
         dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 140, -1));
+        visitIncludes.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(75, 80, 140, -1));
 
         jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
@@ -653,7 +653,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
         jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
-        visitIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 0, 60, 20));
+        visitIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(605, 1, -1, 20));
 
         lblNumberOfElements.setFont(resourceMap.getFont("lblNumberOfElements.font")); // NOI18N
         lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -725,6 +725,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
         btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
+        btnSlideshow.setToolTipText(resourceMap.getString("btnSlideshow.toolTipText")); // NOI18N
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -795,7 +796,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfElements.setText(Integer.toString(allElements.size()));
         }
         else {
-            tblSightings.setModel(new DefaultTableModel(new String[]{"No Sightings"}, 0));
+            tblSightings.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
@@ -830,8 +831,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     @Override
                     public int showDialog() {
                         return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                "Are you sure you want to delete the Sighting(s)?",
-                                "Delete Sighting(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
+                                "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     }
            });
             if (result == JOptionPane.YES_OPTION) {
@@ -852,7 +853,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             tblSightings.clearSelection();
             refreshSightingInfo();
             PanelSighting dialog = new PanelSighting(
-                    app.getMainFrame(), "Add a New Sighting",
+                    app.getMainFrame(), "Add a New Observation",
                     sighting, locationForVisit, visit, null, this, true, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
@@ -865,7 +866,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             tblSightings.clearSelection();
             PanelSighting dialog = new PanelSighting(
-                    app.getMainFrame(), "Edit an Existing Sighting",
+                    app.getMainFrame(), "Edit an Existing Observation",
                     sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
@@ -877,7 +878,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadFile("VISIT-" + visit.getName(), "Visits"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFile("VISIT-" + visit.getName(), "Periods"+File.separatorChar+locationForVisit.getName()+File.separatorChar+visit.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -892,11 +893,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
             sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
-            refreshSightingInfo();
         }
         else {
             sighting = null;
         }
+        refreshSightingInfo();
 }//GEN-LAST:event_tblSightingsMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed

@@ -4,8 +4,6 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
     </Component>
-    <Component class="javax.swing.ButtonGroup" name="buttonGroup2">
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="background" type="java.awt.Color" resourceKey="Form.background"/>
@@ -72,7 +70,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="85" y="28" width="490" height="-1"/>
+              <AbsoluteConstraints x="85" y="28" width="485" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -87,7 +85,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="0" y="0" width="630" height="20"/>
+              <AbsoluteConstraints x="0" y="0" width="580" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -776,7 +774,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="630" y="0" width="-1" height="20"/>
+              <AbsoluteConstraints x="620" y="1" width="-1" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -857,7 +855,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="780" y="550" width="-1" height="30"/>
+              <AbsoluteConstraints x="760" y="550" width="-1" height="30"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -974,6 +972,7 @@
             <Property name="background" type="java.awt.Color" resourceKey="btnGPS.background"/>
             <Property name="icon" type="javax.swing.Icon" resourceKey="btnGPS.icon"/>
             <Property name="text" type="java.lang.String" resourceKey="btnGPS.text"/>
+            <Property name="toolTipText" type="java.lang.String" resourceKey="btnGPS.toolTipText"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>

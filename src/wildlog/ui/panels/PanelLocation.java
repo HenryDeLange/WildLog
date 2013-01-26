@@ -79,7 +79,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadFiles("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFiles("LOCATION-" + locationWL.getName(), "Places"+File.separatorChar+locationWL.getName(), null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -172,7 +172,6 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        buttonGroup2 = new javax.swing.ButtonGroup();
         locationIncludes = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         lblLocation = new javax.swing.JLabel();
@@ -261,13 +260,13 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtName.setBackground(resourceMap.getColor("txtName.background")); // NOI18N
         txtName.setText(locationWL.getName());
         txtName.setName("txtName"); // NOI18N
-        locationIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 28, 490, -1));
+        locationIncludes.add(txtName, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 28, 485, -1));
 
         lblLocation.setFont(resourceMap.getFont("lblLocation.font")); // NOI18N
         lblLocation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocation.setText(locationWL.getName());
         lblLocation.setName("lblLocation"); // NOI18N
-        locationIncludes.add(lblLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 630, 20));
+        locationIncludes.add(lblLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, 20));
 
         jLabel36.setText(resourceMap.getString("jLabel36.text")); // NOI18N
         jLabel36.setName("jLabel36"); // NOI18N
@@ -612,7 +611,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
         jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
-        locationIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 0, -1, 20));
+        locationIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 1, -1, 20));
 
         lblNumberOfVisits.setFont(resourceMap.getFont("lblNumberOfVisits.font")); // NOI18N
         lblNumberOfVisits.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -657,7 +656,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbVisit.setFocusPainted(false);
         rdbVisit.setName("rdbVisit"); // NOI18N
-        locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, 30));
+        locationIncludes.add(rdbVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 550, -1, 30));
 
         lblNumberOfElements.setFont(resourceMap.getFont("lblNumberOfElements.font")); // NOI18N
         lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -723,6 +722,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
+        btnGPS.setToolTipText(resourceMap.getString("btnGPS.toolTipText")); // NOI18N
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -836,7 +836,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadFile("LOCATION-" + locationWL.getName(), "Locations"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFile("LOCATION-" + locationWL.getName(), "Places"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -884,7 +884,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
         else {
             lblNumberOfVisits.setText("0");
-            tblVisit.setModel(new DefaultTableModel(new String[]{"No Visits"}, 0));
+            tblVisit.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
             tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
         }
 
@@ -906,8 +906,8 @@ public class PanelLocation extends PanelCanSetupHeader {
                     @Override
                     public int showDialog() {
                         return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                "Are you sure you want to delete the Visit(s)? This will delete all Sightings and photos linked to this Visit as well.",
-                                "Delete Visit(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                "Are you sure you want to delete the Period(s)? This will delete all Observations and files linked to the Period(s) as well.",
+                                "Delete Period(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     }
             });
             if (result == JOptionPane.YES_OPTION) {
@@ -955,7 +955,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 if  (tblVisit.getSelectedRowCount() == 1) {
                     UtilTableGenerator.setupElementsForVisitTable(tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0))));
                 }
-                else tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Visit"}, 0));
+                else tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Period"}, 0));
             }
             lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
         }
@@ -1078,7 +1078,6 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JButton btnUpdate;
     private javax.swing.JButton btnUploadImage;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JComboBox cmbCatering;
     private javax.swing.JComboBox cmbGameRating;
     private javax.swing.JComboBox cmbRating;

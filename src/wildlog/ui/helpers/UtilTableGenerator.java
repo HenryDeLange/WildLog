@@ -18,6 +18,7 @@ import wildlog.data.dbi.DBI;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.mapping.utils.UtilsGps;
 
 
 public final class UtilTableGenerator {
@@ -28,12 +29,12 @@ public final class UtilTableGenerator {
     public static void setupCompleteElementTable(JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
-                                "Primary Name",
+                                "Creature Name",
                                 "Other Name",
                                 "Type",
                                 "Class",
-                                "Wish Rate",
-                                "Add Freq"
+                                "Wish Rating",
+                                "Add Frequency"
                                 };
         List<Element> tempList = null;
         tempList = dbi.list(inElement);
@@ -62,7 +63,7 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(200);
+                column.setPreferredWidth(210);
             }
             else if (i == 1) {
                 column.setPreferredWidth(180);
@@ -71,13 +72,13 @@ public final class UtilTableGenerator {
                 column.setPreferredWidth(50);
             }
             else if (i == 3) {
-                column.setPreferredWidth(50);
+                column.setPreferredWidth(40);
             }
             else if (i == 4) {
-                column.setPreferredWidth(150);
+                column.setPreferredWidth(140);
             }
             else if (i == 5) {
-                column.setPreferredWidth(80);
+                column.setPreferredWidth(60);
             }
         }
         // Setup sorting
@@ -87,7 +88,7 @@ public final class UtilTableGenerator {
     public static void setupShortElementTable(JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
-                                "Primary Name",
+                                "Creature Name",
                                 "Type",
                                 "Class"
                                 };
@@ -130,11 +131,11 @@ public final class UtilTableGenerator {
     public static void setupCompleteLocationTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
-                                "Name",
+                                "Place Name",
                                 "Rating",
-                                "Wildlife",
-                                "Accommodation",
-                                "Catering"
+                                "Wildlife Rating",
+                                "Latitude",
+                                "Longitude"
                                 };
         List<Location> tempList = dbi.list(inLocation);
         Object[][] tempTable = new Object[tempList.size()][6];
@@ -144,8 +145,8 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = tempLocation.getName();
             tempTable[t][i++] = tempLocation.getRating();
             tempTable[t][i++] = tempLocation.getGameViewingRating();
-            tempTable[t][i++] = tempLocation.getAccommodationType();
-            tempTable[t][i++] = tempLocation.getCatering();
+            tempTable[t][i++] = UtilsGps.getLatitudeString(tempLocation);
+            tempTable[t][i++] = UtilsGps.getLongitudeString(tempLocation);
         }
         // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
@@ -160,22 +161,19 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(200);
+                column.setPreferredWidth(220);
             }
             else if (i == 1) {
-                column.setPreferredWidth(40);
+                column.setPreferredWidth(30);
             }
             else if (i == 2) {
-                column.setPreferredWidth(22);
+                column.setPreferredWidth(30);
             }
             else if (i == 3) {
-                column.setPreferredWidth(22);
+                column.setPreferredWidth(25);
             }
             else if (i == 4) {
-                column.setPreferredWidth(100);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(140);
+                column.setPreferredWidth(25);
             }
         }
         // Setup sorting
@@ -185,7 +183,7 @@ public final class UtilTableGenerator {
     public static void setupCompleteVisitTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
-                                "Name",
+                                "Period Name",
                                 "Start Date",
                                 "End Date",
                                 "Game Watching",
@@ -262,9 +260,8 @@ public final class UtilTableGenerator {
     public static void setupShortVisitTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
-                                "Name",
+                                "Period Name",
                                 "Start Date",
-                                "Visit Type",
                                 "Sightings"
                                 };
         Visit temp = new Visit();
@@ -278,7 +275,6 @@ public final class UtilTableGenerator {
                 int i = 0;
                 tempTable[t][i++] = tempVisit.getName();
                 tempTable[t][i++] = tempVisit.getStartDate();
-                tempTable[t][i++] = tempVisit.getType();
                 Sighting tempSighting = new Sighting();
                 tempSighting.setVisitName(tempVisit.getName());
                 tempTable[t][i++] = dbi.list(tempSighting).size();
@@ -308,17 +304,14 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(110);
+                column.setPreferredWidth(150);
             }
             else if (i == 1) {
-                column.setPreferredWidth(40);
+                column.setPreferredWidth(50);
                 column.setCellRenderer(new DateCellRenderer());
             }
             else if (i == 2) {
-                column.setPreferredWidth(30);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(13);
+                column.setPreferredWidth(15);
             }
         }
         // Setup sorting
@@ -384,7 +377,7 @@ public final class UtilTableGenerator {
     public static void setupCompleteSightingTable(JTable inTable, Visit inVisit) {
         // Load data
         String[] columnNames = {
-                                "Primary Name",
+                                "Creature Name",
                                 "Date",
                                 "View Rating",
                                 "Certainty",
@@ -465,7 +458,7 @@ public final class UtilTableGenerator {
     public static void setupElementsForVisitTable(JTable inTable, Visit inVisit) {
         // Load data
         String[] columnNames = {
-                                "Primary Name",
+                                "Creature Name",
                                 "Type",
                                 "Class"
                                 };
@@ -499,22 +492,13 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(200);
+                column.setPreferredWidth(110);
             }
             else if (i == 1) {
-                column.setPreferredWidth(40);
+                column.setPreferredWidth(35);
             }
             else if (i == 2) {
-                column.setPreferredWidth(22);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(22);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(100);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(140);
+                column.setPreferredWidth(30);
             }
         }
         // Setup sorting
@@ -524,7 +508,7 @@ public final class UtilTableGenerator {
     public static void setupElementsForLocationTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
-                                "Primary Name",
+                                "Creature Name",
                                 "Type",
                                 "Class"
                                 };
@@ -575,8 +559,8 @@ public final class UtilTableGenerator {
     public static void setupLocationsForElementTable(JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
-                                "Name",
-                                "Wildlife"
+                                "Place Name",
+                                "Wildlife Rating"
                                 };
         List<String> allLocations = new ArrayList<String>();
         Object[][] tempTable = null;
@@ -610,13 +594,10 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(100);
+                column.setPreferredWidth(150);
             }
             else if (i == 1) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(35);
+                column.setPreferredWidth(20);
             }
         }
         // Setup sorting
@@ -626,7 +607,7 @@ public final class UtilTableGenerator {
     public static void setupShortLocationTable(JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
-                                "Name"
+                                "Place Name"
                                 };
         List<Location> tempList = null;
         tempList = dbi.list(inLocation);
@@ -652,9 +633,6 @@ public final class UtilTableGenerator {
             if (i == 0) {
                 column.setPreferredWidth(150);
             }
-            else if (i == 1) {
-                column.setPreferredWidth(30);
-            }
         }
         // Setup sorting
         setupRowSorter(inTable, 0);
@@ -663,7 +641,7 @@ public final class UtilTableGenerator {
     public static void setupSightingsForElementTable(JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
-                                "Location",
+                                "Place Name",
                                 "Date",
                                 "ID"
                                 };

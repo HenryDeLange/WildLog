@@ -108,10 +108,10 @@ public class BulkUploadDataLoader {
             inImageList.add(wrapper);
         }
         catch (JpegProcessingException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }
 
@@ -130,7 +130,7 @@ public class BulkUploadDataLoader {
 
     public static String[] getColumnNames() {
         return new String[] {
-            "Sightings", "Images"
+            "Observations", "Images"
         };
     }
 

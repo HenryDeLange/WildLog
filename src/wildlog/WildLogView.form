@@ -94,7 +94,7 @@
                           <Component id="lblSightings" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="lblCreatures" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="643" max="32767" attributes="0"/>
+                          <EmptySpace pref="626" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
@@ -282,29 +282,35 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" attributes="1">
                                   <Component id="rdbBrowseLocation" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="5" pref="5" max="5" attributes="0"/>
                                   <Component id="rdbBrowseElement" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="1" pref="1" max="1" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
                                   <Component id="rdbBrowseDate" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="0">
-                                  <Component id="dtpStartDate" min="-2" pref="100" max="-2" attributes="0"/>
-                                  <Component id="dtpEndDate" min="-2" pref="100" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="chkElementTypeBrowseTab" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="30" pref="30" max="30" attributes="0"/>
-                                  <Component id="cmbElementTypesBrowseTab" min="-2" pref="210" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                   <Component id="jScrollPane4" alignment="1" min="-2" pref="250" max="-2" attributes="0"/>
                                   <Group type="103" alignment="1" groupAlignment="1" attributes="0">
-                                      <Component id="btnRefreshDates" alignment="1" min="-2" pref="40" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <EmptySpace min="-2" pref="113" max="-2" attributes="0"/>
+                                          <Component id="dtpEndDate" min="-2" pref="100" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="btnRefreshDates" min="-2" pref="30" max="-2" attributes="0"/>
+                                      </Group>
                                       <Component id="btnGoBrowseSelection" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
                                   </Group>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="dtpStartDate" min="-2" pref="108" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="chkElementTypeBrowseTab" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="cmbElementTypesBrowseTab" min="-2" pref="172" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -356,26 +362,19 @@
                               <Group type="102" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="rdbBrowseLocation" min="-2" max="-2" attributes="0"/>
-                                      <Component id="rdbBrowseElement" min="-2" max="-2" attributes="0"/>
-                                      <Component id="rdbBrowseDate" min="-2" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="rdbBrowseElement" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="rdbBrowseDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="2" pref="2" max="2" attributes="0"/>
-                                          <Component id="dtpStartDate" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="2" pref="2" max="2" attributes="0"/>
-                                          <Component id="dtpEndDate" min="-2" max="-2" attributes="0"/>
-                                      </Group>
                                       <Component id="btnRefreshDates" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="2" pref="2" max="2" attributes="0"/>
-                                          <Component id="chkElementTypeBrowseTab" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="2" pref="2" max="2" attributes="0"/>
-                                          <Component id="cmbElementTypesBrowseTab" min="-2" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="1" attributes="0">
+                                              <Component id="dtpEndDate" alignment="1" min="-2" max="-2" attributes="0"/>
+                                              <Component id="chkElementTypeBrowseTab" alignment="1" min="-2" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
@@ -414,6 +413,14 @@
                                       </Group>
                                       <Component id="jScrollPane5" alignment="0" pref="586" max="32767" attributes="0"/>
                                   </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="dtpStartDate" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                                  <Component id="cmbElementTypesBrowseTab" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -652,6 +659,9 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new SimpleDateFormat(&quot;dd MMM yyyy&quot;)" type="code"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="dtpStartDate" noResource="true"/>
                   </Properties>
                 </Component>
@@ -659,6 +669,9 @@
                   <Properties>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
+                    </Property>
+                    <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new SimpleDateFormat(&quot;dd MMM yyyy&quot;)" type="code"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="dtpEndDate" noResource="true"/>
                   </Properties>
@@ -763,6 +776,10 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="horizontalAlignment" type="int" value="2"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 2, 2, 2]"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="btnRotate" noResource="true"/>
                   </Properties>
                 </Component>
@@ -1152,23 +1169,20 @@
                                   <Component id="scrlElement" pref="847" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="jSeparator1" min="-2" pref="340" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" alignment="0" attributes="0">
-                                          <Component id="txtSearch" min="-2" pref="200" max="-2" attributes="0"/>
-                                          <Component id="cmbType" min="-2" pref="140" max="-2" attributes="0"/>
+                                          <Component id="txtSearch" min="-2" pref="205" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="cmbType" min="-2" pref="93" max="-2" attributes="0"/>
                                       </Group>
-                                      <Group type="102" alignment="1" attributes="1">
-                                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                          <Component id="jLabel14" min="-2" pref="280" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="jSeparator1" alignment="0" min="-2" pref="304" max="-2" attributes="1"/>
+                                      <Component id="jLabel14" alignment="0" min="-2" pref="304" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="btnGoLocation" pref="325" max="32767" attributes="0"/>
-                                      <Component id="jLabel6" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane6" alignment="0" pref="325" max="32767" attributes="0"/>
+                                      <Component id="btnGoLocation" pref="361" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane6" alignment="0" pref="361" max="32767" attributes="0"/>
+                                      <Component id="jLabel6" alignment="1" pref="361" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                   <Component id="lblImage" min="-2" max="-2" attributes="0"/>
@@ -1208,9 +1222,10 @@
                                   <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtSearch" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cmbType" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="txtSearch" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="cmbType" alignment="3" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1341,6 +1356,7 @@
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="cmbType" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1409,6 +1425,7 @@
                 <Component class="javax.swing.JLabel" name="jLabel14">
                   <Properties>
                     <Property name="font" type="java.awt.Font" resourceKey="jLabel14.font"/>
+                    <Property name="horizontalAlignment" type="int" value="0"/>
                     <Property name="text" type="java.lang.String" resourceKey="jLabel14.text"/>
                     <Property name="name" type="java.lang.String" value="jLabel14" noResource="true"/>
                   </Properties>
@@ -1455,6 +1472,7 @@
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="mnuChangeWorkspaceMenuItem.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="mnuChangeWorkspaceMenuItem.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="mnuChangeWorkspaceMenuItem.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceMenuItem" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1465,6 +1483,7 @@
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" resourceKey="mnuCleanWorkspace.icon"/>
                     <Property name="text" type="java.lang.String" resourceKey="mnuCleanWorkspace.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="mnuCleanWorkspace.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuCleanWorkspace" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1531,6 +1550,7 @@
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" resourceKey="mnuBackupMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="mnuBackupMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="mnuBackupMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="mnuBackupMenuItem" noResource="true"/>
               </Properties>
               <Events>
@@ -1618,6 +1638,7 @@
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" resourceKey="calcSunMoonMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="calcSunMoonMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="calcSunMoonMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="calcSunMoonMenuItem" noResource="true"/>
               </Properties>
               <Events>
@@ -1628,6 +1649,7 @@
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" resourceKey="moveVisitsMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="moveVisitsMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="moveVisitsMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="moveVisitsMenuItem" noResource="true"/>
               </Properties>
               <Events>
@@ -1638,6 +1660,7 @@
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" resourceKey="linkElementsMenuItem.icon"/>
                 <Property name="text" type="java.lang.String" resourceKey="linkElementsMenuItem.text"/>
+                <Property name="toolTipText" type="java.lang.String" resourceKey="linkElementsMenuItem.toolTipText"/>
                 <Property name="name" type="java.lang.String" value="linkElementsMenuItem" noResource="true"/>
               </Properties>
               <Events>
@@ -1665,6 +1688,7 @@
                       <Connection code="app.getWildLogOptions().isIsOnlinemapTheDefault()" type="code"/>
                     </Property>
                     <Property name="text" type="java.lang.String" resourceKey="chkMnuUseWMS.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="chkMnuUseWMS.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="chkMnuUseWMS" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1674,6 +1698,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuMapStartMenuItem">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="mnuMapStartMenuItem.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="mnuMapStartMenuItem.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuMapStartMenuItem" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1692,6 +1717,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuSetSlideshowSpeed">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="mnuSetSlideshowSpeed.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="mnuSetSlideshowSpeed.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuSetSlideshowSpeed" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1701,6 +1727,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuSetSlideshowSize">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="mnuSetSlideshowSize.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="mnuSetSlideshowSize.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuSetSlideshowSize" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1719,6 +1746,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuGPSInput">
                   <Properties>
                     <Property name="text" type="java.lang.String" resourceKey="mnuGPSInput.text"/>
+                    <Property name="toolTipText" type="java.lang.String" resourceKey="mnuGPSInput.toolTipText"/>
                     <Property name="name" type="java.lang.String" value="mnuGPSInput" noResource="true"/>
                   </Properties>
                   <Events>

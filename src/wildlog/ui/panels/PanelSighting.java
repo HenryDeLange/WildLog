@@ -150,7 +150,7 @@ public class PanelSighting extends JDialog {
             }
         }
         else {
-            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Location"}, 0));
+            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Place"}, 0));
         }
 
         // Setup location and element images
@@ -255,7 +255,7 @@ public class PanelSighting extends JDialog {
 
     private void setupSightingInfo() {
         // Display the ID
-        lblSightingID.setText("Sighting ID: " + Long.toString(sighting.getSightingCounter()));
+        lblSightingID.setText("Observation ID: " + Long.toString(sighting.getSightingCounter()));
         // Load the values from the Sighting object
         setUIFieldsFromSightingDate();
         cmbCertainty.setSelectedItem(sighting.getCertainty());
@@ -310,7 +310,6 @@ public class PanelSighting extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         sightingIncludes = new javax.swing.JPanel();
         btnUpdateSighting = new javax.swing.JButton();
         jSeparator8 = new javax.swing.JSeparator();
@@ -607,6 +606,7 @@ public class PanelSighting extends JDialog {
 
         cmbElementType.setMaximumRowCount(9);
         cmbElementType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
+        cmbElementType.setSelectedItem(ElementType.NONE);
         cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setEnabled(!disableEditing);
         cmbElementType.setFocusable(false);
@@ -616,7 +616,7 @@ public class PanelSighting extends JDialog {
                 cmbElementTypeActionPerformed(evt);
             }
         });
-        sightingIncludes.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 330, 130, -1));
+        sightingIncludes.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 330, 90, -1));
 
         jLabel18.setText(resourceMap.getString("jLabel18.text")); // NOI18N
         jLabel18.setName("jLabel18"); // NOI18N
@@ -625,7 +625,7 @@ public class PanelSighting extends JDialog {
         txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setEnabled(!disableEditing);
         txtSearch.setName("txtSearch"); // NOI18N
-        sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 150, 20));
+        sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 190, 20));
 
         btnDeleteImage.setBackground(resourceMap.getColor("btnDeleteImage.background")); // NOI18N
         btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
@@ -873,6 +873,7 @@ public class PanelSighting extends JDialog {
         btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
         btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
         btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
+        btnGPS.setToolTipText(resourceMap.getString("btnGPS.toolTipText")); // NOI18N
         btnGPS.setEnabled(!disableEditing);
         btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1014,7 +1015,7 @@ public class PanelSighting extends JDialog {
                 public int showDialog() {
                     JOptionPane.showMessageDialog(app.getMainFrame(),
                             "Please fill in all of the required fields.",
-                            "Can't Save Sighting", JOptionPane.ERROR_MESSAGE);
+                            "Can't Save Observation", JOptionPane.ERROR_MESSAGE);
                     return -1;
                 }
             });
@@ -1073,7 +1074,7 @@ public class PanelSighting extends JDialog {
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Could not save the Sighting",
+                                "Could not save the Observation.",
                                 "Error Saving", JOptionPane.ERROR_MESSAGE);
                         return -1;
                     }
@@ -1108,13 +1109,13 @@ public class PanelSighting extends JDialog {
                 if (inFiles == null) {
                     imageIndex = UtilsFileProcessing.uploadFile(
                             "SIGHTING-" + sighting.getSightingCounter(),
-                            "Sightings" + File.separatorChar + sighting.toString(),
+                            "Observations" + File.separatorChar + sighting.toString(),
                             this, lblImage, 300, app);
                 }
                 else {
                     imageIndex = UtilsFileProcessing.uploadFiles(
                             "SIGHTING-" + sighting.getSightingCounter(),
-                            "Sightings" + File.separatorChar + sighting.toString(),
+                            "Observations" + File.separatorChar + sighting.toString(),
                             this, lblImage, 300, app,
                             inFiles);
                 }
@@ -1175,7 +1176,7 @@ public class PanelSighting extends JDialog {
         }
         else {
             location = null;
-            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Location"}, 0));
+            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Place"}, 0));
             visit = null;
             lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
         }
@@ -1183,7 +1184,11 @@ public class PanelSighting extends JDialog {
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         if (sighting != null) {
-            searchElement = new Element((ElementType)cmbElementType.getSelectedItem());
+            searchElement = new Element();
+            ElementType type = (ElementType)cmbElementType.getSelectedItem();
+            if (!ElementType.NONE.equals(type)) {
+                searchElement.setType(type);
+            }
             UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
             txtSearch.setText("");
             // Clear Images
@@ -1260,7 +1265,7 @@ public class PanelSighting extends JDialog {
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Please make sure to first specify details for the Creature, Location, Visit and GPS values.",
+                                "Please make sure to first provide values for the Creature, Place, Period and GPS location.",
                                 "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
                         return -1;
                     }
@@ -1333,7 +1338,6 @@ public class PanelSighting extends JDialog {
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdateSighting;
     private javax.swing.JButton btnUploadImage;
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cmbCertainty;
     private javax.swing.JComboBox cmbElementType;
     private javax.swing.JComboBox cmbEvidence;

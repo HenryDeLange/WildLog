@@ -448,7 +448,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel65.setFont(resourceMap.getFont("jLabel65.font")); // NOI18N
         jLabel65.setText(resourceMap.getString("jLabel65.text")); // NOI18N
         jLabel65.setName("jLabel65"); // NOI18N
-        elementIncludes.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 0, -1, 20));
+        elementIncludes.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 1, -1, 20));
 
         jLabel66.setText(resourceMap.getString("jLabel66.text")); // NOI18N
         jLabel66.setName("jLabel66"); // NOI18N
@@ -578,7 +578,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(element.getPrimaryName());
         lblElementName.setName("lblElementName"); // NOI18N
-        elementIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, -1));
+        elementIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, -1));
 
         cmbWishList.setModel(new DefaultComboBoxModel(wildlog.data.enums.WishRating.values()));
         cmbWishList.setSelectedItem(element.getWishListRating());
@@ -711,14 +711,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 270, 60));
 
         btnAddSighting.setBackground(resourceMap.getColor("btnAddSighting.background")); // NOI18N
+        btnAddSighting.setFont(resourceMap.getFont("btnAddSighting.font")); // NOI18N
         btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
         btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
         btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddSighting.setFocusPainted(false);
         btnAddSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnAddSighting.setIconTextGap(6);
-        btnAddSighting.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnAddSighting.setIconTextGap(2);
+        btnAddSighting.setMargin(new java.awt.Insets(2, 3, 2, 2));
         btnAddSighting.setName("btnAddSighting"); // NOI18N
         btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -761,7 +762,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 rdbSightingsItemStateChanged(evt);
             }
         });
-        elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, 30));
+        elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 550, -1, 30));
 
         jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
@@ -1055,7 +1056,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
                 Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
                 PanelSighting dialog = new PanelSighting(
-                        app.getMainFrame(), "Edit an Existing Sighting",
+                        app.getMainFrame(), "Edit an Existing Observation",
                         sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false, false);
                 dialog.setVisible(true);
             }
@@ -1064,7 +1065,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "You can't view multiple Sightings at once.",
+                                "You can't view multiple Observations at once.",
                                 "Please Note", JOptionPane.INFORMATION_MESSAGE);
                         return -1;
                     }
@@ -1088,7 +1089,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             UtilTableGenerator.setupLocationsForElementTable(tblLocation, element);
         }
         else
-            tblLocation.setModel(new DefaultTableModel(new String[]{"No Locations"}, 0));
+            tblLocation.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
         rdbLocations.setSelected(true);
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
     }//GEN-LAST:event_formComponentShown
@@ -1113,7 +1114,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             Sighting sighting = new Sighting();
             sighting.setElementName(element.getPrimaryName());
             PanelSighting dialog = new PanelSighting(
-                    app.getMainFrame(), "Add a New Sighting",
+                    app.getMainFrame(), "Add a New Observation",
                     sighting, null, null, element, this, true, false, false);
             dialog.setVisible(true);
         }
@@ -1135,7 +1136,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 tblLocation.setSelectionBackground(new Color(125,120,93));
             }
             else
-                tblLocation.setModel(new DefaultTableModel(new String[]{"No Sightings"}, 0));
+                tblLocation.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
         }
         else {
             if (element.getPrimaryName() != null) {
@@ -1143,7 +1144,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 tblLocation.setSelectionBackground(new Color(67,97,113));
             }
             else
-                tblLocation.setModel(new DefaultTableModel(new String[]{"No Locations"}, 0));
+                tblLocation.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
         }
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
     }//GEN-LAST:event_rdbSightingsItemStateChanged

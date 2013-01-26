@@ -411,7 +411,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 {null, null}
             },
             new String [] {
-                "Sightings", "Images"
+                "Observations", "Images"
             }
         ));
         tblBulkImport.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
