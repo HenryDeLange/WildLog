@@ -82,23 +82,31 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
         htmlSighting.append("<body bgcolor='rgb(238,234,211)'>");
         htmlSighting.append("<table bgcolor='rgb(238,234,211)' width='100%'>");
-        htmlSighting.append("<tr><td>");
-        htmlSighting.append("<b><u>Sighting ID: ").append(UtilsHTML.formatString(sightingCounter)).append("</u></b>");
+        htmlSighting.append("<tr><td style='font-size:9px;font-family:verdana;'>");
+        htmlSighting.append("<b><u>Observation ID: ").append(UtilsHTML.formatObjectAsString(sightingCounter)).append("</u></b>");
         htmlSighting.append("<br/>");
-        htmlSighting.append("<br/><b>Date:</b> ").append(UtilsHTML.formatDate(date, true));
-        htmlSighting.append("<br/><b>Creature:</b> ").append(elementName);
-        htmlSighting.append("<br/><b>Location:</b> ").append(UtilsHTML.formatString(locationName));
-        htmlSighting.append("<br/>");
-        htmlSighting.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSeconds);
-        htmlSighting.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSeconds);
-        htmlSighting.append("<br/><b>Time of Day:</b> ").append(UtilsHTML.formatString(timeOfDay));
-        htmlSighting.append("<br/><b>Weather:</b> ").append(UtilsHTML.formatString(weather));
-        htmlSighting.append("<br/><b>View Rating:</b> ").append(UtilsHTML.formatString(viewRating));
-        htmlSighting.append("<br/><b>Certainty:</b> ").append(UtilsHTML.formatString(certainty));
-        htmlSighting.append("<br/><b>Number of Creatures:</b> ").append(UtilsHTML.formatString(numberOfElements));
-        htmlSighting.append("<br/><b>Moon Phase:</b> ").append(UtilsHTML.formatString(moonPhase)).append(" % Full");
-        htmlSighting.append("<br/><b>Moonlight:</b> ").append(UtilsHTML.formatString(moonlight));
-        htmlSighting.append("<br/><b>Details:</b> ").append(UtilsHTML.formatString(details));
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Creature:</b><br/> ", elementName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Place:</b><br/> ", locationName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Period:</b><br/> ", visitName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/> ", UtilsHTML.formatDateAsString(date, true), true);
+        if (durationMinutes >= 0 && durationSeconds > 0)
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Duration:</b><br/> ", durationMinutes + " minutes, " + durationSeconds + " seconds", true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time of Day:</b><br/> ", timeOfDay, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moon Phase:</b><br/> ", moonPhase + " % Full", true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moonlight:</b><br/> ", moonlight, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Number of Creatures:</b><br/> ", numberOfElements, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Weather:</b><br/> ", weather, true);
+        if (unitsTemperature != null && !UnitsTemperature.NONE.equals(unitsTemperature))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Temperature:</b><br/> ", temperature + " " + unitsTemperature, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Sex:</b><br/> ", sex, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Life Status:</b><br/> ", lifeStatus, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Evidence:</b><br/> ", sightingEvidence, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>View Rating:</b><br/> ", viewRating, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Certainty:</b><br/> ", certainty, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Tag:</b><br/> ", tag, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Details:</b><br/> ", details, true);
         if (inIncludeImages && fotoString.length() > 0) {
             htmlSighting.append("<br/>");
             htmlSighting.append("<br/><b>Photos:</b><br/>").append(fotoString);

@@ -58,17 +58,17 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
                 sightingString.append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType)).append("<br/>");
             }
         }
-        StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Visit: " + name + "</title></head>");
+        StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Periods: " + name + "</title></head>");
         htmlVisit.append("<body bgcolor='rgb(230,228,240)'>");
         htmlVisit.append("<table bgcolor='rgb(230,228,240)' width='100%'>");
-        htmlVisit.append("<tr><td>");
+        htmlVisit.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlVisit.append("<b><u>").append(name).append("</u></b>");
         htmlVisit.append("<br/>");
-        htmlVisit.append("<br/><b>Start Date:</b> ").append(UtilsHTML.formatDate(startDate, false));
-        htmlVisit.append("<br/><b>End Date:</b> ").append(UtilsHTML.formatDate(endDate, false));
-        htmlVisit.append("<br/><b>Game Watching:</b> ").append(UtilsHTML.formatString(gameWatchingIntensity));
-        htmlVisit.append("<br/><b>Type of Visit:</b> ").append(UtilsHTML.formatString(type));
-        htmlVisit.append("<br/><b>Description:</b> ").append(UtilsHTML.formatString(description));
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Start Date:</b><br/> ", UtilsHTML.formatDateAsString(startDate, false), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>End Date:</b><br/> ", UtilsHTML.formatDateAsString(endDate, false), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Game Watching:</b><br/> ", gameWatchingIntensity, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Type of Visit:</b><br/> ", type, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlVisit, "<br/><b>Description:</b><br/> ", description, true);
         if (inIncludeImages && fotoString.length() > 0) {
             htmlVisit.append("<br/>");
             htmlVisit.append("<br/><b>Photos:</b><br/>").append(fotoString);

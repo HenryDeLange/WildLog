@@ -86,40 +86,47 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
         StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
         htmlElement.append("<body bgcolor='rgb(227,240,227)'>");
         htmlElement.append("<table bgcolor='rgb(227,240,227)' width='100%'>");
-        htmlElement.append("<tr><td>");
+        htmlElement.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlElement.append("<b><u>").append(primaryName).append("</u></b>");
         htmlElement.append("<br/>");
-        htmlElement.append("<br/><b>Other Name:</b> ").append(UtilsHTML.formatString(otherName));
-        htmlElement.append("<br/><b>Scientific Name:</b> <i>").append(UtilsHTML.formatString(scientificName)).append("</i>");
-        htmlElement.append("<br/><b>Reference ID:</b> ").append(UtilsHTML.formatString(referenceID));
-        htmlElement.append("<br/>");
-        htmlElement.append("<br/><b>Creature Type:</b> ").append(UtilsHTML.formatString(type));
-        htmlElement.append("<br/><b>Feeding Class:</b> ").append(UtilsHTML.formatString(feedingClass));
-        htmlElement.append("<br/><b>Add Frequency:</b> ").append(UtilsHTML.formatString(addFrequency));
-        htmlElement.append("<br/><b>Wish List Rating:</b> ").append(UtilsHTML.formatString(wishListRating));
-        htmlElement.append("<br/><b>Active Time:</b> ").append(UtilsHTML.formatString(activeTime));
-        htmlElement.append("<br/><b>Endangered Status:</b> ").append(UtilsHTML.formatString(endangeredStatus));
-        htmlElement.append("<br/><b>Water Need:</b> ").append(UtilsHTML.formatString(waterDependance));
-        htmlElement.append("<br/><b>Food/Nutrition:</b> ").append(UtilsHTML.formatString(nutrition));
-        htmlElement.append("<br/><b>Identification:</b> ").append(UtilsHTML.formatString(diagnosticDescription));
-        htmlElement.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(description));
-        htmlElement.append("<br/><b>Distribution:</b> ").append(UtilsHTML.formatString(distribution));
-        htmlElement.append("<br/><b>Behaviour:</b> ").append(UtilsHTML.formatString(behaviourDescription));
-        htmlElement.append("<br/><b>Lifespan:</b> ").append(UtilsHTML.formatString(lifespan));
-        htmlElement.append("<br/><b>Breeding:</b> ").append(UtilsHTML.formatString(breedingDuration));
-        htmlElement.append("<br/><b>Number of Young:</b> ").append(UtilsHTML.formatString(breedingNumber));
-        htmlElement.append("<br/><b>Size Type:</b> ").append(UtilsHTML.formatString(sizeType));
-        htmlElement.append("<br/><b>Min Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Max Male Size:</b> ").append(UtilsHTML.formatString(sizeMaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Min Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Max Female Size:</b> ").append(UtilsHTML.formatString(sizeFemaleMin)).append(" ").append(UtilsHTML.formatString(sizeUnit));
-        htmlElement.append("<br/><b>Min Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
-        htmlElement.append("<br/><b>Max Male Weight:</b> ").append(UtilsHTML.formatString(weightMaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
-        htmlElement.append("<br/><b>Min Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
-        htmlElement.append("<br/><b>Max Female Weight:</b> ").append(UtilsHTML.formatString(weightFemaleMin)).append(" ").append(UtilsHTML.formatString(weightUnit));
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Other Name:</b><br/> ", otherName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Scientific Name:</b><br/>", scientificName, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Reference ID:</b><br/> ", referenceID, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Creature Type:</b><br/> ", type, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Feeding Class:</b><br/> ", feedingClass, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Add Frequency:</b><br/> ", addFrequency, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Wish List Rating:</b><br/> ", wishListRating, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Active Time:</b><br/> ", activeTime, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Endangered Status:</b><br/> ", endangeredStatus, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Water Need:</b><br/> ", waterDependance, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Food/Nutrition:</b><br/> ", nutrition, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Identification:</b><br/> ", diagnosticDescription, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Habitat:</b><br/> ", description, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Distribution:</b><br/> ", distribution, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Behaviour:</b><br/> ", behaviourDescription, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Lifespan:</b><br/> ", lifespan, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Breeding:</b><br/> ", breedingDuration, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Number of Young:</b><br/> ", breedingNumber, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Size Type:</b> ", sizeType, true);
+        if (sizeMaleMin > 0 && !UnitsSize.NONE.equals(sizeUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Male Size:</b><br/> ", sizeMaleMin + " " + UtilsHTML.formatObjectAsString(sizeUnit));
+        if (sizeMaleMax > 0 && !UnitsSize.NONE.equals(sizeUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Male Size:</b><br/> ", sizeMaleMax + " " + UtilsHTML.formatObjectAsString(sizeUnit));
+        if (sizeFemaleMin > 0 && !UnitsSize.NONE.equals(sizeUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Female Size:</b><br/> ", sizeFemaleMin + " " + UtilsHTML.formatObjectAsString(sizeUnit));
+        if (sizeFemaleMax > 0 && !UnitsSize.NONE.equals(sizeUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Female Size:</b><br/> ", sizeFemaleMax + " " + UtilsHTML.formatObjectAsString(sizeUnit));
+        if (weightMaleMin > 0 && !UnitsWeight.NONE.equals(weightUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Male Weight:</b><br/> ", weightMaleMin + " " + UtilsHTML.formatObjectAsString(weightUnit));
+        if (weightMaleMax > 0 && !UnitsWeight.NONE.equals(weightUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Male Weight:</b><br/> ", weightMaleMax + " " + UtilsHTML.formatObjectAsString(weightUnit));
+        if (weightFemaleMin > 0 && !UnitsWeight.NONE.equals(weightUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Female Weight:</b><br/> ", weightFemaleMin + " " + UtilsHTML.formatObjectAsString(weightUnit));
+        if (weightFemaleMax > 0 && !UnitsWeight.NONE.equals(weightUnit))
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Female Weight:</b><br/> ", weightFemaleMax + " " + UtilsHTML.formatObjectAsString(weightUnit));
         if (inIncludeImages && fotoString.length() > 0) {
             htmlElement.append("<br/>");
-            htmlElement.append("<br/><b>Photos:</b><br/>").append(fotoString);
+            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Photos:</b><br/>", fotoString);
         }
         if (inIsRecursive) {
             htmlElement.append("<br/>");

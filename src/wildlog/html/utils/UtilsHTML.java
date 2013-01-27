@@ -126,14 +126,14 @@ public final class UtilsHTML {
         return toFile.getPath();
     }
 
-    public static String formatString(Object inObject) {
+    public static String formatObjectAsString(Object inObject) {
         if (inObject == null)
             return "";
         else
             return inObject.toString();
     }
 
-    public static String formatDate(Date inDate, boolean inShowTime) {
+    public static String formatDateAsString(Date inDate, boolean inShowTime) {
         if (inDate != null) {
             if (inShowTime)
                 return new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)").format((Date)inDate);
@@ -142,6 +142,20 @@ public final class UtilsHTML {
         }
         else
             return "";
+    }
+
+    public static void appendIfNotNullNorEmpty(StringBuilder inStringBuilder, String inKey, Object inValue, boolean... inAddBreakLine) {
+        if (inValue != null) {
+            String temp = UtilsHTML.formatObjectAsString(inValue);
+            if (!temp.isEmpty()) {
+                if (!(inValue instanceof Enum) || !"NONE".equalsIgnoreCase(temp)) {
+                    inStringBuilder.append(inKey).append(temp);
+                    if (inAddBreakLine != null && inAddBreakLine.length == 1 && inAddBreakLine[0] == true) {
+                        inStringBuilder.append("<br/>");
+                    }
+                }
+            }
+        }
     }
 
 }

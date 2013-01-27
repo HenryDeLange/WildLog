@@ -68,30 +68,30 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
             }
         }
 
-        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Location: " + name + "</title></head>");
+        StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Place: " + name + "</title></head>");
         htmlLocation.append("<body bgcolor='rgb(233,239,244)'>");
         htmlLocation.append("<table bgcolor='rgb(233,239,244)' width='100%'>");
-        htmlLocation.append("<tr><td>");
+        htmlLocation.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");
-        htmlLocation.append("<br/><b>Latitude:</b> ").append(latitude).append(" ").append(latDegrees).append(" ").append(latMinutes).append(" ").append(latSeconds);
-        htmlLocation.append("<br/><b>Longitude:</b> ").append(longitude).append(" ").append(lonDegrees).append(" ").append(lonMinutes).append(" ").append(lonSeconds);
-        htmlLocation.append("<br/><b>General Rating:</b> ").append(UtilsHTML.formatString(rating));
-        htmlLocation.append("<br/><b>Wildlife Rating:</b> ").append(UtilsHTML.formatString(gameViewingRating));
-        htmlLocation.append("<br/><b>Habitat:</b> ").append(UtilsHTML.formatString(habitatType));
-        htmlLocation.append("<br/><b>Description:</b> ").append(UtilsHTML.formatString(description));
-        htmlLocation.append("<br/><b>Directions:</b> ").append(UtilsHTML.formatString(directions));
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>General Rating:</b><br/> ", rating, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Wildlife Rating:</b><br/> ", gameViewingRating, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Habitat:</b><br/> ", habitatType, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Description:</b><br/> ", description, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Directions:</b><br/> ", directions, true);
         if (website != null)
             if (website.length() > 0)
-                htmlLocation.append("<br/><b>Website:</b> <a href=\"").append(UtilsHTML.formatString(website)).append("\">Link</a>");
+                UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", "<a href=\"" + website + "\">" + website + "</a>", true);
             else
-                htmlLocation.append("<br/><b>Website:</b> ").append(UtilsHTML.formatString(website));
+                UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
         else
-            htmlLocation.append("<br/><b>Website:</b> ").append(UtilsHTML.formatString(website));
-        htmlLocation.append("<br/><b>Email:</b> ").append(UtilsHTML.formatString(email));
-        htmlLocation.append("<br/><b>Phone Number:</b> ").append(UtilsHTML.formatString(contactNumbers));
-        htmlLocation.append("<br/><b>Catering:</b> ").append(UtilsHTML.formatString(catering));
-        htmlLocation.append("<br/><b>Accomodation:</b> ").append(UtilsHTML.formatString(accommodationType));
+            UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Website:</b><br/> ", website, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Email:</b><br/> ", email, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Phone Number:</b><br/> ", contactNumbers, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Catering:</b><br/> ", catering, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlLocation, "<br/><b>Accomodation:</b><br/> ", accommodationType, true);
         if (inIncludeImages && fotoString.length() > 0) {
             htmlLocation.append("<br/>");
             htmlLocation.append("<br/><b>Photos:</b><br/>").append(fotoString);
