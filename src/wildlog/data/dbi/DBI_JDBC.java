@@ -321,16 +321,24 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listElement;
             if (inElement.getPrimaryName() != null && inElement.getType() == null) {
-                sql = sql + " WHERE PRIMARYNAME like '%" + UtilsData.sanitizeString(inElement.getPrimaryName()) + "%'";
+                sql = sql + " WHERE PRIMARYNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
             }
             else if (inElement.getPrimaryName() == null && inElement.getType() != null) {
-                sql = sql + " WHERE ELEMENTTYPE = '" + inElement.getType() + "'";
+                sql = sql + " WHERE ELEMENTTYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inElement.getType().toString());
             }
             else if (inElement.getPrimaryName() != null && inElement.getType() != null) {
-                sql = sql + " WHERE PRIMARYNAME like '%" + UtilsData.sanitizeString(inElement.getPrimaryName())
-                        + "%' AND ELEMENTTYPE = '" + inElement.getType() + "'";
+                sql = sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
+                state.setString(2, inElement.getType().toString());
             }
-            state = conn.prepareStatement(sql);
+            else {
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 Element tempElement = new Element();
@@ -384,9 +392,13 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listLocation;
             if (inLocation.getName() != null) {
-                sql = sql + " WHERE NAME like '%" + UtilsData.sanitizeString(inLocation.getName()) + "%'";
+                sql = sql + " WHERE NAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inLocation.getName()));
             }
-            state = conn.prepareStatement(sql);
+            else {
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 Location tempLocation = new Location();
@@ -429,12 +441,18 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listVisit;
             if (inVisit.getName() != null) {
-                sql = sql + " WHERE NAME = '" + UtilsData.sanitizeString(inVisit.getName()) + "'";
+                sql = sql + " WHERE NAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
             }
             else if (inVisit.getLocationName() != null) {
-                sql = sql + " WHERE LOCATIONNAME = '" + UtilsData.sanitizeString(inVisit.getLocationName()) + "'";
+                sql = sql + " WHERE LOCATIONNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inVisit.getLocationName()));
             }
-            state = conn.prepareStatement(sql);
+            else {
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 Visit tempVisit = new Visit();
@@ -465,18 +483,28 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listSighting;
             if (inSighting.getSightingCounter() > 0) {
-                sql = sql + " WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter() + "";
+                sql = sql + " WHERE SIGHTINGCOUNTER = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inSighting.getSightingCounter());
             }
             else if (inSighting.getElementName() != null) {
-                sql = sql + " WHERE ELEMENTNAME = '" + UtilsData.sanitizeString(inSighting.getElementName()) + "'";
+                sql = sql + " WHERE ELEMENTNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
             }
             else if (inSighting.getLocationName() != null) {
-                sql = sql + " WHERE LOCATIONNAME = '" + UtilsData.sanitizeString(inSighting.getLocationName()) + "'";
+                sql = sql + " WHERE LOCATIONNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
             }
             else if (inSighting.getVisitName() != null) {
-                sql = sql + " WHERE VISITNAME = '" + UtilsData.sanitizeString(inSighting.getVisitName()) + "'";
+                sql = sql + " WHERE VISITNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getVisitName()));
             }
-            state = conn.prepareStatement(sql);
+            else {
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
@@ -512,7 +540,6 @@ public abstract class DBI_JDBC implements DBI {
                 tempSighting.setDurationSeconds(results.getDouble("DURATIONSECONDS"));
                 tempList.add(tempSighting);
             }
-
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -531,10 +558,15 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = listFile;
             if (inFile.getId() != null) {
-                sql = sql + " WHERE ID = '" + UtilsData.sanitizeString(inFile.getId()) + "'";
+                sql = sql + " WHERE ID = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inFile.getId()));
             }
-            sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
-            state = conn.prepareStatement(sql);
+            else {
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 WildLogFile tempFoto = new WildLogFile();
@@ -564,10 +596,14 @@ public abstract class DBI_JDBC implements DBI {
         try {
             String sql = "SELECT * FROM SIGHTINGS";
             if (inStartDate != null && inEndDate != null) {
-                sql = sql + " WHERE SIGHTINGDATE > '" + new java.sql.Date(inStartDate.getTime())
-                        + "' AND SIGHTINGDATE < '" + new java.sql.Date(inEndDate.getTime()) + "'";
+                sql = sql + " WHERE SIGHTINGDATE > ? AND SIGHTINGDATE < ?";
+                state = conn.prepareStatement(sql);
+                state.setDate(1, new java.sql.Date(inStartDate.getTime()));
+                state.setDate(2, new java.sql.Date(inEndDate.getTime()));
             }
-            state = conn.prepareStatement(sql);
+            else {
+                state = conn.prepareStatement(sql);
+            }
             results = state.executeQuery();
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
@@ -774,7 +810,7 @@ public abstract class DBI_JDBC implements DBI {
                     return false;
                 }
             }
-            // Check whether to update or create the it.
+            // Check whether to update or create it.
             if (inOldName != null) {
                 // Update teh related tables if the name cahnges
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
