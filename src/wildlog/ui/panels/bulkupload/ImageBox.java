@@ -54,12 +54,11 @@ public class ImageBox extends JPanel {
         btnNewSighting = new javax.swing.JButton();
         btnClone = new javax.swing.JButton();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ImageBox.class);
-        setBackground(resourceMap.getColor("Form.background")); // NOI18N
+        setBackground(new java.awt.Color(235, 246, 220));
         setName("Form"); // NOI18N
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -72,10 +71,9 @@ public class ImageBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
-        btnUp.setBackground(resourceMap.getColor("btnUp.background")); // NOI18N
-        btnUp.setIcon(resourceMap.getIcon("btnUp.icon")); // NOI18N
-        btnUp.setText(resourceMap.getString("btnUp.text")); // NOI18N
-        btnUp.setToolTipText(resourceMap.getString("btnUp.toolTipText")); // NOI18N
+        btnUp.setBackground(new java.awt.Color(235, 246, 220));
+        btnUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/up.png"))); // NOI18N
+        btnUp.setToolTipText("Move the image UP to the Observation above.");
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setFocusPainted(false);
         btnUp.setMargin(new java.awt.Insets(1, 1, 1, 1));
@@ -87,10 +85,9 @@ public class ImageBox extends JPanel {
         });
         add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 100));
 
-        btnDown.setBackground(resourceMap.getColor("btnDown.background")); // NOI18N
-        btnDown.setIcon(resourceMap.getIcon("btnDown.icon")); // NOI18N
-        btnDown.setText(resourceMap.getString("btnDown.text")); // NOI18N
-        btnDown.setToolTipText(resourceMap.getString("btnDown.toolTipText")); // NOI18N
+        btnDown.setBackground(new java.awt.Color(235, 246, 220));
+        btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
+        btnDown.setToolTipText("Move the image DOWN to the Observation below.");
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setFocusPainted(false);
         btnDown.setMargin(new java.awt.Insets(1, 1, 1, 1));
@@ -102,11 +99,11 @@ public class ImageBox extends JPanel {
         });
         add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
 
-        btnRemove.setBackground(resourceMap.getColor("btnRemove.background")); // NOI18N
-        btnRemove.setFont(resourceMap.getFont("btnRemove.font")); // NOI18N
-        btnRemove.setIcon(resourceMap.getIcon("btnRemove.icon")); // NOI18N
-        btnRemove.setText(resourceMap.getString("btnRemove.text")); // NOI18N
-        btnRemove.setToolTipText(resourceMap.getString("btnRemove.toolTipText")); // NOI18N
+        btnRemove.setBackground(new java.awt.Color(235, 246, 220));
+        btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
+        btnRemove.setText("Remove");
+        btnRemove.setToolTipText("Remove the image from this Observation.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
         btnRemove.setIconTextGap(2);
@@ -119,11 +116,11 @@ public class ImageBox extends JPanel {
         });
         add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
-        btnNewSighting.setBackground(resourceMap.getColor("btnNewSighting.background")); // NOI18N
-        btnNewSighting.setFont(resourceMap.getFont("btnNewSighting.font")); // NOI18N
-        btnNewSighting.setIcon(resourceMap.getIcon("btnNewSighting.icon")); // NOI18N
-        btnNewSighting.setText(resourceMap.getString("btnNewSighting.text")); // NOI18N
-        btnNewSighting.setToolTipText(resourceMap.getString("btnNewSighting.toolTipText")); // NOI18N
+        btnNewSighting.setBackground(new java.awt.Color(235, 246, 220));
+        btnNewSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnNewSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
+        btnNewSighting.setText("Observation");
+        btnNewSighting.setToolTipText("Move the image into its own NEW Observation.");
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setFocusPainted(false);
         btnNewSighting.setIconTextGap(2);
@@ -136,11 +133,11 @@ public class ImageBox extends JPanel {
         });
         add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 90, 30));
 
-        btnClone.setBackground(resourceMap.getColor("btnClone.background")); // NOI18N
-        btnClone.setFont(resourceMap.getFont("btnClone.font")); // NOI18N
-        btnClone.setIcon(resourceMap.getIcon("btnClone.icon")); // NOI18N
-        btnClone.setText(resourceMap.getString("btnClone.text")); // NOI18N
-        btnClone.setToolTipText(resourceMap.getString("btnClone.toolTipText")); // NOI18N
+        btnClone.setBackground(new java.awt.Color(235, 246, 220));
+        btnClone.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
+        btnClone.setText("Duplicate");
+        btnClone.setToolTipText("Duplicate the image for this Observation.");
         btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClone.setFocusPainted(false);
         btnClone.setIconTextGap(2);

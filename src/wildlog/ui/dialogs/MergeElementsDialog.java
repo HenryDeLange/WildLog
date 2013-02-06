@@ -52,8 +52,7 @@ public class MergeElementsDialog extends JDialog {
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MergeElementsDialog.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setTitle("Merge Creatures");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(775, 530));
         setModal(true);
@@ -67,23 +66,23 @@ public class MergeElementsDialog extends JDialog {
         elementIncludes.setPreferredSize(new java.awt.Dimension(775, 495));
         elementIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("Select the two Creatures you would like to merge:");
         jLabel1.setName("jLabel1"); // NOI18N
         elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Keep this Creature:");
         jLabel3.setName("jLabel3"); // NOI18N
         elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, -1, -1));
 
-        jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("Replace this Creature:");
         jLabel4.setName("jLabel4"); // NOI18N
         elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
-        btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
-        btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
+        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnConfirm.setToolTipText("Merge the one Creature into the other.");
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -96,6 +95,7 @@ public class MergeElementsDialog extends JDialog {
 
         lstReplaceElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MergeElementsDialog.class);
         lstReplaceElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
 
@@ -105,12 +105,12 @@ public class MergeElementsDialog extends JDialog {
 
         lstKeepElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstKeepElement.setName("lstKeepElement"); // NOI18N
-        lstKeepElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
+        lstKeepElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         jScrollPane1.setViewportView(lstKeepElement);
 
         elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 320, 400));
 
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setText("<html>All Observations of the selected Creature from the first list will be changed to point to the Creature from the second list, then the Creature in the first list will be deleted.</html>");
         jLabel5.setName("jLabel5"); // NOI18N
         elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, 560, 40));
 

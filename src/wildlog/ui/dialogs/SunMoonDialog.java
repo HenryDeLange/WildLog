@@ -131,15 +131,14 @@ public class SunMoonDialog extends JDialog {
         lblMoonrise = new javax.swing.JLabel();
         lblMoonset = new javax.swing.JLabel();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(SunMoonDialog.class);
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setText("jLabel1");
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setText("jLabel2");
         jLabel2.setName("jLabel2"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setTitle("View Sun and Moon Phase");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/SunAndMoon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(295, 300));
         setModal(true);
@@ -147,7 +146,7 @@ public class SunMoonDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setText("Date:");
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
 
@@ -162,25 +161,25 @@ public class SunMoonDialog extends JDialog {
         });
         getContentPane().add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 135, -1));
 
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+        jLabel10.setText("GPS:");
         jLabel10.setName("jLabel10"); // NOI18N
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, 20));
 
-        txtLatitude.setBackground(resourceMap.getColor("txtLatitude.background")); // NOI18N
-        txtLatitude.setDisabledTextColor(resourceMap.getColor("txtLatitude.disabledTextColor")); // NOI18N
+        txtLatitude.setBackground(new java.awt.Color(212, 222, 230));
+        txtLatitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
         txtLatitude.setEnabled(false);
         txtLatitude.setName("txtLatitude"); // NOI18N
         getContentPane().add(txtLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 135, -1));
 
-        txtLongitude.setBackground(resourceMap.getColor("txtLongitude.background")); // NOI18N
-        txtLongitude.setDisabledTextColor(resourceMap.getColor("txtLongitude.disabledTextColor")); // NOI18N
+        txtLongitude.setBackground(new java.awt.Color(212, 222, 230));
+        txtLongitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
         txtLongitude.setEnabled(false);
         txtLongitude.setName("txtLongitude"); // NOI18N
         getContentPane().add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 60, 135, -1));
 
-        btnRefresh.setIcon(resourceMap.getIcon("btnRefresh.icon")); // NOI18N
-        btnRefresh.setText(resourceMap.getString("btnRefresh.text")); // NOI18N
-        btnRefresh.setToolTipText(resourceMap.getString("btnRefresh.toolTipText")); // NOI18N
+        btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        btnRefresh.setText("Refresh");
+        btnRefresh.setToolTipText("Recalculate the Sun and Moon Phase based on the specified values.");
         btnRefresh.setFocusPainted(false);
         btnRefresh.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRefresh.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -192,10 +191,10 @@ public class SunMoonDialog extends JDialog {
         });
         getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, 100, -1));
 
-        btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
-        btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
-        btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
-        btnGPS.setToolTipText(resourceMap.getString("btnGPS.toolTipText")); // NOI18N
+        btnGPS.setBackground(new java.awt.Color(233, 239, 244));
+        btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnGPS.setText("Change GPS");
+        btnGPS.setToolTipText("Select a GPS location to use for the calculation.");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -217,93 +216,93 @@ public class SunMoonDialog extends JDialog {
         jSeparator3.setName("jSeparator3"); // NOI18N
         getContentPane().add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 270, 10));
 
-        jLabel4.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
-        jLabel4.setForeground(resourceMap.getColor("jLabel6.foreground")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel4.setText("Moon Phase:");
         jLabel4.setName("jLabel4"); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, -1, -1));
 
-        jLabel5.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
-        jLabel5.setForeground(resourceMap.getColor("jLabel6.foreground")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel5.setText("Moonlight:");
         jLabel5.setName("jLabel5"); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
-        jLabel6.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
-        jLabel6.setForeground(resourceMap.getColor("jLabel6.foreground")); // NOI18N
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel6.setText("Moonrise:");
         jLabel6.setName("jLabel6"); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, -1, -1));
 
-        jLabel7.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
-        jLabel7.setForeground(resourceMap.getColor("jLabel6.foreground")); // NOI18N
-        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 51, 102));
+        jLabel7.setText("Moonset:");
         jLabel7.setName("jLabel7"); // NOI18N
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, -1));
 
-        jLabel8.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
-        jLabel8.setForeground(resourceMap.getColor("jLabel9.foreground")); // NOI18N
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(156, 78, 0));
+        jLabel8.setText("Sunlight:");
         jLabel8.setName("jLabel8"); // NOI18N
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
 
-        jLabel9.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
-        jLabel9.setForeground(resourceMap.getColor("jLabel9.foreground")); // NOI18N
-        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(156, 78, 0));
+        jLabel9.setText("Dawn:");
         jLabel9.setName("jLabel9"); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
-        jLabel11.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
-        jLabel11.setForeground(resourceMap.getColor("jLabel9.foreground")); // NOI18N
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(156, 78, 0));
+        jLabel11.setText("Sunrise:");
         jLabel11.setName("jLabel11"); // NOI18N
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
 
-        jLabel12.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
-        jLabel12.setForeground(resourceMap.getColor("jLabel9.foreground")); // NOI18N
-        jLabel12.setText(resourceMap.getString("jLabel12.text")); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(156, 78, 0));
+        jLabel12.setText("Sunset:");
         jLabel12.setName("jLabel12"); // NOI18N
         getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
 
-        jLabel13.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
-        jLabel13.setForeground(resourceMap.getColor("jLabel9.foreground")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(156, 78, 0));
+        jLabel13.setText("Dusk:");
         jLabel13.setName("jLabel13"); // NOI18N
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
 
-        lblSunlight.setText(resourceMap.getString("lblSunlight.text")); // NOI18N
+        lblSunlight.setText("...");
         lblSunlight.setName("lblSunlight"); // NOI18N
         getContentPane().add(lblSunlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, -1, -1));
 
-        lblDawn.setText(resourceMap.getString("lblDawn.text")); // NOI18N
+        lblDawn.setText("...");
         lblDawn.setName("lblDawn"); // NOI18N
         getContentPane().add(lblDawn, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
 
-        lblSunrise.setText(resourceMap.getString("lblSunrise.text")); // NOI18N
+        lblSunrise.setText("...");
         lblSunrise.setName("lblSunrise"); // NOI18N
         getContentPane().add(lblSunrise, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, -1, -1));
 
-        lblSunset.setText(resourceMap.getString("lblSunset.text")); // NOI18N
+        lblSunset.setText("...");
         lblSunset.setName("lblSunset"); // NOI18N
         getContentPane().add(lblSunset, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 160, -1, -1));
 
-        lblDusk.setText(resourceMap.getString("lblDusk.text")); // NOI18N
+        lblDusk.setText("...");
         lblDusk.setName("lblDusk"); // NOI18N
         getContentPane().add(lblDusk, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, -1, -1));
 
-        lblMoonlight.setText(resourceMap.getString("lblMoonlight.text")); // NOI18N
+        lblMoonlight.setText("...");
         lblMoonlight.setName("lblMoonlight"); // NOI18N
         getContentPane().add(lblMoonlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 210, -1, -1));
 
-        lblMoonPhase.setText(resourceMap.getString("lblMoonPhase.text")); // NOI18N
+        lblMoonPhase.setText("...");
         lblMoonPhase.setName("lblMoonPhase"); // NOI18N
         getContentPane().add(lblMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, -1, -1));
 
-        lblMoonrise.setText(resourceMap.getString("lblMoonrise.text")); // NOI18N
+        lblMoonrise.setText("...");
         lblMoonrise.setName("lblMoonrise"); // NOI18N
         getContentPane().add(lblMoonrise, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, -1, -1));
 
-        lblMoonset.setText(resourceMap.getString("lblMoonset.text")); // NOI18N
+        lblMoonset.setText("...");
         lblMoonset.setName("lblMoonset"); // NOI18N
         getContentPane().add(lblMoonset, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, -1, -1));
 

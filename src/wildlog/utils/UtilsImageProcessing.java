@@ -104,7 +104,7 @@ public class UtilsImageProcessing {
         File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), "System", "NoFile.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
-            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/images/NoFile.png");
+            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/NoFile.png");
             UtilsFileProcessing.copyFile(templateStream, tempFile);
         }
         return getScaledIcon(tempFile, inSize);
@@ -114,7 +114,7 @@ public class UtilsImageProcessing {
         File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), "System", "Movie.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
-            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/images/Movie.png");
+            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/Movie.png");
             UtilsFileProcessing.copyFile(templateStream, tempFile);
         }
         return getScaledIcon(tempFile, inSize);
@@ -124,7 +124,7 @@ public class UtilsImageProcessing {
         File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), "System", "OtherFile.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
-            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/images/OtherFile.png");
+            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/OtherFile.png");
             UtilsFileProcessing.copyFile(templateStream, tempFile);
         }
         return getScaledIcon(tempFile, inSize);

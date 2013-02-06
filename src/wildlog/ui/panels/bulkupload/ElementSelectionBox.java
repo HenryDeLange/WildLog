@@ -69,20 +69,19 @@ public class ElementSelectionBox extends JDialog {
         cmbElementType = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ElementSelectionBox.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setTitle("Select a Creature");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Element.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(resourceMap.getColor("jPanel1.background")); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(230, 237, 220));
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Please choose a Creature:");
         jLabel2.setName("jLabel2"); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
@@ -99,7 +98,7 @@ public class ElementSelectionBox extends JDialog {
         lstElements.setModel(new DefaultListModel());
         lstElements.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstElements.setName("lstElements"); // NOI18N
-        lstElements.setSelectionBackground(resourceMap.getColor("lstElements.selectionBackground")); // NOI18N
+        lstElements.setSelectionBackground(new java.awt.Color(82, 115, 79));
         lstElements.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstElementsMouseClicked(evt);
@@ -119,7 +118,7 @@ public class ElementSelectionBox extends JDialog {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 250, 360));
 
-        lblElementImage.setBackground(resourceMap.getColor("lblElementImage.background")); // NOI18N
+        lblElementImage.setBackground(new java.awt.Color(0, 0, 0));
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblElementImage.setName("lblElementImage"); // NOI18N
@@ -131,9 +130,9 @@ public class ElementSelectionBox extends JDialog {
         });
         jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 150, 150));
 
-        btnSelect.setBackground(resourceMap.getColor("btnSelect.background")); // NOI18N
-        btnSelect.setIcon(resourceMap.getIcon("btnSelect.icon")); // NOI18N
-        btnSelect.setToolTipText(resourceMap.getString("btnSelect.toolTipText")); // NOI18N
+        btnSelect.setBackground(new java.awt.Color(230, 237, 220));
+        btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnSelect.setToolTipText("Confirm the selected Creature.");
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelect.setFocusPainted(false);
         btnSelect.setName("btnSelect"); // NOI18N

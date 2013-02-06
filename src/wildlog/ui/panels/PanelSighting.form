@@ -3,8 +3,10 @@
 <Form version="1.6" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JDialogFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" resourceKey="Form.title"/>
-    <Property name="background" type="java.awt.Color" resourceKey="Form.background"/>
+    <Property name="title" type="java.lang.String" value="Observation"/>
+    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+      <Color blue="b5" green="cc" red="d0" type="rgb"/>
+    </Property>
     <Property name="iconImage" type="java.awt.Image" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new ImageIcon(app.getClass().getResource(&quot;resources/icons/Sighting.gif&quot;)).getImage()" type="code"/>
     </Property>
@@ -19,7 +21,7 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="2"/>
   </SyntheticProperties>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
@@ -37,7 +39,9 @@
   <SubComponents>
     <Container class="javax.swing.JPanel" name="sightingIncludes">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="sightingIncludes.background"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="b5" green="cc" red="d0" type="rgb"/>
+        </Property>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[950, 590]"/>
         </Property>
@@ -61,10 +65,13 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btnUpdateSighting">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnUpdateSighting.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnUpdateSighting.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnUpdateSighting.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnUpdateSighting.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="33" green="cc" red="0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Save and update the Observation."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -98,7 +105,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
-                  <Property name="color" resourceKey="sclElement.border.lineColor"/>
+                  <Color PropertyName="color" blue="33" green="cc" red="0" type="rgb"/>
                 </LineBorder>
               </Border>
             </Property>
@@ -118,12 +125,16 @@
             <Component class="javax.swing.JTable" name="tblElement">
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
-                <Property name="font" type="java.awt.Font" resourceKey="tblElement.font"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="0"/>
+                </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="!disableEditing" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblElement" noResource="true"/>
-                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblElement.selectionBackground"/>
+                <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="4f" green="73" red="52" type="rgb"/>
+                </Property>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
@@ -147,10 +158,13 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnPreviousImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnPreviousImage.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnPreviousImage.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnPreviousImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnPreviousImage.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/Previous.gif"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Load previous file."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -168,10 +182,13 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnNextImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnNextImage.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnNextImage.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnNextImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnNextImage.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/Next.gif"/>
+            </Property>
+            <Property name="toolTipText" type="java.lang.String" value="Load next file."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -189,10 +206,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnUploadImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnUploadImage.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnUploadImage.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnUploadImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnUploadImage.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/UploadImage.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Upload File"/>
+            <Property name="toolTipText" type="java.lang.String" value="Upload a file for this Observation. You can also drag and drop files onto the above box to upload it."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -213,9 +234,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel6.font"/>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="jLabel6.toolTipText"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Date:"/>
+            <Property name="toolTipText" type="java.lang.String" value="It is required to fill in this field."/>
             <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
           </Properties>
           <Constraints>
@@ -229,7 +252,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
-                  <Property name="color" resourceKey="dtpSightingDate.border.lineColor"/>
+                  <Color PropertyName="color" blue="33" green="cc" red="0" type="rgb"/>
                 </LineBorder>
               </Border>
             </Property>
@@ -256,7 +279,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel8.text"/>
+            <Property name="text" type="java.lang.String" value="Weather:"/>
             <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
           </Properties>
           <Constraints>
@@ -267,7 +290,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel9.text"/>
+            <Property name="text" type="java.lang.String" value="Rating:"/>
             <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
           </Properties>
           <Constraints>
@@ -278,7 +301,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel10">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel10.text"/>
+            <Property name="text" type="java.lang.String" value="Number:"/>
             <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
           </Properties>
           <Constraints>
@@ -289,7 +312,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel12">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel12.text"/>
+            <Property name="text" type="java.lang.String" value="Certainty:"/>
             <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
           </Properties>
           <Constraints>
@@ -300,7 +323,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel13">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel13.text"/>
+            <Property name="text" type="java.lang.String" value="Details:"/>
             <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
           </Properties>
           <Constraints>
@@ -328,7 +351,9 @@
             <Component class="javax.swing.JTextArea" name="txtDetails">
               <Properties>
                 <Property name="columns" type="int" value="20"/>
-                <Property name="font" type="java.awt.Font" resourceKey="txtDetails.font"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="11" style="0"/>
+                </Property>
                 <Property name="lineWrap" type="boolean" value="true"/>
                 <Property name="rows" type="int" value="5"/>
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -426,10 +451,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblElementImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="lblElementImage.background"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblElementImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="lblElementImage.toolTipText"/>
+            <Property name="toolTipText" type="java.lang.String" value="The default image of the selected Creature."/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
@@ -455,9 +481,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="lblImage.background"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblImage.text"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
@@ -516,7 +543,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel18">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel18.text"/>
+            <Property name="text" type="java.lang.String" value="GPS:"/>
             <Property name="name" type="java.lang.String" value="jLabel18" noResource="true"/>
           </Properties>
           <Constraints>
@@ -527,7 +554,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtSearch">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="txtSearch.text"/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
@@ -541,10 +567,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnDeleteImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnDeleteImage.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnDeleteImage.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnDeleteImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnDeleteImage.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/Delete_Small.gif"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Delete File"/>
+            <Property name="toolTipText" type="java.lang.String" value="Delete the current file."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -568,10 +598,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnSetMainImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnSetMainImage.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnSetMainImage.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnSetMainImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnSetMainImage.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/DefaultImage.gif"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Default"/>
+            <Property name="toolTipText" type="java.lang.String" value="Make this the default (first) file for the Observation."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -592,7 +626,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
+            <Property name="text" type="java.lang.String" value="Evidence:"/>
             <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
           </Properties>
           <Constraints>
@@ -626,7 +660,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
-                  <Property name="color" resourceKey="sclLocation.border.lineColor"/>
+                  <Color PropertyName="color" blue="33" green="cc" red="0" type="rgb"/>
                 </LineBorder>
               </Border>
             </Property>
@@ -646,12 +680,16 @@
             <Component class="javax.swing.JTable" name="tblLocation">
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
-                <Property name="font" type="java.awt.Font" resourceKey="tblLocation.font"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="0"/>
+                </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblLocation" noResource="true"/>
-                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblLocation.selectionBackground"/>
+                <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="71" green="61" red="43" type="rgb"/>
+                </Property>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
@@ -668,7 +706,7 @@
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
-                  <Property name="color" resourceKey="sclVisit.border.lineColor"/>
+                  <Color PropertyName="color" blue="33" green="cc" red="0" type="rgb"/>
                 </LineBorder>
               </Border>
             </Property>
@@ -688,12 +726,16 @@
             <Component class="javax.swing.JTable" name="tblVisit">
               <Properties>
                 <Property name="autoCreateRowSorter" type="boolean" value="true"/>
-                <Property name="font" type="java.awt.Font" resourceKey="tblVisit.font"/>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="12" style="0"/>
+                </Property>
                 <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="tblVisit" noResource="true"/>
-                <Property name="selectionBackground" type="java.awt.Color" resourceKey="tblVisit.selectionBackground"/>
+                <Property name="selectionBackground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="74" green="5c" red="60" type="rgb"/>
+                </Property>
                 <Property name="selectionModel" type="javax.swing.ListSelectionModel" editor="org.netbeans.modules.form.editors2.JTableSelectionModelEditor">
                   <JTableSelectionModel selectionMode="0"/>
                 </Property>
@@ -706,9 +748,11 @@
         </Container>
         <Component class="javax.swing.JLabel" name="lblElement">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="lblElement.font"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblElement.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="lblElement.toolTipText"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Creature:"/>
+            <Property name="toolTipText" type="java.lang.String" value="It is required to fill in this field."/>
             <Property name="name" type="java.lang.String" value="lblElement" noResource="true"/>
           </Properties>
           <Constraints>
@@ -719,9 +763,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblLocation">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="lblLocation.font"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblLocation.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="lblLocation.toolTipText"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Place:"/>
+            <Property name="toolTipText" type="java.lang.String" value="It is required to fill in this field."/>
             <Property name="name" type="java.lang.String" value="lblLocation" noResource="true"/>
           </Properties>
           <Constraints>
@@ -732,7 +778,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtSearchLocation">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="txtSearchLocation.text"/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
@@ -746,9 +791,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblVisit">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="lblVisit.font"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblVisit.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="lblVisit.toolTipText"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="12" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Period:"/>
+            <Property name="toolTipText" type="java.lang.String" value="It is required to fill in this field."/>
             <Property name="name" type="java.lang.String" value="lblVisit" noResource="true"/>
           </Properties>
           <Constraints>
@@ -759,9 +806,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblLocationImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="lblLocationImage.background"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="0" red="0" type="rgb"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="lblLocationImage.toolTipText"/>
+            <Property name="toolTipText" type="java.lang.String" value="The default image of the selected Place."/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
@@ -787,9 +836,10 @@
         </Component>
         <Component class="javax.swing.JLabel" name="lblNumberOfImages">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="lblNumberOfImages.font"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="10" style="0"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblNumberOfImages.text"/>
             <Property name="name" type="java.lang.String" value="lblNumberOfImages" noResource="true"/>
           </Properties>
           <Constraints>
@@ -800,9 +850,11 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="14" style="1"/>
+            </Property>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+            <Property name="text" type="java.lang.String" value=":"/>
             <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
           </Properties>
           <Constraints>
@@ -834,7 +886,6 @@
         <Component class="javax.swing.JLabel" name="lblSightingID">
           <Properties>
             <Property name="horizontalAlignment" type="int" value="0"/>
-            <Property name="text" type="java.lang.String" resourceKey="lblSightingID.text"/>
             <Property name="name" type="java.lang.String" value="lblSightingID" noResource="true"/>
           </Properties>
           <Constraints>
@@ -867,10 +918,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnGetDateFromImage">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnGetDateFromImage.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnGetDateFromImage.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnGetDateFromImage.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnGetDateFromImage.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/EXIF_small.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Load &lt;b&gt;Date&lt;/b&gt; from &lt;b&gt;Image &lt;/b&gt;EXIF&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Attempt to load the date from the image&apos;s EXIF data."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -894,7 +949,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+            <Property name="text" type="java.lang.String" value="Time:"/>
             <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
           </Properties>
           <Constraints>
@@ -905,7 +960,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+            <Property name="text" type="java.lang.String" value="Moon Phase:"/>
             <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
           </Properties>
           <Constraints>
@@ -916,8 +971,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="font" type="java.awt.Font" resourceKey="jLabel5.font"/>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
+            <Property name="text" type="java.lang.String" value="% Full"/>
             <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
           </Properties>
           <Constraints>
@@ -928,10 +982,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnCalculateSunAndMoon">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnCalculateSunAndMoon.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnCalculateSunAndMoon.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnCalculateSunAndMoon.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnCalculateSunAndMoon.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon.gif"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate &lt;b&gt;Time of Day&lt;/b&gt; and &lt;b&gt; Moon Phase&lt;/b&gt;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -955,7 +1013,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel11">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel11.text"/>
+            <Property name="text" type="java.lang.String" value="Moonlight:"/>
             <Property name="name" type="java.lang.String" value="jLabel11" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1054,8 +1112,9 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtLatitude">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="txtLatitude.text"/>
-            <Property name="disabledTextColor" type="java.awt.Color" resourceKey="txtLatitude.disabledTextColor"/>
+            <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="17" green="17" red="17" type="rgb"/>
+            </Property>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="txtLatitude" noResource="true"/>
           </Properties>
@@ -1067,8 +1126,9 @@
         </Component>
         <Component class="javax.swing.JTextField" name="txtLongitude">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="txtLongitude.text"/>
-            <Property name="disabledTextColor" type="java.awt.Color" resourceKey="txtLongitude.disabledTextColor"/>
+            <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="17" green="17" red="17" type="rgb"/>
+            </Property>
             <Property name="enabled" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="txtLongitude" noResource="true"/>
           </Properties>
@@ -1080,10 +1140,14 @@
         </Component>
         <Component class="javax.swing.JButton" name="btnGPS">
           <Properties>
-            <Property name="background" type="java.awt.Color" resourceKey="btnGPS.background"/>
-            <Property name="icon" type="javax.swing.Icon" resourceKey="btnGPS.icon"/>
-            <Property name="text" type="java.lang.String" resourceKey="btnGPS.text"/>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="btnGPS.toolTipText"/>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Change GPS"/>
+            <Property name="toolTipText" type="java.lang.String" value="Select a new GPS value for this Observation."/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
@@ -1105,7 +1169,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel7.text"/>
+            <Property name="text" type="java.lang.String" value="Temperature:"/>
             <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1158,7 +1222,9 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator3">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" resourceKey="jSeparator3.foreground"/>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="99" red="99" type="rgb"/>
+            </Property>
             <Property name="orientation" type="int" value="1"/>
             <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
           </Properties>
@@ -1170,7 +1236,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel14">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel14.text"/>
+            <Property name="text" type="java.lang.String" value="Time of day:"/>
             <Property name="name" type="java.lang.String" value="jLabel14" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1181,7 +1247,9 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator4">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" resourceKey="jSeparator4.foreground"/>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="99" red="99" type="rgb"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1192,7 +1260,9 @@
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator5">
           <Properties>
-            <Property name="foreground" type="java.awt.Color" resourceKey="jSeparator5.foreground"/>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="99" green="99" red="99" type="rgb"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="jSeparator5" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1203,7 +1273,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel15">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel15.text"/>
+            <Property name="text" type="java.lang.String" value="Sex:"/>
             <Property name="name" type="java.lang.String" value="jLabel15" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1234,7 +1304,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel16">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel16.text"/>
+            <Property name="text" type="java.lang.String" value="Status:"/>
             <Property name="name" type="java.lang.String" value="jLabel16" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1265,7 +1335,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel17">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel17.text"/>
+            <Property name="text" type="java.lang.String" value="Info  Tag:"/>
             <Property name="name" type="java.lang.String" value="jLabel17" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1279,7 +1349,7 @@
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getTag()" type="code"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" resourceKey="txtTag.toolTipText"/>
+            <Property name="toolTipText" type="java.lang.String" value="This field can be used to &quot;tag&quot; the sighting. For instance using it for the individual animal&apos;s ID, or a sub-location name, etc."/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
@@ -1293,7 +1363,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel19">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel19.text"/>
+            <Property name="text" type="java.lang.String" value="Duration:"/>
             <Property name="name" type="java.lang.String" value="jLabel19" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1317,7 +1387,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel20">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel20.text"/>
+            <Property name="text" type="java.lang.String" value="minutes"/>
             <Property name="name" type="java.lang.String" value="jLabel20" noResource="true"/>
           </Properties>
           <Constraints>
@@ -1341,7 +1411,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel21">
           <Properties>
-            <Property name="text" type="java.lang.String" resourceKey="jLabel21.text"/>
+            <Property name="text" type="java.lang.String" value="seconds"/>
             <Property name="name" type="java.lang.String" value="jLabel21" noResource="true"/>
           </Properties>
           <Constraints>

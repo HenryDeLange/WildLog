@@ -122,215 +122,214 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Creature Report: " + element.getPrimaryName());
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportElementSightingsByMoon.class);
-        setBackground(resourceMap.getColor("Form.background")); // NOI18N
-        setForeground(resourceMap.getColor("Form.foreground")); // NOI18N
+        setBackground(new java.awt.Color(255, 255, 255));
+        setForeground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(550, 750));
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblName.setFont(resourceMap.getFont("lblName.font")); // NOI18N
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblName.setText(resourceMap.getString("lblName.text")); // NOI18N
+        lblName.setText("...");
         lblName.setName("lblName"); // NOI18N
         getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
 
-        lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
+        lblNumberOfSightings.setText("Unknown");
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
         getContentPane().add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 70, 70, -1));
 
-        jLabel5.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setText("Add Frequency:");
         jLabel5.setName("jLabel5"); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 90, -1, -1));
 
-        lblAddFrequency.setText(resourceMap.getString("lblAddFrequency.text")); // NOI18N
+        lblAddFrequency.setText("Unknown");
         lblAddFrequency.setName("lblAddFrequency"); // NOI18N
         getContentPane().add(lblAddFrequency, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 90, 70, -1));
 
-        jLabel7.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel7.setText("Number of Observation:");
         jLabel7.setName("jLabel7"); // NOI18N
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
-        jLabel2.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("Number of Places:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 70, -1, -1));
 
-        jLabel6.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setText("First Observation:");
         jLabel6.setName("jLabel6"); // NOI18N
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
 
-        jLabel9.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel9.setText("Last Observation:");
         jLabel9.setName("jLabel9"); // NOI18N
         getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
 
-        lblFirstDate.setText(resourceMap.getString("lblFirstDate.text")); // NOI18N
+        lblFirstDate.setText("Unknown");
         lblFirstDate.setName("lblFirstDate"); // NOI18N
         getContentPane().add(lblFirstDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 30, 100, -1));
 
-        lblLastDate.setText(resourceMap.getString("lblLastDate.text")); // NOI18N
+        lblLastDate.setText("Unknown");
         lblLastDate.setName("lblLastDate"); // NOI18N
         getContentPane().add(lblLastDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 50, 100, -1));
 
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+        jLabel10.setText("Legend:");
         jLabel10.setName("jLabel10"); // NOI18N
         getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 705, -1, -1));
 
-        jLabel19.setFont(resourceMap.getFont("jLabel19.font")); // NOI18N
-        jLabel19.setText(resourceMap.getString("jLabel19.text")); // NOI18N
+        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel19.setText("Wish List Rating:");
         jLabel19.setName("jLabel19"); // NOI18N
         getContentPane().add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
-        lblWishList.setText(resourceMap.getString("lblWishList.text")); // NOI18N
+        lblWishList.setText("Unknown");
         lblWishList.setName("lblWishList"); // NOI18N
         getContentPane().add(lblWishList, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 290, -1));
 
-        lblNumberOfLocations.setText(resourceMap.getString("lblNumberOfLocations.text")); // NOI18N
+        lblNumberOfLocations.setText("Unknown");
         lblNumberOfLocations.setName("lblNumberOfLocations"); // NOI18N
         getContentPane().add(lblNumberOfLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 70, 50, -1));
 
-        jLabel23.setFont(resourceMap.getFont("jLabel23.font")); // NOI18N
-        jLabel23.setText(resourceMap.getString("jLabel23.text")); // NOI18N
+        jLabel23.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel23.setText("Very Good Observations:");
         jLabel23.setName("jLabel23"); // NOI18N
         getContentPane().add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
-        lblVeryGood.setText(resourceMap.getString("lblVeryGood.text")); // NOI18N
+        lblVeryGood.setText("Unknown");
         lblVeryGood.setName("lblVeryGood"); // NOI18N
         getContentPane().add(lblVeryGood, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 50, -1));
 
-        jLabel25.setFont(resourceMap.getFont("jLabel23.font")); // NOI18N
-        jLabel25.setText(resourceMap.getString("jLabel25.text")); // NOI18N
+        jLabel25.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel25.setText("Good Observations:");
         jLabel25.setName("jLabel25"); // NOI18N
         getContentPane().add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
-        lblGood.setText(resourceMap.getString("lblGood.text")); // NOI18N
+        lblGood.setText("Unknown");
         lblGood.setName("lblGood"); // NOI18N
         getContentPane().add(lblGood, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 130, 60, -1));
 
-        jLabel27.setFont(resourceMap.getFont("jLabel23.font")); // NOI18N
-        jLabel27.setText(resourceMap.getString("jLabel27.text")); // NOI18N
+        jLabel27.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel27.setText("Normal Observations:");
         jLabel27.setName("jLabel27"); // NOI18N
         getContentPane().add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 130, -1, -1));
 
-        lblNormal.setText(resourceMap.getString("lblNormal.text")); // NOI18N
+        lblNormal.setText("Unknown");
         lblNormal.setName("lblNormal"); // NOI18N
         getContentPane().add(lblNormal, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 130, 50, -1));
 
-        jLabel29.setFont(resourceMap.getFont("jLabel23.font")); // NOI18N
-        jLabel29.setText(resourceMap.getString("jLabel29.text")); // NOI18N
+        jLabel29.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel29.setText("Bad Observations:");
         jLabel29.setName("jLabel29"); // NOI18N
         getContentPane().add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 130, -1, -1));
 
-        lblBad.setText(resourceMap.getString("lblBad.text")); // NOI18N
+        lblBad.setText("Unknown");
         lblBad.setName("lblBad"); // NOI18N
         getContentPane().add(lblBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 70, -1));
 
-        jLabel31.setFont(resourceMap.getFont("jLabel23.font")); // NOI18N
-        jLabel31.setText(resourceMap.getString("jLabel31.text")); // NOI18N
+        jLabel31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel31.setText("Very Bad Observations:");
         jLabel31.setName("jLabel31"); // NOI18N
         getContentPane().add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 110, -1, -1));
 
-        lblVeryBad.setText(resourceMap.getString("lblVeryBad.text")); // NOI18N
+        lblVeryBad.setText("Unknown");
         lblVeryBad.setName("lblVeryBad"); // NOI18N
         getContentPane().add(lblVeryBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 70, -1));
 
-        lblOther.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
-        lblOther.setForeground(resourceMap.getColor("lblOther.foreground")); // NOI18N
-        lblOther.setText(resourceMap.getString("lblOther.text")); // NOI18N
+        lblOther.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblOther.setForeground(new java.awt.Color(183, 187, 199));
+        lblOther.setText("OTHER");
         lblOther.setName("lblOther"); // NOI18N
         getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(545, 705, 50, -1));
 
-        jLabel4.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel4.setText("Day Observations:");
         jLabel4.setName("jLabel4"); // NOI18N
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 50, -1, -1));
 
-        jLabel8.setFont(resourceMap.getFont("jLabel8.font")); // NOI18N
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel8.setText("Night Observations:");
         jLabel8.setName("jLabel8"); // NOI18N
         getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 30, -1, -1));
 
-        lblDaySightings.setText(resourceMap.getString("lblDaySightings.text")); // NOI18N
+        lblDaySightings.setText("Unknown");
         lblDaySightings.setName("lblDaySightings"); // NOI18N
         getContentPane().add(lblDaySightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 50, 50, -1));
 
-        lblNightSightings.setText(resourceMap.getString("lblNightSightings.text")); // NOI18N
+        lblNightSightings.setText("Unknown");
         lblNightSightings.setName("lblNightSightings"); // NOI18N
         getContentPane().add(lblNightSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 30, 50, -1));
 
-        jLabel11.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel11.setText("First Place:");
         jLabel11.setName("jLabel11"); // NOI18N
         getContentPane().add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 30, -1, -1));
 
-        jLabel13.setFont(resourceMap.getFont("jLabel13.font")); // NOI18N
-        jLabel13.setText(resourceMap.getString("jLabel13.text")); // NOI18N
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel13.setText("Last Place:");
         jLabel13.setName("jLabel13"); // NOI18N
         getContentPane().add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, -1, -1));
 
-        lblFirstLocation.setText(resourceMap.getString("lblFirstLocation.text")); // NOI18N
+        lblFirstLocation.setText("Unknown");
         lblFirstLocation.setName("lblFirstLocation"); // NOI18N
         getContentPane().add(lblFirstLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 30, 230, -1));
 
-        lblLastLocation.setText(resourceMap.getString("lblLastLocation.text")); // NOI18N
+        lblLastLocation.setText("Unknown");
         lblLastLocation.setName("lblLastLocation"); // NOI18N
         getContentPane().add(lblLastLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 50, 230, -1));
 
         scrReport.setBorder(null);
         scrReport.setName("scrReport"); // NOI18N
 
-        pnlScrollPane.setBackground(resourceMap.getColor("pnlScrollPane.background")); // NOI18N
+        pnlScrollPane.setBackground(new java.awt.Color(255, 255, 255));
         pnlScrollPane.setName("pnlScrollPane"); // NOI18N
         pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
         scrReport.setViewportView(pnlScrollPane);
 
         getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 600, 550));
 
-        jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
-        jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel14.setText("Total Number of Periods:");
         jLabel14.setName("jLabel14"); // NOI18N
         getContentPane().add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, -1, -1));
 
-        lblTotalVisits.setText(resourceMap.getString("lblTotalVisits.text")); // NOI18N
+        lblTotalVisits.setText("Unknown");
         lblTotalVisits.setName("lblTotalVisits"); // NOI18N
         getContentPane().add(lblTotalVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, 50, -1));
 
-        lblMoonlightDay.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
-        lblMoonlightDay.setForeground(resourceMap.getColor("lblMoonlightDay.foreground")); // NOI18N
-        lblMoonlightDay.setText(resourceMap.getString("lblMoonlightDay.text")); // NOI18N
+        lblMoonlightDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMoonlightDay.setForeground(new java.awt.Color(231, 181, 72));
+        lblMoonlightDay.setText("MOONLIGHT (DAY)");
         lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
         getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 705, 140, -1));
 
-        lblNoMoonDay.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
-        lblNoMoonDay.setForeground(resourceMap.getColor("lblNoMoonDay.foreground")); // NOI18N
-        lblNoMoonDay.setText(resourceMap.getString("lblNoMoonDay.text")); // NOI18N
+        lblNoMoonDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNoMoonDay.setForeground(new java.awt.Color(113, 89, 36));
+        lblNoMoonDay.setText("NO MOON (DAY)");
         lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
         getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 705, 100, -1));
 
-        lblMoonlightNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
-        lblMoonlightNight.setForeground(resourceMap.getColor("lblMoonlightNight.foreground")); // NOI18N
-        lblMoonlightNight.setText(resourceMap.getString("lblMoonlightNight.text")); // NOI18N
+        lblMoonlightNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMoonlightNight.setForeground(new java.awt.Color(100, 160, 219));
+        lblMoonlightNight.setText("MOONLIGHT (NIGHT)");
         lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
         getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 705, 130, -1));
 
-        lblNoMoonNight.setFont(resourceMap.getFont("lblMoonlightNight.font")); // NOI18N
-        lblNoMoonNight.setForeground(resourceMap.getColor("lblNoMoonNight.foreground")); // NOI18N
-        lblNoMoonNight.setText(resourceMap.getString("lblNoMoonNight.text")); // NOI18N
+        lblNoMoonNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNoMoonNight.setForeground(new java.awt.Color(46, 58, 87));
+        lblNoMoonNight.setText("NO MOON (NIGHT)");
         lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
         getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 705, 120, -1));
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
-        mnuPrint.setText(resourceMap.getString("mnuPrint.text")); // NOI18N
+        mnuPrint.setText("Print");
         mnuPrint.setName("mnuPrint"); // NOI18N
 
-        mnuPrintReport.setText(resourceMap.getString("mnuPrintReport.text")); // NOI18N
+        mnuPrintReport.setText("Print this Report");
         mnuPrintReport.setName("mnuPrintReport"); // NOI18N
         mnuPrintReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,10 +340,10 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
 
         jMenuBar1.add(mnuPrint);
 
-        mnuExtra.setText(resourceMap.getString("mnuExtra.text")); // NOI18N
+        mnuExtra.setText("Options");
         mnuExtra.setName("mnuExtra"); // NOI18N
 
-        mnuName.setText(resourceMap.getString("mnuName.text")); // NOI18N
+        mnuName.setText("Switch Primary and Secondary Names");
         mnuName.setName("mnuName"); // NOI18N
         mnuName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

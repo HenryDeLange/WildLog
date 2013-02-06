@@ -2,11 +2,13 @@
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
-    <Property name="background" type="java.awt.Color" resourceKey="Form.background"/>
+    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+      <Color blue="dc" green="f6" red="eb" type="rgb"/>
+    </Property>
     <Property name="name" type="java.lang.String" value="Form" noResource="true"/>
   </Properties>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
@@ -24,7 +26,9 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblImage">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="lblImage.background"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -51,10 +55,13 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnUp">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnUp.background"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnUp.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnUp.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnUp.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="dc" green="f6" red="eb" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/up.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Move the image UP to the Observation above."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -75,10 +82,13 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnDown">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnDown.background"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnDown.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnDown.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnDown.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="dc" green="f6" red="eb" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/down.png"/>
+        </Property>
+        <Property name="toolTipText" type="java.lang.String" value="Move the image DOWN to the Observation below."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -99,11 +109,17 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnRemove">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnRemove.background"/>
-        <Property name="font" type="java.awt.Font" resourceKey="btnRemove.font"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnRemove.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnRemove.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnRemove.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="dc" green="f6" red="eb" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="10" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Delete_Small.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Remove"/>
+        <Property name="toolTipText" type="java.lang.String" value="Remove the image from this Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -125,11 +141,17 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnNewSighting">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnNewSighting.background"/>
-        <Property name="font" type="java.awt.Font" resourceKey="btnNewSighting.font"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnNewSighting.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnNewSighting.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnNewSighting.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="dc" green="f6" red="eb" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="10" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Sighting Small.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Observation"/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the image into its own NEW Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -151,11 +173,17 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnClone">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnClone.background"/>
-        <Property name="font" type="java.awt.Font" resourceKey="btnClone.font"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnClone.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnClone.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnClone.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="dc" green="f6" red="eb" type="rgb"/>
+        </Property>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="10" style="0"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Duplicate"/>
+        <Property name="toolTipText" type="java.lang.String" value="Duplicate the image for this Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

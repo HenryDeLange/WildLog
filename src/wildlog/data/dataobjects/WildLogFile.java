@@ -56,7 +56,7 @@ public class WildLogFile {
             return "[<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
                     // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
 //                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
-//                        WildLogApp.class.getResource("resources/images/Movie.png").toString(),
+//                        WildLogApp.class.getResource("resources/icons/Movie.png").toString(),
 //                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType)
                     + "Movie</a>] ";
         else
@@ -64,7 +64,7 @@ public class WildLogFile {
             return "[<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
                     // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
 //                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
-//                        WildLogApp.class.getResource("resources/images/OtherFile.png").toString(),
+//                        WildLogApp.class.getResource("resources/icons/OtherFile.png").toString(),
 //                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType)
                     + "Other File</a>] ";
         else

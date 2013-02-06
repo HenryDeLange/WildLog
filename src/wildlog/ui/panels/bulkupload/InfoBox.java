@@ -83,63 +83,62 @@ public class InfoBox extends JPanel {
         btnGPS = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(InfoBox.class);
-        setBackground(resourceMap.getColor("Form.background")); // NOI18N
+        setBackground(new java.awt.Color(229, 241, 212));
         setMaximumSize(new java.awt.Dimension(250, 250));
         setMinimumSize(new java.awt.Dimension(250, 250));
         setName("Form"); // NOI18N
         setPreferredSize(new java.awt.Dimension(250, 250));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblElementName.setFont(resourceMap.getFont("lblElementName.font")); // NOI18N
+        lblElementName.setFont(new java.awt.Font("Tahoma", 1, 12));
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblElementName.setText(resourceMap.getString("lblElementName.text")); // NOI18N
+        lblElementName.setText("Creature Name");
         lblElementName.setName("lblElementName"); // NOI18N
         add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 3, 230, 20));
 
         jSeparator2.setName("jSeparator2"); // NOI18N
         add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 27, 230, 10));
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setText("Date:");
         jLabel2.setName("jLabel2"); // NOI18N
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
 
-        lblDate.setText(resourceMap.getString("lblDate.text")); // NOI18N
+        lblDate.setText("01 Jan 2012");
         lblDate.setName("lblDate"); // NOI18N
         add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 70, -1));
 
-        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setText("Time:");
         jLabel3.setName("jLabel3"); // NOI18N
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
 
-        lblTime.setText(resourceMap.getString("lblTime.text")); // NOI18N
+        lblTime.setText("11:11 pm");
         lblTime.setName("lblTime"); // NOI18N
         add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 50, -1));
 
-        jLabel4.setFont(resourceMap.getFont("jLabel4.font")); // NOI18N
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setText("GPS Latitude:");
         jLabel4.setName("jLabel4"); // NOI18N
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 53, -1, -1));
 
-        lblLatitude.setText(resourceMap.getString("lblLatitude.text")); // NOI18N
+        lblLatitude.setText("33.123456");
         lblLatitude.setName("lblLatitude"); // NOI18N
         add(lblLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 53, 130, -1));
 
-        jLabel10.setFont(resourceMap.getFont("jLabel10.font")); // NOI18N
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel10.setText("GPS Longitude:");
         jLabel10.setName("jLabel10"); // NOI18N
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
 
-        lblLongitude.setText(resourceMap.getString("lblLongitude.text")); // NOI18N
+        lblLongitude.setText("25.1234567");
         lblLongitude.setName("lblLongitude"); // NOI18N
         add(lblLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 130, -1));
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 47, 230, 10));
 
-        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -152,10 +151,10 @@ public class InfoBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 85, 150, 150));
 
-        btnChooseCreature.setBackground(resourceMap.getColor("btnChooseCreature.background")); // NOI18N
-        btnChooseCreature.setIcon(resourceMap.getIcon("btnChooseCreature.icon")); // NOI18N
-        btnChooseCreature.setText(resourceMap.getString("btnChooseCreature.text")); // NOI18N
-        btnChooseCreature.setToolTipText(resourceMap.getString("btnChooseCreature.toolTipText")); // NOI18N
+        btnChooseCreature.setBackground(new java.awt.Color(229, 241, 212));
+        btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.gif"))); // NOI18N
+        btnChooseCreature.setText("Creature");
+        btnChooseCreature.setToolTipText("Select a Creature for this Observation.");
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseCreature.setFocusPainted(false);
         btnChooseCreature.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -168,10 +167,10 @@ public class InfoBox extends JPanel {
         });
         add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 50));
 
-        btnGPS.setBackground(resourceMap.getColor("btnGPS.background")); // NOI18N
-        btnGPS.setIcon(resourceMap.getIcon("btnGPS.icon")); // NOI18N
-        btnGPS.setText(resourceMap.getString("btnGPS.text")); // NOI18N
-        btnGPS.setToolTipText(resourceMap.getString("btnGPS.toolTipText")); // NOI18N
+        btnGPS.setBackground(new java.awt.Color(229, 241, 212));
+        btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnGPS.setText("GPS");
+        btnGPS.setToolTipText("Select a GPD point for this Observation.");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -183,10 +182,10 @@ public class InfoBox extends JPanel {
         });
         add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 135, 80, 50));
 
-        btnEdit.setBackground(resourceMap.getColor("btnEdit.background")); // NOI18N
-        btnEdit.setIcon(resourceMap.getIcon("btnEdit.icon")); // NOI18N
-        btnEdit.setText(resourceMap.getString("btnEdit.text")); // NOI18N
-        btnEdit.setToolTipText(resourceMap.getString("btnEdit.toolTipText")); // NOI18N
+        btnEdit.setBackground(new java.awt.Color(229, 241, 212));
+        btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnEdit.setText("Edit");
+        btnEdit.setToolTipText("Edit this Observation's details.");
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setFocusPainted(false);
         btnEdit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

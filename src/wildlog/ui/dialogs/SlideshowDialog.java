@@ -78,20 +78,19 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowElement = new javax.swing.JButton();
         btnSlideshowElementSightings = new javax.swing.JButton();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(SlideshowDialog.class);
-        jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
+        jButton5.setText("jButton5");
         jButton5.setName("jButton5"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/images/Slideshow.gif")).getImage());
+        setTitle("Available Maps");
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Slideshow.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnSlideshowVisit.setIcon(resourceMap.getIcon("btnSlideshowLocation.icon")); // NOI18N
-        btnSlideshowVisit.setText(resourceMap.getString("btnSlideshowVisit.text")); // NOI18N
+        btnSlideshowVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowVisit.setText("Slideshow of the Period's Images");
         btnSlideshowVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowVisit.setFocusPainted(false);
         btnSlideshowVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -108,8 +107,8 @@ public class SlideshowDialog extends JDialog {
         });
         getContentPane().add(btnSlideshowVisit);
 
-        btnSlideshowVisitSightings.setIcon(resourceMap.getIcon("btnSlideshowLocation.icon")); // NOI18N
-        btnSlideshowVisitSightings.setText(resourceMap.getString("btnSlideshowVisitSightings.text")); // NOI18N
+        btnSlideshowVisitSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowVisitSightings.setText("Slideshow of the Observations");
         btnSlideshowVisitSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowVisitSightings.setFocusPainted(false);
         btnSlideshowVisitSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -126,8 +125,8 @@ public class SlideshowDialog extends JDialog {
         });
         getContentPane().add(btnSlideshowVisitSightings);
 
-        btnSlideshowLocation.setIcon(resourceMap.getIcon("btnSlideshowLocation.icon")); // NOI18N
-        btnSlideshowLocation.setText(resourceMap.getString("btnSlideshowLocation.text")); // NOI18N
+        btnSlideshowLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowLocation.setText("Slideshow of the Place's Images");
         btnSlideshowLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowLocation.setFocusPainted(false);
         btnSlideshowLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -144,8 +143,8 @@ public class SlideshowDialog extends JDialog {
         });
         getContentPane().add(btnSlideshowLocation);
 
-        btnSlideshowLocationSightings.setIcon(resourceMap.getIcon("btnSlideshowLocation.icon")); // NOI18N
-        btnSlideshowLocationSightings.setText(resourceMap.getString("btnSlideshowLocationSightings.text")); // NOI18N
+        btnSlideshowLocationSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowLocationSightings.setText("Slideshow of the Observations");
         btnSlideshowLocationSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowLocationSightings.setFocusPainted(false);
         btnSlideshowLocationSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -162,8 +161,8 @@ public class SlideshowDialog extends JDialog {
         });
         getContentPane().add(btnSlideshowLocationSightings);
 
-        btnSlideshowElement.setIcon(resourceMap.getIcon("btnSlideshowLocation.icon")); // NOI18N
-        btnSlideshowElement.setText(resourceMap.getString("btnSlideshowElement.text")); // NOI18N
+        btnSlideshowElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowElement.setText("Slideshow of the Creature's Images");
         btnSlideshowElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowElement.setFocusPainted(false);
         btnSlideshowElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -180,8 +179,8 @@ public class SlideshowDialog extends JDialog {
         });
         getContentPane().add(btnSlideshowElement);
 
-        btnSlideshowElementSightings.setIcon(resourceMap.getIcon("btnSlideshowLocation.icon")); // NOI18N
-        btnSlideshowElementSightings.setText(resourceMap.getString("btnSlideshowElementSightings.text")); // NOI18N
+        btnSlideshowElementSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
+        btnSlideshowElementSightings.setText("Slideshow of the Observations");
         btnSlideshowElementSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowElementSightings.setFocusPainted(false);
         btnSlideshowElementSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

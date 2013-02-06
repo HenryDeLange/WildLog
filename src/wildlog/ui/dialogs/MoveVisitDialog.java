@@ -53,8 +53,7 @@ public class MoveVisitDialog extends JDialog {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MoveVisitDialog.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setTitle("Move a Visit to a new Location");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(750, 550));
         setModal(true);
@@ -62,13 +61,13 @@ public class MoveVisitDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setText("Select the Place you want to move the Period from:");
         jLabel1.setName("jLabel1"); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Select the Place you want to move the Period to:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
@@ -76,7 +75,7 @@ public class MoveVisitDialog extends JDialog {
 
         lstFromLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
-        lstFromLocation.setSelectionBackground(resourceMap.getColor("lstFromLocation.selectionBackground")); // NOI18N
+        lstFromLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         lstFromLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 lstFromLocationMouseReleased(evt);
@@ -90,7 +89,7 @@ public class MoveVisitDialog extends JDialog {
 
         lstVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstVisit.setName("lstVisit"); // NOI18N
-        lstVisit.setSelectionBackground(resourceMap.getColor("lstVisit.selectionBackground")); // NOI18N
+        lstVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
         jScrollPane2.setViewportView(lstVisit);
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 360, 400));
@@ -99,14 +98,13 @@ public class MoveVisitDialog extends JDialog {
 
         lstToLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstToLocation.setName("lstToLocation"); // NOI18N
-        lstToLocation.setSelectionBackground(resourceMap.getColor("lstToLocation.selectionBackground")); // NOI18N
+        lstToLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         jScrollPane3.setViewportView(lstToLocation);
 
         getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 350, 230));
 
-        btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
-        btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
-        btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
+        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnConfirm.setToolTipText("Move the selected Period to the new Place.");
         btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -116,8 +114,8 @@ public class MoveVisitDialog extends JDialog {
         });
         getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 110, 60));
 
-        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Select the Period to be moved:");
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, -1, -1));
     }// </editor-fold>//GEN-END:initComponents

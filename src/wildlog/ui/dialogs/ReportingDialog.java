@@ -96,20 +96,20 @@ public class ReportingDialog extends JDialog {
         btnSightingDateLocation = new javax.swing.JButton();
         btnSightingDateElement = new javax.swing.JButton();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportingDialog.class);
-        jButton5.setText(resourceMap.getString("jButton5.text")); // NOI18N
+        jButton5.setText("jButton5");
         jButton5.setName("jButton5"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/images/Report.gif")).getImage());
+        setTitle("Available Reports");
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportingDialog.class);
         btnLocationMoon.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnLocationMoon.setText(resourceMap.getString("btnLocationMoon.text")); // NOI18N
+        btnLocationMoon.setText("Observations by Moon Phase");
         btnLocationMoon.setFocusPainted(false);
         btnLocationMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationMoon.setIconTextGap(10);
@@ -126,7 +126,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnLocationMoon);
 
         btnLocationSun.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnLocationSun.setText(resourceMap.getString("btnLocationSun.text")); // NOI18N
+        btnLocationSun.setText("Observations by Sun Phase");
         btnLocationSun.setFocusPainted(false);
         btnLocationSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationSun.setIconTextGap(10);
@@ -143,7 +143,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnLocationSun);
 
         btnLocationType.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnLocationType.setText(resourceMap.getString("btnLocationType.text")); // NOI18N
+        btnLocationType.setText("Observations by Type");
         btnLocationType.setFocusPainted(false);
         btnLocationType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationType.setIconTextGap(10);
@@ -160,7 +160,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnLocationType);
 
         btnLocationSpeciesCurve.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnLocationSpeciesCurve.setText(resourceMap.getString("btnLocationSpeciesCurve.text")); // NOI18N
+        btnLocationSpeciesCurve.setText("Species Accumulation Curve");
         btnLocationSpeciesCurve.setFocusPainted(false);
         btnLocationSpeciesCurve.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationSpeciesCurve.setIconTextGap(10);
@@ -177,7 +177,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnLocationSpeciesCurve);
 
         btnElementMoon.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnElementMoon.setText(resourceMap.getString("btnElementMoon.text")); // NOI18N
+        btnElementMoon.setText("Observations by Moon Phase");
         btnElementMoon.setFocusPainted(false);
         btnElementMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnElementMoon.setIconTextGap(10);
@@ -194,7 +194,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnElementMoon);
 
         btnElementSun.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnElementSun.setText(resourceMap.getString("btnElementSun.text")); // NOI18N
+        btnElementSun.setText("Observations by Sun Phase");
         btnElementSun.setFocusPainted(false);
         btnElementSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnElementSun.setIconTextGap(10);
@@ -211,7 +211,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnElementSun);
 
         btnVisitSun.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnVisitSun.setText(resourceMap.getString("btnVisitSun.text")); // NOI18N
+        btnVisitSun.setText("Observations by Sun Phase");
         btnVisitSun.setFocusPainted(false);
         btnVisitSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnVisitSun.setIconTextGap(10);
@@ -228,7 +228,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnVisitSun);
 
         btnSightingDateLocation.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnSightingDateLocation.setText(resourceMap.getString("btnSightingDateLocation.text")); // NOI18N
+        btnSightingDateLocation.setText("Observations by Date and Place");
         btnSightingDateLocation.setFocusPainted(false);
         btnSightingDateLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSightingDateLocation.setIconTextGap(10);
@@ -245,7 +245,7 @@ public class ReportingDialog extends JDialog {
         getContentPane().add(btnSightingDateLocation);
 
         btnSightingDateElement.setIcon(resourceMap.getIcon("btnLocationSpeciesCurve.icon")); // NOI18N
-        btnSightingDateElement.setText(resourceMap.getString("btnSightingDateElement.text")); // NOI18N
+        btnSightingDateElement.setText("Observations by Date and Creature");
         btnSightingDateElement.setFocusPainted(false);
         btnSightingDateElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSightingDateElement.setIconTextGap(10);

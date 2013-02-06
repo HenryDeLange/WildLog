@@ -38,49 +38,47 @@ public class WildLogAboutBox extends JDialog {
         javax.swing.JLabel emailAddressLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(WildLogAboutBox.class);
-        setTitle(resourceMap.getString("title")); // NOI18N
         setModal(true);
         setName("aboutBox"); // NOI18N
         setResizable(false);
 
         appTitleLabel.setFont(appTitleLabel.getFont().deriveFont(appTitleLabel.getFont().getStyle() | java.awt.Font.BOLD, appTitleLabel.getFont().getSize()+3));
-        appTitleLabel.setText(resourceMap.getString("Application.title")); // NOI18N
-        appTitleLabel.setToolTipText(resourceMap.getString("appTitleLabel.toolTipText")); // NOI18N
+        appTitleLabel.setText("WildLog");
+        appTitleLabel.setToolTipText("");
         appTitleLabel.setName("appTitleLabel"); // NOI18N
 
         versionLabel.setFont(versionLabel.getFont().deriveFont(versionLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        versionLabel.setText(resourceMap.getString("versionLabel.text")); // NOI18N
+        versionLabel.setText("Product Version:");
         versionLabel.setName("versionLabel"); // NOI18N
 
-        appVersionLabel.setText(resourceMap.getString("Application.version")); // NOI18N
+        appVersionLabel.setText("4.0");
         appVersionLabel.setName("appVersionLabel"); // NOI18N
 
         vendorLabel.setFont(vendorLabel.getFont().deriveFont(vendorLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        vendorLabel.setText(resourceMap.getString("vendorLabel.text")); // NOI18N
+        vendorLabel.setText("Copyright:");
         vendorLabel.setName("vendorLabel"); // NOI18N
 
-        appVendorLabel.setText(resourceMap.getString("Application.vendor")); // NOI18N
+        appVendorLabel.setText("Henry de Lange");
         appVendorLabel.setName("appVendorLabel"); // NOI18N
 
-        appDescLabel.setText(resourceMap.getString("appDescLabel.text")); // NOI18N
+        appDescLabel.setText("<html>Use at own risk.<br> WildLog was written in Java by Henry de Lange and uses third party libraries to help with some of the functionality, these include OpenMap (mapping), H2 (database) and SwingX (GUI components), JMF (slideshow) and MetadataExtractor (Exif reader).");
         appDescLabel.setName("appDescLabel"); // NOI18N
 
-        imageLabel.setIcon(resourceMap.getIcon("imageLabel.icon")); // NOI18N
+        imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/About.gif"))); // NOI18N
         imageLabel.setName("imageLabel"); // NOI18N
 
         developerLabel.setFont(developerLabel.getFont().deriveFont(developerLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        developerLabel.setText(resourceMap.getString("developerLabel.text")); // NOI18N
+        developerLabel.setText("Developer:");
         developerLabel.setName("developerLabel"); // NOI18N
 
-        developerNameLabel.setText(resourceMap.getString("developerNameLabel.text")); // NOI18N
+        developerNameLabel.setText("Henry de Lange");
         developerNameLabel.setName("developerNameLabel"); // NOI18N
 
         emailLabel.setFont(emailLabel.getFont().deriveFont(emailLabel.getFont().getStyle() | java.awt.Font.BOLD));
-        emailLabel.setText(resourceMap.getString("emailLabel.text")); // NOI18N
+        emailLabel.setText("Email:");
         emailLabel.setName("emailLabel"); // NOI18N
 
-        emailAddressLabel.setText(resourceMap.getString("emailAddressLabel.text")); // NOI18N
+        emailAddressLabel.setText("WildLog.Support@gmail.com");
         emailAddressLabel.setName("emailAddressLabel"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

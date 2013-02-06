@@ -281,8 +281,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbSizeType = new javax.swing.JComboBox();
         btnSlideshow = new javax.swing.JButton();
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
-        setBackground(resourceMap.getColor("Form.background")); // NOI18N
+        setBackground(new java.awt.Color(227, 240, 227));
         setMaximumSize(new java.awt.Dimension(1005, 585));
         setMinimumSize(new java.awt.Dimension(1005, 585));
         setName(element.getPrimaryName());
@@ -294,28 +293,28 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 0, 0));
 
-        elementIncludes.setBackground(resourceMap.getColor("elementIncludes.background")); // NOI18N
+        elementIncludes.setBackground(new java.awt.Color(227, 240, 227));
         elementIncludes.setMaximumSize(new java.awt.Dimension(1005, 585));
         elementIncludes.setMinimumSize(new java.awt.Dimension(1005, 585));
         elementIncludes.setName("elementIncludes"); // NOI18N
         elementIncludes.setPreferredSize(new java.awt.Dimension(1005, 585));
         elementIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel55.setText(resourceMap.getString("jLabel55.text")); // NOI18N
         jLabel55.setName("jLabel55"); // NOI18N
+        jLabel55.setText("Primary Name:");
         elementIncludes.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, -1, -1));
 
-        jLabel56.setText(resourceMap.getString("jLabel56.text")); // NOI18N
         jLabel56.setName("jLabel56"); // NOI18N
+        jLabel56.setText("Other Name:");
         elementIncludes.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 52, -1, -1));
 
-        jLabel57.setText(resourceMap.getString("jLabel57.text")); // NOI18N
         jLabel57.setName("jLabel57"); // NOI18N
+        jLabel57.setText("Scientific:");
         elementIncludes.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 76, -1, -1));
 
-        txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background")); // NOI18N
         txtPrimaryName.setText(element.getPrimaryName());
         txtPrimaryName.setName("txtPrimaryName"); // NOI18N
+        txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
         elementIncludes.add(txtPrimaryName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 28, 470, -1));
 
         txtOtherName.setText(element.getOtherName());
@@ -326,10 +325,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtScienceName.setName("txtScienceName"); // NOI18N
         elementIncludes.add(txtScienceName, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 76, 310, -1));
 
-        btnUpdate.setBackground(resourceMap.getColor("btnUpdate.background")); // NOI18N
-        btnUpdate.setIcon(resourceMap.getIcon("btnUpdate.icon")); // NOI18N
-        btnUpdate.setText(resourceMap.getString("btnUpdate.text")); // NOI18N
-        btnUpdate.setToolTipText(resourceMap.getString("btnUpdate.toolTipText")); // NOI18N
+        btnUpdate.setBackground(new java.awt.Color(0, 204, 51));
+        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnUpdate.setToolTipText("Save and update the Creature.");
         btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUpdate.setFocusPainted(false);
         btnUpdate.setName("btnUpdate"); // NOI18N
@@ -343,10 +341,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jSeparator10.setName("jSeparator10"); // NOI18N
         elementIncludes.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 22, 690, 10));
 
-        btnPreviousImage.setBackground(resourceMap.getColor("btnPreviousImage.background")); // NOI18N
-        btnPreviousImage.setIcon(resourceMap.getIcon("btnPreviousImage.icon")); // NOI18N
-        btnPreviousImage.setText(resourceMap.getString("btnPreviousImage.text")); // NOI18N
-        btnPreviousImage.setToolTipText(resourceMap.getString("btnPreviousImage.toolTipText")); // NOI18N
+        btnPreviousImage.setBackground(new java.awt.Color(227, 240, 227));
+        btnPreviousImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnPreviousImage.setToolTipText("Load the previous file.");
         btnPreviousImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPreviousImage.setFocusPainted(false);
         btnPreviousImage.setName("btnPreviousImage"); // NOI18N
@@ -357,10 +354,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnPreviousImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 300, 40, 50));
 
-        btnNextImage.setBackground(resourceMap.getColor("btnNextImage.background")); // NOI18N
-        btnNextImage.setIcon(resourceMap.getIcon("btnNextImage.icon")); // NOI18N
-        btnNextImage.setText(resourceMap.getString("btnNextImage.text")); // NOI18N
-        btnNextImage.setToolTipText(resourceMap.getString("btnNextImage.toolTipText")); // NOI18N
+        btnNextImage.setBackground(new java.awt.Color(227, 240, 227));
+        btnNextImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
+        btnNextImage.setToolTipText("Load the next file.");
         btnNextImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNextImage.setFocusPainted(false);
         btnNextImage.setName("btnNextImage"); // NOI18N
@@ -371,10 +367,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnNextImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 300, 40, 50));
 
-        btnSetMainImage.setBackground(resourceMap.getColor("btnSetMainImage.background")); // NOI18N
-        btnSetMainImage.setIcon(resourceMap.getIcon("btnSetMainImage.icon")); // NOI18N
-        btnSetMainImage.setText(resourceMap.getString("btnSetMainImage.text")); // NOI18N
-        btnSetMainImage.setToolTipText(resourceMap.getString("btnSetMainImage.toolTipText")); // NOI18N
+        btnSetMainImage.setBackground(new java.awt.Color(227, 240, 227));
+        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
+        btnSetMainImage.setText("Default");
+        btnSetMainImage.setToolTipText("Make this the default (first) file for the Creature.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetMainImage.setFocusPainted(false);
         btnSetMainImage.setName("btnSetMainImage"); // NOI18N
@@ -385,15 +381,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnSetMainImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 326, 90, -1));
 
-        jLabel58.setText(resourceMap.getString("jLabel58.text")); // NOI18N
         jLabel58.setName("jLabel58"); // NOI18N
+        jLabel58.setText("List of Places or Observations for this Creature:");
         elementIncludes.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 361, -1, -1));
 
         jScrollPane15.setName("jScrollPane15"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
         tblLocation.setName("tblLocation"); // NOI18N
-        tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
+        tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocationMouseClicked(evt);
@@ -408,10 +404,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         elementIncludes.add(jScrollPane15, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 376, 290, 170));
 
-        btnGoLocation.setBackground(resourceMap.getColor("btnGoLocation.background")); // NOI18N
-        btnGoLocation.setIcon(resourceMap.getIcon("btnGoLocation.icon")); // NOI18N
-        btnGoLocation.setText(resourceMap.getString("btnGoLocation.text")); // NOI18N
-        btnGoLocation.setToolTipText(resourceMap.getString("btnGoLocation.toolTipText")); // NOI18N
+        btnGoLocation.setBackground(new java.awt.Color(227, 240, 227));
+        btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoLocation.setToolTipText("Open a tab for the selected Place or view the selected Observation.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoLocation.setFocusPainted(false);
         btnGoLocation.setName("btnGoLocation"); // NOI18N
@@ -425,88 +420,88 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jSeparator11.setName("jSeparator11"); // NOI18N
         elementIncludes.add(jSeparator11, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jLabel59.setText(resourceMap.getString("jLabel59.text")); // NOI18N
         jLabel59.setName("jLabel59"); // NOI18N
+        jLabel59.setText("Habitat:");
         elementIncludes.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
 
-        jLabel60.setText(resourceMap.getString("jLabel60.text")); // NOI18N
         jLabel60.setName("jLabel60"); // NOI18N
+        jLabel60.setText("Identification:");
         elementIncludes.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, -1, -1));
 
-        jLabel61.setText(resourceMap.getString("jLabel61.text")); // NOI18N
         jLabel61.setName("jLabel61"); // NOI18N
+        jLabel61.setText("Behaviour:");
         elementIncludes.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 410, -1, -1));
 
-        jLabel62.setText(resourceMap.getString("jLabel62.text")); // NOI18N
         jLabel62.setName("jLabel62"); // NOI18N
+        jLabel62.setText("Endangered:");
         elementIncludes.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 197, -1, -1));
 
-        jLabel64.setText(resourceMap.getString("jLabel64.text")); // NOI18N
         jLabel64.setName("jLabel64"); // NOI18N
+        jLabel64.setText("Active Time:");
         elementIncludes.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 148, 80, -1));
 
-        jLabel65.setFont(resourceMap.getFont("jLabel65.font")); // NOI18N
-        jLabel65.setText(resourceMap.getString("jLabel65.text")); // NOI18N
         jLabel65.setName("jLabel65"); // NOI18N
+        jLabel65.setText("Observations:");
+        jLabel65.setFont(new java.awt.Font("Tahoma", 1, 10));
         elementIncludes.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 1, -1, 20));
 
-        jLabel66.setText(resourceMap.getString("jLabel66.text")); // NOI18N
         jLabel66.setName("jLabel66"); // NOI18N
+        jLabel66.setText("Add Frequency:");
         elementIncludes.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 124, 90, -1));
 
-        jLabel67.setText(resourceMap.getString("jLabel67.text")); // NOI18N
         jLabel67.setName("jLabel67"); // NOI18N
+        jLabel67.setText("Wish List Rating:");
         elementIncludes.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 124, 80, -1));
 
-        jLabel68.setText(resourceMap.getString("jLabel68.text")); // NOI18N
         jLabel68.setName("jLabel68"); // NOI18N
+        jLabel68.setText("Water Need:");
         elementIncludes.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 172, -1, -1));
 
-        jLabel69.setText(resourceMap.getString("jLabel69.text")); // NOI18N
         jLabel69.setName("jLabel69"); // NOI18N
+        jLabel69.setText("Food / Nutrition:");
         elementIncludes.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 410, -1, -1));
 
-        jLabel70.setText(resourceMap.getString("jLabel70.text")); // NOI18N
         jLabel70.setName("jLabel70"); // NOI18N
+        jLabel70.setText("Creature Type:");
         elementIncludes.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 80, -1));
 
-        jLabel71.setText(resourceMap.getString("jLabel71.text")); // NOI18N
         jLabel71.setName("jLabel71"); // NOI18N
+        jLabel71.setText("Male Size:");
         elementIncludes.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, -1, -1));
 
-        jLabel72.setText(resourceMap.getString("jLabel72.text")); // NOI18N
         jLabel72.setName("jLabel72"); // NOI18N
+        jLabel72.setText("Female Size:");
         elementIncludes.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 540, -1, -1));
 
-        jLabel73.setText(resourceMap.getString("jLabel73.text")); // NOI18N
         jLabel73.setName("jLabel73"); // NOI18N
+        jLabel73.setText("Male Weight:");
         elementIncludes.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 510, -1, -1));
 
-        jLabel74.setText(resourceMap.getString("jLabel74.text")); // NOI18N
         jLabel74.setName("jLabel74"); // NOI18N
+        jLabel74.setText("Female Weight:");
         elementIncludes.add(jLabel74, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 540, -1, -1));
 
-        jLabel75.setText(resourceMap.getString("jLabel75.text")); // NOI18N
         jLabel75.setName("jLabel75"); // NOI18N
+        jLabel75.setText("Lifespan:");
         elementIncludes.add(jLabel75, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 148, 80, -1));
 
-        jLabel76.setText(resourceMap.getString("jLabel76.text")); // NOI18N
         jLabel76.setName("jLabel76"); // NOI18N
+        jLabel76.setText("Breeding:");
         elementIncludes.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 172, -1, -1));
 
-        jLabel77.setText(resourceMap.getString("jLabel77.text")); // NOI18N
         jLabel77.setName("jLabel77"); // NOI18N
+        jLabel77.setText("Number of Young:");
         elementIncludes.add(jLabel77, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 197, -1, -1));
 
         jScrollPane16.setName("jScrollPane16"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(resourceMap.getFont("txtDescription.font")); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(element.getDescription());
         txtDescription.setWrapStyleWord(true);
         txtDescription.setName("txtDescription"); // NOI18N
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
         jScrollPane16.setViewportView(txtDescription);
 
         elementIncludes.add(jScrollPane16, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 320, 310, 80));
@@ -514,12 +509,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane17.setName("jScrollPane17"); // NOI18N
 
         txtDiagnosticDescription.setColumns(20);
-        txtDiagnosticDescription.setFont(resourceMap.getFont("txtDiagnosticDescription.font")); // NOI18N
         txtDiagnosticDescription.setLineWrap(true);
         txtDiagnosticDescription.setRows(5);
         txtDiagnosticDescription.setText(element.getDiagnosticDescription());
         txtDiagnosticDescription.setWrapStyleWord(true);
         txtDiagnosticDescription.setName("txtDiagnosticDescription"); // NOI18N
+        txtDiagnosticDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
         jScrollPane17.setViewportView(txtDiagnosticDescription);
 
         elementIncludes.add(jScrollPane17, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 470, 80));
@@ -527,12 +522,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
         txtBehaviourDescription.setColumns(20);
-        txtBehaviourDescription.setFont(resourceMap.getFont("txtBehaviourDescription.font")); // NOI18N
         txtBehaviourDescription.setLineWrap(true);
         txtBehaviourDescription.setRows(5);
         txtBehaviourDescription.setText(element.getBehaviourDescription());
         txtBehaviourDescription.setWrapStyleWord(true);
         txtBehaviourDescription.setName("txtBehaviourDescription"); // NOI18N
+        txtBehaviourDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
         jScrollPane18.setViewportView(txtBehaviourDescription);
 
         elementIncludes.add(jScrollPane18, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 310, 80));
@@ -568,16 +563,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
         elementIncludes.add(txtBreedingNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 197, 150, -1));
 
-        lblNumberOfSightings.setFont(resourceMap.getFont("lblNumberOfSightings.font")); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNumberOfSightings.setText(resourceMap.getString("lblNumberOfSightings.text")); // NOI18N
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
+        lblNumberOfSightings.setFont(new java.awt.Font("Tahoma", 0, 10));
         elementIncludes.add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 1, 30, 20));
 
-        lblElementName.setFont(resourceMap.getFont("lblElementName.font")); // NOI18N
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(element.getPrimaryName());
         lblElementName.setName("lblElementName"); // NOI18N
+        lblElementName.setFont(new java.awt.Font("Tahoma", 1, 14));
         elementIncludes.add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 580, -1));
 
         cmbWishList.setModel(new DefaultComboBoxModel(wildlog.data.enums.WishRating.values()));
@@ -598,8 +592,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbEndangeredStatus.setName("cmbEndangeredStatus"); // NOI18N
         elementIncludes.add(cmbEndangeredStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 197, 220, -1));
 
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
         jLabel1.setName("jLabel1"); // NOI18N
+        jLabel1.setText("Feeding Class:");
         elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, 80, -1));
 
         cmbFeedingClass.setModel(new DefaultComboBoxModel(FeedingClass.values()));
@@ -608,10 +602,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbFeedingClass.setName("cmbFeedingClass"); // NOI18N
         elementIncludes.add(cmbFeedingClass, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 100, 150, -1));
 
-        btnUploadImage.setBackground(resourceMap.getColor("btnUploadImage.background")); // NOI18N
-        btnUploadImage.setIcon(resourceMap.getIcon("btnUploadImage.icon")); // NOI18N
-        btnUploadImage.setText(resourceMap.getString("btnUploadImage.text")); // NOI18N
-        btnUploadImage.setToolTipText(resourceMap.getString("btnUploadImage.toolTipText")); // NOI18N
+        btnUploadImage.setBackground(new java.awt.Color(227, 240, 227));
+        btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
+        btnUploadImage.setText("Upload File");
+        btnUploadImage.setToolTipText("Upload a file for this Creature. You can also drag and drop files onto the above box to upload it.");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setFocusPainted(false);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
@@ -622,9 +616,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnUploadImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 300, 220, -1));
 
-        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setName("lblImage"); // NOI18N
@@ -637,17 +630,17 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 0, -1, -1));
 
-        jSeparator2.setForeground(resourceMap.getColor("jSeparator2.foreground")); // NOI18N
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator2.setName("jSeparator2"); // NOI18N
+        jSeparator2.setForeground(new java.awt.Color(102, 102, 102));
         elementIncludes.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 361, 10, 220));
 
-        jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
         jSeparator1.setName("jSeparator1"); // NOI18N
+        jSeparator1.setForeground(new java.awt.Color(102, 102, 102));
         elementIncludes.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 360, 300, 10));
 
-        jLabel4.setText(resourceMap.getString("jLabel4.text")); // NOI18N
         jLabel4.setName("jLabel4"); // NOI18N
+        jLabel4.setText("Units:");
         elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 510, -1, 20));
 
         cmbSizeUnits.setModel(new DefaultComboBoxModel(UnitsSize.values()));
@@ -656,8 +649,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbSizeUnits.setName("cmbSizeUnits"); // NOI18N
         elementIncludes.add(cmbSizeUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 510, 70, -1));
 
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setName("jLabel5"); // NOI18N
+        jLabel5.setText("Units:");
         elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 530, -1, 20));
 
         cmbWeightUnits.setModel(new DefaultComboBoxModel(UnitsWeight.values()));
@@ -666,10 +659,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbWeightUnits.setName("cmbWeightUnits"); // NOI18N
         elementIncludes.add(cmbWeightUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 530, 70, -1));
 
-        btnDeleteImage.setBackground(resourceMap.getColor("btnDeleteImage.background")); // NOI18N
-        btnDeleteImage.setIcon(resourceMap.getIcon("btnDeleteImage.icon")); // NOI18N
-        btnDeleteImage.setText(resourceMap.getString("btnDeleteImage.text")); // NOI18N
-        btnDeleteImage.setToolTipText(resourceMap.getString("btnDeleteImage.toolTipText")); // NOI18N
+        btnDeleteImage.setBackground(new java.awt.Color(227, 240, 227));
+        btnDeleteImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
+        btnDeleteImage.setText("Delete File");
+        btnDeleteImage.setToolTipText("Delete the current image.");
         btnDeleteImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteImage.setFocusPainted(false);
         btnDeleteImage.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -681,10 +674,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 326, 90, -1));
 
-        btnMap.setBackground(resourceMap.getColor("btnMap.background")); // NOI18N
-        btnMap.setIcon(resourceMap.getIcon("btnMap.icon")); // NOI18N
-        btnMap.setText(resourceMap.getString("btnMap.text")); // NOI18N
-        btnMap.setToolTipText(resourceMap.getString("btnMap.toolTipText")); // NOI18N
+        btnMap.setBackground(new java.awt.Color(227, 240, 227));
+        btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnMap.setText("View Maps");
+        btnMap.setToolTipText("Show available maps for this Creature.");
         btnMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMap.setFocusPainted(false);
         btnMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -700,21 +693,21 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         txtNutrition.setColumns(20);
-        txtNutrition.setFont(resourceMap.getFont("txtNutrition.font")); // NOI18N
         txtNutrition.setLineWrap(true);
         txtNutrition.setRows(3);
         txtNutrition.setText(element.getNutrition());
         txtNutrition.setWrapStyleWord(true);
         txtNutrition.setName("txtNutrition"); // NOI18N
+        txtNutrition.setFont(new java.awt.Font("Tahoma", 0, 11));
         jScrollPane1.setViewportView(txtNutrition);
 
         elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 270, 60));
 
-        btnAddSighting.setBackground(resourceMap.getColor("btnAddSighting.background")); // NOI18N
-        btnAddSighting.setFont(resourceMap.getFont("btnAddSighting.font")); // NOI18N
-        btnAddSighting.setIcon(resourceMap.getIcon("btnAddSighting.icon")); // NOI18N
-        btnAddSighting.setText(resourceMap.getString("btnAddSighting.text")); // NOI18N
-        btnAddSighting.setToolTipText(resourceMap.getString("btnAddSighting.toolTipText")); // NOI18N
+        btnAddSighting.setBackground(new java.awt.Color(227, 240, 227));
+        btnAddSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        btnAddSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnAddSighting.setText("Add Observation");
+        btnAddSighting.setToolTipText("Add an Observation of this Creature.");
         btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddSighting.setFocusPainted(false);
         btnAddSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -728,32 +721,31 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnAddSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 100, 110, 35));
 
-        lblNumberOfLocations.setFont(resourceMap.getFont("lblNumberOfLocations.font")); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNumberOfLocations.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lblNumberOfLocations.border.lineColor"))); // NOI18N
+        lblNumberOfLocations.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         lblNumberOfLocations.setName("lblNumberOfLocations"); // NOI18N
+        lblNumberOfLocations.setFont(new java.awt.Font("Tahoma", 0, 10));
         elementIncludes.add(lblNumberOfLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 550, 30, 30));
 
-        lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNumberOfImages.setText(resourceMap.getString("lblNumberOfImages.text")); // NOI18N
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10));
         elementIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 330, 40, 20));
 
-        rdbLocations.setBackground(resourceMap.getColor("rdbLocations.background")); // NOI18N
+        rdbLocations.setBackground(new java.awt.Color(227, 240, 227));
         buttonGroup1.add(rdbLocations);
         rdbLocations.setSelected(true);
-        rdbLocations.setText(resourceMap.getString("rdbLocations.text")); // NOI18N
-        rdbLocations.setToolTipText(resourceMap.getString("rdbLocations.toolTipText")); // NOI18N
+        rdbLocations.setText("Place");
+        rdbLocations.setToolTipText("View all Places where this Creature has been observed.");
         rdbLocations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbLocations.setFocusPainted(false);
         rdbLocations.setName("rdbLocations"); // NOI18N
         elementIncludes.add(rdbLocations, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 550, -1, 30));
 
-        rdbSightings.setBackground(resourceMap.getColor("rdbSightings.background")); // NOI18N
+        rdbSightings.setBackground(new java.awt.Color(227, 240, 227));
         buttonGroup1.add(rdbSightings);
-        rdbSightings.setText(resourceMap.getString("rdbSightings.text")); // NOI18N
-        rdbSightings.setToolTipText(resourceMap.getString("rdbSightings.toolTipText")); // NOI18N
+        rdbSightings.setText("Observations");
+        rdbSightings.setToolTipText("View all Observations where this Creature has been observed.");
         rdbSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSightings.setFocusPainted(false);
         rdbSightings.setName("rdbSightings"); // NOI18N
@@ -764,18 +756,18 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(rdbSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 550, -1, 30));
 
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
         jLabel2.setName("jLabel2"); // NOI18N
+        jLabel2.setText("Reference ID:");
         elementIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 76, -1, -1));
 
         txtReferenceID.setText(element.getReferenceID());
         txtReferenceID.setName("txtReferenceID"); // NOI18N
         elementIncludes.add(txtReferenceID, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 76, 80, -1));
 
-        btnReport.setBackground(resourceMap.getColor("btnReport.background")); // NOI18N
-        btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
-        btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
-        btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
+        btnReport.setBackground(new java.awt.Color(227, 240, 227));
+        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        btnReport.setText("View Reports");
+        btnReport.setToolTipText("View reports for this Creature.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -788,10 +780,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 180, 110, 35));
 
-        btnHTML.setBackground(resourceMap.getColor("btnHTML.background")); // NOI18N
-        btnHTML.setIcon(resourceMap.getIcon("btnHTML.icon")); // NOI18N
-        btnHTML.setText(resourceMap.getString("btnHTML.text")); // NOI18N
-        btnHTML.setToolTipText(resourceMap.getString("btnHTML.toolTipText")); // NOI18N
+        btnHTML.setBackground(new java.awt.Color(227, 240, 227));
+        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnHTML.setText("View HTML");
+        btnHTML.setToolTipText("View the HTML export for this Creature.");
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -805,35 +797,35 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
         elementIncludes.add(btnHTML, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 260, 110, 35));
 
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
+        jLabel3.setText("Min");
         elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 495, -1, -1));
 
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
         jLabel6.setName("jLabel6"); // NOI18N
+        jLabel6.setText("Max");
         elementIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 495, -1, -1));
 
-        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
         jLabel7.setName("jLabel7"); // NOI18N
+        jLabel7.setText("Min");
         elementIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 495, -1, -1));
 
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
         jLabel8.setName("jLabel8"); // NOI18N
+        jLabel8.setText("Max");
         elementIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 495, -1, -1));
 
-        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
         jLabel9.setName("jLabel9"); // NOI18N
+        jLabel9.setText("Distribution:");
         elementIncludes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, -1, -1));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDistribution.setColumns(20);
-        txtDistribution.setFont(resourceMap.getFont("txtDistribution.font")); // NOI18N
         txtDistribution.setLineWrap(true);
         txtDistribution.setRows(3);
         txtDistribution.setText(element.getDistribution());
         txtDistribution.setWrapStyleWord(true);
         txtDistribution.setName("txtDistribution"); // NOI18N
+        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11));
         jScrollPane2.setViewportView(txtDistribution);
 
         elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 340, 270, 60));
@@ -886,8 +878,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         spnWeightFemaleMax.setValue(element.getWeightFemaleMax());
         elementIncludes.add(spnWeightFemaleMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, 50, -1));
 
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
         jLabel10.setName("jLabel10"); // NOI18N
+        jLabel10.setText("Type:");
         elementIncludes.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 540, 40, 20));
 
         cmbSizeType.setModel(new DefaultComboBoxModel(SizeType.values()));
@@ -896,9 +888,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbSizeType.setName("cmbSizeType"); // NOI18N
         elementIncludes.add(cmbSizeType, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, 110, -1));
 
-        btnSlideshow.setIcon(resourceMap.getIcon("btnSlideshow.icon")); // NOI18N
-        btnSlideshow.setText(resourceMap.getString("btnSlideshow.text")); // NOI18N
-        btnSlideshow.setToolTipText(resourceMap.getString("btnSlideshow.toolTipText")); // NOI18N
+        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
+        btnSlideshow.setText("Slideshows");
+        btnSlideshow.setToolTipText("View slideshow videos of linked images.");
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));

@@ -41,7 +41,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 import wildlog.data.dataobjects.Element;
@@ -104,8 +103,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         initComponents();
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
-        ResourceMap resourceMap = getResourceMap();
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
+        int messageTimeout = 10000;
         messageTimer = new Timer(messageTimeout, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,9 +111,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
         messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
+        int busyAnimationRate = 30;
         for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
+            busyIcons[i] = new ImageIcon(getClass().getResource("/wildlog/resources/busyicons/busy-icon" + i + ".png"));
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
             @Override
@@ -124,7 +122,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
             }
         });
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
+        idleIcon = new ImageIcon(getClass().getResource("/wildlog/resources/busyicons/idle-icon.png"));
         statusAnimationLabel.setIcon(idleIcon);
         progressBar.setVisible(false);
 
@@ -357,15 +355,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mainPanel.setLayout(new javax.swing.BoxLayout(mainPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         tabbedPanel.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(WildLogView.class);
-        tabbedPanel.setToolTipText(resourceMap.getString("tabbedPanel.toolTipText")); // NOI18N
+        tabbedPanel.setToolTipText("");
         tabbedPanel.setFocusable(false);
         tabbedPanel.setMaximumSize(new java.awt.Dimension(3500, 1800));
         tabbedPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabbedPanel.setName("tabbedPanel"); // NOI18N
         tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
 
-        tabHome.setBackground(resourceMap.getColor("tabHome.background")); // NOI18N
+        tabHome.setBackground(new java.awt.Color(5, 26, 5));
         tabHome.setMaximumSize(new java.awt.Dimension(1000, 630));
         tabHome.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabHome.setName("tabHome"); // NOI18N
@@ -376,63 +373,62 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        jLabel10.setFont(resourceMap.getFont("jLabel10.font")); // NOI18N
-        jLabel10.setForeground(resourceMap.getColor("jLabel10.foreground")); // NOI18N
-        jLabel10.setText(resourceMap.getString("jLabel10.text")); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18));
+        jLabel10.setForeground(new java.awt.Color(249, 250, 241));
+        jLabel10.setText("Welcome to");
         jLabel10.setName("jLabel10"); // NOI18N
 
-        jLabel11.setFont(resourceMap.getFont("jLabel11.font")); // NOI18N
-        jLabel11.setForeground(resourceMap.getColor("jLabel11.foreground")); // NOI18N
-        jLabel11.setText(resourceMap.getString("jLabel11.text")); // NOI18N
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 48));
+        jLabel11.setForeground(new java.awt.Color(249, 245, 239));
+        jLabel11.setText("WildLog");
         jLabel11.setName("jLabel11"); // NOI18N
 
-        jLabel12.setFont(resourceMap.getFont("jLabel12.font")); // NOI18N
-        jLabel12.setForeground(resourceMap.getColor("jLabel12.foreground")); // NOI18N
-        jLabel12.setText(resourceMap.getString("jLabel12.text")); // NOI18N
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18));
+        jLabel12.setForeground(new java.awt.Color(237, 230, 221));
+        jLabel12.setText("version 4.0 beta");
         jLabel12.setName("jLabel12"); // NOI18N
 
-        jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
-        jLabel15.setForeground(resourceMap.getColor("jLabel15.foreground")); // NOI18N
-        jLabel15.setText(resourceMap.getString("jLabel15.text")); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel15.setForeground(new java.awt.Color(186, 210, 159));
+        jLabel15.setText("http://remotecamera-sa.blogspot.com");
         jLabel15.setName("jLabel15"); // NOI18N
 
-        jLabel3.setIcon(resourceMap.getIcon("jLabel3.icon")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 1.png"))); // NOI18N
         jLabel3.setName("jLabel3"); // NOI18N
 
-        lblLocations.setForeground(resourceMap.getColor("lblLocations.foreground")); // NOI18N
-        lblLocations.setText(resourceMap.getString("lblLocations.text")); // NOI18N
+        lblLocations.setForeground(new java.awt.Color(183, 195, 166));
+        lblLocations.setText("Places:");
         lblLocations.setName("lblLocations"); // NOI18N
 
-        lblVisits.setForeground(resourceMap.getColor("lblVisits.foreground")); // NOI18N
-        lblVisits.setText(resourceMap.getString("lblVisits.text")); // NOI18N
+        lblVisits.setForeground(new java.awt.Color(183, 195, 166));
+        lblVisits.setText("Periods:");
         lblVisits.setName("lblVisits"); // NOI18N
 
-        lblSightings.setForeground(resourceMap.getColor("lblSightings.foreground")); // NOI18N
-        lblSightings.setText(resourceMap.getString("lblSightings.text")); // NOI18N
+        lblSightings.setForeground(new java.awt.Color(183, 195, 166));
+        lblSightings.setText("Observations:");
         lblSightings.setName("lblSightings"); // NOI18N
 
-        lblCreatures.setForeground(resourceMap.getColor("lblCreatures.foreground")); // NOI18N
-        lblCreatures.setText(resourceMap.getString("lblCreatures.text")); // NOI18N
+        lblCreatures.setForeground(new java.awt.Color(183, 195, 166));
+        lblCreatures.setText("Creatures:");
         lblCreatures.setName("lblCreatures"); // NOI18N
 
-        jSeparator5.setBackground(resourceMap.getColor("jSeparator5.background")); // NOI18N
-        jSeparator5.setForeground(resourceMap.getColor("jSeparator5.foreground")); // NOI18N
+        jSeparator5.setBackground(new java.awt.Color(57, 68, 43));
+        jSeparator5.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator5.setName("jSeparator5"); // NOI18N
 
-        jLabel5.setFont(resourceMap.getFont("jLabel5.font")); // NOI18N
-        jLabel5.setForeground(resourceMap.getColor("jLabel5.foreground")); // NOI18N
-        jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel5.setForeground(new java.awt.Color(107, 124, 89));
+        jLabel5.setText("http://www.mywild.co.za");
         jLabel5.setName("jLabel5"); // NOI18N
 
-        lblWorkspace.setFont(resourceMap.getFont("lblWorkspace.font")); // NOI18N
-        lblWorkspace.setForeground(resourceMap.getColor("lblWorkspace.foreground")); // NOI18N
+        lblWorkspace.setFont(new java.awt.Font("Arial", 0, 11));
+        lblWorkspace.setForeground(new java.awt.Color(74, 87, 60));
         lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblWorkspace.setText(wildlog.utils.WildLogPaths.WILDLOG.getFullPath());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
 
-        jSeparator6.setBackground(resourceMap.getColor("jSeparator6.background")); // NOI18N
-        jSeparator6.setForeground(resourceMap.getColor("jSeparator6.foreground")); // NOI18N
+        jSeparator6.setBackground(new java.awt.Color(163, 175, 148));
+        jSeparator6.setForeground(new java.awt.Color(216, 227, 201));
         jSeparator6.setName("jSeparator6"); // NOI18N
 
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
@@ -511,9 +507,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        tabbedPanel.addTab(resourceMap.getString("tabHome.TabConstraints.tabTitle"), tabHome); // NOI18N
+        tabbedPanel.addTab("Home", tabHome);
 
-        tabFoto.setBackground(resourceMap.getColor("tabFoto.background")); // NOI18N
+        tabFoto.setBackground(new java.awt.Color(235, 233, 221));
         tabFoto.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabFoto.setName("tabFoto"); // NOI18N
         tabFoto.setPreferredSize(new java.awt.Dimension(1000, 630));
@@ -523,10 +519,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        rdbBrowseLocation.setBackground(resourceMap.getColor("rdbBrowseLocation.background")); // NOI18N
+        rdbBrowseLocation.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbBrowseLocation);
-        rdbBrowseLocation.setText(resourceMap.getString("rdbBrowseLocation.text")); // NOI18N
-        rdbBrowseLocation.setToolTipText(resourceMap.getString("rdbBrowseLocation.toolTipText")); // NOI18N
+        rdbBrowseLocation.setText("By Places");
+        rdbBrowseLocation.setToolTipText("Sort the tree based on Places.");
         rdbBrowseLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbBrowseLocation.setName("rdbBrowseLocation"); // NOI18N
         rdbBrowseLocation.addItemListener(new java.awt.event.ItemListener() {
@@ -535,10 +531,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        rdbBrowseElement.setBackground(resourceMap.getColor("rdbBrowseElement.background")); // NOI18N
+        rdbBrowseElement.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbBrowseElement);
-        rdbBrowseElement.setText(resourceMap.getString("rdbBrowseElement.text")); // NOI18N
-        rdbBrowseElement.setToolTipText(resourceMap.getString("rdbBrowseElement.toolTipText")); // NOI18N
+        rdbBrowseElement.setText("By Creatures");
+        rdbBrowseElement.setToolTipText("Sort the tree based on Creatures.");
         rdbBrowseElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbBrowseElement.setName("rdbBrowseElement"); // NOI18N
         rdbBrowseElement.addItemListener(new java.awt.event.ItemListener() {
@@ -547,10 +543,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        rdbBrowseDate.setBackground(resourceMap.getColor("rdbBrowseDate.background")); // NOI18N
+        rdbBrowseDate.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbBrowseDate);
-        rdbBrowseDate.setText(resourceMap.getString("rdbBrowseDate.text")); // NOI18N
-        rdbBrowseDate.setToolTipText(resourceMap.getString("rdbBrowseDate.toolTipText")); // NOI18N
+        rdbBrowseDate.setText("By Date");
+        rdbBrowseDate.setToolTipText("Sort the tree based on the Date of the Observations.");
         rdbBrowseDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbBrowseDate.setName("rdbBrowseDate"); // NOI18N
         rdbBrowseDate.addItemListener(new java.awt.event.ItemListener() {
@@ -559,7 +555,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        imgBrowsePhotos.setBackground(resourceMap.getColor("imgBrowsePhotos.background")); // NOI18N
+        imgBrowsePhotos.setBackground(new java.awt.Color(231, 235, 204));
         imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         imgBrowsePhotos.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         imgBrowsePhotos.setName("imgBrowsePhotos"); // NOI18N
@@ -578,9 +574,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane5.setName("jScrollPane5"); // NOI18N
         jScrollPane5.setPreferredSize(new java.awt.Dimension(230, 600));
 
-        txtBrowseInfo.setContentType(resourceMap.getString("txtBrowseInfo.contentType")); // NOI18N
+        txtBrowseInfo.setContentType("text/html");
         txtBrowseInfo.setEditable(false);
-        txtBrowseInfo.setText(resourceMap.getString("txtBrowseInfo.text")); // NOI18N
+        txtBrowseInfo.setText("");
         txtBrowseInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtBrowseInfo.setName("txtBrowseInfo"); // NOI18N
         jScrollPane5.setViewportView(txtBrowseInfo);
@@ -598,10 +594,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
-        btnGoBrowseSelection.setBackground(resourceMap.getColor("btnGoBrowseSelection.background")); // NOI18N
-        btnGoBrowseSelection.setIcon(resourceMap.getIcon("btnGoBrowseSelection.icon")); // NOI18N
-        btnGoBrowseSelection.setText(resourceMap.getString("btnGoBrowseSelection.text")); // NOI18N
-        btnGoBrowseSelection.setToolTipText(resourceMap.getString("btnGoBrowseSelection.toolTipText")); // NOI18N
+        btnGoBrowseSelection.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoBrowseSelection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoBrowseSelection.setToolTipText("Open the selected tree entry.");
         btnGoBrowseSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoBrowseSelection.setFocusPainted(false);
         btnGoBrowseSelection.setName("btnGoBrowseSelection"); // NOI18N
@@ -612,26 +607,26 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
 
         btnZoomIn.setAction(imgBrowsePhotos.getZoomInAction());
-        btnZoomIn.setBackground(resourceMap.getColor("btnZoomIn.background")); // NOI18N
-        btnZoomIn.setIcon(resourceMap.getIcon("btnZoomIn.icon")); // NOI18N
-        btnZoomIn.setText(resourceMap.getString("btnZoomIn.text")); // NOI18N
-        btnZoomIn.setToolTipText(resourceMap.getString("btnZoomIn.toolTipText")); // NOI18N
+        btnZoomIn.setBackground(new java.awt.Color(235, 233, 221));
+        btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
+        btnZoomIn.setText("Zoom");
+        btnZoomIn.setToolTipText("Zoom the image in.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setFocusPainted(false);
         btnZoomIn.setName("btnZoomIn"); // NOI18N
 
         btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
-        btnZoomOut.setBackground(resourceMap.getColor("btnZoomOut.background")); // NOI18N
-        btnZoomOut.setIcon(resourceMap.getIcon("btnZoomOut.icon")); // NOI18N
-        btnZoomOut.setText(resourceMap.getString("btnZoomOut.text")); // NOI18N
-        btnZoomOut.setToolTipText(resourceMap.getString("btnZoomOut.toolTipText")); // NOI18N
+        btnZoomOut.setBackground(new java.awt.Color(235, 233, 221));
+        btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
+        btnZoomOut.setText("Zoom");
+        btnZoomOut.setToolTipText("Zoom the image out.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setFocusPainted(false);
         btnZoomOut.setName("btnZoomOut"); // NOI18N
 
-        btnViewImage.setBackground(resourceMap.getColor("btnViewImage.background")); // NOI18N
-        btnViewImage.setText(resourceMap.getString("btnViewImage.text")); // NOI18N
-        btnViewImage.setToolTipText(resourceMap.getString("btnViewImage.toolTipText")); // NOI18N
+        btnViewImage.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewImage.setText("Open Original File");
+        btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
         btnViewImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewImage.setFocusPainted(false);
         btnViewImage.setName("btnViewImage"); // NOI18N
@@ -641,10 +636,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnBrowsePrev.setBackground(resourceMap.getColor("btnBrowsePrev.background")); // NOI18N
-        btnBrowsePrev.setIcon(resourceMap.getIcon("btnBrowsePrev.icon")); // NOI18N
-        btnBrowsePrev.setText(resourceMap.getString("btnBrowsePrev.text")); // NOI18N
-        btnBrowsePrev.setToolTipText(resourceMap.getString("btnBrowsePrev.toolTipText")); // NOI18N
+        btnBrowsePrev.setBackground(new java.awt.Color(235, 233, 221));
+        btnBrowsePrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnBrowsePrev.setToolTipText("Load the previous file.");
         btnBrowsePrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowsePrev.setFocusPainted(false);
         btnBrowsePrev.setName("btnBrowsePrev"); // NOI18N
@@ -654,10 +648,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnBrowseNext.setBackground(resourceMap.getColor("btnBrowseNext.background")); // NOI18N
-        btnBrowseNext.setIcon(resourceMap.getIcon("btnBrowseNext.icon")); // NOI18N
-        btnBrowseNext.setText(resourceMap.getString("btnBrowseNext.text")); // NOI18N
-        btnBrowseNext.setToolTipText(resourceMap.getString("btnBrowseNext.toolTipText")); // NOI18N
+        btnBrowseNext.setBackground(new java.awt.Color(235, 233, 221));
+        btnBrowseNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
+        btnBrowseNext.setToolTipText("Load the next file.");
         btnBrowseNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowseNext.setFocusPainted(false);
         btnBrowseNext.setName("btnBrowseNext"); // NOI18N
@@ -675,10 +668,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
 
-        btnRefreshDates.setBackground(resourceMap.getColor("btnRefreshDates.background")); // NOI18N
-        btnRefreshDates.setIcon(resourceMap.getIcon("btnRefreshDates.icon")); // NOI18N
-        btnRefreshDates.setText(resourceMap.getString("btnRefreshDates.text")); // NOI18N
-        btnRefreshDates.setToolTipText(resourceMap.getString("btnRefreshDates.toolTipText")); // NOI18N
+        btnRefreshDates.setBackground(new java.awt.Color(235, 233, 221));
+        btnRefreshDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        btnRefreshDates.setToolTipText("Refresh the Observations based on the provided Dates.");
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRefreshDates.setFocusPainted(false);
         btnRefreshDates.setIconTextGap(0);
@@ -690,14 +682,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        lblNumberOfImages.setFont(resourceMap.getFont("lblNumberOfImages.font")); // NOI18N
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 1, 12));
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
-        btnReport.setBackground(resourceMap.getColor("btnReport.background")); // NOI18N
-        btnReport.setIcon(resourceMap.getIcon("btnReport.icon")); // NOI18N
-        btnReport.setText(resourceMap.getString("btnReport.text")); // NOI18N
-        btnReport.setToolTipText(resourceMap.getString("btnReport.toolTipText")); // NOI18N
+        btnReport.setBackground(new java.awt.Color(235, 233, 221));
+        btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
+        btnReport.setText("View Reports");
+        btnReport.setToolTipText("View the report for the selected tree entry.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -709,10 +701,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnDefault.setBackground(resourceMap.getColor("btnDefault.background")); // NOI18N
-        btnDefault.setIcon(resourceMap.getIcon("btnDefault.icon")); // NOI18N
-        btnDefault.setText(resourceMap.getString("btnDefault.text")); // NOI18N
-        btnDefault.setToolTipText(resourceMap.getString("btnDefault.toolTipText")); // NOI18N
+        btnDefault.setBackground(new java.awt.Color(235, 233, 221));
+        btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
+        btnDefault.setText("Default");
+        btnDefault.setToolTipText("Set the current file as the default (first) file for the selected tree entry.");
         btnDefault.setFocusPainted(false);
         btnDefault.setName("btnDefault"); // NOI18N
         btnDefault.addActionListener(new java.awt.event.ActionListener() {
@@ -721,7 +713,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        cmbElementTypesBrowseTab.setBackground(resourceMap.getColor("cmbElementTypesBrowseTab.background")); // NOI18N
+        cmbElementTypesBrowseTab.setBackground(new java.awt.Color(219, 237, 205));
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -733,8 +725,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        chkElementTypeBrowseTab.setBackground(resourceMap.getColor("chkElementTypeBrowseTab.background")); // NOI18N
-        chkElementTypeBrowseTab.setText(resourceMap.getString("chkElementTypeBrowseTab.text")); // NOI18N
+        chkElementTypeBrowseTab.setBackground(new java.awt.Color(235, 233, 221));
         chkElementTypeBrowseTab.setName("chkElementTypeBrowseTab"); // NOI18N
         chkElementTypeBrowseTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -743,20 +734,20 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
 
         btnRotate.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
-        btnRotate.setBackground(resourceMap.getColor("btnRotate.background")); // NOI18N
-        btnRotate.setIcon(resourceMap.getIcon("btnRotate.icon")); // NOI18N
-        btnRotate.setText(resourceMap.getString("btnRotate.text")); // NOI18N
-        btnRotate.setToolTipText(resourceMap.getString("btnRotate.toolTipText")); // NOI18N
+        btnRotate.setBackground(new java.awt.Color(235, 233, 221));
+        btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        btnRotate.setText("Rotate");
+        btnRotate.setToolTipText("Rotate the image counter clockwise.");
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRotate.setFocusPainted(false);
         btnRotate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRotate.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRotate.setName("btnRotate"); // NOI18N
 
-        btnViewEXIF.setBackground(resourceMap.getColor("btnViewEXIF.background")); // NOI18N
-        btnViewEXIF.setIcon(resourceMap.getIcon("btnViewEXIF.icon")); // NOI18N
-        btnViewEXIF.setText(resourceMap.getString("btnViewEXIF.text")); // NOI18N
-        btnViewEXIF.setToolTipText(resourceMap.getString("btnViewEXIF.toolTipText")); // NOI18N
+        btnViewEXIF.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        btnViewEXIF.setText("View EXIF");
+        btnViewEXIF.setToolTipText("View the EXIF meta data for the image.");
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewEXIF.setFocusPainted(false);
         btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -883,9 +874,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addContainerGap())
         );
 
-        tabbedPanel.addTab(resourceMap.getString("tabFoto.TabConstraints.tabTitle"), tabFoto); // NOI18N
+        tabbedPanel.addTab("Browse All", tabFoto);
 
-        tabLocation.setBackground(resourceMap.getColor("tabLocation.background")); // NOI18N
+        tabLocation.setBackground(new java.awt.Color(194, 207, 214));
         tabLocation.setMaximumSize(new java.awt.Dimension(1000, 600));
         tabLocation.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabLocation.setName("tabLocation"); // NOI18N
@@ -899,11 +890,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFont(resourceMap.getFont("tblLocation.font")); // NOI18N
+        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12));
         tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
-        tblLocation.setSelectionBackground(resourceMap.getColor("tblLocation.selectionBackground")); // NOI18N
+        tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocationMouseClicked(evt);
@@ -922,21 +913,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane1.setViewportView(tblLocation);
 
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setText("List of Creatures observed at the selected Place:");
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setText("List of Periods at the selected Place:");
         jLabel2.setName("jLabel2"); // NOI18N
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setFont(resourceMap.getFont("tblVisit.font")); // NOI18N
+        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12));
         tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblVisit.setName("tblVisit"); // NOI18N
-        tblVisit.setSelectionBackground(resourceMap.getColor("tblVisit.selectionBackground")); // NOI18N
+        tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblVisitMouseClicked(evt);
@@ -949,10 +940,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane2.setViewportView(tblVisit);
 
-        btnGoLocation_LocTab.setBackground(resourceMap.getColor("btnGoLocation_LocTab.background")); // NOI18N
-        btnGoLocation_LocTab.setIcon(resourceMap.getIcon("btnGoLocation_LocTab.icon")); // NOI18N
-        btnGoLocation_LocTab.setText(resourceMap.getString("btnGoLocation_LocTab.text")); // NOI18N
-        btnGoLocation_LocTab.setToolTipText(resourceMap.getString("btnGoLocation_LocTab.toolTipText")); // NOI18N
+        btnGoLocation_LocTab.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoLocation_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoLocation_LocTab.setToolTipText("Open a tab for the selected Place.");
         btnGoLocation_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoLocation_LocTab.setFocusPainted(false);
         btnGoLocation_LocTab.setName("btnGoLocation_LocTab"); // NOI18N
@@ -962,10 +952,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnGoElement_LocTab.setBackground(resourceMap.getColor("btnGoElement_LocTab.background")); // NOI18N
-        btnGoElement_LocTab.setIcon(resourceMap.getIcon("btnGoElement_LocTab.icon")); // NOI18N
-        btnGoElement_LocTab.setText(resourceMap.getString("btnGoElement_LocTab.text")); // NOI18N
-        btnGoElement_LocTab.setToolTipText(resourceMap.getString("btnGoElement_LocTab.toolTipText")); // NOI18N
+        btnGoElement_LocTab.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoElement_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoElement_LocTab.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoElement_LocTab.setFocusPainted(false);
         btnGoElement_LocTab.setName("btnGoElement_LocTab"); // NOI18N
@@ -975,10 +964,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnAddLocation.setBackground(resourceMap.getColor("btnAddLocation.background")); // NOI18N
-        btnAddLocation.setIcon(resourceMap.getIcon("btnAddLocation.icon")); // NOI18N
-        btnAddLocation.setText(resourceMap.getString("btnAddLocation.text")); // NOI18N
-        btnAddLocation.setToolTipText(resourceMap.getString("btnAddLocation.toolTipText")); // NOI18N
+        btnAddLocation.setBackground(new java.awt.Color(194, 207, 214));
+        btnAddLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
+        btnAddLocation.setToolTipText("Open a tab for a new Place to be added.");
         btnAddLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddLocation.setFocusPainted(false);
         btnAddLocation.setName("btnAddLocation"); // NOI18N
@@ -988,10 +976,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnDeleteLocation.setBackground(resourceMap.getColor("btnDeleteLocation.background")); // NOI18N
-        btnDeleteLocation.setIcon(resourceMap.getIcon("btnDeleteLocation.icon")); // NOI18N
-        btnDeleteLocation.setText(resourceMap.getString("btnDeleteLocation.text")); // NOI18N
-        btnDeleteLocation.setToolTipText(resourceMap.getString("btnDeleteLocation.toolTipText")); // NOI18N
+        btnDeleteLocation.setBackground(new java.awt.Color(194, 207, 214));
+        btnDeleteLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnDeleteLocation.setToolTipText("Delete the selected Place.");
         btnDeleteLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteLocation.setFocusPainted(false);
         btnDeleteLocation.setName("btnDeleteLocation"); // NOI18N
@@ -1004,10 +991,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         tblElement_LocTab.setAutoCreateRowSorter(true);
-        tblElement_LocTab.setFont(resourceMap.getFont("tblElement_LocTab.font")); // NOI18N
+        tblElement_LocTab.setFont(new java.awt.Font("Tahoma", 0, 12));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
-        tblElement_LocTab.setSelectionBackground(resourceMap.getColor("tblElement_LocTab.selectionBackground")); // NOI18N
+        tblElement_LocTab.setSelectionBackground(new java.awt.Color(82, 115, 79));
         tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblElement_LocTabMouseClicked(evt);
@@ -1020,10 +1007,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane3.setViewportView(tblElement_LocTab);
 
-        btnGoVisit_LocTab.setBackground(resourceMap.getColor("btnGoVisit_LocTab.background")); // NOI18N
-        btnGoVisit_LocTab.setIcon(resourceMap.getIcon("btnGoVisit_LocTab.icon")); // NOI18N
-        btnGoVisit_LocTab.setText(resourceMap.getString("btnGoVisit_LocTab.text")); // NOI18N
-        btnGoVisit_LocTab.setToolTipText(resourceMap.getString("btnGoVisit_LocTab.toolTipText")); // NOI18N
+        btnGoVisit_LocTab.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoVisit_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoVisit_LocTab.setToolTipText("Open a tab for the selected Period.");
         btnGoVisit_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoVisit_LocTab.setFocusPainted(false);
         btnGoVisit_LocTab.setName("btnGoVisit_LocTab"); // NOI18N
@@ -1033,9 +1019,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        lblImage_LocTab.setBackground(resourceMap.getColor("lblImage_LocTab.background")); // NOI18N
+        lblImage_LocTab.setBackground(new java.awt.Color(0, 0, 0));
         lblImage_LocTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImage_LocTab.setText(resourceMap.getString("lblImage_LocTab.text")); // NOI18N
         lblImage_LocTab.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage_LocTab.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -1049,9 +1034,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        jLabel7.setFont(resourceMap.getFont("jLabel7.font")); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText(resourceMap.getString("jLabel7.text")); // NOI18N
+        jLabel7.setText("All Places:");
         jLabel7.setName("jLabel7"); // NOI18N
 
         javax.swing.GroupLayout tabLocationLayout = new javax.swing.GroupLayout(tabLocation);
@@ -1115,9 +1100,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addContainerGap())
         );
 
-        tabbedPanel.addTab(resourceMap.getString("tabLocation.TabConstraints.tabTitle"), tabLocation); // NOI18N
+        tabbedPanel.addTab("All Locations", tabLocation);
 
-        tabElement.setBackground(resourceMap.getColor("tabElement.background")); // NOI18N
+        tabElement.setBackground(new java.awt.Color(201, 218, 199));
         tabElement.setMaximumSize(new java.awt.Dimension(1000, 600));
         tabElement.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabElement.setName("tabElement"); // NOI18N
@@ -1131,11 +1116,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         scrlElement.setName("scrlElement"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFont(resourceMap.getFont("tblElement.font")); // NOI18N
+        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12));
         tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
-        tblElement.setSelectionBackground(resourceMap.getColor("tblElement.selectionBackground")); // NOI18N
+        tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblElementMouseClicked(evt);
@@ -1154,14 +1139,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         scrlElement.setViewportView(tblElement);
 
-        jLabel6.setFont(resourceMap.getFont("jLabel6.font")); // NOI18N
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setText("List of Places where the selected Creature has been observed:");
         jLabel6.setName("jLabel6"); // NOI18N
 
-        btnGoElement.setBackground(resourceMap.getColor("btnGoElement.background")); // NOI18N
-        btnGoElement.setIcon(resourceMap.getIcon("btnGoElement.icon")); // NOI18N
-        btnGoElement.setText(resourceMap.getString("btnGoElement.text")); // NOI18N
-        btnGoElement.setToolTipText(resourceMap.getString("btnGoElement.toolTipText")); // NOI18N
+        btnGoElement.setBackground(new java.awt.Color(206, 219, 206));
+        btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoElement.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoElement.setFocusPainted(false);
         btnGoElement.setName("btnGoElement"); // NOI18N
@@ -1171,10 +1155,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnAddElement.setBackground(resourceMap.getColor("btnAddElement.background")); // NOI18N
-        btnAddElement.setIcon(resourceMap.getIcon("btnAddElement.icon")); // NOI18N
-        btnAddElement.setText(resourceMap.getString("btnAddElement.text")); // NOI18N
-        btnAddElement.setToolTipText(resourceMap.getString("btnAddElement.toolTipText")); // NOI18N
+        btnAddElement.setBackground(new java.awt.Color(206, 219, 206));
+        btnAddElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
+        btnAddElement.setToolTipText("Open a tab for a new Creature to be added.");
         btnAddElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAddElement.setFocusPainted(false);
         btnAddElement.setName("btnAddElement"); // NOI18N
@@ -1184,10 +1167,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnDeleteElement.setBackground(resourceMap.getColor("btnDeleteElement.background")); // NOI18N
-        btnDeleteElement.setIcon(resourceMap.getIcon("btnDeleteElement.icon")); // NOI18N
-        btnDeleteElement.setText(resourceMap.getString("btnDeleteElement.text")); // NOI18N
-        btnDeleteElement.setToolTipText(resourceMap.getString("btnDeleteElement.toolTipText")); // NOI18N
+        btnDeleteElement.setBackground(new java.awt.Color(206, 219, 206));
+        btnDeleteElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnDeleteElement.setToolTipText("Delete the selected Creature.");
         btnDeleteElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteElement.setFocusPainted(false);
         btnDeleteElement.setName("btnDeleteElement"); // NOI18N
@@ -1200,10 +1182,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane6.setName("jScrollPane6"); // NOI18N
 
         tblLocation_EleTab.setAutoCreateRowSorter(true);
-        tblLocation_EleTab.setFont(resourceMap.getFont("tblLocation_EleTab.font")); // NOI18N
+        tblLocation_EleTab.setFont(new java.awt.Font("Tahoma", 0, 12));
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
-        tblLocation_EleTab.setSelectionBackground(resourceMap.getColor("tblLocation_EleTab.selectionBackground")); // NOI18N
+        tblLocation_EleTab.setSelectionBackground(new java.awt.Color(106, 94, 60));
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocation_EleTabMouseClicked(evt);
@@ -1227,10 +1209,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        btnGoLocation.setBackground(resourceMap.getColor("btnGoLocation.background")); // NOI18N
-        btnGoLocation.setIcon(resourceMap.getIcon("btnGoLocation.icon")); // NOI18N
-        btnGoLocation.setText(resourceMap.getString("btnGoLocation.text")); // NOI18N
-        btnGoLocation.setToolTipText(resourceMap.getString("btnGoLocation.toolTipText")); // NOI18N
+        btnGoLocation.setBackground(new java.awt.Color(206, 219, 206));
+        btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoLocation.setToolTipText("Open a new tab for the selected Location.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoLocation.setFocusPainted(false);
         btnGoLocation.setName("btnGoLocation"); // NOI18N
@@ -1240,9 +1221,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        lblImage.setBackground(resourceMap.getColor("lblImage.background")); // NOI18N
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
         lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImage.setText(resourceMap.getString("lblImage.text")); // NOI18N
         lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
@@ -1256,20 +1236,19 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        jLabel9.setFont(resourceMap.getFont("jLabel9.font")); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14));
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText(resourceMap.getString("jLabel9.text")); // NOI18N
+        jLabel9.setText("All Creatures:");
         jLabel9.setName("jLabel9"); // NOI18N
 
-        txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
 
-        jLabel14.setFont(resourceMap.getFont("jLabel14.font")); // NOI18N
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText(resourceMap.getString("jLabel14.text")); // NOI18N
+        jLabel14.setText("Search on Primary Name and Creature Type:");
         jLabel14.setName("jLabel14"); // NOI18N
 
-        jSeparator1.setForeground(resourceMap.getColor("jSeparator1.foreground")); // NOI18N
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
         jSeparator1.setName("jSeparator1"); // NOI18N
 
         javax.swing.GroupLayout tabElementLayout = new javax.swing.GroupLayout(tabElement);
@@ -1338,22 +1317,22 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addContainerGap())
         );
 
-        tabbedPanel.addTab(resourceMap.getString("tabElement.TabConstraints.tabTitle"), tabElement); // NOI18N
+        tabbedPanel.addTab("All Creatures", tabElement);
 
         mainPanel.add(tabbedPanel);
 
         menuBar.setName("menuBar"); // NOI18N
 
-        fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
+        fileMenu.setText("Application");
         fileMenu.setName("fileMenu"); // NOI18N
 
-        workspaceMenu.setIcon(resourceMap.getIcon("workspaceMenu.icon")); // NOI18N
-        workspaceMenu.setText(resourceMap.getString("workspaceMenu.text")); // NOI18N
+        workspaceMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
+        workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
-        mnuChangeWorkspaceMenuItem.setIcon(resourceMap.getIcon("mnuChangeWorkspaceMenuItem.icon")); // NOI18N
-        mnuChangeWorkspaceMenuItem.setText(resourceMap.getString("mnuChangeWorkspaceMenuItem.text")); // NOI18N
-        mnuChangeWorkspaceMenuItem.setToolTipText(resourceMap.getString("mnuChangeWorkspaceMenuItem.toolTipText")); // NOI18N
+        mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
+        mnuChangeWorkspaceMenuItem.setText("Change Workspace Folder");
+        mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
         mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
         mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1362,9 +1341,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         workspaceMenu.add(mnuChangeWorkspaceMenuItem);
 
-        mnuCleanWorkspace.setIcon(resourceMap.getIcon("mnuCleanWorkspace.icon")); // NOI18N
-        mnuCleanWorkspace.setText(resourceMap.getString("mnuCleanWorkspace.text")); // NOI18N
-        mnuCleanWorkspace.setToolTipText(resourceMap.getString("mnuCleanWorkspace.toolTipText")); // NOI18N
+        mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
+        mnuCleanWorkspace.setText("Check and Clean Workspace Folder");
+        mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove any nonessential files.");
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
         mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1375,12 +1354,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         fileMenu.add(workspaceMenu);
 
-        helpMenu.setIcon(resourceMap.getIcon("helpMenu.icon")); // NOI18N
-        helpMenu.setText(resourceMap.getString("helpMenu.text")); // NOI18N
+        helpMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        helpMenu.setText("About");
         helpMenu.setName("helpMenu"); // NOI18N
 
-        mnuAboutMenuItem.setIcon(resourceMap.getIcon("mnuAboutMenuItem.icon")); // NOI18N
-        mnuAboutMenuItem.setText(resourceMap.getString("mnuAboutMenuItem.text")); // NOI18N
+        mnuAboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        mnuAboutMenuItem.setText("About WildLog");
         mnuAboutMenuItem.setName("mnuAboutMenuItem"); // NOI18N
         mnuAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1394,8 +1373,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator2.setName("jSeparator2"); // NOI18N
         fileMenu.add(jSeparator2);
 
-        exitMenuItem.setIcon(resourceMap.getIcon("exitMenuItem.icon")); // NOI18N
-        exitMenuItem.setText(resourceMap.getString("exitMenuItem.text")); // NOI18N
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        exitMenuItem.setText("Exit WildLog");
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1406,12 +1385,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(fileMenu);
 
-        backupMenu.setText(resourceMap.getString("backupMenu.text")); // NOI18N
+        backupMenu.setText("Backup");
         backupMenu.setName("backupMenu"); // NOI18N
 
-        mnuBackupMenuItem.setIcon(resourceMap.getIcon("mnuBackupMenuItem.icon")); // NOI18N
-        mnuBackupMenuItem.setText(resourceMap.getString("mnuBackupMenuItem.text")); // NOI18N
-        mnuBackupMenuItem.setToolTipText(resourceMap.getString("mnuBackupMenuItem.toolTipText")); // NOI18N
+        mnuBackupMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
+        mnuBackupMenuItem.setText("Backup Database");
+        mnuBackupMenuItem.setToolTipText("Backup the database. (Note: This does NOT backup the linked files.)");
         mnuBackupMenuItem.setName("mnuBackupMenuItem"); // NOI18N
         mnuBackupMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1422,11 +1401,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(backupMenu);
 
-        exportMenu.setText(resourceMap.getString("exportMenu.text")); // NOI18N
+        exportMenu.setText("Export");
 
-        csvExportMenuItem.setIcon(resourceMap.getIcon("csvExportMenuItem.icon")); // NOI18N
-        csvExportMenuItem.setText(resourceMap.getString("csvExportMenuItem.text")); // NOI18N
-        csvExportMenuItem.setToolTipText(resourceMap.getString("csvExportMenuItem.toolTipText")); // NOI18N
+        csvExportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        csvExportMenuItem.setText("Export All to CSV");
+        csvExportMenuItem.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
         csvExportMenuItem.setName("csvExportMenuItem"); // NOI18N
         csvExportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1435,9 +1414,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         exportMenu.add(csvExportMenuItem);
 
-        htmlExportMenuItem1.setIcon(resourceMap.getIcon("htmlExportMenuItem1.icon")); // NOI18N
-        htmlExportMenuItem1.setText(resourceMap.getString("htmlExportMenuItem1.text")); // NOI18N
-        htmlExportMenuItem1.setToolTipText(resourceMap.getString("htmlExportMenuItem1.toolTipText")); // NOI18N
+        htmlExportMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        htmlExportMenuItem1.setText("Export All to HTML");
+        htmlExportMenuItem1.setToolTipText("Export all data and linked files to HTML files. (Viewable in a web browser, etc.)");
         htmlExportMenuItem1.setName("htmlExportMenuItem1"); // NOI18N
         htmlExportMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1446,9 +1425,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         exportMenu.add(htmlExportMenuItem1);
 
-        kmlExportMenuItem.setIcon(resourceMap.getIcon("kmlExportMenuItem.icon")); // NOI18N
-        kmlExportMenuItem.setText(resourceMap.getString("kmlExportMenuItem.text")); // NOI18N
-        kmlExportMenuItem.setToolTipText(resourceMap.getString("kmlExportMenuItem.toolTipText")); // NOI18N
+        kmlExportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
+        kmlExportMenuItem.setText("Export All to KML");
+        kmlExportMenuItem.setToolTipText("Export all data and linked files to a KML file. (Open in Google Earth, etc.)");
         kmlExportMenuItem.setName("kmlExportMenuItem"); // NOI18N
         kmlExportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1459,12 +1438,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(exportMenu);
 
-        importMenu.setText(resourceMap.getString("importMenu.text")); // NOI18N
+        importMenu.setText("Import");
         importMenu.setName("importMenu"); // NOI18N
 
-        csvImportMenuItem.setIcon(resourceMap.getIcon("csvImportMenuItem.icon")); // NOI18N
-        csvImportMenuItem.setText(resourceMap.getString("csvImportMenuItem.text")); // NOI18N
-        csvImportMenuItem.setToolTipText(resourceMap.getString("csvImportMenuItem.toolTipText")); // NOI18N
+        csvImportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        csvImportMenuItem.setText("Import from CSV");
+        csvImportMenuItem.setToolTipText("Import the data contained in the CSV files. All imported data will be prefixed by the provided value. (Note: The files must be in the same format as generated by the CSV Export.)");
         csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
         csvImportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1473,9 +1452,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         importMenu.add(csvImportMenuItem);
 
-        bulkImportMenuItem.setIcon(resourceMap.getIcon("bulkImportMenuItem.icon")); // NOI18N
-        bulkImportMenuItem.setText(resourceMap.getString("bulkImportMenuItem.text")); // NOI18N
-        bulkImportMenuItem.setToolTipText(resourceMap.getString("bulkImportMenuItem.toolTipText")); // NOI18N
+        bulkImportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
+        bulkImportMenuItem.setText("Open Bulk Import Tab");
+        bulkImportMenuItem.setToolTipText("Import multiple images at once.");
         bulkImportMenuItem.setName("bulkImportMenuItem"); // NOI18N
         bulkImportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1486,11 +1465,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(importMenu);
 
-        advancedMenu.setText(resourceMap.getString("advancedMenu.text")); // NOI18N
+        advancedMenu.setText("Advanced");
 
-        calcSunMoonMenuItem.setIcon(resourceMap.getIcon("calcSunMoonMenuItem.icon")); // NOI18N
-        calcSunMoonMenuItem.setText(resourceMap.getString("calcSunMoonMenuItem.text")); // NOI18N
-        calcSunMoonMenuItem.setToolTipText(resourceMap.getString("calcSunMoonMenuItem.toolTipText")); // NOI18N
+        calcSunMoonMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
+        calcSunMoonMenuItem.setText("Calculate Sun and Moon information for all Observations");
+        calcSunMoonMenuItem.setToolTipText("WARNING: This action will recalculate and overwrite the Sun and Moon info for all Observations.");
         calcSunMoonMenuItem.setName("calcSunMoonMenuItem"); // NOI18N
         calcSunMoonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1499,9 +1478,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         advancedMenu.add(calcSunMoonMenuItem);
 
-        moveVisitsMenuItem.setIcon(resourceMap.getIcon("moveVisitsMenuItem.icon")); // NOI18N
-        moveVisitsMenuItem.setText(resourceMap.getString("moveVisitsMenuItem.text")); // NOI18N
-        moveVisitsMenuItem.setToolTipText(resourceMap.getString("moveVisitsMenuItem.toolTipText")); // NOI18N
+        moveVisitsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        moveVisitsMenuItem.setText("Move a Period to another Place");
+        moveVisitsMenuItem.setToolTipText("Move a Period from one Place to another, including all Observations during that Period.");
         moveVisitsMenuItem.setName("moveVisitsMenuItem"); // NOI18N
         moveVisitsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1510,9 +1489,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         advancedMenu.add(moveVisitsMenuItem);
 
-        linkElementsMenuItem.setIcon(resourceMap.getIcon("linkElementsMenuItem.icon")); // NOI18N
-        linkElementsMenuItem.setText(resourceMap.getString("linkElementsMenuItem.text")); // NOI18N
-        linkElementsMenuItem.setToolTipText(resourceMap.getString("linkElementsMenuItem.toolTipText")); // NOI18N
+        linkElementsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        linkElementsMenuItem.setText("Merge one Creatures into another");
+        linkElementsMenuItem.setToolTipText("Move all Observations from one Creature to another Creature and then delete the initial Creature.");
         linkElementsMenuItem.setName("linkElementsMenuItem"); // NOI18N
         linkElementsMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1523,16 +1502,16 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(advancedMenu);
 
-        settingsMenu.setText(resourceMap.getString("settingsMenu.text")); // NOI18N
+        settingsMenu.setText("Settings");
         settingsMenu.setName("settingsMenu"); // NOI18N
 
-        mappingMenu.setIcon(resourceMap.getIcon("mappingMenu.icon")); // NOI18N
-        mappingMenu.setText(resourceMap.getString("mappingMenu.text")); // NOI18N
+        mappingMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        mappingMenu.setText("Map Settings");
         mappingMenu.setName("mappingMenu"); // NOI18N
 
         chkMnuUseWMS.setSelected(app.getWildLogOptions().isIsOnlinemapTheDefault());
-        chkMnuUseWMS.setText(resourceMap.getString("chkMnuUseWMS.text")); // NOI18N
-        chkMnuUseWMS.setToolTipText(resourceMap.getString("chkMnuUseWMS.toolTipText")); // NOI18N
+        chkMnuUseWMS.setText("Use Online Map");
+        chkMnuUseWMS.setToolTipText("Check to use the Online Map, uncheck to use the Offline Map instead.");
         chkMnuUseWMS.setName("chkMnuUseWMS"); // NOI18N
         chkMnuUseWMS.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -1541,8 +1520,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         mappingMenu.add(chkMnuUseWMS);
 
-        mnuMapStartMenuItem.setText(resourceMap.getString("mnuMapStartMenuItem.text")); // NOI18N
-        mnuMapStartMenuItem.setToolTipText(resourceMap.getString("mnuMapStartMenuItem.toolTipText")); // NOI18N
+        mnuMapStartMenuItem.setText("Set Map Start Location");
+        mnuMapStartMenuItem.setToolTipText("Set the GPS location where the map will open at by default.");
         mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
         mnuMapStartMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1553,12 +1532,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         settingsMenu.add(mappingMenu);
 
-        slideshowMenu.setIcon(resourceMap.getIcon("slideshowMenu.icon")); // NOI18N
-        slideshowMenu.setText(resourceMap.getString("slideshowMenu.text")); // NOI18N
+        slideshowMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
+        slideshowMenu.setText("Slideshow Settings");
         slideshowMenu.setName("slideshowMenu"); // NOI18N
 
-        mnuSetSlideshowSpeed.setText(resourceMap.getString("mnuSetSlideshowSpeed.text")); // NOI18N
-        mnuSetSlideshowSpeed.setToolTipText(resourceMap.getString("mnuSetSlideshowSpeed.toolTipText")); // NOI18N
+        mnuSetSlideshowSpeed.setText("Set Slideshow Speed");
+        mnuSetSlideshowSpeed.setToolTipText("Set the framerate that will be used for all generated Slideshows.");
         mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
         mnuSetSlideshowSpeed.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1567,8 +1546,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         slideshowMenu.add(mnuSetSlideshowSpeed);
 
-        mnuSetSlideshowSize.setText(resourceMap.getString("mnuSetSlideshowSize.text")); // NOI18N
-        mnuSetSlideshowSize.setToolTipText(resourceMap.getString("mnuSetSlideshowSize.toolTipText")); // NOI18N
+        mnuSetSlideshowSize.setText("Set Slideshow Size");
+        mnuSetSlideshowSize.setToolTipText("Set the size to witch the images should be resized for the generated Slideshows.");
         mnuSetSlideshowSize.setName("mnuSetSlideshowSize"); // NOI18N
         mnuSetSlideshowSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1579,12 +1558,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         settingsMenu.add(slideshowMenu);
 
-        otherMenu.setIcon(resourceMap.getIcon("otherMenu.icon")); // NOI18N
-        otherMenu.setText(resourceMap.getString("otherMenu.text")); // NOI18N
+        otherMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        otherMenu.setText("GPS Defaults");
         otherMenu.setName("otherMenu"); // NOI18N
 
-        mnuGPSInput.setText(resourceMap.getString("mnuGPSInput.text")); // NOI18N
-        mnuGPSInput.setToolTipText(resourceMap.getString("mnuGPSInput.toolTipText")); // NOI18N
+        mnuGPSInput.setText("Select Default GPS Hemispheres");
+        mnuGPSInput.setToolTipText("Select the default values to use when adding new GPS points using the GPS Dialog.");
         mnuGPSInput.setName("mnuGPSInput"); // NOI18N
         mnuGPSInput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1597,11 +1576,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(settingsMenu);
 
-        extraMenu.setText(resourceMap.getString("extraMenu.text")); // NOI18N
+        extraMenu.setText("Extra");
         extraMenu.setName("extraMenu"); // NOI18N
 
-        mnuExifMenuItem.setIcon(resourceMap.getIcon("mnuExifMenuItem.icon")); // NOI18N
-        mnuExifMenuItem.setText(resourceMap.getString("mnuExifMenuItem.text")); // NOI18N
+        mnuExifMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        mnuExifMenuItem.setText("Image EXIF Data Reader");
         mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
         mnuExifMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1610,8 +1589,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         extraMenu.add(mnuExifMenuItem);
 
-        mnuCreateSlideshow.setIcon(resourceMap.getIcon("mnuCreateSlideshow.icon")); // NOI18N
-        mnuCreateSlideshow.setText(resourceMap.getString("mnuCreateSlideshow.text")); // NOI18N
+        mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
+        mnuCreateSlideshow.setText("Create a Slideshow");
         mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
         mnuCreateSlideshow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1620,8 +1599,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         extraMenu.add(mnuCreateSlideshow);
 
-        mnuSunAndMoon.setIcon(resourceMap.getIcon("mnuSunAndMoon.icon")); // NOI18N
-        mnuSunAndMoon.setText(resourceMap.getString("mnuSunAndMoon.text")); // NOI18N
+        mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
+        mnuSunAndMoon.setText("View Sun And Moon Phase");
         mnuSunAndMoon.setName("mnuSunAndMoon"); // NOI18N
         mnuSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1630,12 +1609,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         extraMenu.add(mnuSunAndMoon);
 
-        subMenu1.setIcon(resourceMap.getIcon("subMenu1.icon")); // NOI18N
-        subMenu1.setText(resourceMap.getString("subMenu1.text")); // NOI18N
+        subMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        subMenu1.setText("External Database Tools");
         subMenu1.setName("subMenu1"); // NOI18N
 
-        mnuDBConsole.setText(resourceMap.getString("mnuDBConsole.text")); // NOI18N
-        mnuDBConsole.setToolTipText(resourceMap.getString("mnuDBConsole.toolTipText")); // NOI18N
+        mnuDBConsole.setText("Open H2 Database Console");
+        mnuDBConsole.setToolTipText("Open the DB console bundled with the H2 database used by WildLog.");
         mnuDBConsole.setName("mnuDBConsole"); // NOI18N
         mnuDBConsole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1646,12 +1625,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         extraMenu.add(subMenu1);
 
-        subMenu3.setIcon(resourceMap.getIcon("subMenu3.icon")); // NOI18N
-        subMenu3.setText(resourceMap.getString("subMenu3.text")); // NOI18N
+        subMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        subMenu3.setText("External Map Tools");
         subMenu3.setName("subMenu3"); // NOI18N
 
-        mnuOpenMapApp.setText(resourceMap.getString("mnuOpenMapApp.text")); // NOI18N
-        mnuOpenMapApp.setToolTipText(resourceMap.getString("mnuOpenMapApp.toolTipText")); // NOI18N
+        mnuOpenMapApp.setText("Open OpenMap Software");
+        mnuOpenMapApp.setToolTipText("Open the OpenMap application used by WildLog");
         mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
         mnuOpenMapApp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1664,7 +1643,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(extraMenu);
 
-        statusPanel.setBackground(resourceMap.getColor("statusPanel.background")); // NOI18N
+        statusPanel.setBackground(new java.awt.Color(232, 238, 220));
         statusPanel.setName("statusPanel"); // NOI18N
         statusPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 0));
 
@@ -1890,7 +1869,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         txtBrowseInfo.setText("");
         lblNumberOfImages.setText("");
         try {
-            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+            imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
             if (imgBrowsePhotos.getImage() != null) {
                 if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
                     imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
@@ -1956,7 +1935,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             txtBrowseInfo.setText("");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {
@@ -2014,7 +1993,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             chkElementTypeBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
                 // Scale image
                 if (imgBrowsePhotos.getImage() != null) {
@@ -2042,7 +2021,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             cmbElementTypesBrowseTab.setVisible(true);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
                 // Scale image
                 if (imgBrowsePhotos.getImage() != null) {
@@ -2070,7 +2049,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             chkElementTypeBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
                 // Scale image
                 if (imgBrowsePhotos.getImage() != null) {
@@ -3127,7 +3106,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void noFiles() {
         try {
-            imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+            imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
             lblNumberOfImages.setText("0 of 0");
             imgBrowsePhotos.setToolTipText("");
         }
@@ -3150,10 +3129,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     }
                     else
                     if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.MOVIE))
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/Movie.png"));
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Movie.png"));
                     else
                     if (inFotos.get(imageIndex).getFotoType().equals(WildLogFileType.OTHER))
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/OtherFile.png"));
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
                 }
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
@@ -3164,7 +3143,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
             else {
                 try {
-                    imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+                    imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                     lblNumberOfImages.setText("0 of 0");
                 }
                 catch (IOException ex) {
@@ -3177,7 +3156,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         }
         else {
             try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/images/NoFile.png"));
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
             }
             catch (IOException ex) {

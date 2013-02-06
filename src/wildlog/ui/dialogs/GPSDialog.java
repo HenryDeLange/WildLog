@@ -206,8 +206,7 @@ public class GPSDialog extends JDialog {
         spnLonDecimal = new javax.swing.JSpinner();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(GPSDialog.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setTitle("Configure GPS Point");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/GPS.png")).getImage());
         setMinimumSize(new java.awt.Dimension(410, 210));
         setModal(true);
@@ -215,9 +214,8 @@ public class GPSDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        btnSave.setIcon(resourceMap.getIcon("btnSave.icon")); // NOI18N
-        btnSave.setText(resourceMap.getString("btnSave.text")); // NOI18N
-        btnSave.setToolTipText(resourceMap.getString("btnSave.toolTipText")); // NOI18N
+        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnSave.setToolTipText("Confirm the GPS value.");
         btnSave.setFocusPainted(false);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -227,9 +225,9 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 110, 60));
 
-        btnUsePrevious.setIcon(resourceMap.getIcon("btnUsePrevious.icon")); // NOI18N
-        btnUsePrevious.setText(resourceMap.getString("btnUsePrevious.text")); // NOI18N
-        btnUsePrevious.setToolTipText(resourceMap.getString("btnUsePrevious.toolTipText")); // NOI18N
+        btnUsePrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnUsePrevious.setText("Use Previous GPS");
+        btnUsePrevious.setToolTipText("Use the previously saved GPS point.");
         btnUsePrevious.setFocusPainted(false);
         btnUsePrevious.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUsePrevious.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -241,9 +239,9 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 130, 30));
 
-        btnUseImage.setIcon(resourceMap.getIcon("btnUseImage.icon")); // NOI18N
-        btnUseImage.setText(resourceMap.getString("btnUseImage.text")); // NOI18N
-        btnUseImage.setToolTipText(resourceMap.getString("btnUseImage.toolTipText")); // NOI18N
+        btnUseImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        btnUseImage.setText("Load from Image");
+        btnUseImage.setToolTipText("Browse to an image with GPS data, or drag-and-drop the image on this button.");
         btnUseImage.setFocusPainted(false);
         btnUseImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseImage.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -255,8 +253,8 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(btnUseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 45, 130, 30));
 
-        btnUseMap.setIcon(resourceMap.getIcon("btnUseMap.icon")); // NOI18N
-        btnUseMap.setText(resourceMap.getString("btnUseMap.text")); // NOI18N
+        btnUseMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnUseMap.setText("Use Map");
         btnUseMap.setEnabled(false);
         btnUseMap.setFocusPainted(false);
         btnUseMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -269,9 +267,9 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 10, 130, 30));
 
-        btnUseGPX.setIcon(resourceMap.getIcon("btnUseGPX.icon")); // NOI18N
-        btnUseGPX.setText(resourceMap.getString("btnUseGPX.text")); // NOI18N
-        btnUseGPX.setToolTipText(resourceMap.getString("btnUseGPX.toolTipText")); // NOI18N
+        btnUseGPX.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPX.png"))); // NOI18N
+        btnUseGPX.setText("Load From GPX");
+        btnUseGPX.setToolTipText("Browse to a GPX file, or drag-and-drop the file onto the button.");
         btnUseGPX.setFocusPainted(false);
         btnUseGPX.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseGPX.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -286,8 +284,8 @@ public class GPSDialog extends JDialog {
         jSeparator1.setName("jSeparator1"); // NOI18N
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 390, -1));
 
-        jLabel1.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel1.setText("Latitude:");
         jLabel1.setName("jLabel1"); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
@@ -313,8 +311,8 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(tglSouth, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 60, 30));
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel2.setText("Logitude:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
 
@@ -340,8 +338,8 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(tglEast, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 60, 30));
 
-        tglDecimalDegrees.setText(resourceMap.getString("tglDecimalDegrees.text")); // NOI18N
-        tglDecimalDegrees.setToolTipText(resourceMap.getString("tglDecimalDegrees.toolTipText")); // NOI18N
+        tglDecimalDegrees.setText("DD");
+        tglDecimalDegrees.setToolTipText("Decimal-Degrees");
         tglDecimalDegrees.setFocusPainted(false);
         tglDecimalDegrees.setName("tglDecimalDegrees"); // NOI18N
         tglDecimalDegrees.addActionListener(new java.awt.event.ActionListener() {
@@ -351,8 +349,8 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(tglDecimalDegrees, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 60, 45));
 
-        tglDegMinSec.setText(resourceMap.getString("tglDegMinSec.text")); // NOI18N
-        tglDegMinSec.setToolTipText(resourceMap.getString("tglDegMinSec.toolTipText")); // NOI18N
+        tglDegMinSec.setText("DMS");
+        tglDegMinSec.setToolTipText("Degrees, Minutes and Decimal-Seconds");
         tglDegMinSec.setFocusPainted(false);
         tglDegMinSec.setName("tglDegMinSec"); // NOI18N
         tglDegMinSec.addActionListener(new java.awt.event.ActionListener() {
@@ -362,56 +360,51 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(tglDegMinSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 155, 60, 45));
 
-        spnLatDeg.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
         spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, -90, 90, 1));
         spnLatDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDeg, "#"));
         spnLatDeg.setName("spnLatDeg"); // NOI18N
         getContentPane().add(spnLatDeg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 50, 30));
 
-        spnLatMin.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
         spnLatMin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnLatMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatMin.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatMin, "#"));
         spnLatMin.setName("spnLatMin"); // NOI18N
         getContentPane().add(spnLatMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 50, 30));
 
-        spnLatSec.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
         spnLatSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
         spnLatSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatSec, "#.####"));
         spnLatSec.setName("spnLatSec"); // NOI18N
         getContentPane().add(spnLatSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 70, 30));
 
-        spnLatDecimal.setFont(resourceMap.getFont("spnLatDecimal.font")); // NOI18N
+        spnLatDecimal.setFont(new java.awt.Font("Tahoma", 0, 12));
         spnLatDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 90.0d, 1.0E-5d));
         spnLatDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDecimal, "#.############"));
         spnLatDecimal.setName("spnLatDecimal"); // NOI18N
         getContentPane().add(spnLatDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 190, 30));
 
-        spnLonDeg.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
         spnLonDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 180, 1));
         spnLonDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDeg, "#"));
         spnLonDeg.setName("spnLonDeg"); // NOI18N
         getContentPane().add(spnLonDeg, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 50, 30));
 
-        spnLonMin.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
         spnLonMin.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnLonMin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonMin.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonMin, "#"));
         spnLonMin.setName("spnLonMin"); // NOI18N
         getContentPane().add(spnLonMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 50, 30));
 
-        spnLonSec.setFont(resourceMap.getFont("spnLonSec.font")); // NOI18N
+        spnLonSec.setFont(new java.awt.Font("Tahoma", 0, 12));
         spnLonSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
         spnLonSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonSec, "#.####"));
         spnLonSec.setName("spnLonSec"); // NOI18N
         getContentPane().add(spnLonSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 70, 30));
 
-        spnLonDecimal.setFont(resourceMap.getFont("spnLonDecimal.font")); // NOI18N
+        spnLonDecimal.setFont(new java.awt.Font("Tahoma", 0, 12));
         spnLonDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 180.0d, 1.0E-5d));
         spnLonDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDecimal, "#.############"));

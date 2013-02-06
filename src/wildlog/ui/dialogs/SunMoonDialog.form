@@ -4,20 +4,20 @@
   <NonVisualComponents>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel1.text"/>
+        <Property name="text" type="java.lang.String" value="jLabel1"/>
         <Property name="name" type="java.lang.String" value="jLabel1" noResource="true"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+        <Property name="text" type="java.lang.String" value="jLabel2"/>
         <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
       </Properties>
     </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" resourceKey="Form.title"/>
+    <Property name="title" type="java.lang.String" value="View Sun and Moon Phase"/>
     <Property name="iconImage" type="java.awt.Image" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
       <Connection code="new ImageIcon(app.getClass().getResource(&quot;resources/icons/SunAndMoon.gif&quot;)).getImage()" type="code"/>
     </Property>
@@ -32,7 +32,7 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
@@ -50,7 +50,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+        <Property name="text" type="java.lang.String" value="Date:"/>
         <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
       </Properties>
       <Constraints>
@@ -83,7 +83,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel10.text"/>
+        <Property name="text" type="java.lang.String" value="GPS:"/>
         <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
       </Properties>
       <Constraints>
@@ -94,8 +94,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtLatitude">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="txtLatitude.background"/>
-        <Property name="disabledTextColor" type="java.awt.Color" resourceKey="txtLatitude.disabledTextColor"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="e6" green="de" red="d4" type="rgb"/>
+        </Property>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="17" green="17" red="17" type="rgb"/>
+        </Property>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="txtLatitude" noResource="true"/>
       </Properties>
@@ -107,8 +111,12 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtLongitude">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="txtLongitude.background"/>
-        <Property name="disabledTextColor" type="java.awt.Color" resourceKey="txtLongitude.disabledTextColor"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="e6" green="de" red="d4" type="rgb"/>
+        </Property>
+        <Property name="disabledTextColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="17" green="17" red="17" type="rgb"/>
+        </Property>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="name" type="java.lang.String" value="txtLongitude" noResource="true"/>
       </Properties>
@@ -120,9 +128,11 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnRefresh">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnRefresh.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnRefresh.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnRefresh.toolTipText"/>
+        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Refresh"/>
+        <Property name="toolTipText" type="java.lang.String" value="Recalculate the Sun and Moon Phase based on the specified values."/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
@@ -141,10 +151,14 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnGPS">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnGPS.background"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnGPS.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnGPS.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnGPS.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="f4" green="ef" red="e9" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Change GPS"/>
+        <Property name="toolTipText" type="java.lang.String" value="Select a GPS location to use for the calculation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -196,9 +210,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel6.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel6.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="33" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Moon Phase:"/>
         <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
       </Properties>
       <Constraints>
@@ -209,9 +227,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel6.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel6.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel5.text"/>
+        <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="33" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Moonlight:"/>
         <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
       </Properties>
       <Constraints>
@@ -222,9 +244,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel6.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel6.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel6.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="33" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Moonrise:"/>
         <Property name="name" type="java.lang.String" value="jLabel6" noResource="true"/>
       </Properties>
       <Constraints>
@@ -235,9 +261,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel6.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel6.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel7.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="66" green="33" red="0" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Moonset:"/>
         <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
       </Properties>
       <Constraints>
@@ -248,9 +278,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel8">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel9.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel9.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel8.text"/>
+        <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="4e" red="9c" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Sunlight:"/>
         <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
       </Properties>
       <Constraints>
@@ -261,9 +295,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel9">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel9.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel9.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel9.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="4e" red="9c" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Dawn:"/>
         <Property name="name" type="java.lang.String" value="jLabel9" noResource="true"/>
       </Properties>
       <Constraints>
@@ -274,9 +312,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel11">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel9.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel9.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel11.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="4e" red="9c" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Sunrise:"/>
         <Property name="name" type="java.lang.String" value="jLabel11" noResource="true"/>
       </Properties>
       <Constraints>
@@ -287,9 +329,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel12">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel9.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel9.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel12.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="4e" red="9c" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Sunset:"/>
         <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
       </Properties>
       <Constraints>
@@ -300,9 +346,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel13">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel9.font"/>
-        <Property name="foreground" type="java.awt.Color" resourceKey="jLabel9.foreground"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel13.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="4e" red="9c" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Dusk:"/>
         <Property name="name" type="java.lang.String" value="jLabel13" noResource="true"/>
       </Properties>
       <Constraints>
@@ -313,7 +363,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblSunlight">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblSunlight.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblSunlight" noResource="true"/>
       </Properties>
       <Constraints>
@@ -324,7 +374,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblDawn">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblDawn.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblDawn" noResource="true"/>
       </Properties>
       <Constraints>
@@ -335,7 +385,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblSunrise">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblSunrise.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblSunrise" noResource="true"/>
       </Properties>
       <Constraints>
@@ -346,7 +396,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblSunset">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblSunset.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblSunset" noResource="true"/>
       </Properties>
       <Constraints>
@@ -357,7 +407,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblDusk">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblDusk.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblDusk" noResource="true"/>
       </Properties>
       <Constraints>
@@ -368,7 +418,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblMoonlight">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblMoonlight.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblMoonlight" noResource="true"/>
       </Properties>
       <Constraints>
@@ -379,7 +429,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblMoonPhase">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblMoonPhase.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblMoonPhase" noResource="true"/>
       </Properties>
       <Constraints>
@@ -390,7 +440,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblMoonrise">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblMoonrise.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblMoonrise" noResource="true"/>
       </Properties>
       <Constraints>
@@ -401,7 +451,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblMoonset">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblMoonset.text"/>
+        <Property name="text" type="java.lang.String" value="..."/>
         <Property name="name" type="java.lang.String" value="lblMoonset" noResource="true"/>
       </Properties>
       <Constraints>

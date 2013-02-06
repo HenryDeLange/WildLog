@@ -2,7 +2,9 @@
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <Properties>
-    <Property name="background" type="java.awt.Color" resourceKey="Form.background"/>
+    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+      <Color blue="d4" green="f1" red="e5" type="rgb"/>
+    </Property>
     <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[250, 250]"/>
     </Property>
@@ -15,7 +17,7 @@
     </Property>
   </Properties>
   <AuxValues>
-    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="2"/>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
     <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
@@ -33,9 +35,11 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblElementName">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="lblElementName.font"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" resourceKey="lblElementName.text"/>
+        <Property name="text" type="java.lang.String" value="Creature Name"/>
         <Property name="name" type="java.lang.String" value="lblElementName" noResource="true"/>
       </Properties>
       <Constraints>
@@ -56,8 +60,10 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel2.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel2.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Date:"/>
         <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
       </Properties>
       <Constraints>
@@ -68,7 +74,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblDate">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblDate.text"/>
+        <Property name="text" type="java.lang.String" value="01 Jan 2012"/>
         <Property name="name" type="java.lang.String" value="lblDate" noResource="true"/>
       </Properties>
       <Constraints>
@@ -79,8 +85,10 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel3.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel3.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Time:"/>
         <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
       </Properties>
       <Constraints>
@@ -91,7 +99,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblTime">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblTime.text"/>
+        <Property name="text" type="java.lang.String" value="11:11 pm"/>
         <Property name="name" type="java.lang.String" value="lblTime" noResource="true"/>
       </Properties>
       <Constraints>
@@ -102,8 +110,10 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel4.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel4.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="GPS Latitude:"/>
         <Property name="name" type="java.lang.String" value="jLabel4" noResource="true"/>
       </Properties>
       <Constraints>
@@ -114,7 +124,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblLatitude">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblLatitude.text"/>
+        <Property name="text" type="java.lang.String" value="33.123456"/>
         <Property name="name" type="java.lang.String" value="lblLatitude" noResource="true"/>
       </Properties>
       <Constraints>
@@ -125,8 +135,10 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel10">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel10.font"/>
-        <Property name="text" type="java.lang.String" resourceKey="jLabel10.text"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="GPS Longitude:"/>
         <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
       </Properties>
       <Constraints>
@@ -137,7 +149,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblLongitude">
       <Properties>
-        <Property name="text" type="java.lang.String" resourceKey="lblLongitude.text"/>
+        <Property name="text" type="java.lang.String" value="25.1234567"/>
         <Property name="name" type="java.lang.String" value="lblLongitude" noResource="true"/>
       </Properties>
       <Constraints>
@@ -158,7 +170,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblImage">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="lblImage.background"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="0" green="0" red="0" type="rgb"/>
+        </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -182,10 +196,14 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnChooseCreature">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnChooseCreature.background"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnChooseCreature.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnChooseCreature.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnChooseCreature.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="d4" green="f1" red="e5" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/ElementList.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Creature"/>
+        <Property name="toolTipText" type="java.lang.String" value="Select a Creature for this Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -207,10 +225,14 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnGPS">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnGPS.background"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnGPS.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnGPS.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnGPS.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="d4" green="f1" red="e5" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="GPS"/>
+        <Property name="toolTipText" type="java.lang.String" value="Select a GPD point for this Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -231,10 +253,14 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnEdit">
       <Properties>
-        <Property name="background" type="java.awt.Color" resourceKey="btnEdit.background"/>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnEdit.icon"/>
-        <Property name="text" type="java.lang.String" resourceKey="btnEdit.text"/>
-        <Property name="toolTipText" type="java.lang.String" resourceKey="btnEdit.toolTipText"/>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="d4" green="f1" red="e5" type="rgb"/>
+        </Property>
+        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Sighting.gif"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Edit"/>
+        <Property name="toolTipText" type="java.lang.String" value="Edit this Observation&apos;s details."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 X-COMMENT: Main-Class will be added automatically by build
-SplashScreen-Image: wildlog/resources/images/SplashScreen.gif
+SplashScreen-Image: wildlog/resources/icons/SplashScreen.gif
 

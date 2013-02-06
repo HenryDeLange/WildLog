@@ -85,8 +85,7 @@ public class ChecklistDialog extends JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ChecklistDialog.class);
-        setTitle(resourceMap.getString("Form.title")); // NOI18N
+        setTitle("CheckList: Add New Sightings");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/CheckList.png")).getImage());
         setMinimumSize(new java.awt.Dimension(760, 550));
         setModal(true);
@@ -94,8 +93,8 @@ public class ChecklistDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Dubble click the Creature to be added as an Observation:");
         jLabel1.setName("jLabel1"); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
@@ -103,10 +102,10 @@ public class ChecklistDialog extends JDialog {
 
         lstFromCreatures.setModel(new DefaultListModel());
         lstFromCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        lstFromCreatures.setToolTipText(resourceMap.getString("lstFromCreatures.toolTipText")); // NOI18N
-        lstFromCreatures.setFont(resourceMap.getFont("lstFromCreatures.font")); // NOI18N
+        lstFromCreatures.setToolTipText("");
+        lstFromCreatures.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lstFromCreatures.setName("lstFromCreatures"); // NOI18N
-        lstFromCreatures.setSelectionBackground(resourceMap.getColor("lstFromCreatures.selectionBackground")); // NOI18N
+        lstFromCreatures.setSelectionBackground(new java.awt.Color(82, 115, 79));
         lstFromCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstFromCreaturesMouseClicked(evt);
@@ -123,11 +122,11 @@ public class ChecklistDialog extends JDialog {
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        lstSightedCreatures.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("lstSightedCreatures.border.lineColor"))); // NOI18N
-        lstSightedCreatures.setFont(resourceMap.getFont("lstSightedCreatures.font")); // NOI18N
+        lstSightedCreatures.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
+        lstSightedCreatures.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lstSightedCreatures.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstSightedCreatures.setName("lstSightedCreatures"); // NOI18N
-        lstSightedCreatures.setSelectionBackground(resourceMap.getColor("lstSightedCreatures.selectionBackground")); // NOI18N
+        lstSightedCreatures.setSelectionBackground(new java.awt.Color(82, 115, 79));
         lstSightedCreatures.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lstSightedCreaturesMouseClicked(evt);
@@ -142,10 +141,9 @@ public class ChecklistDialog extends JDialog {
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, 350, 370));
 
-        btnConfirm.setBackground(resourceMap.getColor("btnConfirm.background")); // NOI18N
-        btnConfirm.setIcon(resourceMap.getIcon("btnConfirm.icon")); // NOI18N
-        btnConfirm.setText(resourceMap.getString("btnConfirm.text")); // NOI18N
-        btnConfirm.setToolTipText(resourceMap.getString("btnConfirm.toolTipText")); // NOI18N
+        btnConfirm.setBackground(new java.awt.Color(0, 204, 51));
+        btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
+        btnConfirm.setToolTipText("Save the Observations of the selected Creatures for this date.");
         btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -155,8 +153,8 @@ public class ChecklistDialog extends JDialog {
         });
         getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 110, 60));
 
-        jLabel3.setFont(resourceMap.getFont("jLabel3.font")); // NOI18N
-        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("Dubble click to remove the Creature from the Observation.");
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, -1, -1));
 
@@ -173,7 +171,6 @@ public class ChecklistDialog extends JDialog {
         });
         getContentPane().add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 120, -1));
 
-        txtSearch.setText(resourceMap.getString("txtSearch.text")); // NOI18N
         txtSearch.setName("txtSearch"); // NOI18N
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -182,14 +179,14 @@ public class ChecklistDialog extends JDialog {
         });
         getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 210, -1));
 
-        dtpDate.setBorder(javax.swing.BorderFactory.createLineBorder(resourceMap.getColor("dtpDate.border.lineColor"))); // NOI18N
+        dtpDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
         dtpDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpDate.setName("dtpDate"); // NOI18N
         getContentPane().add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 140, -1));
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
-        jLabel2.setText(resourceMap.getString("jLabel2.text")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("All Observations will be for this date:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, -1, 20));
     }// </editor-fold>//GEN-END:initComponents
