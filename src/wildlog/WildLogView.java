@@ -7,11 +7,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -30,6 +34,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,6 +59,8 @@ import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
+import org.netbeans.lib.awtextra.AbsoluteConstraints;
+import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
@@ -2913,314 +2920,382 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
         if (result == JOptionPane.OK_OPTION) {
-            // Setup the feedback file
-            File feedbackFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG.getFullPath()), "WorkspaceCleanupFeedback.txt");
-            PrintWriter feedback = null;
-            // Start cleanup
-            try {
-                feedback = new PrintWriter(new FileWriter(feedbackFile), true);
-                // Create a final reference to the feedback writer for use in inner classes, etc.
-                final PrintWriter finalHandleFeedback = feedback;
-                // Setup helper classes (Op hierdie stadium wil ek al die code op een plek hou, ek kan dit later in Util methods in skuif of iets...)
-                class CleanupHelper {
-                    private void doTheMove(String inExpectedPath, String inExpectedPrefix, WildLogFile inWildLogFile) {
-                        String shouldBePath = WildLogPaths.concatPaths(inExpectedPath, inExpectedPrefix);
-                        String currentPath = new File(inWildLogFile.getFilePath(false)).getParent();
-                        if (!shouldBePath.equalsIgnoreCase(currentPath)) {
-                            finalHandleFeedback.println("ERROR: Incorrect path:" + currentPath);
-                            finalHandleFeedback.println("          RESOLVE: Moving the file to the correct location:" + shouldBePath);
-                            // "Re-upload" the file to the correct location
-                            UtilsFileProcessing.performFileUpload(inWildLogFile.getId(), inExpectedPrefix, new File[]{new File(inWildLogFile.getFilePath(true))}, null, -1, app);
-                            // Delete the wrong entry
-                            app.getDBI().delete(inWildLogFile);
-                        }
-                    }
-                    public void moveFilesToCorrectFolders(WildLogFile inWildLogFile, String inPrefix) {
-                        // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
-                        // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
-                        if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
-                            doTheMove(
-                                    WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath(),
-                                    inPrefix,
-                                    inWildLogFile);
-                        }
-                        if (WildLogFileType.MOVIE.equals(inWildLogFile.getFileType())) {
-                            doTheMove(
-                                    WildLogPaths.WILDLOG_FILES_MOVIES.getRelativePath(),
-                                    inPrefix,
-                                    inWildLogFile);
-                        }
-                        else {
-                            doTheMove(
-                                    WildLogPaths.WILDLOG_FILES_OTHER.getRelativePath(),
-                                    inPrefix,
-                                    inWildLogFile);
-                        }
-                    }
-                    public void checkDiskFilesAreInDB(WildLogPaths inWildLogPaths) throws IOException {
-                        Files.walkFileTree(Paths.get(inWildLogPaths.getFullPath()), new SimpleFileVisitor<Path>() {
-                            @Override
-                            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                                if (attrs.isRegularFile()) {
-                                    // Kyk in DB of die path bestaan, as dit nie daar is nie delete die file
-                                    WildLogFile wildLogFile = new WildLogFile();
-                                    wildLogFile.setFilePath(WildLogPaths.stripRootFromPath(file.toString(), WildLogPaths.getFullWorkspacePrefix()));
-                                    if (app.getDBI().find(wildLogFile) == null) {
-                                        finalHandleFeedback.println("ERROR: File in Workspace not present in the database: " + wildLogFile.getFilePath(false));
-                                        finalHandleFeedback.println("          RESOLVE: Deleting the file.");
-                                        Files.deleteIfExists(file);
-                                    }
+            // Lock the input/display and show busy message
+            // Note: we never remove the Busy dialog and greyed out background since the app wil be restarted anyway when done
+            tabbedPanel.setSelectedIndex(0);
+            // FIXME: Maak dat die message reg op die glasspane wys
+            JPanel panel = new JPanel(new AbsoluteLayout());
+            panel.setPreferredSize(new Dimension(400, 50));
+            panel.setBorder(new LineBorder(new Color(235, 90, 80), 3));
+            JLabel label = new JLabel("<html>Busy cleaning workspace. <br>Please be patient and don't close the application until the process is finished.</html>");
+            label.setFont(new Font("Tahoma", Font.BOLD, 14));
+            label.setForeground(new Color(240, 251, 230));
+            label.setBorder(new LineBorder(new Color(180, 90, 40), 5));
+            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
+            panel.add(label, new AbsoluteConstraints(350, 350, -1, -1));
+            panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+            JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
+            glassPane.removeAll();
+            glassPane.setLayout(new BorderLayout(100, 100));
+            glassPane.add(panel, BorderLayout.CENTER);
+            glassPane.addMouseListener(new MouseAdapter() {});
+            glassPane.addKeyListener(new KeyAdapter() {});
+            app.getMainFrame().setGlassPane(glassPane);
+            app.getMainFrame().getGlassPane().setVisible(true);
+            // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
+            UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setProgress(0);
+                    setMessage("Workspace Cleanup starting...");
+                    // Setup the feedback file
+                    File feedbackFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG.getFullPath()), "WorkspaceCleanupFeedback.txt");
+                    PrintWriter feedback = null;
+                    // Start cleanup
+                    try {
+                        feedback = new PrintWriter(new FileWriter(feedbackFile), true);
+                        // Create a final reference to the feedback writer for use in inner classes, etc.
+                        final PrintWriter finalHandleFeedback = feedback;
+                        // Setup helper classes (Op hierdie stadium wil ek al die code op een plek hou, ek kan dit later in Util methods in skuif of iets...)
+                        class CleanupHelper {
+                            private void doTheMove(String inExpectedPath, String inExpectedPrefix, WildLogFile inWildLogFile) {
+                                String shouldBePath = WildLogPaths.concatPaths(inExpectedPath, inExpectedPrefix);
+                                String currentPath = new File(inWildLogFile.getFilePath(false)).getParent();
+                                if (!shouldBePath.equalsIgnoreCase(currentPath)) {
+                                    finalHandleFeedback.println("ERROR: Incorrect path:" + currentPath);
+                                    finalHandleFeedback.println("          RESOLVE: Moving the file to the correct location:" + shouldBePath);
+                                    // "Re-upload" the file to the correct location
+                                    UtilsFileProcessing.performFileUpload(inWildLogFile.getId(), inExpectedPrefix, new File[]{new File(inWildLogFile.getFilePath(true))}, null, -1, app);
+                                    // Delete the wrong entry
+                                    app.getDBI().delete(inWildLogFile);
                                 }
-                                return FileVisitResult.CONTINUE;
                             }
-                        });
-                    }
-                };
-                CleanupHelper cleanupHelper = new CleanupHelper();
-                // Lock the input/display and show busy message
-                // Note: we never remove the Busy dialog and greyed out background since the app wil be restarted anyway when done
-                tabbedPanel.setSelectedIndex(0);
-                // FIXME: Maak dat die message reg op die glasspane wys
-                JPanel panel = new JPanel();
-                panel.setPreferredSize(new Dimension(400, 50));
-                panel.setBorder(new LineBorder(new Color(235, 90, 80), 3));
-                JLabel label = new JLabel("<html>Busy cleaning workspace. <br>Please be patient and don't close the application until the process is finished.</html>");
-                panel.add(label);
-                panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-                JPanel glassPane = (JPanel)app.getMainFrame().getGlassPane();
-                glassPane.setLayout(new BorderLayout());
-                glassPane.removeAll();
-                glassPane.add(panel, BorderLayout.CENTER);
-                app.getMainFrame().setGlassPane(glassPane);
-                app.getMainFrame().getGlassPane().setVisible(true);
-                // ---------------------1---------------------
-                // First check database files
-                // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
-                feedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing Places, Periods, Creatures, Observations and Workspace files.");
-                List<WildLogFile> allFiles = app.getDBI().list(new WildLogFile());
-                for (WildLogFile wildLogFile : allFiles) {
-                    // Check the WildLogFile's content
-                    if (wildLogFile.getId() == null) {
-                        feedback.println("ERROR: File without an ID. FilePath:" + wildLogFile.getFilePath(false));
-                        feedback.println("          RESOLVE: Trying to delete the file.");
-                        app.getDBI().delete(wildLogFile);
-                        continue;
-                    }
-                    if (wildLogFile.getFilePath(false) == null || wildLogFile.getFilePath(true) == null) {
-                        feedback.println("ERROR: File path missing. FileID:" + wildLogFile.getId());
-                        feedback.println("          RESOLVE: Trying to delete the file.");
-                        app.getDBI().delete(wildLogFile);
-                        continue;
-                    }
-                    if (!new File(wildLogFile.getFilePath(false)).exists() && !new File(wildLogFile.getFilePath(true)).exists()) {
-                        feedback.println("ERROR: File can't be found on disk. File path:" + wildLogFile.getFilePath(false));
-                        feedback.println("          RESOLVE: Trying to delete the file.");
-                        app.getDBI().delete(wildLogFile);
-                        continue;
-                    }
-                    if (wildLogFile.getFilename() == null || wildLogFile.getFilename().isEmpty() || wildLogFile.getUploadDate() == null) {
-                        feedback.println("ERROR: File missing data. FilePath:" + wildLogFile.getFilePath(false)
-                                + ", Filename:" + wildLogFile.getFilename()
-                                + ", UploadDate:" + wildLogFile.getUploadDate());
-                        feedback.println("          RESOLVE: No action taken...");
-                        continue;
-                    }
-                    if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
-                        feedback.println("ERROR: Unknown FileType. FilePath:" + wildLogFile.getFilePath(false)
-                                + ", FileType:" + wildLogFile.getFileType());
-                        feedback.println("          RESOLVE: Changed FileType to " + WildLogFileType.OTHER + ".");
-                        wildLogFile.setFileType(WildLogFileType.OTHER);
-                        app.getDBI().createOrUpdate(wildLogFile, true);
-                        continue;
-                    }
-                    // Check the WildLogFile's linkage
-                    if (wildLogFile.getId().startsWith("ELEMENT-")) {
-                        // Make sure it is linked
-                        final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring("ELEMENT-".length())));
-                        if (temp == null) {
-                            feedback.println("ERROR: Could not find linked Creature for this file. FilePath:" + wildLogFile.getFilePath(false));
-                            feedback.println("          RESOLVE: Deleting the file.");
-                            app.getDBI().delete(wildLogFile);
-                            continue;
+                            public void moveFilesToCorrectFolders(WildLogFile inWildLogFile, String inPrefix) {
+                                // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
+                                // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
+                                if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
+                                    doTheMove(
+                                            WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath(),
+                                            inPrefix,
+                                            inWildLogFile);
+                                }
+                                else
+                                if (WildLogFileType.MOVIE.equals(inWildLogFile.getFileType())) {
+                                    doTheMove(
+                                            WildLogPaths.WILDLOG_FILES_MOVIES.getRelativePath(),
+                                            inPrefix,
+                                            inWildLogFile);
+                                }
+                                else {
+                                    doTheMove(
+                                            WildLogPaths.WILDLOG_FILES_OTHER.getRelativePath(),
+                                            inPrefix,
+                                            inWildLogFile);
+                                }
+                            }
+                            public void checkDiskFilesAreInDB(WildLogPaths inWildLogPaths) throws IOException {
+                                Files.walkFileTree(Paths.get(inWildLogPaths.getFullPath()), new SimpleFileVisitor<Path>() {
+                                    @Override
+                                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                                        if (attrs.isRegularFile()) {
+                                            // Kyk in DB of die path bestaan, as dit nie daar is nie delete die file
+                                            WildLogFile wildLogFile = new WildLogFile();
+                                            wildLogFile.setFilePath(WildLogPaths.stripRootFromPath(file.toString(), WildLogPaths.getFullWorkspacePrefix()));
+                                            if (app.getDBI().find(wildLogFile) == null) {
+                                                finalHandleFeedback.println("ERROR: File in Workspace not present in the database: " + wildLogFile.getFilePath(false));
+                                                finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                                Files.deleteIfExists(file);
+                                            }
+                                        }
+                                        return FileVisitResult.CONTINUE;
+                                    }
+                                });
+                            }
                         }
-                        // Make sure the file path is correct
-                        cleanupHelper.moveFilesToCorrectFolders(
-                                wildLogFile,
-                                WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), temp.getPrimaryName()));
-                        continue;
-                    }
-                    else
-                    if (wildLogFile.getId().startsWith("VISIT-")) {
-                        // Make sure it is linked
-                        final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring("VISIT-".length())));
-                        if (temp == null) {
-                            feedback.println("ERROR: Could not find linked Period for this file. FilePath:" + wildLogFile.getFilePath(false));
-                            feedback.println("          RESOLVE: Deleting the file.");
-                            app.getDBI().delete(wildLogFile);
-                            continue;
+                        final CleanupHelper cleanupHelper = new CleanupHelper();
+                        setProgress(5);
+                        // ---------------------1---------------------
+                        // First check database files
+                        // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
+                        setMessage("1) Validate database references to the files in the Workspace...");
+                        finalHandleFeedback.println("** Starting Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+                        finalHandleFeedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
+                        List<WildLogFile> allFiles = app.getDBI().list(new WildLogFile());
+                        for (WildLogFile wildLogFile : allFiles) {
+                            // Check the WildLogFile's content
+                            if (wildLogFile.getId() == null) {
+                                finalHandleFeedback.println("ERROR: File without an ID. FilePath:" + wildLogFile.getFilePath(false));
+                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file.");
+                                app.getDBI().delete(wildLogFile);
+                                continue;
+                            }
+                            if (wildLogFile.getFilePath(false) == null || wildLogFile.getFilePath(true) == null) {
+                                finalHandleFeedback.println("ERROR: File path missing. FileID:" + wildLogFile.getId());
+                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file.");
+                                app.getDBI().delete(wildLogFile);
+                                continue;
+                            }
+                            if (!new File(wildLogFile.getFilePath(false)).exists() && !new File(wildLogFile.getFilePath(true)).exists()) {
+                                finalHandleFeedback.println("ERROR: File can't be found on disk. File path:" + wildLogFile.getFilePath(false));
+                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file.");
+                                app.getDBI().delete(wildLogFile);
+                                continue;
+                            }
+                            if (wildLogFile.getFilename() == null || wildLogFile.getFilename().isEmpty() || wildLogFile.getUploadDate() == null) {
+                                finalHandleFeedback.println("ERROR: File missing data. FilePath:" + wildLogFile.getFilePath(false)
+                                        + ", Filename:" + wildLogFile.getFilename()
+                                        + ", UploadDate:" + wildLogFile.getUploadDate());
+                                finalHandleFeedback.println("          RESOLVE: No action taken...");
+                                continue;
+                            }
+                            if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
+                                finalHandleFeedback.println("ERROR: Unknown FileType. FilePath:" + wildLogFile.getFilePath(false)
+                                        + ", FileType:" + wildLogFile.getFileType());
+                                finalHandleFeedback.println("          RESOLVE: Changed FileType to " + WildLogFileType.OTHER + ".");
+                                wildLogFile.setFileType(WildLogFileType.OTHER);
+                                app.getDBI().createOrUpdate(wildLogFile, true);
+                                continue;
+                            }
+                            // Check the WildLogFile's linkage
+                            if (wildLogFile.getId().startsWith("ELEMENT-")) {
+                                // Make sure it is linked
+                                final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring("ELEMENT-".length())));
+                                if (temp == null) {
+                                    finalHandleFeedback.println("ERROR: Could not find linked Creature for this file. FilePath:" + wildLogFile.getFilePath(false));
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    app.getDBI().delete(wildLogFile);
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(
+                                        wildLogFile,
+                                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), temp.getPrimaryName()));
+                                continue;
+                            }
+                            else if (wildLogFile.getId().startsWith("VISIT-")) {
+                                // Make sure it is linked
+                                final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring("VISIT-".length())));
+                                if (temp == null) {
+                                    finalHandleFeedback.println("ERROR: Could not find linked Period for this file. FilePath:" + wildLogFile.getFilePath(false));
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    app.getDBI().delete(wildLogFile);
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(
+                                        wildLogFile,
+                                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), temp.getLocationName(), temp.getName()));
+                                continue;
+                            }
+                            else if (wildLogFile.getId().startsWith("LOCATION-")) {
+                                // Make sure it is linked
+                                final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring("LOCATION-".length())));
+                                if (temp == null) {
+                                    finalHandleFeedback.println("ERROR: Could not find linked Place for this file. FilePath:" + wildLogFile.getFilePath(false));
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    app.getDBI().delete(wildLogFile);
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(
+                                        wildLogFile,
+                                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), temp.getName()));
+                                continue;
+                            }
+                            else if (wildLogFile.getId().startsWith("SIGHTING-")) {
+                                // Make sure it is linked
+                                Sighting temp = null;
+                                try {
+                                    temp = app.getDBI().find(new Sighting(Long.parseLong(wildLogFile.getId().substring("SIGHTING-".length()))));
+                                }
+                                catch (NumberFormatException ex) {
+                                    finalHandleFeedback.println("ERROR: Can't get linked Observation's ID.");
+                                }
+                                if (temp == null) {
+                                    finalHandleFeedback.println("ERROR: Could not find linked Observation for this file. FilePath:" + wildLogFile.getFilePath(false));
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    app.getDBI().delete(wildLogFile);
+                                    continue;
+                                }
+                                // Make sure the file path is correct
+                                cleanupHelper.moveFilesToCorrectFolders(
+                                        wildLogFile,
+                                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), temp.toString()));
+                                continue;
+                            }
+                            else {
+                                finalHandleFeedback.println("ERROR: File ID is not correctly formatted.");
+                                finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                app.getDBI().delete(wildLogFile);
+                            }
                         }
-                        // Make sure the file path is correct
-                        cleanupHelper.moveFilesToCorrectFolders(
-                                wildLogFile,
-                                WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), temp.getLocationName(), temp.getName()));
-                        continue;
-                    }
-                    else
-                    if (wildLogFile.getId().startsWith("LOCATION-")) {
-                        // Make sure it is linked
-                        final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring("LOCATION-".length())));
-                        if (temp == null) {
-                            feedback.println("ERROR: Could not find linked Place for this file. FilePath:" + wildLogFile.getFilePath(false));
-                            feedback.println("          RESOLVE: Deleting the file.");
-                            app.getDBI().delete(wildLogFile);
-                            continue;
-                        }
-                        // Make sure the file path is correct
-                        cleanupHelper.moveFilesToCorrectFolders(
-                                wildLogFile,
-                                WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), temp.getName()));
-                        continue;
-                    }
-                    else
-                    if (wildLogFile.getId().startsWith("SIGHTING-")) {
-                        // Make sure it is linked
-                        Sighting temp = null;
+                        setProgress(25);
+
+                        // ---------------------2---------------------
+                        setMessage("2) Validate that the Workspace files are in the database...");
+                        finalHandleFeedback.println("2) Make sure the Files in the Workspace are present in the database.");
+                        // Secondly check the files on disk
                         try {
-                            temp = app.getDBI().find(new Sighting(Long.parseLong(wildLogFile.getId().substring("SIGHTING-".length()))));
+                            // Kyk of al die files op die hardeskyf in die database bestaan
+                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES);
+                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES);
+                            cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER);
                         }
-                        catch (NumberFormatException ex) {
-                            feedback.println("ERROR: Can't get linked Observation's ID.");
+                        catch (IOException ex) {
+                            ex.printStackTrace(System.err);
+                            finalHandleFeedback.println("ERROR: Could not check all files on disk.");
                         }
-                        if (temp == null) {
-                            feedback.println("ERROR: Could not find linked Observation for this file. FilePath:" + wildLogFile.getFilePath(false));
-                            feedback.println("          RESOLVE: Deleting the file.");
-                            app.getDBI().delete(wildLogFile);
-                            continue;
+                        setProgress(40);
+
+                        // ---------------------3---------------------
+                        // As alles klaar is delete alle lee en temporary folders
+                        setMessage("3) Delete empty folders in WildLog\\Files\\...");
+                        finalHandleFeedback.println("3) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
+                        try {
+                            UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_FILES_IMAGES.getFullPath()));
+                            UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_FILES_MOVIES.getFullPath()));
+                            UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_FILES_OTHER.getFullPath()));
                         }
-                        // Make sure the file path is correct
-                        cleanupHelper.moveFilesToCorrectFolders(
-                                wildLogFile,
-                                WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), temp.toString()));
-                        continue;
+                        catch (final IOException ex) {
+                            ex.printStackTrace(System.err);
+                            finalHandleFeedback.println("ERROR: Could not delete empty folders.");
+                        }
+                        setProgress(55);
+
+                        // ---------------------4---------------------
+                        // Delete alle temporary/onnodige files en folders
+                        setMessage("4) Delete exports and thumbnails...");
+                        finalHandleFeedback.println("4) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
+                        try {
+                            UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
+                            UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath()));
+                        }
+                        catch (final IOException ex) {
+                            ex.printStackTrace(System.err);
+                            finalHandleFeedback.println("ERROR: Could not delete temporary folders.");
+                        }
+                        setProgress(70);
+
+                        // ---------------------5---------------------
+                        // Check the rest of the data for inconsistencies(all Locations, Visits and Creatures link correctly)
+                        setMessage("5) Check links between records in the database...");
+                        finalHandleFeedback.println("5) Make sure Places, Periods, Observations and Creatures all have correct links to each other.");
+                        List<Visit> allVisits = app.getDBI().list(new Visit());
+                        for (Visit visit : allVisits) {
+                            Location temp = app.getDBI().find(new Location(visit.getLocationName()));
+                            if (temp == null) {
+                                finalHandleFeedback.println("ERROR: Could not find link between Period and Place. "
+                                        + "Period:" + visit.getName() + ", Place:" + visit.getLocationName());
+                                finalHandleFeedback.println("          RESOLVE: Moving Period to a new Place called 'WildLog_lost_and_found'.");
+                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                if (newLocation == null) {
+                                    newLocation = new Location("WildLog_lost_and_found");
+                                    app.getDBI().createOrUpdate(newLocation, null);
+                                }
+                                visit.setLocationName("WildLog_lost_and_found");
+                                // Still an issue with sightings not going to point to the correct place... (handled in the code below)
+                                app.getDBI().createOrUpdate(visit, visit.getName());
+                            }
+                        }
+                        List<Sighting> allSightings = app.getDBI().list(new Sighting());
+                        for (Sighting sighting : allSightings) {
+                            // Check Location
+                            Location tempLocation = app.getDBI().find(new Location(sighting.getLocationName()));
+                            if (tempLocation == null) {
+                                finalHandleFeedback.println("ERROR: Could not find link between Observation and Place. "
+                                        + "Observation:" + sighting.getSightingCounter() + ", Place:" + sighting.getLocationName());
+                                finalHandleFeedback.println("          RESOLVE: Moving Observation to a new Place called 'WildLog_lost_and_found'.");
+                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                if (newLocation == null) {
+                                    newLocation = new Location("WildLog_lost_and_found");
+                                    app.getDBI().createOrUpdate(newLocation, null);
+                                }
+                                sighting.setLocationName("WildLog_lost_and_found");
+                                app.getDBI().createOrUpdate(sighting);
+                            }
+                            // Check Element
+                            Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
+                            if (tempElement == null) {
+                                finalHandleFeedback.println("ERROR: Could not find link between Observation and Creature. "
+                                        + "Observation:" + sighting.getSightingCounter() + ", Creature:" + sighting.getLocationName());
+                                finalHandleFeedback.println("          RESOLVE: Moving Observation to a new Creature called 'WildLog_lost_and_found'.");
+                                Element newElement = app.getDBI().find(new Element("WildLog_lost_and_found"));
+                                if (newElement == null) {
+                                    newElement = new Element("WildLog_lost_and_found");
+                                    app.getDBI().createOrUpdate(newElement, null);
+                                }
+                                sighting.setElementName("WildLog_lost_and_found");
+                                app.getDBI().createOrUpdate(sighting);
+                            }
+                            // Check Visit
+                            Visit tempVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
+                            if (tempVisit == null) {
+                                finalHandleFeedback.println("ERROR: Could not find link between Observation and Period. "
+                                        + "Observation:" + sighting.getSightingCounter() + ", Period:" + sighting.getVisitName());
+                                finalHandleFeedback.println("          RESOLVE: Moving Observation to a new Period called 'WildLog_lost_and_found'.");
+                                // Visit
+                                Visit newVisit = app.getDBI().find(new Visit("WildLog_lost_and_found"));
+                                if (newVisit == null) {
+                                    newVisit = new Visit("WildLog_lost_and_found");
+                                    newVisit.setLocationName("WildLog_lost_and_found");
+                                    app.getDBI().createOrUpdate(newVisit, null);
+                                }
+                                sighting.setVisitName("WildLog_lost_and_found");
+                                // Location
+                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                if (newLocation == null) {
+                                    newLocation = new Location("WildLog_lost_and_found");
+                                    app.getDBI().createOrUpdate(newLocation, null);
+                                }
+                                sighting.setLocationName("WildLog_lost_and_found");
+                                app.getDBI().createOrUpdate(sighting);
+                            }
+                            // Make sure the Sighting is using a legitimate Location-Visit pair
+                            Visit checkSightingVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
+                            if (!checkSightingVisit.getLocationName().equalsIgnoreCase(sighting.getLocationName())) {
+                                finalHandleFeedback.println("ERROR: The Observation and Period references different Places. "
+                                        + "Observation:" + sighting.getLocationName() + ", Period:" + checkSightingVisit.getLocationName());
+                                finalHandleFeedback.println("          RESOLVE: Moving Observation and Period to a new Place called 'WildLog_lost_and_found'.");
+                                Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
+                                if (newLocation == null) {
+                                    newLocation = new Location("WildLog_lost_and_found");
+                                    app.getDBI().createOrUpdate(newLocation, null);
+                                }
+                                // Update sighting
+                                sighting.setLocationName("WildLog_lost_and_found");
+                                app.getDBI().createOrUpdate(sighting);
+                                // Update visit
+                                checkSightingVisit.setLocationName("WildLog_lost_and_found");
+                                app.getDBI().createOrUpdate(checkSightingVisit, checkSightingVisit.getName());
+                            }
+                        }
+                        setProgress(90);
+
+                        // ---------------------?---------------------
+                        // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
+                        // TODO: maybe delete all non-wildlog files
+                        // ---------------------?---------------------
+                        // Re-create die default thumbnails
+                        // TODO-Maybe: Ek het tegnies nie nodig om die thumbnails nou al te re-create nie want die code sal dit dynamically generate...
+                        finalHandleFeedback.println("** Finished Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+                        setMessage("Finished Workspace Cleanup...");
+                        setProgress(100);
                     }
-                    else {
-                        feedback.println("ERROR: File ID is not correctly formatted.");
-                        feedback.println("          RESOLVE: Deleting the file.");
-                        app.getDBI().delete(wildLogFile);
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                        feedback.println("ERROR: An exception occured while cleaning the Workspace!! " + ex.getMessage());
                     }
-                }
-
-                // ---------------------2---------------------
-                feedback.println("2) Make sure the Files in the Workspace are present in the database.");
-                // Secondly check the files on disk
-                try {
-                    // Kyk of al die files op die hardeskyf in die database bestaan
-                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_IMAGES);
-                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_MOVIES);
-                    cleanupHelper.checkDiskFilesAreInDB(WildLogPaths.WILDLOG_FILES_OTHER);
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                    feedback.println("ERROR: Could not check all files on disk.");
-                }
-
-                // ---------------------3---------------------
-                // As alles klaar is delete alle lee en temporary folders
-                feedback.println("3) Delete all empty folders in the Workspace's Images, Movies and Other files folders.");
-                try {
-                    UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_FILES_IMAGES.getFullPath()));
-                    UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_FILES_MOVIES.getFullPath()));
-                    UtilsFileProcessing.deleteRecursiveOnlyEmptyFolders(new File(WildLogPaths.WILDLOG_FILES_OTHER.getFullPath()));
-                }
-                catch (final IOException ex) {
-                    ex.printStackTrace(System.err);
-                    feedback.println("ERROR: Could not delete empty folders.");
-                }
-                // Delete alle temporary/onnodige files en folders
-                feedback.println("4) Delete all exports and thumbnails (since these files can be recreated from within WildLog).");
-                try {
-                    UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_EXPORT.getFullPath()));
-                    UtilsFileProcessing.deleteRecursive(new File(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath()));
-                }
-                catch (final IOException ex) {
-                    ex.printStackTrace(System.err);
-                    feedback.println("ERROR: Could not delete temporary folders.");
-                }
-                    // 'n Ander manier om dit ook te doen wat glo symbolic links beter handle, ens.
-//                    Files.walkFileTree(Paths.get(WildLogPaths.WILDLOG_EXPORT.getFullPath()), new SimpleFileVisitor<Path>() {
-//                        @Override
-//                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-//                            Files.delete(file);
-//                            return FileVisitResult.CONTINUE;
-//                        }
-//                        @Override
-//                        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-//                            // try to delete the file anyway, even if its attributes could not be read, since delete-only access is theoretically possible
-//                            Files.delete(file);
-//                            return FileVisitResult.CONTINUE;
-//                        }
-//                        @Override
-//                        public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-//                            if (exc == null) {
-//                                Files.delete(dir);
-//                                return FileVisitResult.CONTINUE;
-//                            }
-//                            else {
-//                                // directory iteration failed; propagate exception
-//                                throw exc;
-//                            }
-//                        }
-//                    });
-//                }
-//                catch (IOException ex) {
-//                    ex.printStackTrace(System.err);
-//                    feedback.println("ERROR: Could not delete export folders.");
-//                }
-
-                // ---------------------5---------------------
-                // TODO: Possibily also scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
-                feedback.println("5) TODO: Delete all non-WildLog files from the workspace.");
-
-                // ---------------------?---------------------
-                // Re-create die default thumbnails
-                // TODO-Maybe: Ek het tegnies nie nodig om die thumbnails nou al te re-create nie want die code sal dit dynamically generate...
-
-                // ---------------------6---------------------
-                // Thirdly check the rest of the data for inconsistencies
-                // TODO: Check that all Locations, Visits and Creatures link correctly
-                feedback.println("6) Make sure Places, Periods, Observations and Creatures all have correct links to each other.");
-                List<Visit> allVisits = app.getDBI().list(new Visit());
-                for (Visit visit : allVisits) {
-                    Location temp = app.getDBI().find(new Location(visit.getLocationName()));
-                    if (temp == null) {
-                        feedback.println("ERROR: Could not find link between Period and Place. "
-                                + "Period:" + visit.getName() + ", Place:" + visit.getLocationName());
-                        feedback.println("          RESOLVE: Moving Period to a new Place called 'WildLog_lost_and_found'.");
-                        Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
-                        if (newLocation == null)
-                            app.getDBI().createOrUpdate(newLocation, null);
-                        visit.setLocationName("WildLog_lost_and_found");
-                        // FIXME: Still a issue with sightings not going to point to the correct place...
-                        app.getDBI().createOrUpdate(visit, visit.getName());
+                    finally {
+                        feedback.flush();
+                        feedback.close();
                     }
+                    // Open the summary document
+                    UtilsFileProcessing.openFile(feedbackFile.getAbsolutePath());
+                    // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                    app.quit(null);
+                    return null;
                 }
-                List<Sighting> allSightings = app.getDBI().list(new Sighting());
-                for (Sighting sighting : allSightings) {
-
-                }
-
-            }
-            catch (IOException ex) {
-                ex.printStackTrace(System.err);
-            }
-            finally {
-                feedback.flush();
-                feedback.close();
-            }
-            // Open the summary document
-            UtilsFileProcessing.openFile(feedbackFile.getAbsolutePath());
-            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-            app.quit(null);
+            });
         }
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 
