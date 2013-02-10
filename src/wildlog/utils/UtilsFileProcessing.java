@@ -47,7 +47,7 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a FileChooser dialog.
      */
-    public static int uploadFile(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
+    public static int uploadFileUsingDialog(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
         if (inComponent != null)
             inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
@@ -84,7 +84,7 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a List of Files. (Used with FileDrop.)
      */
-    public static int uploadFiles(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
+    public static int uploadFilesUsingList(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
         if (inComponent != null)
             inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         performFileUpload(inID, inFolderName, inFiles.toArray(new File[inFiles.size()]), inImageLabel, inSize, inApp);
@@ -105,15 +105,15 @@ public final class UtilsFileProcessing {
                         lastFilePath = fromFile.getPath();
                         // Is an image
                         if (new ImageFilter().accept(fromFile)) {
-                            saveOriginalFile(WildLogPaths.WILDLOG_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID);
+                            saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID);
                         }
                         else
                         // Is a movie
                         if (new MovieFilter().accept(fromFile)) {
-                            saveOriginalFile(WildLogPaths.WILDLOG_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID);
+                            saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID);
                         }
                         else {
-                            saveOriginalFile(WildLogPaths.WILDLOG_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID);
+                            saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID);
                         }
                     }
                 }
@@ -147,7 +147,7 @@ public final class UtilsFileProcessing {
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            String fileName = fotos.get(inIndex).getOriginalFotoLocation(true);
+            String fileName = fotos.get(inIndex).getFilePath(true);
             openFile(fileName);
         }
     }

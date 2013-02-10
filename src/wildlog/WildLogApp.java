@@ -141,10 +141,17 @@ public class WildLogApp extends SingleFrameApplication {
         threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
         if (threadCount < 3)
             threadCount = 3;
-        File dataFolder = new File(WildLogPaths.WILDLOG_DATA.getFullPath());
-        dataFolder.mkdirs();
-        File imagesFolder = new File(WildLogPaths.WILDLOG_IMAGES.getFullPath());
-        imagesFolder.mkdirs();
+        // Makse sure all the basic data/file folders are in place
+        File tempFolder = new File(WildLogPaths.WILDLOG_DATA.getFullPath());
+        tempFolder.mkdirs();
+        tempFolder = new File(WildLogPaths.WILDLOG_FILES.getFullPath());
+        tempFolder.mkdirs();
+        tempFolder = new File(WildLogPaths.WILDLOG_FILES_IMAGES.getFullPath());
+        tempFolder.mkdirs();
+        tempFolder = new File(WildLogPaths.WILDLOG_FILES_MOVIES.getFullPath());
+        tempFolder.mkdirs();
+        tempFolder = new File(WildLogPaths.WILDLOG_FILES_OTHER.getFullPath());
+        tempFolder.mkdirs();
         //dbi = new DBI_derby();
         dbi = new DBI_h2();
         // Check to do monthly backup

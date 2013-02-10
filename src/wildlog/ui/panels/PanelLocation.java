@@ -45,6 +45,8 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogPrefixes;
 
 
 public class PanelLocation extends PanelCanSetupHeader {
@@ -79,7 +81,9 @@ public class PanelLocation extends PanelCanSetupHeader {
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadFiles("LOCATION-" + locationWL.getName(), "Places"+File.separatorChar+locationWL.getName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFilesUsingList("LOCATION-" + locationWL.getName(),
+                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
+                            null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -824,7 +828,9 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadFile("LOCATION-" + locationWL.getName(), "Places"+File.separatorChar+locationWL.getName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFileUsingDialog("LOCATION-" + locationWL.getName(),
+                    WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
+                    this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);

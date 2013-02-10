@@ -208,10 +208,10 @@ public class SlideshowDialog extends JDialog {
                 List<String> slideshowList = new ArrayList<String>();
                 List<WildLogFile> files = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
                 for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                        if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                    if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
+                        if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
+                            tempFile.getFilePath(true).toLowerCase().endsWith("jpeg")) {
+                            slideshowList.add(tempFile.getFilePath(true));
                         }
                     }
                 }
@@ -238,11 +238,11 @@ public class SlideshowDialog extends JDialog {
                     Sighting tempSighting = sightingList.get(t);
                     List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                     for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
+                        if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                             // Only using JPGs because otherwise it might break the video
-                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
-                                tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
-                                slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                            if (tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
+                                tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
+                                slideshowList.add(tempFile.getFilePath(true));
                             }
                         }
                     }
@@ -265,10 +265,10 @@ public class SlideshowDialog extends JDialog {
                 List<String> slideshowList = new ArrayList<String>();
                 List<WildLogFile> files = app.getDBI().list(new WildLogFile("LOCATION-" + location.getName()));
                 for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                        if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                    if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
+                        if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
+                            tempFile.getFilePath(true).toLowerCase().endsWith("jpeg")) {
+                            slideshowList.add(tempFile.getFilePath(true));
                         }
                     }
                 }
@@ -295,11 +295,11 @@ public class SlideshowDialog extends JDialog {
                     Sighting tempSighting = sightingList.get(t);
                     List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                     for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
+                        if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                             // Only using JPGs because otherwise it might break the video
-                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
-                                tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
-                                slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                            if (tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
+                                tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
+                                slideshowList.add(tempFile.getFilePath(true));
                             }
                         }
                     }
@@ -322,10 +322,10 @@ public class SlideshowDialog extends JDialog {
                 List<String> slideshowList = new ArrayList<String>();
                 List<WildLogFile> files = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
                 for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
-                        if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                    if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
+                        if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
+                            tempFile.getFilePath(true).toLowerCase().endsWith("jpeg")) {
+                            slideshowList.add(tempFile.getFilePath(true));
                         }
                     }
                 }
@@ -352,11 +352,11 @@ public class SlideshowDialog extends JDialog {
                     Sighting tempSighting = sightingList.get(t);
                     List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
                     for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFotoType())) {
+                        if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                             // Only using JPGs because otherwise it might break the video
-                            if (tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
-                                tempFile.getOriginalFotoLocation(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
-                                slideshowList.add(tempFile.getOriginalFotoLocation(true));
+                            if (tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
+                                tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
+                                slideshowList.add(tempFile.getFilePath(true));
                             }
                         }
                     }

@@ -169,7 +169,7 @@ public class UtilsDialog {
     public static void showExifPopup(String inID, int inIndex, WildLogApp inApp) {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            String fileName = fotos.get(inIndex).getOriginalFotoLocation(true);
+            String fileName = fotos.get(inIndex).getFilePath(true);
             showExifPopup(new File(fileName));
         }
     }

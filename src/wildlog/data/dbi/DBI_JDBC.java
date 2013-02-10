@@ -66,6 +66,7 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
     protected static final String findSighting = "SELECT * FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
     protected static final String findElement = "SELECT * FROM ELEMENTS WHERE PRIMARYNAME = ?";
+    protected static final String findFile = "SELECT * FROM FILES";
     protected static final String findWildLogOptions = "SELECT * FROM WILDLOG";
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
@@ -284,6 +285,46 @@ public abstract class DBI_JDBC implements DBI {
             closeStatementAndResultset(state, results);
         }
         return tempSighting;
+    }
+
+    @Override
+    public WildLogFile find(WildLogFile inFile) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        WildLogFile tempFile = null;
+        try {
+            String sql = findFile;
+            if (inFile.getFilePath(false) != null) {
+                sql = sql + " WHERE ORIGINALPATH = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inFile.getFilePath(false)));
+            }
+            else
+            if (inFile.getId() != null) {
+                sql = sql + " WHERE ID = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inFile.getId()));
+            }
+            results = state.executeQuery();
+            if (results.next()) {
+                tempFile = new WildLogFile();
+                tempFile.setId(results.getString("ID"));
+                tempFile.setFilename(results.getString("FILENAME"));
+                tempFile.setFilePath(results.getString("ORIGINALPATH"));
+                tempFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
+                tempFile.setDate(results.getDate("UPLOADDATE"));
+                tempFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempFile;
     }
 
     @Override
@@ -572,8 +613,8 @@ public abstract class DBI_JDBC implements DBI {
                 WildLogFile tempFoto = new WildLogFile();
                 tempFoto.setId(results.getString("ID"));
                 tempFoto.setFilename(results.getString("FILENAME"));
-                tempFoto.setOriginalFotoLocation(results.getString("ORIGINALPATH"));
-                tempFoto.setFotoType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
+                tempFoto.setFilePath(results.getString("ORIGINALPATH"));
+                tempFoto.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
                 tempFoto.setDate(results.getDate("UPLOADDATE"));
                 tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
                 tempList.add(tempFoto);
@@ -812,7 +853,8 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Check whether to update or create it.
             if (inOldName != null) {
-                // Update teh related tables if the name cahnges
+                // FIXME: What happens if a visit is moved to a new location? We need to also check that if the location name changes on the visit the sightings change as well
+                // Update the related tables if the name cahnges
                 if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
                     // Update the Sightings
                     Sighting sighting = new Sighting();
@@ -949,7 +991,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public boolean createOrUpdate(WildLogFile inFoto, boolean inUpdate) {
+    public boolean createOrUpdate(WildLogFile inFile, boolean inUpdate) {
         PreparedStatement state = null;
         try {
             if (inUpdate) {
@@ -958,24 +1000,24 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 state = conn.prepareStatement(createFile);
             }
-            state.setString(1, UtilsData.sanitizeString(inFoto.getId()));
-            state.setString(2, UtilsData.sanitizeString(inFoto.getFilename()));
-            state.setString(3, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
-            state.setString(4, UtilsData.stringFromObject(inFoto.getFotoType()));
-            if (inFoto.getUploadDate() != null) {
-                state.setDate(5, new java.sql.Date(inFoto.getUploadDate().getTime()));
+            state.setString(1, UtilsData.sanitizeString(inFile.getId()));
+            state.setString(2, UtilsData.sanitizeString(inFile.getFilename()));
+            state.setString(3, UtilsData.sanitizeString(inFile.getFilePath(false)));
+            state.setString(4, UtilsData.stringFromObject(inFile.getFileType()));
+            if (inFile.getUploadDate() != null) {
+                state.setDate(5, new java.sql.Date(inFile.getUploadDate().getTime()));
             }
             else {
                 state.setDate(5, null);
             }
-            if (inFoto.isDefaultFile()) {
+            if (inFile.isDefaultFile()) {
                 state.setBoolean(6, true);
             }
             else {
                 state.setBoolean(6, false);
             }
             if (inUpdate) {
-                state.setString(7, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+                state.setString(7, UtilsData.sanitizeString(inFile.getFilePath(false)));
             }
             state.executeUpdate();
         }
@@ -1176,11 +1218,11 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, UtilsData.sanitizeString(inFoto.getOriginalFotoLocation(false)));
+            state.setString(1, UtilsData.sanitizeString(inFoto.getFilePath(false)));
             // Delete File from database
             state.executeUpdate();
             // Delete the file on the PC
-            File tempFile = new File(inFoto.getOriginalFotoLocation(true));
+            File tempFile = new File(inFoto.getFilePath(true));
             tempFile.delete();
             // FIXME: Huidiglik gaan dit die thumbnails agter los, dis OK vir nou want mens kan alle thumbnails delete soos mens wil, maar sal nice wees om dit ook skoon te maak
         }

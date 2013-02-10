@@ -101,7 +101,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForNoImage(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), "System", "NoFile.png"));
+        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "NoFile.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
             InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/NoFile.png");
@@ -111,7 +111,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForMovies(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), "System", "Movie.png"));
+        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "Movie.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
             InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/Movie.png");
@@ -121,7 +121,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForOtherFiles(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(), "System", "OtherFile.png"));
+        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "OtherFile.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
             InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/OtherFile.png");
@@ -199,14 +199,14 @@ public class UtilsImageProcessing {
         if (inImageLabel != null) {
             List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
             if (fotos.size() > inImageIndex) {
-                if (fotos.get(inImageIndex).getFotoType() != null) {
-                    if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.IMAGE))
+                if (fotos.get(inImageIndex).getFileType() != null) {
+                    if (fotos.get(inImageIndex).getFileType().equals(WildLogFileType.IMAGE))
                         inImageLabel.setIcon(new ImageIcon(fotos.get(inImageIndex).getThumbnailPath(inSize)));
                     else
-                    if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.MOVIE))
+                    if (fotos.get(inImageIndex).getFileType().equals(WildLogFileType.MOVIE))
                         inImageLabel.setIcon(getScaledIconForMovies(inSize));
                     else
-                    if (fotos.get(inImageIndex).getFotoType().equals(WildLogFileType.OTHER))
+                    if (fotos.get(inImageIndex).getFileType().equals(WildLogFileType.OTHER))
                         inImageLabel.setIcon(getScaledIconForOtherFiles(inSize));
                     inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
                 }
@@ -363,10 +363,10 @@ public class UtilsImageProcessing {
 
     private static String getThumbnailPath(File inOriginalFile, int inSize) {
         File thumbnail = new File(WildLogPaths.concatPaths(
-                WildLogPaths.WILDLOG_IMAGES_THUMBNAILS.getFullPath(),
+                WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(),
                 WildLogPaths.stripRootFromPath(
                     inOriginalFile.getParent(),
-                    WildLogPaths.WILDLOG_IMAGES.getFullPath()),
+                    WildLogPaths.WILDLOG_FILES_IMAGES.getFullPath()),
                 inOriginalFile.getName()
             ));
         String path = thumbnail.getAbsolutePath();

@@ -50,6 +50,8 @@ import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogPrefixes;
 
 
 public class PanelSighting extends JDialog {
@@ -1094,15 +1096,15 @@ public class PanelSighting extends JDialog {
             // Now upload the files
             if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 if (inFiles == null) {
-                    imageIndex = UtilsFileProcessing.uploadFile(
+                    imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
                             "SIGHTING-" + sighting.getSightingCounter(),
-                            "Observations" + File.separatorChar + sighting.toString(),
+                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
                             this, lblImage, 300, app);
                 }
                 else {
-                    imageIndex = UtilsFileProcessing.uploadFiles(
+                    imageIndex = UtilsFileProcessing.uploadFilesUsingList(
                             "SIGHTING-" + sighting.getSightingCounter(),
-                            "Observations" + File.separatorChar + sighting.toString(),
+                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
                             this, lblImage, 300, app,
                             inFiles);
                 }
@@ -1214,7 +1216,7 @@ public class PanelSighting extends JDialog {
     private void btnGetDateFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDateFromImageActionPerformed
         List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
         if (files != null && files.size() > 0)
-            getDateFromImage(new File(files.get(imageIndex).getOriginalFotoLocation(true)));
+            getDateFromImage(new File(files.get(imageIndex).getFilePath(true)));
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
 
     private void getDateFromImage(File inFile) {

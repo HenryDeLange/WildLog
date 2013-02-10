@@ -1967,6 +1967,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Image EXIF Data Reader"/>
+                <Property name="toolTipText" type="java.lang.String" value="Allows you to browse to any image on your computer and view the EXIF data."/>
                 <Property name="name" type="java.lang.String" value="mnuExifMenuItem" noResource="true"/>
               </Properties>
               <Events>
@@ -1979,6 +1980,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Slideshow_Small.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Create a Slideshow"/>
+                <Property name="toolTipText" type="java.lang.String" value="Allows you to create a slideshow using a folder of images anywhere on your computer."/>
                 <Property name="name" type="java.lang.String" value="mnuCreateSlideshow" noResource="true"/>
               </Properties>
               <Events>
@@ -1991,6 +1993,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon_big.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="View Sun And Moon Phase"/>
+                <Property name="toolTipText" type="java.lang.String" value="Opens up a Sun and Moon Phase dialog that can be sued to determine the phases at any location."/>
                 <Property name="name" type="java.lang.String" value="mnuSunAndMoon" noResource="true"/>
               </Properties>
               <Events>
@@ -2009,7 +2012,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuDBConsole">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Open H2 Database Console"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the DB console bundled with the H2 database used by WildLog."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open the DB console bundled with the H2 database to access the database used by WildLog."/>
                     <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
                   </Properties>
                   <Events>
@@ -2030,7 +2033,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuOpenMapApp">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Open OpenMap Software"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the OpenMap application used by WildLog"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open the OpenMap application in standand alone mode."/>
                     <Property name="name" type="java.lang.String" value="mnuOpenMapApp" noResource="true"/>
                   </Properties>
                   <Events>

@@ -2,7 +2,6 @@ package wildlog.data.dataobjects;
 
 import java.util.Calendar;
 import java.util.Date;
-import wildlog.WildLogApp;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.utils.UtilsImageProcessing;
@@ -11,7 +10,7 @@ import wildlog.utils.WildLogPaths;
 public class WildLogFile {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
     private String filename;
-    private String originalFileLocation;
+    private String originalFileLocation; // This is used as the DB table ID
     private Date uploadDate;
     private WildLogFileType fileType;
     private boolean defaultFile = false;
@@ -24,20 +23,20 @@ public class WildLogFile {
         id = inID;
     }
 
-    public WildLogFile(String inID, String inName, String inOriginalFileLocation, WildLogFileType inFotoType) {
+    public WildLogFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
         id = inID;
-        filename = inName;
-        originalFileLocation = inOriginalFileLocation;
+        filename = inFilename;
+        originalFileLocation = inFilePath;
         uploadDate = Calendar.getInstance().getTime();
-        fileType = inFotoType;
+        fileType = inFileType;
     }
 
-    public WildLogFile(String inID, String inName, String inOriginalFileLocation, WildLogFileType inFotoType, Date inUploadDate) {
+    public WildLogFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType, Date inUploadDate) {
         id = inID;
-        filename = inName;
-        originalFileLocation = inOriginalFileLocation;
+        filename = inFilename;
+        originalFileLocation = inFilePath;
         uploadDate = inUploadDate;
-        fileType = inFotoType;
+        fileType = inFileType;
     }
 
     // METHODS:
@@ -49,11 +48,11 @@ public class WildLogFile {
     public String toHTML(UtilsHTML.ImageExportTypes inExportType) {
         if (fileType.equals(WildLogFileType.IMAGE))
             // Moet die getter hier gebruik want ek wil die File().exists() doen...
-            return "<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
+            return "<a href='" + getFilePath(true) + "' target='_blank'>"
                     + UtilsHTML.generateHTMLImages(getThumbnailPath(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a>";
         else
         if (fileType.equals(WildLogFileType.MOVIE))
-            return "[<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
+            return "[<a href='" + getFilePath(true) + "' target='_blank'>"
                     // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
 //                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
 //                        WildLogApp.class.getResource("resources/icons/Movie.png").toString(),
@@ -61,7 +60,7 @@ public class WildLogFile {
                     + "Movie</a>] ";
         else
         if (fileType.equals(WildLogFileType.OTHER))
-            return "[<a href='" + getOriginalFotoLocation(true) + "' target='_blank'>"
+            return "[<a href='" + getFilePath(true) + "' target='_blank'>"
                     // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
 //                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
 //                        WildLogApp.class.getResource("resources/icons/OtherFile.png").toString(),
@@ -82,7 +81,7 @@ public class WildLogFile {
         return uploadDate;
     }
 
-    public String getOriginalFotoLocation(boolean inGetFullpath) {
+    public String getFilePath(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
             return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), originalFileLocation);
@@ -90,7 +89,7 @@ public class WildLogFile {
             return originalFileLocation;
     }
 
-    public WildLogFileType getFotoType() {
+    public WildLogFileType getFileType() {
         return fileType;
     }
 
@@ -98,12 +97,12 @@ public class WildLogFile {
         uploadDate = inDate;
     }
 
-    public void setOriginalFotoLocation(String inOriginalFotoLocation) {
-        originalFileLocation = inOriginalFotoLocation;
+    public void setFilePath(String inOriginalFileLocation) {
+        originalFileLocation = inOriginalFileLocation;
     }
 
-    public void setFotoType(WildLogFileType inFotoType) {
-        fileType = inFotoType;
+    public void setFileType(WildLogFileType inFileType) {
+        fileType = inFileType;
     }
 
     public String getId() {

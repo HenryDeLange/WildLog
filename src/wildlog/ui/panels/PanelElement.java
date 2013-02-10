@@ -54,6 +54,8 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogPrefixes;
 
 
 public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenSightingAdded {
@@ -94,7 +96,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadFiles("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), null, lblImage, 300, app, inFiles);
+                    imageIndex = UtilsFileProcessing.uploadFilesUsingList("ELEMENT-" + element.getPrimaryName(),
+                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()),
+                            null, lblImage, 300, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -1011,7 +1015,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadFile("ELEMENT-" + element.getPrimaryName(), "Creatures"+File.separatorChar+element.getPrimaryName(), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFileUsingDialog("ELEMENT-" + element.getPrimaryName(), WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()), this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
