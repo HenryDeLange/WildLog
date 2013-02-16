@@ -6,7 +6,7 @@ public enum VisitType {
     REMOTE_CAMERA("Remote Camera"), // TODO: change to camera trap
     BIRD_ATLASSING("Bird Atlassing"), // TODO: change to atlassing/census
     DAY_VISIT("Day Visit"),
-    INCIDENTAL("incidental"),
+    INCIDENTAL("Incidental"),
     OTHER("Other"),
     NONE("None");
 

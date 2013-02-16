@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.application.FrameView;
@@ -23,10 +22,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
@@ -37,7 +34,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
@@ -287,7 +283,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         btnReport = new javax.swing.JButton();
         btnDefault = new javax.swing.JButton();
         cmbElementTypesBrowseTab = new javax.swing.JComboBox();
-        chkElementTypeBrowseTab = new javax.swing.JCheckBox();
         btnRotate = new javax.swing.JButton();
         btnViewEXIF = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
@@ -382,7 +377,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabbedPanel.setPreferredSize(new java.awt.Dimension(1000, 630));
 
         tabHome.setBackground(new java.awt.Color(5, 26, 5));
-        tabHome.setMaximumSize(new java.awt.Dimension(1000, 630));
         tabHome.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabHome.setName("tabHome"); // NOI18N
         tabHome.setPreferredSize(new java.awt.Dimension(1000, 630));
@@ -736,19 +730,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cmbElementTypesBrowseTab.setEnabled(false);
         cmbElementTypesBrowseTab.setName("cmbElementTypesBrowseTab"); // NOI18N
         cmbElementTypesBrowseTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbElementTypesBrowseTabActionPerformed(evt);
-            }
-        });
-
-        chkElementTypeBrowseTab.setBackground(new java.awt.Color(235, 233, 221));
-        chkElementTypeBrowseTab.setName("chkElementTypeBrowseTab"); // NOI18N
-        chkElementTypeBrowseTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkElementTypeBrowseTabActionPerformed(evt);
             }
         });
 
@@ -801,13 +786,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(tabFotoLayout.createSequentialGroup()
-                        .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(chkElementTypeBrowseTab))
-                    .addGroup(tabFotoLayout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbElementTypesBrowseTab, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -853,9 +833,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                             .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(tabFotoLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(chkElementTypeBrowseTab))))
+                                .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -896,7 +874,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabbedPanel.addTab("Browse All", tabFoto);
 
         tabLocation.setBackground(new java.awt.Color(194, 207, 214));
-        tabLocation.setMaximumSize(new java.awt.Dimension(1000, 600));
         tabLocation.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabLocation.setName("tabLocation"); // NOI18N
         tabLocation.setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -1122,7 +1099,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabbedPanel.addTab("All Locations", tabLocation);
 
         tabElement.setBackground(new java.awt.Color(201, 218, 199));
-        tabElement.setMaximumSize(new java.awt.Dimension(1000, 600));
         tabElement.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabElement.setName("tabElement"); // NOI18N
         tabElement.setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -1878,7 +1854,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         dtpEndDate.setVisible(false);
         btnRefreshDates.setVisible(false);
         cmbElementTypesBrowseTab.setVisible(false);
-        chkElementTypeBrowseTab.setVisible(false);
         rdbBrowseLocationItemStateChanged(null);
         rdbBrowseElementItemStateChanged(null);
         rdbBrowseDateItemStateChanged(null);
@@ -2012,7 +1987,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
             cmbElementTypesBrowseTab.setVisible(false);
-            chkElementTypeBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
@@ -2039,7 +2013,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
-            chkElementTypeBrowseTab.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(true);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
@@ -2068,7 +2041,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             dtpEndDate.setVisible(true);
             btnRefreshDates.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(false);
-            chkElementTypeBrowseTab.setVisible(false);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
@@ -2294,14 +2266,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             btnBrowseNextActionPerformed(evt);
         }
     }//GEN-LAST:event_btnDefaultActionPerformed
-
-    private void chkElementTypeBrowseTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkElementTypeBrowseTabActionPerformed
-        searchElementBrowseTab = new Element();
-        cmbElementTypesBrowseTab.setEnabled(chkElementTypeBrowseTab.isSelected());
-        if (cmbElementTypesBrowseTab.isEnabled())
-            searchElementBrowseTab.setType((ElementType)cmbElementTypesBrowseTab.getSelectedItem());
-        browseByElement();
-    }//GEN-LAST:event_chkElementTypeBrowseTabActionPerformed
 
     private void cmbElementTypesBrowseTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypesBrowseTabActionPerformed
         searchElementBrowseTab.setType((ElementType)cmbElementTypesBrowseTab.getSelectedItem());
@@ -2927,12 +2891,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             JPanel panel = new JPanel(new AbsoluteLayout());
             panel.setPreferredSize(new Dimension(400, 50));
             panel.setBorder(new LineBorder(new Color(235, 90, 80), 3));
-            JLabel label = new JLabel("<html>Busy cleaning workspace. <br>Please be patient and don't close the application until the process is finished.</html>");
+            JLabel label = new JLabel("<html>Busy cleaning workspace. <br>Please be patient, this might take a while. <br>Don't close the application until the process is finished.</html>");
             label.setFont(new Font("Tahoma", Font.BOLD, 14));
             label.setForeground(new Color(240, 251, 230));
             label.setBorder(new LineBorder(new Color(180, 90, 40), 5));
             panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-            panel.add(label, new AbsoluteConstraints(350, 350, -1, -1));
+            panel.add(label, new AbsoluteConstraints(300, 150, -1, -1));
             panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
             JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
             glassPane.removeAll();
@@ -2946,6 +2910,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
+                    // TODO: Implement better progress
+                    // TODO: Print summary of what was done at the end
                     setProgress(0);
                     setMessage("Workspace Cleanup starting...");
                     // Setup the feedback file
@@ -3024,20 +2990,21 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         for (WildLogFile wildLogFile : allFiles) {
                             // Check the WildLogFile's content
                             if (wildLogFile.getId() == null) {
-                                finalHandleFeedback.println("ERROR: File without an ID. FilePath:" + wildLogFile.getFilePath(false));
-                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file.");
+                                finalHandleFeedback.println("ERROR: File record without an ID. FilePath:" + wildLogFile.getFilePath(false));
+                                // FIXME: Move to WildLog_lost_and_found instead?
+                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file record and disk file.");
                                 app.getDBI().delete(wildLogFile);
                                 continue;
                             }
                             if (wildLogFile.getFilePath(false) == null || wildLogFile.getFilePath(true) == null) {
-                                finalHandleFeedback.println("ERROR: File path missing. FileID:" + wildLogFile.getId());
-                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file.");
+                                finalHandleFeedback.println("ERROR: File path missing from record. FileID:" + wildLogFile.getId());
+                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file record and disk file.");
                                 app.getDBI().delete(wildLogFile);
                                 continue;
                             }
                             if (!new File(wildLogFile.getFilePath(false)).exists() && !new File(wildLogFile.getFilePath(true)).exists()) {
-                                finalHandleFeedback.println("ERROR: File can't be found on disk. File path:" + wildLogFile.getFilePath(false));
-                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file.");
+                                finalHandleFeedback.println("ERROR: File record in the database can't be found on disk. File path:" + wildLogFile.getFilePath(false));
+                                finalHandleFeedback.println("          RESOLVE: Trying to delete the file record and disk file.");
                                 app.getDBI().delete(wildLogFile);
                                 continue;
                             }
@@ -3049,7 +3016,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 continue;
                             }
                             if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
-                                finalHandleFeedback.println("ERROR: Unknown FileType. FilePath:" + wildLogFile.getFilePath(false)
+                                finalHandleFeedback.println("ERROR: Unknown FileType of File record. FilePath:" + wildLogFile.getFilePath(false)
                                         + ", FileType:" + wildLogFile.getFileType());
                                 finalHandleFeedback.println("          RESOLVE: Changed FileType to " + WildLogFileType.OTHER + ".");
                                 wildLogFile.setFileType(WildLogFileType.OTHER);
@@ -3061,8 +3028,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 // Make sure it is linked
                                 final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring("ELEMENT-".length())));
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR: Could not find linked Creature for this file. FilePath:" + wildLogFile.getFilePath(false));
-                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    finalHandleFeedback.println("ERROR: Could not find linked Creature for this file record. FilePath:" + wildLogFile.getFilePath(false)
+                                            + ", ID:" + wildLogFile.getId() + ", PrimaryName Used:" + wildLogFile.getId().substring("ELEMENT-".length()));
+                                    // FIXME: Move to WildLog_lost_and_found instead?
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file record  and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
                                 }
@@ -3076,8 +3045,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 // Make sure it is linked
                                 final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring("VISIT-".length())));
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR: Could not find linked Period for this file. FilePath:" + wildLogFile.getFilePath(false));
-                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    finalHandleFeedback.println("ERROR: Could not find linked Period for this file record. FilePath:" + wildLogFile.getFilePath(false)
+                                            + ", ID:" + wildLogFile.getId() + ", Period Used:" + wildLogFile.getId().substring("VISIT-".length()));
+                                    // FIXME: Move to WildLog_lost_and_found instead?
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
                                 }
@@ -3091,8 +3062,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                 // Make sure it is linked
                                 final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring("LOCATION-".length())));
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR: Could not find linked Place for this file. FilePath:" + wildLogFile.getFilePath(false));
-                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    finalHandleFeedback.println("ERROR: Could not find linked Place for this file. FilePath:" + wildLogFile.getFilePath(false)
+                                            + ", ID:" + wildLogFile.getId() + ", Location Used:" + wildLogFile.getId().substring("LOCATION-".length()));
+                                    // FIXME: Move to WildLog_lost_and_found instead?
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
                                 }
@@ -3112,8 +3085,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                     finalHandleFeedback.println("ERROR: Can't get linked Observation's ID.");
                                 }
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR: Could not find linked Observation for this file. FilePath:" + wildLogFile.getFilePath(false));
-                                    finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                    finalHandleFeedback.println("ERROR: Could not find linked Observation for this file. FilePath:" + wildLogFile.getFilePath(false)
+                                            + ", ID:" + wildLogFile.getId() + ", Sighting ID Used:" + wildLogFile.getId().substring("SIGHTING-".length()));
+                                    // FIXME: Move to WildLog_lost_and_found instead?
+                                    finalHandleFeedback.println("          RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
                                 }
@@ -3125,7 +3100,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                             }
                             else {
                                 finalHandleFeedback.println("ERROR: File ID is not correctly formatted.");
-                                finalHandleFeedback.println("          RESOLVE: Deleting the file.");
+                                finalHandleFeedback.println("          RESOLVE: Deleting the file record and disk file.");
                                 app.getDBI().delete(wildLogFile);
                             }
                         }
@@ -3513,7 +3488,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JMenuItem bulkImportMenuItem;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JMenuItem calcSunMoonMenuItem;
-    private javax.swing.JCheckBox chkElementTypeBrowseTab;
     private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JComboBox cmbElementTypesBrowseTab;
     private javax.swing.JComboBox cmbType;
