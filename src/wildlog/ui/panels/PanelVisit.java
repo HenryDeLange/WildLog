@@ -6,6 +6,7 @@ import wildlog.ui.dialogs.ReportingDialog;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -18,7 +19,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
@@ -52,6 +52,8 @@ import wildlog.utils.WildLogPrefixes;
  * @author  henry.delange
  */
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenSightingAdded {
+    private int imageIndex;
+    private WildLogApp app;
     private Visit visit;
     private Location locationForVisit;
     private Sighting sighting;
@@ -100,6 +102,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
         UtilsUI.attachClipboardPopup(txtDescription);
+
+        // Setup info for tab headers
+        tabLabel = visit.getName();
+        tabIconURL = app.getClass().getResource("resources/icons/Visit.gif");
     }
 
     public void setVisit(Visit inVisit) {
@@ -135,29 +141,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     @Override
-    public void setupTabHeader() {
-        JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif"))));
-        if (visit.getName() != null) tabHeader.add(new JLabel(visit.getName() + " "));
-        else tabHeader.add(new JLabel("[new] "));
-        JButton btnClose = new JButton();
-        btnClose.setFocusPainted(false);
-        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnClose.setPreferredSize(new Dimension(12, 12));
-        btnClose.setBackground(new Color(255, 000, 000));
-        btnClose.setToolTipText("Close");
-        btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
-        btnClose.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                closeTab();
-            }
-        });
-        tabHeader.add(btnClose);
-        tabHeader.setBackground(new Color(0, 0, 0, 0));
-        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
-    }
-
     public void closeTab() {
         ((JTabbedPane)getParent()).remove(this);
     }

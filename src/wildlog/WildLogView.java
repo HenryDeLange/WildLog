@@ -207,34 +207,50 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     public void setupTabHeaderHome() {
         JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif"))));
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif"));
+        tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel(""));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
+        tabbedPanel.setTitleAt(0, "Home");
+        tabbedPanel.setIconAt(0, icon);
         tabbedPanel.setTabComponentAt(0, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 0);
     }
 
     public void setupTabHeaderFoto() {
         JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Browse.png"))));
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Browse.png"));
+        tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Browse"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
+        tabbedPanel.setTitleAt(1, "Browse");
+        tabbedPanel.setIconAt(1, icon);
         tabbedPanel.setTabComponentAt(1, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 1);
     }
 
     public void setupTabHeaderLocation() {
         JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"))));
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"));
+        tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Places"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
+        tabbedPanel.setTitleAt(2, "Places");
+        tabbedPanel.setIconAt(2, icon);
         tabbedPanel.setTabComponentAt(2, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 2);
     }
 
     public void setupTabHeaderElement() {
         JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/ElementList.gif"))));
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/ElementList.gif"));
+        tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Creatures"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
+        tabbedPanel.setTitleAt(3, "Creatures");
+        tabbedPanel.setIconAt(3, icon);
         tabbedPanel.setTabComponentAt(3, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 3);
     }
 
     /** This method is called from within the constructor to
@@ -3252,6 +3268,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         // ---------------------?---------------------
                         // Re-create die default thumbnails
                         // TODO-Maybe: Ek het tegnies nie nodig om die thumbnails nou al te re-create nie want die code sal dit dynamically generate...
+                        // ---------------------?---------------------
+                        // Check distribution maps linkage
+                        // TODO: Kyk hoeveel files link reg met 'n creature en hoeveel nie (lys die wat gefix moet word)
+
                         finalHandleFeedback.println("** Finished Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
                         setMessage("Finished Workspace Cleanup...");
                         setProgress(100);

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -22,7 +23,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -62,6 +62,8 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
+    private int imageIndex;
+    private WildLogApp app;
     private CustomMouseWheelScroller mouseWheel;
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
     public final static Color tableBackgroundColor2 = new Color(215, 226, 200);
@@ -98,6 +100,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Setup clipboard
         UtilsUI.attachClipboardPopup(txtLocationName);
         UtilsUI.attachClipboardPopup(txtVisitName);
+
+        // Setup info for tab headers
+        tabLabel = "Bulk Upload";
+        tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
@@ -112,29 +118,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     @Override
-    public void setupTabHeader() {
-        JPanel tabHeader = new JPanel();
-        tabHeader.add(new JLabel(new ImageIcon(app.getClass().getResource("resources/icons/Bulk Import.png"))));
-        tabHeader.add(new JLabel("Bulk Upload"));
-        JButton btnClose = new JButton();
-        btnClose.setFocusPainted(false);
-        btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnClose.setPreferredSize(new Dimension(12, 12));
-        btnClose.setBackground(new Color(255, 000, 000));
-        btnClose.setToolTipText("Close");
-        btnClose.setIcon(new ImageIcon(app.getClass().getResource("resources/icons/Close.gif")));
-        btnClose.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                closeTab();
-            }
-        });
-        tabHeader.add(btnClose);
-        tabHeader.setBackground(new Color(0, 0, 0, 0));
-        ((JTabbedPane)getParent()).setTabComponentAt(((JTabbedPane)getParent()).indexOfComponent(this), tabHeader);
-    }
-
-    private void closeTab() {
+    public void closeTab() {
         ((JTabbedPane)getParent()).remove(this);
     }
 

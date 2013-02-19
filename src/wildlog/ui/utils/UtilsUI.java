@@ -1,5 +1,6 @@
 package wildlog.ui.utils;
 
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -11,21 +12,27 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.util.Date;
+import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
+import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 
 public class UtilsUI {
-    private static Timer timer = new Timer(30, null);
 
     public static void doClipboardCopy(String inText) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -150,7 +157,68 @@ public class UtilsUI {
         });
     }
 
+    public static void attachMouseScrollToTabs(final JTabbedPane inTabbedPane, final JPanel inHeaderPanel, final int inFixedIndex) {
+        class TabbedPaneMouseWheelScroller implements MouseWheelListener {
+            public void mouseWheelMoved(MouseWheelEvent inEvent) {
+                int scrollCount = inEvent.getWheelRotation();
+                int currentIndex = inTabbedPane.getSelectedIndex();
+                int maxIndex = inTabbedPane.getTabCount()-1;
+                int newIndex = currentIndex - scrollCount;
+                if (newIndex > maxIndex)
+                    newIndex = maxIndex;
+                else
+                if (newIndex < 0)
+                    newIndex = 0;
+                // FIXME: Maak dat mens die actualy select nie maar net die viewport skuif
+                inTabbedPane.setSelectedIndex(newIndex);
+            }
+        }
+        class TabSelectionMouseHandler extends MouseAdapter {
+            public void mouseClicked(MouseEvent inEvent) {
+                if(SwingUtilities.isRightMouseButton(inEvent)) {
+                    // Right clicked = show popup of all open tabs
+                    JPopupMenu menu = new JPopupMenu();
+                    int tabCount = inTabbedPane.getTabCount();
+                    for(int i = 0; i < tabCount; i++) {
+                        Object temp = inTabbedPane.getTabComponentAt(i);
+                        if (temp instanceof PanelCanSetupHeader.HeaderPanel) {
+                            final PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)temp;
+                            menu.add(new AbstractAction(headerPanel.getLabel(), headerPanel.getIcon()) {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    inTabbedPane.setSelectedComponent(headerPanel.getParentPanel());
+                                }
+                            });
+                        }
+                        else {
+                            final int finalIndex = i;
+                            menu.add(new AbstractAction(inTabbedPane.getTitleAt(i), inTabbedPane.getIconAt(i)) {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    inTabbedPane.setSelectedIndex(finalIndex);
+                                }
+                            });
+                        }
+                    }
+                    menu.show(inTabbedPane, inTabbedPane.getMousePosition().x, inTabbedPane.getMousePosition().y);
+                }
+                else {
+                    // Left click = select tab
+                    if (inFixedIndex < 0) {
+                        inTabbedPane.setSelectedComponent(((PanelCanSetupHeader.HeaderPanel)inHeaderPanel).getParentPanel());
+                    }
+                    else {
+                        inTabbedPane.setSelectedIndex(inFixedIndex);
+                    }
+                }
+            }
+        }
+        inHeaderPanel.addMouseWheelListener(new TabbedPaneMouseWheelScroller());
+        inHeaderPanel.addMouseListener(new TabSelectionMouseHandler());
+    }
+
     // Voorbeeld van animations in swing
+//private static Timer timer = new Timer(30, null);
 //    public static void doAnimationSaveSuccess(final Color inFromColor, final Color inToColor, final JTextComponent inFeedbackField) {
 //        if (!timer.isRunning()) {
 //            timer.addActionListener(new ActionListener() {
