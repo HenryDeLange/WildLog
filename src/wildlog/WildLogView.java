@@ -53,7 +53,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
@@ -2505,7 +2504,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    messageTimer.stop();
                     setMessage("Starting the Sun and Moon Calculation");
                     setProgress(0);
                     tabbedPanel.setSelectedIndex(0);
@@ -2528,7 +2526,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     }
                     setProgress(100);
                     setMessage("Done with the Sun and Moon Calculation");
-                    messageTimer.start();
                     return null;
                 }
             });
@@ -2550,7 +2547,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                messageTimer.stop();
                 setMessage("Starting the CSV Import");
                 final JFileChooser fileChooser = new JFileChooser();
                 fileChooser.setDialogTitle("Select the directory with the CSV files to import");
@@ -2586,7 +2582,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                     }
                 }
                 setMessage("Done with the CSV Import");
-                messageTimer.start();
                 return null;
             }
         });
@@ -2645,10 +2640,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
     private void csvExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvExportMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                messageTimer.stop();
                 setMessage("Starting the CSV Export");
                 String path = WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath();
                 File tempFile = new File(path);
@@ -2656,17 +2650,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 app.getDBI().doExportCSV(path);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getFullPath());
                 setMessage("Done with the CSV Export");
-                messageTimer.start();
                 return null;
             }
         });
     }//GEN-LAST:event_csvExportMenuItemActionPerformed
 
     private void htmlExportMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlExportMenuItem1ActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                messageTimer.stop();
                 setMessage("Starting the HTML Export");
                 setProgress(0);
                 List<Element> listElements = app.getDBI().list(new Element());
@@ -2687,17 +2679,15 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 setMessage("HTML Export: " + getProgress());
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath());
                 setMessage("Done with the HTML Export");
-                messageTimer.start();
                 return null;
             }
         });
     }//GEN-LAST:event_htmlExportMenuItem1ActionPerformed
 
     private void kmlExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kmlExportMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                messageTimer.stop();
                 setMessage("Starting the KML Export");
                 setProgress(0);
                 // First do the HTML export to generate the Images in the right place
@@ -2755,7 +2745,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
                 setProgress(100);
                 setMessage("Done with the KML Export");
-                messageTimer.start();
                 return null;
             }
         });
@@ -2767,10 +2756,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }//GEN-LAST:event_mnuSunAndMoonActionPerformed
 
     private void mnuBackupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                messageTimer.stop();
                 setMessage("Starting the Database Backup");
                 app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
                 setMessage("Done with the Database Backup");
@@ -2783,7 +2771,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                         return -1;
                     }
                 });
-                messageTimer.start();
                 return null;
             }
         });

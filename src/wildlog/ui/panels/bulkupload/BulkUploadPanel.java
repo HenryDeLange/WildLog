@@ -2,11 +2,6 @@ package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -18,8 +13,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,6 +48,7 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
 import wildlog.ui.helpers.UtilTableGenerator;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
+import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsConcurency;
@@ -65,8 +59,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private int imageIndex;
     private WildLogApp app;
     private CustomMouseWheelScroller mouseWheel;
+    private File importPath = null;
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
-    public final static Color tableBackgroundColor2 = new Color(215, 226, 200);
+    public final static Color tableBackgroundColor2 = new Color(195, 205, 180);
 
 
     /** Creates new form BulkUploadPanel */
@@ -78,15 +73,22 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Set table scroling to only one row at a time
         mouseWheel = new CustomMouseWheelScroller(scrTable);
         mouseWheel.install();
-        // "Hack" to make the buttons clickable when teh mouse scrolles over the cell (very performance intensive, but "better" now...)
+        // "Hack" to make the buttons clickable when teh mouse scrolles over the cell (very performance intensive, but "better" now...) of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
             @Override
-            public void mouseMoved(MouseEvent e) {
-                int row = tableHandle.rowAtPoint(e.getPoint());
-                int col = tableHandle.columnAtPoint(e.getPoint());
+            public void mouseMoved(MouseEvent inEvent) {
+                int row = tableHandle.rowAtPoint(inEvent.getPoint());
+                int col = tableHandle.columnAtPoint(inEvent.getPoint());
                 if (row != tableHandle.getEditingRow() || col != tableHandle.getEditingColumn()) {
-                    tableHandle.editCellAt(row, col);
+                    try {
+                        if (row >= 0 && row < tableHandle.getModel().getRowCount() && col >= 0 && col < tableHandle.getModel().getColumnCount()) {
+                            tableHandle.editCellAt(row, col);
+                        }
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
                 }
             }
         });
@@ -104,6 +106,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Setup info for tab headers
         tabLabel = "Bulk Upload";
         tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
+
+        // Spinner selection fix
+        SpinnerFixer.fixSelectAllForSpinners(spnInactivityTime);
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
@@ -130,11 +135,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void loadImages(ProgressbarTask inProgressbarTask) {
         // Get the list of files from the folder to import from
-        File rootFile = showFileChooser();
+        if (importPath == null)
+            importPath = showFileChooser();
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
-        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(rootFile, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), inProgressbarTask, app);
+        model.fireTableDataChanged();
+        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(importPath, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), inProgressbarTask, app);
         model.getDataVector().addAll(UtilTableGenerator.convertToVector(wrapper.getData()));
         model.fireTableDataChanged();
         // Setup the dates
@@ -413,10 +420,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
         tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
         tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
-        tblBulkImport.getColumnModel().getColumn(0).setHeaderValue("Observations");
         tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, txtLocationName, txtVisitName));
         tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, txtLocationName, txtVisitName));
-        tblBulkImport.getColumnModel().getColumn(1).setHeaderValue("Images");
         tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
         tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());
 
@@ -463,7 +468,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
-        // FIXME: When reloading the talbe if the mouse is over the rows it creates lots of exceptions until done reloading...
+        if (tblBulkImport.getCellEditor() != null) {
+            tblBulkImport.getCellEditor().cancelCellEditing();
+        }
+        tblBulkImport.clearSelection();
         // You can only use a task once, hence for the saving we need to create a new task
         UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override

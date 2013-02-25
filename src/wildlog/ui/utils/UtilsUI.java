@@ -1,6 +1,5 @@
 package wildlog.ui.utils;
 
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -17,8 +16,6 @@ import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.util.Date;
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;

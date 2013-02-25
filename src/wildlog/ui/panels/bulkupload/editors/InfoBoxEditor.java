@@ -35,7 +35,7 @@ public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor
     @Override
     public Component getTableCellEditorComponent(JTable inTable, Object inValue, boolean inIsSelected, int inRow, int inColumn) {
         editorValue = inValue;
-        return InfoBoxRenderer.drawInfoBox(inTable, inValue, app, txtLocation, txtVisit);
+        return InfoBoxRenderer.drawInfoBox(inTable, inValue, app, txtLocation, txtVisit, inRow);
     }
 
 }

@@ -46,10 +46,10 @@ public class UtilsImageProcessing {
 
 
     public static ImageIcon getScaledIcon(File inFile, int inSize) {
-        try {
-            FileImageInputStream inputStream = new FileImageInputStream(inFile);
+        ImageReader imageReader = null;
+        try (FileImageInputStream inputStream = new FileImageInputStream(inFile)) {
             Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
-            ImageReader imageReader = imageReaderList.next();
+            imageReader = imageReaderList.next();
             imageReader.setInput(inputStream);
             int imageWidth = imageReader.getWidth(imageReader.getMinIndex());
             int imageHeight = imageReader.getHeight(imageReader.getMinIndex());
@@ -75,13 +75,15 @@ public class UtilsImageProcessing {
                     finalHeight = (int)(imageHeight*ratio);
                 }
             }
-            imageReader.dispose();
-            inputStream.close();
             // FIXME: Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou, so ek hoef dit nie dan self uit te werk nie...
             return new ImageIcon(getScaledImage(Toolkit.getDefaultToolkit().createImage(inFile.getAbsolutePath()), finalWidth, finalHeight));
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
+        }
+        finally {
+            if (imageReader != null)
+                imageReader.dispose();
         }
         return getScaledIconForNoImage(inSize);
     }

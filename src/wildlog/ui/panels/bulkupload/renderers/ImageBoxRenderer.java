@@ -23,7 +23,7 @@ public class ImageBoxRenderer implements TableCellRenderer {
         // Note: Java alsready only calls this method for visible rows, so no need to check that
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
         JPanel panel = new JPanel(new AbsoluteLayout());
-        if (inRow%2 == 0)
+        if (inRow % 2 == 0)
             panel.setBackground(BulkUploadPanel.tableBackgroundColor1);
         else
             panel.setBackground(BulkUploadPanel.tableBackgroundColor2);
