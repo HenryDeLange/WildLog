@@ -94,6 +94,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
         txtLocationName.setText(inLocationName);
         // Setup the tab's content
+        lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
         setupTab(inProgressbarTask);
         // Pre-select the location if present
         if (inLocationName != null && !inLocationName.isEmpty()) {
@@ -468,6 +469,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
+        // Disable die button sodat mens dit nie weer kan druk nie en wys 'n loading boodskap in die table
+        btnReload.setEnabled(false);
+        tblBulkImport.getColumnModel().getColumn(0).setHeaderValue("Loading...");
+        tblBulkImport.getColumnModel().getColumn(1).setHeaderValue("Loading...");
+        // Update die table om nie meer te edit nie
         if (tblBulkImport.getCellEditor() != null) {
             tblBulkImport.getCellEditor().cancelCellEditing();
         }
@@ -480,6 +486,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 return null;
             }
         });
+        // Disable die button sodat mens dit nie weer kan druk nie en wys 'n loading boodskap in die table
+        // FIXME: Die moet eers na die task klaar is gebeur...
+        btnReload.setEnabled(true);
+        tblBulkImport.getColumnModel().getColumn(0).setHeaderValue("Observations");
+        tblBulkImport.getColumnModel().getColumn(1).setHeaderValue("Images");
     }//GEN-LAST:event_btnReloadActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed

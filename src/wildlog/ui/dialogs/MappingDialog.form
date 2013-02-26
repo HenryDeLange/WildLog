@@ -42,7 +42,7 @@
     <Component class="javax.swing.JButton" name="btnViewLocation">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View the Place on the Map"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -72,7 +72,7 @@
     <Component class="javax.swing.JButton" name="btnViewSingleSighting">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View the selected Observation"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -102,7 +102,7 @@
     <Component class="javax.swing.JButton" name="btnViewAllSightingsForLocation">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View Observations at the Place"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -132,7 +132,7 @@
     <Component class="javax.swing.JButton" name="btnViewAllSightingsForVisit">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View Observations during the Period"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -162,7 +162,7 @@
     <Component class="javax.swing.JButton" name="btnViewAllSightingsForElement">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View Observations of the Creature"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -192,7 +192,7 @@
     <Component class="javax.swing.JButton" name="btnViewSightingsAndDistributionMap">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View Observations + Distribution"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
@@ -222,7 +222,7 @@
     <Component class="javax.swing.JButton" name="btnViewDistributionMap">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Map_Small.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Map.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="View Distribution Map"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">

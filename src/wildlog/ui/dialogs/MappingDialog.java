@@ -127,7 +127,7 @@ public class MappingDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnViewLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewLocation.setText("View the Place on the Map");
         btnViewLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewLocation.setFocusPainted(false);
@@ -145,7 +145,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewLocation);
 
-        btnViewSingleSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewSingleSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewSingleSighting.setText("View the selected Observation");
         btnViewSingleSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewSingleSighting.setFocusPainted(false);
@@ -163,7 +163,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewSingleSighting);
 
-        btnViewAllSightingsForLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewAllSightingsForLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewAllSightingsForLocation.setText("View Observations at the Place");
         btnViewAllSightingsForLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForLocation.setFocusPainted(false);
@@ -181,7 +181,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewAllSightingsForLocation);
 
-        btnViewAllSightingsForVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewAllSightingsForVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewAllSightingsForVisit.setText("View Observations during the Period");
         btnViewAllSightingsForVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForVisit.setFocusPainted(false);
@@ -199,7 +199,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewAllSightingsForVisit);
 
-        btnViewAllSightingsForElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewAllSightingsForElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewAllSightingsForElement.setText("View Observations of the Creature");
         btnViewAllSightingsForElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForElement.setFocusPainted(false);
@@ -217,7 +217,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewAllSightingsForElement);
 
-        btnViewSightingsAndDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewSightingsAndDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewSightingsAndDistributionMap.setText("View Observations + Distribution");
         btnViewSightingsAndDistributionMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewSightingsAndDistributionMap.setFocusPainted(false);
@@ -235,7 +235,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewSightingsAndDistributionMap);
 
-        btnViewDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewDistributionMap.setText("View Distribution Map");
         btnViewDistributionMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewDistributionMap.setFocusPainted(false);

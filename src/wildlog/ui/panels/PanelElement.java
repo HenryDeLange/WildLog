@@ -166,10 +166,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         elementIncludes = new javax.swing.JPanel();
+        txtPrimaryName = new javax.swing.JTextField();
         jLabel55 = new javax.swing.JLabel();
         jLabel56 = new javax.swing.JLabel();
         jLabel57 = new javax.swing.JLabel();
-        txtPrimaryName = new javax.swing.JTextField();
         txtOtherName = new javax.swing.JTextField();
         txtScienceName = new javax.swing.JTextField();
         btnUpdate = new javax.swing.JButton();
@@ -275,6 +275,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         elementIncludes.setName("elementIncludes"); // NOI18N
         elementIncludes.setPreferredSize(new java.awt.Dimension(1005, 585));
 
+        txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
+        txtPrimaryName.setText(element.getPrimaryName());
+        txtPrimaryName.setName("txtPrimaryName"); // NOI18N
+
         jLabel55.setText("Primary Name:");
         jLabel55.setName("jLabel55"); // NOI18N
 
@@ -283,10 +287,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         jLabel57.setText("Scientific:");
         jLabel57.setName("jLabel57"); // NOI18N
-
-        txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
-        txtPrimaryName.setText(element.getPrimaryName());
-        txtPrimaryName.setName("txtPrimaryName"); // NOI18N
 
         txtOtherName.setText(element.getOtherName());
         txtOtherName.setName("txtOtherName"); // NOI18N
@@ -716,7 +716,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDistribution.setColumns(20);
-        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11));
         txtDistribution.setLineWrap(true);
         txtDistribution.setRows(3);
         txtDistribution.setText(element.getDistribution());
@@ -1254,8 +1254,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
                 // Save the element
                 if (app.getDBI().createOrUpdate(element, oldName) == true) {
-                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelElement.class);
-                    txtPrimaryName.setBackground(resourceMap.getColor("txtPrimaryName.background"));
+                    txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
                     txtPrimaryName.setText(element.getPrimaryName());
                 }
                 else {
@@ -1266,6 +1265,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
                 lblElementName.setText(element.getPrimaryName());
 
+                tabLabel = element.getPrimaryName();
                 setupTabHeader();
             }
             else {

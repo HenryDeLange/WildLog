@@ -921,8 +921,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
                 // Save the visit
                 if (app.getDBI().createOrUpdate(visit, oldName) == true) {
-                    org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelVisit.class);
-                    txtName.setBackground(resourceMap.getColor("txtName.background"));
+                    txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(visit.getName());
                 }
                 else {
@@ -933,6 +932,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
                 lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
 
+                tabLabel = visit.getName();
                 setupTabHeader();
             }
             else {

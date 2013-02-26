@@ -41,7 +41,9 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="btnLocationMoon">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Moon Phase"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -66,7 +68,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnLocationSun">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Sun Phase"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -91,7 +95,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnLocationType">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Type"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -116,7 +122,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnLocationSpeciesCurve">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Species Accumulation Curve"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -141,7 +149,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnElementMoon">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Moon Phase"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -166,7 +176,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnElementSun">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Sun Phase"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -191,7 +203,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnVisitSun">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Sun Phase"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -216,7 +230,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnSightingDateLocation">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Date and Place"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -241,7 +257,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnSightingDateElement">
       <Properties>
-        <Property name="icon" type="javax.swing.Icon" resourceKey="btnLocationSpeciesCurve.icon"/>
+        <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+          <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Observations by Date and Creature"/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>

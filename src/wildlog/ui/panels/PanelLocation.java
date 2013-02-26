@@ -985,8 +985,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
                 // Save the location
                 if (app.getDBI().createOrUpdate(locationWL, oldName) == true) {
-                    ResourceMap resourceMap = Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(PanelLocation.class);
-                    txtName.setBackground(resourceMap.getColor("txtName.background"));
+                    txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(locationWL.getName());
                 }
                 else {
@@ -997,6 +996,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
                 lblLocation.setText(locationWL.getName());
 
+                tabLabel = locationWL.getName();
                 setupTabHeader();
             }
             else {
