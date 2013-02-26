@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,6 +42,7 @@ import wildlog.utils.WildLogPaths;
 /**
  * The main class of the application.
  */
+// TODO: Huidiglik gebruik ek die Swinf App Framework nog (net) hier, maar ek kan seker refactor om dit heeltemal nie te gebruik nie...
 public class WildLogApp extends SingleFrameApplication {
     private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
     // FIXME: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
@@ -169,9 +172,13 @@ public class WildLogApp extends SingleFrameApplication {
     @Override
     protected void startup() {
         // Show the main frame
-        ImageIcon icon = new ImageIcon(getClass().getResource("resources/icons/WildLog Icon.gif"));
         WildLogView view = new WildLogView(this);
-        view.getFrame().setIconImage(icon.getImage());
+        view.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent inEvent) {
+                quit(null);
+            }
+        });
         show(view);
         // Setup the glassPane for modal popups
         JPanel glassPane = (JPanel)this.getMainFrame().getGlassPane();

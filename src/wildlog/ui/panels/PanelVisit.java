@@ -252,7 +252,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         visitIncludes.setName("visitIncludes"); // NOI18N
         visitIncludes.setPreferredSize(new java.awt.Dimension(1005, 585));
 
-        lblVisitName.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblVisitName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblVisitName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVisitName.setName("lblVisitName"); // NOI18N
 
@@ -285,7 +285,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jScrollPane14.setName("jScrollPane14"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(4);
         txtDescription.setText(visit.getDescription());
@@ -317,12 +317,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         cmbGameWatchIntensity.setFocusable(false);
         cmbGameWatchIntensity.setName("cmbGameWatchIntensity"); // NOI18N
 
-        dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setDate(visit.getStartDate());
         dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
 
-        dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setDate(visit.getEndDate());
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
@@ -395,7 +393,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Observations during this Period:");
         jLabel5.setName("jLabel5"); // NOI18N
 
@@ -525,7 +523,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        lblNumberOfSightings.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfSightings.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfSightings.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
@@ -575,21 +573,21 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel7.setText("Creature observed:");
         jLabel7.setName("jLabel7"); // NOI18N
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 10));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jLabel8.setText("Creatures:");
         jLabel8.setName("jLabel8"); // NOI18N
 
-        lblNumberOfElements.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfElements.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
 
         lblNumberOfSightingImages.setBackground(new java.awt.Color(224, 239, 240));
-        lblNumberOfSightingImages.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfSightingImages.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfSightingImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfSightingImages.setName("lblNumberOfSightingImages"); // NOI18N
 
         lblNumberOfImages.setBackground(new java.awt.Color(224, 239, 240));
-        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
@@ -662,7 +660,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
+                            .addComponent(lblVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(25, 25, 25)
                         .addComponent(jLabel8)
                         .addGap(2, 2, 2)
@@ -672,7 +670,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(jLabel53)
                         .addGap(8, 8, 8)
                         .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                            .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
                                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(visitIncludesLayout.createSequentialGroup()
@@ -686,7 +684,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                                 .addComponent(cmbGameWatchIntensity, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGap(11, 11, 11))
                                     .addGroup(visitIncludesLayout.createSequentialGroup()
-                                        .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane14)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnHTML, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
@@ -694,10 +692,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                     .addComponent(btnReport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(10, 10, 10)
                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
-                        .addGap(580, 580, 580)
-                        .addComponent(btnChecklist, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSeparator3)
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel1))
@@ -716,17 +711,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel52))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
-                        .addGap(580, 580, 580)
-                        .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(110, 110, 110)
                         .addComponent(jLabel5))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
-                        .addGap(650, 650, 650)
-                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10))
+                    .addComponent(jSeparator1)
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -734,13 +722,23 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                             .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
-                        .addGap(10, 10, 10)))
+                        .addComponent(jScrollPane1)
+                        .addGap(10, 10, 10))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
+                        .addGap(580, 580, 580)
+                        .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnChecklist, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnMapSighting, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
+                                .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)))))
                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(50, 50, 50)
                         .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
                         .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
                         .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -768,7 +766,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(btnPreviousImageSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
                         .addComponent(lblNumberOfSightingImages, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
                         .addComponent(btnNextImageSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(6, 6, 6))
         );
@@ -781,10 +781,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addComponent(lblVisitName, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(visitIncludesLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(visitIncludesLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(1, 1, 1)
                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(visitIncludesLayout.createSequentialGroup()
@@ -834,7 +833,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                             .addGroup(visitIncludesLayout.createSequentialGroup()
                                 .addGap(5, 5, 5)
                                 .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnChecklist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)

@@ -85,7 +85,6 @@ public class ReportingDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton5 = new javax.swing.JButton();
         btnLocationMoon = new javax.swing.JButton();
         btnLocationSun = new javax.swing.JButton();
         btnLocationType = new javax.swing.JButton();
@@ -95,9 +94,6 @@ public class ReportingDialog extends JDialog {
         btnVisitSun = new javax.swing.JButton();
         btnSightingDateLocation = new javax.swing.JButton();
         btnSightingDateElement = new javax.swing.JButton();
-
-        jButton5.setText("jButton5");
-        jButton5.setName("jButton5"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Reports");
@@ -337,6 +333,5 @@ public class ReportingDialog extends JDialog {
     private javax.swing.JButton btnSightingDateElement;
     private javax.swing.JButton btnSightingDateLocation;
     private javax.swing.JButton btnVisitSun;
-    private javax.swing.JButton jButton5;
     // End of variables declaration//GEN-END:variables
 }

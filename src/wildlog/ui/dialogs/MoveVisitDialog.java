@@ -59,17 +59,14 @@ public class MoveVisitDialog extends JDialog {
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabel1.setText("Select the Place you want to move the Period from:");
         jLabel1.setName("jLabel1"); // NOI18N
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabel2.setText("Select the Place you want to move the Period to:");
         jLabel2.setName("jLabel2"); // NOI18N
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -83,8 +80,6 @@ public class MoveVisitDialog extends JDialog {
         });
         jScrollPane1.setViewportView(lstFromLocation);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 350, 220));
-
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -92,16 +87,12 @@ public class MoveVisitDialog extends JDialog {
         lstVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
         jScrollPane2.setViewportView(lstVisit);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 360, 400));
-
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         lstToLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstToLocation.setName("lstToLocation"); // NOI18N
         lstToLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         jScrollPane3.setViewportView(lstToLocation);
-
-        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 350, 230));
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Move the selected Period to the new Place.");
@@ -112,12 +103,49 @@ public class MoveVisitDialog extends JDialog {
                 btnConfirmActionPerformed(evt);
             }
         });
-        getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 10, 110, 60));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabel3.setText("Select the Period to be moved:");
         jLabel3.setName("jLabel3"); // NOI18N
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 90, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(250, 250, 250)
+                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(jLabel2)
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel3)
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void lstFromLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromLocationMouseReleased

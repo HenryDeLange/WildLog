@@ -18,6 +18,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.Timer;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
@@ -469,10 +472,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void btnReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReloadActionPerformed
-        // Disable die button sodat mens dit nie weer kan druk nie en wys 'n loading boodskap in die table
-        btnReload.setEnabled(false);
-        tblBulkImport.getColumnModel().getColumn(0).setHeaderValue("Loading...");
-        tblBulkImport.getColumnModel().getColumn(1).setHeaderValue("Loading...");
         // Update die table om nie meer te edit nie
         if (tblBulkImport.getCellEditor() != null) {
             tblBulkImport.getCellEditor().cancelCellEditing();
@@ -482,15 +481,21 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                // Disable die button sodat mens dit nie weer kan druk nie
+                btnReload.setEnabled(false);
+                Border originalBorder = btnReload.getBorder();
+                Timer timer = UtilsUI.doAnimationForFlashingBorder(btnReload.getBackground(), new Color(200, 220, 250), btnReload);
+                btnUpdate.setEnabled(false);
+                // Do the re-setting up
                 setupTab(this);
+                // Enable die button sodat mens dit weer kan druk
+                btnReload.setEnabled(true);
+                timer.stop();
+                btnReload.setBorder(originalBorder);
+                btnUpdate.setEnabled(true);
                 return null;
             }
         });
-        // Disable die button sodat mens dit nie weer kan druk nie en wys 'n loading boodskap in die table
-        // FIXME: Die moet eers na die task klaar is gebeur...
-        btnReload.setEnabled(true);
-        tblBulkImport.getColumnModel().getColumn(0).setHeaderValue("Observations");
-        tblBulkImport.getColumnModel().getColumn(1).setHeaderValue("Images");
     }//GEN-LAST:event_btnReloadActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed

@@ -5,11 +5,9 @@ import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -41,6 +39,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -97,7 +96,7 @@ import wildlog.utils.WildLogPrefixes;
 /**
  * The application's main frame.
  */
-public final class WildLogView extends FrameView implements PanelNeedsRefreshWhenSightingAdded {
+public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSightingAdded {
     // This section contains all the custom initializations that needs to happen...
     private WildLogApp app;
     private Element searchElement;
@@ -112,7 +111,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     }
 
     public WildLogView(SingleFrameApplication app) {
-        super(app);
         init();
         initComponents();
 
@@ -141,7 +139,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         progressBar.setVisible(false);
 
         // connecting action tasks to status bar via TaskMonitor
-        TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
+        TaskMonitor taskMonitor = new TaskMonitor(app.getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
@@ -197,7 +195,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
 
         // Set the minimum size of the frame
-        this.getFrame().setMinimumSize(new Dimension(1024, 705));
+        this.setMinimumSize(new Dimension(1024, 705));
 
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
@@ -260,6 +258,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         mainPanel = new javax.swing.JPanel();
         tabbedPanel = new javax.swing.JTabbedPane();
         tabHome = new javax.swing.JPanel();
@@ -276,6 +275,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jLabel5 = new javax.swing.JLabel();
         lblWorkspace = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
+        jLabel8 = new javax.swing.JLabel();
         tabFoto = new javax.swing.JPanel();
         rdbBrowseLocation = new javax.swing.JRadioButton();
         rdbBrowseElement = new javax.swing.JRadioButton();
@@ -332,6 +332,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         txtSearch = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        statusPanel = new javax.swing.JPanel();
+        statusMessageLabel = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
+        statusAnimationLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
@@ -371,11 +375,10 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         mnuDBConsole = new javax.swing.JMenuItem();
         subMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
-        buttonGroup1 = new javax.swing.ButtonGroup();
-        statusPanel = new javax.swing.JPanel();
-        statusMessageLabel = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
-        statusAnimationLabel = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("WildLog");
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -401,22 +404,22 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(249, 250, 241));
         jLabel10.setText("Welcome to");
         jLabel10.setName("jLabel10"); // NOI18N
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 48));
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(249, 245, 239));
         jLabel11.setText("WildLog");
         jLabel11.setName("jLabel11"); // NOI18N
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18));
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.0 beta");
+        jLabel12.setText("version 4.0");
         jLabel12.setName("jLabel12"); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(186, 210, 159));
         jLabel15.setText("http://remotecamera-sa.blogspot.com");
         jLabel15.setName("jLabel15"); // NOI18N
@@ -444,12 +447,12 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator5.setForeground(new java.awt.Color(105, 123, 79));
         jSeparator5.setName("jSeparator5"); // NOI18N
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(107, 124, 89));
         jLabel5.setText("http://www.mywild.co.za");
         jLabel5.setName("jLabel5"); // NOI18N
 
-        lblWorkspace.setFont(new java.awt.Font("Arial", 0, 11));
+        lblWorkspace.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblWorkspace.setForeground(new java.awt.Color(74, 87, 60));
         lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblWorkspace.setText(wildlog.utils.WildLogPaths.WILDLOG.getFullPath());
@@ -459,49 +462,56 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jSeparator6.setForeground(new java.awt.Color(216, 227, 201));
         jSeparator6.setName("jSeparator6"); // NOI18N
 
+        jLabel8.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(115, 122, 107));
+        jLabel8.setText("WildLog.Support@gmail.com");
+        jLabel8.setName("jLabel8"); // NOI18N
+
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(110, 110, 110)
-                .addComponent(jLabel11)
-                .addGap(16, 16, 16)
-                .addComponent(jLabel12))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                 .addContainerGap(858, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(512, Short.MAX_VALUE))
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addComponent(lblWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(520, Short.MAX_VALUE))
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(134, 134, 134)
-                .addComponent(lblLocations)
-                .addGap(18, 18, 18)
-                .addComponent(lblVisits)
-                .addGap(18, 18, 18)
-                .addComponent(lblSightings)
-                .addGap(18, 18, 18)
-                .addComponent(lblCreatures)
-                .addContainerGap(626, Short.MAX_VALUE))
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(502, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                .addContainerGap(875, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                .addContainerGap(813, Short.MAX_VALUE)
-                .addComponent(jLabel15)
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabHomeLayout.createSequentialGroup()
+                                .addGap(110, 110, 110)
+                                .addComponent(jLabel11)
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel12))
+                            .addGroup(tabHomeLayout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(tabHomeLayout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addComponent(lblWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(tabHomeLayout.createSequentialGroup()
+                                .addGap(134, 134, 134)
+                                .addComponent(lblLocations)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblVisits)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblSightings)
+                                .addGap(18, 18, 18)
+                                .addComponent(lblCreatures))
+                            .addGroup(tabHomeLayout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel8)))
                 .addContainerGap())
         );
         tabHomeLayout.setVerticalGroup(
@@ -511,7 +521,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addComponent(jLabel15)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -531,7 +543,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -585,14 +597,13 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         imgBrowsePhotos.setBackground(new java.awt.Color(231, 235, 204));
         imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        imgBrowsePhotos.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
         imgBrowsePhotos.setName("imgBrowsePhotos"); // NOI18N
 
         javax.swing.GroupLayout imgBrowsePhotosLayout = new javax.swing.GroupLayout(imgBrowsePhotos);
         imgBrowsePhotos.setLayout(imgBrowsePhotosLayout);
         imgBrowsePhotosLayout.setHorizontalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 497, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         imgBrowsePhotosLayout.setVerticalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,8 +613,8 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane5.setName("jScrollPane5"); // NOI18N
         jScrollPane5.setPreferredSize(new java.awt.Dimension(230, 600));
 
-        txtBrowseInfo.setContentType("text/html");
         txtBrowseInfo.setEditable(false);
+        txtBrowseInfo.setContentType("text/html"); // NOI18N
         txtBrowseInfo.setText("");
         txtBrowseInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         txtBrowseInfo.setName("txtBrowseInfo"); // NOI18N
@@ -688,11 +699,9 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
 
-        dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
 
@@ -710,7 +719,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
@@ -870,9 +879,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                                         .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(tabFotoLayout.createSequentialGroup()
                                         .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
                                         .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(tabFotoLayout.createSequentialGroup()
                                         .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
                                         .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(11, 11, 11)
                                 .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -901,7 +912,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
@@ -924,18 +935,18 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         jScrollPane1.setViewportView(tblLocation);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("List of Creatures observed at the selected Place:");
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("List of Periods at the selected Place:");
         jLabel2.setName("jLabel2"); // NOI18N
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
@@ -1002,7 +1013,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
         tblElement_LocTab.setAutoCreateRowSorter(true);
-        tblElement_LocTab.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblElement_LocTab.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement_LocTab.setName("tblElement_LocTab"); // NOI18N
         tblElement_LocTab.setSelectionBackground(new java.awt.Color(82, 115, 79));
@@ -1045,7 +1056,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("All Places:");
         jLabel7.setName("jLabel7"); // NOI18N
@@ -1126,7 +1137,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         scrlElement.setName("scrlElement"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setName("tblElement"); // NOI18N
@@ -1149,7 +1160,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         });
         scrlElement.setViewportView(tblElement);
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel6.setText("List of Places where the selected Creature has been observed:");
         jLabel6.setName("jLabel6"); // NOI18N
 
@@ -1192,7 +1203,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         jScrollPane6.setName("jScrollPane6"); // NOI18N
 
         tblLocation_EleTab.setAutoCreateRowSorter(true);
-        tblLocation_EleTab.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblLocation_EleTab.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
         tblLocation_EleTab.setSelectionBackground(new java.awt.Color(106, 94, 60));
@@ -1246,14 +1257,14 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             }
         });
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("All Creatures:");
         jLabel9.setName("jLabel9"); // NOI18N
 
         txtSearch.setName("txtSearch"); // NOI18N
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("Search on Primary Name and Creature Type:");
         jLabel14.setName("jLabel14"); // NOI18N
@@ -1330,6 +1341,30 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
         tabbedPanel.addTab("All Creatures", tabElement);
 
         mainPanel.add(tabbedPanel);
+
+        getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
+
+        statusPanel.setBackground(new java.awt.Color(232, 238, 220));
+        statusPanel.setName("statusPanel"); // NOI18N
+        statusPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 0));
+
+        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        statusMessageLabel.setAlignmentY(0.0F);
+        statusMessageLabel.setMaximumSize(new java.awt.Dimension(800, 20));
+        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
+        statusMessageLabel.setPreferredSize(new java.awt.Dimension(400, 20));
+        statusPanel.add(statusMessageLabel);
+
+        progressBar.setName("progressBar"); // NOI18N
+        progressBar.setPreferredSize(new java.awt.Dimension(400, 16));
+        statusPanel.add(progressBar);
+
+        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
+        statusAnimationLabel.setPreferredSize(new java.awt.Dimension(20, 20));
+        statusPanel.add(statusAnimationLabel);
+
+        getContentPane().add(statusPanel, java.awt.BorderLayout.PAGE_END);
 
         menuBar.setName("menuBar"); // NOI18N
 
@@ -1656,29 +1691,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
         menuBar.add(extraMenu);
 
-        statusPanel.setBackground(new java.awt.Color(232, 238, 220));
-        statusPanel.setName("statusPanel"); // NOI18N
-        statusPanel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 5, 0));
-
-        statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        statusMessageLabel.setAlignmentY(0.0F);
-        statusMessageLabel.setMaximumSize(new java.awt.Dimension(800, 20));
-        statusMessageLabel.setName("statusMessageLabel"); // NOI18N
-        statusMessageLabel.setPreferredSize(new java.awt.Dimension(400, 20));
-        statusPanel.add(statusMessageLabel);
-
-        progressBar.setName("progressBar"); // NOI18N
-        progressBar.setPreferredSize(new java.awt.Dimension(400, 16));
-        statusPanel.add(progressBar);
-
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-        statusAnimationLabel.setPreferredSize(new java.awt.Dimension(20, 20));
-        statusPanel.add(statusAnimationLabel);
-
-        setComponent(mainPanel);
-        setMenuBar(menuBar);
-        setStatusBar(statusPanel);
+        setJMenuBar(menuBar);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
@@ -1997,7 +2010,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
 
     private void rdbBrowseLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseLocationItemStateChanged
         if (rdbBrowseLocation.isSelected()) {
-            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
@@ -2018,13 +2030,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 ex.printStackTrace(System.err);
             }
             browseByLocation();
-            this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
 }//GEN-LAST:event_rdbBrowseLocationItemStateChanged
 
     private void rdbBrowseElementItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseElementItemStateChanged
         if (rdbBrowseElement.isSelected()) {
-            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
@@ -2045,13 +2055,11 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 ex.printStackTrace(System.err);
             }
             browseByElement();
-            this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_rdbBrowseElementItemStateChanged
 
     private void rdbBrowseDateItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbBrowseDateItemStateChanged
         if (rdbBrowseDate.isSelected()) {
-            this.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             dtpStartDate.setVisible(true);
             dtpEndDate.setVisible(true);
             btnRefreshDates.setVisible(true);
@@ -2072,7 +2080,6 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
                 ex.printStackTrace(System.err);
             }
             browseByDate();
-            this.getComponent().setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_rdbBrowseDateItemStateChanged
 
@@ -2384,7 +2391,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void mnuSetSlideshowSizeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSizeActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         app.getMainFrame().getGlassPane().setVisible(true);
-        String inputFramerate = JOptionPane.showInputDialog(this.getComponent(),
+        String inputFramerate = JOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default frame size to use for the slideshows. \n (This can be any positive decimal value, for example 500)",
                 options.getDefaultSlideshowSize());
         app.getMainFrame().getGlassPane().setVisible(false);
@@ -2402,7 +2409,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void mnuSetSlideshowSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSpeedActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         app.getMainFrame().getGlassPane().setVisible(true);
-        String inputFramerate = JOptionPane.showInputDialog(this.getComponent(),
+        String inputFramerate = JOptionPane.showInputDialog(app.getMainFrame(),
                 "Please specify the default framerate to use for the slideshows. \n (This can be any positive decimal value, for example 1 or 0.3)",
                 options.getDefaultSlideshowSpeed());
         app.getMainFrame().getGlassPane().setVisible(false);
@@ -2420,8 +2427,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private void mnuGPSInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGPSInputActionPerformed
         WildLogOptions options = app.getWildLogOptions();
         app.getMainFrame().getGlassPane().setVisible(true);
-        int latOption = JOptionPane.showOptionDialog(
-                this.getComponent(),
+        int latOption = JOptionPane.showOptionDialog(app.getMainFrame(),
                 "Please select the Default Latitude to use for GPS input:",
                 "Default GPS Input Latitude",
                 JOptionPane.DEFAULT_OPTION,
@@ -2434,8 +2440,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
             options.setDefaultInputLatitude(Latitudes.values()[latOption]);
         }
         app.getMainFrame().getGlassPane().setVisible(true);
-        int lonOption = JOptionPane.showOptionDialog(
-                this.getComponent(),
+        int lonOption = JOptionPane.showOptionDialog(app.getMainFrame(),
                 "Please select the Default Longitude to use for GPS input:",
                 "Default GPS Input Longitude",
                 JOptionPane.DEFAULT_OPTION,
@@ -3518,6 +3523,7 @@ public final class WildLogView extends FrameView implements PanelNeedsRefreshWhe
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

@@ -100,8 +100,6 @@ public class SunMoonDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         dtpDate = new org.jdesktop.swingx.JXDatePicker();
         jLabel10 = new javax.swing.JLabel();
@@ -131,12 +129,6 @@ public class SunMoonDialog extends JDialog {
         lblMoonrise = new javax.swing.JLabel();
         lblMoonset = new javax.swing.JLabel();
 
-        jLabel1.setText("jLabel1");
-        jLabel1.setName("jLabel1"); // NOI18N
-
-        jLabel2.setText("jLabel2");
-        jLabel2.setName("jLabel2"); // NOI18N
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("View Sun and Moon Phase");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/SunAndMoon.gif")).getImage());
@@ -150,7 +142,6 @@ public class SunMoonDialog extends JDialog {
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
 
-        dtpDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpDate.setDate(Calendar.getInstance().getTime());
         dtpDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpDate.setName("dtpDate"); // NOI18N
@@ -332,12 +323,10 @@ public class SunMoonDialog extends JDialog {
     private javax.swing.JButton btnGPS;
     private javax.swing.JButton btnRefresh;
     private org.jdesktop.swingx.JXDatePicker dtpDate;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

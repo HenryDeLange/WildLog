@@ -10,6 +10,7 @@ import org.jdesktop.application.TaskService;
 
 
 public class UtilsConcurency {
+    
     public static void kickoffProgressbarTask(Task inTask) {
         ApplicationContext appContext = Application.getInstance().getContext();
         TaskMonitor taskMonitor = appContext.getTaskMonitor();

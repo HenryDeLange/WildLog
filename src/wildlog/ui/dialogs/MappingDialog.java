@@ -106,7 +106,6 @@ public class MappingDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton5 = new javax.swing.JButton();
         btnViewLocation = new javax.swing.JButton();
         btnViewSingleSighting = new javax.swing.JButton();
         btnViewAllSightingsForLocation = new javax.swing.JButton();
@@ -115,9 +114,6 @@ public class MappingDialog extends JDialog {
         btnViewSightingsAndDistributionMap = new javax.swing.JButton();
         btnViewDistributionMap = new javax.swing.JButton();
         btnOpenKmlViewer = new javax.swing.JButton();
-
-        jButton5.setText("jButton5");
-        jButton5.setName("jButton5"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Maps");
@@ -689,6 +685,5 @@ public class MappingDialog extends JDialog {
     private javax.swing.JButton btnViewLocation;
     private javax.swing.JButton btnViewSightingsAndDistributionMap;
     private javax.swing.JButton btnViewSingleSighting;
-    private javax.swing.JButton jButton5;
     // End of variables declaration//GEN-END:variables
 }

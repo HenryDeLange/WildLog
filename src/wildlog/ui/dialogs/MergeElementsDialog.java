@@ -40,7 +40,6 @@ public class MergeElementsDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        elementIncludes = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -58,28 +57,18 @@ public class MergeElementsDialog extends JDialog {
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        elementIncludes.setMaximumSize(new java.awt.Dimension(775, 495));
-        elementIncludes.setMinimumSize(new java.awt.Dimension(775, 495));
-        elementIncludes.setName("elementIncludes"); // NOI18N
-        elementIncludes.setPreferredSize(new java.awt.Dimension(775, 495));
-        elementIncludes.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Select the two Creatures you would like to merge:");
         jLabel1.setName("jLabel1"); // NOI18N
-        elementIncludes.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabel3.setText("Keep this Creature:");
         jLabel3.setName("jLabel3"); // NOI18N
-        elementIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, -1, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12));
         jLabel4.setText("Replace this Creature:");
         jLabel4.setName("jLabel4"); // NOI18N
-        elementIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Merge the one Creature into the other.");
@@ -89,17 +78,12 @@ public class MergeElementsDialog extends JDialog {
                 btnConfirmActionPerformed(evt);
             }
         });
-        elementIncludes.add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 10, 110, 60));
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         lstReplaceElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(MergeElementsDialog.class);
-        lstReplaceElement.setSelectionBackground(resourceMap.getColor("lstKeepElement.selectionBackground")); // NOI18N
         jScrollPane2.setViewportView(lstReplaceElement);
-
-        elementIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 300, 400));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -108,13 +92,51 @@ public class MergeElementsDialog extends JDialog {
         lstKeepElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         jScrollPane1.setViewportView(lstKeepElement);
 
-        elementIncludes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 320, 400));
-
         jLabel5.setText("<html>All Observations of the selected Creature from the first list will be changed to point to the Creature from the second list, then the Creature in the first list will be deleted.</html>");
         jLabel5.setName("jLabel5"); // NOI18N
-        elementIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 28, 560, 40));
 
-        getContentPane().add(elementIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 770, -1));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 10, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(80, 80, 80)
+                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(175, 175, 175)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 10, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 7, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 8, Short.MAX_VALUE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
@@ -159,7 +181,6 @@ public class MergeElementsDialog extends JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
-    private javax.swing.JPanel elementIncludes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

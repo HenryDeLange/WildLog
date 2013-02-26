@@ -70,16 +70,12 @@ public class SlideshowDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton5 = new javax.swing.JButton();
         btnSlideshowVisit = new javax.swing.JButton();
         btnSlideshowVisitSightings = new javax.swing.JButton();
         btnSlideshowLocation = new javax.swing.JButton();
         btnSlideshowLocationSightings = new javax.swing.JButton();
         btnSlideshowElement = new javax.swing.JButton();
         btnSlideshowElementSightings = new javax.swing.JButton();
-
-        jButton5.setText("jButton5");
-        jButton5.setName("jButton5"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Maps");
@@ -379,6 +375,5 @@ public class SlideshowDialog extends JDialog {
     private javax.swing.JButton btnSlideshowLocationSightings;
     private javax.swing.JButton btnSlideshowVisit;
     private javax.swing.JButton btnSlideshowVisitSightings;
-    private javax.swing.JButton jButton5;
     // End of variables declaration//GEN-END:variables
 }
