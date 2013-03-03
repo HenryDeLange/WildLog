@@ -427,7 +427,7 @@ public class PanelSighting extends JDialog {
         sclElement.setName("sclElement"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblElement.setEnabled(!disableEditing);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
@@ -490,14 +490,13 @@ public class PanelSighting extends JDialog {
         });
         sightingIncludes.add(btnUploadImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 310, 220, -1));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Date:");
         jLabel6.setToolTipText("It is required to fill in this field.");
         jLabel6.setName("jLabel6"); // NOI18N
         sightingIncludes.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
 
         dtpSightingDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
-        dtpSightingDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setEnabled(!disableEditing);
         dtpSightingDate.setFocusable(false);
@@ -529,7 +528,7 @@ public class PanelSighting extends JDialog {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDetails.setColumns(20);
-        txtDetails.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDetails.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDetails.setLineWrap(true);
         txtDetails.setRows(5);
         txtDetails.setText(sighting.getDetails());
@@ -668,7 +667,7 @@ public class PanelSighting extends JDialog {
         sclLocation.setName("sclLocation"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblLocation.setEnabled(!disableEditing && !bulkUploadMode);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
@@ -691,7 +690,7 @@ public class PanelSighting extends JDialog {
         sclVisit.setName("sclVisit"); // NOI18N
 
         tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12));
+        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblVisit.setEnabled(!disableEditing && !bulkUploadMode);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
@@ -705,13 +704,13 @@ public class PanelSighting extends JDialog {
 
         sightingIncludes.add(sclVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 390, 310, 190));
 
-        lblElement.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblElement.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblElement.setText("Creature:");
         lblElement.setToolTipText("It is required to fill in this field.");
         lblElement.setName("lblElement"); // NOI18N
         sightingIncludes.add(lblElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 310, -1, -1));
 
-        lblLocation.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblLocation.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblLocation.setText("Place:");
         lblLocation.setToolTipText("It is required to fill in this field.");
         lblLocation.setName("lblLocation"); // NOI18N
@@ -721,7 +720,7 @@ public class PanelSighting extends JDialog {
         txtSearchLocation.setName("txtSearchLocation"); // NOI18N
         sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 210, 20));
 
-        lblVisit.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblVisit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblVisit.setText("Period:");
         lblVisit.setToolTipText("It is required to fill in this field.");
         lblVisit.setName("lblVisit"); // NOI18N
@@ -742,12 +741,12 @@ public class PanelSighting extends JDialog {
         });
         sightingIncludes.add(lblLocationImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 480, -1, -1));
 
-        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
         sightingIncludes.add(lblNumberOfImages, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 335, 40, 20));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText(":");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -785,7 +784,7 @@ public class PanelSighting extends JDialog {
                 btnGetDateFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 110, 50));
+        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 110, 50));
 
         jLabel2.setText("Time:");
         jLabel2.setName("jLabel2"); // NOI18N
@@ -863,6 +862,7 @@ public class PanelSighting extends JDialog {
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnGPS.setText("Change GPS");
         btnGPS.setToolTipText("Select a new GPS value for this Observation.");
+        btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setEnabled(!disableEditing);
         btnGPS.setFocusPainted(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

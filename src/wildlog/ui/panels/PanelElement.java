@@ -394,7 +394,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel64.setText("Active Time:");
         jLabel64.setName("jLabel64"); // NOI18N
 
-        jLabel65.setFont(new java.awt.Font("Tahoma", 1, 10));
+        jLabel65.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jLabel65.setText("Observations:");
         jLabel65.setName("jLabel65"); // NOI18N
 
@@ -437,7 +437,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane16.setName("jScrollPane16"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(element.getDescription());
@@ -448,7 +448,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane17.setName("jScrollPane17"); // NOI18N
 
         txtDiagnosticDescription.setColumns(20);
-        txtDiagnosticDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDiagnosticDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDiagnosticDescription.setLineWrap(true);
         txtDiagnosticDescription.setRows(5);
         txtDiagnosticDescription.setText(element.getDiagnosticDescription());
@@ -459,7 +459,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane18.setName("jScrollPane18"); // NOI18N
 
         txtBehaviourDescription.setColumns(20);
-        txtBehaviourDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtBehaviourDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtBehaviourDescription.setLineWrap(true);
         txtBehaviourDescription.setRows(5);
         txtBehaviourDescription.setText(element.getBehaviourDescription());
@@ -492,11 +492,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         txtBreedingNumber.setText(element.getBreedingNumber());
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
 
-        lblNumberOfSightings.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfSightings.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
 
-        lblElementName.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblElementName.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText(element.getPrimaryName());
         lblElementName.setName("lblElementName"); // NOI18N
@@ -605,7 +605,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         txtNutrition.setColumns(20);
-        txtNutrition.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtNutrition.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtNutrition.setLineWrap(true);
         txtNutrition.setRows(3);
         txtNutrition.setText(element.getNutrition());
@@ -614,7 +614,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane1.setViewportView(txtNutrition);
 
         btnAddSighting.setBackground(new java.awt.Color(227, 240, 227));
-        btnAddSighting.setFont(new java.awt.Font("Tahoma", 0, 10));
+        btnAddSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnAddSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
         btnAddSighting.setText("Add Observation");
         btnAddSighting.setToolTipText("Add an Observation of this Creature.");
@@ -630,12 +630,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
-        lblNumberOfLocations.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfLocations.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfLocations.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfLocations.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         lblNumberOfLocations.setName("lblNumberOfLocations"); // NOI18N
 
-        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
@@ -716,7 +716,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDistribution.setColumns(20);
-        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDistribution.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDistribution.setLineWrap(true);
         txtDistribution.setRows(3);
         txtDistribution.setText(element.getDistribution());
@@ -775,6 +775,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         btnSlideshow.setText("Slideshows");
         btnSlideshow.setToolTipText("View slideshow videos of linked images.");
+        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -794,38 +795,38 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblElementName, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE))
+                            .addComponent(lblElementName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addComponent(jLabel65)
                         .addGap(1, 1, 1)
                         .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(100, 100, 100)
-                        .addComponent(txtOtherName, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                        .addComponent(txtOtherName)
                         .addGap(120, 120, 120))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel56))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(100, 100, 100)
-                        .addComponent(txtPrimaryName, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                        .addComponent(txtPrimaryName)
                         .addGap(120, 120, 120))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel57))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(100, 100, 100)
-                        .addComponent(txtScienceName, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                        .addComponent(txtScienceName)
                         .addGap(280, 280, 280))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel55))
-                    .addComponent(jSeparator10, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+                    .addComponent(jSeparator10)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel60)
                         .addGap(23, 23, 23)
-                        .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                        .addComponent(jScrollPane17)
                         .addGap(10, 10, 10)
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -834,20 +835,20 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addGap(10, 10, 10)
                         .addComponent(jLabel59)
                         .addGap(51, 51, 51)
-                        .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                        .addComponent(jScrollPane16)
                         .addGap(10, 10, 10)
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane2)))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(jLabel61)
                         .addGap(38, 38, 38)
-                        .addComponent(jScrollPane18, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
+                        .addComponent(jScrollPane18)
                         .addGap(10, 10, 10)
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel69)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane1)))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(110, 110, 110)
                         .addComponent(jLabel3)
@@ -883,6 +884,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
                         .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(jLabel74)
@@ -922,9 +924,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                 .addGap(202, 202, 202))
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtLifespan, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                    .addComponent(txtbreedingDuration, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                    .addComponent(txtBreedingNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                                    .addComponent(txtLifespan)
+                                    .addComponent(txtbreedingDuration)
+                                    .addComponent(txtBreedingNumber)
                                     .addComponent(cmbFeedingClass, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cmbWishList, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10)
@@ -948,15 +950,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                             .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
                                 .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
                                 .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addGap(0, 0, 0)
-                                .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(rdbLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -980,10 +982,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addComponent(lblElementName)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(jLabel65, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel65, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(1, 1, 1)
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
@@ -1055,38 +1056,37 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addComponent(txtBreedingNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
+                        .addGap(10, 10, 10)
                         .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
+                        .addGap(10, 10, 10)
                         .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(3, 3, 3)
+                .addGap(10, 10, 10)
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel60))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10)
+                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                        .addGap(0, 0, 0)
+                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel60)
+                            .addComponent(jScrollPane17))))
                 .addGap(10, 10, 10)
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel59)
-                    .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addGap(6, 6, 6)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)))
                 .addGap(10, 10, 10)
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel61)
-                    .addComponent(jScrollPane18, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
+                    .addComponent(jScrollPane18, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addComponent(jLabel69)
                         .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1)))
                 .addGap(5, 5, 5)
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
@@ -1104,32 +1104,19 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addComponent(spnWeightMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(spnWeightMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel72))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel74))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbWeightUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbWeightUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel72)
+                            .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel74)
+                            .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(25, 25, 25))
             .addGroup(elementIncludesLayout.createSequentialGroup()
                 .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1155,7 +1142,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addGap(1, 1, 1)
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
+                                .addComponent(jSeparator2))
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

@@ -144,6 +144,7 @@ public class ChecklistDialog extends JDialog {
         btnConfirm.setBackground(new java.awt.Color(0, 204, 51));
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Save the Observations of the selected Creatures for this date.");
+        btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
@@ -161,7 +162,6 @@ public class ChecklistDialog extends JDialog {
         cmbElementType.setMaximumRowCount(9);
         cmbElementType.setModel(new DefaultComboBoxModel(ElementType.values()));
         cmbElementType.setSelectedItem(ElementType.NONE);
-        cmbElementType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementType.setFocusable(false);
         cmbElementType.setName("cmbElementType"); // NOI18N
         cmbElementType.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +180,6 @@ public class ChecklistDialog extends JDialog {
         getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 210, -1));
 
         dtpDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
-        dtpDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpDate.setName("dtpDate"); // NOI18N
         getContentPane().add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 140, -1));

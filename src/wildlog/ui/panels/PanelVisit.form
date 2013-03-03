@@ -99,15 +99,27 @@
                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="btnHTML" alignment="1" pref="110" max="32767" attributes="1"/>
-                                      <Component id="btnSlideshow" alignment="1" pref="110" max="32767" attributes="1"/>
-                                      <Component id="btnReport" alignment="1" max="32767" attributes="1"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnSlideshow" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
+                                      <Component id="btnHTML" min="-2" pref="110" max="-2" attributes="1"/>
+                                      <Component id="btnReport" alignment="1" min="-2" pref="110" max="-2" attributes="1"/>
+                                  </Group>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                  <Component id="btnMapSighting" min="-2" pref="110" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnChecklist" min="-2" pref="110" max="-2" attributes="0"/>
+                                      <Component id="btnUpdate" min="-2" pref="110" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnUpdate" min="-2" pref="110" max="-2" attributes="0"/>
                       </Group>
                       <Component id="jSeparator3" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
@@ -151,15 +163,9 @@
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="580" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnChecklist" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnMapSighting" alignment="1" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                              </Group>
-                          </Group>
+                          <EmptySpace min="-2" pref="650" max="-2" attributes="0"/>
+                          <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
+                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -254,7 +260,7 @@
                               </Group>
                               <Component id="jSeparator3" alignment="0" min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -290,21 +296,18 @@
                                       <Component id="jLabel53" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Component id="btnReport" min="-2" pref="35" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="btnChecklist" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                          <Component id="btnSlideshow" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Group type="102" attributes="0">
-                                          <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="3" attributes="0">
-                                              <Component id="btnMapSighting" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                              <Component id="btnHTML" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btnSlideshow" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                                      <Component id="btnChecklist" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="btnHTML" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                                      <Component id="btnMapSighting" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -1059,6 +1062,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Add Checklist"/>
             <Property name="toolTipText" type="java.lang.String" value="Open a popup box to add Observations in a checklist format."/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="iconTextGap" type="int" value="5"/>
@@ -1103,6 +1109,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Slideshows"/>
             <Property name="toolTipText" type="java.lang.String" value="View slideshow videos of linked images."/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">

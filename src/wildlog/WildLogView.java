@@ -106,6 +106,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
     private void init() {
         app = (WildLogApp) Application.getInstance();
+        app.setMainframe(this);
         searchElement = new Element();
         searchLocation = new Location();
     }
@@ -379,6 +380,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
+        setPreferredSize(new java.awt.Dimension(1020, 675));
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -455,7 +457,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         lblWorkspace.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblWorkspace.setForeground(new java.awt.Color(74, 87, 60));
         lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblWorkspace.setText(wildlog.utils.WildLogPaths.WILDLOG.getFullPath());
+        lblWorkspace.setText("Active Workspace Folder: " + wildlog.utils.WildLogPaths.WILDLOG.getFullPath());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
 
         jSeparator6.setBackground(new java.awt.Color(163, 175, 148));
@@ -472,7 +474,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         tabHomeLayout.setHorizontalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                .addContainerGap(858, Short.MAX_VALUE)
+                .addContainerGap(866, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(tabHomeLayout.createSequentialGroup()
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -543,7 +545,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -603,11 +605,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         imgBrowsePhotos.setLayout(imgBrowsePhotosLayout);
         imgBrowsePhotosLayout.setHorizontalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 509, Short.MAX_VALUE)
         );
         imgBrowsePhotosLayout.setVerticalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 508, Short.MAX_VALUE)
+            .addGap(0, 522, Short.MAX_VALUE)
         );
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
@@ -707,7 +709,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         btnRefreshDates.setBackground(new java.awt.Color(235, 233, 221));
         btnRefreshDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
-        btnRefreshDates.setToolTipText("Refresh the Observations based on the provided Dates.");
+        btnRefreshDates.setToolTipText("Refresh the tree based on the provided values.");
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRefreshDates.setFocusPainted(false);
         btnRefreshDates.setIconTextGap(0);
@@ -753,6 +755,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         cmbElementTypesBrowseTab.setBackground(new java.awt.Color(219, 237, 205));
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
+        cmbElementTypesBrowseTab.setSelectedItem(ElementType.NONE);
         cmbElementTypesBrowseTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbElementTypesBrowseTab.setName("cmbElementTypesBrowseTab"); // NOI18N
         cmbElementTypesBrowseTab.addActionListener(new java.awt.event.ActionListener() {
@@ -792,15 +795,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         tabFotoLayout.setHorizontalGroup(
             tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabFotoLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(5, 5, 5)
+                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addComponent(rdbBrowseLocation)
                         .addGap(5, 5, 5)
                         .addComponent(rdbBrowseElement)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rdbBrowseDate)
-                        .addGap(13, 13, 13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdbBrowseDate))
                     .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -811,9 +813,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbElementTypesBrowseTab, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                 .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addGap(9, 9, 9)
@@ -835,13 +837,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                .addGap(5, 5, 5))
         );
         tabFotoLayout.setVerticalGroup(
             tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -858,12 +861,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addGroup(tabFotoLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                        .addGap(5, 5, 5)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(tabFotoLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
+                        .addGap(5, 5, 5)
                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(tabFotoLayout.createSequentialGroup()
                                 .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -875,26 +878,24 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                     .addComponent(btnBrowseNext, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(tabFotoLayout.createSequentialGroup()
                                         .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(5, 5, 5)
-                                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(tabFotoLayout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(tabFotoLayout.createSequentialGroup()
-                                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(11, 11, 11)
+                                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(5, 5, 5)
                                 .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)))
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(5, 5, 5))
         );
 
         tabbedPanel.addTab("Browse All", tabFoto);
@@ -1075,17 +1076,17 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
                     .addGroup(tabLocationLayout.createSequentialGroup()
                         .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE))
+                            .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
-                            .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                            .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1103,20 +1104,20 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabLocationLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tabLocationLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1221,7 +1222,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
-        cmbType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
         cmbType.addActionListener(new java.awt.event.ActionListener() {
@@ -1286,7 +1286,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addComponent(btnAddElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE))
+                        .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
                     .addGroup(tabElementLayout.createSequentialGroup()
                         .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(tabElementLayout.createSequentialGroup()
@@ -1297,9 +1297,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 361, Short.MAX_VALUE))
+                            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1317,14 +1317,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addComponent(btnAddElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(btnDeleteElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE))
+                    .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tabElementLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                         .addGap(4, 4, 4)
                         .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(tabElementLayout.createSequentialGroup()
@@ -2037,7 +2037,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (rdbBrowseElement.isSelected()) {
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
-            btnRefreshDates.setVisible(false);
+            btnRefreshDates.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(true);
             txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
             try {
@@ -2204,7 +2204,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_btnBrowseNextActionPerformed
 
     private void btnRefreshDatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshDatesActionPerformed
-        rdbBrowseDateItemStateChanged(null);
+        if (rdbBrowseDate.isSelected())
+            rdbBrowseDateItemStateChanged(null);
+        else
+        // 'n "Klein hack" om te kry dat die dropdown reg wys... Dit het skielik begin verkeer resize (dalk die NB 7.3 upgrade of die nuwe JDK...)
+        if (rdbBrowseElement.isSelected())
+            cmbElementTypesBrowseTabActionPerformed(null);
     }//GEN-LAST:event_btnRefreshDatesActionPerformed
 
     private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
@@ -3319,6 +3324,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (searchElementBrowseTab == null) searchElementBrowseTab = new Element();
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
+        if (ElementType.NONE.equals(searchElementBrowseTab.getType()))
+            searchElementBrowseTab.setType(null);
         List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElementBrowseTab));
         Collections.sort(elements);
         for (Element tempElement : elements) {

@@ -62,16 +62,17 @@ public class MergeElementsDialog extends JDialog {
         jLabel1.setText("Select the two Creatures you would like to merge:");
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Keep this Creature:");
         jLabel3.setName("jLabel3"); // NOI18N
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("Replace this Creature:");
         jLabel4.setName("jLabel4"); // NOI18N
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnConfirm.setToolTipText("Merge the one Creature into the other.");
+        btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,6 +84,7 @@ public class MergeElementsDialog extends JDialog {
 
         lstReplaceElement.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstReplaceElement.setName("lstReplaceElement"); // NOI18N
+        lstReplaceElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         jScrollPane2.setViewportView(lstReplaceElement);
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N

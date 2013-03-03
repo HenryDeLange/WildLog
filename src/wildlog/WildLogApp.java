@@ -42,7 +42,7 @@ import wildlog.utils.WildLogPaths;
 /**
  * The main class of the application.
  */
-// TODO: Huidiglik gebruik ek die Swinf App Framework nog (net) hier, maar ek kan seker refactor om dit heeltemal nie te gebruik nie...
+// TODO: Huidiglik gebruik ek die Swinf App Framework nog (net) hier, maar ek kan seker refactor om dit heeltemal nie te gebruik nie... ('n static class behoort my seker als te gee wat ek wil he...)
 public class WildLogApp extends SingleFrameApplication {
     private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
     // FIXME: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
@@ -396,6 +396,10 @@ public class WildLogApp extends SingleFrameApplication {
 
     public static String getWILDLOG_SETTINGS_FOLDER() {
         return WILDLOG_SETTINGS_FOLDER;
+    }
+
+    public void setMainframe(JFrame inFrame) {
+        setMainFrame(inFrame);
     }
 
 }

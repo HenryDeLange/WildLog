@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.ResourceMap;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
