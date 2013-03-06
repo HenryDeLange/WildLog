@@ -993,6 +993,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         sighting = null;
         setupNumberOfSightingImages();
         refreshSightingInfo();
+        btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
 
     private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed

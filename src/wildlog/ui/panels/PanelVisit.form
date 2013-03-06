@@ -104,7 +104,6 @@
                                       <Component id="btnHTML" min="-2" pref="110" max="-2" attributes="1"/>
                                       <Component id="btnReport" alignment="1" min="-2" pref="110" max="-2" attributes="1"/>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -152,20 +151,23 @@
                       </Group>
                       <Component id="jSeparator1" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnEditSighting" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Component id="btnAddSighting" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Component id="btnDeleteSighting" min="-2" pref="100" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnEditSighting" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <Component id="btnAddSighting" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <Component id="btnDeleteSighting" min="-2" pref="100" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane1" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace min="-2" pref="650" max="-2" attributes="0"/>
+                                  <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="650" max="-2" attributes="0"/>
-                          <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">

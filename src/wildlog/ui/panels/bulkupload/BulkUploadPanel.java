@@ -671,6 +671,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 }
             }
         }
+        btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed

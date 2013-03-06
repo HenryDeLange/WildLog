@@ -1342,6 +1342,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             tblLocation.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
         rdbLocations.setSelected(true);
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+        btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed

@@ -36,27 +36,18 @@ public class GPSDialog extends JDialog {
 
     public GPSDialog(JFrame parent, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent);
-        // Do the setup
+        // Do the setup (this is where the shared setup happens)
         doSetup(inDataObjectWithGPS);
-        // Setup the default behavior
+        // Setup the default behavior (this is for JFrames)
         UtilsDialog.setDialogToCenter(parent, this);
         UtilsDialog.addModalBackgroundPanel(parent, this);
-        // Attach clipboard
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLatDecimal.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLatDeg.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLatMin.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLatSec.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLonDecimal.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLonDeg.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLonMin.getEditor().getComponent(0));
-        UtilsUI.attachClipboardPopup((JTextComponent)spnLonSec.getEditor().getComponent(0));
     }
 
     public GPSDialog(JDialog parent, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent);
-        // Do the setup
+        // Do the setup (this is where the shared setup happens)
         doSetup(inDataObjectWithGPS);
-        // Setup the default behavior
+        // Setup the default behavior (this is for JDialogs)
         UtilsDialog.setDialogToCenter(parent, this);
         UtilsDialog.addModalBackgroundPanel(parent, this);
     }
@@ -83,28 +74,10 @@ public class GPSDialog extends JDialog {
         SpinnerFixer.fixSelectAllForSpinners(spnLonMin);
         SpinnerFixer.fixSelectAllForSpinners(spnLonSec);
         // Setup the ui Lat and Lon
-        Latitudes tempLat = dataObjectWithGPS.getLatitude();
-        if (tempLat == null || Latitudes.NONE.equals(tempLat))
-            tempLat = app.getWildLogOptions().getDefaultInputLatitude();
-        if (Latitudes.NORTH.equals(tempLat)) {
-            tglNorth.setSelected(true);
-        }
-        else
-        if (Latitudes.SOUTH.equals(tempLat)) {
-            tglSouth.setSelected(true);
-        }
-        Longitudes tempLon = dataObjectWithGPS.getLongitude();
-        if (tempLon == null || Longitudes.NONE.equals(tempLon))
-            tempLon = app.getWildLogOptions().getDefaultInputLongitude();
-        if (Longitudes.EAST.equals(tempLon)) {
-            tglEast.setSelected(true);
-        }
-        else
-        if (Longitudes.WEST.equals(tempLon)) {
-            tglWest.setSelected(true);
-        }
         // Get existing value from passed in dataObjectWithGPS
         loadUIValues(dataObjectWithGPS);
+        // Load the defaults if no values were provided
+        loadDefaultLatAndLon();
         // Setup the drag and drop on the butons
         FileDrop.SetupFileDrop(btnUseGPX, false, new FileDrop.Listener() {
             @Override
@@ -126,6 +99,40 @@ public class GPSDialog extends JDialog {
         UtilsDialog.addEscapeKeyListener(this);
         // Setup the glasspane on this dialog as well for the JOptionPane's
         UtilsDialog.addModalBackgroundPanel(this, null);
+        // Attach clipboard
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatDecimal.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatDeg.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLatSec.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonDecimal.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonDeg.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonMin.getEditor().getComponent(0));
+        UtilsUI.attachClipboardPopup((JTextComponent)spnLonSec.getEditor().getComponent(0));
+        // Set focus
+        btnSave.requestFocusInWindow();
+    }
+
+    private void loadDefaultLatAndLon() {
+        Latitudes tempLat = dataObjectWithGPS.getLatitude();
+        if (tempLat == null || Latitudes.NONE.equals(tempLat))
+            tempLat = app.getWildLogOptions().getDefaultInputLatitude();
+        if (Latitudes.NORTH.equals(tempLat)) {
+            tglNorth.setSelected(true);
+        }
+        else
+        if (Latitudes.SOUTH.equals(tempLat)) {
+            tglSouth.setSelected(true);
+        }
+        Longitudes tempLon = dataObjectWithGPS.getLongitude();
+        if (tempLon == null || Longitudes.NONE.equals(tempLon))
+            tempLon = app.getWildLogOptions().getDefaultInputLongitude();
+        if (Longitudes.EAST.equals(tempLon)) {
+            tglEast.setSelected(true);
+        }
+        else
+        if (Longitudes.WEST.equals(tempLon)) {
+            tglWest.setSelected(true);
+        }
     }
 
     private void loadUIValues(DataObjectWithGPS inDataObjectWithGPS) {

@@ -1066,6 +1066,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
 
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
 
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
