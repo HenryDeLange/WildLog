@@ -55,7 +55,7 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
         if (inDate == null)
             return false;
         else
-            return date.getTime() < (inDate.getTime() + inWindowPeriodInMiliseconds);
+            return date.getTime() <= (inDate.getTime() + inWindowPeriodInMiliseconds);
     }
 
     public File getFile() {

@@ -229,6 +229,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="calcSunMoonMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="calcDurationMenuItem">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/Duration.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Calculate Duration for all Observations"/>
+                <Property name="name" type="java.lang.String" value="calcDurationMenuItem" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="calcDurationMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -2099,6 +2111,9 @@
         </Component>
         <Component class="javax.swing.JProgressBar" name="progressBar">
           <Properties>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="0" green="66" red="33" type="rgb"/>
+            </Property>
             <Property name="name" type="java.lang.String" value="progressBar" noResource="true"/>
             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[400, 16]"/>

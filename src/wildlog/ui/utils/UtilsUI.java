@@ -26,7 +26,6 @@ import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;

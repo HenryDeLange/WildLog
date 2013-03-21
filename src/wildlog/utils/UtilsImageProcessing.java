@@ -20,6 +20,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.FileImageInputStream;
@@ -37,6 +39,8 @@ public class UtilsImageProcessing {
     // Thumbnail sizes
     /** 100px */
     public static final int THUMBNAIL_SIZE_SMALL = 100;
+    /** 200px */
+    public static final int THUMBNAIL_SIZE_MEDIUM_SMALL = 200;
     /** 300px */
     public static final int THUMBNAIL_SIZE_MEDIUM = 300;
     /** 500px */
@@ -224,31 +228,58 @@ public class UtilsImageProcessing {
         }
     }
 
-    public static Date getExifDateFromJpeg(Metadata inMeta) {
-        Iterator<Directory> directories = inMeta.getDirectories().iterator();
-        while (directories.hasNext()) {
-            Directory directory = (Directory)directories.next();
-            Collection<Tag> tags = directory.getTags();
-            for (Tag tag : tags) {
-                if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
-                    // Not all files store the date in the same format, so I have to try a few known formats...
-                    // Try 1:
-                    try {
-                        // This seems to be by far the most used format
-                        return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
-                    }
-                    catch (ParseException ex) {
-                        System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
-                        ex.printStackTrace(System.err);
-                    }
-                    // Try 2:
-                    try {
-                        // Wierd format used by Samsung Galaxy Gio (Android)
-                        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
-                    }
-                    catch (ParseException ex) {
-                        System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
-                        ex.printStackTrace(System.err);
+    public static Date getDateFromImage(File inFile) {
+        Metadata metadata = null;
+        try {
+            metadata = JpegMetadataReader.readMetadata(inFile);
+        }
+        catch (JpegProcessingException | IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return getDateFromImage(metadata, inFile);
+    }
+
+    public static Date getDateFromImage(Metadata inMeta, File inFile) {
+        Date date = UtilsImageProcessing.getExifDateFromJpeg(inMeta);
+        if (date == null) {
+            try {
+                date = new Date(inFile.lastModified());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace(System.err);
+            }
+        }
+        return date;
+    }
+
+    private static Date getExifDateFromJpeg(Metadata inMeta) {
+        // FIXME: Die ou Moultrie images het 'n issue waar hulle 'n EXIF value het wat altyd na dieselfde datum point, ek moet 'n reel maak wat daai files kan optel en dan die file.lastmodified gebruik...
+        if (inMeta != null) {
+            Iterator<Directory> directories = inMeta.getDirectories().iterator();
+            while (directories.hasNext()) {
+                Directory directory = (Directory)directories.next();
+                Collection<Tag> tags = directory.getTags();
+                for (Tag tag : tags) {
+                    if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
+                        // Not all files store the date in the same format, so I have to try a few known formats...
+                        // Try 1:
+                        try {
+                            // This seems to be by far the most used format
+                            return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
+                        }
+                        catch (ParseException ex) {
+                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
+                            ex.printStackTrace(System.err);
+                        }
+                        // Try 2:
+                        try {
+                            // Wierd format used by Samsung Galaxy Gio (Android)
+                            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
+                        }
+                        catch (ParseException ex) {
+                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
+                            ex.printStackTrace(System.err);
+                        }
                     }
                 }
             }
@@ -298,45 +329,12 @@ public class UtilsImageProcessing {
         return tempDataObjectWithGPS;
      }
 
-    public static Date getExifDateFromJpeg(File inFile) {
-        try {
-            return getExifDateFromJpeg(JpegMetadataReader.readMetadata(inFile));
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (JpegProcessingException ex) {
-            ex.printStackTrace(System.err);
-        }
-        return null;
-    }
-
-    public static Date getExifDateFromJpeg(InputStream inInputStream) {
-        try {
-            return getExifDateFromJpeg(JpegMetadataReader.readMetadata(inInputStream));
-        }
-        catch (JpegProcessingException ex) {
-            ex.printStackTrace(System.err);
-        }
-        return null;
-    }
-
     public static DataObjectWithGPS getExifGpsFromJpeg(File inFile) {
         try {
             return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inFile));
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
-        }
-        catch (JpegProcessingException ex) {
-            ex.printStackTrace(System.err);
-        }
-        return null;
-    }
-
-    public static DataObjectWithGPS getExifGpsFromJpeg(InputStream inInputStream) {
-        try {
-            return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inInputStream));
         }
         catch (JpegProcessingException ex) {
             ex.printStackTrace(System.err);

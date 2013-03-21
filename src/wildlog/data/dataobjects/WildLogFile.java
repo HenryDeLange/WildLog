@@ -1,5 +1,6 @@
 package wildlog.data.dataobjects;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import wildlog.html.utils.UtilsHTML;
@@ -7,7 +8,7 @@ import wildlog.data.enums.WildLogFileType;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
-public class WildLogFile {
+public class WildLogFile implements Comparable<WildLogFile> {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
     private String filename;
     private String originalFileLocation; // This is used as the DB table ID
@@ -43,6 +44,20 @@ public class WildLogFile {
     @Override
     public String toString() {
         return filename + " - " + originalFileLocation;
+    }
+
+    @Override
+    public int compareTo(WildLogFile inWildLogFile) {
+        if (WildLogFileType.IMAGE.equals(fileType) && inWildLogFile != null && WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
+            File file1 = new File(this.getFilePath(true));
+            File file2 = new File(inWildLogFile.getFilePath(true));
+            Date date1 = UtilsImageProcessing.getDateFromImage(file1);
+            Date date2 = UtilsImageProcessing.getDateFromImage(file2);
+            if (date1 != null && date2 != null) {
+                return date1.compareTo(date2);
+            }
+        }
+        return 0;
     }
 
     public String toHTML(UtilsHTML.ImageExportTypes inExportType) {
@@ -93,7 +108,7 @@ public class WildLogFile {
         return fileType;
     }
 
-    public void setDate(Date inDate) {
+    public void setUploadDate(Date inDate) {
         uploadDate = inDate;
     }
 

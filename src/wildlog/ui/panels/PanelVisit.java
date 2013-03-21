@@ -62,11 +62,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         imageIndex = 0;
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
         if (fotos.size() > 0) {
-            UtilsImageProcessing.setupFoto("VISIT-" + visit.getName(), imageIndex, lblImage, 300, app);
+            UtilsImageProcessing.setupFoto("VISIT-" + visit.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             lblNumberOfImages.setText("0 of 0");
         }
         imageSightingIndex = 0;
@@ -83,7 +83,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 if (!txtName.getBackground().equals(Color.RED)) {
                     imageIndex = UtilsFileProcessing.uploadFilesUsingList("VISIT-" + visit.getName(),
                             WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), locationForVisit.getName(), visit.getName()),
-                            null, lblImage, 300, app, inFiles);
+                            null, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -1059,7 +1059,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage("VISIT-" + visit.getName(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.previousImage("VISIT-" + visit.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
@@ -1074,7 +1074,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_tblSightingsMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage("VISIT-" + visit.getName(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.nextImage("VISIT-" + visit.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
 }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -1087,7 +1087,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 }//GEN-LAST:event_btnMapSightingActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage("VISIT-" + visit.getName(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.removeImage("VISIT-" + visit.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed

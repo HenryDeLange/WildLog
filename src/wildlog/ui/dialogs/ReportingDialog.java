@@ -61,6 +61,7 @@ public class ReportingDialog extends JDialog {
         }
         if (visit == null) {
             btnVisitSun.setVisible(false);
+            btnVisitBulkImportView.setVisible(false);
         }
         if (startDate == null || endDate == null) {
             btnSightingDateElement.setVisible(false);
@@ -94,6 +95,7 @@ public class ReportingDialog extends JDialog {
         btnVisitSun = new javax.swing.JButton();
         btnSightingDateLocation = new javax.swing.JButton();
         btnSightingDateElement = new javax.swing.JButton();
+        btnVisitBulkImportView = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Reports");
@@ -256,6 +258,24 @@ public class ReportingDialog extends JDialog {
         });
         getContentPane().add(btnSightingDateElement);
 
+        btnVisitBulkImportView.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Impor Large.png"))); // NOI18N
+        btnVisitBulkImportView.setText("Advanced Observation View");
+        btnVisitBulkImportView.setEnabled(false);
+        btnVisitBulkImportView.setFocusPainted(false);
+        btnVisitBulkImportView.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnVisitBulkImportView.setIconTextGap(10);
+        btnVisitBulkImportView.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnVisitBulkImportView.setMaximumSize(new java.awt.Dimension(250, 35));
+        btnVisitBulkImportView.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnVisitBulkImportView.setName("btnVisitBulkImportView"); // NOI18N
+        btnVisitBulkImportView.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnVisitBulkImportView.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVisitBulkImportViewActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVisitBulkImportView);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -322,6 +342,10 @@ public class ReportingDialog extends JDialog {
         report.toFront();
     }//GEN-LAST:event_btnSightingDateElementActionPerformed
 
+    private void btnVisitBulkImportViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisitBulkImportViewActionPerformed
+        // TODO: implement hierdie
+    }//GEN-LAST:event_btnVisitBulkImportViewActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnElementMoon;
@@ -332,6 +356,7 @@ public class ReportingDialog extends JDialog {
     private javax.swing.JButton btnLocationType;
     private javax.swing.JButton btnSightingDateElement;
     private javax.swing.JButton btnSightingDateLocation;
+    private javax.swing.JButton btnVisitBulkImportView;
     private javax.swing.JButton btnVisitSun;
     // End of variables declaration//GEN-END:variables
 }

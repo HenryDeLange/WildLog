@@ -314,7 +314,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempFile.setFilename(results.getString("FILENAME"));
                 tempFile.setFilePath(results.getString("ORIGINALPATH"));
                 tempFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
-                tempFile.setDate(results.getDate("UPLOADDATE"));
+                tempFile.setUploadDate(results.getDate("UPLOADDATE"));
                 tempFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
             }
         }
@@ -615,7 +615,7 @@ public abstract class DBI_JDBC implements DBI {
                 tempFoto.setFilename(results.getString("FILENAME"));
                 tempFoto.setFilePath(results.getString("ORIGINALPATH"));
                 tempFoto.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
-                tempFoto.setDate(results.getDate("UPLOADDATE"));
+                tempFoto.setUploadDate(results.getDate("UPLOADDATE"));
                 tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
                 tempList.add(tempFoto);
             }

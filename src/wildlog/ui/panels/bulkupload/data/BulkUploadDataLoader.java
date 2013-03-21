@@ -55,6 +55,7 @@ public class BulkUploadDataLoader {
         if (!UtilsConcurency.tryAndWaitToShutdownExecutorService(executorService)) {
             return null;
         }
+        // The images must be sorted according to date to make sure they are grouped correctly into sightings
         Collections.sort(imageList);
         inProgressbarTask.setMessage("Bulk Import Preparation: Process files...");
         inProgressbarTask.setTaskProgress(95);
@@ -63,14 +64,13 @@ public class BulkUploadDataLoader {
         Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> finalMap =
                 new LinkedHashMap<BulkUploadSightingWrapper, BulkUploadImageListWrapper>(imageList.size());
         if (imageList.size() > 0) {
+            // Start off with a value that is garuanteed to be updated for the first record, to get things started...
             Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
             BulkUploadSightingWrapper sightingKey = null;
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
                     sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
-                    // Set the date for this sighting
-                    sightingKey.setDate(currentSightingDate);
                     // Set other defaults for the sighting
                     sightingKey.setCertainty(Certainty.SURE);
                     sightingKey.setSightingEvidence(SightingEvidence.SEEN);
@@ -78,6 +78,8 @@ public class BulkUploadDataLoader {
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
                     // Update the curent date to compare against
                     currentSightingDate = temp.getDate();
+                    // Set the date for this sighting
+                    sightingKey.setDate(currentSightingDate);
                 }
                 // Set the GPS details (if not already set)
                 if ((sightingKey.getLatitude() == null || Latitudes.NONE.equals(sightingKey.getLatitude()))
@@ -99,28 +101,26 @@ public class BulkUploadDataLoader {
     }
 
     private static void loadFileData(File inFile, List<BulkUploadImageFileWrapper> inImageList) {
+        // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
+        Metadata metadata = null;
         try {
-            // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
-            Metadata metadata = JpegMetadataReader.readMetadata(inFile);
-            // TODO: ek moet hierdie code gebruik orals waar image dates gelees word (add sightings, etc.) Skuif dit uit na UtilsImageProcessing of erns soos dit...
-            Date date = UtilsImageProcessing.getExifDateFromJpeg(metadata);
-            if (date == null) {
-                date = new Date(inFile.lastModified());
-            }
-            if (date != null) {
-                BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(inFile, UtilsImageProcessing.getScaledIcon(inFile, 200), date);
-                wrapper.setDataObjectWithGPS(UtilsImageProcessing.getExifGpsFromJpeg(metadata));
-                inImageList.add(wrapper);
-            }
-            else {
-                System.out.println("Could not determine date for image file: " + inFile.getAbsolutePath());
-            }
+            metadata = JpegMetadataReader.readMetadata(inFile);
         }
         catch (JpegProcessingException ex) {
             ex.printStackTrace(System.err);
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
+        }
+        Date date = UtilsImageProcessing.getDateFromImage(metadata, inFile);
+        if (date != null) {
+            BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
+                    inFile, UtilsImageProcessing.getScaledIcon(inFile, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM_SMALL), date);
+            wrapper.setDataObjectWithGPS(UtilsImageProcessing.getExifGpsFromJpeg(metadata));
+            inImageList.add(wrapper);
+        }
+        else {
+            System.out.println("Could not determine date for image file: " + inFile.getAbsolutePath());
         }
     }
 

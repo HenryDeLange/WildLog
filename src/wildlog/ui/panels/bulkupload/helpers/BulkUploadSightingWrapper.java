@@ -11,16 +11,6 @@ public class BulkUploadSightingWrapper extends Sighting {
 
     public BulkUploadSightingWrapper(Icon inIcon) {
         icon = inIcon;
-//        setElementName("Unknown Creature");
-//        setDate(new Date());
-//        setLatitude(Latitudes.SOUTH);
-//        setLatDegrees(25);
-//        setLatMinutes(24);
-//        setLatSecondsFloat(23.2f);
-//        setLongitude(Longitudes.EAST);
-//        setLatDegrees(15);
-//        setLatMinutes(14);
-//        setLatSecondsFloat(13.2f);
     }
 
     public Icon getIcon() {

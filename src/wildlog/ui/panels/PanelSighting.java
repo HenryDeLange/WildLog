@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -233,7 +234,7 @@ public class PanelSighting extends JDialog {
             cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
             cmbViewRating.setSelectedItem(ViewRating.NORMAL);
             cmbLifeStatus.setSelectedItem(LifeStatus.ALIVE);
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             spnNumberOfElements.setValue(0);
             spnMoonPhase.setValue(-1);
             spnTemperature.setValue(0);
@@ -281,9 +282,9 @@ public class PanelSighting extends JDialog {
         // Setup the sighting's image
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
         if (fotos.size() > 0)
-            UtilsImageProcessing.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
+            UtilsImageProcessing.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         else
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
     }
 
     private void setUIFieldsFromSightingDate() {
@@ -388,6 +389,7 @@ public class PanelSighting extends JDialog {
         jLabel20 = new javax.swing.JLabel();
         spnDurationSeconds = new javax.swing.JSpinner();
         jLabel21 = new javax.swing.JLabel();
+        btnCalculateDuration = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
@@ -777,6 +779,7 @@ public class PanelSighting extends JDialog {
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
         btnGetDateFromImage.setFocusPainted(false);
+        btnGetDateFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGetDateFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnGetDateFromImage.setName("btnGetDateFromImage"); // NOI18N
         btnGetDateFromImage.addActionListener(new java.awt.event.ActionListener() {
@@ -784,7 +787,7 @@ public class PanelSighting extends JDialog {
                 btnGetDateFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 110, 50));
+        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 110, 40));
 
         jLabel2.setText("Time:");
         jLabel2.setName("jLabel2"); // NOI18N
@@ -805,6 +808,7 @@ public class PanelSighting extends JDialog {
         btnCalculateSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCalculateSunAndMoon.setEnabled(!disableEditing);
         btnCalculateSunAndMoon.setFocusPainted(false);
+        btnCalculateSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCalculateSunAndMoon.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnCalculateSunAndMoon.setName("btnCalculateSunAndMoon"); // NOI18N
         btnCalculateSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
@@ -812,7 +816,7 @@ public class PanelSighting extends JDialog {
                 btnCalculateSunAndMoonActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 130, 110, 50));
+        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, 45));
 
         jLabel11.setText("Moonlight:");
         jLabel11.setName("jLabel11"); // NOI18N
@@ -940,13 +944,14 @@ public class PanelSighting extends JDialog {
         txtTag.setToolTipText("This field can be used to \"tag\" the sighting. For instance using it for the individual animal's ID, or a sub-location name, etc.");
         txtTag.setEnabled(!disableEditing);
         txtTag.setName("txtTag"); // NOI18N
-        sightingIncludes.add(txtTag, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, 260, -1));
+        sightingIncludes.add(txtTag, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, 140, -1));
 
         jLabel19.setText("Duration:");
         jLabel19.setName("jLabel19"); // NOI18N
         sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
 
         spnDurationMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 1440, 1));
+        spnDurationMinutes.setEnabled(!disableEditing);
         spnDurationMinutes.setName("spnDurationMinutes"); // NOI18N
         sightingIncludes.add(spnDurationMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 50, -1));
 
@@ -955,12 +960,29 @@ public class PanelSighting extends JDialog {
         sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 100, -1, 20));
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 60.0d, 1.0d));
+        spnDurationSeconds.setEnabled(!disableEditing);
         spnDurationSeconds.setName("spnDurationSeconds"); // NOI18N
         sightingIncludes.add(spnDurationSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 50, -1));
 
         jLabel21.setText("seconds");
         jLabel21.setName("jLabel21"); // NOI18N
         sightingIncludes.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 100, -1, 20));
+
+        btnCalculateDuration.setBackground(new java.awt.Color(208, 204, 181));
+        btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        btnCalculateDuration.setText("<html>Calculate <b>Duration</b> from <b>Image</b> EXIF</html>");
+        btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
+        btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode);
+        btnCalculateDuration.setFocusPainted(false);
+        btnCalculateDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCalculateDuration.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnCalculateDuration.setName("btnCalculateDuration"); // NOI18N
+        btnCalculateDuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCalculateDurationActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 170, 110, 45));
 
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -1084,38 +1106,38 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void uploadImage(final List<File> inFiles) {
-        if (inFiles.size() > 0) {
+        if (inFiles != null && inFiles.size() > 0) {
             // If the date hasn't been set yet, then try to load it from the first image
             setSightingDateFromUIFields();
             if (sighting.getDate() == null) {
                 getDateFromImage(inFiles.get(0));
                 btnCalculateSunAndMoonActionPerformed(null);
             }
-            // Try to save the sighting (to make sure all required fields are there and to get the SightingID)
-            btnUpdateSightingActionPerformed(null);
-            // Now upload the files
-            if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
-                if (inFiles == null) {
-                    imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
-                            "SIGHTING-" + sighting.getSightingCounter(),
-                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
-                            this, lblImage, 300, app);
-                }
-                else {
-                    imageIndex = UtilsFileProcessing.uploadFilesUsingList(
-                            "SIGHTING-" + sighting.getSightingCounter(),
-                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
-                            this, lblImage, 300, app,
-                            inFiles);
-                }
-                // Update the label showingthe numebr of images
-                setupNumberOfImages();
+        }
+        // Try to save the sighting (to make sure all required fields are there and to get the SightingID)
+        btnUpdateSightingActionPerformed(null);
+        // Now upload the files
+        if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
+            if (inFiles == null) {
+                imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
+                        "SIGHTING-" + sighting.getSightingCounter(),
+                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
+                        this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             }
+            else {
+                imageIndex = UtilsFileProcessing.uploadFilesUsingList(
+                        "SIGHTING-" + sighting.getSightingCounter(),
+                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
+                        this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app,
+                        inFiles);
+            }
+            // Update the label showingthe numebr of images
+            setupNumberOfImages();
         }
     }
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.previousImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
@@ -1131,12 +1153,12 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.nextImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.removeImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
         btnUpdateSightingActionPerformed(null);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -1223,7 +1245,7 @@ public class PanelSighting extends JDialog {
         if (inFile != null) {
             if (new ImageFilter().accept(inFile)) {
                 // Get the date form the image
-                Date imageDate = UtilsImageProcessing.getExifDateFromJpeg(inFile);
+                Date imageDate = UtilsImageProcessing.getDateFromImage(inFile);
                 // Set the date
                 if (imageDate != null) {
                     sighting.setDate(imageDate);
@@ -1273,6 +1295,20 @@ public class PanelSighting extends JDialog {
         btnUpdateSighting.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed
 
+    private void btnCalculateDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateDurationActionPerformed
+        List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
+        if (!files.isEmpty()) {
+            Collections.sort(files);
+            Date startDate = UtilsImageProcessing.getDateFromImage(new File(files.get(0).getFilePath(true)));
+            Date endDate = UtilsImageProcessing.getDateFromImage(new File(files.get(files.size()-1).getFilePath(true)));
+            double difference = (endDate.getTime() - startDate.getTime())/1000;
+            int minutes = (int)difference/60;
+            double seconds = difference - minutes*60.0;
+            spnDurationMinutes.setValue(minutes);
+            spnDurationSeconds.setValue((double)seconds);
+        }
+    }//GEN-LAST:event_btnCalculateDurationActionPerformed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
         if (fotos.size() > 0)
@@ -1318,6 +1354,7 @@ public class PanelSighting extends JDialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCalculateDuration;
     private javax.swing.JButton btnCalculateSunAndMoon;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGPS;

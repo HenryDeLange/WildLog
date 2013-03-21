@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,7 +21,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
@@ -452,7 +452,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_lstLocationValueChanged
 
     private void txtLocationNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLocationNameKeyReleased
-        if (evt == null || (evt != null && !evt.isActionKey())) {
+        if (evt == null || !evt.isActionKey()) {
             for (int t = 0; t < lstLocation.getModel().getSize(); t++) {
                 if (lstLocation.getModel().getElementAt(t).toString().equalsIgnoreCase(txtLocationName.getText())) {
                     lstLocation.setSelectedIndex(t);
@@ -587,21 +587,39 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     sightingWrapper.setMoonPhase(AstroCalculator.getMoonPhase(sightingWrapper.getDate()));
                                     sightingWrapper.setMoonlight(AstroCalculator.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
                                 }
+                                // Get a list of all the images
+                                BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(counter, 1);
+                                // Determine the duration and build up the a list of File objects (to save later)
+                                Date startDate = listWrapper.getImageList().get(0).getDate();
+                                Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
+                                List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
+                                for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
+                                    files.add(imageWrapper.getFile());
+                                    if (imageWrapper.getDate().getTime() < startDate.getTime()) {
+                                        startDate = imageWrapper.getDate();
+                                    }
+                                    else
+                                    if (imageWrapper.getDate().getTime() > endDate.getTime()) {
+                                        endDate = imageWrapper.getDate();
+                                    }
+                                }
+                                if (sightingWrapper.getDurationMinutes() == 0 && sightingWrapper.getDurationSeconds() == 0.0) {
+                                    double difference = (endDate.getTime() - startDate.getTime())/1000;
+                                    int minutes = (int)difference/60;
+                                    double seconds = difference - minutes*60.0;
+                                    sightingWrapper.setDurationMinutes(minutes);
+                                    sightingWrapper.setDurationSeconds(seconds);
+                                }
                                 // Save the sigting
                                 synchronized (saveSightingLock) {
                                     app.getDBI().createOrUpdate(sightingWrapper);
                                 }
                                 // Save the corresponding images
-                                BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(counter, 1);
-                                List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
-                                for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
-                                    files.add(imageWrapper.getFile());
-                                }
                                 UtilsFileProcessing.performFileUpload(
                                             "SIGHTING-" + sightingWrapper.getSightingCounter(),
                                             "Observations" + File.separatorChar + sightingWrapper.toString(),
                                             files.toArray(new File[files.size()]),
-                                            null, 300, app);
+                                            null, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
                                 // Update the progress
                                 try {
                                     progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());

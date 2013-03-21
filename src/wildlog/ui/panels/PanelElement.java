@@ -63,10 +63,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         imageIndex = 0;
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
         if (fotos.size() > 0) {
-            UtilsImageProcessing.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
+            UtilsImageProcessing.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
         }
         setupNumberOfImages();
 
@@ -91,7 +91,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (!txtPrimaryName.getBackground().equals(Color.RED)) {
                     imageIndex = UtilsFileProcessing.uploadFilesUsingList("ELEMENT-" + element.getPrimaryName(),
                             WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()),
-                            null, lblImage, 300, app, inFiles);
+                            null, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
                     btnUpdateActionPerformed(null);
@@ -1269,7 +1269,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadFileUsingDialog("ELEMENT-" + element.getPrimaryName(), WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()), this, lblImage, 300, app);
+            imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
+                    "ELEMENT-" + element.getPrimaryName(),
+                    WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(),
+                    element.getPrimaryName()),
+                    this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             setupNumberOfImages();
             // everything went well - saving
             btnUpdateActionPerformed(evt);
@@ -1277,12 +1281,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.previousImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.nextImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
@@ -1354,7 +1358,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, 300, app);
+        imageIndex = UtilsImageProcessing.removeImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed

@@ -357,6 +357,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         bulkImportMenuItem = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
         calcSunMoonMenuItem = new javax.swing.JMenuItem();
+        calcDurationMenuItem = new javax.swing.JMenuItem();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
@@ -1356,6 +1357,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         statusMessageLabel.setPreferredSize(new java.awt.Dimension(400, 20));
         statusPanel.add(statusMessageLabel);
 
+        progressBar.setForeground(new java.awt.Color(51, 102, 0));
         progressBar.setName("progressBar"); // NOI18N
         progressBar.setPreferredSize(new java.awt.Dimension(400, 16));
         statusPanel.add(progressBar);
@@ -1523,6 +1525,16 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
         advancedMenu.add(calcSunMoonMenuItem);
+
+        calcDurationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        calcDurationMenuItem.setText("Calculate Duration for all Observations");
+        calcDurationMenuItem.setName("calcDurationMenuItem"); // NOI18N
+        calcDurationMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calcDurationMenuItemActionPerformed(evt);
+            }
+        });
+        advancedMenu.add(calcDurationMenuItem);
 
         moveVisitsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         moveVisitsMenuItem.setText("Move a Period to another Place");
@@ -1699,7 +1711,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (tblLocation.getSelectedRow() != -1) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
             int[] selectedRows = tblVisit.getSelectedRows();
-            PanelVisit tempPanel = null;
+            PanelVisit tempPanel;
             for (int t = 0; t < selectedRows.length; t++) {
                 tempPanel = UtilPanelGenerator.getVisitPanel(tempLocation, (String)tblVisit.getValueAt(selectedRows[t], 0));
                 UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
@@ -1709,7 +1721,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         int[] selectedRows = tblElement.getSelectedRows();
-        PanelElement tempPanel = null;
+        PanelElement tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
             tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
@@ -1726,7 +1738,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         txtSearch.setText("");
         cmbType.setSelectedItem(ElementType.NONE);
-        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
 }//GEN-LAST:event_tabElementComponentShown
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
@@ -1741,7 +1753,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             });
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblElement.getSelectedRows();
-                PanelElement tempPanel = null;
+                PanelElement tempPanel;
                 for (int t = 0; t < selectedRows.length; t++) {
                     tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
                     tabbedPanel.remove(tempPanel);
@@ -1761,12 +1773,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         UtilTableGenerator.setupCompleteLocationTable(tblLocation, searchLocation);
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
-        lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+        lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
     }//GEN-LAST:event_tabLocationComponentShown
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
         int[] selectedRows = tblLocation.getSelectedRows();
-        PanelLocation tempPanel = null;
+        PanelLocation tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
             tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
@@ -1782,12 +1794,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
         txtSearch.setText("");
         UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
-        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
         int[] selectedRows = tblElement_LocTab.getSelectedRows();
-        PanelElement tempPanel = null;
+        PanelElement tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
             tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement_LocTab.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
@@ -1796,7 +1808,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
         int[] selectedRows = tblLocation_EleTab.getSelectedRows();
-        PanelLocation tempPanel = null;
+        PanelLocation tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
             tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation_EleTab.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
@@ -1838,14 +1850,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
             if (fotos.size() > 0)
-                UtilsImageProcessing.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, 300, app);
+                UtilsImageProcessing.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             else
-                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             // Get Locations
             UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, tempElement);
         }
         else {
-            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         }
     }//GEN-LAST:event_tblElementMouseReleased
@@ -1856,16 +1868,16 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
             if (fotos.size() > 0)
-                UtilsImageProcessing.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, 300, app);
+                UtilsImageProcessing.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             else
-                lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+                lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             // Get Visits
             UtilTableGenerator.setupShortVisitTable(tblVisit, tempLocation);
             // Get All Elements seen
             UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, tempLocation);
         }
         else {
-            lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(300));
+            lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
             tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
         }
@@ -3276,11 +3288,15 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     }
                     catch (IOException ex) {
                         ex.printStackTrace(System.err);
-                        feedback.println("ERROR: An exception occured while cleaning the Workspace!! " + ex.getMessage());
+                        if (feedback != null) {
+                            feedback.println("ERROR: An exception occured while cleaning the Workspace!! " + ex.getMessage());
+                        }
                     }
                     finally {
-                        feedback.flush();
-                        feedback.close();
+                        if (feedback != null) {
+                            feedback.flush();
+                            feedback.close();
+                        }
                     }
                     // Open the summary document
                     UtilsFileProcessing.openFile(feedbackFile.getAbsolutePath());
@@ -3291,6 +3307,10 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             });
         }
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
+
+    private void calcDurationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcDurationMenuItemActionPerformed
+        // TODO: Calculate all observations' duration
+    }//GEN-LAST:event_calcDurationMenuItemActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -3507,6 +3527,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private javax.swing.JButton btnZoomOut;
     private javax.swing.JMenuItem bulkImportMenuItem;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JMenuItem calcDurationMenuItem;
     private javax.swing.JMenuItem calcSunMoonMenuItem;
     private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JComboBox cmbElementTypesBrowseTab;
