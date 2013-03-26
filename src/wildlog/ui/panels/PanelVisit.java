@@ -82,7 +82,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
                     imageIndex = UtilsFileProcessing.uploadFilesUsingList("VISIT-" + visit.getName(),
-                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), locationForVisit.getName(), visit.getName()),
+                            WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), locationForVisit.getName(), visit.getName()),
                             null, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
@@ -1050,7 +1050,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
             imageIndex = UtilsFileProcessing.uploadFileUsingDialog("VISIT-" + visit.getName(),
-                    WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), locationForVisit.getName(), visit.getName()),
+                    WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), locationForVisit.getName(), visit.getName()),
                     this, lblImage, 300, app);
             setupNumberOfImages();
             // everything went well - saving

@@ -23,8 +23,8 @@ public final class UtilsHTML {
     public static String generateHTMLImages(String inFileLocation, ImageExportTypes inExportType) {
         File fromFile = new File(inFileLocation);
         File toDir = new File(
-                WildLogPaths.concatPaths(
-                    WildLogPaths.concatPaths(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath(), "Images"),
+                WildLogPaths.concatPaths(true,
+                    WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath(), "Images"),
                     WildLogPaths.stripRootFromPath(inFileLocation.substring(0, inFileLocation.lastIndexOf(File.separatorChar)),
                                             WildLogPaths.getFullWorkspacePrefix())));
         toDir.mkdirs();
@@ -36,13 +36,13 @@ public final class UtilsHTML {
             //return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + WildLogPaths.WILDLOG_EXPORT_HTML), "..") + "\"/>  ";
             return "<img src=\"..\\"
                     + WildLogPaths.stripRootFromPath(fullpath,
-                        WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
+                        WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
                     + "\"/>  ";
         else
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML))
             return "<img src=\"..\\html\\"
                     + WildLogPaths.stripRootFromPath(fullpath,
-                        WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
+                        WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
                     + "\"/>  ";
         else
         if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap))

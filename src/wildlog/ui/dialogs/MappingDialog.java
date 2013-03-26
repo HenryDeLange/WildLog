@@ -67,7 +67,7 @@ public class MappingDialog extends JDialog {
         else {
             if (element.getScientificName() != null && !element.getScientificName().isEmpty()) {
                 // FIXME: Case sensitivaty mag dalk 'n issue wees op ander opperating systems
-                File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
+                File file = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
                 if (!file.exists() || file.isDirectory()) {
                     btnViewDistributionMap.setVisible(false);
                     btnViewSightingsAndDistributionMap.setVisible(false);
@@ -548,7 +548,7 @@ public class MappingDialog extends JDialog {
     private void btnViewDistributionMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDistributionMapActionPerformed
         // Clear old points
         UtilsMapGenerator.clearMap(app, true);
-        File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
+        File file = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
         UtilsMapGenerator.addDistributionMap(app, file);
         this.dispose();
         // Open Map
@@ -560,7 +560,7 @@ public class MappingDialog extends JDialog {
         // Clear old points
         UtilsMapGenerator.clearMap(app, true);
         // Load distribution map
-        File file = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
+        File file = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
         UtilsMapGenerator.addDistributionMap(app, file);
         // Load points
         Sighting sigting = new Sighting();

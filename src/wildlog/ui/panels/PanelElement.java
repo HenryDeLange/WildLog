@@ -90,7 +90,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 btnUpdateActionPerformed(null);
                 if (!txtPrimaryName.getBackground().equals(Color.RED)) {
                     imageIndex = UtilsFileProcessing.uploadFilesUsingList("ELEMENT-" + element.getPrimaryName(),
-                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()),
+                            WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()),
                             null, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
@@ -1271,7 +1271,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
             imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
                     "ELEMENT-" + element.getPrimaryName(),
-                    WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(),
+                    WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(),
                     element.getPrimaryName()),
                     this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             setupNumberOfImages();

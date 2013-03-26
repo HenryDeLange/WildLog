@@ -1121,13 +1121,13 @@ public class PanelSighting extends JDialog {
             if (inFiles == null) {
                 imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
                         "SIGHTING-" + sighting.getSightingCounter(),
-                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
+                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
                         this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             }
             else {
                 imageIndex = UtilsFileProcessing.uploadFilesUsingList(
                         "SIGHTING-" + sighting.getSightingCounter(),
-                        WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
+                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
                         this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app,
                         inFiles);
             }

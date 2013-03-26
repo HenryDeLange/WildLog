@@ -21,7 +21,9 @@ import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import org.jdesktop.application.Application;
@@ -37,15 +39,16 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.WildLogPaths;
 
 /**
  * The main class of the application.
  */
-// TODO: Huidiglik gebruik ek die Swinf App Framework nog (net) hier, maar ek kan seker refactor om dit heeltemal nie te gebruik nie... ('n static class behoort my seker als te gee wat ek wil he...)
+// TODO: Huidiglik gebruik ek die Swing App Framework nog (net) hier, maar ek kan seker refactor om dit heeltemal nie te gebruik nie... ('n static class behoort my seker als te gee wat ek wil he...)
 public class WildLogApp extends SingleFrameApplication {
     private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
-    // FIXME: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
+    // TODO: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
     private Latitudes prevLat;
     private int prevLatDeg;
     private int prevLatMin;
@@ -155,8 +158,26 @@ public class WildLogApp extends SingleFrameApplication {
         tempFolder.mkdirs();
         tempFolder = new File(WildLogPaths.WILDLOG_FILES_OTHER.getFullPath());
         tempFolder.mkdirs();
-        //dbi = new DBI_derby();
-        dbi = new DBI_h2();
+        // Open the database
+        // If this fails then it might be corrupt or already open. Ask the user to select a new workspace folder.
+        boolean openedWorkspace;
+        do {
+            openedWorkspace = openWorkspace();
+            if (openedWorkspace == false) {
+                final WildLogApp app = (WildLogApp)Application.getInstance();
+                UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "The WildLog Workspace could not be opened. It might be in use or broken. Please select another Workspace to open.",
+                                "WildLog Workspace Error", JOptionPane.ERROR_MESSAGE);
+                        return -1;
+                    }
+                });
+                configureWildLogHomeBasedOnFileBrowser(null, true);
+            }
+        }
+        while (openedWorkspace == false);
         // Check to do monthly backup
         File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
         if (!dirs.exists()) {
@@ -164,6 +185,17 @@ public class WildLogApp extends SingleFrameApplication {
         }
         // Load the WildLogOptions
         wildLogOptions = dbi.find(new WildLogOptions());
+    }
+
+    private boolean openWorkspace() {
+        try {
+            dbi = new DBI_h2();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace(System.err); // This will technicall log the error twice, but doing it to playsafe
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -210,7 +242,7 @@ public class WildLogApp extends SingleFrameApplication {
      */
     public static void main(String[] args) {
         boolean logToFile = false;
-        // Configure to log to a logging file
+        // Check for a overwritten settings folder and configuration to log to a logging file or not
         if (args != null && args.length >= 1) {
             for (String arg : args) {
                 if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {
@@ -229,9 +261,8 @@ public class WildLogApp extends SingleFrameApplication {
         // Enable logging to file
         if (logToFile) {
             try {
-                PrintStream fileStream = null;
                 // Saving the orginal stream
-                fileStream = new PrintStream(new FileOutputStream(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "errorlog.txt"), true));
+                PrintStream fileStream = new PrintStream(new FileOutputStream(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "errorlog.txt"), true));
                 // Redirecting console output to file
                 System.setOut(fileStream);
                 // Redirecting runtime exceptions to file
@@ -241,16 +272,17 @@ public class WildLogApp extends SingleFrameApplication {
                 ex.printStackTrace(System.err);
             }
         }
-        // Try to read the workspace file
+        // Try to read the settings file containing the wildloghome (active workspace)
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "wildloghome")));
-            WildLogPaths.setWorkspacePrefix(reader.readLine());
+            configureWildLogHomeBasedOnSettingsFile();
         }
         catch (IOException ex) {
-            ex.printStackTrace(System.err);
+            // Daar was 'n probleem om die wildloghome settings file te lees, probeer om 'n nuwe wildloghome file te maak
+            System.out.println("Could not find the wildloghome file. Will try to create it...");
+            ex.printStackTrace(System.out);
             FileWriter writer = null;
             try {
-                writer = new FileWriter(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "wildloghome"));
+                writer = new FileWriter(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "wildloghome"));
                 writer.write(File.separator);
             }
             catch (IOException ioex) {
@@ -267,19 +299,49 @@ public class WildLogApp extends SingleFrameApplication {
                     }
                 }
             }
-            // Try to load the new file
+            // As ek steeds nie 'n wildloghome file kan gelees kry nie vra die user vir 'n wildloghome om te gebruik
             try {
-                BufferedReader reader = new BufferedReader(
-                        new FileReader(WildLogPaths.concatPaths(WILDLOG_SETTINGS_FOLDER, "wildloghome")));
-                WildLogPaths.setWorkspacePrefix(reader.readLine());
+                configureWildLogHomeBasedOnSettingsFile();
             }
             catch (IOException ioex) {
                 ioex.printStackTrace(System.err);
-                System.exit(-1);
+                configureWildLogHomeBasedOnFileBrowser(null, true);
             }
         }
         // Launch the application
         launch(WildLogApp.class, args);
+    }
+
+    private static void configureWildLogHomeBasedOnSettingsFile() throws IOException {
+        // Using try-with-resource to close the reader when done, the error should still be thrown if something goes wrong
+        try (BufferedReader reader = new BufferedReader(new FileReader(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "wildloghome")))) {
+            WildLogPaths.setWorkspacePrefix(reader.readLine());
+        }
+    }
+
+    public static boolean configureWildLogHomeBasedOnFileBrowser(final JFrame inParent, boolean inTerminateIfNotSelected) {
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int result = UtilsDialog.showDialogBackgroundWrapper(inParent, new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return fileChooser.showOpenDialog(inParent);
+            }
+        });
+        if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+            WildLogPaths.setWorkspacePrefix(fileChooser.getSelectedFile().getAbsolutePath());
+            return true;
+        }
+        else {
+            if (inTerminateIfNotSelected) {
+                Application.getInstance().exit();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -291,11 +353,9 @@ public class WildLogApp extends SingleFrameApplication {
                 + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
     }
 
-
     public DBI getDBI() {
         return dbi;
     }
-
 
     public MapFrameOffline getMapOffline() {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts

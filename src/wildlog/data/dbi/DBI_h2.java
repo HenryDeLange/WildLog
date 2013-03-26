@@ -8,10 +8,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
-import javax.swing.JOptionPane;
 import org.h2.jdbc.JdbcSQLException;
-import org.jdesktop.application.Application;
-import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -43,13 +40,12 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
 import wildlog.data.enums.WishRating;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.WildLogPaths;
 
 
 public class DBI_h2 extends DBI_JDBC {
     // Constructor
-    public DBI_h2() {
+    public DBI_h2() throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
@@ -63,15 +59,15 @@ public class DBI_h2 extends DBI_JDBC {
                 conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
             }
             catch (JdbcSQLException ex) {
-                ex.printStackTrace(System.err);
+                ex.printStackTrace(System.out);
                 // Might be trying to use the wrong password, try again with old password and update it
-                System.out.println("Going to try to update database username and password...");
+                System.out.println("Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
                 props = new Properties();
                 conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
                 state = conn.createStatement();
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
-                System.out.println("Database username and password updated");
+                System.out.println("Database username and password updated.");
             }
 
             // Create tables
@@ -129,20 +125,14 @@ public class DBI_h2 extends DBI_JDBC {
             printSQLException(sqle);
             started = false;
         }
+        catch (Exception ex) {
+            started = false;
+            ex.printStackTrace(System.err);
+        }
         finally {
             closeStatementAndResultset(state, results);
             if (!started) {
-                final WildLogApp app = (WildLogApp)Application.getInstance();
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "The database could not be opened. Make sure it is not in use or broken.",
-                                "WildLog Error: Initialize Database", JOptionPane.ERROR_MESSAGE);
-                        return -1;
-                    }
-                });
-                Application.getInstance().exit();
+                throw new Exception("Could not open WildLog database.");
             }
         }
     }

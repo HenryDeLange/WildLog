@@ -74,7 +74,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 btnUpdateActionPerformed(null);
                 if (!txtName.getBackground().equals(Color.RED)) {
                     imageIndex = UtilsFileProcessing.uploadFilesUsingList("LOCATION-" + locationWL.getName(),
-                            WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
+                            WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
                             null, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app, inFiles);
                     setupNumberOfImages();
                     // everything went well - saving
@@ -1012,7 +1012,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
             imageIndex = UtilsFileProcessing.uploadFileUsingDialog("LOCATION-" + locationWL.getName(),
-                    WildLogPaths.concatPaths(WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
+                    WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
                     this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             setupNumberOfImages();
             // everything went well - saving

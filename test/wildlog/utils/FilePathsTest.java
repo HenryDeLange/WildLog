@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 
 public class FilePathsTest {
+    // WARNING: Some of these tests are dependant on what files are on the file system. To work correctly C:\WildLog\Data must already exist.
 
     @Test
     public void testPaths1() {
@@ -62,7 +63,7 @@ public class FilePathsTest {
         String inPrefix = "WildLog";
         WildLogPaths.setWorkspacePrefix(inPrefix);
         String fullPathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath();
-        assertEquals("C:\\WildLog\\WildLog\\Export\\HTML\\", fullPathResult);
+        assertEquals("C:\\WildLog\\Export\\HTML\\", fullPathResult);
         String relativePathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath();
         assertEquals("\\WildLog\\Export\\HTML\\", relativePathResult);
     }
@@ -72,7 +73,7 @@ public class FilePathsTest {
         String inPrefix = "WildLog\\";
         WildLogPaths.setWorkspacePrefix(inPrefix);
         String fullPathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath();
-        assertEquals("C:\\WildLog\\WildLog\\Export\\HTML\\", fullPathResult);
+        assertEquals("C:\\WildLog\\Export\\HTML\\", fullPathResult);
         String relativePathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath();
         assertEquals("\\WildLog\\Export\\HTML\\", relativePathResult);
     }
@@ -82,7 +83,7 @@ public class FilePathsTest {
         String inPrefix = "C:\\WildLog";
         WildLogPaths.setWorkspacePrefix(inPrefix);
         String fullPathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath();
-        assertEquals("C:\\WildLog\\WildLog\\Export\\HTML\\", fullPathResult);
+        assertEquals("C:\\WildLog\\Export\\HTML\\", fullPathResult);
         String relativePathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath();
         assertEquals("\\WildLog\\Export\\HTML\\", relativePathResult);
     }
@@ -102,7 +103,7 @@ public class FilePathsTest {
         String inPrefix = "\\WildLog\\";
         WildLogPaths.setWorkspacePrefix(inPrefix);
         String fullPathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath();
-        assertEquals("C:\\WildLog\\WildLog\\Export\\HTML\\", fullPathResult);
+        assertEquals("C:\\WildLog\\Export\\HTML\\", fullPathResult);
         String relativePathResult = WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath();
         assertEquals("\\WildLog\\Export\\HTML\\", relativePathResult);
     }
@@ -112,19 +113,19 @@ public class FilePathsTest {
         String path1 = null;
         String path2 = null;
         String expectedResult = null;
-        String result = WildLogPaths.concatPaths(path1, path2);
+        String result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "123";
         path2 = null;
         expectedResult = null;
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = null;
         path2 = "321";
         expectedResult = null;
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
     }
 
@@ -133,70 +134,169 @@ public class FilePathsTest {
         String path1 = "";
         String path2 = "123";
         String expectedResult = "123";
-        String result = WildLogPaths.concatPaths(path1, path2);
+        String result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "321";
         path2 = "";
         expectedResult = "321";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "";
         path2 = "";
         expectedResult = "";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
     }
 
     @Test
-    public void testConcatPathNormal() {
+    public void testConcatPathNormal1() {
         String path1 = "123";
         String path2 = "321";
         String expectedResult = "123\\321";
-        String result = WildLogPaths.concatPaths(path1, path2);
+        String result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "\\321";
         path2 = "123\\";
-        expectedResult = "\\321\\123\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        expectedResult = "\\321\\123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "";
+        path2 = "";
+        expectedResult = "";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\321";
+        path2 = "123\\\\";
+        expectedResult = "\\321\\123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\321\\\\";
+        path2 = "123";
+        expectedResult = "\\321\\\\123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "\\";
         path2 = "\\";
         expectedResult = "\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\123";
+        path2 = "\\";
+        expectedResult = "\\123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\\\\\123";
+        path2 = "\\\\\\";
+        expectedResult = "\\\\\\123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\";
+        path2 = "123\\";
+        expectedResult = "\\123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "123\\";
+        path2 = "\\";
+        expectedResult = "123";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\123\\";
+        path2 = "\\321\\";
+        expectedResult = "\\123\\321";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "C:\\123\\";
+        path2 = "\\test\\more\\";
+        expectedResult = "C:\\123\\test\\more";
+        result = WildLogPaths.concatPaths(true, path1, path2);
+        assertEquals(expectedResult, result);
+    }
+
+    @Test
+    public void testConcatPathNormal2() {
+        String path1 = "123";
+        String path2 = "321";
+        String expectedResult = "123\\321";
+        String result = WildLogPaths.concatPaths(false, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\321";
+        path2 = "123\\";
+        expectedResult = "\\321\\123\\";
+        result = WildLogPaths.concatPaths(false, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "";
+        path2 = "";
+        expectedResult = "";
+        result = WildLogPaths.concatPaths(false, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\321";
+        path2 = "123\\\\";
+        expectedResult = "\\321\\123\\\\";
+        result = WildLogPaths.concatPaths(false, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\321\\\\";
+        path2 = "123";
+        expectedResult = "\\321\\\\123";
+        result = WildLogPaths.concatPaths(false, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\";
+        path2 = "\\";
+        expectedResult = "\\";
+        result = WildLogPaths.concatPaths(false, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "\\123";
         path2 = "\\";
         expectedResult = "\\123\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(false, path1, path2);
+        assertEquals(expectedResult, result);
+        // Also test
+        path1 = "\\\\\\123";
+        path2 = "\\\\\\";
+        expectedResult = "\\\\\\123\\\\\\";
+        result = WildLogPaths.concatPaths(false, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "\\";
         path2 = "123\\";
         expectedResult = "\\123\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(false, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "123\\";
         path2 = "\\";
         expectedResult = "123\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(false, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "\\123\\";
         path2 = "\\321\\";
         expectedResult = "\\123\\321\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(false, path1, path2);
         assertEquals(expectedResult, result);
         // Also test
         path1 = "C:\\123\\";
         path2 = "\\test\\more\\";
         expectedResult = "C:\\123\\test\\more\\";
-        result = WildLogPaths.concatPaths(path1, path2);
+        result = WildLogPaths.concatPaths(false, path1, path2);
         assertEquals(expectedResult, result);
     }
 

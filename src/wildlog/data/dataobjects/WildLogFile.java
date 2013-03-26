@@ -87,7 +87,7 @@ public class WildLogFile implements Comparable<WildLogFile> {
 
     public String getThumbnailPath(int inSize) {
         return UtilsImageProcessing.getThumbnail(
-                WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(),originalFileLocation),
+                WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(),originalFileLocation),
                 inSize);
     }
 
@@ -99,7 +99,7 @@ public class WildLogFile implements Comparable<WildLogFile> {
     public String getFilePath(boolean inGetFullpath) {
         // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
         if (inGetFullpath)
-            return WildLogPaths.concatPaths(WildLogPaths.getFullWorkspacePrefix(), originalFileLocation);
+            return WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), originalFileLocation);
         else
             return originalFileLocation;
     }

@@ -20,8 +20,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.FileImageInputStream;
@@ -107,7 +105,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForNoImage(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "NoFile.png"));
+        File tempFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "NoFile.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
             InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/NoFile.png");
@@ -117,7 +115,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForMovies(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "Movie.png"));
+        File tempFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "Movie.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
             InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/Movie.png");
@@ -127,7 +125,7 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIconForOtherFiles(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "OtherFile.png"));
+        File tempFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "OtherFile.png"));
         if (!tempFile.exists()) {
             tempFile.getParentFile().mkdirs();
             InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/OtherFile.png");
@@ -362,7 +360,7 @@ public class UtilsImageProcessing {
     }
 
     private static String getThumbnailPath(File inOriginalFile, int inSize) {
-        File thumbnail = new File(WildLogPaths.concatPaths(
+        File thumbnail = new File(WildLogPaths.concatPaths(true, 
                 WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(),
                 WildLogPaths.stripRootFromPath(
                     inOriginalFile.getParent(),
@@ -373,16 +371,16 @@ public class UtilsImageProcessing {
         return path.substring(0, path.lastIndexOf('.')) + "_" + inSize + "px" + path.substring(path.lastIndexOf('.'));
     }
 
-    public static String getThumbnail(File inFile, int inSize) {
-        File thumbnail = new File(getThumbnailPath(inFile, inSize));
+    public static String getThumbnail(File inOriginalFile, int inSize) {
+        File thumbnail = new File(getThumbnailPath(inOriginalFile, inSize));
         if (!thumbnail.exists()) {
-            createThumbnailOnDisk(inFile, inSize);
+            createThumbnailOnDisk(inOriginalFile, inSize);
         }
         return thumbnail.getAbsolutePath();
     }
 
-    public static String getThumbnail(String inPath, int inSize) {
-        return getThumbnail(new File(inPath), inSize);
+    public static String getThumbnail(String inOriginalPath, int inSize) {
+        return getThumbnail(new File(inOriginalPath), inSize);
     }
 
 }

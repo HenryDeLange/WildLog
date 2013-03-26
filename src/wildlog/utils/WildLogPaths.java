@@ -36,6 +36,20 @@ public enum WildLogPaths {
             currentWorkspacePrefix = getFullWorkspacePrefix(); // Dit sal 'n "mooi" waarde return
         else
             currentWorkspacePrefix = inPrefix;
+        // Sanitize the value to be consistent (never end in a File.sepperator, never include terminating wildlog, etc.)
+        currentWorkspacePrefix = concatPaths(false, currentWorkspacePrefix, File.separator);
+        if (currentWorkspacePrefix.charAt(0) != File.separatorChar && currentWorkspacePrefix.charAt(1) != ':')
+            currentWorkspacePrefix = concatPaths(false, File.separator, currentWorkspacePrefix);
+        if (currentWorkspacePrefix.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase())) {
+            // The name might be tricky to parse when it ends with WildLog so we have to do some extra checks,
+            // because the user can select either c:\MyWildLog(\WildLog\Data) or c:\MyWildLog\WildLog(\Data)...
+            // I'll use the presence of the WildLog\Data folder to test for Workspaces.
+            File testFile = new File(concatPaths(true, currentWorkspacePrefix, WildLogPaths.WILDLOG_DATA.toString().replace(WildLogPaths.WILDLOG.toString(), File.separator)));
+            if (testFile.exists() && testFile.isDirectory() && testFile.canRead() && testFile.canWrite()) {
+                // I assume the user selected the WildLog folder and we need to strip it from the worspace prefix's path
+                currentWorkspacePrefix = concatPaths(false, currentWorkspacePrefix.substring(0, currentWorkspacePrefix.length() - WildLogPaths.WILDLOG.toString().length()), File.separator);
+            }
+        }
     }
 
     /**
@@ -43,7 +57,7 @@ public enum WildLogPaths {
      * WARNING: Rather use relative paths to cater for different drive letters, etc.
      */
     public String getFullPath() {
-        return concatPaths(getFullWorkspacePrefix(), path);
+        return concatPaths(false, getFullWorkspacePrefix(), path);
     }
 
     /**
@@ -60,8 +74,6 @@ public enum WildLogPaths {
     public static String getFullWorkspacePrefix() {
         if (currentWorkspacePrefix == null)
             currentWorkspacePrefix = File.listRoots()[0].getPath();
-        if (currentWorkspacePrefix.charAt(0) != File.separatorChar && currentWorkspacePrefix.charAt(1) != ':')
-            currentWorkspacePrefix = File.separator + currentWorkspacePrefix;
         return new File(currentWorkspacePrefix).getAbsolutePath();
     }
 
@@ -75,15 +87,19 @@ public enum WildLogPaths {
 
     /**
      * This method will concatenate two path segments and make sure that only one File.separatorChar is used.
-     * WARNING: Nulls will return null and ""s will return any non-"" value.
+     * Optionally the returned value will always end without a File.separatorChar.
+     * WARNING: The presence of any NULL values will return null.
+     *          Empty Strings will be ignored.
+     *          Multiple File.seperatorChar's are possible/allowed next one another if present in the original parts.
      */
-    public static String concatPaths(String... inPathParts) {
+    public static String concatPaths(boolean inTrimFileSeparatorFromEnd, String... inPathParts) {
         String finalPath = "";
         for (String part : inPathParts) {
-            if (part == null)
+            if (part == null) {
                 return null;
-                if (part.length() != 0) {
-                    if (finalPath.length() == 0) {
+            }
+            if (!part.isEmpty()) {
+                if (finalPath.length() == 0) {
                     finalPath = part;
                     continue;
                 }
@@ -102,6 +118,11 @@ public enum WildLogPaths {
                     finalPath = finalPath + part;
                     continue;
                 }
+            }
+        }
+        if (inTrimFileSeparatorFromEnd) {
+            while (finalPath.length() > 1 && finalPath.endsWith(File.separator)) {
+                finalPath = finalPath.substring(0, finalPath.lastIndexOf(File.separatorChar));
             }
         }
         return finalPath;

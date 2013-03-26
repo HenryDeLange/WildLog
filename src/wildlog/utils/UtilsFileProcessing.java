@@ -127,10 +127,10 @@ public final class UtilsFileProcessing {
         // Make the folder
         new File(inFilePaths.getFullPath() + inFolderName).mkdirs();
         // Setup the output files
-        File toFile_Original = new File(WildLogPaths.concatPaths(inFilePaths.getFullPath(), inFolderName, inFromFile.getName()));
+        File toFile_Original = new File(WildLogPaths.concatPaths(true, inFilePaths.getFullPath(), inFolderName, inFromFile.getName()));
         // Check that the filename is unique
         while (toFile_Original.exists()) {
-            toFile_Original = new File(WildLogPaths.concatPaths(toFile_Original.getParent(), "wl_" + toFile_Original.getName()));
+            toFile_Original = new File(WildLogPaths.concatPaths(true, toFile_Original.getParent(), "wl_" + toFile_Original.getName()));
         }
         // Copy the original file into WildLog's folders
         copyFile(inFromFile, toFile_Original);
