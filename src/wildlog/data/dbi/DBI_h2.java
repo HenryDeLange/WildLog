@@ -59,9 +59,9 @@ public class DBI_h2 extends DBI_JDBC {
                 conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
             }
             catch (JdbcSQLException ex) {
+                System.out.println("Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
                 ex.printStackTrace(System.out);
                 // Might be trying to use the wrong password, try again with old password and update it
-                System.out.println("Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
                 props = new Properties();
                 conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
                 state = conn.createStatement();

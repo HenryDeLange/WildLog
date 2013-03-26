@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import org.jdesktop.application.SingleFrameApplication;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -104,12 +103,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
     private void init() {
         app = (WildLogApp) Application.getInstance();
-        app.setMainframe(this);
         searchElement = new Element();
         searchLocation = new Location();
     }
 
-    public WildLogView(SingleFrameApplication app) {
+    public WildLogView(Application app) {
         init();
         initComponents();
 

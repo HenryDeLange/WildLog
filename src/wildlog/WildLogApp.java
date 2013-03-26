@@ -45,7 +45,7 @@ import wildlog.utils.WildLogPaths;
 /**
  * The main class of the application.
  */
-// TODO: Huidiglik gebruik ek die Swing App Framework nog (net) hier, maar ek kan seker refactor om dit heeltemal nie te gebruik nie... ('n static class behoort my seker als te gee wat ek wil he...)
+// Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends SingleFrameApplication {
     private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
     // TODO: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
@@ -190,8 +190,10 @@ public class WildLogApp extends SingleFrameApplication {
     private boolean openWorkspace() {
         try {
             dbi = new DBI_h2();
+            System.out.println("Workspace opened at: " + WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG.toString()));
         }
         catch (Exception ex) {
+            System.err.println("Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
             ex.printStackTrace(System.err); // This will technicall log the error twice, but doing it to playsafe
             return false;
         }
@@ -308,6 +310,7 @@ public class WildLogApp extends SingleFrameApplication {
                 configureWildLogHomeBasedOnFileBrowser(null, true);
             }
         }
+        System.out.println("WildLog Setting Folder: " + WILDLOG_SETTINGS_FOLDER);
         // Launch the application
         launch(WildLogApp.class, args);
     }
