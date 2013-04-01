@@ -691,129 +691,134 @@ public class PanelLocation extends PanelCanSetupHeader {
         locationIncludesLayout.setHorizontalGroup(
             locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(locationIncludesLayout.createSequentialGroup()
-                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel7)
-                        .addGap(4, 4, 4)
-                        .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel48))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createSequentialGroup()
-                        .addGap(580, 580, 580)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1)
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(85, 85, 85)
-                        .addComponent(txtName)
-                        .addGap(120, 120, 120))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel36)
-                            .addComponent(jLabel40)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(5, 5, 5)
-                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane10)
-                            .addComponent(jScrollPane3)
-                            .addComponent(txtWebsite)
-                            .addComponent(txtEmail)
-                            .addComponent(txtContactNumber)
-                            .addComponent(cmbCatering, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
-                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel41, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createSequentialGroup()
-                                    .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(locationIncludesLayout.createSequentialGroup()
-                                            .addGap(80, 80, 80)
-                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(locationIncludesLayout.createSequentialGroup()
-                                            .addComponent(jLabel6)
-                                            .addGap(29, 29, 29)
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                                    .addGap(10, 10, 10)
-                                    .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(locationIncludesLayout.createSequentialGroup()
-                                    .addComponent(jLabel42, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cmbGameRating, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10)
-                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11))
-            .addGroup(locationIncludesLayout.createSequentialGroup()
-                .addComponent(jSeparator7)
-                .addGap(11, 11, 11))
-            .addGroup(locationIncludesLayout.createSequentialGroup()
                 .addGap(110, 110, 110)
-                .addComponent(jLabel45))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel45)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(locationIncludesLayout.createSequentialGroup()
                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addGap(160, 160, 160)
-                                .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(40, 40, 40)
+                                .addComponent(jLabel7)
+                                .addGap(4, 4, 4)
+                                .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jSeparator1)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(rdbVisit))
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(locationIncludesLayout.createSequentialGroup()
+                                            .addGap(85, 85, 85)
+                                            .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(locationIncludesLayout.createSequentialGroup()
+                                            .addGap(225, 225, 225)
+                                            .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(locationIncludesLayout.createSequentialGroup()
+                                            .addContainerGap()
+                                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(locationIncludesLayout.createSequentialGroup()
+                                            .addGap(85, 85, 85)
+                                            .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                                .addComponent(jLabel42)
+                                                .addGap(7, 7, 7)
+                                                .addComponent(cmbGameRating, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                                .addComponent(jLabel41)
+                                                .addGap(4, 4, 4)
+                                                .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(10, 10, 10)
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel1)
+                                            .addComponent(jLabel6))
+                                        .addGap(4, 4, 4)
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                        .addGap(120, 120, 120))))
                             .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addGap(120, 120, 120)
-                                .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(rdbLocation)))
-                    .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                                .addGap(10, 10, 10)
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addComponent(jLabel48)
+                                        .addGap(16, 16, 16)
+                                        .addComponent(txtName)
+                                        .addGap(10, 10, 10)
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(btnUpdate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel36)
+                                            .addComponent(jLabel40)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel4)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel2))
+                                        .addGap(5, 5, 5)
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cmbCatering, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addGap(10, 10, 10)
+                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, 0)
+                                        .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(160, 160, 160)
+                                        .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(50, 50, 50)
+                                        .addComponent(rdbVisit))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(120, 120, 120)
+                                        .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(rdbLocation)))
+                            .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jSeparator7))
+                .addGap(5, 5, 5))
         );
         locationIncludesLayout.setVerticalGroup(
             locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -852,9 +857,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                                 .addGap(4, 4, 4)
                                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(locationIncludesLayout.createSequentialGroup()
-                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel41)
-                                            .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel41))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel42)
@@ -875,34 +880,37 @@ public class PanelLocation extends PanelCanSetupHeader {
                                 .addGap(11, 11, 11)
                                 .addComponent(jLabel2))
                             .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(txtWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(txtContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(cmbCatering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                .addComponent(jLabel1)
                                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addGap(76, 76, 76)
+                                        .addComponent(jLabel6))))
+                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(jScrollPane1)
+                                    .addComponent(jScrollPane10))
                                 .addGap(5, 5, 5)
                                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(5, 5, 5)
-                                .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(txtWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(txtContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(5, 5, 5)
+                                        .addComponent(cmbCatering, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -923,7 +931,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGap(5, 5, 5)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -940,24 +948,213 @@ public class PanelLocation extends PanelCanSetupHeader {
                                     .addGroup(locationIncludesLayout.createSequentialGroup()
                                         .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(20, 20, 20)
-                                        .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE))
-                                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)))
-                            .addComponent(jSeparator6, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                                        .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                            .addComponent(jSeparator6)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
                                 .addComponent(jLabel44)
                                 .addGap(155, 155, 155)
                                 .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)))))
                 .addGap(5, 5, 5))
             .addGroup(locationIncludesLayout.createSequentialGroup()
                 .addGap(99, 99, 99)
                 .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(461, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(locationIncludes, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
+        txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
+
+        rdbLocation.setSelected(true);
+        //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
+
+        if (locationWL.getName() != null) {
+            Visit tempVisit = new Visit();
+            tempVisit.setLocationName(locationWL.getName());
+            List<Visit> visits = app.getDBI().list(tempVisit);
+            lblNumberOfVisits.setText(Integer.toString(visits.size()));
+            UtilTableGenerator.setupCompleteVisitTable(tblVisit, locationWL);
+            UtilTableGenerator.setupElementsForLocationTable(tblElement, locationWL);
+        }
+        else {
+            lblNumberOfVisits.setText("0");
+            tblVisit.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
+            tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
+        }
+
+        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        btnUpdate.requestFocusInWindow();
+    }//GEN-LAST:event_formComponentShown
+
+    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, locationWL.getName());
+                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, (JTabbedPane)getParent());
+                return null;
+            }
+        });
+    }//GEN-LAST:event_btnBulkImportActionPerformed
+
+    private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            SlideshowDialog dialog = new SlideshowDialog(null, locationWL, null);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnSlideshowActionPerformed
+
+    private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
+        GPSDialog dialog = new GPSDialog(app.getMainFrame(), locationWL);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
+            txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
+        }
+        btnUpdate.requestFocus();
+    }//GEN-LAST:event_btnGPSActionPerformed
+
+    private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
+        SunMoonDialog dialog = new SunMoonDialog(locationWL);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnSunAndMoonActionPerformed
+
+    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Starting the HTML Export");
+                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(locationWL, app));
+                setMessage("Done with the HTML Export");
+                return null;
+            }
+        });
+    }//GEN-LAST:event_btnHTMLActionPerformed
+
+    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), locationWL, null, null, null, null);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnReportActionPerformed
+
+    private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
+        if (locationWL.getName() != null) {
+            if (rdbLocation.isSelected()) {
+                UtilTableGenerator.setupElementsForLocationTable(tblElement, locationWL);
+            }
+            else {
+                if  (tblVisit.getSelectedRowCount() == 1) {
+                    UtilTableGenerator.setupElementsForVisitTable(tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0))));
+                }
+                else tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Period"}, 0));
+            }
+            lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        }
+        else {
+            lblNumberOfElements.setText("0");
+        }
+    }//GEN-LAST:event_rdbLocationItemStateChanged
+
+    private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
+                locationWL, null, null, null);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnMapActionPerformed
+
+    private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
+        imageIndex = UtilsImageProcessing.removeImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        setupNumberOfImages();
+        btnUpdateActionPerformed(evt);
+    }//GEN-LAST:event_btnDeleteImageActionPerformed
+
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
+        UtilsFileProcessing.openFile("LOCATION-" + locationWL.getName(), imageIndex, app);
+    }//GEN-LAST:event_lblImageMouseReleased
+
+    private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
+        int[] selectedRows = tblElement.getSelectedRows();
+        PanelElement tempPanel;
+        for (int t = 0; t < selectedRows.length; t++) {
+            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+        }
+    }//GEN-LAST:event_btnGoElementActionPerformed
+
+    private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
+        if (tblVisit.getSelectedRowCount() > 0) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "Are you sure you want to delete the Period(s)? This will delete all Observations and files linked to the Period(s) as well.",
+                        "Delete Period(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
+                int[] selectedRows = tblVisit.getSelectedRows();
+                PanelVisit tempPanel;
+                for (int t = 0; t < selectedRows.length; t++) {
+                    tempPanel = UtilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
+                    ((JTabbedPane)getParent()).remove(tempPanel);
+                    app.getDBI().delete(tempPanel.getVisit());
+                }
+                formComponentShown(null);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteVisitActionPerformed
+
+    private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
+        btnUpdateActionPerformed(evt);
+        if (!txtName.getBackground().equals(Color.RED)) {
+            PanelVisit tempPanel = UtilPanelGenerator.getNewVisitPanel(locationWL);
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+        }
+    }//GEN-LAST:event_btnAddVisitActionPerformed
+
+    private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
+        int[] selectedRows = tblVisit.getSelectedRows();
+        PanelVisit tempPanel;
+        for (int t = 0; t < selectedRows.length; t++) {
+            tempPanel = UtilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
+            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+        }
+    }//GEN-LAST:event_btnGoVisitActionPerformed
+
+    private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
+        btnUpdateActionPerformed(evt);
+        if (!txtName.getBackground().equals(Color.RED)) {
+            imageIndex = UtilsFileProcessing.uploadFileUsingDialog("LOCATION-" + locationWL.getName(),
+                WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
+                this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+            setupNumberOfImages();
+            // everything went well - saving
+            btnUpdateActionPerformed(evt);
+        }
+    }//GEN-LAST:event_btnUploadImageActionPerformed
+
+    private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
+        imageIndex = UtilsImageProcessing.nextImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        setupNumberOfImages();
+    }//GEN-LAST:event_btnNextImageActionPerformed
+
+    private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
+        imageIndex = UtilsImageProcessing.setMainImage("LOCATION-" + locationWL.getName(), imageIndex, app);
+        setupNumberOfImages();
+        btnUpdateActionPerformed(evt);
+    }//GEN-LAST:event_btnSetMainImageActionPerformed
+
+    private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
+        imageIndex = UtilsImageProcessing.previousImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        setupNumberOfImages();
+    }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         if (UtilsData.checkCharacters(txtName.getText().trim())) {
@@ -1002,156 +1199,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        btnUpdateActionPerformed(evt);
-        if (!txtName.getBackground().equals(Color.RED)) {
-            imageIndex = UtilsFileProcessing.uploadFileUsingDialog("LOCATION-" + locationWL.getName(),
-                    WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), locationWL.getName()),
-                    this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
-            setupNumberOfImages();
-            // everything went well - saving
-            btnUpdateActionPerformed(evt);
-        }
-    }//GEN-LAST:event_btnUploadImageActionPerformed
-
-    private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
-        setupNumberOfImages();
-    }//GEN-LAST:event_btnPreviousImageActionPerformed
-
-    private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
-        setupNumberOfImages();
-    }//GEN-LAST:event_btnNextImageActionPerformed
-
-    private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        imageIndex = UtilsImageProcessing.setMainImage("LOCATION-" + locationWL.getName(), imageIndex, app);
-        setupNumberOfImages();
-        btnUpdateActionPerformed(evt);
-    }//GEN-LAST:event_btnSetMainImageActionPerformed
-
-    private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
-        btnUpdateActionPerformed(evt);
-        if (!txtName.getBackground().equals(Color.RED)) {
-            PanelVisit tempPanel = UtilPanelGenerator.getNewVisitPanel(locationWL);
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
-        }
-    }//GEN-LAST:event_btnAddVisitActionPerformed
-
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
-        txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
-
-        rdbLocation.setSelected(true);
-        //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
-
-        if (locationWL.getName() != null) {
-            Visit tempVisit = new Visit();
-            tempVisit.setLocationName(locationWL.getName());
-            List<Visit> visits = app.getDBI().list(tempVisit);
-            lblNumberOfVisits.setText(Integer.toString(visits.size()));
-            UtilTableGenerator.setupCompleteVisitTable(tblVisit, locationWL);
-            UtilTableGenerator.setupElementsForLocationTable(tblElement, locationWL);
-        }
-        else {
-            lblNumberOfVisits.setText("0");
-            tblVisit.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
-            tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
-        }
-
-        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
-        btnUpdate.requestFocusInWindow();
-    }//GEN-LAST:event_formComponentShown
-
-    private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
-        int[] selectedRows = tblVisit.getSelectedRows();
-        PanelVisit tempPanel;
-        for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
-        }
-    }//GEN-LAST:event_btnGoVisitActionPerformed
-
-    private void btnDeleteVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteVisitActionPerformed
-        if (tblVisit.getSelectedRowCount() > 0) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                                "Are you sure you want to delete the Period(s)? This will delete all Observations and files linked to the Period(s) as well.",
-                                "Delete Period(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    }
-            });
-            if (result == JOptionPane.YES_OPTION) {
-                int[] selectedRows = tblVisit.getSelectedRows();
-                PanelVisit tempPanel;
-                for (int t = 0; t < selectedRows.length; t++) {
-                    tempPanel = UtilPanelGenerator.getVisitPanel(locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-                    ((JTabbedPane)getParent()).remove(tempPanel);
-                    app.getDBI().delete(tempPanel.getVisit());
-                }
-                formComponentShown(null);
-            }
-        }
-    }//GEN-LAST:event_btnDeleteVisitActionPerformed
-
-    private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
-        int[] selectedRows = tblElement.getSelectedRows();
-        PanelElement tempPanel;
-        for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
-        }
-    }//GEN-LAST:event_btnGoElementActionPerformed
-
-    private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
-        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
-                    locationWL, null, null, null);
-            dialog.setVisible(true);
-        }
-}//GEN-LAST:event_btnMapActionPerformed
-
-    private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage("LOCATION-" + locationWL.getName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
-        setupNumberOfImages();
-        btnUpdateActionPerformed(evt);
-    }//GEN-LAST:event_btnDeleteImageActionPerformed
-
-    private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
-        if (locationWL.getName() != null) {
-            if (rdbLocation.isSelected()) {
-                UtilTableGenerator.setupElementsForLocationTable(tblElement, locationWL);
-            }
-            else {
-                if  (tblVisit.getSelectedRowCount() == 1) {
-                    UtilTableGenerator.setupElementsForVisitTable(tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0))));
-                }
-                else tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Period"}, 0));
-            }
-            lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
-        }
-        else {
-            lblNumberOfElements.setText("0");
-        }
-    }//GEN-LAST:event_rdbLocationItemStateChanged
-
-    private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
-        rdbLocationItemStateChanged(null);
-    }//GEN-LAST:event_tblVisitMouseReleased
-
-    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        UtilsFileProcessing.openFile("LOCATION-" + locationWL.getName(), imageIndex, app);
-    }//GEN-LAST:event_lblImageMouseReleased
-
-    private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-            btnGoVisitActionPerformed(null);
-    }//GEN-LAST:event_tblVisitKeyPressed
-
     private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER)
-            btnGoElementActionPerformed(null);
+        btnGoElementActionPerformed(null);
     }//GEN-LAST:event_tblElementKeyPressed
 
     private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
@@ -1160,68 +1210,25 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_tblElementMouseClicked
 
+    private void tblVisitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
+        tblVisitMouseReleased(null);
+    }//GEN-LAST:event_tblVisitKeyReleased
+
+    private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        btnGoVisitActionPerformed(null);
+    }//GEN-LAST:event_tblVisitKeyPressed
+
     private void tblVisitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseClicked
         if (evt.getClickCount() == 2) {
             btnGoVisitActionPerformed(null);
         }
     }//GEN-LAST:event_tblVisitMouseClicked
 
-    private void tblVisitKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN)
-            tblVisitMouseReleased(null);
-    }//GEN-LAST:event_tblVisitKeyReleased
-
-    private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                setMessage("Starting the HTML Export");
-                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(locationWL, app));
-                setMessage("Done with the HTML Export");
-                return null;
-            }
-        });
-}//GEN-LAST:event_btnHTMLActionPerformed
-
-    private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
-        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), locationWL, null, null, null, null);
-            dialog.setVisible(true);
-        }
-    }//GEN-LAST:event_btnReportActionPerformed
-
-    private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
-        SunMoonDialog dialog = new SunMoonDialog(locationWL);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_btnSunAndMoonActionPerformed
-
-    private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), locationWL);
-        dialog.setVisible(true);
-        if (dialog.isSelectionMade()) {
-            txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
-            txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
-        }
-        btnUpdate.requestFocus();
-    }//GEN-LAST:event_btnGPSActionPerformed
-
-    private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
-        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            SlideshowDialog dialog = new SlideshowDialog(null, locationWL, null);
-            dialog.setVisible(true);
-        }
-    }//GEN-LAST:event_btnSlideshowActionPerformed
-
-    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, locationWL.getName());
-                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, (JTabbedPane)getParent());
-                return null;
-            }
-        });
-    }//GEN-LAST:event_btnBulkImportActionPerformed
+    private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
+        rdbLocationItemStateChanged(null);
+    }//GEN-LAST:event_tblVisitMouseReleased
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));

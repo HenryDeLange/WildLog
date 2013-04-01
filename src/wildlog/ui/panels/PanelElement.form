@@ -63,186 +63,194 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jSeparator11" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblElementName" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="jLabel65" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                          <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="txtOtherName" max="32767" attributes="0"/>
-                          <EmptySpace min="120" pref="120" max="120" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel56" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="txtPrimaryName" max="32767" attributes="0"/>
-                          <EmptySpace min="120" pref="120" max="120" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel57" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="txtScienceName" max="32767" attributes="0"/>
-                          <EmptySpace min="280" pref="280" max="280" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Component id="jSeparator10" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="jLabel60" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
-                          <Component id="jScrollPane17" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnSlideshow" min="-2" pref="110" max="-2" attributes="0"/>
-                              <Component id="btnHTML" min="-2" pref="110" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
-                          <Component id="jScrollPane16" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane2" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="jLabel61" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
-                          <Component id="jScrollPane18" max="32767" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel69" min="-2" max="-2" attributes="0"/>
-                              <Component id="jScrollPane1" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="110" pref="110" max="110" attributes="0"/>
-                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="44" pref="44" max="44" attributes="0"/>
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="290" pref="290" max="290" attributes="0"/>
-                          <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="44" pref="44" max="44" attributes="0"/>
-                          <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                          <Component id="jLabel71" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="32" pref="32" max="32" attributes="0"/>
-                          <Component id="spnSizeMaleMin" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="spnSizeMaleMax" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="12" pref="12" max="12" attributes="0"/>
-                          <Component id="cmbSizeUnits" min="-2" pref="70" max="-2" attributes="0"/>
-                          <EmptySpace min="60" pref="60" max="60" attributes="0"/>
-                          <Component id="jLabel73" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="17" pref="17" max="17" attributes="0"/>
-                          <Component id="spnWeightMaleMin" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="spnWeightMaleMax" min="-2" pref="50" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                          <Component id="jLabel72" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                          <Component id="spnSizeFemaleMin" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="spnSizeFemaleMax" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel10" min="-2" pref="40" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="cmbSizeType" min="-2" pref="110" max="-2" attributes="0"/>
-                          <EmptySpace min="20" pref="20" max="20" attributes="0"/>
-                          <Component id="jLabel74" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                          <Component id="spnWeightFemaleMin" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="spnWeightFemaleMax" min="-2" pref="50" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="2" pref="2" max="2" attributes="0"/>
-                          <Component id="cmbWeightUnits" min="-2" pref="70" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel70" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="jLabel66" min="-2" pref="90" max="-2" attributes="0"/>
-                              <Component id="jLabel64" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="jLabel68" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel62" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="cmbType" min="-2" pref="220" max="-2" attributes="0"/>
-                              <Component id="cmbAddFrequency" min="-2" pref="220" max="-2" attributes="0"/>
-                              <Component id="cmbActiveTime" min="-2" pref="220" max="-2" attributes="0"/>
-                              <Component id="cmbWaterDependance" min="-2" pref="220" max="-2" attributes="0"/>
-                              <Component id="cmbEndangeredStatus" min="-2" pref="220" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel1" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="jLabel67" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel75" min="-2" pref="80" max="-2" attributes="0"/>
-                              <Component id="jLabel76" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jSeparator11" min="-2" max="-2" attributes="0"/>
+                                      <Component id="lblElementName" max="32767" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="jLabel65" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                                  <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="txtOtherName" max="32767" attributes="0"/>
+                                  <EmptySpace min="120" pref="120" max="120" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel56" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="txtPrimaryName" max="32767" attributes="0"/>
+                                  <EmptySpace min="120" pref="120" max="120" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel57" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="txtScienceName" max="32767" attributes="0"/>
+                                  <EmptySpace min="280" pref="280" max="280" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jSeparator10" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jLabel2" min="-2" pref="68" max="-2" attributes="0"/>
-                                  <EmptySpace min="202" pref="202" max="202" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="jLabel60" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane17" max="32767" attributes="0"/>
+                                  <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnSlideshow" min="-2" pref="110" max="-2" attributes="0"/>
+                                      <Component id="btnHTML" min="-2" pref="110" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="txtLifespan" max="32767" attributes="0"/>
-                                      <Component id="txtbreedingDuration" max="32767" attributes="0"/>
-                                      <Component id="txtBreedingNumber" max="32767" attributes="0"/>
-                                      <Component id="cmbFeedingClass" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
-                                      <Component id="cmbWishList" alignment="0" min="-2" pref="150" max="-2" attributes="0"/>
+                                      <Component id="jLabel70" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="jLabel66" min="-2" pref="90" max="-2" attributes="0"/>
+                                      <Component id="jLabel64" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="jLabel68" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel62" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="cmbType" min="-2" pref="180" max="-2" attributes="0"/>
+                                      <Component id="cmbAddFrequency" min="-2" pref="180" max="-2" attributes="0"/>
+                                      <Component id="cmbActiveTime" min="-2" pref="180" max="-2" attributes="0"/>
+                                      <Component id="cmbWaterDependance" min="-2" pref="180" max="-2" attributes="0"/>
+                                      <Component id="cmbEndangeredStatus" min="-2" pref="180" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="btnAddSighting" min="-2" pref="110" max="-2" attributes="0"/>
-                                      <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                                          <Component id="btnUpdate" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
-                                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                              <Component id="btnMap" min="-2" pref="110" max="-2" attributes="0"/>
-                                              <Component id="btnReport" min="-2" pref="110" max="-2" attributes="0"/>
+                                      <Component id="jLabel1" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="jLabel67" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel75" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Component id="jLabel76" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="jLabel2" min="-2" pref="68" max="-2" attributes="0"/>
+                                          <EmptySpace min="202" pref="202" max="202" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="txtLifespan" max="32767" attributes="0"/>
+                                              <Component id="txtbreedingDuration" max="32767" attributes="0"/>
+                                              <Component id="txtBreedingNumber" max="32767" attributes="0"/>
+                                              <Component id="cmbFeedingClass" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
+                                              <Component id="cmbWishList" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="btnAddSighting" min="-2" pref="110" max="-2" attributes="0"/>
+                                              <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                                                  <Component id="btnUpdate" alignment="0" min="-2" pref="110" max="-2" attributes="0"/>
+                                                  <Group type="103" alignment="1" groupAlignment="0" attributes="0">
+                                                      <Component id="btnMap" min="-2" pref="110" max="-2" attributes="0"/>
+                                                      <Component id="btnReport" min="-2" pref="110" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                           </Group>
                                       </Group>
                                   </Group>
                               </Group>
+                              <Group type="102" alignment="1" attributes="0">
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="txtReferenceID" min="-2" pref="80" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="txtReferenceID" min="-2" pref="80" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="51" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane16" pref="292" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane2" pref="292" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabel61" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane18" max="32767" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel69" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jScrollPane1" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="44" pref="44" max="44" attributes="0"/>
+                                  <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="290" pref="290" max="290" attributes="0"/>
+                                  <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="44" pref="44" max="44" attributes="0"/>
+                                  <Component id="jLabel8" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="jLabel71" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="32" pref="32" max="32" attributes="0"/>
+                                  <Component id="spnSizeMaleMin" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="spnSizeMaleMax" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="12" pref="12" max="12" attributes="0"/>
+                                  <Component id="cmbSizeUnits" min="-2" pref="70" max="-2" attributes="0"/>
+                                  <EmptySpace min="60" pref="60" max="60" attributes="0"/>
+                                  <Component id="jLabel73" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="17" pref="17" max="17" attributes="0"/>
+                                  <Component id="spnWeightMaleMin" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="spnWeightMaleMax" min="-2" pref="50" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="jLabel72" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+                                  <Component id="spnSizeFemaleMin" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="spnSizeFemaleMax" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel10" min="-2" pref="40" max="-2" attributes="0"/>
+                                  <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                                  <Component id="cmbSizeType" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <EmptySpace min="20" pref="20" max="20" attributes="0"/>
+                                  <Component id="jLabel74" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="5" pref="5" max="5" attributes="0"/>
+                                  <Component id="spnWeightFemaleMin" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="spnWeightFemaleMax" min="-2" pref="50" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="2" pref="2" max="2" attributes="0"/>
+                                  <Component id="cmbWeightUnits" min="-2" pref="70" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="lblImage" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblImage" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
                           <Component id="btnPreviousImage" min="-2" pref="40" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -257,164 +265,225 @@
                           </Group>
                           <Component id="btnNextImage" min="-2" pref="40" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="jSeparator2" min="-2" pref="10" max="-2" attributes="0"/>
+                      <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="jSeparator2" min="-2" pref="4" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jScrollPane15" min="-2" pref="290" max="-2" attributes="1"/>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                              <Component id="jLabel58" alignment="0" min="-2" pref="268" max="-2" attributes="0"/>
+                              <Component id="jScrollPane15" pref="0" max="32767" attributes="1"/>
+                              <Group type="102" alignment="1" attributes="0">
                                   <Component id="rdbLocations" min="-2" pref="53" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
                                   <Component id="rdbSightings" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="lblNumberOfLocations" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                                  <Component id="btnGoLocation" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnGoLocation" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
-                      <Component id="jSeparator1" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="9" pref="9" max="9" attributes="0"/>
-                          <Component id="jLabel58" min="-2" pref="268" max="-2" attributes="0"/>
-                      </Group>
                   </Group>
-                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="lblImage" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="btnPreviousImage" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Component id="btnUploadImage" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="3" pref="3" max="3" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="btnSetMainImage" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                                  <Component id="lblNumberOfImages" min="-2" pref="20" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="btnDeleteImage" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Component id="btnNextImage" min="-2" pref="50" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <EmptySpace min="1" pref="1" max="1" attributes="0"/>
+                                  <Component id="jLabel58" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <Component id="jScrollPane15" pref="0" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="rdbLocations" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                                  <Component id="rdbSightings" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="lblNumberOfLocations" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="btnGoLocation" min="-2" pref="30" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                          <Component id="jSeparator2" max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              </Group>
               <Group type="102" attributes="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jSeparator11" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblElementName" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="238" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLabel65" min="-2" pref="20" max="-2" attributes="0"/>
-                              <Component id="lblNumberOfSightings" min="-2" pref="20" max="-2" attributes="0"/>
+                              <Component id="jSeparator11" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblElementName" min="-2" max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="jLabel65" min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Component id="lblNumberOfSightings" min="-2" pref="20" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
-                      </Group>
-                  </Group>
-                  <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="30" pref="30" max="30" attributes="0"/>
-                          <Component id="jLabel56" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="54" pref="54" max="54" attributes="0"/>
-                          <Component id="jLabel57" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="54" pref="54" max="54" attributes="0"/>
-                          <Component id="txtScienceName" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="6" pref="6" max="6" attributes="0"/>
-                          <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
+                              <Group type="102" attributes="0">
                                   <EmptySpace min="30" pref="30" max="30" attributes="0"/>
-                                  <Component id="txtOtherName" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel56" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="54" pref="54" max="54" attributes="0"/>
+                                  <Component id="jLabel57" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="54" pref="54" max="54" attributes="0"/>
+                                  <Component id="txtScienceName" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="6" pref="6" max="6" attributes="0"/>
+                                  <Component id="jLabel55" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="30" pref="30" max="30" attributes="0"/>
+                                          <Component id="txtOtherName" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="6" pref="6" max="6" attributes="0"/>
+                                          <Component id="txtPrimaryName" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Component id="jSeparator10" alignment="0" min="-2" pref="10" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="txtReferenceID" min="-2" max="-2" attributes="0"/>
+                                      <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel70" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel66" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel64" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel68" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                                  <Component id="jLabel62" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="cmbType" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                                  <Component id="cmbAddFrequency" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                                  <Component id="cmbActiveTime" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                                  <Component id="cmbWaterDependance" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="5" pref="5" max="5" attributes="0"/>
+                                  <Component id="cmbEndangeredStatus" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel67" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel75" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="10" pref="10" max="10" attributes="0"/>
+                                  <Component id="jLabel76" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="11" pref="11" max="11" attributes="0"/>
+                                  <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="cmbFeedingClass" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Component id="cmbWishList" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                                  <Component id="txtLifespan" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
+                                  <Component id="txtbreedingDuration" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="5" pref="5" max="5" attributes="0"/>
+                                  <Component id="txtBreedingNumber" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Component id="btnAddSighting" min="-2" pref="35" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="btnMap" min="-2" pref="35" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="btnReport" min="-2" pref="35" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" attributes="0">
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="btnSlideshow" min="-2" pref="35" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                                  <Component id="btnHTML" min="-2" pref="35" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="6" pref="6" max="6" attributes="0"/>
-                                  <Component id="txtPrimaryName" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Component id="jLabel60" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      </Group>
+                                      <Component id="jScrollPane17" pref="96" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Component id="jSeparator10" alignment="0" min="-2" pref="10" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="4" pref="4" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtReferenceID" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="jLabel70" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel66" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel64" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel68" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="11" pref="11" max="11" attributes="0"/>
-                          <Component id="jLabel62" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="cmbType" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                          <Component id="cmbAddFrequency" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                          <Component id="cmbActiveTime" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                          <Component id="cmbWaterDependance" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                          <Component id="cmbEndangeredStatus" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel67" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel75" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                          <Component id="jLabel76" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="11" pref="11" max="11" attributes="0"/>
-                          <Component id="jLabel77" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="cmbFeedingClass" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                          <Component id="cmbWishList" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                          <Component id="txtLifespan" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                          <Component id="txtbreedingDuration" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="5" pref="5" max="5" attributes="0"/>
-                          <Component id="txtBreedingNumber" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" attributes="0">
-                          <Component id="btnAddSighting" min="-2" pref="35" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnMap" min="-2" pref="35" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnReport" min="-2" pref="35" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <Component id="btnSlideshow" min="-2" pref="35" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnHTML" min="-2" pref="35" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel60" min="-2" max="-2" attributes="0"/>
-                          <Component id="jScrollPane17" max="32767" attributes="0"/>
-                      </Group>
-                  </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel59" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane16" pref="81" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Component id="jScrollPane16" pref="77" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                          <Component id="jScrollPane2" pref="61" max="32767" attributes="0"/>
+                          <Component id="jScrollPane2" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel61" min="-2" max="-2" attributes="0"/>
-                      <Component id="jScrollPane18" pref="0" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Component id="jScrollPane18" pref="78" max="32767" attributes="0"/>
+                      <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabel69" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" max="32767" attributes="0"/>
@@ -441,7 +510,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel5" min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="cmbWeightUnits" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel72" min="-2" max="-2" attributes="0"/>
@@ -455,60 +524,7 @@
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <Component id="lblImage" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnPreviousImage" min="-2" pref="50" max="-2" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Component id="btnUploadImage" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="3" pref="3" max="3" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnSetMainImage" min="-2" max="-2" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="4" pref="4" max="4" attributes="0"/>
-                                  <Component id="lblNumberOfImages" min="-2" pref="20" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="btnDeleteImage" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <Component id="btnNextImage" min="-2" pref="50" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="1" pref="1" max="1" attributes="0"/>
-                          <Component id="jLabel58" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
-                                  <Component id="jSeparator2" max="32767" attributes="0"/>
-                              </Group>
-                              <Group type="102" attributes="1">
-                                  <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane15" pref="0" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblNumberOfLocations" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="btnGoLocation" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="rdbSightings" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                                      <Component id="rdbLocations" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-              </Group>
-              <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                  <Component id="btnUpdate" min="-2" pref="60" max="-2" attributes="0"/>
-                  <EmptySpace pref="497" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

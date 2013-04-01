@@ -3,8 +3,8 @@ package wildlog.data.enums;
 
 public enum VisitType {
     VACATION("Vacation"),
-    REMOTE_CAMERA("Remote Camera"), // TODO: change to camera trap
-    BIRD_ATLASSING("Bird Atlassing"), // TODO: change to atlassing/census
+    REMOTE_CAMERA("Camera Trap"),
+    BIRD_ATLASSING("Census, Atlas, etc."),
     DAY_VISIT("Day Visit"),
     INCIDENTAL("Incidental"),
     OTHER("Other"),
