@@ -80,8 +80,8 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
             }
         }
         StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
-        htmlSighting.append("<body bgcolor='rgb(238,234,211)'>");
-        htmlSighting.append("<table bgcolor='rgb(238,234,211)' width='100%'>");
+        htmlSighting.append("<body bgcolor='#EEEAD3'>");
+        htmlSighting.append("<table bgcolor='#EEEAD3' width='100%'>");
         htmlSighting.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlSighting.append("<b><u>Observation ID: ").append(UtilsHTML.formatObjectAsString(sightingCounter)).append("</u></b>");
         htmlSighting.append("<br/>");

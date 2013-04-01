@@ -160,6 +160,7 @@ public class UtilsUI {
 
     public static void attachMouseScrollToTabs(final JTabbedPane inTabbedPane, final JPanel inHeaderPanel, final int inFixedIndex) {
         class TabbedPaneMouseWheelScroller implements MouseWheelListener {
+            @Override
             public void mouseWheelMoved(MouseWheelEvent inEvent) {
                 int scrollCount = inEvent.getWheelRotation();
                 int currentIndex = inTabbedPane.getSelectedIndex();
@@ -170,11 +171,12 @@ public class UtilsUI {
                 else
                 if (newIndex < 0)
                     newIndex = 0;
-                // FIXME: Maak dat mens die actualy select nie maar net die viewport skuif
+                // FIXME: Maak dat mens nie actualy die tabs select nie maar net die viewport skuif
                 inTabbedPane.setSelectedIndex(newIndex);
             }
         }
         class TabSelectionMouseHandler extends MouseAdapter {
+            @Override
             public void mouseClicked(MouseEvent inEvent) {
                 if(SwingUtilities.isRightMouseButton(inEvent)) {
                     // Right clicked = show popup of all open tabs

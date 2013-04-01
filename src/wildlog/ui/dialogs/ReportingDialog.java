@@ -343,7 +343,7 @@ public class ReportingDialog extends JDialog {
     }//GEN-LAST:event_btnSightingDateElementActionPerformed
 
     private void btnVisitBulkImportViewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisitBulkImportViewActionPerformed
-        // TODO: implement hierdie
+        // TODO: implement 'n "report" wat lyk soos 'n "bulk import view"
     }//GEN-LAST:event_btnVisitBulkImportViewActionPerformed
 
 

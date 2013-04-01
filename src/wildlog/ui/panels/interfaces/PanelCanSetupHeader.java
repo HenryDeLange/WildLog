@@ -26,7 +26,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
 
     private void doSetupTabHeader(String inLabel, URL inIconURL) {
         HeaderPanel tabHeader = new HeaderPanel();
-        // FIXME: Issue waar die scrolling nie werk as men nie in die panel is nie (die panel moet die hele tab vol stretch...)
+        // FIXME: Issue waar die scrolling nie werk as mens nie in die panel is nie (die panel moet die hele tab vol stretch...)
         tabHeader.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
         ImageIcon icon = new ImageIcon(inIconURL);
         tabHeader.add(new JLabel(icon));

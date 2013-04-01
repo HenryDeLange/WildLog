@@ -59,8 +59,8 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
             }
         }
         StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Periods: " + name + "</title></head>");
-        htmlVisit.append("<body bgcolor='rgb(230,228,240)'>");
-        htmlVisit.append("<table bgcolor='rgb(230,228,240)' width='100%'>");
+        htmlVisit.append("<body bgcolor='#E6E4F0'>");
+        htmlVisit.append("<table bgcolor='#E6E4F0' width='100%'>");
         htmlVisit.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlVisit.append("<b><u>").append(name).append("</u></b>");
         htmlVisit.append("<br/>");

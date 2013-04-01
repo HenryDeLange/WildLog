@@ -69,8 +69,8 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
         }
 
         StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Place: " + name + "</title></head>");
-        htmlLocation.append("<body bgcolor='rgb(233,239,244)'>");
-        htmlLocation.append("<table bgcolor='rgb(233,239,244)' width='100%'>");
+        htmlLocation.append("<body bgcolor='E9EFF4'>");
+        htmlLocation.append("<table bgcolor='#E9EFF4' width='100%'>");
         htmlLocation.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlLocation.append("<b><u>").append(name).append("</u></b>");
         htmlLocation.append("<br/>");

@@ -67,20 +67,16 @@ public class WildLogFile implements Comparable<WildLogFile> {
                     + UtilsHTML.generateHTMLImages(getThumbnailPath(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a>";
         else
         if (fileType.equals(WildLogFileType.MOVIE))
-            return "[<a href='" + getFilePath(true) + "' target='_blank'>"
-                    // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
-//                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
-//                        WildLogApp.class.getResource("resources/icons/Movie.png").toString(),
-//                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType)
-                    + "Movie</a>] ";
+            return "<a href='" + getFilePath(true) + "' target='_blank'>"
+                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
+                        new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath(), "Movie.png")),
+                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a> ";
         else
         if (fileType.equals(WildLogFileType.OTHER))
-            return "[<a href='" + getFilePath(true) + "' target='_blank'>"
-                    // FIXME: Kan nie dit nou al doen nie want dis tricky om die file binne die JAR te access...
-//                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
-//                        WildLogApp.class.getResource("resources/icons/OtherFile.png").toString(),
-//                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType)
-                    + "Other File</a>] ";
+            return "<a href='" + getFilePath(true) + "' target='_blank'>"
+                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
+                        new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath(), "OtherFile.png")),
+                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a> ";
         else
             return "";
     }

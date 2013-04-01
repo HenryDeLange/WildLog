@@ -31,7 +31,7 @@ import wildlog.ui.reports.helpers.MoonReportHelper;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
-// FIXME: Inheritance might be used to specialise the reports... or maybe better to just have unique ones...
+// TODO: Inheritance might be used to specialise the reports... or maybe better to just have unique ones...
 public class ReportLocationSightingsByMoon extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;
@@ -47,7 +47,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
 
         initComponents();
 
-        // FIXME: Hierdie escape key en dialogtocenter code herhaal baie, maak dalk een util method wat altwee doen...
+        // TODO: Hierdie escape key en dialogtocenter code herhaal baie, maak dalk een util method wat altwee doen...
         // Setup the escape key
         final JFrame thisHandler = (JFrame)this;
         ActionListener escListiner = new ActionListener() {

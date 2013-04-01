@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -52,6 +53,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Element inElement, WildLogApp inApp) {
+        copyDefaultFilePlaceholderImages(inApp);
         File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Creatures"  + File.separatorChar + inElement.getPrimaryName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
@@ -67,7 +69,9 @@ public final class UtilsHTML {
         }
         finally {
             try {
-                fileOutput.close();
+                if (fileOutput != null) {
+                    fileOutput.close();
+                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -77,6 +81,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Location inLocation, WildLogApp inApp) {
+        copyDefaultFilePlaceholderImages(inApp);
         File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Places"  + File.separatorChar + inLocation.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
@@ -92,7 +97,9 @@ public final class UtilsHTML {
         }
         finally {
             try {
-                fileOutput.close();
+                if (fileOutput != null) {
+                    fileOutput.close();
+                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -102,6 +109,7 @@ public final class UtilsHTML {
     }
 
     public static String exportHTML(Visit inVisit, WildLogApp inApp) {
+        copyDefaultFilePlaceholderImages(inApp);
         File toFile = new File(WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath() + "Periods" + File.separatorChar + inVisit.getName() + ".html");
         toFile.mkdirs();
         FileOutputStream fileOutput = null;
@@ -117,7 +125,9 @@ public final class UtilsHTML {
         }
         finally {
             try {
-                fileOutput.close();
+                if (fileOutput != null) {
+                    fileOutput.close();
+                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -148,13 +158,38 @@ public final class UtilsHTML {
         if (inValue != null) {
             String temp = UtilsHTML.formatObjectAsString(inValue);
             if (!temp.isEmpty()) {
-                if (!(inValue instanceof Enum) || !"NONE".equalsIgnoreCase(temp)) {
+                if (((inValue instanceof Enum) && "NONE".equalsIgnoreCase(temp)) || ((inValue instanceof List) && "[]".equalsIgnoreCase(temp))) {
+                    // Don't print anything
+                }
+                else {
                     inStringBuilder.append(inKey).append(temp);
                     if (inAddBreakLine != null && inAddBreakLine.length == 1 && inAddBreakLine[0] == true) {
                         inStringBuilder.append("<br/>");
                     }
                 }
             }
+        }
+    }
+
+    public static void copyDefaultFilePlaceholderImages(WildLogApp inApp) {
+        // Make the directory if it doesn't exist yet.
+        String path = WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath();
+        File tempFile = new File(path);
+        if (!tempFile.exists()) {
+            tempFile.mkdirs();
+        }
+        // Copy the files.
+        File noFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath(), "NoFile.png"));
+        if (!noFile.exists()) {
+            UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/icons/NoFile.png"), noFile);
+        }
+        File movie = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath(), "Movie.png"));
+        if (!movie.exists()) {
+            UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/icons/Movie.png"), movie);
+        }
+        File other = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getFullPath(), "OtherFile.png"));
+        if (!other.exists()) {
+            UtilsFileProcessing.copyFile(inApp.getClass().getResourceAsStream("resources/icons/OtherFile.png"), other);
         }
     }
 

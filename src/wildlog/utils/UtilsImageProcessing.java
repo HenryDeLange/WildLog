@@ -306,17 +306,21 @@ public class UtilsImageProcessing {
                     if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
                         // Voorbeeld -33°44'57.0"
                         String temp = tag.getDescription();
-                        tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
-                        tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
-                        tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                        if (temp != null) {
+                            tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
+                            tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
+                            tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                        }
                     }
                     else
                     if (tag.getTagName().equalsIgnoreCase("GPS Longitude")) {
                         // Voorbeeld 26°28'7.0"
                         String temp = tag.getDescription();
-                        tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
-                        tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
-                        tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                        if (temp != null) {
+                            tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
+                            tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
+                            tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                        }
                     }
                 }
                 catch (NumberFormatException ex) {
@@ -351,6 +355,7 @@ public class UtilsImageProcessing {
             BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = bufferedImage.createGraphics();
             graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
+            // Hardcoding all thumbnails to be JPG (even originally PNG images)
             ImageIO.write(bufferedImage, "jpg", toFileThumbnail);
             graphics2D.dispose();
         }
@@ -360,7 +365,7 @@ public class UtilsImageProcessing {
     }
 
     private static String getThumbnailPath(File inOriginalFile, int inSize) {
-        File thumbnail = new File(WildLogPaths.concatPaths(true, 
+        File thumbnail = new File(WildLogPaths.concatPaths(true,
                 WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(),
                 WildLogPaths.stripRootFromPath(
                     inOriginalFile.getParent(),
@@ -368,9 +373,14 @@ public class UtilsImageProcessing {
                 inOriginalFile.getName()
             ));
         String path = thumbnail.getAbsolutePath();
-        return path.substring(0, path.lastIndexOf('.')) + "_" + inSize + "px" + path.substring(path.lastIndexOf('.'));
+        // Hardcoding all thumbnails to be JPG (even originally PNG images)
+        return path.substring(0, path.lastIndexOf('.')) + "_" + inSize + "px" + ".jpg";
     }
 
+    /**
+     * The thumbnail will be created if it doesn't already exist.
+     * NOTE: Currently all thumbnails will be JPGs (even if the original was PNG).
+     */
     public static String getThumbnail(File inOriginalFile, int inSize) {
         File thumbnail = new File(getThumbnailPath(inOriginalFile, inSize));
         if (!thumbnail.exists()) {
@@ -379,6 +389,10 @@ public class UtilsImageProcessing {
         return thumbnail.getAbsolutePath();
     }
 
+    /**
+     * The thumbnail will be created if it doesn't already exist.
+     * NOTE: Currently all thumbnails will be JPGs (even if the original was PNG).
+     */
     public static String getThumbnail(String inOriginalPath, int inSize) {
         return getThumbnail(new File(inOriginalPath), inSize);
     }

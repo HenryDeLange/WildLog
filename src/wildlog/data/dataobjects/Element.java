@@ -84,8 +84,8 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
             }
         }
         StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
-        htmlElement.append("<body bgcolor='rgb(227,240,227)'>");
-        htmlElement.append("<table bgcolor='rgb(227,240,227)' width='100%'>");
+        htmlElement.append("<body bgcolor='#E3F0E3'>");
+        htmlElement.append("<table bgcolor='#E3F0E3' width='100%'>");
         htmlElement.append("<tr><td style='font-size:9px;font-family:verdana;'>");
         htmlElement.append("<b><u>").append(primaryName).append("</u></b>");
         htmlElement.append("<br/>");

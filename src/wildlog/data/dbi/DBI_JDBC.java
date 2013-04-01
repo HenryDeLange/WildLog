@@ -1224,7 +1224,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete the file on the PC
             File tempFile = new File(inFoto.getFilePath(true));
             tempFile.delete();
-            // FIXME: Huidiglik gaan dit die thumbnails agter los, dis OK vir nou want mens kan alle thumbnails delete soos mens wil, maar sal nice wees om dit ook skoon te maak
+            // NOTE: Huidiglik gaan dit die thumbnails agter los, dis OK vir nou want mens kan alle thumbnails delete soos mens wil, maar sal nice wees om dit ook skoon te maak
         }
         catch (SQLException ex) {
             printSQLException(ex);

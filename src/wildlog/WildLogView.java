@@ -2023,7 +2023,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
             cmbElementTypesBrowseTab.setVisible(false);
-            txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
+            txtBrowseInfo.setText("<body bgcolor='#FFFFFF'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
@@ -2048,7 +2048,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(true);
-            txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
+            txtBrowseInfo.setText("<body bgcolor='#FFFFFF'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
@@ -2073,7 +2073,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             dtpEndDate.setVisible(true);
             btnRefreshDates.setVisible(true);
             cmbElementTypesBrowseTab.setVisible(false);
-            txtBrowseInfo.setText("<body bgcolor='rgb(255,255,255)'></body>");
+            txtBrowseInfo.setText("<body bgcolor='#FFFFFF'></body>");
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
@@ -2803,7 +2803,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (aboutBox == null) {
             aboutBox = new WildLogAboutBox();
         }
-        WildLogApp.getApplication().show(aboutBox);
+        aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutMenuItemActionPerformed
 
     private void mnuChangeWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceMenuItemActionPerformed
@@ -2882,7 +2882,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    // TODO: Implement better progress bar
+                    // TODO: Implement better progress bar feedback vir workspace cleanup
                     setProgress(0);
                     setMessage("Workspace Cleanup starting...");
                     // Setup the feedback file

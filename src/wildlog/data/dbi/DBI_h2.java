@@ -71,7 +71,7 @@ public class DBI_h2 extends DBI_JDBC {
             }
 
             // Create tables
-            // FIXME: EK kan ook 'n H2 "if not exists" command gebruik in die query in plaas van die story...
+            // TODO: EK kan ook 'n H2 "if not exists" command gebruik in die query in plaas van die story aangesien ek basies net H2 support as DB...
             results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
             state = conn.createStatement();
             if (!results.next()) {
@@ -316,7 +316,8 @@ public class DBI_h2 extends DBI_JDBC {
                 tempSighting.setSex(Sex.getEnumFromText(results.getString("SEX")));
                 tempSighting.setTag(results.getString("TAG"));
                 tempSighting.setTimeUnknown(results.getBoolean("UNKNOWNTIME"));
-                // TODO: Remember to get the sighting duration here when I add the code...
+                tempSighting.setDurationMinutes(results.getInt("DURATIONMINUTES"));
+                tempSighting.setDurationSeconds(results.getDouble("DURATIONSECONDS"));
                 createOrUpdate(tempSighting);
             }
             // TODO: CSV Import of Files

@@ -28,7 +28,7 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
 
-// FIXME: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
+// TODO: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
 public class MappingDialog extends JDialog {
     private WildLogApp app;
     private Location location;
@@ -345,7 +345,7 @@ public class MappingDialog extends JDialog {
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
         List<Sighting> sightingList = app.getDBI().list(sigting);
-        boolean foundPosition = false;
+        boolean foundPosition;
         for (int t = 0; t < sightingList.size(); t++) {
             foundPosition = false;
             if (sightingList.get(t).getLatitude() != null && sightingList.get(t).getLongitude() != null)
@@ -566,7 +566,7 @@ public class MappingDialog extends JDialog {
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
         List<Sighting> sightingList = app.getDBI().list(sigting);
-        boolean foundPosition = false;
+        boolean foundPosition;
         for (int t = 0; t < sightingList.size(); t++) {
             foundPosition = false;
             if (sightingList.get(t).getLatitude() != null && sightingList.get(t).getLongitude() != null)

@@ -234,7 +234,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtName.setText(locationWL.getName());
         txtName.setName("txtName"); // NOI18N
 
-        lblLocation.setFont(new java.awt.Font("Tahoma", 1, 14));
+        lblLocation.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         lblLocation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLocation.setText(locationWL.getName());
         lblLocation.setName("lblLocation"); // NOI18N
@@ -259,7 +259,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane10.setName("jScrollPane10"); // NOI18N
 
         txtDescription.setColumns(20);
-        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDescription.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDescription.setLineWrap(true);
         txtDescription.setRows(5);
         txtDescription.setText(locationWL.getDescription());
@@ -270,7 +270,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
         txtDirections.setColumns(20);
-        txtDirections.setFont(new java.awt.Font("Tahoma", 0, 11));
+        txtDirections.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         txtDirections.setLineWrap(true);
         txtDirections.setRows(5);
         txtDirections.setText(locationWL.getDirections());
@@ -527,11 +527,11 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 10));
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jLabel7.setText("Period:");
         jLabel7.setName("jLabel7"); // NOI18N
 
-        lblNumberOfVisits.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfVisits.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfVisits.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfVisits.setName("lblNumberOfVisits"); // NOI18N
 
@@ -572,12 +572,12 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbVisit.setFocusPainted(false);
         rdbVisit.setName("rdbVisit"); // NOI18N
 
-        lblNumberOfElements.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfElements.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfElements.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfElements.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
         lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
 
-        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10));
+        lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNumberOfImages.setName("lblNumberOfImages"); // NOI18N
 
@@ -651,11 +651,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLongitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
         txtLongitude.setEnabled(false);
         txtLongitude.setName("txtLongitude"); // NOI18N
-        txtLongitude.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLongitudeActionPerformed(evt);
-            }
-        });
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
@@ -698,7 +693,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             .addGroup(locationIncludesLayout.createSequentialGroup()
                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+                        .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(40, 40, 40)
                         .addComponent(jLabel7)
                         .addGap(4, 4, 4)
@@ -718,10 +713,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addGap(85, 85, 85)
                         .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+                    .addComponent(jSeparator1)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addGap(85, 85, 85)
-                        .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                        .addComponent(txtName)
                         .addGap(120, 120, 120))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, locationIncludesLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -734,11 +729,11 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addComponent(jLabel2))
                         .addGap(5, 5, 5)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                            .addComponent(txtWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
-                            .addComponent(txtContactNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)
+                            .addComponent(jScrollPane10)
+                            .addComponent(jScrollPane3)
+                            .addComponent(txtWebsite)
+                            .addComponent(txtEmail)
+                            .addComponent(txtContactNumber)
                             .addComponent(cmbCatering, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(5, 5, 5)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -748,12 +743,12 @@ public class PanelLocation extends PanelCanSetupHeader {
                                     .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(locationIncludesLayout.createSequentialGroup()
                                             .addGap(80, 80, 80)
-                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE))
+                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGroup(locationIncludesLayout.createSequentialGroup()
                                             .addComponent(jLabel6)
                                             .addGap(29, 29, 29)
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)))
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                                     .addGap(10, 10, 10)
                                     .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -780,12 +775,14 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
                                 .addComponent(btnSetMainImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
                                 .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
                                 .addComponent(btnDeleteImage, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(11, 11, 11))
             .addGroup(locationIncludesLayout.createSequentialGroup()
-                .addComponent(jSeparator7, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+                .addComponent(jSeparator7)
                 .addGap(11, 11, 11))
             .addGroup(locationIncludesLayout.createSequentialGroup()
                 .addGap(110, 110, 110)
@@ -797,7 +794,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 584, Short.MAX_VALUE)
+                .addComponent(jScrollPane12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -827,10 +824,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addComponent(lblLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
                                 .addGap(1, 1, 1)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblNumberOfVisits, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(1, 1, 1)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
@@ -850,10 +846,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(locationIncludesLayout.createSequentialGroup()
                                         .addGap(6, 6, 6)
-                                        .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jLabel48)))
+                                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel48))))
                                 .addGap(4, 4, 4)
                                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(locationIncludesLayout.createSequentialGroup()
@@ -928,7 +923,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
                         .addGap(5, 5, 5)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -937,29 +932,28 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addComponent(rdbLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(jLabel45)
-                        .addGap(5, 5, 5)
                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
-                                .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20)
-                                .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 103, Short.MAX_VALUE))
-                            .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)))
-                    .addGroup(locationIncludesLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator6, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                                .addComponent(jLabel45)
+                                .addGap(5, 5, 5)
+                                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(locationIncludesLayout.createSequentialGroup()
+                                        .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(20, 20, 20)
+                                        .addComponent(btnAddVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE))
+                                    .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)))
+                            .addComponent(jSeparator6, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
                             .addGroup(locationIncludesLayout.createSequentialGroup()
                                 .addComponent(jLabel44)
                                 .addGap(155, 155, 155)
                                 .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))))
                 .addGap(5, 5, 5))
             .addGroup(locationIncludesLayout.createSequentialGroup()
                 .addGap(99, 99, 99)
                 .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(490, Short.MAX_VALUE))
+                .addContainerGap(461, Short.MAX_VALUE))
         );
 
         add(locationIncludes, java.awt.BorderLayout.CENTER);
@@ -1228,10 +1222,6 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
     }//GEN-LAST:event_btnBulkImportActionPerformed
-
-    private void txtLongitudeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLongitudeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtLongitudeActionPerformed
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + locationWL.getName()));

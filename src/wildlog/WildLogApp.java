@@ -27,7 +27,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import org.jdesktop.application.Application;
-import org.jdesktop.application.SingleFrameApplication;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
@@ -46,7 +45,7 @@ import wildlog.utils.WildLogPaths;
  * The main class of the application.
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
-public class WildLogApp extends SingleFrameApplication {
+public class WildLogApp extends Application {
     private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
     // TODO: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
     private Latitudes prevLat;
@@ -67,6 +66,7 @@ public class WildLogApp extends SingleFrameApplication {
     // Make sure the application uses the same DBI instance...
     // The DBI is initialized in startup() and closed in shutdown()
     private DBI dbi;
+    private WildLogView view;
 
     // Getters and Setters
     public Latitudes getPrevLat() {
@@ -164,11 +164,10 @@ public class WildLogApp extends SingleFrameApplication {
         do {
             openedWorkspace = openWorkspace();
             if (openedWorkspace == false) {
-                final WildLogApp app = (WildLogApp)Application.getInstance();
                 UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                        JOptionPane.showMessageDialog(getMainFrame(),
                                 "The WildLog Workspace could not be opened. It might be in use or broken. Please select another Workspace to open.",
                                 "WildLog Workspace Error", JOptionPane.ERROR_MESSAGE);
                         return -1;
@@ -206,29 +205,20 @@ public class WildLogApp extends SingleFrameApplication {
     @Override
     protected void startup() {
         // Show the main frame
-        WildLogView view = new WildLogView(this);
+        view = new WildLogView(this);
         view.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent inEvent) {
                 quit(null);
             }
         });
-        show(view);
+        view.setVisible(true);
         // Setup the glassPane for modal popups
-        JPanel glassPane = (JPanel)this.getMainFrame().getGlassPane();
+        JPanel glassPane = (JPanel)view.getGlassPane();
         glassPane.setLayout(new BorderLayout());
         JPanel background = new JPanel();
         background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
         glassPane.add(background, BorderLayout.CENTER);
-    }
-
-    /**
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override
-    protected void configureWindow(java.awt.Window root) {
     }
 
     /**
@@ -461,8 +451,8 @@ public class WildLogApp extends SingleFrameApplication {
         return WILDLOG_SETTINGS_FOLDER;
     }
 
-    public void setMainframe(JFrame inFrame) {
-        setMainFrame(inFrame);
+    public JFrame getMainFrame() {
+        return view;
     }
 
 }
