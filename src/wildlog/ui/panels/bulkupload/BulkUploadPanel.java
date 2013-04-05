@@ -24,13 +24,24 @@ import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
+import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.VisitType;
+import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.GPSDialog;
+import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.CustomMouseWheelScroller;
+import wildlog.ui.helpers.ImageFilter;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.helpers.UtilPanelGenerator;
+import wildlog.ui.helpers.UtilTableGenerator;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataWrapper;
 import wildlog.ui.panels.bulkupload.editors.ImageBoxEditor;
@@ -41,20 +52,9 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.ui.panels.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
-import wildlog.astro.AstroCalculator;
-import wildlog.data.dataobjects.Sighting;
-import wildlog.mapping.utils.UtilsGps;
-import wildlog.ui.dialogs.GPSDialog;
-import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.helpers.ImageFilter;
-import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
-import wildlog.ui.helpers.CustomMouseWheelScroller;
-import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.utils.UtilsUI;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
@@ -209,6 +209,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders = new javax.swing.JCheckBox();
         jLabel5 = new javax.swing.JLabel();
         cmbVisitType = new javax.swing.JComboBox();
+        jSeparator3 = new javax.swing.JSeparator();
         scrTable = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
@@ -228,35 +229,33 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         pnlTop.setPreferredSize(new java.awt.Dimension(1005, 130));
         pnlTop.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Place Name:");
         jLabel1.setName("jLabel1"); // NOI18N
         pnlTop.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Period Name:");
         jLabel2.setName("jLabel2"); // NOI18N
         pnlTop.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 10, -1, 20));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Start Date:");
         jLabel3.setName("jLabel3"); // NOI18N
         pnlTop.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 40, -1, 20));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("End Date:");
         jLabel4.setName("jLabel4"); // NOI18N
-        pnlTop.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 40, -1, 20));
+        pnlTop.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, -1, 20));
 
-        dtpStartDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
-        pnlTop.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 40, 140, -1));
+        pnlTop.add(dtpStartDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 40, 135, -1));
 
-        dtpEndDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
-        pnlTop.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 40, 140, -1));
+        pnlTop.add(dtpEndDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 40, 135, -1));
 
         lblLocationImage.setBackground(new java.awt.Color(0, 0, 0));
         lblLocationImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -287,14 +286,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         txtVisitName.setBackground(new java.awt.Color(204, 255, 204));
         txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()));
         txtVisitName.setName("txtVisitName"); // NOI18N
-        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 200, -1));
+        pnlTop.add(txtVisitName, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 10, 190, -1));
 
         chkShowInactiveTimes.setBackground(new java.awt.Color(153, 180, 115));
         chkShowInactiveTimes.setText("Show inactive periods between sightings");
         chkShowInactiveTimes.setEnabled(false);
         chkShowInactiveTimes.setFocusable(false);
         chkShowInactiveTimes.setName("chkShowInactiveTimes"); // NOI18N
-        pnlTop.add(chkShowInactiveTimes, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
+        pnlTop.add(chkShowInactiveTimes, new org.netbeans.lib.awtextra.AbsoluteConstraints(625, 75, -1, -1));
 
         jLabel6.setText("Start new sightings after");
         jLabel6.setName("jLabel6"); // NOI18N
@@ -323,18 +322,20 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel7.setName("jLabel7"); // NOI18N
         pnlTop.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(695, 100, -1, 20));
 
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel8.setText("Settings:");
         jLabel8.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         jLabel8.setName("jLabel8"); // NOI18N
-        pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 80, 70, 40));
+        pnlTop.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 80, 70, 20));
 
+        jSeparator1.setBackground(new java.awt.Color(196, 220, 172));
         jSeparator1.setName("jSeparator1"); // NOI18N
-        pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(422, 70, 440, 10));
+        pnlTop.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(422, 70, 459, 10));
 
+        jSeparator2.setBackground(new java.awt.Color(196, 220, 172));
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator2.setName("jSeparator2"); // NOI18N
-        pnlTop.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 5, 20, 120));
+        pnlTop.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 5, 5, 120));
 
         txtLocationName.setBackground(new java.awt.Color(204, 255, 204));
         txtLocationName.setName("txtLocationName"); // NOI18N
@@ -361,7 +362,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         btnGPSForAll.setBackground(new java.awt.Color(153, 180, 115));
         btnGPSForAll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGPSForAll.setText("<html>Set the GPS point for all Observations</html>");
+        btnGPSForAll.setText("<html>Set one GPS point for all Observations</html>");
         btnGPSForAll.setToolTipText("The specified GPS point will be applied to all currently defined Observations.");
         btnGPSForAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPSForAll.setFocusPainted(false);
@@ -379,19 +380,24 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         chkIncludeSubfolders.setText("Include Subfolders");
         chkIncludeSubfolders.setFocusable(false);
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
-        pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 75, -1, -1));
+        pnlTop.add(chkIncludeSubfolders, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 75, -1, -1));
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Type:");
         jLabel5.setName("jLabel5"); // NOI18N
-        pnlTop.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(705, 10, 40, 20));
+        pnlTop.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, -1, 20));
 
         cmbVisitType.setBackground(new java.awt.Color(153, 180, 115));
         cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.values()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
         cmbVisitType.setFocusable(false);
         cmbVisitType.setName("cmbVisitType"); // NOI18N
-        pnlTop.add(cmbVisitType, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 120, -1));
+        pnlTop.add(cmbVisitType, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 10, 135, -1));
+
+        jSeparator3.setBackground(new java.awt.Color(196, 220, 172));
+        jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        pnlTop.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 5, 5, 120));
 
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
 
@@ -730,6 +736,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lblLocationImage;
     private javax.swing.JList lstLocation;
     private javax.swing.JPanel pnlTop;

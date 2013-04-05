@@ -76,6 +76,7 @@ public class ImageBox extends JPanel {
         btnUp.setToolTipText("Move the image UP to the Observation above.");
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setFocusPainted(false);
+        btnUp.setFocusable(false);
         btnUp.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnUp.setName("btnUp"); // NOI18N
         btnUp.addActionListener(new java.awt.event.ActionListener() {
@@ -90,6 +91,7 @@ public class ImageBox extends JPanel {
         btnDown.setToolTipText("Move the image DOWN to the Observation below.");
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setFocusPainted(false);
+        btnDown.setFocusable(false);
         btnDown.setMargin(new java.awt.Insets(1, 1, 1, 1));
         btnDown.setName("btnDown"); // NOI18N
         btnDown.addActionListener(new java.awt.event.ActionListener() {
@@ -106,6 +108,7 @@ public class ImageBox extends JPanel {
         btnRemove.setToolTipText("Remove the image from this Observation.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
+        btnRemove.setFocusable(false);
         btnRemove.setIconTextGap(2);
         btnRemove.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRemove.setName("btnRemove"); // NOI18N
@@ -123,6 +126,7 @@ public class ImageBox extends JPanel {
         btnNewSighting.setToolTipText("Move the image into its own NEW Observation.");
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setFocusPainted(false);
+        btnNewSighting.setFocusable(false);
         btnNewSighting.setIconTextGap(2);
         btnNewSighting.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnNewSighting.setName("btnNewSighting"); // NOI18N
@@ -140,6 +144,7 @@ public class ImageBox extends JPanel {
         btnClone.setToolTipText("Duplicate the image for this Observation.");
         btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClone.setFocusPainted(false);
+        btnClone.setFocusable(false);
         btnClone.setIconTextGap(2);
         btnClone.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnClone.setName("btnClone"); // NOI18N

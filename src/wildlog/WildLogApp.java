@@ -212,6 +212,7 @@ public class WildLogApp extends Application {
                 quit(null);
             }
         });
+        view.setLocationRelativeTo(null);
         view.setVisible(true);
         // Setup the glassPane for modal popups
         JPanel glassPane = (JPanel)view.getGlassPane();

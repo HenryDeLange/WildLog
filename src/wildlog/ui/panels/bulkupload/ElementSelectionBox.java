@@ -1,5 +1,6 @@
 package wildlog.ui.panels.bulkupload;
 
+import java.awt.Color;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,18 +16,20 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
+import javax.swing.border.LineBorder;
 import org.jdesktop.swingx.sort.ListSortController;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.enums.ElementType;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
 public class ElementSelectionBox extends JDialog {
     private WildLogApp app;
     private boolean selectionMade = false;
+    private static String previousElement = "";
 
     /** Creates new form ElementSelectionBox */
     public ElementSelectionBox(Frame inParent, boolean inIsModal, WildLogApp inApp, String inSelectedElement) {
@@ -48,6 +51,10 @@ public class ElementSelectionBox extends JDialog {
 
         // Position the dialog
         UtilsDialog.setDialogToCenter(app.getMainFrame(), thisHandler);
+        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), thisHandler);
+        // Set the initial value
+        UtilsImageProcessing.setupFoto("ELEMENT-" + inSelectedElement, 0, lblElementImage, 150, app);
+        lstElements.setSelectedValue(inSelectedElement, true);
     }
 
     /** This method is called from within the constructor to
@@ -67,6 +74,7 @@ public class ElementSelectionBox extends JDialog {
         lblElementImage = new javax.swing.JLabel();
         btnSelect = new javax.swing.JButton();
         cmbElementType = new javax.swing.JComboBox();
+        btnPreviousElement = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Select a Creature");
@@ -128,7 +136,7 @@ public class ElementSelectionBox extends JDialog {
                 lblElementImageMouseReleased(evt);
             }
         });
-        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 150, 150));
+        jPanel1.add(lblElementImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, 150, 150));
 
         btnSelect.setBackground(new java.awt.Color(230, 237, 220));
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
@@ -156,6 +164,20 @@ public class ElementSelectionBox extends JDialog {
         });
         jPanel1.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 110, -1));
 
+        btnPreviousElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnPreviousElement.setText("Use Previous Creature");
+        btnPreviousElement.setToolTipText("This will set the Creature to: " + previousElement);
+        btnPreviousElement.setFocusPainted(false);
+        btnPreviousElement.setFocusable(false);
+        btnPreviousElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnPreviousElement.setName("btnPreviousElement"); // NOI18N
+        btnPreviousElement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousElementActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnPreviousElement, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 150, 40));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 430, 430));
 
         pack();
@@ -170,22 +192,36 @@ public class ElementSelectionBox extends JDialog {
     }
 
     private void txtElementNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtElementNameKeyReleased
-        if (evt == null || evt.getKeyChar() == KeyEvent.VK_ESCAPE) {
-           txtElementName.setText("");
+        if (evt != null && evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btnSelectActionPerformed(null);
         }
-        ListSortController sorter = (ListSortController) lstElements.getRowSorter();
-        if (sorter == null) {
-            sorter = new ListSortController(lstElements.getModel());
+        else {
+            if (evt == null || !evt.isActionKey()) {
+                // Filter die lys
+                ListSortController sorter = (ListSortController) lstElements.getRowSorter();
+                if (sorter == null) {
+                    sorter = new ListSortController(lstElements.getModel());
+                }
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + txtElementName.getText()));
+                lstElements.setRowSorter(sorter);
+                // As daar net een item in die lys is update die image automaties
+                if (lstElements.getElementCount() == 1) {
+                    lstElements.setSelectedIndex(0);
+                    lstElementsValueChanged(null);
+                }
+                else {
+                    lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
+                    lstElements.clearSelection();
+                }
+            }
         }
-        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + txtElementName.getText()));
-        lstElements.setRowSorter(sorter);
     }//GEN-LAST:event_txtElementNameKeyReleased
 
     private void lstElementsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstElementsValueChanged
         if (!lstElements.getSelectionModel().isSelectionEmpty()) {
             String selectedName = lstElements.getSelectedValue().toString();
-            // Change the location name
-            txtElementName.setText(selectedName);
+//            // Change the location name
+//            txtElementName.setText(selectedName);
             // Change the image
             UtilsImageProcessing.setupFoto("ELEMENT-" + selectedName, 0, lblElementImage, 150, app);
         }
@@ -201,8 +237,19 @@ public class ElementSelectionBox extends JDialog {
     }//GEN-LAST:event_lblElementImageMouseReleased
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
-        selectionMade = true;
-        dispose();
+        if (lstElements.getElementCount() == 1) {
+            lstElements.setSelectedValue(lstElements.getElementAt(0), true);
+        }
+        if (lstElements.getSelectedValue() != null) {
+            selectionMade = true;
+            txtElementName.setText(lstElements.getSelectedValue().toString());
+            previousElement = txtElementName.getText();
+            lstElements.setBorder(null);
+            dispose();
+        }
+        else {
+            lstElements.setBorder(new LineBorder(Color.RED, 2));
+        }
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void lstElementsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstElementsKeyReleased
@@ -217,9 +264,18 @@ public class ElementSelectionBox extends JDialog {
     }//GEN-LAST:event_lstElementsMouseClicked
 
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
+        txtElementName.setText("");
         txtElementNameKeyReleased(null);
         loadElementList();
 	}//GEN-LAST:event_cmbElementTypeActionPerformed
+
+    private void btnPreviousElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousElementActionPerformed
+        cmbElementType.setSelectedItem(ElementType.NONE);
+        cmbElementTypeActionPerformed(evt);
+        txtElementName.setText(previousElement);
+        lstElements.setSelectedValue(previousElement, true);
+        txtElementNameKeyReleased(null);
+    }//GEN-LAST:event_btnPreviousElementActionPerformed
 
     private void loadElementList() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -247,6 +303,7 @@ public class ElementSelectionBox extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPreviousElement;
     private javax.swing.JButton btnSelect;
     private javax.swing.JComboBox cmbElementType;
     private javax.swing.JLabel jLabel2;

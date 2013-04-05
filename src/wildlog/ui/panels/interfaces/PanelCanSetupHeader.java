@@ -41,6 +41,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
         }
         JButton btnClose = new JButton();
         btnClose.setFocusPainted(false);
+        btnClose.setFocusable(false);
         btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.setBackground(new Color(255, 000, 000));

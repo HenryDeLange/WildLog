@@ -8,10 +8,10 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.mapping.utils.UtilsGps;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -90,7 +90,7 @@ public class InfoBox extends JPanel {
         setPreferredSize(new java.awt.Dimension(250, 250));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblElementName.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblElementName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblElementName.setText("Creature Name");
         lblElementName.setName("lblElementName"); // NOI18N
@@ -99,7 +99,7 @@ public class InfoBox extends JPanel {
         jSeparator2.setName("jSeparator2"); // NOI18N
         add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 27, 230, 10));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Date:");
         jLabel2.setName("jLabel2"); // NOI18N
         add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, -1));
@@ -108,7 +108,7 @@ public class InfoBox extends JPanel {
         lblDate.setName("lblDate"); // NOI18N
         add(lblDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 70, -1));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Time:");
         jLabel3.setName("jLabel3"); // NOI18N
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 30, -1, -1));
@@ -117,7 +117,7 @@ public class InfoBox extends JPanel {
         lblTime.setName("lblTime"); // NOI18N
         add(lblTime, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 30, 50, -1));
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("GPS Latitude:");
         jLabel4.setName("jLabel4"); // NOI18N
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 53, -1, -1));
@@ -126,7 +126,7 @@ public class InfoBox extends JPanel {
         lblLatitude.setName("lblLatitude"); // NOI18N
         add(lblLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 53, 130, -1));
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel10.setText("GPS Longitude:");
         jLabel10.setName("jLabel10"); // NOI18N
         add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
@@ -157,6 +157,7 @@ public class InfoBox extends JPanel {
         btnChooseCreature.setToolTipText("Select a Creature for this Observation.");
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseCreature.setFocusPainted(false);
+        btnChooseCreature.setFocusable(false);
         btnChooseCreature.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnChooseCreature.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnChooseCreature.setName("btnChooseCreature"); // NOI18N
@@ -170,8 +171,10 @@ public class InfoBox extends JPanel {
         btnGPS.setBackground(new java.awt.Color(229, 241, 212));
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnGPS.setText("GPS");
-        btnGPS.setToolTipText("Select a GPD point for this Observation.");
+        btnGPS.setToolTipText("Select a GPS point for this Observation.");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGPS.setFocusPainted(false);
+        btnGPS.setFocusable(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnGPS.setName("btnGPS"); // NOI18N
@@ -188,6 +191,7 @@ public class InfoBox extends JPanel {
         btnEdit.setToolTipText("Edit this Observation's details.");
         btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnEdit.setFocusPainted(false);
+        btnEdit.setFocusable(false);
         btnEdit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnEdit.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnEdit.setName("btnEdit"); // NOI18N
