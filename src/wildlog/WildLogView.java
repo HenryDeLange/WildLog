@@ -1,6 +1,5 @@
 package wildlog;
 
-import wildlog.ui.dialogs.WildLogAboutBox;
 import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.BorderLayout;
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,42 +52,45 @@ import org.jdesktop.application.Application;
 import org.jdesktop.application.TaskMonitor;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
+import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
-import wildlog.html.utils.UtilsHTML;
+import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.kml.utils.UtilsKML;
-import wildlog.ui.panels.PanelElement;
-import wildlog.ui.panels.PanelLocation;
-import wildlog.ui.dialogs.MergeElementsDialog;
-import wildlog.ui.dialogs.MoveVisitDialog;
-import wildlog.ui.panels.PanelSighting;
-import wildlog.ui.panels.PanelVisit;
-import wildlog.ui.dialogs.ReportingDialog;
-import wildlog.ui.panels.bulkupload.BulkUploadPanel;
-import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.astro.AstroCalculator;
-import wildlog.utils.WildLogPaths;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.movies.utils.UtilsMovies;
+import wildlog.ui.dialogs.MergeElementsDialog;
+import wildlog.ui.dialogs.MoveVisitDialog;
+import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
+import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilPanelGenerator;
 import wildlog.ui.helpers.UtilTableGenerator;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.helpers.WildLogTreeCellRenderer;
+import wildlog.ui.panels.PanelElement;
+import wildlog.ui.panels.PanelLocation;
+import wildlog.ui.panels.PanelSighting;
+import wildlog.ui.panels.PanelVisit;
+import wildlog.ui.panels.bulkupload.BulkUploadPanel;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogPrefixes;
 
 /**
@@ -1353,7 +1356,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         statusMessageLabel.setPreferredSize(new java.awt.Dimension(400, 20));
         statusPanel.add(statusMessageLabel);
 
-        progressBar.setForeground(new java.awt.Color(51, 102, 0));
         progressBar.setName("progressBar"); // NOI18N
         progressBar.setPreferredSize(new java.awt.Dimension(400, 16));
         statusPanel.add(progressBar);
@@ -1844,9 +1846,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (tblElement.getSelectedRowCount() == 1) {
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
             if (fotos.size() > 0)
-                UtilsImageProcessing.setupFoto("ELEMENT-" + tempElement.getPrimaryName(), 0, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+                UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             else
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             // Get Locations
@@ -1862,9 +1864,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (tblLocation.getSelectedRowCount() == 1) {
             // Get Image
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
             if (fotos.size() > 0)
-                UtilsImageProcessing.setupFoto("LOCATION-" + tempLocation.getName(), 0, lblImage_LocTab, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+                UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage_LocTab, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             else
                 lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             // Get Visits
@@ -1919,14 +1921,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-                UtilsFileProcessing.openFile("ELEMENT-" + tempElement.getPrimaryName(), 0, app);
+                UtilsFileProcessing.openFile(tempElement.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblImage_LocTabMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage_LocTabMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
-            UtilsFileProcessing.openFile("LOCATION-" + tempLocation.getName(), 0, app);
+            UtilsFileProcessing.openFile(tempLocation.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImage_LocTabMouseReleased
 
@@ -1980,7 +1982,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtBrowseInfo.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
                 setupFile(fotos);
             }
             else
@@ -1988,7 +1990,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtBrowseInfo.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
                 setupFile(fotos);
             }
             else
@@ -1996,7 +1998,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtBrowseInfo.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
                 setupFile(fotos);
             }
             else
@@ -2004,7 +2006,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                 txtBrowseInfo.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
                         .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                 setupFile(fotos);
             }
             else {
@@ -2135,23 +2137,23 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private void btnViewImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewImageActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsFileProcessing.openFile("LOCATION-" + temp.getName(), imageIndex, app);
+                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsFileProcessing.openFile(tempLocation.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsFileProcessing.openFile("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsFileProcessing.openFile(tempElement.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsFileProcessing.openFile("VISIT-" + temp.getName(), imageIndex, app);
+                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsFileProcessing.openFile(tempVisit.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsFileProcessing.openFile("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                SightingWrapper tempSightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsFileProcessing.openFile(tempSightingWrapper.getSighting().getWildLogFileID(), imageIndex, app);
             }
         }
     }//GEN-LAST:event_btnViewImageActionPerformed
@@ -2160,25 +2162,25 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
                 loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
                 loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
                 loadPrevFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                 loadPrevFile(fotos);
             }
         }
@@ -2188,25 +2190,25 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + tempLocation.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
                 loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + tempElement.getPrimaryName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
                 loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("VISIT-" + tempVisit.getName()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
                 loadNextFile(fotos);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                 loadNextFile(fotos);
             }
         }
@@ -2280,23 +2282,23 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private void btnDefaultActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDefaultActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage("LOCATION-" + temp.getName(), imageIndex, app);
+                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                imageIndex = UtilsImageProcessing.setMainImage(tempLocation.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                imageIndex = UtilsImageProcessing.setMainImage(tempElement.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage("VISIT-" + temp.getName(), imageIndex, app);
+                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                imageIndex = UtilsImageProcessing.setMainImage(tempVisit.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                imageIndex = UtilsImageProcessing.setMainImage("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                SightingWrapper tempSightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                imageIndex = UtilsImageProcessing.setMainImage(tempSightingWrapper.getSighting().getWildLogFileID(), imageIndex, app);
             }
             imageIndex--;
             btnBrowseNextActionPerformed(evt);
@@ -2317,23 +2319,23 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private void btnViewEXIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEXIFActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location temp = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsDialog.showExifPopup("LOCATION-" + temp.getName(), imageIndex, app);
+                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsDialog.showExifPopup(tempLocation.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element temp = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsDialog.showExifPopup("ELEMENT-" + temp.getPrimaryName(), imageIndex, app);
+                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsDialog.showExifPopup(tempElement.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit temp = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsDialog.showExifPopup("VISIT-" + temp.getName(), imageIndex, app);
+                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsDialog.showExifPopup(tempVisit.getWildLogFileID(), imageIndex, app);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                SightingWrapper temp = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilsDialog.showExifPopup("SIGHTING-" + temp.getSighting().getSightingCounter(), imageIndex, app);
+                SightingWrapper tempSightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                UtilsDialog.showExifPopup(tempSightingWrapper.getSighting().getWildLogFileID(), imageIndex, app);
             }
         }
     }//GEN-LAST:event_btnViewEXIFActionPerformed
@@ -2513,41 +2515,93 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             @Override
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>Please backup your data before proceding. <br>"
-                        + "This will replace the Sun and Moon information for all your Observations with the auto generated values.</html>",
+                        "<html>Please <b>backup your data</b> before proceding. <br>"
+                        + "This will replace the Sun and Moon information for all your Observations with the auto generated values. <br/>"
+                        + "<b>NOTE:</b> It is recommended not to edit any Observations until the process is finished.</html>",
                         "Calculate Sun and Moon Information",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
         });
         if (result == JOptionPane.OK_OPTION) {
-            UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setMessage("Starting the Sun and Moon Calculation");
-                    setProgress(0);
-                    tabbedPanel.setSelectedIndex(0);
-                    while (tabbedPanel.getTabCount() > 4) {
-                        tabbedPanel.remove(4);
-                    }
-                    List<Sighting> sightings = app.getDBI().list(new Sighting());
-                    for (int t = 0; t < sightings.size(); t++) {
-                        Sighting sighting = sightings.get(t);
-                        sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                        if (!Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude()) && !sighting.isTimeUnknown()) {
-                            double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                            double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                            sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
-                            sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
-                            app.getDBI().createOrUpdate(sighting);
+            app.getMainFrame().getGlassPane().setVisible(true);
+            final int choice = JOptionPane.showOptionDialog(app.getMainFrame(),
+                    "Please select what records should be modified:",
+                    "Automatically Calculate Sun and Moon Information",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[] {"All Observations", "Only Obervations without Sun and Moon information"},
+                    null);
+            app.getMainFrame().getGlassPane().setVisible(false);
+            if (choice != JOptionPane.CLOSED_OPTION) {
+                UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+                    @Override
+                    protected Object doInBackground() throws Exception {
+                        if (choice == 0) {
+                            // Update all Observations
+                            setMessage("Starting the Sun and Moon Calculation");
+                            setProgress(0);
+                            tabbedPanel.setSelectedIndex(0);
+                            while (tabbedPanel.getTabCount() > 4) {
+                                tabbedPanel.remove(4);
+                            }
+                            List<Sighting> sightings = app.getDBI().list(new Sighting());
+                            for (int t = 0; t < sightings.size(); t++) {
+                                Sighting sighting = sightings.get(t);
+                                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                                if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
+                                        && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())
+                                        && !sighting.isTimeUnknown()) {
+                                    double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                    double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
+                                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
+                                    app.getDBI().createOrUpdate(sighting);
+                                }
+                                setProgress(0 + (int)((t/(double)sightings.size())*100));
+                                setMessage("Sun and Moon Calculation: " + getProgress() + "%");
+                            }
+                            setProgress(100);
+                            setMessage("Done with the Sun and Moon Calculation");
                         }
-                        setProgress(0 + (int)((t/(double)sightings.size())*100));
-                        setMessage("Sun and Moon Calculation: " + getProgress() + "%");
+                        else
+                        if (choice == 0) {
+                            // Update only Observations without Sun and Moon phase
+                            setMessage("Starting the Sun and Moon Calculation");
+                            setProgress(0);
+                            tabbedPanel.setSelectedIndex(0);
+                            while (tabbedPanel.getTabCount() > 4) {
+                                tabbedPanel.remove(4);
+                            }
+                            List<Sighting> sightings = app.getDBI().list(new Sighting());
+                            for (int t = 0; t < sightings.size(); t++) {
+                                Sighting sighting = sightings.get(t);
+                                if (sighting.getMoonPhase() < 0) {
+                                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                                }
+                                if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
+                                        && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())
+                                        && !sighting.isTimeUnknown()) {
+                                    double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                    double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                                    if (sighting.getMoonlight() == null || Moonlight.NONE.equals(sighting.getMoonlight())) {
+                                        sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
+                                    }
+                                    if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())) {
+                                        sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
+                                    }
+                                    app.getDBI().createOrUpdate(sighting);
+                                }
+                                setProgress(0 + (int)((t/(double)sightings.size())*100));
+                                setMessage("Sun and Moon Calculation: " + getProgress() + "%");
+                            }
+                            setProgress(100);
+                            setMessage("Done with the Sun and Moon Calculation");
+                        }
+                        return null;
                     }
-                    setProgress(100);
-                    setMessage("Done with the Sun and Moon Calculation");
-                    return null;
-                }
-            });
+                });
+            }
         }
     }//GEN-LAST:event_calcSunMoonMenuItemActionPerformed
 
@@ -3009,13 +3063,13 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 continue;
                             }
                             // Check the WildLogFile's linkage
-                            if (wildLogFile.getId().startsWith("ELEMENT-")) {
+                            if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring("ELEMENT-".length())));
+                                final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
                                     filesWithBadID++;
                                     finalHandleFeedback.println("ERROR: Could not find linked Creature for this file record. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", PrimaryName Used:" + wildLogFile.getId().substring("ELEMENT-".length()));
+                                            + ", ID:" + wildLogFile.getId() + ", PrimaryName Used:" + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record  and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3026,13 +3080,13 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                         WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), temp.getPrimaryName()));
                                 continue;
                             }
-                            else if (wildLogFile.getId().startsWith("VISIT-")) {
+                            else if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring("VISIT-".length())));
+                                final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
                                     filesWithBadID++;
                                     finalHandleFeedback.println("ERROR: Could not find linked Period for this file record. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", Period Used:" + wildLogFile.getId().substring("VISIT-".length()));
+                                            + ", ID:" + wildLogFile.getId() + ", Period Used:" + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3043,13 +3097,13 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                         WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), temp.getLocationName(), temp.getName()));
                                 continue;
                             }
-                            else if (wildLogFile.getId().startsWith("LOCATION-")) {
+                            else if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
-                                final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring("LOCATION-".length())));
+                                final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
                                     filesWithBadID++;
                                     finalHandleFeedback.println("ERROR: Could not find linked Place for this file. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", Location Used:" + wildLogFile.getId().substring("LOCATION-".length()));
+                                            + ", ID:" + wildLogFile.getId() + ", Location Used:" + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3060,11 +3114,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                         WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), temp.getName()));
                                 continue;
                             }
-                            else if (wildLogFile.getId().startsWith("SIGHTING-")) {
+                            else if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 Sighting temp = null;
                                 try {
-                                    temp = app.getDBI().find(new Sighting(Long.parseLong(wildLogFile.getId().substring("SIGHTING-".length()))));
+                                    temp = app.getDBI().find(new Sighting(Long.parseLong(wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()))));
                                 }
                                 catch (NumberFormatException ex) {
                                     finalHandleFeedback.println("ERROR: Can't get linked Observation's ID.");
@@ -3072,7 +3126,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 if (temp == null) {
                                     filesWithBadID++;
                                     finalHandleFeedback.println("ERROR: Could not find linked Observation for this file. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", Sighting ID Used:" + wildLogFile.getId().substring("SIGHTING-".length()));
+                                            + ", ID:" + wildLogFile.getId() + ", Sighting ID Used:" + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3293,7 +3347,95 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_mnuCleanWorkspaceActionPerformed
 
     private void calcDurationMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calcDurationMenuItemActionPerformed
-        // TODO: Calculate all observations' duration
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>Please <b>backup your data</b> before proceding. <br>"
+                        + "This will replace the Duration information for all your Observations. <br/>"
+                        + "<b>NOTE:</b> It is recommended not to edit any Observations until the process is finished.</html>",
+                        "Calculate Observation Duration",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        if (result == JOptionPane.OK_OPTION) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            final int choice = JOptionPane.showOptionDialog(app.getMainFrame(),
+                    "Please select what records should be modified:",
+                    "Automatically Calculate Duration",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[] {"All Observations", "Only Obervations without a Duration"},
+                    null);
+            app.getMainFrame().getGlassPane().setVisible(false);
+            if (choice != JOptionPane.CLOSED_OPTION) {
+                UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+                    @Override
+                    protected Object doInBackground() throws Exception {
+                        if (choice == 0) {
+                            // Update all observations
+                            setMessage("Starting the Duration Calculation");
+                            setProgress(0);
+                            List<Sighting> sightingList = app.getDBI().list(new Sighting());
+                            for (int t = 0; t < sightingList.size(); t++) {
+                                Sighting sighting = sightingList.get(t);
+                                WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
+                                searchFile.setFileType(WildLogFileType.IMAGE);
+                                List<WildLogFile> files = app.getDBI().list(searchFile);
+                                if (!files.isEmpty()) {
+                                    Collections.sort(files);
+                                    Date startDate = UtilsImageProcessing.getDateFromImage(new File(files.get(0).getFilePath(true)));
+                                    Date endDate = UtilsImageProcessing.getDateFromImage(new File(files.get(files.size()-1).getFilePath(true)));
+                                    double difference = (endDate.getTime() - startDate.getTime())/1000;
+                                    int minutes = (int)difference/60;
+                                    double seconds = difference - minutes*60.0;
+                                    sighting.setDurationMinutes(minutes);
+                                    sighting.setDurationSeconds((double)seconds);
+                                    app.getDBI().createOrUpdate(sighting);
+                                }
+                                setProgress(0 + (int)((t/(double)sightingList.size())*100));
+                                setMessage("Duration Calculation: " + getProgress() + "%");
+                            }
+                            setProgress(100);
+                            setMessage("Done with the Duration Calculation");
+                        }
+                        else
+                        if (choice == 1) {
+                            // Update only observations that don't have a Duration yet
+                            // Update all observations
+                            setMessage("Starting the Duration Calculation");
+                            setProgress(0);
+                            List<Sighting> sightingList = app.getDBI().list(new Sighting());
+                            for (int t = 0; t < sightingList.size(); t++) {
+                                Sighting sighting = sightingList.get(t);
+                                if (sighting.getDurationMinutes() == 0 && sighting.getDurationSeconds() == 0.0) {
+                                    WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
+                                    searchFile.setFileType(WildLogFileType.IMAGE);
+                                    List<WildLogFile> files = app.getDBI().list(searchFile);
+                                    if (!files.isEmpty()) {
+                                        Collections.sort(files);
+                                        Date startDate = UtilsImageProcessing.getDateFromImage(new File(files.get(0).getFilePath(true)));
+                                        Date endDate = UtilsImageProcessing.getDateFromImage(new File(files.get(files.size()-1).getFilePath(true)));
+                                        double difference = (endDate.getTime() - startDate.getTime())/1000;
+                                        int minutes = (int)difference/60;
+                                        double seconds = difference - minutes*60.0;
+                                        sighting.setDurationMinutes(minutes);
+                                        sighting.setDurationSeconds((double)seconds);
+                                        app.getDBI().createOrUpdate(sighting);
+                                    }
+                                }
+                                setProgress(0 + (int)((t/(double)sightingList.size())*100));
+                                setMessage("Duration Calculation: " + getProgress() + "%");
+                            }
+                            setProgress(100);
+                            setMessage("Done with the Duration Calculation");
+                        }
+                        return null;
+                    }
+                });
+            }
+        }
     }//GEN-LAST:event_calcDurationMenuItemActionPerformed
 
     private void browseByLocation() {

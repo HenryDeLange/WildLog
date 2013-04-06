@@ -3,6 +3,7 @@ package wildlog.data.dataobjects;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
@@ -15,7 +16,8 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
 import wildlog.html.utils.UtilsHTML;
 
-public class Element implements Comparable<Element>, DataObjectWithHTML {
+public class Element implements Comparable<Element>, DataObjectWithHTML, DataObjectWithWildLogFile {
+    public static final String WILDLOGFILE_ID_PREFIX = "ELEMENT-";
     private String primaryName; // Used for indexing (ID)
     private String otherName;
     private String scientificName;
@@ -75,10 +77,15 @@ public class Element implements Comparable<Element>, DataObjectWithHTML {
     }
 
     @Override
+    public String getWildLogFileID() {
+        return WILDLOGFILE_ID_PREFIX + primaryName;
+    }
+
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         if (inIncludeImages) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("ELEMENT-" + primaryName));
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString.append(fotos.get(t).toHTML(inExportType));
             }

@@ -3,8 +3,8 @@ package wildlog.data.dataobjects;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
-import wildlog.html.utils.UtilsHTML;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.html.utils.UtilsHTML;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 

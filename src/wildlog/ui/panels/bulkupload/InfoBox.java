@@ -215,7 +215,7 @@ public class InfoBox extends JPanel {
         dialog.setVisible(true);
         // Update the UI
         table.getCellEditor().stopCellEditing();
-        UtilsImageProcessing.setupFoto("ELEMENT-" + sightingWrapper.getElementName(), 0, lblImage, 150, app);
+        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getElementName(), 0, lblImage, 150, app);
         sightingWrapper.setIcon(lblImage.getIcon());
         populateUI();
     }//GEN-LAST:event_btnEditActionPerformed
@@ -232,7 +232,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnChooseCreatureActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        UtilsFileProcessing.openFile("ELEMENT-" + sightingWrapper.getElementName(), 0, app);
+        UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getElementName(), 0, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed

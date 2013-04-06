@@ -113,6 +113,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         // Spinner selection fix
         SpinnerFixer.fixSelectAllForSpinners(spnInactivityTime);
+        // Make dates pretty
+        dtpStartDate.getComponent(1).setBackground(pnlTop.getBackground());
+        dtpEndDate.getComponent(1).setBackground(pnlTop.getBackground());
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
@@ -560,9 +563,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             // Change the location name
             txtLocationName.setText(selectedName);
             // Cahnge the image
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + selectedName));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + selectedName));
             if (fotos.size() > 0) {
-                UtilsImageProcessing.setupFoto("LOCATION-" + selectedName, imageIndex, lblLocationImage, 100, app);
+                UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedName, imageIndex, lblLocationImage, 100, app);
             }
             else {
                 lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
@@ -589,7 +592,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void lblLocationImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationImageMouseReleased
         if (!lstLocation.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile("LOCATION-" + lstLocation.getSelectedValue().toString(), imageIndex, app);
+            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + lstLocation.getSelectedValue().toString(), imageIndex, app);
         }
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
@@ -697,6 +700,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // Continue processing the Sighting
                                 sightingWrapper.setLocationName(locationHandle.getName());
                                 sightingWrapper.setVisitName(visit.getName());
+                                // Makje sure the default moonphase is set to -1 (for when the code below doesn't overwrite it)
+                                sightingWrapper.setMoonPhase(-1);
                                 // If the sighting's GPS point is set then try to calculate Sun and Moon
                                 if (sightingWrapper.getDate() != null
                                         && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
@@ -738,7 +743,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(
-                                            "SIGHTING-" + sightingWrapper.getSightingCounter(),
+                                            sightingWrapper.getWildLogFileID(),
                                             "Observations" + File.separatorChar + sightingWrapper.toString(),
                                             files.toArray(new File[files.size()]),
                                             null, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
@@ -800,7 +805,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 for (Element element : elements) {
                     if (sightingWrapper.getElementName().equalsIgnoreCase(element.getPrimaryName())) {
                         JLabel tempLabel = new JLabel();
-                        UtilsImageProcessing.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, tempLabel, 150, app);
+                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, 150, app);
                         sightingWrapper.setIcon(tempLabel.getIcon());
                         foundElement = true;
                         break;

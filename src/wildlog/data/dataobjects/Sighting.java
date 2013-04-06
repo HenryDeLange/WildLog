@@ -7,6 +7,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
@@ -20,10 +21,12 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
-import wildlog.mapping.utils.UtilsGps;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.mapping.utils.UtilsGps;
 
-public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML {
+public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML, DataObjectWithWildLogFile {
+    public static final String WILDLOGFILE_ID_PREFIX = "SIGHTING-";
+    private long sightingCounter; // Used as index (ID)
     private Date date; // must include time
     private boolean timeUnknown;
     private ActiveTimeSpesific timeOfDay;
@@ -33,7 +36,6 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     private int numberOfElements;
     private String details;
     private SightingEvidence sightingEvidence;
-    private long sightingCounter;
     private String elementName;
     private String locationName;
     private String visitName;
@@ -71,10 +73,15 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     }
 
     @Override
+    public String getWildLogFileID() {
+        return WILDLOGFILE_ID_PREFIX + sightingCounter;
+    }
+
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         if (inIncludeImages) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("SIGHTING-" + sightingCounter));
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString.append(fotos.get(t).toHTML(inExportType));
             }

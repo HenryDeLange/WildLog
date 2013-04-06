@@ -1,7 +1,5 @@
 package wildlog.ui.panels;
 
-import wildlog.ui.dialogs.MappingDialog;
-import wildlog.ui.dialogs.ReportingDialog;
 import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -16,35 +14,37 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.AddFrequency;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.WaterDependancy;
-import wildlog.data.enums.WishRating;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
-import wildlog.utils.UtilsFileProcessing;
-import wildlog.WildLogApp;
-import wildlog.data.dataobjects.Location;
-import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
-import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.utils.UtilsData;
 import wildlog.data.enums.SizeType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
-import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
-import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.ui.helpers.FileDrop;
+import wildlog.data.enums.WaterDependancy;
+import wildlog.data.enums.WishRating;
+import wildlog.data.utils.UtilsData;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.ui.dialogs.MappingDialog;
+import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.helpers.UtilPanelGenerator;
+import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogPrefixes;
@@ -61,9 +61,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         element = inElement;
         initComponents();
         imageIndex = 0;
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
         if (fotos.size() > 0) {
-            UtilsImageProcessing.setupFoto("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
@@ -89,7 +89,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             public void filesDropped(List<File> inFiles) {
                 btnUpdateActionPerformed(null);
                 if (!txtPrimaryName.getBackground().equals(Color.RED)) {
-                    imageIndex = UtilsFileProcessing.uploadFilesUsingList("ELEMENT-" + element.getPrimaryName(),
+                    imageIndex = UtilsFileProcessing.uploadFilesUsingList(element.getWildLogFileID(),
                             WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), element.getPrimaryName()),
                             null, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app, inFiles);
                     setupNumberOfImages();
@@ -1276,7 +1276,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnUpdateActionPerformed(evt);
         if (!txtPrimaryName.getBackground().equals(Color.RED)) {
             imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
-                    "ELEMENT-" + element.getPrimaryName(),
+                    element.getWildLogFileID(),
                     WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(),
                     element.getPrimaryName()),
                     this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
@@ -1287,17 +1287,17 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        imageIndex = UtilsImageProcessing.previousImage(element.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        imageIndex = UtilsImageProcessing.nextImage(element.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        imageIndex = UtilsImageProcessing.setMainImage("ELEMENT-" + element.getPrimaryName(), imageIndex, app);
+        imageIndex = UtilsImageProcessing.setMainImage(element.getWildLogFileID(), imageIndex, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnSetMainImageActionPerformed
@@ -1364,7 +1364,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage("ELEMENT-" + element.getPrimaryName(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        imageIndex = UtilsImageProcessing.removeImage(element.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
         btnUpdateActionPerformed(evt);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
@@ -1382,7 +1382,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnAddSightingActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        UtilsFileProcessing.openFile("ELEMENT-" + element.getPrimaryName(), imageIndex, app);
+        UtilsFileProcessing.openFile(element.getWildLogFileID(), imageIndex, app);
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
@@ -1444,7 +1444,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
 
     private void setupNumberOfImages() {
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
         if (fotos.size() > 0)
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else

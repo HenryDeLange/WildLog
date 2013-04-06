@@ -53,7 +53,7 @@ public class ElementSelectionBox extends JDialog {
         UtilsDialog.setDialogToCenter(app.getMainFrame(), thisHandler);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), thisHandler);
         // Set the initial value
-        UtilsImageProcessing.setupFoto("ELEMENT-" + inSelectedElement, 0, lblElementImage, 150, app);
+        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + inSelectedElement, 0, lblElementImage, 150, app);
         lstElements.setSelectedValue(inSelectedElement, true);
     }
 
@@ -223,7 +223,7 @@ public class ElementSelectionBox extends JDialog {
 //            // Change the location name
 //            txtElementName.setText(selectedName);
             // Change the image
-            UtilsImageProcessing.setupFoto("ELEMENT-" + selectedName, 0, lblElementImage, 150, app);
+            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblElementImage, 150, app);
         }
         else {
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
@@ -232,7 +232,7 @@ public class ElementSelectionBox extends JDialog {
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (!lstElements.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile("ELEMENT-" + lstElements.getSelectedValue().toString(), 0, app);
+            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + lstElements.getSelectedValue().toString(), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 

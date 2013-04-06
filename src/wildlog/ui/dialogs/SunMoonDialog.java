@@ -58,6 +58,8 @@ public class SunMoonDialog extends JDialog {
                 escListener,
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_FOCUSED);
+        // Make date pretty
+        dtpDate.getComponent(1).setBackground(this.getBackground());
     }
 
     private void populateUI() {

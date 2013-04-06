@@ -20,19 +20,16 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
+import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.enums.Certainty;
-import wildlog.data.enums.ElementType;
-import wildlog.data.enums.ViewRating;
-import wildlog.data.enums.Weather;
-import wildlog.ui.helpers.UtilTableGenerator;
-import wildlog.utils.UtilsFileProcessing;
-import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
@@ -41,15 +38,19 @@ import wildlog.data.enums.Sex;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
-import wildlog.ui.dialogs.GPSDialog;
-import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
-import wildlog.astro.AstroCalculator;
-import wildlog.ui.helpers.FileDrop;
+import wildlog.data.enums.ViewRating;
+import wildlog.data.enums.Weather;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.GPSDialog;
+import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.SpinnerFixer;
-import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogPrefixes;
@@ -158,9 +159,9 @@ public class PanelSighting extends JDialog {
 
         // Setup location and element images
         if (location != null) {
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("LOCATION-" + location.getName()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
             if (fotos.size() > 0)
-                UtilsImageProcessing.setupFoto("LOCATION-" + location.getName(), 0, lblLocationImage, 100, app);
+                UtilsImageProcessing.setupFoto(location.getWildLogFileID(), 0, lblLocationImage, 100, app);
             else
                 lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
         }
@@ -168,9 +169,9 @@ public class PanelSighting extends JDialog {
             lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
         }
         if (element != null) {
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
             if (fotos.size() > 0)
-                UtilsImageProcessing.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, lblElementImage, 100, app);
+                UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, 100, app);
             else
                 lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
         }
@@ -254,6 +255,9 @@ public class PanelSighting extends JDialog {
                 escListiner,
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_FOCUSED);
+
+        // Make dates pretty
+        dtpSightingDate.getComponent(1).setBackground(sightingIncludes.getBackground());
     }
 
     private void setupSightingInfo() {
@@ -280,9 +284,9 @@ public class PanelSighting extends JDialog {
         spnDurationMinutes.setValue(sighting.getDurationMinutes());
         spnDurationSeconds.setValue(sighting.getDurationSeconds());
         // Setup the sighting's image
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (fotos.size() > 0)
-            UtilsImageProcessing.setupFoto("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+            UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         else
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
     }
@@ -1120,13 +1124,13 @@ public class PanelSighting extends JDialog {
         if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
             if (inFiles == null) {
                 imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
-                        "SIGHTING-" + sighting.getSightingCounter(),
+                        sighting.getWildLogFileID(),
                         WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
                         this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
             }
             else {
                 imageIndex = UtilsFileProcessing.uploadFilesUsingList(
-                        "SIGHTING-" + sighting.getSightingCounter(),
+                        sighting.getWildLogFileID(),
                         WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
                         this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app,
                         inFiles);
@@ -1137,14 +1141,14 @@ public class PanelSighting extends JDialog {
     }
 
     private void btnPreviousImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousImageActionPerformed
-        imageIndex = UtilsImageProcessing.previousImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        imageIndex = UtilsImageProcessing.previousImage(sighting.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
-            UtilsImageProcessing.setupFoto("ELEMENT-" + element.getPrimaryName(), 0, lblElementImage, 100, app);
+            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, 100, app);
         }
         else {
             element = null;
@@ -1153,18 +1157,18 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_tblElementMouseReleased
 
     private void btnNextImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextImageActionPerformed
-        imageIndex = UtilsImageProcessing.nextImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        imageIndex = UtilsImageProcessing.nextImage(sighting.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
 }//GEN-LAST:event_btnNextImageActionPerformed
 
     private void btnDeleteImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteImageActionPerformed
-        imageIndex = UtilsImageProcessing.removeImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+        imageIndex = UtilsImageProcessing.removeImage(sighting.getWildLogFileID(), imageIndex, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
         setupNumberOfImages();
         btnUpdateSightingActionPerformed(null);
     }//GEN-LAST:event_btnDeleteImageActionPerformed
 
     private void btnSetMainImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetMainImageActionPerformed
-        imageIndex = UtilsImageProcessing.setMainImage("SIGHTING-" + sighting.getSightingCounter(), imageIndex, app);
+        imageIndex = UtilsImageProcessing.setMainImage(sighting.getWildLogFileID(), imageIndex, app);
         setupNumberOfImages();
         btnUpdateSightingActionPerformed(null);
 }//GEN-LAST:event_btnSetMainImageActionPerformed
@@ -1183,7 +1187,7 @@ public class PanelSighting extends JDialog {
             location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
             UtilTableGenerator.setupVeryShortVisitTable(tblVisit, location);
             visit = null;
-            UtilsImageProcessing.setupFoto("LOCATION-" + location.getName(), 0, lblLocationImage, 100, app);
+            UtilsImageProcessing.setupFoto(location.getWildLogFileID(), 0, lblLocationImage, 100, app);
         }
         else {
             location = null;
@@ -1209,19 +1213,19 @@ public class PanelSighting extends JDialog {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (sighting != null) {
-            UtilsFileProcessing.openFile("SIGHTING-" + sighting.getSightingCounter(), imageIndex, app);
+            UtilsFileProcessing.openFile(sighting.getWildLogFileID(), imageIndex, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void lblLocationImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationImageMouseReleased
         if (location != null) {
-            UtilsFileProcessing.openFile("LOCATION-" + location.getName(), 0, app);
+            UtilsFileProcessing.openFile(location.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblLocationImageMouseReleased
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (element != null) {
-            UtilsFileProcessing.openFile("ELEMENT-" + element.getPrimaryName(), 0, app);
+            UtilsFileProcessing.openFile(element.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
@@ -1236,7 +1240,7 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_tblElementKeyReleased
 
     private void btnGetDateFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDateFromImageActionPerformed
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
+        List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (files != null && files.size() > 0)
             getDateFromImage(new File(files.get(imageIndex).getFilePath(true)));
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
@@ -1256,18 +1260,22 @@ public class PanelSighting extends JDialog {
     }
 
     private void btnCalculateSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateSunAndMoonActionPerformed
-        if (sighting.getDate() != null && sighting.getLatitude() != null && sighting.getLongitude() != null
+        if (sighting.getDate() != null
+                && sighting.getLatitude() != null && sighting.getLongitude() != null
                 && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
                 && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
                 && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
-            // Sun
+            // Try to save the sighting (to make sure all required fields are there and to get the Sighting Time)
             btnUpdateSightingActionPerformed(null);
-            double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-            double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-            cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(setSightingDateFromUIFields(), latitude, longitude));
-            // Moon
-            spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
-            cmbMoonlight.setSelectedItem(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+            if (!sighting.isTimeUnknown()) {
+                double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                // Sun
+                cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(setSightingDateFromUIFields(), latitude, longitude));
+                // Moon
+                spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
+                cmbMoonlight.setSelectedItem(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+            }
         }
         else {
             // Only show the error if the user clicked the button
@@ -1296,7 +1304,10 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_btnGPSActionPerformed
 
     private void btnCalculateDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateDurationActionPerformed
-        List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
+        // Get all Image files for this sighting
+        WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
+        searchFile.setFileType(WildLogFileType.IMAGE);
+        List<WildLogFile> files = app.getDBI().list(searchFile);
         if (!files.isEmpty()) {
             Collections.sort(files);
             Date startDate = UtilsImageProcessing.getDateFromImage(new File(files.get(0).getFilePath(true)));
@@ -1310,7 +1321,7 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
 
     private void setupNumberOfImages() {
-        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile("SIGHTING-" + sighting.getSightingCounter()));
+        List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (fotos.size() > 0)
             lblNumberOfImages.setText(imageIndex+1 + " of " + fotos.size());
         else

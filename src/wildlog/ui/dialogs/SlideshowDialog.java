@@ -14,11 +14,11 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.utils.WildLogPaths;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
 
 public class SlideshowDialog extends JDialog {
@@ -202,7 +202,7 @@ public class SlideshowDialog extends JDialog {
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
                 List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile("VISIT-" + visit.getName()));
+                List<WildLogFile> files = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
                 for (WildLogFile tempFile : files) {
                     if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                         if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
@@ -232,7 +232,7 @@ public class SlideshowDialog extends JDialog {
                 Collections.sort(sightingList);
                 for (int t = 0; t < sightingList.size(); t++) {
                     Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                    List<WildLogFile> files = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                     for (WildLogFile tempFile : files) {
                         if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                             // Only using JPGs because otherwise it might break the video
@@ -259,7 +259,7 @@ public class SlideshowDialog extends JDialog {
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
                 List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile("LOCATION-" + location.getName()));
+                List<WildLogFile> files = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
                 for (WildLogFile tempFile : files) {
                     if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                         if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
@@ -289,7 +289,7 @@ public class SlideshowDialog extends JDialog {
                 Collections.sort(sightingList);
                 for (int t = 0; t < sightingList.size(); t++) {
                     Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                    List<WildLogFile> files = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                     for (WildLogFile tempFile : files) {
                         if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                             // Only using JPGs because otherwise it might break the video
@@ -316,7 +316,7 @@ public class SlideshowDialog extends JDialog {
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
                 List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile("ELEMENT-" + element.getPrimaryName()));
+                List<WildLogFile> files = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
                 for (WildLogFile tempFile : files) {
                     if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                         if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
@@ -346,7 +346,7 @@ public class SlideshowDialog extends JDialog {
                 Collections.sort(sightingList);
                 for (int t = 0; t < sightingList.size(); t++) {
                     Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile("SIGHTING-" + tempSighting.getSightingCounter()));
+                    List<WildLogFile> files = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
                     for (WildLogFile tempFile : files) {
                         if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
                             // Only using JPGs because otherwise it might break the video

@@ -3,7 +3,6 @@ package wildlog.data.dataobjects.interfaces;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 
-
 public abstract class DataObjectWithGPS {
     protected Latitudes latitude;
     protected int latDegrees;

@@ -1,6 +1,5 @@
 package wildlog.data.dbi;
 
-import wildlog.data.utils.UtilsData;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -29,7 +28,6 @@ import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.Latitudes;
@@ -47,7 +45,9 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.Weather;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WishRating;
+import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public abstract class DBI_JDBC implements DBI {
@@ -307,15 +307,20 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inFile.getId()));
             }
-            results = state.executeQuery();
-            if (results.next()) {
-                tempFile = new WildLogFile();
-                tempFile.setId(results.getString("ID"));
-                tempFile.setFilename(results.getString("FILENAME"));
-                tempFile.setFilePath(results.getString("ORIGINALPATH"));
-                tempFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
-                tempFile.setUploadDate(results.getDate("UPLOADDATE"));
-                tempFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
+            if (state != null) {
+                results = state.executeQuery();
+                if (results.next()) {
+                    tempFile = new WildLogFile();
+                    tempFile.setId(results.getString("ID"));
+                    tempFile.setFilename(results.getString("FILENAME"));
+                    tempFile.setFilePath(results.getString("ORIGINALPATH"));
+                    tempFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
+                    tempFile.setUploadDate(results.getDate("UPLOADDATE"));
+                    tempFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
+                }
+            }
+            else {
+                System.err.println("WARNING: Null Statement in DBI_JDBC.java");
             }
         }
         catch (SQLException ex) {
@@ -598,11 +603,26 @@ public abstract class DBI_JDBC implements DBI {
         List<WildLogFile> tempList = new ArrayList<WildLogFile>();
         try {
             String sql = listFile;
-            if (inFile.getId() != null) {
+            if (inFile.getId() != null && (inFile.getFileType() == null || WildLogFileType.NONE.equals(inFile.getFileType()))) {
                 sql = sql + " WHERE ID = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inFile.getId()));
+            }
+            else
+            if (inFile.getId() != null && !(inFile.getFileType() == null || WildLogFileType.NONE.equals(inFile.getFileType()))) {
+                sql = sql + " WHERE ID = ? AND FILETYPE = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inFile.getId()));
+                state.setString(2, UtilsData.stringFromObject(inFile.getFileType()));
+            }
+            else
+            if (inFile.getId() == null && !(inFile.getFileType() == null || WildLogFileType.NONE.equals(inFile.getFileType()))) {
+                sql = sql + " WHERE FILETYPE = ?";
+                sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.stringFromObject(inFile.getFileType()));
             }
             else {
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
@@ -706,9 +726,9 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp);
                     }
                     // Update the Files
-                    List<WildLogFile> wildLogFiles = list(new WildLogFile("ELEMENT-" + UtilsData.sanitizeString(inOldName)));
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile(Element.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
                     for (WildLogFile temp : wildLogFiles) {
-                        temp.setId("ELEMENT-" + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
+                        temp.setId(Element.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
                         createOrUpdate(temp, true);
                     }
                 }
@@ -794,9 +814,9 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp, temp.getName());
                     }
                     // Update the Files
-                    List<WildLogFile> wildLogFiles = list(new WildLogFile("LOCATION-" + UtilsData.sanitizeString(inOldName)));
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
                     for (WildLogFile temp : wildLogFiles) {
-                        temp.setId("LOCATION-" + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
+                        temp.setId(Location.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
                         createOrUpdate(temp, true);
                     }
                 }
@@ -865,9 +885,9 @@ public abstract class DBI_JDBC implements DBI {
                         createOrUpdate(temp);
                     }
                     // Update the Files
-                    List<WildLogFile> wildLogFiles = list(new WildLogFile("VISIT-" + UtilsData.sanitizeString(inOldName)));
+                    List<WildLogFile> wildLogFiles = list(new WildLogFile(Visit.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
                     for (WildLogFile temp : wildLogFiles) {
-                        temp.setId("VISIT-" + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
+                        temp.setId(Visit.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
                         createOrUpdate(temp, true);
                     }
                 }
@@ -1103,7 +1123,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("ELEMENT-" + UtilsData.sanitizeString(inElement.getPrimaryName()));
+            file.setId(Element.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inElement.getPrimaryName()));
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);
@@ -1137,7 +1157,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("LOCATION-" + UtilsData.sanitizeString(inLocation.getName()));
+            file.setId(Location.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inLocation.getName()));
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);
@@ -1170,7 +1190,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("VISIT-" + UtilsData.sanitizeString(inVisit.getName()));
+            file.setId(Visit.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inVisit.getName()));
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);
@@ -1196,7 +1216,7 @@ public abstract class DBI_JDBC implements DBI {
             state.executeUpdate();
             // Delete Fotos
             WildLogFile file = new WildLogFile();
-            file.setId("SIGHTING-" + inSighting.getSightingCounter());
+            file.setId(Sighting.WILDLOGFILE_ID_PREFIX + inSighting.getSightingCounter());
             List<WildLogFile> fileList = list(file);
             for (WildLogFile temp : fileList) {
                 delete(temp);

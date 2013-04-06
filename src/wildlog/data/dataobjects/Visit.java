@@ -4,11 +4,13 @@ import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.html.utils.UtilsHTML;
 
-public class Visit implements Comparable<Visit>, DataObjectWithHTML {
+public class Visit implements Comparable<Visit>, DataObjectWithHTML, DataObjectWithWildLogFile {
+    public static final String WILDLOGFILE_ID_PREFIX = "VISIT-";
     private String name; // Used as index (ID)
     private Date startDate;
     private Date endDate;
@@ -41,10 +43,15 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML {
     }
 
     @Override
+    public String getWildLogFileID() {
+        return WILDLOGFILE_ID_PREFIX + name;
+    }
+
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         if (inIncludeImages) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("VISIT-" + name));
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString.append(fotos.get(t).toHTML(inExportType));
             }

@@ -6,14 +6,16 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
-import wildlog.mapping.utils.UtilsGps;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.mapping.utils.UtilsGps;
 
-public class Location extends DataObjectWithGPS implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML {
+public class Location extends DataObjectWithGPS implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML, DataObjectWithWildLogFile {
+    public static final String WILDLOGFILE_ID_PREFIX = "LOCATION-";
     private String name; // Used as index (ID)
     private String description;
     private LocationRating rating;
@@ -50,10 +52,15 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
     }
 
     @Override
+    public String getWildLogFileID() {
+        return WILDLOGFILE_ID_PREFIX + name;
+    }
+
+    @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
         StringBuilder fotoString = new StringBuilder();
         if (inIncludeImages) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile("LOCATION-" + name));
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
             for (int t = 0; t < fotos.size(); t++) {
                 fotoString.append(fotos.get(t).toHTML(inExportType));
             }

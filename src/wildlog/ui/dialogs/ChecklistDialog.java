@@ -61,6 +61,8 @@ public class ChecklistDialog extends JDialog {
                 escListiner,
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_FOCUSED);
+        // Make dates pretty
+        dtpDate.getComponent(1).setBackground(this.getBackground());
     }
 
     /** This method is called from within the constructor to
