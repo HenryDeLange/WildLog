@@ -238,7 +238,7 @@ public class PanelSighting extends JDialog {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             spnNumberOfElements.setValue(0);
             spnMoonPhase.setValue(-1);
-            spnTemperature.setValue(0);
+            spnTemperature.setValue(0.0);
         }
         else {
             // Setup the Sighting info
@@ -1260,14 +1260,17 @@ public class PanelSighting extends JDialog {
     }
 
     private void btnCalculateSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateSunAndMoonActionPerformed
+        boolean showError = true;
         if (sighting.getDate() != null
                 && sighting.getLatitude() != null && sighting.getLongitude() != null
                 && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
                 && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
                 && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
             // Try to save the sighting (to make sure all required fields are there and to get the Sighting Time)
-            btnUpdateSightingActionPerformed(null);
-            if (!sighting.isTimeUnknown()) {
+            if (!bulkUploadMode) {
+                btnUpdateSightingActionPerformed(null);
+            }
+            if (dtpSightingDate.getDate() != null && !sighting.isTimeUnknown()) {
                 double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
                 double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 // Sun
@@ -1275,21 +1278,23 @@ public class PanelSighting extends JDialog {
                 // Moon
                 spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
                 cmbMoonlight.setSelectedItem(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                showError = false;
             }
         }
-        else {
-            // Only show the error if the user clicked the button
-            if (evt != null) {
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Please make sure to first provide values for the Creature, Place, Period and GPS point.",
-                                "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
-                        return -1;
-                    }
-                });
-            }
+        // Only show the error if the user clicked the button
+        if (evt == null) {
+            showError = false;
+        }
+        if (showError) {
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please make sure to first provide values for the Creature, Place, Period and GPS point.",
+                            "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
+                    return -1;
+                }
+            });
         }
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
 

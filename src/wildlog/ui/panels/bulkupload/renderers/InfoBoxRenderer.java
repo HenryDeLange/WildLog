@@ -35,9 +35,9 @@ public class InfoBoxRenderer implements TableCellRenderer {
         else
             infoBox.populateUI();
         if (inRow % 2 == 0)
-            infoBox.setBackground(BulkUploadPanel.tableBackgroundColor1);
+            infoBox.setRowBackground(BulkUploadPanel.tableBackgroundColor1);
         else
-            infoBox.setBackground(BulkUploadPanel.tableBackgroundColor2);
+            infoBox.setRowBackground(BulkUploadPanel.tableBackgroundColor2);
         return infoBox;
     }
 

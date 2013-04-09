@@ -1,8 +1,5 @@
 package wildlog.utils;
 
-import wildlog.ui.helpers.ImagePreview;
-import wildlog.ui.helpers.ImageFilter;
-import wildlog.ui.helpers.MovieFilter;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
@@ -22,6 +19,9 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ImageFilter;
+import wildlog.ui.helpers.ImagePreview;
+import wildlog.ui.helpers.MovieFilter;
 
 public final class UtilsFileProcessing {
     // Extentions

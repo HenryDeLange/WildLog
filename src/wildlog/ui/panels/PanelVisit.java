@@ -299,7 +299,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel54.setText("Type of Visit:");
         jLabel54.setName("jLabel54"); // NOI18N
 
-        cmbType.setBackground(new java.awt.Color(224, 239, 240));
         cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
         cmbType.setSelectedItem(visit.getType());
         cmbType.setFocusable(false);
@@ -314,7 +313,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel4.setText("Game Watching:");
         jLabel4.setName("jLabel4"); // NOI18N
 
-        cmbGameWatchIntensity.setBackground(new java.awt.Color(224, 239, 240));
         cmbGameWatchIntensity.setModel(new DefaultComboBoxModel(GameWatchIntensity.values()));
         cmbGameWatchIntensity.setSelectedItem(visit.getGameWatchingIntensity());
         cmbGameWatchIntensity.setFocusable(false);

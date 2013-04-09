@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -96,7 +97,8 @@ public class UtilsDialog {
     public static void showExifPopup(File inFile) {
         if (inFile != null) {
             if (inFile.exists()) {
-                JFrame frame = new JFrame("EXIF Meta Data: " + inFile.getPath());
+                final JFrame frame = new JFrame("EXIF Meta Data: " + inFile.getPath());
+                frame.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/EXIF.png")).getImage());
                 JTextPane txtPane = new JTextPane();
                 txtPane.setContentType("text/html");
                 txtPane.setEditable(false);
@@ -118,8 +120,18 @@ public class UtilsDialog {
                     JScrollPane scroll = new JScrollPane(txtPane);
                     scroll.setPreferredSize(new Dimension(500, 750));
                     frame.getContentPane().add(scroll);
-                    //frame.setLocationRelativeTo(((WildLogApp)Application.getInstance()).getMainView().getComponent());
                     frame.pack();
+                    frame.setLocationRelativeTo(((WildLogApp)Application.getInstance()).getMainFrame());
+                    ActionListener escListiner = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            frame.dispose();
+                        }
+                    };
+                    frame.getRootPane().registerKeyboardAction(
+                            escListiner,
+                            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                            JComponent.WHEN_IN_FOCUSED_WINDOW);
                     frame.setVisible(true);
                 }
                 catch (IOException ex) {

@@ -19,10 +19,10 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -66,7 +66,8 @@ public class BulkUploadDataLoader {
         if (imageList.size() > 0) {
             // Start off with a value that is garuanteed to be updated for the first record, to get things started...
             Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
-            BulkUploadSightingWrapper sightingKey = null;
+            // If no image has any date, then all will be in this initial SightingWrapper.
+            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
@@ -125,14 +126,12 @@ public class BulkUploadDataLoader {
     }
 
     private static Object[][] getArrayFromHash(Map<BulkUploadSightingWrapper, BulkUploadImageListWrapper> inData){
-        Object[][] temp = null; {
-            Object[] keys = inData.keySet().toArray();
-            Object[] values = inData.values().toArray();
-            temp = new Object[keys.length][values.length];
-            for(int i=0; i < keys.length; i++) {
-                temp[i][0] = keys[i];
-                temp[i][1] = values[i];
-            }
+        Object[] keys = inData.keySet().toArray();
+        Object[] values = inData.values().toArray();
+        Object[][] temp = new Object[keys.length][2];
+        for(int i=0; i < keys.length; i++) {
+            temp[i][0] = keys[i];
+            temp[i][1] = values[i];
         }
         return temp;
     }

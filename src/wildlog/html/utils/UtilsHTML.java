@@ -6,12 +6,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
-import wildlog.utils.WildLogPaths;
 import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
 
 public final class UtilsHTML {
@@ -31,25 +32,30 @@ public final class UtilsHTML {
         toDir.mkdirs();
         File toFile = new File(toDir.getAbsolutePath() + File.separatorChar + fromFile.getName());
         UtilsFileProcessing.copyFile(fromFile, toFile);
-        // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
-        String fullpath = toFile.getAbsolutePath().toLowerCase();
-        if (inExportType.equals(UtilsHTML.ImageExportTypes.ForHTML))
-            //return "<img src=\"" + toFile.getAbsolutePath().toLowerCase().replaceFirst(Matcher.quoteReplacement(toFile.getAbsolutePath().toLowerCase().substring(0, 1) + ":" + WildLogPaths.WILDLOG_EXPORT_HTML), "..") + "\"/>  ";
-            return "<img src=\"..\\"
+        String fullpath = toFile.getAbsolutePath();
+        if (inExportType.equals(UtilsHTML.ImageExportTypes.ForHTML)) {
+            return "<img src=\".." + File.separatorChar
                     + WildLogPaths.stripRootFromPath(fullpath,
                         WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
+                    .replaceAll(Pattern.quote(File.separator), "/")
                     + "\"/>  ";
+        }
         else
-        if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML))
-            return "<img src=\"..\\html\\"
+        if (inExportType.equals(UtilsHTML.ImageExportTypes.ForKML)) {
+            // Gebruik toLowerCase() want Google Earth herken nie die filenaam as 'n image as dit met hoofletter JPG eindig nie
+            fullpath = fullpath.toLowerCase();
+            return "<img src=\".." + File.separatorChar + "html" + File.separatorChar
                     + WildLogPaths.stripRootFromPath(fullpath,
                         WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath()))
+                    .replaceAll(Pattern.quote(File.separator), "/")
                     + "\"/>  ";
+        }
         else
-        if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap))
-            return "<img src=\"file:\\" + toFile.getAbsolutePath().toLowerCase() + "\"/>  ";
-        else
-            return "[image error]";
+        if (inExportType.equals(UtilsHTML.ImageExportTypes.ForMap)) {
+            // Gebruik URI hier om in Windows en Linux reg te werk
+            return "<img src=\"" + toFile.toURI().toString() + "\"/>  ";
+        }
+        return "[image error]";
     }
 
     public static String exportHTML(Element inElement, WildLogApp inApp) {

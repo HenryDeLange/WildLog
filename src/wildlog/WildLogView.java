@@ -341,8 +341,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         workspaceMenu = new javax.swing.JMenu();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
-        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem mnuAboutMenuItem = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
@@ -353,10 +351,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         kmlExportMenuItem = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         csvImportMenuItem = new javax.swing.JMenuItem();
+        jSeparator7 = new javax.swing.JPopupMenu.Separator();
         bulkImportMenuItem = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
         calcSunMoonMenuItem = new javax.swing.JMenuItem();
         calcDurationMenuItem = new javax.swing.JMenuItem();
+        jSeparator4 = new javax.swing.JPopupMenu.Separator();
         moveVisitsMenuItem = new javax.swing.JMenuItem();
         linkElementsMenuItem = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
@@ -372,10 +372,13 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
         mnuSunAndMoon = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
         subMenu1 = new javax.swing.JMenu();
         mnuDBConsole = new javax.swing.JMenuItem();
         subMenu3 = new javax.swing.JMenu();
         mnuOpenMapApp = new javax.swing.JMenuItem();
+        javax.swing.JMenu helpMenu = new javax.swing.JMenu();
+        javax.swing.JMenuItem mnuAboutMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog");
@@ -752,7 +755,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
 
-        cmbElementTypesBrowseTab.setBackground(new java.awt.Color(219, 237, 205));
         cmbElementTypesBrowseTab.setMaximumRowCount(9);
         cmbElementTypesBrowseTab.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
         cmbElementTypesBrowseTab.setSelectedItem(ElementType.NONE);
@@ -1377,7 +1379,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
-        mnuChangeWorkspaceMenuItem.setText("Change Workspace Folder");
+        mnuChangeWorkspaceMenuItem.setText("Select New Default Workspace Folder");
         mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
         mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
         mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1388,8 +1390,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         workspaceMenu.add(mnuChangeWorkspaceMenuItem);
 
         mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
-        mnuCleanWorkspace.setText("Check and Clean Workspace Folder");
-        mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove any nonessential files.");
+        mnuCleanWorkspace.setText("Check and Clean Default Workspace Folder");
+        mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove nonessential files.");
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
         mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1400,26 +1402,10 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         fileMenu.add(workspaceMenu);
 
-        helpMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
-        helpMenu.setText("About");
-        helpMenu.setName("helpMenu"); // NOI18N
-
-        mnuAboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
-        mnuAboutMenuItem.setText("About WildLog");
-        mnuAboutMenuItem.setName("mnuAboutMenuItem"); // NOI18N
-        mnuAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAboutMenuItemActionPerformed(evt);
-            }
-        });
-        helpMenu.add(mnuAboutMenuItem);
-
-        fileMenu.add(helpMenu);
-
         jSeparator2.setName("jSeparator2"); // NOI18N
         fileMenu.add(jSeparator2);
 
-        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
         exitMenuItem.setText("Exit WildLog");
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1498,6 +1484,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         });
         importMenu.add(csvImportMenuItem);
 
+        jSeparator7.setName("jSeparator7"); // NOI18N
+        importMenu.add(jSeparator7);
+
         bulkImportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
         bulkImportMenuItem.setText("Open Bulk Import Tab");
         bulkImportMenuItem.setToolTipText("Import multiple images at once.");
@@ -1533,6 +1522,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
         advancedMenu.add(calcDurationMenuItem);
+
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        advancedMenu.add(jSeparator4);
 
         moveVisitsMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         moveVisitsMenuItem.setText("Move a Period to another Place");
@@ -1668,10 +1660,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         });
         extraMenu.add(mnuSunAndMoon);
 
-        subMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        extraMenu.add(jSeparator3);
+
+        subMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         subMenu1.setText("External Database Tools");
         subMenu1.setName("subMenu1"); // NOI18N
 
+        mnuDBConsole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuDBConsole.setText("Open H2 Database Console");
         mnuDBConsole.setToolTipText("Open the DB console bundled with the H2 database to access the database used by WildLog.");
         mnuDBConsole.setName("mnuDBConsole"); // NOI18N
@@ -1684,10 +1680,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         extraMenu.add(subMenu1);
 
-        subMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        subMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         subMenu3.setText("External Map Tools");
         subMenu3.setName("subMenu3"); // NOI18N
 
+        mnuOpenMapApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Map Icon.gif"))); // NOI18N
         mnuOpenMapApp.setText("Open OpenMap Software");
         mnuOpenMapApp.setToolTipText("Open the OpenMap application in standand alone mode.");
         mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
@@ -1701,6 +1698,21 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         extraMenu.add(subMenu3);
 
         menuBar.add(extraMenu);
+
+        helpMenu.setText("About");
+        helpMenu.setName("helpMenu"); // NOI18N
+
+        mnuAboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        mnuAboutMenuItem.setText("About WildLog");
+        mnuAboutMenuItem.setName("mnuAboutMenuItem"); // NOI18N
+        mnuAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutMenuItemActionPerformed(evt);
+            }
+        });
+        helpMenu.add(mnuAboutMenuItem);
+
+        menuBar.add(helpMenu);
 
         setJMenuBar(menuBar);
     }// </editor-fold>//GEN-END:initComponents
@@ -1981,7 +1993,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtBrowseInfo.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
+                        .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
                 setupFile(fotos);
             }
@@ -1989,7 +2001,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtBrowseInfo.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
+                        .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
                 setupFile(fotos);
             }
@@ -1997,7 +2009,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 txtBrowseInfo.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
+                        .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
                 List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
                 setupFile(fotos);
             }
@@ -2254,28 +2266,44 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_tblLocation_EleTabMouseClicked
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
+        boolean somethingToReportOn = false;
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), tempLocation, null, null, null, null);
                 dialog.setVisible(true);
+                somethingToReportOn = true;
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, tempElement, null, null, null);
                 dialog.setVisible(true);
+                somethingToReportOn = true;
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
                 ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, tempVisit, null, null);
                 dialog.setVisible(true);
+                somethingToReportOn = true;
             }
         }
         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
             ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, null, dtpStartDate.getDate(), dtpEndDate.getDate());
             dialog.setVisible(true);
+            somethingToReportOn = true;
+        }
+        if (somethingToReportOn == false) {
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "Please select an entry in the tree to the left, or specifiy a date range.",
+                            "No Report Available",
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                }
+            });
         }
 }//GEN-LAST:event_btnReportActionPerformed
 
@@ -2534,6 +2562,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     null);
             app.getMainFrame().getGlassPane().setVisible(false);
             if (choice != JOptionPane.CLOSED_OPTION) {
+                // Close all tabs and go to the home tab
+                tabbedPanel.setSelectedIndex(0);
+                while (tabbedPanel.getTabCount() > 4) {
+                    tabbedPanel.remove(4);
+                }
                 UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
@@ -2541,10 +2574,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             // Update all Observations
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            tabbedPanel.setSelectedIndex(0);
-                            while (tabbedPanel.getTabCount() > 4) {
-                                tabbedPanel.remove(4);
-                            }
                             List<Sighting> sightings = app.getDBI().list(new Sighting());
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
@@ -2569,10 +2598,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             // Update only Observations without Sun and Moon phase
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            tabbedPanel.setSelectedIndex(0);
-                            while (tabbedPanel.getTabCount() > 4) {
-                                tabbedPanel.remove(4);
-                            }
                             List<Sighting> sightings = app.getDBI().list(new Sighting());
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
@@ -2896,7 +2921,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
 
     private void mnuCleanWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCleanWorkspaceActionPerformed
-        // POPUP 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
+        // Popup 'n warning om te se alle programme wat WL data dalk oop het moet toe gemaak word sodat ek die files kan delete of move.
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
@@ -2911,18 +2936,22 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
         if (result == JOptionPane.OK_OPTION) {
+            // Close all tabs and go to the home tab
+            tabbedPanel.setSelectedIndex(0);
+            while (tabbedPanel.getTabCount() > 4) {
+                tabbedPanel.remove(4);
+            }
             // Lock the input/display and show busy message
             // Note: we never remove the Busy dialog and greyed out background since the app wil be restarted anyway when done
             tabbedPanel.setSelectedIndex(0);
             JPanel panel = new JPanel(new AbsoluteLayout());
             panel.setPreferredSize(new Dimension(400, 50));
-            panel.setBorder(new LineBorder(new Color(235, 90, 80), 3));
+            panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
             JLabel label = new JLabel("<html>Busy cleaning workspace. Please be patient, this might take a while. <br>Don't close the application until the process is finished.</html>");
-            label.setFont(new Font("Tahoma", Font.BOLD, 14));
-            label.setForeground(new Color(240, 251, 230));
-            label.setBorder(new LineBorder(new Color(180, 90, 40), 5));
+            label.setFont(new Font("Tahoma", Font.BOLD, 12));
+            label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
             panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-            panel.add(label, new AbsoluteConstraints(250, 30, -1, -1));
+            panel.add(label, new AbsoluteConstraints(310, 20, -1, -1));
             panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
             JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
             glassPane.removeAll();
@@ -2956,8 +2985,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 String shouldBePath = WildLogPaths.concatPaths(true, inExpectedPath, inExpectedPrefix);
                                 String currentPath = new File(inWildLogFile.getFilePath(false)).getParent();
                                 if (!shouldBePath.equalsIgnoreCase(currentPath)) {
-                                    finalHandleFeedback.println("ERROR: Incorrect path:" + currentPath);
-                                    finalHandleFeedback.println("     RESOLVE: Moving the file to the correct location:" + shouldBePath);
+                                    finalHandleFeedback.println("ERROR: Incorrect path: " + currentPath);
+                                    finalHandleFeedback.println("     RESOLVE: Moving the file to the correct location: " + shouldBePath);
                                     // "Re-upload" the file to the correct location
                                     UtilsFileProcessing.performFileUpload(inWildLogFile.getId(), inExpectedPrefix, new File[]{new File(inWildLogFile.getFilePath(true))}, null, -1, app);
                                     // Delete the wrong entry
@@ -3026,37 +3055,37 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             // Check the WildLogFile's content
                             if (wildLogFile.getId() == null) {
                                 filesWithoutID++;
-                                finalHandleFeedback.println("ERROR: File record without an ID. FilePath:" + wildLogFile.getFilePath(false));
+                                finalHandleFeedback.println("ERROR: File record without an ID. FilePath: " + wildLogFile.getFilePath(false));
                                 finalHandleFeedback.println("     RESOLVE: Trying to delete the database file record and file on disk.");
                                 app.getDBI().delete(wildLogFile);
                                 continue;
                             }
                             if (wildLogFile.getFilePath(false) == null || wildLogFile.getFilePath(true) == null) {
                                 filesWithoutPath++;
-                                finalHandleFeedback.println("ERROR: File path missing from record. FileID:" + wildLogFile.getId());
+                                finalHandleFeedback.println("ERROR: File path missing from record. FileID: " + wildLogFile.getId());
                                 finalHandleFeedback.println("     RESOLVE: Trying to delete the database file record.");
                                 app.getDBI().delete(wildLogFile);
                                 continue;
                             }
                             if (!new File(wildLogFile.getFilePath(false)).exists() && !new File(wildLogFile.getFilePath(true)).exists()) {
                                 filesNotOnDisk++;
-                                finalHandleFeedback.println("ERROR: File record in the database can't be found on disk. File path:" + wildLogFile.getFilePath(false));
+                                finalHandleFeedback.println("ERROR: File record in the database can't be found on disk. File path: " + wildLogFile.getFilePath(false));
                                 finalHandleFeedback.println("     RESOLVE: Trying to delete the database file record.");
                                 app.getDBI().delete(wildLogFile);
                                 continue;
                             }
                             if (wildLogFile.getFilename() == null || wildLogFile.getFilename().isEmpty() || wildLogFile.getUploadDate() == null) {
                                 filesWithMissingData++;
-                                finalHandleFeedback.println("WARNING: Database file record missing data. FilePath:" + wildLogFile.getFilePath(false)
-                                        + ", Filename:" + wildLogFile.getFilename()
-                                        + ", UploadDate:" + wildLogFile.getUploadDate());
+                                finalHandleFeedback.println("WARNING: Database file record missing data. FilePath: " + wildLogFile.getFilePath(false)
+                                        + ", Filename: " + wildLogFile.getFilename()
+                                        + ", UploadDate: " + wildLogFile.getUploadDate());
                                 finalHandleFeedback.println("     RESOLVE: No action taken...");
                                 continue;
                             }
                             if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
                                 filesWithBadType++;
-                                finalHandleFeedback.println("ERROR: Unknown FileType of database file record. FilePath:" + wildLogFile.getFilePath(false)
-                                        + ", FileType:" + wildLogFile.getFileType());
+                                finalHandleFeedback.println("ERROR: Unknown FileType of database file record. FilePath: " + wildLogFile.getFilePath(false)
+                                        + ", FileType: " + wildLogFile.getFileType());
                                 finalHandleFeedback.println("     RESOLVE: Changed FileType to " + WildLogFileType.OTHER + ".");
                                 wildLogFile.setFileType(WildLogFileType.OTHER);
                                 app.getDBI().createOrUpdate(wildLogFile, true);
@@ -3068,8 +3097,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
                                     filesWithBadID++;
-                                    finalHandleFeedback.println("ERROR: Could not find linked Creature for this file record. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", PrimaryName Used:" + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("ERROR: Could not find linked Creature for this file record. FilePath: " + wildLogFile.getFilePath(false)
+                                            + ", ID: " + wildLogFile.getId() + ", PrimaryName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record  and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3085,8 +3114,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
                                     filesWithBadID++;
-                                    finalHandleFeedback.println("ERROR: Could not find linked Period for this file record. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", Period Used:" + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("ERROR: Could not find linked Period for this file record. FilePath: " + wildLogFile.getFilePath(false)
+                                            + ", ID: " + wildLogFile.getId() + ", Period Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3102,8 +3131,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
                                     filesWithBadID++;
-                                    finalHandleFeedback.println("ERROR: Could not find linked Place for this file. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", Location Used:" + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("ERROR: Could not find linked Place for this file. FilePath: " + wildLogFile.getFilePath(false)
+                                            + ", ID: " + wildLogFile.getId() + ", Location Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3125,8 +3154,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 }
                                 if (temp == null) {
                                     filesWithBadID++;
-                                    finalHandleFeedback.println("ERROR: Could not find linked Observation for this file. FilePath:" + wildLogFile.getFilePath(false)
-                                            + ", ID:" + wildLogFile.getId() + ", Sighting ID Used:" + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
+                                    finalHandleFeedback.println("ERROR: Could not find linked Observation for this file. FilePath: " + wildLogFile.getFilePath(false)
+                                            + ", ID: " + wildLogFile.getId() + ", Sighting ID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("     RESOLVE: Deleting the file record and disk file.");
                                     app.getDBI().delete(wildLogFile);
                                     continue;
@@ -3203,7 +3232,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             if (temp == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR: Could not find link between Period and Place. "
-                                        + "Period:" + visit.getName() + ", Place:" + visit.getLocationName());
+                                        + "Period: " + visit.getName() + ", Place: " + visit.getLocationName());
                                 finalHandleFeedback.println("     RESOLVE: Moving Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
                                 if (newLocation == null) {
@@ -3222,7 +3251,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             if (tempLocation == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR: Could not find link between Observation and Place. "
-                                        + "Observation:" + sighting.getSightingCounter() + ", Place:" + sighting.getLocationName());
+                                        + "Observation: " + sighting.getSightingCounter() + ", Place: " + sighting.getLocationName());
                                 finalHandleFeedback.println("     RESOLVE: Moving Observation to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
                                 if (newLocation == null) {
@@ -3237,7 +3266,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             if (tempElement == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR: Could not find link between Observation and Creature. "
-                                        + "Observation:" + sighting.getSightingCounter() + ", Creature:" + sighting.getLocationName());
+                                        + "Observation: " + sighting.getSightingCounter() + ", Creature: " + sighting.getLocationName());
                                 finalHandleFeedback.println("     RESOLVE: Moving Observation to a new Creature called 'WildLog_lost_and_found'.");
                                 Element newElement = app.getDBI().find(new Element("WildLog_lost_and_found"));
                                 if (newElement == null) {
@@ -3252,7 +3281,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             if (tempVisit == null) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR: Could not find link between Observation and Period. "
-                                        + "Observation:" + sighting.getSightingCounter() + ", Period:" + sighting.getVisitName());
+                                        + "Observation: " + sighting.getSightingCounter() + ", Period: " + sighting.getVisitName());
                                 finalHandleFeedback.println("     RESOLVE: Moving Observation to a new Period called 'WildLog_lost_and_found'.");
                                 // Visit
                                 Visit newVisit = app.getDBI().find(new Visit("WildLog_lost_and_found"));
@@ -3276,7 +3305,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             if (!checkSightingVisit.getLocationName().equalsIgnoreCase(sighting.getLocationName())) {
                                 badDataLinks++;
                                 finalHandleFeedback.println("ERROR: The Observation and Period references different Places. "
-                                        + "Observation:" + sighting.getLocationName() + ", Period:" + checkSightingVisit.getLocationName());
+                                        + "Observation: " + sighting.getLocationName() + ", Period: " + checkSightingVisit.getLocationName());
                                 finalHandleFeedback.println("     RESOLVE: Moving Observation and Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
                                 if (newLocation == null) {
@@ -3370,6 +3399,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     null);
             app.getMainFrame().getGlassPane().setVisible(false);
             if (choice != JOptionPane.CLOSED_OPTION) {
+                // Close all tabs and go to the home tab
+                tabbedPanel.setSelectedIndex(0);
+                while (tabbedPanel.getTabCount() > 4) {
+                    tabbedPanel.remove(4);
+                }
                 UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
@@ -3688,8 +3722,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JPopupMenu.Separator jSeparator2;
+    private javax.swing.JPopupMenu.Separator jSeparator3;
+    private javax.swing.JPopupMenu.Separator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblCreatures;
     private javax.swing.JLabel lblImage;

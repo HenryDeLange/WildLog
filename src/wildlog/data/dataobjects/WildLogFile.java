@@ -97,7 +97,7 @@ public class WildLogFile implements Comparable<WildLogFile> {
         if (inGetFullpath)
             return WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), originalFileLocation);
         else
-            return originalFileLocation;
+            return WildLogPaths.concatPaths(false, File.separator, originalFileLocation);
     }
 
     public WildLogFileType getFileType() {

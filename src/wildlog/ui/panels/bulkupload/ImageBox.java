@@ -1,5 +1,6 @@
 package wildlog.ui.panels.bulkupload;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -71,7 +72,6 @@ public class ImageBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 5, 200, 200));
 
-        btnUp.setBackground(new java.awt.Color(235, 246, 220));
         btnUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/up.png"))); // NOI18N
         btnUp.setToolTipText("Move the image UP to the Observation above.");
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -86,7 +86,6 @@ public class ImageBox extends JPanel {
         });
         add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 100));
 
-        btnDown.setBackground(new java.awt.Color(235, 246, 220));
         btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
         btnDown.setToolTipText("Move the image DOWN to the Observation below.");
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -101,7 +100,6 @@ public class ImageBox extends JPanel {
         });
         add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
 
-        btnRemove.setBackground(new java.awt.Color(235, 246, 220));
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemove.setText("Remove");
@@ -119,7 +117,6 @@ public class ImageBox extends JPanel {
         });
         add(btnRemove, new org.netbeans.lib.awtextra.AbsoluteConstraints(165, 205, 70, 30));
 
-        btnNewSighting.setBackground(new java.awt.Color(235, 246, 220));
         btnNewSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnNewSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
         btnNewSighting.setText("Observation");
@@ -137,7 +134,6 @@ public class ImageBox extends JPanel {
         });
         add(btnNewSighting, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 205, 90, 30));
 
-        btnClone.setBackground(new java.awt.Color(235, 246, 220));
         btnClone.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnClone.setText("Duplicate");
@@ -251,6 +247,15 @@ public class ImageBox extends JPanel {
 
     public JTable getTable() {
         return table;
+    }
+
+    public void setRowBackground(Color inColor) {
+        this.setBackground(inColor);
+        btnClone.setBackground(inColor);
+        btnDown.setBackground(inColor);
+        btnNewSighting.setBackground(inColor);
+        btnRemove.setBackground(inColor);
+        btnUp.setBackground(inColor);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

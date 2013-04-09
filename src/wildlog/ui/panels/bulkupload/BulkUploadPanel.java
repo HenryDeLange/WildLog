@@ -366,7 +366,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel5.setText("Type:");
         jLabel5.setName("jLabel5"); // NOI18N
 
-        cmbVisitType.setBackground(new java.awt.Color(153, 180, 115));
         cmbVisitType.setModel(new DefaultComboBoxModel(VisitType.values()));
         cmbVisitType.setSelectedItem(VisitType.OTHER);
         cmbVisitType.setFocusable(false);

@@ -33,7 +33,7 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small Selected.gif"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Change Workspace Folder"/>
+                    <Property name="text" type="java.lang.String" value="Select New Default Workspace Folder"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select another Workspace to use."/>
                     <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceMenuItem" noResource="true"/>
                   </Properties>
@@ -46,44 +46,13 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small Selected.gif"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Check and Clean Workspace Folder"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Make sure the Workspace is in good order and remove any nonessential files."/>
+                    <Property name="text" type="java.lang.String" value="Check and Clean Default Workspace Folder"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Make sure the Workspace is in good order and remove nonessential files."/>
                     <Property name="name" type="java.lang.String" value="mnuCleanWorkspace" noResource="true"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCleanWorkspaceActionPerformed"/>
                   </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="helpMenu">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="About"/>
-                <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
-              </Properties>
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-              </AuxValues>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuAboutMenuItem">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="About WildLog"/>
-                    <Property name="name" type="java.lang.String" value="mnuAboutMenuItem" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutMenuItemActionPerformed"/>
-                  </Events>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
-                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-                  </AuxValues>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -95,7 +64,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="exitMenuItem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Exit WildLog"/>
                 <Property name="name" type="java.lang.String" value="exitMenuItem" noResource="true"/>
@@ -196,6 +165,11 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="csvImportMenuItemActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator7" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="bulkImportMenuItem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -240,6 +214,11 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="calcDurationMenuItemActionPerformed"/>
               </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator4">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator4" noResource="true"/>
+              </Properties>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="moveVisitsMenuItem">
               <Properties>
@@ -408,10 +387,15 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSunAndMoonActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
+              </Properties>
+            </MenuItem>
             <Menu class="javax.swing.JMenu" name="subMenu1">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="External Database Tools"/>
                 <Property name="name" type="java.lang.String" value="subMenu1" noResource="true"/>
@@ -419,6 +403,9 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuDBConsole">
                   <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Open H2 Database Console"/>
                     <Property name="toolTipText" type="java.lang.String" value="Open the DB console bundled with the H2 database to access the database used by WildLog."/>
                     <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
@@ -432,7 +419,7 @@
             <Menu class="javax.swing.JMenu" name="subMenu3">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="External Map Tools"/>
                 <Property name="name" type="java.lang.String" value="subMenu3" noResource="true"/>
@@ -440,6 +427,9 @@
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuOpenMapApp">
                   <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Map Icon.gif"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Open OpenMap Software"/>
                     <Property name="toolTipText" type="java.lang.String" value="Open the OpenMap application in standand alone mode."/>
                     <Property name="name" type="java.lang.String" value="mnuOpenMapApp" noResource="true"/>
@@ -450,6 +440,34 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="helpMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="About"/>
+            <Property name="name" type="java.lang.String" value="helpMenu" noResource="true"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+          </AuxValues>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuAboutMenuItem">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="About WildLog"/>
+                <Property name="name" type="java.lang.String" value="mnuAboutMenuItem" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuAboutMenuItemActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+              </AuxValues>
+            </MenuItem>
           </SubComponents>
         </Menu>
       </SubComponents>
@@ -1311,9 +1329,6 @@
                 </Component>
                 <Component class="javax.swing.JComboBox" name="cmbElementTypesBrowseTab">
                   <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="cd" green="ed" red="db" type="rgb"/>
-                    </Property>
                     <Property name="maximumRowCount" type="int" value="9"/>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new DefaultComboBoxModel(wildlog.data.enums.ElementType.values())" type="code"/>

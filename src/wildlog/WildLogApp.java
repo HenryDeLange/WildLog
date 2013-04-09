@@ -246,6 +246,26 @@ public class WildLogApp extends Application {
                 if (arg != null && "log_to_file".equalsIgnoreCase(arg.toLowerCase())) {
                     logToFile = true;
                 }
+// Die storie werk nie regtig in Ubuntu nie...
+//                else
+//                if (arg != null && arg.startsWith("font_size=")) {
+//                    // Change the font size to a standard size (in an attempt to have the panels render the same on other platforms, especially Ubuntu...).. Dit werk nie in Ubuntu nie...
+//                    try {
+//                        int newFontSize = Integer.parseInt(arg.substring("font_size=".length()));
+//                        UIDefaults uiDefaults = UIManager.getDefaults();
+//                        Enumeration keys = uiDefaults.keys();
+//                        while (keys.hasMoreElements()) {
+//                            Object key = keys.nextElement();
+//                            if ((key instanceof String) && (((String)key).endsWith(".font"))) {
+//                                FontUIResource font = (FontUIResource)UIManager.get(key);
+//                                uiDefaults.put(key, new FontUIResource(font.getName(), font.getStyle(), newFontSize));
+//                            }
+//                        }
+//                    }
+//                    catch (NumberFormatException ex) {
+//                        ex.printStackTrace(System.err);
+//                    }
+//                }
             }
         }
         // Make sure the Settings folder exists
@@ -276,7 +296,12 @@ public class WildLogApp extends Application {
             FileWriter writer = null;
             try {
                 writer = new FileWriter(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "wildloghome"));
-                writer.write(File.separator);
+                if (new File(File.separator).canWrite()) {
+                    writer.write(File.separator);
+                }
+                else {
+                    writer.write(System.getProperty("user.home") + File.separatorChar);
+                }
             }
             catch (IOException ioex) {
                 ioex.printStackTrace(System.err);

@@ -20,7 +20,7 @@ public class ImageBoxRenderer implements TableCellRenderer {
     }
 
     public static JPanel drawImageBoxes(Object inValue, JTable inTable, int inRow, int inColumn) {
-        // Note: Java alsready only calls this method for visible rows, so no need to check that
+        // Note: Java already only calls this method for visible rows, so no need to check that
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
         JPanel panel = new JPanel(new AbsoluteLayout());
         if (inRow % 2 == 0)
@@ -32,19 +32,15 @@ public class ImageBoxRenderer implements TableCellRenderer {
         int posX = 0;
         int posY = -1;
         for (BulkUploadImageFileWrapper imageWrapper : imageListWrapper.getImageList()) {
-            if (posX == 0)
+            if (posX == 0) {
                 posY++;
-            // Try to use the old panel if possible (I'm assuming it will be faster, but might use more memory and cause issues)
-//            ImageBox imageBox = imageWrapper.getImageBox();
-//            if (imageBox == null)
-//                imageBox = new ImageBox(imageWrapper, inTable);
-//            else
-//                imageBox.populateUI();
+            }
             ImageBox imageBox = new ImageBox(imageWrapper, inTable);
-            imageBox.setBackground(panel.getBackground());
+            imageBox.setRowBackground(panel.getBackground());
             panel.add(imageBox, new AbsoluteConstraints(imageBoxSize*posX++, imageBoxSize*posY, imageBoxSize, imageBoxSize));
-            if (posX == imagesPerRow)
+            if (posX == imagesPerRow) {
                 posX = 0;
+            }
         }
         if (inTable.getRowHeight(inRow) != imageBoxSize*(posY+1)) {
             inTable.setRowHeight(inRow, imageBoxSize*(posY+1));
