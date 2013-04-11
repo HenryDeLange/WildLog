@@ -1,0 +1,3 @@
+Copy die WildLog folder wat in die installer moet kom in hierdie folder in.
+Bou die exe files deur Launch4j.
+Maak die .aip file oop en bou die nuwe installer.
