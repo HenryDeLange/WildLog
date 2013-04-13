@@ -232,6 +232,7 @@ public class PanelSighting extends JDialog {
         // Setup default values for input fields
         if (treatAsNewSighting) {
             cmbCertainty.setSelectedItem(Certainty.SURE);
+            cmbLifeStatus.setSelectedItem(LifeStatus.ALIVE);
             cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
             cmbViewRating.setSelectedItem(ViewRating.NORMAL);
             cmbLifeStatus.setSelectedItem(LifeStatus.ALIVE);
@@ -892,6 +893,11 @@ public class PanelSighting extends JDialog {
         spnTemperature.setEditor(new javax.swing.JSpinner.NumberEditor(spnTemperature, "###.##"));
         spnTemperature.setEnabled(!disableEditing);
         spnTemperature.setName("spnTemperature"); // NOI18N
+        spnTemperature.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spnTemperatureStateChanged(evt);
+            }
+        });
         sightingIncludes.add(spnTemperature, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 60, -1));
 
         cmbTemperatureUnits.setModel(new DefaultComboBoxModel(UnitsTemperature.values()));
@@ -920,25 +926,25 @@ public class PanelSighting extends JDialog {
 
         jLabel15.setText("Sex:");
         jLabel15.setName("jLabel15"); // NOI18N
-        sightingIncludes.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, 20));
+        sightingIncludes.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, -1, 20));
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(sighting.getSex());
         cmbSex.setEnabled(!disableEditing);
         cmbSex.setFocusable(false);
         cmbSex.setName("cmbSex"); // NOI18N
-        sightingIncludes.add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, 140, -1));
+        sightingIncludes.add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, 140, -1));
 
         jLabel16.setText("Status:");
         jLabel16.setName("jLabel16"); // NOI18N
-        sightingIncludes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, -1, 20));
+        sightingIncludes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, 20));
 
         cmbLifeStatus.setModel(new DefaultComboBoxModel(LifeStatus.values()));
         cmbLifeStatus.setSelectedItem(sighting.getLifeStatus());
         cmbLifeStatus.setEnabled(!disableEditing);
         cmbLifeStatus.setFocusable(false);
         cmbLifeStatus.setName("cmbLifeStatus"); // NOI18N
-        sightingIncludes.add(cmbLifeStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, 140, -1));
+        sightingIncludes.add(cmbLifeStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, 140, -1));
 
         jLabel17.setText("Info  Tag:");
         jLabel17.setName("jLabel17"); // NOI18N
@@ -1324,6 +1330,13 @@ public class PanelSighting extends JDialog {
             spnDurationSeconds.setValue((double)seconds);
         }
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
+
+    private void spnTemperatureStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnTemperatureStateChanged
+        if ((double)spnTemperature.getValue() > 50
+                && (cmbTemperatureUnits.getSelectedItem() == null || UnitsTemperature.NONE.equals(cmbTemperatureUnits.getSelectedItem()))) {
+            cmbTemperatureUnits.setSelectedItem(UnitsTemperature.FAHRENHEIT);
+        }
+    }//GEN-LAST:event_spnTemperatureStateChanged
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));

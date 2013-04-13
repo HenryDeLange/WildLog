@@ -239,7 +239,7 @@ public class WildLogApp extends Application {
         if (args != null && args.length >= 1) {
             for (String arg : args) {
                 if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {
-                    // Voorbeeld: "settings_folder_location=./settings/"
+                    // Voorbeeld: settings_folder_location="./WildLog Settings/"
                     WILDLOG_SETTINGS_FOLDER = arg.substring("settings_folder_location=".length());
                 }
                 else
@@ -366,6 +366,8 @@ public class WildLogApp extends Application {
     @Override
     protected void shutdown() {
         super.shutdown();
+        view.setVisible(false);
+        view.dispose();
         if (dbi != null)
             dbi.close();
         System.out.println("SHUTTING DOWN WildLog - "

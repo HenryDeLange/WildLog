@@ -340,6 +340,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem exitMenuItem = new javax.swing.JMenuItem();
@@ -1388,6 +1389,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
         workspaceMenu.add(mnuChangeWorkspaceMenuItem);
+
+        jSeparator8.setName("jSeparator8"); // NOI18N
+        workspaceMenu.add(jSeparator8);
 
         mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
         mnuCleanWorkspace.setText("Check and Clean Default Workspace Folder");
@@ -2981,7 +2985,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             public int counter = 0;
                         }
                         class CleanupHelper {
-                            private void doTheMove(String inExpectedPath, String inExpectedPrefix, WildLogFile inWildLogFile) {
+                            private void doTheMove(String inExpectedPath, String inExpectedPrefix, WildLogFile inWildLogFile, final CleanupCounter fileCount) {
                                 String shouldBePath = WildLogPaths.concatPaths(true, inExpectedPath, inExpectedPrefix);
                                 String currentPath = new File(inWildLogFile.getFilePath(false)).getParent();
                                 if (!shouldBePath.equalsIgnoreCase(currentPath)) {
@@ -2991,29 +2995,33 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                     UtilsFileProcessing.performFileUpload(inWildLogFile.getId(), inExpectedPrefix, new File[]{new File(inWildLogFile.getFilePath(true))}, null, -1, app);
                                     // Delete the wrong entry
                                     app.getDBI().delete(inWildLogFile);
+                                    fileCount.counter++;
                                 }
                             }
-                            public void moveFilesToCorrectFolders(WildLogFile inWildLogFile, String inPrefix) {
+                            public void moveFilesToCorrectFolders(WildLogFile inWildLogFile, String inPrefix, final CleanupCounter fileCount) {
                                 // Check to make sure the parent paths are correct, if not then move the file to the correct place and add a new DB entry before deleting the old one
                                 // Maak seker alle DB paths is relative (nie absolute nie) en begin met propper WL roots
                                 if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
                                     doTheMove(
                                             WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath(),
                                             inPrefix,
-                                            inWildLogFile);
+                                            inWildLogFile,
+                                            fileCount);
                                 }
                                 else
                                 if (WildLogFileType.MOVIE.equals(inWildLogFile.getFileType())) {
                                     doTheMove(
                                             WildLogPaths.WILDLOG_FILES_MOVIES.getRelativePath(),
                                             inPrefix,
-                                            inWildLogFile);
+                                            inWildLogFile,
+                                            fileCount);
                                 }
                                 else {
                                     doTheMove(
                                             WildLogPaths.WILDLOG_FILES_OTHER.getRelativePath(),
                                             inPrefix,
-                                            inWildLogFile);
+                                            inWildLogFile,
+                                            fileCount);
                                 }
                             }
                             public void checkDiskFilesAreInDB(WildLogPaths inWildLogPaths, final CleanupCounter fileCount) throws IOException {
@@ -3051,6 +3059,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         int filesWithMissingData = 0;
                         int filesWithBadType = 0;
                         int filesWithBadID = 0;
+                        CleanupCounter filesMoved = new CleanupCounter();
                         for (WildLogFile wildLogFile : allFiles) {
                             // Check the WildLogFile's content
                             if (wildLogFile.getId() == null) {
@@ -3106,7 +3115,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), temp.getPrimaryName()));
+                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_ELEMENT.toString(), temp.getPrimaryName()),
+                                        filesMoved);
                                 continue;
                             }
                             else if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
@@ -3123,7 +3133,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), temp.getLocationName(), temp.getName()));
+                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_VISIT.toString(), temp.getLocationName(), temp.getName()),
+                                        filesMoved);
                                 continue;
                             }
                             else if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
@@ -3140,7 +3151,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), temp.getName()));
+                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_LOCATION.toString(), temp.getName()),
+                                        filesMoved);
                                 continue;
                             }
                             else if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
@@ -3163,7 +3175,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), temp.toString()));
+                                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), temp.toString()),
+                                        filesMoved);
                                 continue;
                             }
                             else {
@@ -3341,6 +3354,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         finalHandleFeedback.println("** Finished Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("----------SUMMARY----------");
+                        finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved);
                         finalHandleFeedback.println("Database file record had no reference to a file on disk: " + filesWithoutPath);
                         finalHandleFeedback.println("Database file record had a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
                         finalHandleFeedback.println("Database file record had no ID: " + filesWithoutID);
@@ -3727,6 +3741,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JMenuItem kmlExportMenuItem;
     private javax.swing.JLabel lblCreatures;
     private javax.swing.JLabel lblImage;

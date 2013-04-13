@@ -1132,7 +1132,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void lblSightingImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSightingImageMouseReleased
         if (sighting != null) {
-            UtilsFileProcessing.openFile(visit.getWildLogFileID(), imageSightingIndex, app);
+            UtilsFileProcessing.openFile(sighting.getWildLogFileID(), imageSightingIndex, app);
         }
     }//GEN-LAST:event_lblSightingImageMouseReleased
 

@@ -19,14 +19,14 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.mapping.kml.utils.UtilsKML;
-import wildlog.utils.WildLogPaths;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.mapping.utils.UtilsMapGenerator;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.WildLogPaths;
 
 // TODO: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
 public class MappingDialog extends JDialog {
@@ -107,10 +107,10 @@ public class MappingDialog extends JDialog {
     private void initComponents() {
 
         btnViewLocation = new javax.swing.JButton();
-        btnViewSingleSighting = new javax.swing.JButton();
         btnViewAllSightingsForLocation = new javax.swing.JButton();
         btnViewAllSightingsForVisit = new javax.swing.JButton();
         btnViewAllSightingsForElement = new javax.swing.JButton();
+        btnViewSingleSighting = new javax.swing.JButton();
         btnViewSightingsAndDistributionMap = new javax.swing.JButton();
         btnViewDistributionMap = new javax.swing.JButton();
         btnOpenKmlViewer = new javax.swing.JButton();
@@ -140,24 +140,6 @@ public class MappingDialog extends JDialog {
             }
         });
         getContentPane().add(btnViewLocation);
-
-        btnViewSingleSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewSingleSighting.setText("View the selected Observation");
-        btnViewSingleSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewSingleSighting.setFocusPainted(false);
-        btnViewSingleSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewSingleSighting.setIconTextGap(10);
-        btnViewSingleSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(230, 35));
-        btnViewSingleSighting.setName("btnViewSingleSighting"); // NOI18N
-        btnViewSingleSighting.setPreferredSize(new java.awt.Dimension(230, 35));
-        btnViewSingleSighting.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewSingleSightingActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnViewSingleSighting);
 
         btnViewAllSightingsForLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewAllSightingsForLocation.setText("View Observations at the Place");
@@ -212,6 +194,24 @@ public class MappingDialog extends JDialog {
             }
         });
         getContentPane().add(btnViewAllSightingsForElement);
+
+        btnViewSingleSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
+        btnViewSingleSighting.setText("View the selected Observation");
+        btnViewSingleSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewSingleSighting.setFocusPainted(false);
+        btnViewSingleSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewSingleSighting.setIconTextGap(10);
+        btnViewSingleSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(230, 35));
+        btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnViewSingleSighting.setName("btnViewSingleSighting"); // NOI18N
+        btnViewSingleSighting.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnViewSingleSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewSingleSightingActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnViewSingleSighting);
 
         btnViewSightingsAndDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
         btnViewSightingsAndDistributionMap.setText("View Observations + Distribution");

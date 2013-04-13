@@ -100,6 +100,10 @@ public class WildLogFile implements Comparable<WildLogFile> {
             return WildLogPaths.concatPaths(false, File.separator, originalFileLocation);
     }
 
+    public String getDBFilePath() {
+        return originalFileLocation;
+    }
+
     public WildLogFileType getFileType() {
         return fileType;
     }

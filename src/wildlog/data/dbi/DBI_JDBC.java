@@ -1238,7 +1238,7 @@ public abstract class DBI_JDBC implements DBI {
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, UtilsData.sanitizeString(inFoto.getFilePath(false)));
+            state.setString(1, UtilsData.sanitizeString(inFoto.getDBFilePath()));
             // Delete File from database
             state.executeUpdate();
             // Delete the file on the PC

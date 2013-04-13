@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
 import wildlog.mapping.utils.UtilsGps;
@@ -75,6 +76,7 @@ public class BulkUploadDataLoader {
                     // Set other defaults for the sighting
                     sightingKey.setCertainty(Certainty.SURE);
                     sightingKey.setSightingEvidence(SightingEvidence.SEEN);
+                    sightingKey.setLifeStatus(LifeStatus.ALIVE);
                     // Update the map
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
                     // Update the curent date to compare against
