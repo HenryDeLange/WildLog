@@ -6,7 +6,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
@@ -19,8 +18,8 @@ public class MergeElementsDialog extends JDialog {
 
 
     /** Creates new form MergeElementsDialog */
-    public MergeElementsDialog() {
-        app = (WildLogApp)Application.getInstance();
+    public MergeElementsDialog(WildLogApp inApp) {
+        app = inApp;
         initComponents();
         loadLists();
         // Setup the default behavior

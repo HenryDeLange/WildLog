@@ -10,7 +10,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -52,8 +51,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private int imageSightingIndex;
 
     /** Creates new form PanelVisit */
-    public PanelVisit(Location inLocation, Visit inVisit) {
-        app = (WildLogApp) Application.getInstance();
+    public PanelVisit(WildLogApp inApp, Location inLocation, Visit inVisit) {
+        app = inApp;
         locationForVisit = inLocation;
         visit = inVisit;
         sighting = new Sighting();
@@ -951,7 +950,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblSightingImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
         if (visit.getName() != null) {
-            UtilTableGenerator.setupCompleteSightingTable(tblSightings, visit);
+            UtilTableGenerator.setupCompleteSightingTable(app, tblSightings, visit);
             Sighting tempSighting = new Sighting();
             tempSighting.setVisitName(visit.getName());
             List<Sighting> sightings = app.getDBI().list(tempSighting);
@@ -1023,7 +1022,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             tblSightings.clearSelection();
             refreshSightingInfo();
             PanelSighting dialog = new PanelSighting(
-                    app.getMainFrame(), "Add a New Observation",
+                    app, app.getMainFrame(), "Add a New Observation",
                     sighting, locationForVisit, visit, null, this, true, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
@@ -1036,7 +1035,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             tblSightings.clearSelection();
             PanelSighting dialog = new PanelSighting(
-                    app.getMainFrame(), "Edit an Existing Observation",
+                    app, app.getMainFrame(), "Edit an Existing Observation",
                     sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false);
             dialog.setVisible(true);
             // Reset Sighting on this panel
@@ -1079,8 +1078,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
-                    null, null, visit, sighting);
+            MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting);
             dialog.setVisible(true);
         }
 }//GEN-LAST:event_btnMapSightingActionPerformed
@@ -1099,7 +1097,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         if (sighting != null) {
-            PanelElement tempPanel = UtilPanelGenerator.getElementPanel(sighting.getElementName());
+            PanelElement tempPanel = UtilPanelGenerator.getElementPanel(app, sighting.getElementName());
             UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
@@ -1158,20 +1156,20 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, visit, null, null);
+            ReportingDialog dialog = new ReportingDialog(app, null, null, visit, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ChecklistDialog dialog = new ChecklistDialog(locationForVisit, visit, this);
+            ChecklistDialog dialog = new ChecklistDialog(app, locationForVisit, visit, this);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnChecklistActionPerformed
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the HTML Export");
@@ -1184,7 +1182,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            SlideshowDialog dialog = new SlideshowDialog(visit, null, null);
+            SlideshowDialog dialog = new SlideshowDialog(app, visit, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed

@@ -9,18 +9,17 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.gpx.GpxReader;
-import wildlog.ui.helpers.FileDrop;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.GpxFilter;
 import wildlog.ui.helpers.ImageFilter;
 import wildlog.ui.helpers.SpinnerFixer;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -34,26 +33,26 @@ public class GPSDialog extends JDialog {
     private WildLogApp app;
 
 
-    public GPSDialog(JFrame parent, DataObjectWithGPS inDataObjectWithGPS) {
+    public GPSDialog(WildLogApp inApp, JFrame parent, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent);
         // Do the setup (this is where the shared setup happens)
-        doSetup(inDataObjectWithGPS);
+        doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JFrames)
         UtilsDialog.setDialogToCenter(parent, this);
         UtilsDialog.addModalBackgroundPanel(parent, this);
     }
 
-    public GPSDialog(JDialog parent, DataObjectWithGPS inDataObjectWithGPS) {
+    public GPSDialog(WildLogApp inApp, JDialog parent, DataObjectWithGPS inDataObjectWithGPS) {
         super(parent);
         // Do the setup (this is where the shared setup happens)
-        doSetup(inDataObjectWithGPS);
+        doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JDialogs)
         UtilsDialog.setDialogToCenter(parent, this);
         UtilsDialog.addModalBackgroundPanel(parent, this);
     }
 
-    private void doSetup(DataObjectWithGPS inDataObjectWithGPS) {
-        app = (WildLogApp)Application.getInstance();
+    private void doSetup(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
+        app = inApp;
         dataObjectWithGPS = inDataObjectWithGPS;
         if (dataObjectWithGPS == null)
             dispose();

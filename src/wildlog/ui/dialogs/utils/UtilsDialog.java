@@ -31,7 +31,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.RootPaneContainer;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 
@@ -94,7 +93,7 @@ public class UtilsDialog {
         return escListiner;
     }
 
-    public static void showExifPopup(File inFile) {
+    public static void showExifPopup(final WildLogApp inApp, File inFile) {
         if (inFile != null) {
             if (inFile.exists()) {
                 final JFrame frame = new JFrame("EXIF Meta Data: " + inFile.getPath());
@@ -121,7 +120,7 @@ public class UtilsDialog {
                     scroll.setPreferredSize(new Dimension(500, 750));
                     frame.getContentPane().add(scroll);
                     frame.pack();
-                    frame.setLocationRelativeTo(((WildLogApp)Application.getInstance()).getMainFrame());
+                    frame.setLocationRelativeTo(inApp.getMainFrame());
                     ActionListener escListiner = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -139,11 +138,10 @@ public class UtilsDialog {
                 }
                 catch (JpegProcessingException ex) {
                     ex.printStackTrace(System.err);
-                    final WildLogApp app = (WildLogApp)Application.getInstance();
-                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                         @Override
                         public int showDialog() {
-                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                            JOptionPane.showMessageDialog(inApp.getMainFrame(),
                                     "Could not process the file.",
                                     "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
                             return -1;
@@ -152,11 +150,10 @@ public class UtilsDialog {
                 }
             }
             else {
-                final WildLogApp app = (WildLogApp)Application.getInstance();
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
                                 "Could not access the file.",
                                 "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
                         return -1;
@@ -165,11 +162,10 @@ public class UtilsDialog {
             }
         }
         else {
-            final WildLogApp app = (WildLogApp)Application.getInstance();
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                    JOptionPane.showMessageDialog(inApp.getMainFrame(),
                             "Could not access the file.",
                             "Can't show image meta data!", JOptionPane.ERROR_MESSAGE);
                     return -1;
@@ -182,7 +178,7 @@ public class UtilsDialog {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
             String fileName = fotos.get(inIndex).getFilePath(true);
-            showExifPopup(new File(fileName));
+            showExifPopup(inApp, new File(fileName));
         }
     }
 

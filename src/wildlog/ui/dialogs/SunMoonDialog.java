@@ -11,7 +11,6 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
@@ -24,10 +23,9 @@ public class SunMoonDialog extends JDialog {
     private WildLogApp app;
 
     /** Creates new form GPSDialog */
-    public SunMoonDialog(DataObjectWithGPS inDataObjectWithGPS) {
+    public SunMoonDialog(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
         super();
-        app = (WildLogApp)Application.getInstance();
-
+        app = inApp;
         // Initialize the auto generated code
         initComponents();
 
@@ -307,7 +305,7 @@ public class SunMoonDialog extends JDialog {
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(this, dataObjectWithGPS);
+        GPSDialog dialog = new GPSDialog(app, this, dataObjectWithGPS);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));

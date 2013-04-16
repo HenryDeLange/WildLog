@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import org.jdesktop.application.Application;
 import org.jdesktop.application.Task;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -27,10 +26,10 @@ public class SlideshowDialog extends JDialog {
     private Location location;
     private Element element;
 
-    public SlideshowDialog(Visit inVisit, Location inLocation, Element inElement) {
+    public SlideshowDialog(WildLogApp inApp, Visit inVisit, Location inLocation, Element inElement) {
         super();
         // Set passed in values
-        app = (WildLogApp) Application.getInstance();
+        app = inApp;
         visit = inVisit;
         location = inLocation;
         element = inElement;
@@ -197,7 +196,7 @@ public class SlideshowDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSlideshowVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
@@ -221,7 +220,7 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowVisitActionPerformed
 
     private void btnSlideshowVisitSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
@@ -254,7 +253,7 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowVisitSightingsActionPerformed
 
     private void btnSlideshowLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowLocationActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
@@ -278,7 +277,7 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowLocationActionPerformed
 
     private void btnSlideshowLocationSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowLocationSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
@@ -311,7 +310,7 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowLocationSightingsActionPerformed
 
     private void btnSlideshowElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowElementActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");
@@ -335,7 +334,7 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowElementActionPerformed
 
     private void btnSlideshowElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowElementSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Creating the Slideshow");

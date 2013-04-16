@@ -7,7 +7,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -20,8 +19,8 @@ public class MoveVisitDialog extends JDialog {
     private WildLogApp app;
 
     /** Creates new form MoveVisitDialog */
-    public MoveVisitDialog() {
-        app = (WildLogApp) Application.getInstance();
+    public MoveVisitDialog(WildLogApp inApp) {
+        app = inApp;
         initComponents();
         loadLists();
         // Setup the default behavior

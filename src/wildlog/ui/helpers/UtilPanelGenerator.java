@@ -1,45 +1,42 @@
 package wildlog.ui.helpers;
 
 import javax.swing.JTabbedPane;
-import wildlog.ui.panels.*;
-import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dbi.DBI;
-import wildlog.WildLogApp;
+import wildlog.ui.panels.*;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 
 public final class UtilPanelGenerator {
-    private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
 
     // METHODS:
-    public static PanelElement getNewElementPanel() {
-        return new PanelElement(new Element());
+    public static PanelElement getNewElementPanel(WildLogApp inApp) {
+        return new PanelElement(inApp, new Element());
     }
 
-    public static PanelElement getElementPanel(String inPrimaryName) {
-        Element tempElement = dbi.find(new Element(inPrimaryName));
-        return new PanelElement(tempElement);
+    public static PanelElement getElementPanel(WildLogApp inApp, String inPrimaryName) {
+        Element tempElement = inApp.getDBI().find(new Element(inPrimaryName));
+        return new PanelElement(inApp, tempElement);
     }
 
-    public static PanelLocation getNewLocationPanel() {
-        return new PanelLocation(new Location());
+    public static PanelLocation getNewLocationPanel(WildLogApp inApp) {
+        return new PanelLocation(inApp, new Location());
     }
 
-    public static PanelLocation getLocationPanel(String inName) {
-        Location tempLocation = dbi.find(new Location(inName));
-        return new PanelLocation(tempLocation);
+    public static PanelLocation getLocationPanel(WildLogApp inApp, String inName) {
+        Location tempLocation = inApp.getDBI().find(new Location(inName));
+        return new PanelLocation(inApp, tempLocation);
     }
 
-    public static PanelVisit getNewVisitPanel(Location inLocation) {
-        return new PanelVisit(inLocation, new Visit());
+    public static PanelVisit getNewVisitPanel(WildLogApp inApp, Location inLocation) {
+        return new PanelVisit(inApp, inLocation, new Visit());
     }
 
-    public static PanelVisit getVisitPanel(Location inLocation, String inName) {
-        Visit tempVisit = dbi.find(new Visit(inName));
-        return new PanelVisit(inLocation, tempVisit);
+    public static PanelVisit getVisitPanel(WildLogApp inApp, Location inLocation, String inName) {
+        Visit tempVisit = inApp.getDBI().find(new Visit(inName));
+        return new PanelVisit(inApp, inLocation, tempVisit);
     }
 
     public static void addPanelAsTab(PanelCanSetupHeader inPanel, JTabbedPane inTabPane) {

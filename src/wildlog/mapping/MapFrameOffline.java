@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.io.File;
 import java.util.Properties;
 import javax.swing.ImageIcon;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.mapping.layers.MapOfflinePointLayer;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -50,7 +49,7 @@ public class MapFrameOffline {
         frame = new OpenMapFrame(title);
         mapHandler = mapPanel.getMapHandler();
         // Setup Icon for the Frame
-        ImageIcon icon = new ImageIcon(Application.getInstance().getClass().getResource("resources/icons/WildLog Map Icon.gif"));
+        ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Map Icon.gif"));
         frame.setIconImage(icon.getImage());
 
         // Add the frame to the MapHandler. This is the frame that will be used to show the map.
@@ -130,7 +129,7 @@ public class MapFrameOffline {
     }
 
     // Public Methods:
-    public void showMap() {
+    public void showMap(WildLogApp app) {
         try {
             // Get the default MapBean that the BasicMapPanel created.
             MapBean mapBean = mapPanel.getMapBean();
@@ -186,7 +185,7 @@ public class MapFrameOffline {
 
             // Display the frame
             frame.setSize(950, 700);
-            UtilsDialog.setDialogToCenter(((WildLogApp)Application.getInstance()).getMainFrame(), frame);
+            UtilsDialog.setDialogToCenter(app.getMainFrame(), frame);
             frame.setVisible(true);
             frame.toFront();
 

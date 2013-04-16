@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -1276,7 +1275,7 @@ public abstract class DBI_JDBC implements DBI {
         }
     }
 
-    protected void doUpdates() {
+    protected void doUpdates(final WildLogApp inApp) {
         Statement state = null;
         ResultSet results = null;
         try {
@@ -1307,18 +1306,17 @@ public abstract class DBI_JDBC implements DBI {
                 }
             }
             if (!fullyUpdated) {
-                final WildLogApp app = (WildLogApp)Application.getInstance();
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
                                 "The database could not be fully updated. Make sure it is not in use or broken"
                                 + "and that you are running the latest version of the application.",
                                 "WildLog Error: Can't Initialize Database", JOptionPane.ERROR_MESSAGE);
                         return -1;
                     }
                 });
-                Application.getInstance().exit();
+                inApp.exit();
             }
         }
         catch (SQLException ex) {

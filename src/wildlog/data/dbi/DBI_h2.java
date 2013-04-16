@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
 import org.h2.jdbc.JdbcSQLException;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
@@ -45,7 +46,7 @@ import wildlog.utils.WildLogPaths;
 
 public class DBI_h2 extends DBI_JDBC {
     // Constructor
-    public DBI_h2() throws Exception {
+    public DBI_h2(final WildLogApp inApp) throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
@@ -103,7 +104,7 @@ public class DBI_h2 extends DBI_JDBC {
                 state.execute(tableWildLogOptions);
             }
 
-            super.doUpdates(); // This also creates the WildLogOptions row the first time
+            super.doUpdates(inApp); // This also creates the WildLogOptions row the first time
         }
         catch (ClassNotFoundException cnfe) {
             System.err.println("\nUnable to load the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");

@@ -7,12 +7,7 @@ import org.jdesktop.application.Task;
 public abstract class ProgressbarTask<T extends Object, V extends Object> extends Task<T, V> {
 
     public ProgressbarTask(Application application) {
-        super(new Application() {
-            @Override
-            protected void startup() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        });
+        super(application);
     }
 
     @Override

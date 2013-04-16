@@ -15,7 +15,6 @@ import javax.swing.JDialog;
 import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.border.LineBorder;
-import org.jdesktop.application.Application;
 import org.jdesktop.swingx.sort.ListSortController;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -37,8 +36,8 @@ public class ChecklistDialog extends JDialog {
     private Visit visit;
 
     /** Creates new form PanelMoveVisit */
-    public ChecklistDialog(Location inLocation, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
-        app = (WildLogApp) Application.getInstance();
+    public ChecklistDialog(WildLogApp inApp, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
+        app = inApp;
         initComponents();
         loadElementList();
         location = inLocation;

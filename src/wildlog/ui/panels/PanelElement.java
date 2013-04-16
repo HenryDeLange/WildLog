@@ -13,7 +13,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -56,8 +55,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private Element element;
 
     /** Creates new form PanelElement */
-    public PanelElement(Element inElement) {
-        app = (WildLogApp) Application.getInstance();
+    public PanelElement(WildLogApp inApp, Element inElement) {
+        app = inApp;
         element = inElement;
         initComponents();
         imageIndex = 0;
@@ -1307,7 +1306,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             int[] selectedRows = tblLocation.getSelectedRows();
             PanelLocation tempPanel = null;
             for (int t = 0; t < selectedRows.length; t++) {
-                tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
+                tempPanel = UtilPanelGenerator.getLocationPanel(app, (String)tblLocation.getValueAt(selectedRows[t], 0));
                 UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
             }
         }
@@ -1316,7 +1315,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 0)));
                 Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getValueAt(tblLocation.getSelectedRow(), 2)));
                 PanelSighting dialog = new PanelSighting(
-                        app.getMainFrame(), "Edit an Existing Observation",
+                        app, app.getMainFrame(), "Edit an Existing Observation",
                         sighting, location, app.getDBI().find(new Visit(sighting.getVisitName())), element, this, false, false, false);
                 dialog.setVisible(true);
             }
@@ -1346,7 +1345,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
 
         if (element.getPrimaryName() != null) {
-            UtilTableGenerator.setupLocationsForElementTable(tblLocation, element);
+            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, element);
         }
         else
             tblLocation.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -1357,7 +1356,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app.getMainFrame(),
+            MappingDialog dialog = new MappingDialog(app,
                     null, element, null, null);
             dialog.setVisible(true);
         }
@@ -1375,7 +1374,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             Sighting sighting = new Sighting();
             sighting.setElementName(element.getPrimaryName());
             PanelSighting dialog = new PanelSighting(
-                    app.getMainFrame(), "Add a New Observation",
+                    app, app.getMainFrame(), "Add a New Observation",
                     sighting, null, null, element, this, true, false, false);
             dialog.setVisible(true);
         }
@@ -1393,7 +1392,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
-                UtilTableGenerator.setupSightingsForElementTable(tblLocation, element);
+                UtilTableGenerator.setupSightingsForElementTable(app, tblLocation, element);
                 tblLocation.setSelectionBackground(new Color(125,120,93));
             }
             else
@@ -1401,7 +1400,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
         else {
             if (element.getPrimaryName() != null) {
-                UtilTableGenerator.setupLocationsForElementTable(tblLocation, element);
+                UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, element);
                 tblLocation.setSelectionBackground(new Color(67,97,113));
             }
             else
@@ -1417,7 +1416,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_tblLocationMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the HTML Export");
@@ -1430,14 +1429,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, element, null, null, null);
+            ReportingDialog dialog = new ReportingDialog(app, null, element, null, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            SlideshowDialog dialog = new SlideshowDialog(null, null, element);
+            SlideshowDialog dialog = new SlideshowDialog(app, null, null, element);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed

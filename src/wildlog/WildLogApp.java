@@ -188,7 +188,7 @@ public class WildLogApp extends Application {
 
     private boolean openWorkspace() {
         try {
-            dbi = new DBI_h2();
+            dbi = new DBI_h2(this);
             System.out.println("Workspace opened at: " + WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG.toString()));
         }
         catch (Exception ex) {
@@ -408,7 +408,7 @@ public class WildLogApp extends Application {
             mapOnlineFrame = new MapFrameOnline("WildLog Map - Online", mapOnline, this);
             mapOnlineFrame.setPreferredSize(new Dimension(758, 560));
             mapOnlineFrame.setLayout(new AbsoluteLayout());
-            ImageIcon icon = new ImageIcon(Application.getInstance().getClass().getResource("resources/icons/WildLog Map Icon.gif"));
+            ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Map Icon.gif"));
             mapOnlineFrame.setIconImage(icon.getImage());
 
             mapOnline.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);

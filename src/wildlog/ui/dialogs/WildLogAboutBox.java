@@ -1,17 +1,16 @@
 package wildlog.ui.dialogs;
 
 import javax.swing.JDialog;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public class WildLogAboutBox extends JDialog {
 
-    public WildLogAboutBox() {
+    public WildLogAboutBox(WildLogApp inApp) {
         super();
         initComponents();
         // Setup the default behavior
-        WildLogApp app = (WildLogApp)Application.getInstance();
+        WildLogApp app = inApp;
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);

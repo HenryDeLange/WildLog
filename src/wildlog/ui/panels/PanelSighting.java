@@ -19,7 +19,6 @@ import javax.swing.KeyStroke;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
@@ -86,7 +85,7 @@ public class PanelSighting extends JDialog {
      * @param inDisableEditing
      * @param inBulkUploadMode
      */
-    public PanelSighting(JFrame inOwner, String inTitle, Sighting inSighting, Location inLocation, Visit inVisit,
+    public PanelSighting(WildLogApp inApp, JFrame inOwner, String inTitle, Sighting inSighting, Location inLocation, Visit inVisit,
             Element inElement, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh,
             boolean inTreatAsNewSighting, boolean inDisableEditing, boolean inBulkUploadMode) {
         super(inOwner, inTitle);
@@ -99,7 +98,7 @@ public class PanelSighting extends JDialog {
         treatAsNewSighting = inTreatAsNewSighting;
         disableEditing = inDisableEditing;
         bulkUploadMode = inBulkUploadMode;
-        app = (WildLogApp) Application.getInstance();
+        app = inApp;
         location = inLocation;
         visit = inVisit;
         element = inElement;
@@ -110,8 +109,8 @@ public class PanelSighting extends JDialog {
         initComponents();
 
         // Setup tables
-        UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
-        UtilTableGenerator.setupShortLocationTable(tblLocation, searchLocation);
+        UtilTableGenerator.setupShortElementTable(app, tblElement, searchElement);
+        UtilTableGenerator.setupShortLocationTable(app, tblLocation, searchLocation);
 
         // Setup default values for tables
         if (location != null) {
@@ -140,7 +139,7 @@ public class PanelSighting extends JDialog {
         }
         if (location != null && visit != null) {
             // Build the table
-            UtilTableGenerator.setupVeryShortVisitTable(tblVisit, location);
+            UtilTableGenerator.setupVeryShortVisitTable(app, tblVisit, location);
             // Select the visit
             int select = -1;
             for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
@@ -1191,7 +1190,7 @@ public class PanelSighting extends JDialog {
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
             location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
-            UtilTableGenerator.setupVeryShortVisitTable(tblVisit, location);
+            UtilTableGenerator.setupVeryShortVisitTable(app, tblVisit, location);
             visit = null;
             UtilsImageProcessing.setupFoto(location.getWildLogFileID(), 0, lblLocationImage, 100, app);
         }
@@ -1210,7 +1209,7 @@ public class PanelSighting extends JDialog {
             if (!ElementType.NONE.equals(type)) {
                 searchElement.setType(type);
             }
-            UtilTableGenerator.setupShortElementTable(tblElement, searchElement);
+            UtilTableGenerator.setupShortElementTable(app, tblElement, searchElement);
             txtSearch.setText("");
             // Clear Images
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
@@ -1305,7 +1304,7 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(this, sighting);
+        GPSDialog dialog = new GPSDialog(app, this, sighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(UtilsGps.getLatitudeString(sighting));

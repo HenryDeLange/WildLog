@@ -9,24 +9,20 @@ import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import org.jdesktop.application.Application;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.dbi.DBI;
-import wildlog.WildLogApp;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.utils.UtilsGps;
 
 
 public final class UtilTableGenerator {
-    private static DBI dbi = ((WildLogApp)Application.getInstance()).getDBI();
-
 
     // METHODS:
-    public static void setupCompleteElementTable(JTable inTable, Element inElement) {
+    public static void setupCompleteElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
                                 "Creature Name",
@@ -37,7 +33,7 @@ public final class UtilTableGenerator {
                                 "Add Frequency"
                                 };
         List<Element> tempList = null;
-        tempList = dbi.list(inElement);
+        tempList = inApp.getDBI().list(inElement);
 
         Object[][] tempTable = new Object[tempList.size()][6];
         for (int t = 0; t < tempList.size(); t++) {
@@ -85,7 +81,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupShortElementTable(JTable inTable, Element inElement) {
+    public static void setupShortElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
                                 "Creature Name",
@@ -93,7 +89,7 @@ public final class UtilTableGenerator {
                                 "Class"
                                 };
         List<Element> tempList = null;
-        tempList = dbi.list(inElement);
+        tempList = inApp.getDBI().list(inElement);
 
         Object[][] tempTable = new Object[tempList.size()][4];
         for (int t = 0; t < tempList.size(); t++) {
@@ -128,7 +124,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupCompleteLocationTable(JTable inTable, Location inLocation) {
+    public static void setupCompleteLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
                                 "Place Name",
@@ -137,7 +133,7 @@ public final class UtilTableGenerator {
                                 "Latitude",
                                 "Longitude"
                                 };
-        List<Location> tempList = dbi.list(inLocation);
+        List<Location> tempList = inApp.getDBI().list(inLocation);
         Object[][] tempTable = new Object[tempList.size()][6];
         for (int t = 0; t < tempList.size(); t++) {
             Location tempLocation = tempList.get(t);
@@ -180,7 +176,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupCompleteVisitTable(JTable inTable, Location inLocation) {
+    public static void setupCompleteVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
                                 "Period Name",
@@ -192,7 +188,7 @@ public final class UtilTableGenerator {
                                 };
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
-        List<Visit> tempList = dbi.list(temp);
+        List<Visit> tempList = inApp.getDBI().list(temp);
         Object[][] tempTable;
         if (tempList != null) {
             tempTable = new Object[tempList.size()][6];
@@ -206,7 +202,7 @@ public final class UtilTableGenerator {
                 tempTable[t][i++] = tempVisit.getType();
                 Sighting tempSighting = new Sighting();
                 tempSighting.setVisitName(tempVisit.getName());
-                tempTable[t][i++] = dbi.list(tempSighting).size();
+                tempTable[t][i++] = inApp.getDBI().list(tempSighting).size();
             }
         }
         else tempTable = new Object[0][0];
@@ -257,7 +253,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 1);
     }
 
-    public static void setupShortVisitTable(JTable inTable, Location inLocation) {
+    public static void setupShortVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
                                 "Period Name",
@@ -266,7 +262,7 @@ public final class UtilTableGenerator {
                                 };
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
-        List<Visit> tempList = dbi.list(temp);
+        List<Visit> tempList = inApp.getDBI().list(temp);
         Object[][] tempTable;
         if (tempList != null) {
             tempTable = new Object[tempList.size()][4];
@@ -277,7 +273,7 @@ public final class UtilTableGenerator {
                 tempTable[t][i++] = tempVisit.getStartDate();
                 Sighting tempSighting = new Sighting();
                 tempSighting.setVisitName(tempVisit.getName());
-                tempTable[t][i++] = dbi.list(tempSighting).size();
+                tempTable[t][i++] = inApp.getDBI().list(tempSighting).size();
             }
         }
         else tempTable = new Object[0][0];
@@ -318,7 +314,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 1);
     }
 
-    public static void setupVeryShortVisitTable(JTable inTable, Location inLocation) {
+    public static void setupVeryShortVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
                                 "Name",
@@ -327,7 +323,7 @@ public final class UtilTableGenerator {
                                 };
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
-        List<Visit> tempList = dbi.list(temp);
+        List<Visit> tempList = inApp.getDBI().list(temp);
         Object[][] tempTable;
         if (tempList != null) {
             tempTable = new Object[tempList.size()][3];
@@ -374,7 +370,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 1);
     }
 
-    public static void setupCompleteSightingTable(JTable inTable, Visit inVisit) {
+    public static void setupCompleteSightingTable(WildLogApp inApp, JTable inTable, Visit inVisit) {
         // Load data
         String[] columnNames = {
                                 "Creature Name",
@@ -387,7 +383,7 @@ public final class UtilTableGenerator {
                                 };
         Sighting temp = new Sighting();
         temp.setVisitName(inVisit.getName());
-        List<Sighting> tempList = dbi.list(temp);
+        List<Sighting> tempList = inApp.getDBI().list(temp);
         Object[][] tempTable;
         if (tempList != null) {
             tempTable = new Object[tempList.size()][7];
@@ -398,7 +394,7 @@ public final class UtilTableGenerator {
                 tempTable[t][i++] = tempSighting.getDate();
                 tempTable[t][i++] = tempSighting.getViewRating();
                 tempTable[t][i++] = tempSighting.getCertainty();
-                tempTable[t][i++] = dbi.find(new Element(tempSighting.getElementName())).getType();
+                tempTable[t][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
                 tempTable[t][i++] = tempSighting.getSightingCounter();
                 if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null)
                     if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE))
@@ -455,7 +451,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 1);
     }
 
-    public static void setupElementsForVisitTable(JTable inTable, Visit inVisit) {
+    public static void setupElementsForVisitTable(WildLogApp inApp, JTable inTable, Visit inVisit) {
         // Load data
         String[] columnNames = {
                                 "Creature Name",
@@ -464,7 +460,7 @@ public final class UtilTableGenerator {
                                 };
         Sighting temp = new Sighting();
         temp.setVisitName(inVisit.getName());
-        List<Sighting> allSightings = dbi.list(temp);
+        List<Sighting> allSightings = inApp.getDBI().list(temp);
         List<String> allElements = new ArrayList<String>();
         for (Sighting tempSighting : allSightings) {
             if (!allElements.contains(tempSighting.getElementName()))
@@ -473,7 +469,7 @@ public final class UtilTableGenerator {
         Object[][] tempTable = null;
         tempTable = new Object[allElements.size()][3];
         for (int t = 0; t < allElements.size(); t++) {
-            Element tempElement = dbi.find(new Element(allElements.get(t)));
+            Element tempElement = inApp.getDBI().find(new Element(allElements.get(t)));
             int i = 0;
             tempTable[t][i++] = tempElement.getPrimaryName();
             tempTable[t][i++] = tempElement.getType();
@@ -505,7 +501,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupElementsForLocationTable(JTable inTable, Location inLocation) {
+    public static void setupElementsForLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
                                 "Creature Name",
@@ -515,7 +511,7 @@ public final class UtilTableGenerator {
         Sighting temp = new Sighting();
         if (inLocation.getName() != null)
             temp.setLocationName(inLocation.getName());
-        List<Sighting> allSightings = dbi.list(temp);
+        List<Sighting> allSightings = inApp.getDBI().list(temp);
         List<String> allElements = new ArrayList<String>();
         for (Sighting tempSighting : allSightings) {
             if (!allElements.contains(tempSighting.getElementName()))
@@ -524,7 +520,7 @@ public final class UtilTableGenerator {
         Object[][] tempTable = null;
         tempTable = new Object[allElements.size()][3];
         for (int t = 0; t < allElements.size(); t++) {
-            Element tempElement = dbi.find(new Element(allElements.get(t)));
+            Element tempElement = inApp.getDBI().find(new Element(allElements.get(t)));
             int i = 0;
             tempTable[t][i++] = tempElement.getPrimaryName();
             tempTable[t][i++] = tempElement.getType();
@@ -556,7 +552,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupLocationsForElementTable(JTable inTable, Element inElement) {
+    public static void setupLocationsForElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
                                 "Place Name",
@@ -568,14 +564,14 @@ public final class UtilTableGenerator {
             Sighting temp = new Sighting();
             if (inElement.getPrimaryName() != null)
                 temp.setElementName(inElement.getPrimaryName());
-            List<Sighting> allSightings = dbi.list(temp);
+            List<Sighting> allSightings = inApp.getDBI().list(temp);
             for (int t = 0; t < allSightings.size(); t++) {
                 if (!allLocations.contains(allSightings.get(t).getLocationName()))
                     allLocations.add(allSightings.get(t).getLocationName());
             }
             tempTable = new Object[allLocations.size()][3];
             for (int t = 0; t < allLocations.size(); t++) {
-                Location tempLocation = dbi.find(new Location(allLocations.get(t)));
+                Location tempLocation = inApp.getDBI().find(new Location(allLocations.get(t)));
                 int i = 0;
                 tempTable[t][i++] = tempLocation.getName();
                 tempTable[t][i++] = tempLocation.getGameViewingRating();
@@ -604,13 +600,13 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupShortLocationTable(JTable inTable, Location inLocation) {
+    public static void setupShortLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
         // Load data
         String[] columnNames = {
                                 "Place Name"
                                 };
         List<Location> tempList = null;
-        tempList = dbi.list(inLocation);
+        tempList = inApp.getDBI().list(inLocation);
 
         Object[][] tempTable = new Object[tempList.size()][2];
         for (int t = 0; t < tempList.size(); t++) {
@@ -638,7 +634,7 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupSightingsForElementTable(JTable inTable, Element inElement) {
+    public static void setupSightingsForElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
         // Load data
         String[] columnNames = {
                                 "Place Name",
@@ -647,7 +643,7 @@ public final class UtilTableGenerator {
                                 };
         Sighting templateSighting = new Sighting();
         templateSighting.setElementName(inElement.getPrimaryName());
-        List<Sighting> tempList = dbi.list(templateSighting);
+        List<Sighting> tempList = inApp.getDBI().list(templateSighting);
         Object[][] tempTable;
         if (tempList != null) {
             tempTable = new Object[tempList.size()][3];

@@ -22,7 +22,6 @@ import javax.swing.JTable;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Element;
@@ -68,8 +67,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
 
     /** Creates new form BulkUploadPanel */
-    public BulkUploadPanel(ProgressbarTask inProgressbarTask, String inLocationName) {
-        app = (WildLogApp) Application.getInstance();
+    public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, String inLocationName) {
+        app = inApp;
         imageIndex = 0;
         // Init auto generated code
         initComponents();
@@ -602,7 +601,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
         tblBulkImport.clearSelection();
         // You can only use a task once, hence for the saving we need to create a new task
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 // Disable die button sodat mens dit nie weer kan druk nie
@@ -625,7 +624,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // You can only use a task once, hence for the saving we need to create a new task
         final Container thisParentHandle = this.getParent();
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 // Make sure the location is OK
@@ -771,7 +770,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setMessage("Saving the Bulk Import: Finished");
                     this.setTaskProgress(100);
                     UtilPanelGenerator.addPanelAsTab(
-                        UtilPanelGenerator.getVisitPanel(locationHandle, visit.getName()),
+                        UtilPanelGenerator.getVisitPanel(app, locationHandle, visit.getName()),
                         ((JTabbedPane)thisParentHandle));
                 }
                 else {
@@ -820,7 +819,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void btnGPSForAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSForAllActionPerformed
         Sighting tempSighting = new Sighting();
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), tempSighting);
+        GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), tempSighting);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             for (int t = 0; t < tblBulkImport.getModel().getRowCount(); t++) {

@@ -2,17 +2,17 @@ package wildlog.utils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
-import org.jdesktop.application.Application;
 import org.jdesktop.application.ApplicationContext;
 import org.jdesktop.application.Task;
 import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
+import wildlog.WildLogApp;
 
 
 public class UtilsConcurency {
-    
-    public static void kickoffProgressbarTask(Task inTask) {
-        ApplicationContext appContext = Application.getInstance().getContext();
+
+    public static void kickoffProgressbarTask(WildLogApp inApp, Task inTask) {
+        ApplicationContext appContext = inApp.getContext();
         TaskMonitor taskMonitor = appContext.getTaskMonitor();
         TaskService taskService = appContext.getTaskService();
         taskService.execute(inTask);

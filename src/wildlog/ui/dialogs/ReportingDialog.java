@@ -1,25 +1,23 @@
 package wildlog.ui.dialogs;
 
-import java.awt.Frame;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import org.jdesktop.application.Application;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.ReportElementSightingsByMoon;
 import wildlog.ui.reports.ReportElementSightingsBySun;
-import wildlog.ui.reports.ReportLocationSightingsBySun;
 import wildlog.ui.reports.ReportLocationSightingsByMoon;
+import wildlog.ui.reports.ReportLocationSightingsBySun;
 import wildlog.ui.reports.ReportLocationSightingsByType;
 import wildlog.ui.reports.ReportLocationSpeciesCurve;
 import wildlog.ui.reports.ReportSightingByElement;
 import wildlog.ui.reports.ReportSightingByLocation;
 import wildlog.ui.reports.ReportVisitSightingsBySun;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportingDialog extends JDialog {
@@ -30,15 +28,15 @@ public class ReportingDialog extends JDialog {
     private Date startDate;
     private Date endDate;
 
-    public ReportingDialog(Frame inParent,
+    public ReportingDialog(WildLogApp inApp,
             Location inLocationToMap,
             Element inElementToMap,
             Visit inVisit,
             Date inStartDate,
             Date inEndDate) {
-        super(inParent);
+        super(inApp.getMainFrame());
         // Set passed in values
-        app = (WildLogApp) Application.getInstance();
+        app = inApp;
         location = inLocationToMap;
         element = inElementToMap;
         visit = inVisit;

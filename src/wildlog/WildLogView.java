@@ -48,7 +48,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import org.jdesktop.application.Application;
 import org.jdesktop.application.TaskMonitor;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
@@ -104,14 +103,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private Location searchLocation;
     private int imageIndex = 0;
 
-    private void init() {
-        app = (WildLogApp) Application.getInstance();
+    public WildLogView(WildLogApp inApp) {
+        app = inApp;
         searchElement = new Element();
         searchLocation = new Location();
-    }
-
-    public WildLogView(Application app) {
-        init();
+        // Call the generated code to build the GUI
         initComponents();
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
@@ -1727,7 +1723,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             int[] selectedRows = tblVisit.getSelectedRows();
             PanelVisit tempPanel;
             for (int t = 0; t < selectedRows.length; t++) {
-                tempPanel = UtilPanelGenerator.getVisitPanel(tempLocation, (String)tblVisit.getValueAt(selectedRows[t], 0));
+                tempPanel = UtilPanelGenerator.getVisitPanel(app, tempLocation, (String)tblVisit.getValueAt(selectedRows[t], 0));
                 UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
         }
@@ -1737,18 +1733,18 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         int[] selectedRows = tblElement.getSelectedRows();
         PanelElement tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+            tempPanel = UtilPanelGenerator.getElementPanel(app, (String)tblElement.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
 }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnAddElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddElementActionPerformed
-        PanelElement tempPanel = UtilPanelGenerator.getNewElementPanel();
+        PanelElement tempPanel = UtilPanelGenerator.getNewElementPanel(app);
         UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
 }//GEN-LAST:event_btnAddElementActionPerformed
 
     private void tabElementComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabElementComponentShown
-        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
+        UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         txtSearch.setText("");
         cmbType.setSelectedItem(ElementType.NONE);
@@ -1769,7 +1765,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 int[] selectedRows = tblElement.getSelectedRows();
                 PanelElement tempPanel;
                 for (int t = 0; t < selectedRows.length; t++) {
-                    tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement.getValueAt(selectedRows[t], 0));
+                    tempPanel = UtilPanelGenerator.getElementPanel(app, (String)tblElement.getValueAt(selectedRows[t], 0));
                     tabbedPanel.remove(tempPanel);
                     app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 0)));
                 }
@@ -1779,12 +1775,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_btnDeleteElementActionPerformed
 
     private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
-        PanelLocation tempPanel = UtilPanelGenerator.getNewLocationPanel();
+        PanelLocation tempPanel = UtilPanelGenerator.getNewLocationPanel(app);
         UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
     }//GEN-LAST:event_btnAddLocationActionPerformed
 
     private void tabLocationComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabLocationComponentShown
-        UtilTableGenerator.setupCompleteLocationTable(tblLocation, searchLocation);
+        UtilTableGenerator.setupCompleteLocationTable(app, tblLocation, searchLocation);
         tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
         tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
         lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
@@ -1794,7 +1790,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         int[] selectedRows = tblLocation.getSelectedRows();
         PanelLocation tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation.getValueAt(selectedRows[t], 0));
+            tempPanel = UtilPanelGenerator.getLocationPanel(app, (String)tblLocation.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
@@ -1805,9 +1801,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (!ElementType.NONE.equals(type)) {
             searchElement.setType(type);
         }
-        UtilTableGenerator.setupCompleteElementTable(tblElement, searchElement);
+        UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
         txtSearch.setText("");
-        UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, new Element());
+        UtilTableGenerator.setupLocationsForElementTable(app, tblLocation_EleTab, new Element());
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -1815,7 +1811,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         int[] selectedRows = tblElement_LocTab.getSelectedRows();
         PanelElement tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getElementPanel((String)tblElement_LocTab.getValueAt(selectedRows[t], 0));
+            tempPanel = UtilPanelGenerator.getElementPanel(app, (String)tblElement_LocTab.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
     }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
@@ -1824,7 +1820,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         int[] selectedRows = tblLocation_EleTab.getSelectedRows();
         PanelLocation tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getLocationPanel((String)tblLocation_EleTab.getValueAt(selectedRows[t], 0));
+            tempPanel = UtilPanelGenerator.getLocationPanel(app, (String)tblLocation_EleTab.getValueAt(selectedRows[t], 0));
             UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
         }
     }//GEN-LAST:event_btnGoLocationActionPerformed
@@ -1847,10 +1843,10 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     tempVisit.setLocationName(tempLocation.getName());
                     List<Visit> visits = app.getDBI().list(tempVisit);
                     for (int i = 0; i < visits.size(); i++) {
-                        PanelVisit tempPanel = UtilPanelGenerator.getVisitPanel(tempLocation, visits.get(i).getName());
+                        PanelVisit tempPanel = UtilPanelGenerator.getVisitPanel(app, tempLocation, visits.get(i).getName());
                         tabbedPanel.remove(tempPanel);
                     }
-                    tabbedPanel.remove(UtilPanelGenerator.getLocationPanel(tempLocation.getName()));
+                    tabbedPanel.remove(UtilPanelGenerator.getLocationPanel(app, tempLocation.getName()));
                     app.getDBI().delete(tempLocation);
                 }
                 tabLocationComponentShown(null);
@@ -1868,7 +1864,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             else
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             // Get Locations
-            UtilTableGenerator.setupLocationsForElementTable(tblLocation_EleTab, tempElement);
+            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation_EleTab, tempElement);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
@@ -1886,9 +1882,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             else
                 lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
             // Get Visits
-            UtilTableGenerator.setupShortVisitTable(tblVisit, tempLocation);
+            UtilTableGenerator.setupShortVisitTable(app, tblVisit, tempLocation);
             // Get All Elements seen
-            UtilTableGenerator.setupElementsForLocationTable(tblElement_LocTab, tempLocation);
+            UtilTableGenerator.setupElementsForLocationTable(app, tblElement_LocTab, tempLocation);
         }
         else {
             lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
@@ -2114,26 +2110,26 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                PanelLocation tempPanel = UtilPanelGenerator.getLocationPanel(tempLocation.getName());
+                PanelLocation tempPanel = UtilPanelGenerator.getLocationPanel(app, tempLocation.getName());
                 UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                PanelElement tempPanel = UtilPanelGenerator.getElementPanel(tempElement.getPrimaryName());
+                PanelElement tempPanel = UtilPanelGenerator.getElementPanel(app, tempElement.getPrimaryName());
                 UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                PanelVisit tempPanel = UtilPanelGenerator.getVisitPanel(app.getDBI().find(new Location(tempVisit.getLocationName())), tempVisit.getName());
+                PanelVisit tempPanel = UtilPanelGenerator.getVisitPanel(app, app.getDBI().find(new Location(tempVisit.getLocationName())), tempVisit.getName());
                 UtilPanelGenerator.addPanelAsTab(tempPanel, tabbedPanel);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
                 PanelSighting dialog = new PanelSighting(
-                        app.getMainFrame(), "Edit an Existing Sighting",
+                        app, app.getMainFrame(), "Edit an Existing Sighting",
                         tempSighting,
                         app.getDBI().find(new Location(tempSighting.getLocationName())),
                         app.getDBI().find(new Visit(tempSighting.getVisitName())),
@@ -2274,27 +2270,27 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), tempLocation, null, null, null, null);
+                ReportingDialog dialog = new ReportingDialog(app, tempLocation, null, null, null, null);
                 dialog.setVisible(true);
                 somethingToReportOn = true;
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, tempElement, null, null, null);
+                ReportingDialog dialog = new ReportingDialog(app, null, tempElement, null, null, null);
                 dialog.setVisible(true);
                 somethingToReportOn = true;
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, tempVisit, null, null);
+                ReportingDialog dialog = new ReportingDialog(app, null, null, tempVisit, null, null);
                 dialog.setVisible(true);
                 somethingToReportOn = true;
             }
         }
         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-            ReportingDialog dialog = new ReportingDialog(app.getMainFrame(), null, null, null, dtpStartDate.getDate(), dtpEndDate.getDate());
+            ReportingDialog dialog = new ReportingDialog(app, null, null, null, dtpStartDate.getDate(), dtpEndDate.getDate());
             dialog.setVisible(true);
             somethingToReportOn = true;
         }
@@ -2432,7 +2428,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 }
             });
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            UtilsDialog.showExifPopup(fileChooser.getSelectedFile());
+            UtilsDialog.showExifPopup(app, fileChooser.getSelectedFile());
         }
     }//GEN-LAST:event_mnuExifMenuItemActionPerformed
 
@@ -2517,7 +2513,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             while (tabbedPanel.getTabCount() > 4) {
                 tabbedPanel.remove(4);
             }
-            MergeElementsDialog dialog = new MergeElementsDialog();
+            MergeElementsDialog dialog = new MergeElementsDialog(app);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_linkElementsMenuItemActionPerformed
@@ -2537,7 +2533,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             while (tabbedPanel.getTabCount() > 4) {
                 tabbedPanel.remove(4);
             }
-            MoveVisitDialog dialog = new MoveVisitDialog();
+            MoveVisitDialog dialog = new MoveVisitDialog(app);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_moveVisitsMenuItemActionPerformed
@@ -2571,7 +2567,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 while (tabbedPanel.getTabCount() > 4) {
                     tabbedPanel.remove(4);
                 }
-                UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
                         if (choice == 0) {
@@ -2635,10 +2631,10 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_calcSunMoonMenuItemActionPerformed
 
     private void bulkImportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bulkImportMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(this, null);
+                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(app, this, null);
                 UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, tabbedPanel);
                 return null;
             }
@@ -2646,7 +2642,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_bulkImportMenuItemActionPerformed
 
     private void csvImportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvImportMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the CSV Import");
@@ -2701,7 +2697,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 }
             });
         if (result == JFileChooser.APPROVE_OPTION) {
-            UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setMessage("Creating the Slideshow");
@@ -2742,7 +2738,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
     private void csvExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvExportMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the CSV Export");
@@ -2758,7 +2754,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_csvExportMenuItemActionPerformed
 
     private void htmlExportMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_htmlExportMenuItem1ActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the HTML Export");
@@ -2787,7 +2783,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_htmlExportMenuItem1ActionPerformed
 
     private void kmlExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kmlExportMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the KML Export");
@@ -2853,12 +2849,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_kmlExportMenuItemActionPerformed
 
     private void mnuSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSunAndMoonActionPerformed
-        SunMoonDialog dialog = new SunMoonDialog(null);
+        SunMoonDialog dialog = new SunMoonDialog(app, null);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSunAndMoonActionPerformed
 
     private void mnuBackupMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupMenuItemActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Database Backup");
@@ -2884,7 +2880,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
     private void mnuAboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutMenuItemActionPerformed
         if (aboutBox == null) {
-            aboutBox = new WildLogAboutBox();
+            aboutBox = new WildLogAboutBox(app);
         }
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutMenuItemActionPerformed
@@ -2966,7 +2962,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             app.getMainFrame().setGlassPane(glassPane);
             app.getMainFrame().getGlassPane().setVisible(true);
             // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
-            UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
                     // TODO: Implement better progress bar feedback vir workspace cleanup
@@ -3418,7 +3414,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 while (tabbedPanel.getTabCount() > 4) {
                     tabbedPanel.remove(4);
                 }
-                UtilsConcurency.kickoffProgressbarTask(new ProgressbarTask(app) {
+                UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
                         if (choice == 0) {

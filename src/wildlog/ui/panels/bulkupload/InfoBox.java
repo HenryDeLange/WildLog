@@ -203,6 +203,7 @@ public class InfoBox extends JPanel {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         PanelSighting dialog = new PanelSighting(
+                app,
                 app.getMainFrame(), "Edit the Observation",
                 sightingWrapper,
                 new Location(txtLocation.getText()),
@@ -234,7 +235,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app.getMainFrame(), sightingWrapper);
+        GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), sightingWrapper);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
