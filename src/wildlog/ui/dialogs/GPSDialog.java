@@ -547,6 +547,7 @@ public class GPSDialog extends JDialog {
         temp.setLonMinutes(app.getPrevLonMin());
         temp.setLonSeconds(app.getPrevLonSec());
         loadUIValues(temp);
+        btnSaveActionPerformed(evt);
     }//GEN-LAST:event_btnUsePreviousActionPerformed
 
     private void btnUseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseImageActionPerformed

@@ -45,6 +45,7 @@ import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ImageFilter;
+import wildlog.ui.helpers.MovieFilter;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilTableGenerator;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
@@ -207,11 +208,16 @@ public class PanelSighting extends JDialog {
                     uploadImage(inFiles);
                 }
             });
-
+            // Attach clipboard
+            UtilsUI.attachClipboardPopup(txtSearchLocation);
+            // Setup searcher
+            UtilsUI.attachKeyListernerToFilterTableRows(txtSearchLocation, tblLocation);
+        }
+        if (!disableEditing) {
             // Attach clipboard
             UtilsUI.attachClipboardPopup(txtSearch);
-            UtilsUI.attachClipboardPopup(txtSearchLocation);
             UtilsUI.attachClipboardPopup(txtDetails);
+            UtilsUI.attachClipboardPopup(txtTag);
             UtilsUI.attachClipboardPopup((JTextComponent)spnHours.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnMinutes.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnMoonPhase.getEditor().getComponent(0));
@@ -219,10 +225,8 @@ public class PanelSighting extends JDialog {
             UtilsUI.attachClipboardPopup((JTextComponent)spnTemperature.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnDurationMinutes.getEditor().getComponent(0));
             UtilsUI.attachClipboardPopup((JTextComponent)spnDurationSeconds.getEditor().getComponent(0));
-
             // Setup searcher
             UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
-            UtilsUI.attachKeyListernerToFilterTableRows(txtSearchLocation, tblLocation);
         }
 
         // Setup the image count label
@@ -763,6 +767,11 @@ public class PanelSighting extends JDialog {
         cmbTimeFormat.setEnabled(!disableEditing);
         cmbTimeFormat.setFocusable(false);
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
+        cmbTimeFormat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTimeFormatActionPerformed(evt);
+            }
+        });
         sightingIncludes.add(cmbTimeFormat, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 110, 20));
 
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -835,7 +844,7 @@ public class PanelSighting extends JDialog {
 
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
         spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "##"));
+        spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "00"));
         spnHours.setEnabled(!disableEditing);
         spnHours.setFocusable(false);
         spnHours.setName("spnHours"); // NOI18N
@@ -843,7 +852,7 @@ public class PanelSighting extends JDialog {
 
         spnMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "##"));
+        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "00"));
         spnMinutes.setEnabled(!disableEditing);
         spnMinutes.setFocusable(false);
         spnMinutes.setName("spnMinutes"); // NOI18N
@@ -960,6 +969,7 @@ public class PanelSighting extends JDialog {
         sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
 
         spnDurationMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 1440, 1));
+        spnDurationMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationMinutes, "00"));
         spnDurationMinutes.setEnabled(!disableEditing);
         spnDurationMinutes.setName("spnDurationMinutes"); // NOI18N
         sightingIncludes.add(spnDurationMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 50, -1));
@@ -969,6 +979,7 @@ public class PanelSighting extends JDialog {
         sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 100, -1, 20));
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 60.0d, 1.0d));
+        spnDurationSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationSeconds, "00"));
         spnDurationSeconds.setEnabled(!disableEditing);
         spnDurationSeconds.setName("spnDurationSeconds"); // NOI18N
         sightingIncludes.add(spnDurationSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 50, -1));
@@ -1119,7 +1130,7 @@ public class PanelSighting extends JDialog {
             // If the date hasn't been set yet, then try to load it from the first image
             setSightingDateFromUIFields();
             if (sighting.getDate() == null) {
-                getDateFromImage(inFiles.get(0));
+                getDateFromFile(inFiles.get(0));
                 btnCalculateSunAndMoonActionPerformed(null);
             }
         }
@@ -1179,26 +1190,30 @@ public class PanelSighting extends JDialog {
 }//GEN-LAST:event_btnSetMainImageActionPerformed
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
-        if (tblVisit.getSelectedRowCount() == 1) {
-            visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 0).toString()));
-        }
-        else {
-            visit = null;
+        if (!bulkUploadMode) {
+            if (tblVisit.getSelectedRowCount() == 1) {
+                visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 0).toString()));
+            }
+            else {
+                visit = null;
+            }
         }
 }//GEN-LAST:event_tblVisitMouseReleased
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
-        if (tblLocation.getSelectedRowCount() == 1) {
-            location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
-            UtilTableGenerator.setupVeryShortVisitTable(app, tblVisit, location);
-            visit = null;
-            UtilsImageProcessing.setupFoto(location.getWildLogFileID(), 0, lblLocationImage, 100, app);
-        }
-        else {
-            location = null;
-            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Place"}, 0));
-            visit = null;
-            lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
+        if (!bulkUploadMode) {
+            if (tblLocation.getSelectedRowCount() == 1) {
+                location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
+                UtilTableGenerator.setupVeryShortVisitTable(app, tblVisit, location);
+                visit = null;
+                UtilsImageProcessing.setupFoto(location.getWildLogFileID(), 0, lblLocationImage, 100, app);
+            }
+            else {
+                location = null;
+                tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Place"}, 0));
+                visit = null;
+                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
+            }
         }
 }//GEN-LAST:event_tblLocationMouseReleased
 
@@ -1247,19 +1262,25 @@ public class PanelSighting extends JDialog {
     private void btnGetDateFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDateFromImageActionPerformed
         List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (files != null && files.size() > 0)
-            getDateFromImage(new File(files.get(imageIndex).getFilePath(true)));
+            getDateFromFile(new File(files.get(imageIndex).getFilePath(true)));
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
 
-    private void getDateFromImage(File inFile) {
+    private void getDateFromFile(File inFile) {
         if (inFile != null) {
+            Date fileDate = null;
             if (new ImageFilter().accept(inFile)) {
                 // Get the date form the image
-                Date imageDate = UtilsImageProcessing.getDateFromImage(inFile);
-                // Set the date
-                if (imageDate != null) {
-                    sighting.setDate(imageDate);
-                    setUIFieldsFromSightingDate();
-                }
+                fileDate = UtilsImageProcessing.getDateFromImage(inFile);
+            }
+            else
+            if (new MovieFilter().accept(inFile)) {
+                // Get the date form the movie
+                fileDate = UtilsImageProcessing.getDateFromFile(inFile);
+            }
+            // Set the date
+            if (fileDate != null) {
+                sighting.setDate(fileDate);
+                setUIFieldsFromSightingDate();
             }
         }
     }
@@ -1331,11 +1352,18 @@ public class PanelSighting extends JDialog {
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
 
     private void spnTemperatureStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnTemperatureStateChanged
-        if ((double)spnTemperature.getValue() > 50
+        if ((double)spnTemperature.getValue() >= 45
                 && (cmbTemperatureUnits.getSelectedItem() == null || UnitsTemperature.NONE.equals(cmbTemperatureUnits.getSelectedItem()))) {
             cmbTemperatureUnits.setSelectedItem(UnitsTemperature.FAHRENHEIT);
         }
     }//GEN-LAST:event_spnTemperatureStateChanged
+
+    private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
+        if (TimeFormat.UNKNOWN.equals(cmbTimeFormat.getSelectedItem()) || TimeFormat.NONE.equals(cmbTimeFormat.getSelectedItem())) {
+            spnHours.setValue(0);
+            spnMinutes.setValue(0);
+        }
+    }//GEN-LAST:event_cmbTimeFormatActionPerformed
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));

@@ -62,6 +62,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private WildLogApp app;
     private CustomMouseWheelScroller mouseWheel;
     private File importPath = null;
+    private static String lastFilePath = "";
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
     public final static Color tableBackgroundColor2 = new Color(195, 205, 180);
 
@@ -156,7 +157,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private File showFileChooser() {
-        final JFileChooser fileChooser = new JFileChooser();
+        final JFileChooser fileChooser;
+        if (lastFilePath != null && lastFilePath.length() > 0)
+            fileChooser = new JFileChooser(lastFilePath);
+        else
+            fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -170,11 +175,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
         if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFile() == null)
             return null;
-        else
-        if (fileChooser.getSelectedFile().isDirectory())
-            return fileChooser.getSelectedFile();
-        else
-            return fileChooser.getSelectedFile().getParentFile();
+        else {
+            lastFilePath = fileChooser.getSelectedFile().getAbsolutePath();
+            if (fileChooser.getSelectedFile().isDirectory())
+                return fileChooser.getSelectedFile();
+            else
+                return fileChooser.getSelectedFile().getParentFile();
+        }
     }
 
     /** This method is called from within the constructor to

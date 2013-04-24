@@ -250,6 +250,10 @@ public class UtilsImageProcessing {
         return date;
     }
 
+    public static Date getDateFromFile(File inFile) {
+        return new Date(inFile.lastModified());
+    }
+
     private static Date getExifDateFromJpeg(Metadata inMeta) {
         // FIXME: Die ou Moultrie images het 'n issue waar hulle 'n EXIF value het wat altyd na dieselfde datum point, ek moet 'n reel maak wat daai files kan optel en dan die file.lastmodified gebruik...
         if (inMeta != null) {

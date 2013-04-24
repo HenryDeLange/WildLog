@@ -425,11 +425,11 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(170);
+                column.setPreferredWidth(160);
             }
             else if (i == 1) {
-                column.setPreferredWidth(65);
-                column.setCellRenderer(new DateCellRenderer());
+                column.setPreferredWidth(75);
+                column.setCellRenderer(new DateTimeCellRenderer());
             }
             else if (i == 2) {
                 column.setPreferredWidth(55);

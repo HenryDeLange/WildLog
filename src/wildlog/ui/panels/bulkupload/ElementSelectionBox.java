@@ -275,6 +275,7 @@ public class ElementSelectionBox extends JDialog {
         txtElementName.setText(previousElement);
         lstElements.setSelectedValue(previousElement, true);
         txtElementNameKeyReleased(null);
+        btnSelectActionPerformed(evt);
     }//GEN-LAST:event_btnPreviousElementActionPerformed
 
     private void loadElementList() {
