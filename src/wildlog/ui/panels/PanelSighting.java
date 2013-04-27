@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -39,13 +40,10 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
-import wildlog.data.enums.WildLogFileType;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.ui.helpers.ImageFilter;
-import wildlog.ui.helpers.MovieFilter;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilTableGenerator;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
@@ -253,6 +251,7 @@ public class PanelSighting extends JDialog {
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         ActionListener escListiner = UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
+        UtilsDialog.addModalBackgroundPanel(this, null);
         // Hack to fix the wierd focus issue to get the ESC to work (related to the datepicker)
         this.setFocusable(true);
         dtpSightingDate.getEditor().registerKeyboardAction(
@@ -512,6 +511,11 @@ public class PanelSighting extends JDialog {
         dtpSightingDate.setFocusable(false);
         dtpSightingDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
+        dtpSightingDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dtpSightingDateActionPerformed(evt);
+            }
+        });
         sightingIncludes.add(dtpSightingDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 150, -1));
 
         jLabel8.setText("Weather:");
@@ -1023,7 +1027,7 @@ public class PanelSighting extends JDialog {
         else
             sclVisit.setBorder(new LineBorder(green, 1));
         if (dtpSightingDate.getDate() == null)
-            dtpSightingDate.setBorder(new LineBorder(Color.RED, 2));
+            dtpSightingDate.setBorder(new LineBorder(Color.ORANGE, 2));
         else
             dtpSightingDate.setBorder(new LineBorder(green, 2));
         // Perform the save action
@@ -1041,15 +1045,11 @@ public class PanelSighting extends JDialog {
             }
         }
         else {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please fill in all of the required fields.",
-                            "Can't Save Observation", JOptionPane.ERROR_MESSAGE);
-                    return -1;
-                }
-            });
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please fill in all of the required fields.",
+                    "Can't Save Observation", JOptionPane.ERROR_MESSAGE);
+            getGlassPane().setVisible(false);
         }
 }//GEN-LAST:event_btnUpdateSightingActionPerformed
 
@@ -1101,15 +1101,11 @@ public class PanelSighting extends JDialog {
         // SAVE (Only save to DB if not in bulk upload mode)
         if (!bulkUploadMode) {
             if (app.getDBI().createOrUpdate(sighting) == false) {
-                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                    @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(app.getMainFrame(),
-                                "Could not save the Observation.",
-                                "Error Saving", JOptionPane.ERROR_MESSAGE);
-                        return -1;
-                    }
-                });
+                getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Could not save the Observation.",
+                        "Error Saving", JOptionPane.ERROR_MESSAGE);
+                getGlassPane().setVisible(false);
                 return false;
             }
         }
@@ -1122,37 +1118,56 @@ public class PanelSighting extends JDialog {
     }
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
-        uploadImage(null);
+        uploadImage(UtilsFileProcessing.showFileUploadDialog(app));
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void uploadImage(final List<File> inFiles) {
         if (inFiles != null && inFiles.size() > 0) {
             // If the date hasn't been set yet, then try to load it from the first image
+            // Also update the Sun and Moon phase (if possible).
             setSightingDateFromUIFields();
-            if (sighting.getDate() == null) {
-                getDateFromFile(inFiles.get(0));
+            if (sighting.getDate() == null && location != null && element != null && visit != null) {
+                // Gebruik die compareTo om die sortering te doen
+                class ComparableFile implements Comparable<ComparableFile> {
+                    public File originalFile;
+                    @Override
+                    public int compareTo(ComparableFile inComparableFile) {
+                        if (inComparableFile != null && inComparableFile.originalFile != null && originalFile != null) {
+                            Date date1 = UtilsImageProcessing.getDateFromFileDate(originalFile);
+                            Date date2 = UtilsImageProcessing.getDateFromFileDate(inComparableFile.originalFile);
+                            if (date1 != null && date2 != null) {
+                                return date1.compareTo(date2);
+                            }
+                        }
+                        return 0;
+                    }
+                }
+                List<ComparableFile> compareFileList = new ArrayList<ComparableFile>(inFiles.size());
+                for (File tempFile : inFiles) {
+                    ComparableFile comparableFile = new ComparableFile();
+                    comparableFile.originalFile = tempFile;
+                    compareFileList.add(comparableFile);
+                }
+                Collections.sort(compareFileList);
+                loadDateFromFile(compareFileList.get(0).originalFile);
                 btnCalculateSunAndMoonActionPerformed(null);
             }
-        }
-        // Try to save the sighting (to make sure all required fields are there and to get the SightingID)
-        btnUpdateSightingActionPerformed(null);
-        // Now upload the files
-        if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
-            if (inFiles == null) {
-                imageIndex = UtilsFileProcessing.uploadFileUsingDialog(
-                        sighting.getWildLogFileID(),
-                        WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
-                        this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
-            }
-            else {
+            // Try to save the sighting (to make sure all required fields are there and to get the SightingID)
+            btnUpdateSightingActionPerformed(null);
+            // Now upload the files
+            if (location != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 imageIndex = UtilsFileProcessing.uploadFilesUsingList(
                         sighting.getWildLogFileID(),
                         WildLogPaths.concatPaths(true, WildLogPrefixes.WILDLOG_PREFIXES_SIGHTING.toString(), sighting.toString()),
-                        this, lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app,
+                        lblImage, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app,
                         inFiles);
+                // Update the label showing the number of images
+                setupNumberOfImages();
+                // Calculate duration
+                if ((int)spnDurationMinutes.getValue() == 0 && (double)spnDurationSeconds.getValue() == 0.0) {
+                    btnCalculateDurationActionPerformed(null);
+                }
             }
-            // Update the label showingthe numebr of images
-            setupNumberOfImages();
         }
     }
 
@@ -1261,22 +1276,21 @@ public class PanelSighting extends JDialog {
 
     private void btnGetDateFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDateFromImageActionPerformed
         List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
-        if (files != null && files.size() > 0)
-            getDateFromFile(new File(files.get(imageIndex).getFilePath(true)));
+        if (files != null && files.size() > 0) {
+            loadDateFromFile(new File(files.get(imageIndex).getFilePath(true)));
+        }
+        else {
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please upload some files and try again.",
+                    "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+            getGlassPane().setVisible(false);
+        }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
 
-    private void getDateFromFile(File inFile) {
+    private void loadDateFromFile(File inFile) {
         if (inFile != null) {
-            Date fileDate = null;
-            if (new ImageFilter().accept(inFile)) {
-                // Get the date form the image
-                fileDate = UtilsImageProcessing.getDateFromImage(inFile);
-            }
-            else
-            if (new MovieFilter().accept(inFile)) {
-                // Get the date form the movie
-                fileDate = UtilsImageProcessing.getDateFromFile(inFile);
-            }
+            Date fileDate = UtilsImageProcessing.getDateFromFile(inFile);
             // Set the date
             if (fileDate != null) {
                 sighting.setDate(fileDate);
@@ -1312,15 +1326,11 @@ public class PanelSighting extends JDialog {
             showError = false;
         }
         if (showError) {
-            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please make sure to first provide values for the Creature, Place, Period and GPS point.",
-                            "Could not calculate the Sun and Moon information.", JOptionPane.ERROR_MESSAGE);
-                    return -1;
-                }
-            });
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please make sure to first provide values for the Creature, Place, Period and GPS point.",
+                    "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
+            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
 
@@ -1337,17 +1347,24 @@ public class PanelSighting extends JDialog {
     private void btnCalculateDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateDurationActionPerformed
         // Get all Image files for this sighting
         WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
-        searchFile.setFileType(WildLogFileType.IMAGE);
+//        searchFile.setFileType(WildLogFileType.IMAGE);
         List<WildLogFile> files = app.getDBI().list(searchFile);
-        if (!files.isEmpty()) {
+        if (files != null && !files.isEmpty()) {
             Collections.sort(files);
-            Date startDate = UtilsImageProcessing.getDateFromImage(new File(files.get(0).getFilePath(true)));
-            Date endDate = UtilsImageProcessing.getDateFromImage(new File(files.get(files.size()-1).getFilePath(true)));
+            Date startDate = UtilsImageProcessing.getDateFromFile(new File(files.get(0).getFilePath(true)));
+            Date endDate = UtilsImageProcessing.getDateFromFile(new File(files.get(files.size()-1).getFilePath(true)));
             double difference = (endDate.getTime() - startDate.getTime())/1000;
             int minutes = (int)difference/60;
             double seconds = difference - minutes*60.0;
             spnDurationMinutes.setValue(minutes);
             spnDurationSeconds.setValue((double)seconds);
+        }
+        else {
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please upload some files and try again.",
+                    "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
 
@@ -1364,6 +1381,10 @@ public class PanelSighting extends JDialog {
             spnMinutes.setValue(0);
         }
     }//GEN-LAST:event_cmbTimeFormatActionPerformed
+
+    private void dtpSightingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtpSightingDateActionPerformed
+        setSightingDateFromUIFields();
+    }//GEN-LAST:event_dtpSightingDateActionPerformed
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));

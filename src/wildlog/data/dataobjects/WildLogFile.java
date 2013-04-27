@@ -48,13 +48,24 @@ public class WildLogFile implements Comparable<WildLogFile> {
 
     @Override
     public int compareTo(WildLogFile inWildLogFile) {
-        if (WildLogFileType.IMAGE.equals(fileType) && inWildLogFile != null && WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
-            File file1 = new File(this.getFilePath(true));
-            File file2 = new File(inWildLogFile.getFilePath(true));
-            Date date1 = UtilsImageProcessing.getDateFromImage(file1);
-            Date date2 = UtilsImageProcessing.getDateFromImage(file2);
-            if (date1 != null && date2 != null) {
-                return date1.compareTo(date2);
+        if (inWildLogFile != null) {
+            if (WildLogFileType.IMAGE.equals(fileType) && WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
+                File file1 = new File(this.getFilePath(true));
+                File file2 = new File(inWildLogFile.getFilePath(true));
+                Date date1 = UtilsImageProcessing.getDateFromImage(file1);
+                Date date2 = UtilsImageProcessing.getDateFromImage(file2);
+                if (date1 != null && date2 != null) {
+                    return date1.compareTo(date2);
+                }
+            }
+            else {
+                File file1 = new File(this.getFilePath(true));
+                File file2 = new File(inWildLogFile.getFilePath(true));
+                Date date1 = UtilsImageProcessing.getDateFromFileDate(file1);
+                Date date2 = UtilsImageProcessing.getDateFromFileDate(file2);
+                if (date1 != null && date2 != null) {
+                    return date1.compareTo(date2);
+                }
             }
         }
         return 0;

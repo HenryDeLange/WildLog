@@ -67,8 +67,8 @@ public class ElementSelectionBox extends JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         txtElementName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstElements = new org.jdesktop.swingx.JXList();
         lblElementImage = new javax.swing.JLabel();
@@ -82,16 +82,16 @@ public class ElementSelectionBox extends JDialog {
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(230, 237, 220));
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Please choose a Creature:");
-        jLabel2.setName("jLabel2"); // NOI18N
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         txtElementName.setName("txtElementName"); // NOI18N
         txtElementName.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -100,6 +100,11 @@ public class ElementSelectionBox extends JDialog {
             }
         });
         jPanel1.add(txtElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 130, -1));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel2.setText("Please choose a Creature:");
+        jLabel2.setName("jLabel2"); // NOI18N
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
@@ -277,6 +282,10 @@ public class ElementSelectionBox extends JDialog {
         txtElementNameKeyReleased(null);
         btnSelectActionPerformed(evt);
     }//GEN-LAST:event_btnPreviousElementActionPerformed
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        txtElementName.requestFocus();
+    }//GEN-LAST:event_formComponentShown
 
     private void loadElementList() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException

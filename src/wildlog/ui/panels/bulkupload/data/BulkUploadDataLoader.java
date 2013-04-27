@@ -74,16 +74,14 @@ public class BulkUploadDataLoader {
                     // Start a new sighting and image list for the linked images
                     sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
                     // Set other defaults for the sighting
-                    sightingKey.setCertainty(Certainty.SURE);
-                    sightingKey.setSightingEvidence(SightingEvidence.SEEN);
-                    sightingKey.setLifeStatus(LifeStatus.ALIVE);
+                    setDefaultsForNewBulkUploadSightings(sightingKey);
                     // Update the map
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
-                    // Update the curent date to compare against
-                    currentSightingDate = temp.getDate();
                     // Set the date for this sighting
                     sightingKey.setDate(currentSightingDate);
                 }
+                // Update the curent date to compare against
+                currentSightingDate = temp.getDate();
                 // Set the GPS details (if not already set)
                 if ((sightingKey.getLatitude() == null || Latitudes.NONE.equals(sightingKey.getLatitude()))
                         && (sightingKey.getLongitude() == null || Longitudes.NONE.equals(sightingKey.getLongitude()))) {
@@ -101,6 +99,12 @@ public class BulkUploadDataLoader {
         }
         wrapper.setData(getArrayFromHash(finalMap));
         return wrapper;
+    }
+
+    public static void setDefaultsForNewBulkUploadSightings(BulkUploadSightingWrapper inBulkUploadSightingWrapper) {
+        inBulkUploadSightingWrapper.setCertainty(Certainty.SURE);
+        inBulkUploadSightingWrapper.setSightingEvidence(SightingEvidence.SEEN);
+        inBulkUploadSightingWrapper.setLifeStatus(LifeStatus.ALIVE);
     }
 
     private static void loadFileData(File inFile, List<BulkUploadImageFileWrapper> inImageList) {

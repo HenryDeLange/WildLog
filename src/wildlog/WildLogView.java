@@ -360,11 +360,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         mappingMenu = new javax.swing.JMenu();
         chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
         mnuMapStartMenuItem = new javax.swing.JMenuItem();
+        otherMenu = new javax.swing.JMenu();
+        mnuGPSInput = new javax.swing.JMenuItem();
         slideshowMenu = new javax.swing.JMenu();
         mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
         mnuSetSlideshowSize = new javax.swing.JMenuItem();
-        otherMenu = new javax.swing.JMenu();
-        mnuGPSInput = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
@@ -1371,12 +1371,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         fileMenu.setText("Application");
         fileMenu.setName("fileMenu"); // NOI18N
 
-        workspaceMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
+        workspaceMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
-        mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
-        mnuChangeWorkspaceMenuItem.setText("Select New Default Workspace Folder");
+        mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuChangeWorkspaceMenuItem.setText("Select Different Workspace Folder");
         mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
         mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
         mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1389,7 +1389,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         jSeparator8.setName("jSeparator8"); // NOI18N
         workspaceMenu.add(jSeparator8);
 
-        mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small Selected.gif"))); // NOI18N
+        mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuCleanWorkspace.setText("Check and Clean Default Workspace Folder");
         mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove nonessential files.");
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
@@ -1405,7 +1405,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         jSeparator2.setName("jSeparator2"); // NOI18N
         fileMenu.add(jSeparator2);
 
-        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         exitMenuItem.setText("Exit WildLog");
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -1580,6 +1580,22 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         settingsMenu.add(mappingMenu);
 
+        otherMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        otherMenu.setText("GPS Input Defaults");
+        otherMenu.setName("otherMenu"); // NOI18N
+
+        mnuGPSInput.setText("Select Default GPS Hemispheres");
+        mnuGPSInput.setToolTipText("Select the default values to use when adding new GPS points using the GPS Dialog.");
+        mnuGPSInput.setName("mnuGPSInput"); // NOI18N
+        mnuGPSInput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuGPSInputActionPerformed(evt);
+            }
+        });
+        otherMenu.add(mnuGPSInput);
+
+        settingsMenu.add(otherMenu);
+
         slideshowMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         slideshowMenu.setText("Slideshow Settings");
         slideshowMenu.setName("slideshowMenu"); // NOI18N
@@ -1605,22 +1621,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         slideshowMenu.add(mnuSetSlideshowSize);
 
         settingsMenu.add(slideshowMenu);
-
-        otherMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        otherMenu.setText("GPS Defaults");
-        otherMenu.setName("otherMenu"); // NOI18N
-
-        mnuGPSInput.setText("Select Default GPS Hemispheres");
-        mnuGPSInput.setToolTipText("Select the default values to use when adding new GPS points using the GPS Dialog.");
-        mnuGPSInput.setName("mnuGPSInput"); // NOI18N
-        mnuGPSInput.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuGPSInputActionPerformed(evt);
-            }
-        });
-        otherMenu.add(mnuGPSInput);
-
-        settingsMenu.add(otherMenu);
 
         menuBar.add(settingsMenu);
 
@@ -1702,7 +1702,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         helpMenu.setText("About");
         helpMenu.setName("helpMenu"); // NOI18N
 
-        mnuAboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        mnuAboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuAboutMenuItem.setText("About WildLog");
         mnuAboutMenuItem.setName("mnuAboutMenuItem"); // NOI18N
         mnuAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -2730,11 +2730,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_mnuCreateSlideshowActionPerformed
 
     private void mnuDBConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDBConsoleActionPerformed
-        UtilsFileProcessing.openFile(System.getProperty("user.dir") + "/lib/h2-1.3.168.jar");
+        UtilsFileProcessing.openFile(WildLogPaths.concatPaths(false, System.getProperty("user.dir"), "lib", "h2-1.3.168.jar"));
     }//GEN-LAST:event_mnuDBConsoleActionPerformed
 
     private void mnuOpenMapAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenMapAppActionPerformed
-        UtilsFileProcessing.openFile(System.getProperty("user.dir") + "/lib/openmap.jar");
+        UtilsFileProcessing.openFile(WildLogPaths.concatPaths(false, System.getProperty("user.dir"), "lib", "openmap.jar"));
     }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
     private void csvExportMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_csvExportMenuItemActionPerformed
@@ -2811,7 +2811,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 UtilsKML.copyKmlIcons(app, path);
                 // KML Stuff
                 KmlGenerator kmlgen = new KmlGenerator();
-                kmlgen.setKmlPath(path + "WildLogMarkers.kml");
+                kmlgen.setKmlPath(WildLogPaths.concatPaths(false, path, "WildLogMarkers.kml"));
                 // Get entries for Sightings and Locations
                 Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
                 setProgress(70);
@@ -2840,7 +2840,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 // Generate KML
                 kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
                 // Try to open the Kml file
-                UtilsFileProcessing.openFile(path + "WildLogMarkers.kml");
+                UtilsFileProcessing.openFile(WildLogPaths.concatPaths(false, path, "WildLogMarkers.kml"));
                 setProgress(100);
                 setMessage("Done with the KML Export");
                 return null;

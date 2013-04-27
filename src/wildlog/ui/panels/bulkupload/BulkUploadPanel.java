@@ -138,6 +138,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         List<Location> locations = app.getDBI().list(new Location());
         Collections.sort(locations);
         lstLocation.setListData(locations.toArray());
+        txtLocationNameKeyReleased(null);
     }
 
     private void loadImages(ProgressbarTask inProgressbarTask) {
@@ -611,8 +612,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                txtVisitName.requestFocus();
                 // Disable die button sodat mens dit nie weer kan druk nie
                 btnReload.setEnabled(false);
+                btnGPSForAll.setEnabled(false);
                 Border originalBorder = btnReload.getBorder();
                 Timer timer = UtilsUI.doAnimationForFlashingBorder(btnReload.getBackground(), new Color(200, 220, 250), btnReload);
                 btnUpdate.setEnabled(false);
@@ -620,9 +623,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 setupTab(this);
                 // Enable die button sodat mens dit weer kan druk
                 btnReload.setEnabled(true);
+                btnGPSForAll.setEnabled(true);
                 timer.stop();
                 btnReload.setBorder(originalBorder);
                 btnUpdate.setEnabled(true);
+                btnReload.requestFocus();
                 return null;
             }
         });

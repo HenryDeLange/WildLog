@@ -1,6 +1,5 @@
 package wildlog.utils;
 
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -10,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -47,9 +47,7 @@ public final class UtilsFileProcessing {
     /**
      * Upload a file using a FileChooser dialog.
      */
-    public static int uploadFileUsingDialog(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
-        if (inComponent != null)
-            inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    public static List<File> showFileUploadDialog(final WildLogApp inApp) {
 //        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
 //        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
 //        d.setDirectory(lastFilePath);
@@ -72,24 +70,16 @@ public final class UtilsFileProcessing {
                 return fileChooser.showOpenDialog(inApp.getMainFrame().getContentPane());
             }
         });
-        if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            performFileUpload(inID, inFolderName, fileChooser.getSelectedFiles(), inImageLabel, inSize, inApp);
-        }
-        if (inComponent != null)
-            inComponent.setCursor(Cursor.getDefaultCursor());
-        // return new image index
-        return 0;
+        return Arrays.asList(fileChooser.getSelectedFiles());
     }
 
     /**
      * Upload a file using a List of Files. (Used with FileDrop.)
      */
-    public static int uploadFilesUsingList(String inID, String inFolderName, Component inComponent, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
-        if (inComponent != null)
-            inComponent.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+    public static int uploadFilesUsingList(String inID, String inFolderName, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
+        inApp.getMainFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         performFileUpload(inID, inFolderName, inFiles.toArray(new File[inFiles.size()]), inImageLabel, inSize, inApp);
-        if (inComponent != null)
-            inComponent.setCursor(Cursor.getDefaultCursor());
+        inApp.getMainFrame().setCursor(Cursor.getDefaultCursor());
         // return new image index
         return 0;
     }

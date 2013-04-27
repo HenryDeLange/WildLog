@@ -81,7 +81,7 @@ public class GPSDialog extends JDialog {
         FileDrop.SetupFileDrop(btnUseGPX, false, new FileDrop.Listener() {
             @Override
             public void filesDropped(List<File> inFiles) {
-                if (inFiles != null && inFiles.size() > 0) {
+                if (inFiles != null && inFiles.size() == 1) {
                     doGpxInput(inFiles.get(0));
                 }
             }
@@ -89,7 +89,7 @@ public class GPSDialog extends JDialog {
         FileDrop.SetupFileDrop(btnUseImage, false, new FileDrop.Listener() {
             @Override
             public void filesDropped(List<File> inFiles) {
-                if (inFiles != null && inFiles.size() > 0) {
+                if (inFiles != null && inFiles.size() == 1) {
                     loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(inFiles.get(0)));
                 }
             }
@@ -175,6 +175,8 @@ public class GPSDialog extends JDialog {
             }
             // Populate the initial values into the spinners
             tglDecimalDegrees.setSelected(true);
+            tglDecimalDegrees.requestFocus();
+            tglDegMinSec.setSelected(false);
             setupDD();
         }
     }

@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
@@ -177,6 +178,7 @@ public class ImageBox extends JPanel {
         DefaultTableModel model = ((DefaultTableModel)table.getModel());
         BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
         BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
+        BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper);
         newSightingWrapper.setDate(imageWrapper.getDate());
         BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
         currentListWrapper.getImageList().remove(imageWrapper);

@@ -22,7 +22,7 @@
             <Menu class="javax.swing.JMenu" name="workspaceMenu">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small Selected.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Workspace"/>
                 <Property name="name" type="java.lang.String" value="workspaceMenu" noResource="true"/>
@@ -31,9 +31,9 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuChangeWorkspaceMenuItem">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small Selected.gif"/>
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Select New Default Workspace Folder"/>
+                    <Property name="text" type="java.lang.String" value="Select Different Workspace Folder"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select another Workspace to use."/>
                     <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceMenuItem" noResource="true"/>
                   </Properties>
@@ -49,7 +49,7 @@
                 <MenuItem class="javax.swing.JMenuItem" name="mnuCleanWorkspace">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small Selected.gif"/>
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Check and Clean Default Workspace Folder"/>
                     <Property name="toolTipText" type="java.lang.String" value="Make sure the Workspace is in good order and remove nonessential files."/>
@@ -69,7 +69,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="exitMenuItem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Exit WildLog"/>
                 <Property name="name" type="java.lang.String" value="exitMenuItem" noResource="true"/>
@@ -293,6 +293,27 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <Menu class="javax.swing.JMenu" name="otherMenu">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="GPS Input Defaults"/>
+                <Property name="name" type="java.lang.String" value="otherMenu" noResource="true"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuGPSInput">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Select Default GPS Hemispheres"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select the default values to use when adding new GPS points using the GPS Dialog."/>
+                    <Property name="name" type="java.lang.String" value="mnuGPSInput" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuGPSInputActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
             <Menu class="javax.swing.JMenu" name="slideshowMenu">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -320,27 +341,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSetSlideshowSizeActionPerformed"/>
-                  </Events>
-                </MenuItem>
-              </SubComponents>
-            </Menu>
-            <Menu class="javax.swing.JMenu" name="otherMenu">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="GPS Defaults"/>
-                <Property name="name" type="java.lang.String" value="otherMenu" noResource="true"/>
-              </Properties>
-              <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuGPSInput">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Select Default GPS Hemispheres"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Select the default values to use when adding new GPS points using the GPS Dialog."/>
-                    <Property name="name" type="java.lang.String" value="mnuGPSInput" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuGPSInputActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
@@ -460,7 +460,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuAboutMenuItem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="About WildLog"/>
                 <Property name="name" type="java.lang.String" value="mnuAboutMenuItem" noResource="true"/>

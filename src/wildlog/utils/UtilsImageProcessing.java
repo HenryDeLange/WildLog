@@ -31,6 +31,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.ui.helpers.ImageFilter;
 
 
 public class UtilsImageProcessing {
@@ -226,6 +227,11 @@ public class UtilsImageProcessing {
         }
     }
 
+    /**
+     * Convenience method for getDateFromImage(Metadata inMeta, File inFile).
+     * @param inFile
+     * @return
+     */
     public static Date getDateFromImage(File inFile) {
         Metadata metadata = null;
         try {
@@ -237,6 +243,13 @@ public class UtilsImageProcessing {
         return getDateFromImage(metadata, inFile);
     }
 
+    /**
+     * Try to load the date from the EXIF data, if no date could be loaded use the
+     * Last Modified date instead.
+     * @param inMeta
+     * @param inFile
+     * @return
+     */
     public static Date getDateFromImage(Metadata inMeta, File inFile) {
         Date date = UtilsImageProcessing.getExifDateFromJpeg(inMeta);
         if (date == null) {
@@ -250,8 +263,53 @@ public class UtilsImageProcessing {
         return date;
     }
 
-    public static Date getDateFromFile(File inFile) {
+    /**
+     * This method does not treat Images differently. The Last Modified date is
+     * returned for all file types.
+     * @param inFile
+     * @return
+     */
+    public static Date getDateFromFileDate(File inFile) {
         return new Date(inFile.lastModified());
+    }
+
+    /**
+     * This method will use the FileChooser's filters to determine whether a
+     * file is an Image or not and will use the appropriate way to calculate the
+     * date.
+     * @param inFile
+     * @return
+     */
+    public static Date getDateFromFile(File inFile) {
+        if (inFile != null) {
+            Date fileDate;
+            if (new ImageFilter().accept(inFile)) {
+                // Get the date form the image
+                fileDate = UtilsImageProcessing.getDateFromImage(inFile);
+            }
+            else {
+                // Get the date form the movie
+                fileDate = UtilsImageProcessing.getDateFromFileDate(inFile);
+            }
+            return fileDate;
+        }
+        return null;
+    }
+
+    /**
+     * Looks at the WildLogFileType and chooses the most appropriate way of
+     * calculating the date.
+     * @param inWildLogFile
+     * @return
+     */
+    public static Date getDateFromWildLogFile(WildLogFile inWildLogFile) {
+        if (inWildLogFile != null) {
+            if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType()))
+                return getDateFromImage(new File(inWildLogFile.getFilePath(true)));
+            else
+                return getDateFromFileDate(new File(inWildLogFile.getFilePath(true)));
+        }
+        return null;
     }
 
     private static Date getExifDateFromJpeg(Metadata inMeta) {
