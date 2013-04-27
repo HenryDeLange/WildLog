@@ -673,6 +673,27 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             return null;
                         }
                     }
+                    // Show warning if any sighting doesn't have a GPS coordinate
+                    for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
+                        BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
+                        if (sightingWrapper.getLatitude() == null || Latitudes.NONE.equals(sightingWrapper.getLatitude())
+                                || sightingWrapper.getLongitude() == null || Longitudes.NONE.equals(sightingWrapper.getLongitude())) {
+                            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                @Override
+                                public int showDialog() {
+                                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                            "There are Observations without GPS Coordinates. Are you sure you want to save?",
+                                            "Missing GPS Coordinates", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                                }
+                            });
+                            if (result == JOptionPane.YES_OPTION) {
+                                break;
+                            }
+                            else {
+                                return null;
+                            }
+                        }
+                    }
                     // Everything seems fine, start saving and close the tab to prevent new edits
                     this.setMessage("Saving the Bulk Import: Starting...");
                     this.setTaskProgress(0);

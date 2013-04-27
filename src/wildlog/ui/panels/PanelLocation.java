@@ -91,8 +91,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilsUI.attachClipboardPopup(txtDirections);
         UtilsUI.attachClipboardPopup(txtEmail);
         UtilsUI.attachClipboardPopup(txtWebsite);
-        UtilsUI.attachClipboardPopup(txtLatitude);
-        UtilsUI.attachClipboardPopup(txtLongitude);
 
         // Setup info for tab headers
         tabLabel = locationWL.getName();

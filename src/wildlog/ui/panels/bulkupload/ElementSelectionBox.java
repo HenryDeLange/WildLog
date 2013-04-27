@@ -225,8 +225,6 @@ public class ElementSelectionBox extends JDialog {
     private void lstElementsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstElementsValueChanged
         if (!lstElements.getSelectionModel().isSelectionEmpty()) {
             String selectedName = lstElements.getSelectedValue().toString();
-//            // Change the location name
-//            txtElementName.setText(selectedName);
             // Change the image
             UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblElementImage, 150, app);
         }

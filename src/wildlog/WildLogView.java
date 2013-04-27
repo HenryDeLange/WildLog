@@ -2796,6 +2796,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     setMessage("KML Export: " + getProgress() + "%");
                 }
                 List<Location> listLocations = app.getDBI().list(new Location());
+                Collections.sort(listLocations);
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app);
                     setProgress(32 + (int)((t/(double)listElements.size())*32));
@@ -2818,13 +2819,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 setMessage("KML Export: " + getProgress() + "%");
                 // Sightings
                 List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                Collections.sort(listSightings);
                 for (int t = 0; t < listSightings.size(); t++) {
                     String key = listSightings.get(t).getElementName();
                     if (!entries.containsKey(key)) {
                         entries.put(key, new ArrayList<KmlEntry>());
                      }
                     entries.get(key).add(listSightings.get(t).toKML(t, app));
-                    setProgress(70 + (int)((t/(double)listElements.size())*20));
+                    setProgress(70 + (int)((t/(double)listSightings.size())*20));
                     setMessage("KML Export: " + getProgress() + "%");
                 }
                 // Locations
@@ -2833,8 +2835,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     if (!entries.containsKey(key)) {
                         entries.put(key, new ArrayList<KmlEntry>());
                      }
+                    // Note: Die ID moet aangaan waar die sightings gestop het
                     entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
-                    setProgress(90 + (int)((t/(double)listElements.size())*10));
+                    setProgress(90 + (int)((t/(double)listLocations.size())*10));
                     setMessage("KML Export: " + getProgress() + "%");
                 }
                 // Generate KML
@@ -2926,9 +2929,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             @Override
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "<html>It is <b>HIGHLY</b> recommended to backup the entire WildLog folder before continuing! <br>"
+                        "<html>It is <b>HIGHLY recommended to backup the entire WildLog folder</b> before continuing! <br>"
                         + "Please <b>close any other applications</b> that might be accessing WildLog files. <br>"
-                        + "Note that WildLog will be automatically close when the cleanup is finished. <br>"
+                        + "Note that WildLog will be automatically closed when the cleanup is finished. <br>"
                         + "This task will check that all links between the data and files are correct. <br>"
                         + "In addition all unnessasary files will be removed from the Workspace. </html>",
                         "Warning!",
@@ -3350,7 +3353,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         finalHandleFeedback.println("** Finished Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("----------SUMMARY----------");
-                        finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved);
+                        finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved.counter);
                         finalHandleFeedback.println("Database file record had no reference to a file on disk: " + filesWithoutPath);
                         finalHandleFeedback.println("Database file record had a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
                         finalHandleFeedback.println("Database file record had no ID: " + filesWithoutID);

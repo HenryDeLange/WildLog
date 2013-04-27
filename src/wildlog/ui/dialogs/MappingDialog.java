@@ -5,6 +5,7 @@ import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -418,6 +419,7 @@ public class MappingDialog extends JDialog {
                     Sighting tempSighting = new Sighting();
                     tempSighting.setLocationName(location.getName());
                     List<Sighting> listSightings = app.getDBI().list(tempSighting);
+                    Collections.sort(listSightings);
                     for (int t = 0; t < listSightings.size(); t++) {
                         String key = listSightings.get(t).getElementName();
                         if (!entries.containsKey(key)) {
@@ -429,6 +431,7 @@ public class MappingDialog extends JDialog {
                     }
                     // Locations
                     List<Location> listLocations = app.getDBI().list(new Location(location.getName()));
+                    Collections.sort(listLocations);
                     for (int t = 0; t < listLocations.size(); t++) {
                         String key = listLocations.get(t).getName();
                         if (!entries.containsKey(key)) {
@@ -471,6 +474,7 @@ public class MappingDialog extends JDialog {
                     Sighting tempSighting = new Sighting();
                     tempSighting.setElementName(element.getPrimaryName());
                     List<Sighting> listSightings = app.getDBI().list(tempSighting);
+                    Collections.sort(listSightings);
                     for (int t = 0; t < listSightings.size(); t++) {
                         String key = listSightings.get(t).getLocationName();
                         if (!entries.containsKey(key)) {
@@ -513,6 +517,7 @@ public class MappingDialog extends JDialog {
                     Sighting tempSighting = new Sighting();
                     tempSighting.setVisitName(visit.getName());
                     List<Sighting> listSightings = app.getDBI().list(tempSighting);
+                    Collections.sort(listSightings);
                     for (int t = 0; t < listSightings.size(); t++) {
                         String key = listSightings.get(t).getElementName();
                         if (!entries.containsKey(key)) {
