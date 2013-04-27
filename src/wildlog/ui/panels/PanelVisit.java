@@ -38,10 +38,7 @@ import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogPrefixes;
 
-/**
- *
- * @author  henry.delange
- */
+
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenSightingAdded {
     private int imageIndex;
     private WildLogApp app;
@@ -96,7 +93,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         UtilsUI.attachClipboardPopup(txtDescription);
 
         // Setup info for tab headers
-        tabLabel = visit.getName();
+        tabTitle = visit.getName();
         tabIconURL = app.getClass().getResource("resources/icons/Visit.gif");
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(visitIncludes.getBackground());
@@ -117,22 +114,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     public Location getLocationForVisit() {
         return locationForVisit;
-    }
-
-    @Override
-    public boolean equals(Object inObject) {
-        if (getClass() != inObject.getClass()) return false;
-        final PanelVisit inPanel = (PanelVisit) inObject;
-        if (visit == null && inPanel.getVisit() == null) return true;
-        if (visit.getName() == null && inPanel.getVisit().getName() == null) return true;
-        if (visit == null) return false;
-        if (locationForVisit == null) return true;
-        if (visit.getName() == null) return false;
-        if (locationForVisit.getName() == null) return true;
-        if (!visit.getName().equalsIgnoreCase(inPanel.getVisit().getName()) ||
-            !locationForVisit.getName().equalsIgnoreCase(inPanel.getLocationForVisit().getName()))
-                return false;
-        return true;
     }
 
     @Override
@@ -934,8 +915,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
                 lblVisitName.setText(txtName.getText() + " - [" + locationForVisit.getName() + "]");
 
-                tabLabel = visit.getName();
-                setupTabHeader();
+                tabTitle = visit.getName();
+                setupTabHeader(PanelCanSetupHeader.TabTypes.VISIT);
             }
             else {
                 txtName.setBackground(Color.RED);
@@ -1099,8 +1080,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         if (sighting != null) {
-            PanelElement tempPanel = UtilPanelGenerator.getElementPanel(app, sighting.getElementName());
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+            UtilPanelGenerator.openPanelAsTab(app, sighting.getElementName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 

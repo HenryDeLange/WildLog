@@ -122,7 +122,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         UtilsUI.attachClipboardPopup((JTextComponent)spnWeightMaleMin.getEditor().getComponent(0));
 
         // Setup info for tab headers
-        tabLabel = element.getPrimaryName();
+        tabTitle = element.getPrimaryName();
         tabIconURL = app.getClass().getResource("resources/icons/Element.gif");
     }
 
@@ -131,18 +131,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }
     public void setElement(Element inElement) {
         element = inElement;
-    }
-
-    @Override
-    public boolean equals(Object inObject) {
-        if (getClass() != inObject.getClass()) return false;
-        final PanelElement inPanel = (PanelElement) inObject;
-        if (element == null && inPanel.getElement() == null) return true;
-        if (element.getPrimaryName() == null && inPanel.getElement().getPrimaryName() == null) return true;
-        if (element == null) return false;
-        if (element.getPrimaryName() == null) return false;
-        if (!element.getPrimaryName().equalsIgnoreCase(inPanel.getElement().getPrimaryName())) return false;
-        return true;
     }
 
     @Override
@@ -1247,8 +1235,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
                 lblElementName.setText(element.getPrimaryName());
 
-                tabLabel = element.getPrimaryName();
-                setupTabHeader();
+                tabTitle = element.getPrimaryName();
+                setupTabHeader(PanelCanSetupHeader.TabTypes.ELEMENT);
             }
             else {
                 txtPrimaryName.setBackground(Color.RED);
@@ -1295,10 +1283,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
         if (rdbLocations.isSelected()) {
             int[] selectedRows = tblLocation.getSelectedRows();
-            PanelLocation tempPanel = null;
             for (int t = 0; t < selectedRows.length; t++) {
-                tempPanel = UtilPanelGenerator.getLocationPanel(app, (String)tblLocation.getValueAt(selectedRows[t], 0));
-                UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+                UtilPanelGenerator.openPanelAsTab(app, (String)tblLocation.getValueAt(selectedRows[t], 0), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
             }
         }
         else {

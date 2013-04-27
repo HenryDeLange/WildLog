@@ -171,7 +171,6 @@ public class UtilsUI {
                 else
                 if (newIndex < 0)
                     newIndex = 0;
-                // FIXME: Maak dat mens nie actualy die tabs select nie maar net die viewport skuif
                 inTabbedPane.setSelectedIndex(newIndex);
             }
         }
@@ -186,7 +185,7 @@ public class UtilsUI {
                         Object temp = inTabbedPane.getTabComponentAt(i);
                         if (temp instanceof PanelCanSetupHeader.HeaderPanel) {
                             final PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)temp;
-                            menu.add(new AbstractAction(headerPanel.getLabel(), headerPanel.getIcon()) {
+                            menu.add(new AbstractAction(headerPanel.getTitle(), headerPanel.getIcon()) {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     inTabbedPane.setSelectedComponent(headerPanel.getParentPanel());

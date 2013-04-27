@@ -93,7 +93,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilsUI.attachClipboardPopup(txtWebsite);
 
         // Setup info for tab headers
-        tabLabel = locationWL.getName();
+        tabTitle = locationWL.getName();
         tabIconURL = app.getClass().getResource("resources/icons/Location.gif");
     }
 
@@ -103,18 +103,6 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     public Location getLocationWL() {
         return locationWL;
-    }
-
-    @Override
-    public boolean equals(Object inObject) {
-        if (getClass() != inObject.getClass()) return false;
-        final PanelLocation inPanel = (PanelLocation) inObject;
-        if (locationWL == null && inPanel.getLocationWL() == null) return true;
-        if (locationWL.getName() == null && inPanel.getLocationWL().getName() == null) return true;
-        if (locationWL == null) return false;
-        if (locationWL.getName() == null) return false;
-        if (!locationWL.getName().equalsIgnoreCase(inPanel.getLocationWL().getName())) return false;
-        return true;
     }
 
     @Override
@@ -993,8 +981,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                BulkUploadPanel bulkUploadPanel = new BulkUploadPanel(app, this, locationWL.getName());
-                UtilPanelGenerator.addPanelAsTab(bulkUploadPanel, (JTabbedPane)getParent());
+                UtilPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName()), (JTabbedPane)getParent());
                 return null;
             }
         });
@@ -1078,10 +1065,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         int[] selectedRows = tblElement.getSelectedRows();
-        PanelElement tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getElementPanel(app, (String)tblElement.getValueAt(selectedRows[t], 0));
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+            UtilPanelGenerator.openPanelAsTab(app, (String)tblElement.getValueAt(selectedRows[t], 0), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 
@@ -1097,11 +1082,10 @@ public class PanelLocation extends PanelCanSetupHeader {
             });
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
-                PanelVisit tempPanel;
                 for (int t = 0; t < selectedRows.length; t++) {
-                    tempPanel = UtilPanelGenerator.getVisitPanel(app, locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-                    ((JTabbedPane)getParent()).remove(tempPanel);
-                    app.getDBI().delete(tempPanel.getVisit());
+                    Visit visit = app.getDBI().find(new Visit((String)tblVisit.getValueAt(selectedRows[t], 0)));
+                    UtilPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
+                    app.getDBI().delete(visit);
                 }
                 formComponentShown(null);
             }
@@ -1111,17 +1095,14 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            PanelVisit tempPanel = UtilPanelGenerator.getNewVisitPanel(app, locationWL);
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+            UtilPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
         }
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
         int[] selectedRows = tblVisit.getSelectedRows();
-        PanelVisit tempPanel;
         for (int t = 0; t < selectedRows.length; t++) {
-            tempPanel = UtilPanelGenerator.getVisitPanel(app, locationWL, (String)tblVisit.getValueAt(selectedRows[t], 0));
-            UtilPanelGenerator.addPanelAsTab(tempPanel, (JTabbedPane)getParent());
+            UtilPanelGenerator.openPanelAsTab(app, (String)tblVisit.getValueAt(selectedRows[t], 0), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
         }
     }//GEN-LAST:event_btnGoVisitActionPerformed
 
@@ -1184,8 +1165,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
                 lblLocation.setText(locationWL.getName());
 
-                tabLabel = locationWL.getName();
-                setupTabHeader();
+                tabTitle = locationWL.getName();
+                setupTabHeader(PanelCanSetupHeader.TabTypes.LOCATION);
             }
             else {
                 txtName.setBackground(Color.RED);

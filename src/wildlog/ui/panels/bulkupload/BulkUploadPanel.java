@@ -108,7 +108,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsUI.attachClipboardPopup(txtVisitName);
 
         // Setup info for tab headers
-        tabLabel = "Bulk Upload";
+        tabTitle = "Bulk Upload";
         tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
 
         // Spinner selection fix
@@ -802,9 +802,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");
                     this.setTaskProgress(100);
-                    UtilPanelGenerator.addPanelAsTab(
-                        UtilPanelGenerator.getVisitPanel(app, locationHandle, visit.getName()),
-                        ((JTabbedPane)thisParentHandle));
+                    UtilPanelGenerator.openPanelAsTab(app, visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)thisParentHandle, location);
                 }
                 else {
                     UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
