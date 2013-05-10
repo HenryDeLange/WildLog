@@ -26,9 +26,9 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.VisitType;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportLocationSightingsByType extends JFrame {
@@ -78,7 +78,6 @@ public class ReportLocationSightingsByType extends JFrame {
     private void initComponents() {
 
         lblName = new javax.swing.JLabel();
-        lblLegend = new javax.swing.JLabel();
         scrReport = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
         lblRemoteCamera = new javax.swing.JLabel();
@@ -118,15 +117,11 @@ public class ReportLocationSightingsByType extends JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 16));
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblName.setText("...");
         lblName.setName("lblName"); // NOI18N
         getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
-
-        lblLegend.setText("Legend:");
-        lblLegend.setName("lblLegend"); // NOI18N
-        getContentPane().add(lblLegend, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 725, -1, -1));
 
         scrReport.setBorder(null);
         scrReport.setName("scrReport"); // NOI18N
@@ -142,27 +137,27 @@ public class ReportLocationSightingsByType extends JFrame {
         lblRemoteCamera.setForeground(new java.awt.Color(90, 157, 46));
         lblRemoteCamera.setText("REMOTE CAMERA");
         lblRemoteCamera.setName("lblRemoteCamera"); // NOI18N
-        getContentPane().add(lblRemoteCamera, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 725, -1, -1));
+        getContentPane().add(lblRemoteCamera, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 725, 120, -1));
 
         lblDayVisit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDayVisit.setForeground(new java.awt.Color(60, 170, 193));
+        lblDayVisit.setForeground(new java.awt.Color(45, 190, 201));
         lblDayVisit.setText("DAY VISIT");
         lblDayVisit.setName("lblDayVisit"); // NOI18N
         getContentPane().add(lblDayVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 725, -1, -1));
 
-        lblVacation.setFont(new java.awt.Font("Tahoma", 1, 12));
-        lblVacation.setForeground(new java.awt.Color(24, 134, 166));
+        lblVacation.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblVacation.setForeground(new java.awt.Color(20, 117, 157));
         lblVacation.setText("VACATION");
         lblVacation.setName("lblVacation"); // NOI18N
         getContentPane().add(lblVacation, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 725, -1, -1));
 
-        lblAtlas.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblAtlas.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblAtlas.setForeground(new java.awt.Color(208, 163, 78));
         lblAtlas.setText("ATLAS");
         lblAtlas.setName("lblAtlas"); // NOI18N
         getContentPane().add(lblAtlas, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 725, -1, -1));
 
-        lblOther.setFont(new java.awt.Font("Tahoma", 1, 12));
+        lblOther.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblOther.setForeground(new java.awt.Color(183, 187, 199));
         lblOther.setText("OTHER");
         lblOther.setName("lblOther"); // NOI18N
@@ -438,7 +433,6 @@ public class ReportLocationSightingsByType extends JFrame {
     private javax.swing.JLabel lblDayVisit;
     private javax.swing.JLabel lblFirstVisit;
     private javax.swing.JLabel lblLastVisit;
-    private javax.swing.JLabel lblLegend;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNightSightings;
     private javax.swing.JLabel lblNumberOfElements;

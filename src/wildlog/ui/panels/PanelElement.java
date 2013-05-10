@@ -383,6 +383,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel64.setName("jLabel64"); // NOI18N
 
         jLabel65.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
+        jLabel65.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel65.setText("Observations:");
         jLabel65.setName("jLabel65"); // NOI18N
 
@@ -515,7 +516,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnUploadImage.setBackground(new java.awt.Color(227, 240, 227));
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
         btnUploadImage.setText("Upload File");
-        btnUploadImage.setToolTipText("Upload a file for this Creature. You can also drag and drop files onto the above box to upload it.");
+        btnUploadImage.setToolTipText("<html>Upload a file for this Creature. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setFocusPainted(false);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
@@ -639,7 +640,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         rdbSightings.setBackground(new java.awt.Color(227, 240, 227));
         buttonGroup1.add(rdbSightings);
         rdbSightings.setText("Observations");
-        rdbSightings.setToolTipText("View all Observations where this Creature has been observed.");
+        rdbSightings.setToolTipText("View all Observations of this Creature.");
         rdbSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbSightings.setFocusPainted(false);
         rdbSightings.setName("rdbSightings"); // NOI18N
@@ -762,7 +763,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         btnSlideshow.setText("Slideshows");
-        btnSlideshow.setToolTipText("View slideshow videos of linked images.");
+        btnSlideshow.setToolTipText("View slideshow videos of linked images for this Creature.");
         btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -786,15 +787,15 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jSeparator11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(lblElementName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel65)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel65, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(1, 1, 1)
                                 .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator10)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, elementIncludesLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel60)
-                                .addGap(23, 23, 23)
+                                .addContainerGap()
+                                .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jScrollPane17)
                                 .addGap(18, 18, 18)
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -802,12 +803,18 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                     .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel66, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel64, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel68)
-                                    .addComponent(jLabel62))
+                                    .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(jLabel68, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel64, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
+                                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                                        .addComponent(jLabel62, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(23, 23, 23)))
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(cmbAddFrequency, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -819,8 +826,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel67)
                                     .addComponent(jLabel75, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel76)
-                                    .addComponent(jLabel77))
+                                    .addComponent(jLabel77)
+                                    .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(3, 3, 3)
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtLifespan)
@@ -838,8 +845,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                             .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel57)
-                                .addGap(44, 44, 44)
+                                .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtOtherName)
                                     .addComponent(txtPrimaryName)
@@ -849,33 +856,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(10, 10, 10)
                                         .addComponent(txtReferenceID)))
-                                .addGap(120, 120, 120))
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel56)
-                                    .addComponent(jLabel55))
-                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(120, 120, 120)))
                         .addGap(10, 10, 10))
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addComponent(jLabel59)
-                                .addGap(51, 51, 51)
-                                .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
-                                .addGap(10, 10, 10)
-                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)))
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addComponent(jLabel61)
-                                .addGap(38, 38, 38)
-                                .addComponent(jScrollPane18)
-                                .addGap(10, 10, 10)
-                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel69)
-                                    .addComponent(jScrollPane1)))
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addGap(100, 100, 100)
                                 .addComponent(jLabel3)
@@ -922,7 +907,29 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                 .addGap(10, 10, 10)
                                 .addComponent(jLabel5)
                                 .addGap(2, 2, 2)
-                                .addComponent(cmbWeightUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(cmbWeightUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(elementIncludesLayout.createSequentialGroup()
+                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel61, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                                        .addComponent(jScrollPane18)
+                                        .addGap(10, 10, 10)
+                                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane1)
+                                            .addGroup(elementIncludesLayout.createSequentialGroup()
+                                                .addComponent(jLabel69)
+                                                .addGap(0, 0, Short.MAX_VALUE))))
+                                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                                        .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                                        .addGap(10, 10, 10)
+                                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE)
+                                            .addGroup(elementIncludesLayout.createSequentialGroup()
+                                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE)))))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

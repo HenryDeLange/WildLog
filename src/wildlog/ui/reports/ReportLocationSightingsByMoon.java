@@ -26,9 +26,9 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.helpers.MoonReportHelper;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 // TODO: Inheritance might be used to specialise the reports... or maybe better to just have unique ones...
@@ -96,7 +96,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         lblLastVisit = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lblActiveDays = new javax.swing.JLabel();
-        lblLegend = new javax.swing.JLabel();
         scrReport = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
         lblMoonlightDay = new javax.swing.JLabel();
@@ -109,7 +108,7 @@ public class ReportLocationSightingsByMoon extends JFrame {
         mnuPrintReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Place Moonphase Report: " + location.getName());
+        setTitle("Place Moon Phase Report: " + location.getName());
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
@@ -195,10 +194,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
         lblActiveDays.setText("Unknown");
         lblActiveDays.setName("lblActiveDays"); // NOI18N
         getContentPane().add(lblActiveDays, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 50, 90, -1));
-
-        lblLegend.setText("Legend:");
-        lblLegend.setName("lblLegend"); // NOI18N
-        getContentPane().add(lblLegend, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 725, -1, -1));
 
         scrReport.setBorder(null);
         scrReport.setName("scrReport"); // NOI18N
@@ -399,7 +394,6 @@ public class ReportLocationSightingsByMoon extends JFrame {
     private javax.swing.JLabel lblDaySightings;
     private javax.swing.JLabel lblFirstVisit;
     private javax.swing.JLabel lblLastVisit;
-    private javax.swing.JLabel lblLegend;
     private javax.swing.JLabel lblMoonlightDay;
     private javax.swing.JLabel lblMoonlightNight;
     private javax.swing.JLabel lblName;

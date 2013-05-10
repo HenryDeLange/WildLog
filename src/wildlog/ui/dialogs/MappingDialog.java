@@ -213,7 +213,7 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewSingleSighting);
 
         btnViewSightingsAndDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewSightingsAndDistributionMap.setText("View Observations + Distribution");
+        btnViewSightingsAndDistributionMap.setText("View Observations and Distribution");
         btnViewSightingsAndDistributionMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewSightingsAndDistributionMap.setFocusPainted(false);
         btnViewSightingsAndDistributionMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

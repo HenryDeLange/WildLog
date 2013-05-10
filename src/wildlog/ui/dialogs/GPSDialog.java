@@ -292,7 +292,7 @@ public class GPSDialog extends JDialog {
         jSeparator1.setName("jSeparator1"); // NOI18N
         getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 85, 390, -1));
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Latitude:");
         jLabel1.setName("jLabel1"); // NOI18N
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
@@ -319,7 +319,7 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(tglSouth, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, 60, 30));
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12));
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Logitude:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
@@ -386,7 +386,7 @@ public class GPSDialog extends JDialog {
         spnLatSec.setName("spnLatSec"); // NOI18N
         getContentPane().add(spnLatSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 70, 30));
 
-        spnLatDecimal.setFont(new java.awt.Font("Tahoma", 0, 12));
+        spnLatDecimal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         spnLatDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 90.0d, 1.0E-5d));
         spnLatDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDecimal, "#.############"));
@@ -405,14 +405,14 @@ public class GPSDialog extends JDialog {
         spnLonMin.setName("spnLonMin"); // NOI18N
         getContentPane().add(spnLonMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 170, 50, 30));
 
-        spnLonSec.setFont(new java.awt.Font("Tahoma", 0, 12));
+        spnLonSec.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         spnLonSec.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 59.999999999d, 1.0E-4d));
         spnLonSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonSec.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonSec, "#.####"));
         spnLonSec.setName("spnLonSec"); // NOI18N
         getContentPane().add(spnLonSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 170, 70, 30));
 
-        spnLonDecimal.setFont(new java.awt.Font("Tahoma", 0, 12));
+        spnLonDecimal.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         spnLonDecimal.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 180.0d, 1.0E-5d));
         spnLonDecimal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLonDecimal.setEditor(new javax.swing.JSpinner.NumberEditor(spnLonDecimal, "#.############"));

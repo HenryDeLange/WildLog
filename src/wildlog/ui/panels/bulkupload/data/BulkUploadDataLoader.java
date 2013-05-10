@@ -78,10 +78,13 @@ public class BulkUploadDataLoader {
                     // Update the map
                     finalMap.put(sightingKey, new BulkUploadImageListWrapper());
                     // Set the date for this sighting
+                    currentSightingDate = temp.getDate();
                     sightingKey.setDate(currentSightingDate);
                 }
-                // Update the curent date to compare against
-                currentSightingDate = temp.getDate();
+                else {
+                    // Update the curent date to compare against
+                    currentSightingDate = temp.getDate();
+                }
                 // Set the GPS details (if not already set)
                 if ((sightingKey.getLatitude() == null || Latitudes.NONE.equals(sightingKey.getLatitude()))
                         && (sightingKey.getLongitude() == null || Longitudes.NONE.equals(sightingKey.getLongitude()))) {

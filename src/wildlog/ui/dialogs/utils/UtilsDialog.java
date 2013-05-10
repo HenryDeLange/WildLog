@@ -134,9 +134,11 @@ public class UtilsDialog {
                     frame.setVisible(true);
                 }
                 catch (IOException ex) {
+                    System.err.println("Error showing EXIF data for: " + inFile);
                     ex.printStackTrace(System.err);
                 }
                 catch (JpegProcessingException ex) {
+                    System.err.println("Error showing EXIF data for: " + inFile);
                     ex.printStackTrace(System.err);
                     UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                         @Override
@@ -150,6 +152,7 @@ public class UtilsDialog {
                 }
             }
             else {
+                System.err.println("Error showing EXIF data for: " + inFile);
                 UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
@@ -162,6 +165,7 @@ public class UtilsDialog {
             }
         }
         else {
+            System.err.println("Error showing EXIF data for: " + inFile);
             UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {

@@ -23,13 +23,11 @@ import javax.swing.KeyStroke;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.ViewRating;
-import wildlog.data.enums.VisitType;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.helpers.MoonReportHelper;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportElementSightingsByMoon extends javax.swing.JFrame {
@@ -83,7 +81,6 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         lblFirstDate = new javax.swing.JLabel();
         lblLastDate = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         lblWishList = new javax.swing.JLabel();
         lblNumberOfLocations = new javax.swing.JLabel();
@@ -121,7 +118,7 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
         mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Creature Report: " + element.getPrimaryName());
+        setTitle("Creature Moon Phase Report: " + element.getPrimaryName());
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
@@ -177,10 +174,6 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
         lblLastDate.setName("lblLastDate"); // NOI18N
         getContentPane().add(lblLastDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(113, 50, 100, -1));
 
-        jLabel10.setText("Legend:");
-        jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 705, -1, -1));
-
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel19.setText("Wish List Rating:");
         jLabel19.setName("jLabel19"); // NOI18N
@@ -228,7 +221,7 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
 
         lblBad.setText("Unknown");
         lblBad.setName("lblBad"); // NOI18N
-        getContentPane().add(lblBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 70, -1));
+        getContentPane().add(lblBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 60, -1));
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel31.setText("Very Bad Observations:");
@@ -275,11 +268,11 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
 
         lblFirstLocation.setText("Unknown");
         lblFirstLocation.setName("lblFirstLocation"); // NOI18N
-        getContentPane().add(lblFirstLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 30, 230, -1));
+        getContentPane().add(lblFirstLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 30, 110, -1));
 
         lblLastLocation.setText("Unknown");
         lblLastLocation.setName("lblLastLocation"); // NOI18N
-        getContentPane().add(lblLastLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 50, 230, -1));
+        getContentPane().add(lblLastLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 50, 110, -1));
 
         scrReport.setBorder(null);
         scrReport.setName("scrReport"); // NOI18N
@@ -526,7 +519,6 @@ public class ReportElementSightingsByMoon extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;

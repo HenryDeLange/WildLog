@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -47,7 +47,7 @@
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="title" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-      <Connection code="&quot;Sighting Report: &quot; + new SimpleDateFormat(&quot;dd MMM yyyy&quot;).format(startDate) + &quot; to &quot; + new SimpleDateFormat(&quot;dd MMM yyyy&quot;).format(endDate)" type="code"/>
+      <Connection code="&quot;Observation Report: &quot; + new SimpleDateFormat(&quot;dd MMM yyyy&quot;).format(startDate) + &quot; to &quot; + new SimpleDateFormat(&quot;dd MMM yyyy&quot;).format(endDate)" type="code"/>
     </Property>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="ff" red="ff" type="rgb"/>
@@ -67,6 +67,7 @@
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -102,7 +103,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Number of Observations:"/>
         <Property name="name" type="java.lang.String" value="jLabel3" noResource="true"/>
       </Properties>
@@ -125,7 +128,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Number of Creatures:"/>
         <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
       </Properties>
@@ -148,7 +153,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Day Observations:"/>
         <Property name="name" type="java.lang.String" value="jLabel7" noResource="true"/>
       </Properties>
@@ -171,7 +178,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="font" type="java.awt.Font" resourceKey="jLabel1.font"/>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Night Observations:"/>
         <Property name="name" type="java.lang.String" value="jLabel2" noResource="true"/>
       </Properties>
@@ -189,17 +198,6 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="130" y="30" width="130" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Legend:"/>
-        <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="10" y="705" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -239,7 +237,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="5d" green="5d" red="5d" type="rgb"/>
+          <Color blue="56" green="56" red="56" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="NIGHT"/>
         <Property name="name" type="java.lang.String" value="lblNight" noResource="true"/>
@@ -256,7 +254,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="40" green="78" red="8f" type="rgb"/>
+          <Color blue="c9" green="71" red="6f" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="DAWN"/>
         <Property name="name" type="java.lang.String" value="lblDawn" noResource="true"/>
@@ -273,7 +271,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="3f" green="8e" red="c2" type="rgb"/>
+          <Color blue="35" green="bc" red="d0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="MORNING"/>
         <Property name="name" type="java.lang.String" value="lblMorning" noResource="true"/>
@@ -290,7 +288,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="d" green="49" red="b9" type="rgb"/>
+          <Color blue="e" green="2b" red="a7" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="MID DAY"/>
         <Property name="name" type="java.lang.String" value="lblMidDay" noResource="true"/>
@@ -307,7 +305,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="28" green="59" red="aa" type="rgb"/>
+          <Color blue="38" green="79" red="c1" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="AFTERNOON"/>
         <Property name="name" type="java.lang.String" value="lblAfternoon" noResource="true"/>
@@ -324,7 +322,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="4b" green="62" red="86" type="rgb"/>
+          <Color blue="a0" green="44" red="8d" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="DUSK"/>
         <Property name="name" type="java.lang.String" value="lblDusk" noResource="true"/>

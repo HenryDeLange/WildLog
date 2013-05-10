@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <NonVisualComponents>
@@ -67,6 +67,7 @@
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -297,17 +298,6 @@
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
           <AbsoluteConstraints x="517" y="70" width="80" height="-1"/>
-        </Constraint>
-      </Constraints>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jLabel10">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Legend:"/>
-        <Property name="name" type="java.lang.String" value="jLabel10" noResource="true"/>
-      </Properties>
-      <Constraints>
-        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-          <AbsoluteConstraints x="10" y="705" width="-1" height="-1"/>
         </Constraint>
       </Constraints>
     </Component>
@@ -547,7 +537,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="5d" green="5d" red="5d" type="rgb"/>
+          <Color blue="56" green="56" red="56" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="NIGHT"/>
         <Property name="name" type="java.lang.String" value="lblNight" noResource="true"/>
@@ -564,7 +554,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="40" green="78" red="8f" type="rgb"/>
+          <Color blue="c9" green="71" red="6f" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="DAWN"/>
         <Property name="name" type="java.lang.String" value="lblDawn" noResource="true"/>
@@ -581,7 +571,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="3f" green="8e" red="c2" type="rgb"/>
+          <Color blue="35" green="bc" red="d0" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="MORNING"/>
         <Property name="name" type="java.lang.String" value="lblMorning" noResource="true"/>
@@ -598,7 +588,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="d" green="49" red="b9" type="rgb"/>
+          <Color blue="e" green="2b" red="a7" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="MID DAY"/>
         <Property name="name" type="java.lang.String" value="lblMidDay" noResource="true"/>
@@ -615,7 +605,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="28" green="59" red="aa" type="rgb"/>
+          <Color blue="38" green="79" red="c1" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="AFTERNOON"/>
         <Property name="name" type="java.lang.String" value="lblAfternoon" noResource="true"/>
@@ -632,7 +622,7 @@
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="4b" green="62" red="86" type="rgb"/>
+          <Color blue="a0" green="44" red="8d" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="DUSK"/>
         <Property name="name" type="java.lang.String" value="lblDusk" noResource="true"/>

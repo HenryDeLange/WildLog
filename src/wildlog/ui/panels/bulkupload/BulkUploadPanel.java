@@ -108,7 +108,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         UtilsUI.attachClipboardPopup(txtVisitName);
 
         // Setup info for tab headers
-        tabTitle = "Bulk Upload";
+        tabTitle = "Bulk Import";
         tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
 
         // Spinner selection fix
@@ -304,7 +304,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnReload.setBackground(new java.awt.Color(153, 180, 115));
         btnReload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnReload.setText("Reload");
-        btnReload.setToolTipText("Reload the images using the specified settings and folder.");
+        btnReload.setToolTipText("<html>Reload the Bulk Import using the provided settings. <br/>Warning: All changes will be lost.</html>");
         btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReload.setFocusPainted(false);
         btnReload.setName("btnReload"); // NOI18N
@@ -366,6 +366,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
         chkIncludeSubfolders.setBackground(new java.awt.Color(153, 180, 115));
         chkIncludeSubfolders.setText("Include Subfolders");
+        chkIncludeSubfolders.setToolTipText("Select this checkbox and press the Reload button to also look in subfolder for files to include in the Bulk Import.");
         chkIncludeSubfolders.setFocusable(false);
         chkIncludeSubfolders.setName("chkIncludeSubfolders"); // NOI18N
 

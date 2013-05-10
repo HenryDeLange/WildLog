@@ -25,9 +25,9 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.ViewRating;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportVisitSightingsBySun extends javax.swing.JFrame {
@@ -88,7 +88,6 @@ public class ReportVisitSightingsBySun extends javax.swing.JFrame {
         lblEndDate = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lblActiveDays = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         lblGameWatching = new javax.swing.JLabel();
         lblSightingsPerDay = new javax.swing.JLabel();
@@ -208,10 +207,6 @@ public class ReportVisitSightingsBySun extends javax.swing.JFrame {
         lblActiveDays.setName("lblActiveDays"); // NOI18N
         getContentPane().add(lblActiveDays, new org.netbeans.lib.awtextra.AbsoluteConstraints(517, 70, 80, -1));
 
-        jLabel10.setText("Legend:");
-        jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 705, -1, -1));
-
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel19.setText("Game Watching:");
         jLabel19.setName("jLabel19"); // NOI18N
@@ -295,37 +290,37 @@ public class ReportVisitSightingsBySun extends javax.swing.JFrame {
         getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 600, 550));
 
         lblNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblNight.setForeground(new java.awt.Color(93, 93, 93));
+        lblNight.setForeground(new java.awt.Color(86, 86, 86));
         lblNight.setText("NIGHT");
         lblNight.setName("lblNight"); // NOI18N
         getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 705, 60, -1));
 
         lblDawn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDawn.setForeground(new java.awt.Color(143, 120, 64));
+        lblDawn.setForeground(new java.awt.Color(111, 113, 201));
         lblDawn.setText("DAWN");
         lblDawn.setName("lblDawn"); // NOI18N
         getContentPane().add(lblDawn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 705, 60, -1));
 
         lblMorning.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblMorning.setForeground(new java.awt.Color(194, 142, 63));
+        lblMorning.setForeground(new java.awt.Color(208, 188, 53));
         lblMorning.setText("MORNING");
         lblMorning.setName("lblMorning"); // NOI18N
         getContentPane().add(lblMorning, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 705, 80, -1));
 
         lblMidDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblMidDay.setForeground(new java.awt.Color(185, 73, 13));
+        lblMidDay.setForeground(new java.awt.Color(167, 43, 14));
         lblMidDay.setText("MID DAY");
         lblMidDay.setName("lblMidDay"); // NOI18N
         getContentPane().add(lblMidDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 705, 70, -1));
 
         lblAfternoon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblAfternoon.setForeground(new java.awt.Color(170, 89, 40));
+        lblAfternoon.setForeground(new java.awt.Color(193, 121, 56));
         lblAfternoon.setText("AFTERNOON");
         lblAfternoon.setName("lblAfternoon"); // NOI18N
         getContentPane().add(lblAfternoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 705, 90, -1));
 
         lblDusk.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDusk.setForeground(new java.awt.Color(134, 98, 75));
+        lblDusk.setForeground(new java.awt.Color(141, 68, 160));
         lblDusk.setText("DUSK");
         lblDusk.setName("lblDusk"); // NOI18N
         getContentPane().add(lblDusk, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 705, 50, -1));
@@ -540,7 +535,6 @@ public class ReportVisitSightingsBySun extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;

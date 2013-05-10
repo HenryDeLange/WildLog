@@ -487,7 +487,7 @@ public class PanelSighting extends JDialog {
         btnUploadImage.setBackground(new java.awt.Color(208, 204, 181));
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
         btnUploadImage.setText("Upload File");
-        btnUploadImage.setToolTipText("Upload a file for this Observation. You can also drag and drop files onto the above box to upload it.");
+        btnUploadImage.setToolTipText("<html>Upload a file for this Observation. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode);
         btnUploadImage.setFocusPainted(false);
@@ -780,7 +780,7 @@ public class PanelSighting extends JDialog {
 
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingID.setName("lblSightingID"); // NOI18N
-        sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 340, 120, 20));
+        sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 120, 20));
 
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -792,7 +792,7 @@ public class PanelSighting extends JDialog {
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
         btnGetDateFromImage.setText("<html>Load <b>Date</b> from <b>Image </b>EXIF</html>");
-        btnGetDateFromImage.setToolTipText("Attempt to load the date from the image's EXIF data.");
+        btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
         btnGetDateFromImage.setFocusPainted(false);
@@ -973,7 +973,7 @@ public class PanelSighting extends JDialog {
         sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
 
         spnDurationMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 1440, 1));
-        spnDurationMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationMinutes, "00"));
+        spnDurationMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationMinutes, "0"));
         spnDurationMinutes.setEnabled(!disableEditing);
         spnDurationMinutes.setName("spnDurationMinutes"); // NOI18N
         sightingIncludes.add(spnDurationMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 50, -1));

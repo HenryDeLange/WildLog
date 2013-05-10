@@ -587,7 +587,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         rdbBrowseDate.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbBrowseDate);
         rdbBrowseDate.setText("By Date");
-        rdbBrowseDate.setToolTipText("Sort the tree based on the Date of the Observations.");
+        rdbBrowseDate.setToolTipText("Sort the tree based on the Observations Dates.");
         rdbBrowseDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbBrowseDate.setName("rdbBrowseDate"); // NOI18N
         rdbBrowseDate.addItemListener(new java.awt.event.ItemListener() {
@@ -596,7 +596,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
 
-        imgBrowsePhotos.setBackground(new java.awt.Color(231, 235, 204));
+        imgBrowsePhotos.setBackground(new java.awt.Color(0, 0, 0));
         imgBrowsePhotos.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         imgBrowsePhotos.setName("imgBrowsePhotos"); // NOI18N
 
@@ -742,7 +742,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnDefault.setBackground(new java.awt.Color(235, 233, 221));
         btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
         btnDefault.setText("Default");
-        btnDefault.setToolTipText("Set the current file as the default (first) file for the selected tree entry.");
+        btnDefault.setToolTipText("Set the current file as the default (first) file.");
         btnDefault.setFocusPainted(false);
         btnDefault.setName("btnDefault"); // NOI18N
         btnDefault.addActionListener(new java.awt.event.ActionListener() {
@@ -1000,7 +1000,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         btnDeleteLocation.setBackground(new java.awt.Color(194, 207, 214));
         btnDeleteLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnDeleteLocation.setToolTipText("Delete the selected Place.");
+        btnDeleteLocation.setToolTipText("<html>Delete the selected Place. <br/>This will delete all linked Periods, Observations and files as well.</html>");
         btnDeleteLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteLocation.setFocusPainted(false);
         btnDeleteLocation.setName("btnDeleteLocation"); // NOI18N
@@ -1190,7 +1190,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         btnDeleteElement.setBackground(new java.awt.Color(206, 219, 206));
         btnDeleteElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnDeleteElement.setToolTipText("Delete the selected Creature.");
+        btnDeleteElement.setToolTipText("<html>Delete the selected Creature. <br/>This will delete all linked Observations and files as well.</html>");
         btnDeleteElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteElement.setFocusPainted(false);
         btnDeleteElement.setName("btnDeleteElement"); // NOI18N
@@ -1264,8 +1264,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         txtSearch.setName("txtSearch"); // NOI18N
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel14.setText("Search on Primary Name and Creature Type:");
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel14.setText("Search for a Creature:");
         jLabel14.setName("jLabel14"); // NOI18N
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
@@ -1285,7 +1285,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addComponent(btnAddElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
+                        .addComponent(scrlElement))
                     .addGroup(tabElementLayout.createSequentialGroup()
                         .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(tabElementLayout.createSequentialGroup()
@@ -1296,8 +1296,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 304, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
                         .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
+                            .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1321,19 +1321,19 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tabElementLayout.createSequentialGroup()
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(tabElementLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(5, 5, 5)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
                         .addGap(4, 4, 4)
-                        .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabElementLayout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addGap(5, 5, 5)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -1406,6 +1406,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         exitMenuItem.setText("Exit WildLog");
+        exitMenuItem.setToolTipText("Close the application. Any unsaved changes will be lost.");
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1421,7 +1422,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         mnuBackupMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuBackupMenuItem.setText("Backup Database");
-        mnuBackupMenuItem.setToolTipText("Backup the database. (Note: This does NOT backup the linked files.)");
+        mnuBackupMenuItem.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire workspace.</html>");
         mnuBackupMenuItem.setName("mnuBackupMenuItem"); // NOI18N
         mnuBackupMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1474,7 +1475,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         csvImportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
         csvImportMenuItem.setText("Import from CSV");
-        csvImportMenuItem.setToolTipText("Import the data contained in the CSV files. All imported data will be prefixed by the provided value. (Note: The files must be in the same format as generated by the CSV Export.)");
+        csvImportMenuItem.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV Export.)</html>");
         csvImportMenuItem.setName("csvImportMenuItem"); // NOI18N
         csvImportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1488,7 +1489,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         bulkImportMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
         bulkImportMenuItem.setText("Open Bulk Import Tab");
-        bulkImportMenuItem.setToolTipText("Import multiple images at once.");
+        bulkImportMenuItem.setToolTipText("Import multiple files at once.");
         bulkImportMenuItem.setName("bulkImportMenuItem"); // NOI18N
         bulkImportMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1503,7 +1504,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         calcSunMoonMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
         calcSunMoonMenuItem.setText("Calculate Sun and Moon information for all Observations");
-        calcSunMoonMenuItem.setToolTipText("WARNING: This action will recalculate and overwrite the Sun and Moon info for all Observations.");
+        calcSunMoonMenuItem.setToolTipText("WARNING: This action might recalculate and overwrite the Sun and Moon information for all Observations.");
         calcSunMoonMenuItem.setName("calcSunMoonMenuItem"); // NOI18N
         calcSunMoonMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1514,6 +1515,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         calcDurationMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
         calcDurationMenuItem.setText("Calculate Duration for all Observations");
+        calcDurationMenuItem.setToolTipText("WARNING: This action might recalculate and overwrite the Duration information for all Observations.");
         calcDurationMenuItem.setName("calcDurationMenuItem"); // NOI18N
         calcDurationMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1568,7 +1570,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         mappingMenu.add(chkMnuUseWMS);
 
         mnuMapStartMenuItem.setText("Set Map Start Location");
-        mnuMapStartMenuItem.setToolTipText("Set the GPS location where the map will open at by default.");
+        mnuMapStartMenuItem.setToolTipText("Select the GPS location where the map will open at by default.");
         mnuMapStartMenuItem.setName("mnuMapStartMenuItem"); // NOI18N
         mnuMapStartMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1610,7 +1612,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         slideshowMenu.add(mnuSetSlideshowSpeed);
 
         mnuSetSlideshowSize.setText("Set Slideshow Size");
-        mnuSetSlideshowSize.setToolTipText("Set the size to witch the images should be resized for the generated Slideshows.");
+        mnuSetSlideshowSize.setToolTipText("Set the size to which the images should be resized for the generated Slideshows.");
         mnuSetSlideshowSize.setName("mnuSetSlideshowSize"); // NOI18N
         mnuSetSlideshowSize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1628,7 +1630,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         mnuExifMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
         mnuExifMenuItem.setText("Image EXIF Data Reader");
-        mnuExifMenuItem.setToolTipText("Allows you to browse to any image on your computer and view the EXIF data.");
+        mnuExifMenuItem.setToolTipText("Browse to any image on your computer and view the EXIF data.");
         mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
         mnuExifMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1639,7 +1641,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         mnuCreateSlideshow.setText("Create a Slideshow");
-        mnuCreateSlideshow.setToolTipText("Allows you to create a slideshow using a folder of images anywhere on your computer.");
+        mnuCreateSlideshow.setToolTipText("Create a slideshow using a folder of images anywhere on your computer.");
         mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
         mnuCreateSlideshow.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1650,7 +1652,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
         mnuSunAndMoon.setText("View Sun And Moon Phase");
-        mnuSunAndMoon.setToolTipText("Opens up a Sun and Moon Phase dialog that can be sued to determine the phases at any location.");
+        mnuSunAndMoon.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
         mnuSunAndMoon.setName("mnuSunAndMoon"); // NOI18N
         mnuSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1703,6 +1705,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         mnuAboutMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuAboutMenuItem.setText("About WildLog");
+        mnuAboutMenuItem.setToolTipText("Display information about this version of WildLog.");
         mnuAboutMenuItem.setName("mnuAboutMenuItem"); // NOI18N
         mnuAboutMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2305,9 +2308,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 @Override
                 public int showDialog() {
                     return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                            "Please select an entry in the tree to the left, or specifiy a date range.",
+                            "Please select a Place, Period or Creature in the tree to the left, or specifiy a valid date range.",
                             "No Report Available",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
             });
         }
@@ -2666,8 +2669,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     app.getMainFrame().getGlassPane().setVisible(true);
                     String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
                             "<html>Please provide a prefix to use for the imported data. "
-                            + "<br>The prefix will be chosen to map the data to unique new records. "
-                            + "<br>You should manually merge Creatures and move Periods afterwards.</html>",
+                            + "<br>The prefix will be used to map the imported data to new unique records. "
+                            + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
                             "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
                     if (prefix != null && !prefix.isEmpty()) {
                     app.getMainFrame().getGlassPane().setVisible(false);
@@ -2883,6 +2886,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_mnuBackupMenuItemActionPerformed
 
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+        // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
+        this.setVisible(false);
         app.quit(evt);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
@@ -2924,6 +2929,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     return -1;
                 }
             });
+            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
+            this.setVisible(false);
             app.quit(null);
         }
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
@@ -3386,6 +3393,8 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     // Open the summary document
                     UtilsFileProcessing.openFile(feedbackFile.getAbsolutePath());
                     // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                    // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
+                    app.getMainFrame().setVisible(false);
                     app.quit(null);
                     return null;
                 }

@@ -213,7 +213,7 @@
               <Image iconType="3" name="/wildlog/resources/icons/UploadImage.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Upload File"/>
-            <Property name="toolTipText" type="java.lang.String" value="Upload a file for this Observation. You can also drag and drop files onto the above box to upload it."/>
+            <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Upload a file for this Observation. &lt;br/&gt;You can also drag-and-drop files onto the above box to upload it. &lt;br/&gt;(Note: Drag-and-drop only works on supported platforms.)&lt;/html&gt;"/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -893,7 +893,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="520" y="340" width="120" height="20"/>
+              <AbsoluteConstraints x="520" y="300" width="120" height="20"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -928,7 +928,7 @@
               <Image iconType="3" name="/wildlog/resources/icons/EXIF_small.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;Load &lt;b&gt;Date&lt;/b&gt; from &lt;b&gt;Image &lt;/b&gt;EXIF&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="Attempt to load the date from the image&apos;s EXIF data."/>
+            <Property name="toolTipText" type="java.lang.String" value="Attempt to load the date and time from the image&apos;s EXIF data."/>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -1389,7 +1389,7 @@
               <SpinnerModel initial="0" maximum="1440" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
             <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
-              <SpinnerEditor format="00" type="3"/>
+              <SpinnerEditor format="0" type="3"/>
             </Property>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>

@@ -23,9 +23,9 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportSightingByElement extends javax.swing.JFrame {
@@ -81,7 +81,6 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         lblDaySightings = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         lblNightSightings = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
         scrReport = new javax.swing.JScrollPane();
         pnlScrollPane = new javax.swing.JPanel();
         lblNight = new javax.swing.JLabel();
@@ -98,7 +97,7 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Sighting Report: " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
+        setTitle("Observation Report: " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
@@ -107,14 +106,13 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 16));
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblName.setText("...");
         lblName.setName("lblName"); // NOI18N
         getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(wildlog.WildLogApp.class).getContext().getResourceMap(ReportSightingByElement.class);
-        jLabel3.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel3.setText("Number of Observations:");
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 30, -1, -1));
@@ -123,7 +121,7 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
         getContentPane().add(lblNumberOfSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 30, 100, -1));
 
-        jLabel5.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel5.setText("Number of Creatures:");
         jLabel5.setName("jLabel5"); // NOI18N
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 50, -1, -1));
@@ -132,7 +130,7 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         lblNumberOfElements.setName("lblNumberOfElements"); // NOI18N
         getContentPane().add(lblNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 50, 100, -1));
 
-        jLabel7.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel7.setText("Day Observations:");
         jLabel7.setName("jLabel7"); // NOI18N
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
@@ -141,7 +139,7 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         lblDaySightings.setName("lblDaySightings"); // NOI18N
         getContentPane().add(lblDaySightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 50, 130, -1));
 
-        jLabel2.setFont(resourceMap.getFont("jLabel1.font")); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Night Observations:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
@@ -149,10 +147,6 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         lblNightSightings.setText("Unknown");
         lblNightSightings.setName("lblNightSightings"); // NOI18N
         getContentPane().add(lblNightSightings, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, 130, -1));
-
-        jLabel10.setText("Legend:");
-        jLabel10.setName("jLabel10"); // NOI18N
-        getContentPane().add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 705, -1, -1));
 
         scrReport.setBorder(null);
         scrReport.setName("scrReport"); // NOI18N
@@ -165,37 +159,37 @@ public class ReportSightingByElement extends javax.swing.JFrame {
         getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 600, 630));
 
         lblNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblNight.setForeground(new java.awt.Color(93, 93, 93));
+        lblNight.setForeground(new java.awt.Color(86, 86, 86));
         lblNight.setText("NIGHT");
         lblNight.setName("lblNight"); // NOI18N
         getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 705, 60, -1));
 
         lblDawn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDawn.setForeground(new java.awt.Color(143, 120, 64));
+        lblDawn.setForeground(new java.awt.Color(111, 113, 201));
         lblDawn.setText("DAWN");
         lblDawn.setName("lblDawn"); // NOI18N
         getContentPane().add(lblDawn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 705, 60, -1));
 
         lblMorning.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblMorning.setForeground(new java.awt.Color(194, 142, 63));
+        lblMorning.setForeground(new java.awt.Color(208, 188, 53));
         lblMorning.setText("MORNING");
         lblMorning.setName("lblMorning"); // NOI18N
         getContentPane().add(lblMorning, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 705, 80, -1));
 
         lblMidDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblMidDay.setForeground(new java.awt.Color(185, 73, 13));
+        lblMidDay.setForeground(new java.awt.Color(167, 43, 14));
         lblMidDay.setText("MID DAY");
         lblMidDay.setName("lblMidDay"); // NOI18N
         getContentPane().add(lblMidDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 705, 70, -1));
 
         lblAfternoon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblAfternoon.setForeground(new java.awt.Color(170, 89, 40));
+        lblAfternoon.setForeground(new java.awt.Color(193, 121, 56));
         lblAfternoon.setText("AFTERNOON");
         lblAfternoon.setName("lblAfternoon"); // NOI18N
         getContentPane().add(lblAfternoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 705, 90, -1));
 
         lblDusk.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDusk.setForeground(new java.awt.Color(134, 98, 75));
+        lblDusk.setForeground(new java.awt.Color(141, 68, 160));
         lblDusk.setText("DUSK");
         lblDusk.setName("lblDusk"); // NOI18N
         getContentPane().add(lblDusk, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 705, 50, -1));
@@ -280,7 +274,7 @@ public class ReportSightingByElement extends javax.swing.JFrame {
 
     private void doReport() {
         // Init report fields
-        lblName.setText("Sightings for " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
+        lblName.setText("Observations from " + new SimpleDateFormat("dd MMM yyyy").format(startDate) + " to " + new SimpleDateFormat("dd MMM yyyy").format(endDate));
         Set<String> numOfElements = new HashSet<String>();
         int numDaySightings = 0;
         int numNightSightings = 0;
@@ -355,7 +349,6 @@ public class ReportSightingByElement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;

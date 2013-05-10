@@ -103,7 +103,7 @@ public class SlideshowDialog extends JDialog {
         getContentPane().add(btnSlideshowVisit);
 
         btnSlideshowVisitSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
-        btnSlideshowVisitSightings.setText("Slideshow of the Observations");
+        btnSlideshowVisitSightings.setText("Slideshow of the Observations' Images");
         btnSlideshowVisitSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowVisitSightings.setFocusPainted(false);
         btnSlideshowVisitSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -139,7 +139,7 @@ public class SlideshowDialog extends JDialog {
         getContentPane().add(btnSlideshowLocation);
 
         btnSlideshowLocationSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
-        btnSlideshowLocationSightings.setText("Slideshow of the Observations");
+        btnSlideshowLocationSightings.setText("Slideshow of the Observations' Images");
         btnSlideshowLocationSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowLocationSightings.setFocusPainted(false);
         btnSlideshowLocationSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -175,7 +175,7 @@ public class SlideshowDialog extends JDialog {
         getContentPane().add(btnSlideshowElement);
 
         btnSlideshowElementSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow.gif"))); // NOI18N
-        btnSlideshowElementSightings.setText("Slideshow of the Observations");
+        btnSlideshowElementSightings.setText("Slideshow of the Observations' Images");
         btnSlideshowElementSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshowElementSightings.setFocusPainted(false);
         btnSlideshowElementSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

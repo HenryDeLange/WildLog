@@ -277,7 +277,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         txtDescription.setName("txtDescription"); // NOI18N
         jScrollPane14.setViewportView(txtDescription);
 
-        jLabel54.setText("Type of Visit:");
+        jLabel54.setText("Period Type:");
         jLabel54.setName("jLabel54"); // NOI18N
 
         cmbType.setModel(new DefaultComboBoxModel(VisitType.values()));
@@ -365,7 +365,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnUploadImage.setBackground(new java.awt.Color(228, 240, 237));
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
         btnUploadImage.setText("Upload File");
-        btnUploadImage.setToolTipText("Upload a file for this Period. You can also drag and drop files onto the above box to upload it.");
+        btnUploadImage.setToolTipText("<html>Upload a file for this Period. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setFocusPainted(false);
         btnUploadImage.setName("btnUploadImage"); // NOI18N
@@ -622,7 +622,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
         btnSlideshow.setText("Slideshows");
-        btnSlideshow.setToolTipText("View slideshow videos of linked images.");
+        btnSlideshow.setToolTipText("View slideshow videos of linked images for this Period.");
         btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSlideshow.setFocusPainted(false);
         btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

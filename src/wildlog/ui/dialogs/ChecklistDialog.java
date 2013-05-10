@@ -86,7 +86,7 @@ public class ChecklistDialog extends JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("CheckList: Add New Sightings");
+        setTitle("Add New Sightings - CheckList");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/CheckList.png")).getImage());
         setMinimumSize(new java.awt.Dimension(760, 550));
         setModal(true);
@@ -156,7 +156,7 @@ public class ChecklistDialog extends JDialog {
         getContentPane().add(btnConfirm, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 110, 60));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Dubble click to remove the Creature from the Observation.");
+        jLabel3.setText("Dubble click to remove the Creature from the Observations.");
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 90, -1, -1));
 
@@ -186,7 +186,7 @@ public class ChecklistDialog extends JDialog {
         getContentPane().add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 140, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("All Observations will be for this date:");
+        jLabel2.setText("The date to use for all Observations:");
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 110, -1, 20));
     }// </editor-fold>//GEN-END:initComponents
