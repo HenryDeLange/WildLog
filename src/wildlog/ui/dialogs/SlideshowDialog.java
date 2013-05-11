@@ -77,7 +77,7 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowElementSightings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Available Maps");
+        setTitle("Available Slideshows");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Slideshow.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N

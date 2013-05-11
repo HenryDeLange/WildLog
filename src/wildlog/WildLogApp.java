@@ -372,6 +372,7 @@ public class WildLogApp extends Application {
             dbi.close();
         System.out.println("SHUTTING DOWN WildLog - "
                 + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+        System.out.println();
     }
 
     public DBI getDBI() {
