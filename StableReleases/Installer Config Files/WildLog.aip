@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="8.1.1" version="10.0" Modules="simple" RootPath="." Language="en" Id="{CCD0E87A-8D5F-4A5F-9A35-4EB613D6A9D4}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="8.1.1" version="10.1" Modules="simple" RootPath="." Language="en" Id="{CCD0E87A-8D5F-4A5F-9A35-4EB613D6A9D4}">
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiValidationComponent">
+    <ROW Table="File" Column="Sequence" MinValue="1" MaxValue="2147483647" Description="Sequence with respect to the media images; order must track cabinet order." Options="0" ColumnType="3" ColumnIndex="7" ColumnSize="4" MsiKey="File#Sequence"/>
+    <ROW Table="Media" Column="LastSequence" MinValue="0" MaxValue="2147483647" Description="File sequence number for the last file for this media." Options="0" ColumnType="3" ColumnIndex="1" ColumnSize="4" MsiKey="Media#LastSequence"/>
+  </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_MINJREVERSION" MultiBuildValue="DefaultBuild:1.7" ValueLocId="-"/>
     <ROW Property="AI_MINRAM" MultiBuildValue="DefaultBuild:512" ValueLocId="-"/>
@@ -39,7 +43,6 @@
     <ROW Component="H2_License.txt" ComponentId="{9CA2A0ED-6CD1-4880-BF3A-92A93FFA3842}" Directory_="Licenses_Dir" Attributes="0" KeyPath="H2_License.txt" Type="0"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{C07FD7D1-EDE8-4104-885D-6ADC9A6A2B1A}" Directory_="SHORTCUTDIR" Attributes="0"/>
     <ROW Component="Uninstall_Notes.txt" ComponentId="{7654D4FA-04F8-4C21-B053-E6A839E89D3B}" Directory_="APPDIR" Attributes="0" KeyPath="Uninstall_Notes.txt"/>
-    <ROW Component="WildLog.bat" ComponentId="{88EDF3C9-F06F-4D9D-B9D9-97A65A9F283D}" Directory_="APPDIR" Attributes="0" KeyPath="WildLog.bat"/>
     <ROW Component="WildLog.exe" ComponentId="{502BD712-2387-454B-8195-895ED92CD07A}" Directory_="APPDIR" Attributes="0" KeyPath="WildLog.exe"/>
     <ROW Component="WildLog_License.txt" ComponentId="{32A73802-F8EA-4A85-9F3D-E1E14162A334}" Directory_="Licenses_Dir" Attributes="0" KeyPath="WildLog_License.txt"/>
     <ROW Component="WildLog___General_Guide.pdf" ComponentId="{B9247B18-7153-4A2E-8353-32D140E503F4}" Directory_="APPDIR" Attributes="0" KeyPath="WildLog___General_Guide.pdf"/>
@@ -48,29 +51,34 @@
     <ROW Component="protected_land.shp" ComponentId="{E4A3BC9B-F3AE-41DF-AE28-9440C13BE97B}" Directory_="APPDIR" Attributes="0" KeyPath="protected_land.shp" Type="0"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
-    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AbsoluteLayout.jar H2_License.txt SHORTCUTDIR Uninstall_Notes.txt WildLog.bat WildLog.exe WildLog_License.txt WildLog___General_Guide.pdf WildLog__local_settings_folder_.exe WildLog__portable_.exe protected_land.shp"/>
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0" Components="AbsoluteLayout.jar H2_License.txt SHORTCUTDIR Uninstall_Notes.txt WildLog.exe WildLog_License.txt WildLog___General_Guide.pdf WildLog__local_settings_folder_.exe WildLog__portable_.exe protected_land.shp"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
     <ROW File="AbsoluteLayout.jar" Component_="AbsoluteLayout.jar" FileName="Absolu~1.jar|AbsoluteLayout.jar" Attributes="0" SourcePath="WildLog\lib\AbsoluteLayout.jar" SelfReg="false" NextFile="appframework_1.0.3.jar"/>
     <ROW File="Astro.jar" Component_="AbsoluteLayout.jar" FileName="Astro.jar" Attributes="0" SourcePath="WildLog\lib\Astro.jar" SelfReg="false" NextFile="h2_1.3.168.jar"/>
     <ROW File="H2_License.txt" Component_="H2_License.txt" FileName="H2Lice~1.txt|H2 License.txt" Attributes="0" SourcePath="WildLog\Licenses\H2 License.txt" SelfReg="false" NextFile="OpenMap_License.txt"/>
+    <ROW File="HowtorunWildLog.txt" Component_="protected_land.shp" FileName="Howtor~1.txt|How to run WildLog.txt" Attributes="0" SourcePath="WildLog\How to run WildLog.txt" SelfReg="false" NextFile="WildLogLinux.sh"/>
     <ROW File="InstallReadme.rtf" Component_="protected_land.shp" FileName="Instal~1.rtf|InstallReadme.rtf" Attributes="0" SourcePath="WildLog\InstallReadme.rtf" SelfReg="false" NextFile="AbsoluteLayout.jar"/>
+    <ROW File="JMFLicense.txt" Component_="H2_License.txt" FileName="JMFLic~1.txt|JMF License.txt" Attributes="0" SourcePath="WildLog\Licenses\JMF License.txt" SelfReg="false" NextFile="MetadataExtractorLicense.txt"/>
     <ROW File="KmlGenerator.jar" Component_="AbsoluteLayout.jar" FileName="KmlGen~1.jar|KmlGenerator.jar" Attributes="0" SourcePath="WildLog\lib\KmlGenerator.jar" SelfReg="false" NextFile="metadata_extractor_2.6.3.jar"/>
+    <ROW File="MetadataExtractorLicense.txt" Component_="H2_License.txt" FileName="Metada~1.txt|Metadata-Extractor License.txt" Attributes="0" SourcePath="WildLog\Licenses\Metadata-Extractor License.txt" SelfReg="false" NextFile="HowtorunWildLog.txt"/>
     <ROW File="OpenMap_License.txt" Component_="H2_License.txt" FileName="OpenMa~1.txt|OpenMap License.txt" Attributes="0" SourcePath="WildLog\Licenses\OpenMap License.txt" SelfReg="false" NextFile="SwingX_License.txt"/>
     <ROW File="SwingX_License.txt" Component_="H2_License.txt" FileName="SwingX~1.txt|SwingX License.txt" Attributes="0" SourcePath="WildLog\Licenses\SwingX License.txt" SelfReg="false" NextFile="WildLog_License.rtf"/>
-    <ROW File="Uninstall_Notes.txt" Component_="Uninstall_Notes.txt" FileName="Uninst~1.txt|Uninstall Notes.txt" Attributes="0" SourcePath="WildLog\Uninstall Notes.txt" SelfReg="false" NextFile="WildLog.bat"/>
-    <ROW File="WildLog.bat" Component_="WildLog.bat" FileName="WildLog.bat" Attributes="0" SourcePath="WildLog\WildLog.bat" SelfReg="false" NextFile="WildLog.ico"/>
+    <ROW File="Uninstall_Notes.txt" Component_="Uninstall_Notes.txt" FileName="Uninst~1.txt|Uninstall Notes.txt" Attributes="0" SourcePath="WildLog\Uninstall Notes.txt" SelfReg="false" NextFile="WildLog.ico"/>
     <ROW File="WildLog.exe" Component_="WildLog.exe" FileName="WildLog.exe" Attributes="0" SourcePath="WildLog\WildLog.exe" SelfReg="false" NextFile="InstallReadme.rtf"/>
     <ROW File="WildLog.ico" Component_="protected_land.shp" FileName="WildLog.ico" Attributes="0" SourcePath="WildLog\WildLog.ico" SelfReg="false" NextFile="WildLog.jar"/>
     <ROW File="WildLog.jar" Component_="protected_land.shp" FileName="WildLog.jar" Attributes="0" SourcePath="WildLog\WildLog.jar" SelfReg="false" NextFile="WorldBase.shp"/>
+    <ROW File="WildLogLinux.sh" Component_="protected_land.shp" FileName="WildLo~1.sh|WildLog (Linux).sh" Attributes="0" SourcePath="WildLog\WildLog (Linux).sh" SelfReg="false" NextFile="WildLogMacOS.command"/>
+    <ROW File="WildLogMacOS.command" Component_="protected_land.shp" FileName="WildLo~1.com|WildLog (MacOS).command" Attributes="0" SourcePath="WildLog\WildLog (MacOS).command" SelfReg="false" NextFile="WildLogWindows.bat"/>
+    <ROW File="WildLogWindows.bat" Component_="protected_land.shp" FileName="WildLo~3.bat|WildLog (Windows).bat" Attributes="0" SourcePath="WildLog\WildLog (Windows).bat" SelfReg="false"/>
     <ROW File="WildLog_License.rtf" Component_="H2_License.txt" FileName="WildLo~1.rtf|WildLog License.rtf" Attributes="0" SourcePath="WildLog\Licenses\WildLog License.rtf" SelfReg="false" NextFile="WildLog_License.txt"/>
     <ROW File="WildLog_License.txt" Component_="WildLog_License.txt" FileName="WildLo~1.txt|WildLog License.txt" Attributes="0" SourcePath="WildLog\Licenses\WildLog License.txt" SelfReg="false" NextFile="WildLog___General_Guide.pdf"/>
     <ROW File="WildLog___General_Guide.pdf" Component_="WildLog___General_Guide.pdf" FileName="WildLo~1.pdf|WildLog - General Guide.pdf" Attributes="0" SourcePath="WildLog\WildLog - General Guide.pdf" SelfReg="false" NextFile="WildLog__local_settings_folder_.bat"/>
     <ROW File="WildLog__local_settings_folder_.bat" Component_="protected_land.shp" FileName="WildLo~1.bat|WildLog (local settings folder).bat" Attributes="0" SourcePath="WildLog\WildLog (local settings folder).bat" SelfReg="false" NextFile="WildLog__local_settings_folder_.exe"/>
     <ROW File="WildLog__local_settings_folder_.exe" Component_="WildLog__local_settings_folder_.exe" FileName="WildLo~1.exe|WildLog (local settings folder).exe" Attributes="0" SourcePath="WildLog\WildLog (local settings folder).exe" SelfReg="false" NextFile="WildLog__portable_.bat"/>
     <ROW File="WildLog__portable_.bat" Component_="protected_land.shp" FileName="WildLo~2.bat|WildLog (portable).bat" Attributes="0" SourcePath="WildLog\WildLog (portable).bat" SelfReg="false" NextFile="WildLog__portable_.exe"/>
-    <ROW File="WildLog__portable_.exe" Component_="WildLog__portable_.exe" FileName="WildLo~2.exe|WildLog (portable).exe" Attributes="0" SourcePath="WildLog\WildLog (portable).exe" SelfReg="false"/>
+    <ROW File="WildLog__portable_.exe" Component_="WildLog__portable_.exe" FileName="WildLo~2.exe|WildLog (portable).exe" Attributes="0" SourcePath="WildLog\WildLog (portable).exe" SelfReg="false" NextFile="JMFLicense.txt"/>
     <ROW File="WorldBase.shp" Component_="protected_land.shp" FileName="WorldB~1.shp|WorldBase.shp" Attributes="0" SourcePath="WildLog\WorldBase.shp" SelfReg="false" NextFile="WildLog.exe"/>
     <ROW File="appframework_1.0.3.jar" Component_="AbsoluteLayout.jar" FileName="appfra~1.jar|appframework-1.0.3.jar" Attributes="0" SourcePath="WildLog\lib\appframework-1.0.3.jar" SelfReg="false" NextFile="Astro.jar"/>
     <ROW File="h2_1.3.168.jar" Component_="AbsoluteLayout.jar" FileName="h2-131~1.jar|h2-1.3.168.jar" Attributes="0" SourcePath="WildLog\lib\h2-1.3.168.jar" SelfReg="false" NextFile="jmf.jar"/>
@@ -191,10 +199,10 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="Uninstall" Directory_="SHORTCUTDIR" Name="Uninst~2|Uninstall" Component_="AbsoluteLayout.jar" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFolder_msiexec.exe" IconIndex="0" ShowCmd="1"/>
     <ROW Shortcut="Uninstall_Notes" Directory_="SHORTCUTDIR" Name="Uninst~1.txt|Uninstall Notes.txt" Component_="Uninstall_Notes.txt" Target="[#Uninstall_Notes.txt]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
-    <ROW Shortcut="WildLog_Admin" Directory_="SHORTCUTDIR" Name="WildLo~1.0|WildLog v4.0" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
+    <ROW Shortcut="WildLog" Directory_="DesktopFolder" Name="WildLog" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
+    <ROW Shortcut="WildLog_1" Directory_="SHORTCUTDIR" Name="WildLo~1.0|WildLog v4.0" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
     <ROW Shortcut="WildLog_License.txt" Directory_="SHORTCUTDIR" Name="WildLo~1.txt|WildLog License.txt" Component_="WildLog_License.txt" Target="[#WildLog_License.txt]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="Licenses_Dir"/>
     <ROW Shortcut="WildLog___General_Guide.pdf" Directory_="SHORTCUTDIR" Name="WildLo~1.pdf|WildLog - General Guide.pdf" Component_="WildLog___General_Guide.pdf" Target="[#WildLog___General_Guide.pdf]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
-    <ROW Shortcut="WildLog_v35" Directory_="DesktopFolder" Name="WildLo~1.0|WildLog v4.0" Component_="WildLog.exe" Target="[#WildLog.exe]" Hotkey="0" Icon_="WildLog.exe" IconIndex="0" ShowCmd="7" WkDir="APPDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>

@@ -1206,7 +1206,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         tblLocation_EleTab.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation_EleTab.setName("tblLocation_EleTab"); // NOI18N
-        tblLocation_EleTab.setSelectionBackground(new java.awt.Color(106, 94, 60));
+        tblLocation_EleTab.setSelectionBackground(new java.awt.Color(67, 97, 113));
         tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocation_EleTabMouseClicked(evt);
