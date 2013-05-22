@@ -397,10 +397,7 @@ public class UtilsImageProcessing {
         try {
             return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inFile));
         }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
-        catch (JpegProcessingException ex) {
+        catch (IOException | JpegProcessingException ex) {
             ex.printStackTrace(System.err);
         }
         return null;
@@ -442,6 +439,7 @@ public class UtilsImageProcessing {
     /**
      * The thumbnail will be created if it doesn't already exist.
      * NOTE: Currently all thumbnails will be JPGs (even if the original was PNG).
+     * @return String of the AbsolutePath to the thumbnail
      */
     public static String getThumbnail(File inOriginalFile, int inSize) {
         File thumbnail = new File(getThumbnailPath(inOriginalFile, inSize));
@@ -454,6 +452,7 @@ public class UtilsImageProcessing {
     /**
      * The thumbnail will be created if it doesn't already exist.
      * NOTE: Currently all thumbnails will be JPGs (even if the original was PNG).
+     * @return String of the AbsolutePath to the thumbnail
      */
     public static String getThumbnail(String inOriginalPath, int inSize) {
         return getThumbnail(new File(inOriginalPath), inSize);

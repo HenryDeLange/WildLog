@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -31,6 +32,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -101,6 +104,10 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private Element searchElementBrowseTab;
     private Location searchLocation;
     private int imageIndex = 0;
+    private final int CACHE_LIMIT = 5;
+    private Map<String, Image> oldPreloadedImages = null;
+    private ExecutorService executorService;
+    private final Object imageCacheLock = new Object();
 
     public WildLogView(WildLogApp inApp) {
         app = inApp;
@@ -108,6 +115,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         searchLocation = new Location();
         // Call the generated code to build the GUI
         initComponents();
+
+        // Setup image cache for the browse tab
+        oldPreloadedImages = new HashMap<>(CACHE_LIMIT);
 
         // status bar initialization - message timeout, idle icon and busy animation, etc
         int messageTimeout = 10000;
@@ -139,30 +149,35 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             @Override
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 String propertyName = evt.getPropertyName();
-                if ("started".equals(propertyName)) {
-                    if (!busyIconTimer.isRunning()) {
-                        statusAnimationLabel.setIcon(busyIcons[0]);
-                        busyIconIndex = 0;
-                        busyIconTimer.start();
-                    }
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(true);
-                    messageTimer.stop();
-                } else if ("done".equals(propertyName)) {
-                    busyIconTimer.stop();
-                    statusAnimationLabel.setIcon(idleIcon);
-                    progressBar.setVisible(false);
-                    progressBar.setValue(0);
-                    messageTimer.restart();
-                } else if ("message".equals(propertyName)) {
-                    String text = (String)(evt.getNewValue());
-                    statusMessageLabel.setText((text == null) ? "" : text);
-                    messageTimer.stop();
-                } else if ("progress".equals(propertyName)) {
-                    int value = (Integer)(evt.getNewValue());
-                    progressBar.setVisible(true);
-                    progressBar.setIndeterminate(false);
-                    progressBar.setValue(value);
+                switch (propertyName) {
+                    case "started":
+                        if (!busyIconTimer.isRunning()) {
+                            statusAnimationLabel.setIcon(busyIcons[0]);
+                            busyIconIndex = 0;
+                            busyIconTimer.start();
+                        }
+                        progressBar.setVisible(true);
+                        progressBar.setIndeterminate(true);
+                        messageTimer.stop();
+                        break;
+                    case "done":
+                        busyIconTimer.stop();
+                        statusAnimationLabel.setIcon(idleIcon);
+                        progressBar.setVisible(false);
+                        progressBar.setValue(0);
+                        messageTimer.restart();
+                        break;
+                    case "message":
+                        String text = (String)(evt.getNewValue());
+                        statusMessageLabel.setText((text == null) ? "" : text);
+                        messageTimer.stop();
+                        break;
+                    case "progress":
+                        int value = (Integer)(evt.getNewValue());
+                        progressBar.setVisible(true);
+                        progressBar.setIndeterminate(false);
+                        progressBar.setValue(value);
+                        break;
                 }
             }
         });
@@ -918,11 +933,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                tblLocationMouseReleased(evt);
-            }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblLocationMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblLocationMouseReleased(evt);
             }
         });
         tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -2000,6 +2015,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
             }
+            // Remove the old preloaded images for the selected node (to save memory)
+            synchronized (imageCacheLock) {
+                if (oldPreloadedImages != null) {
+                    oldPreloadedImages.clear();
+                }
+            }
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
@@ -2034,8 +2055,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
             else {
                 setupFile(null);
-            }
-            if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
             }
             // Maak paar display issues reg
             txtBrowseInfo.getCaret().setDot(0);
@@ -3609,17 +3628,59 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         }
     }
 
+    private void lookupCachedImage(final List<WildLogFile> inFiles) {
+        // FIXME: Daars nog 'n werd issue as mens omtrent 24 keer vinnig next druk op groot kruger fotos dan wys daar net 'n blank screen... Dink as ek die executor stop is wat die veroorsaak...
+//        if (executorService != null) {
+//            executorService.shutdownNow();
+//        }
+        executorService = Executors.newFixedThreadPool(app.getThreadCount());
+        int startIndex = imageIndex - CACHE_LIMIT/2;
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        int size = (int) imgBrowsePhotos.getSize().getWidth();
+        if (size > (int) imgBrowsePhotos.getSize().getHeight()) {
+            size = (int) imgBrowsePhotos.getSize().getHeight();
+        }
+        // TODO: implement wrapping van die cache as mens by die einde kom en weer begin om loop (of stop die next buttons)
+        final int finalSize = size;
+        final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT);
+        for (int t = startIndex; t < inFiles.size() && t < startIndex + CACHE_LIMIT; t++) {
+            final WildLogFile wildLogFile = inFiles.get(t);
+            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                Image tempImage = oldPreloadedImages.get(wildLogFile.getFilePath(true));
+                if (tempImage != null) {
+                    newPreloadedImages.put(wildLogFile.getFilePath(true), tempImage);
+                    if (t == imageIndex) callbackToDoTheImageLoad(tempImage);
+                }
+                else {
+                    final int i = t;
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getFilePath(true), finalSize).getImage();
+                            newPreloadedImages.put(wildLogFile.getFilePath(true), tempConcImage);
+                            if (i == imageIndex) callbackToDoTheImageLoad(tempConcImage);
+                        }
+                    });
+                }
+            }
+        }
+        synchronized (imageCacheLock) {
+            oldPreloadedImages.clear();
+            oldPreloadedImages = newPreloadedImages;
+        }
+    }
+
     private void setupFile(final List<WildLogFile> inFotos) {
         if (inFotos != null) {
             if (inFotos.size() > 0) {
                 try {
                     lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.IMAGE)) {
-//                        int size = (int)imgBrowsePhotos.getSize().getWidth();
-//                        if (imgBrowsePhotos.getSize().getHeight() > size)
-//                            size = (int)imgBrowsePhotos.getSize().getHeight();
-//                        imgBrowsePhotos.setImage(UtilsFileProcessing.getScaledIcon(new File(inFotos.get(imageIndex).getFilePath(true)), size).getImage());
-                        imgBrowsePhotos.setImage(new File(inFotos.get(imageIndex).getFilePath(true)));
+                        // TODO: Gebruik 'n mooi loading icon hiervoor
+                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
+                        lookupCachedImage(inFotos);
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.MOVIE))
@@ -3660,32 +3721,11 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 imgBrowsePhotos.setToolTipText("");
             }
         }
-        // Scale image
-        if (imgBrowsePhotos.getImage() != null) {
-            double scale = 1.0;
-            int imageHeight = imgBrowsePhotos.getImage().getHeight(null);
-            int imageWidth = imgBrowsePhotos.getImage().getWidth(null);
-            double componentHeight = imgBrowsePhotos.getSize().getHeight();
-            double componentWidth = imgBrowsePhotos.getSize().getWidth();
-            if (imageHeight > 0 && imageWidth > 0) {
-                if (imageHeight >= imageWidth) {
-                    // Dealing with Portrait image
-                    scale = componentHeight / (double)imageHeight;
-                    if (imageWidth * scale > componentWidth)
-                        scale = componentWidth / (double)imageWidth;
-                }
-                else {
-                    // Dealing with Landscape image
-                    scale = componentWidth / (double)imageWidth;
-                    if (imageHeight * scale > componentHeight)
-                        scale = componentHeight / (double)imageHeight;
-                }
-            }
-            else {
-                System.out.println("WARNING: Trying to get the size of an image before it is known...");
-            }
-            imgBrowsePhotos.setScale(scale);
-        }
+        // TODO: implement dalk ander zoom code wat 'n nuwe scaledimage maak
+    }
+
+    private void callbackToDoTheImageLoad(Image inImage) {
+        imgBrowsePhotos.setImage(inImage);
     }
 
 
