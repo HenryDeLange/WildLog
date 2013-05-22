@@ -1798,7 +1798,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         }
         UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
         txtSearch.setText("");
-        UtilTableGenerator.setupLocationsForElementTable(app, tblLocation_EleTab, new Element());
+        UtilTableGenerator.setupLocationsForElementTable(app, tblLocation_EleTab, null);
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM));
     }//GEN-LAST:event_cmbTypeActionPerformed
 
@@ -2131,7 +2131,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel,
+                UtilPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel,
                         app.getDBI().find(new Location(tempVisit.getLocationName())));
             }
             else
@@ -2738,7 +2738,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     }//GEN-LAST:event_mnuCreateSlideshowActionPerformed
 
     private void mnuDBConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDBConsoleActionPerformed
-        UtilsFileProcessing.openFile(WildLogPaths.concatPaths(false, System.getProperty("user.dir"), "lib", "h2-1.3.168.jar"));
+        UtilsFileProcessing.openFile(WildLogPaths.concatPaths(false, System.getProperty("user.dir"), "lib", "h2-1.3.171.jar"));
     }//GEN-LAST:event_mnuDBConsoleActionPerformed
 
     private void mnuOpenMapAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenMapAppActionPerformed

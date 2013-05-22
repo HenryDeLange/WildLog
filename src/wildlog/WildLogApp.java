@@ -140,8 +140,7 @@ public class WildLogApp extends Application {
 
     @Override
     protected void initialize(String[] arg0) {
-        System.out.println("STARTING UP WildLog..."
-                + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+        System.out.println("Initializing workspace...");
         super.initialize(arg0);
         // Get the threadcount
         threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
@@ -326,6 +325,8 @@ public class WildLogApp extends Application {
                 configureWildLogHomeBasedOnFileBrowser(null, true);
             }
         }
+        System.out.println("STARTING UP WildLog - "
+                + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
         System.out.println("WildLog Setting Folder: " + WILDLOG_SETTINGS_FOLDER);
         // Launch the application
         launch(WildLogApp.class, args);
