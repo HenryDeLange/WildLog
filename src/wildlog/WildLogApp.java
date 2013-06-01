@@ -34,8 +34,6 @@ import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.DBI;
 import wildlog.data.dbi.DBI_h2;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.Longitudes;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -47,15 +45,6 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
-    // TODO: Maybe clean these floating "Session scope" variables up a bit and move into their own container class...
-    private Latitudes prevLat;
-    private int prevLatDeg;
-    private int prevLatMin;
-    private double prevLatSec;
-    private Longitudes prevLon;
-    private int prevLonDeg;
-    private int prevLonMin;
-    private double prevLonSec;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
     private JXMapKit mapOnline;
@@ -67,76 +56,6 @@ public class WildLogApp extends Application {
     // The DBI is initialized in startup() and closed in shutdown()
     private DBI dbi;
     private WildLogView view;
-
-    // Getters and Setters
-    public Latitudes getPrevLat() {
-        if (prevLat == null)
-            prevLat = Latitudes.NONE;
-        return prevLat;
-    }
-
-    public void setPrevLat(Latitudes inPrevLat) {
-        prevLat = inPrevLat;
-    }
-
-    public int getPrevLatDeg() {
-        return prevLatDeg;
-    }
-
-    public void setPrevLatDeg(int inPrevLatDeg) {
-        prevLatDeg = inPrevLatDeg;
-    }
-
-    public int getPrevLatMin() {
-        return prevLatMin;
-    }
-
-    public void setPrevLatMin(int inPrevLatMin) {
-        prevLatMin = inPrevLatMin;
-    }
-
-    public double getPrevLatSec() {
-        return prevLatSec;
-    }
-
-    public void setPrevLatSec(double inPrevLatSec) {
-        prevLatSec = inPrevLatSec;
-    }
-
-    public Longitudes getPrevLon() {
-        if (prevLon == null)
-            prevLon = Longitudes.NONE;
-        return prevLon;
-    }
-
-    public void setPrevLon(Longitudes inPrevLon) {
-        prevLon = inPrevLon;
-    }
-
-    public int getPrevLonDeg() {
-        return prevLonDeg;
-    }
-
-    public void setPrevLonDeg(int inPrevLonDeg) {
-        prevLonDeg = inPrevLonDeg;
-    }
-
-    public int getPrevLonMin() {
-        return prevLonMin;
-    }
-
-    public void setPrevLonMin(int inPrevLonMin) {
-        prevLonMin = inPrevLonMin;
-    }
-
-    public double getPrevLonSec() {
-        return prevLonSec;
-    }
-
-    public void setPrevLonSec(double inPrevLonSec) {
-        prevLonSec = inPrevLonSec;
-    }
-
 
     @Override
     protected void initialize(String[] arg0) {
@@ -481,7 +400,7 @@ public class WildLogApp extends Application {
         return WILDLOG_SETTINGS_FOLDER;
     }
 
-    public JFrame getMainFrame() {
+    public WildLogView getMainFrame() {
         return view;
     }
 

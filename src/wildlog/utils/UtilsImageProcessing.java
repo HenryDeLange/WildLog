@@ -74,11 +74,12 @@ public class UtilsImageProcessing {
                     finalHeight = (int)(imageHeight/ratio);
                 }
                 else {
-                    double ratio = (double)imageWidth;
+                    double ratio = (double)inSize/imageWidth;
                     finalHeight = (int)(imageHeight*ratio);
                 }
             }
-            // FIXME: Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou, so ek hoef dit nie dan self uit te werk nie...
+            // Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou,
+            // maar ek sal in elk geval moet uitwerk of dit landscape of portriate is, so vir eers hou ek maar die kode soos hierbo.
             return new ImageIcon(getScaledImage(Toolkit.getDefaultToolkit().createImage(inFile.getAbsolutePath()), finalWidth, finalHeight));
         }
         catch (IOException ex) {

@@ -505,7 +505,7 @@
     <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
-    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-93,0,0,3,-4"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,2,-103,0,0,3,-24"/>
   </AuxValues>
 
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
@@ -578,7 +578,7 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="866" max="32767" attributes="0"/>
+                          <EmptySpace pref="846" max="32767" attributes="0"/>
                           <Component id="jLabel3" min="-2" pref="149" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -667,7 +667,7 @@
                           <Component id="jSeparator5" min="-2" pref="10" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                           <Component id="lblWorkspace" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="143" max="32767" attributes="0"/>
+                          <EmptySpace pref="133" max="32767" attributes="0"/>
                           <Component id="jLabel3" min="-2" pref="228" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -706,7 +706,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="dd" green="e6" red="ed" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="version 4.0"/>
+                    <Property name="text" type="java.lang.String" value="version 4.1"/>
                     <Property name="name" type="java.lang.String" value="jLabel12" noResource="true"/>
                   </Properties>
                 </Component>
@@ -868,21 +868,22 @@
                               </Group>
                               <Group type="103" alignment="0" groupAlignment="1" attributes="0">
                                   <Component id="jScrollPane4" alignment="1" min="-2" pref="250" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="1" groupAlignment="1" attributes="0">
-                                      <Group type="102" alignment="1" attributes="0">
-                                          <EmptySpace min="-2" pref="113" max="-2" attributes="0"/>
-                                          <Component id="dtpEndDate" min="-2" pref="100" max="-2" attributes="0"/>
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="btnRefreshDates" min="-2" pref="30" max="-2" attributes="0"/>
-                                      </Group>
-                                      <Component id="btnGoBrowseSelection" alignment="0" min="-2" pref="249" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Component id="dtpEndDate" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="btnRefreshDates" min="-2" pref="30" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Component id="dtpStartDate" min="-2" pref="108" max="-2" attributes="0"/>
                               <Component id="cmbElementTypesBrowseTab" alignment="0" min="-2" pref="214" max="-2" attributes="1"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnRefreshBrowseTree" min="-2" pref="110" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnGoBrowseSelection" min="-2" pref="136" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="jScrollPane5" pref="233" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jScrollPane5" pref="210" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
@@ -900,19 +901,22 @@
                                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                   <Component id="btnBrowseNext" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="1" attributes="0">
-                                      <Component id="btnReport" min="-2" pref="117" max="-2" attributes="0"/>
-                                      <Component id="btnViewImage" min="-2" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Component id="btnReport" pref="105" max="32767" attributes="0"/>
+                                      <Component id="btnRotate" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="btnViewEXIF" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <Component id="btnZoomIn" min="-2" pref="80" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="btnZoomOut" min="-2" pref="80" max="-2" attributes="0"/>
-                                      <Component id="btnRotate" min="-2" pref="80" max="-2" attributes="0"/>
+                                      <Group type="102" attributes="0">
+                                          <Component id="btnViewEXIF" min="-2" pref="80" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="btnViewImage" min="-2" pref="98" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <Component id="btnZoomIn" min="-2" pref="90" max="-2" attributes="0"/>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="btnZoomOut" min="-2" pref="88" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -929,26 +933,6 @@
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="rdbBrowseLocation" min="-2" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="3" attributes="0">
-                                          <Component id="rdbBrowseElement" alignment="3" min="-2" max="-2" attributes="0"/>
-                                          <Component id="rdbBrowseDate" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="btnRefreshDates" min="-2" pref="25" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="dtpEndDate" min="-2" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane4" pref="512" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="btnGoBrowseSelection" min="-2" pref="30" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Group type="102" attributes="0">
@@ -961,37 +945,62 @@
                                               </Group>
                                               <Component id="btnBrowseNext" min="-2" pref="65" max="-2" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
-                                                  <Component id="btnReport" min="-2" pref="35" max="-2" attributes="0"/>
+                                                  <Group type="103" groupAlignment="3" attributes="0">
+                                                      <Component id="btnReport" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                                                      <Component id="btnViewEXIF" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                                                      <Component id="btnViewImage" min="-2" pref="35" max="-2" attributes="0"/>
+                                                  </Group>
                                                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="btnViewImage" alignment="0" min="-2" pref="25" max="-2" attributes="0"/>
-                                                      <Group type="103" groupAlignment="3" attributes="0">
-                                                          <Component id="btnZoomIn" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                                          <Component id="btnZoomOut" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                                      </Group>
+                                                      <Component id="btnZoomIn" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
+                                                      <Component id="btnZoomOut" alignment="0" min="-2" pref="28" max="-2" attributes="0"/>
+                                                      <Component id="btnRotate" min="-2" max="-2" attributes="0"/>
                                                   </Group>
-                                              </Group>
-                                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                                                  <Component id="btnViewEXIF" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                                                  <Component id="btnRotate" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                                               </Group>
                                           </Group>
                                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                           <Component id="imgBrowsePhotos" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="jScrollPane5" alignment="0" pref="596" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane5" alignment="0" pref="586" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Component id="dtpStartDate" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                                  <Component id="cmbElementTypesBrowseTab" min="-2" pref="20" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="rdbBrowseLocation" min="-2" max="-2" attributes="0"/>
+                                              <Group type="103" groupAlignment="3" attributes="0">
+                                                  <Component id="rdbBrowseElement" alignment="3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="rdbBrowseDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="btnRefreshDates" min="-2" pref="25" max="-2" attributes="0"/>
+                                              <Group type="102" alignment="0" attributes="0">
+                                                  <EmptySpace max="-2" attributes="0"/>
+                                                  <Component id="dtpEndDate" min="-2" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="jScrollPane4" max="32767" attributes="0"/>
+                                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" attributes="0">
+                                          <EmptySpace min="25" pref="25" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="cmbElementTypesBrowseTab" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
+                                              <Component id="dtpStartDate" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          </Group>
+                                          <EmptySpace max="32767" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="btnRefreshBrowseTree" min="-2" pref="30" max="-2" attributes="0"/>
+                                      <Component id="btnGoBrowseSelection" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
-                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1075,7 +1084,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <EmptySpace min="0" pref="522" max="32767" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -1145,6 +1154,7 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnGoBrowseSelection" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1153,9 +1163,6 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnZoomIn">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="imgBrowsePhotos.getZoomInAction()" type="code"/>
-                    </Property>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="dd" green="e9" red="eb" type="rgb"/>
                     </Property>
@@ -1168,14 +1175,15 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnZoomIn" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnZoomInActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnZoomOut">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="imgBrowsePhotos.getZoomOutAction()" type="code"/>
-                    </Property>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="dd" green="e9" red="eb" type="rgb"/>
                     </Property>
@@ -1188,8 +1196,12 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnZoomOut" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnZoomOutActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnViewImage">
                   <Properties>
@@ -1202,6 +1214,10 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 4, 2, 4]"/>
+                    </Property>
                     <Property name="name" type="java.lang.String" value="btnViewImage" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1221,6 +1237,7 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnBrowsePrev" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1240,6 +1257,7 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnBrowseNext" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1308,9 +1326,10 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 8, 2, 8]"/>
+                      <Insets value="[2, 4, 2, 4]"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="btnReport" noResource="true"/>
                   </Properties>
@@ -1329,6 +1348,7 @@
                     <Property name="text" type="java.lang.String" value="Default"/>
                     <Property name="toolTipText" type="java.lang.String" value="Set the current file as the default (first) file."/>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="name" type="java.lang.String" value="btnDefault" noResource="true"/>
                   </Properties>
                   <Events>
@@ -1355,27 +1375,28 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnRotate">
                   <Properties>
-                    <Property name="action" type="javax.swing.Action" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-                      <Connection code="imgBrowsePhotos.getRotateCounterClockwiseAction()" type="code"/>
-                    </Property>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="dd" green="e9" red="eb" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Rotate"/>
+                    <Property name="text" type="java.lang.String" value="Rotate Image"/>
                     <Property name="toolTipText" type="java.lang.String" value="Rotate the image counter clockwise."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[2, 2, 2, 2]"/>
                     </Property>
                     <Property name="name" type="java.lang.String" value="btnRotate" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRotateActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnViewEXIF">
                   <Properties>
@@ -1391,6 +1412,7 @@
                       <Color id="Hand Cursor"/>
                     </Property>
                     <Property name="focusPainted" type="boolean" value="false"/>
+                    <Property name="focusable" type="boolean" value="false"/>
                     <Property name="horizontalAlignment" type="int" value="2"/>
                     <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                       <Insets value="[2, 2, 2, 2]"/>
@@ -1399,6 +1421,22 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnViewEXIFActionPerformed"/>
+                  </Events>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnRefreshBrowseTree">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Refresh Tree"/>
+                    <Property name="toolTipText" type="java.lang.String" value="This will collapse all tree nodes and reload the data."/>
+                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+                      <Insets value="[2, 4, 2, 4]"/>
+                    </Property>
+                    <Property name="name" type="java.lang.String" value="btnRefreshBrowseTree" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshBrowseTreeActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -1441,19 +1479,19 @@
                                       <Component id="btnDeleteLocation" min="-2" pref="130" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane1" pref="855" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" pref="835" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                      <Component id="btnGoVisit_LocTab" alignment="0" pref="315" max="32767" attributes="0"/>
-                                      <Component id="jScrollPane2" alignment="0" pref="315" max="32767" attributes="0"/>
+                                      <Component id="btnGoVisit_LocTab" alignment="0" pref="305" max="32767" attributes="0"/>
+                                      <Component id="jScrollPane2" alignment="0" pref="305" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jScrollPane3" alignment="0" pref="358" max="32767" attributes="2"/>
-                                      <Component id="btnGoElement_LocTab" alignment="0" pref="358" max="32767" attributes="1"/>
+                                      <Component id="jScrollPane3" alignment="0" pref="348" max="32767" attributes="2"/>
+                                      <Component id="btnGoElement_LocTab" alignment="0" pref="348" max="32767" attributes="1"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                   <Component id="lblImage_LocTab" min="-2" max="-2" attributes="0"/>
@@ -1477,14 +1515,14 @@
                                   <EmptySpace min="20" pref="20" max="20" attributes="0"/>
                                   <Component id="btnDeleteLocation" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="jScrollPane1" pref="263" max="32767" attributes="0"/>
+                              <Component id="jScrollPane1" pref="258" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane2" pref="254" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane2" pref="249" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="btnGoVisit_LocTab" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
@@ -1492,7 +1530,7 @@
                               <Group type="102" attributes="0">
                                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="jScrollPane3" pref="254" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane3" pref="249" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" max="-2" attributes="0"/>
                                   <Component id="btnGoElement_LocTab" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
@@ -1812,7 +1850,7 @@
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="btnGoLocation" max="32767" attributes="0"/>
                                       <Component id="jScrollPane6" alignment="0" pref="0" max="32767" attributes="0"/>
-                                      <Component id="jLabel6" alignment="1" pref="369" max="32767" attributes="0"/>
+                                      <Component id="jLabel6" alignment="1" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                   <Component id="lblImage" min="-2" max="-2" attributes="0"/>
@@ -1836,7 +1874,7 @@
                                   <EmptySpace min="20" pref="20" max="20" attributes="0"/>
                                   <Component id="btnDeleteElement" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="scrlElement" pref="263" max="32767" attributes="0"/>
+                              <Component id="scrlElement" pref="258" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -1854,7 +1892,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane6" pref="257" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane6" pref="252" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                                   <Component id="btnGoLocation" min="-2" pref="30" max="-2" attributes="0"/>
                               </Group>

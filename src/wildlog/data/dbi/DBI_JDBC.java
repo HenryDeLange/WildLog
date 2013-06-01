@@ -47,6 +47,7 @@ import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
+import wildlog.data.utils.WildLogDataState;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 public abstract class DBI_JDBC implements DBI {
@@ -730,6 +731,7 @@ public abstract class DBI_JDBC implements DBI {
                         temp.setId(Element.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
                         createOrUpdate(temp, true);
                     }
+                    WildLogDataState.increaseCounterForNameChanges();
                 }
                 // Update
                 state = conn.prepareStatement(updateElement);
@@ -738,6 +740,7 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 state = conn.prepareStatement(createElement);
+                WildLogDataState.increaseCounterForAddOrDelete();
             }
             state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
             state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getOtherName()), 150));
@@ -818,6 +821,7 @@ public abstract class DBI_JDBC implements DBI {
                         temp.setId(Location.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
                         createOrUpdate(temp, true);
                     }
+                    WildLogDataState.increaseCounterForNameChanges();
                 }
                 // Update
                 state = conn.prepareStatement(updateLocation);
@@ -826,6 +830,7 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 state = conn.prepareStatement(createLocation);
+                WildLogDataState.increaseCounterForAddOrDelete();
             }
             state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
             state.setString(2, UtilsData.sanitizeString(inLocation.getDescription()));
@@ -889,6 +894,7 @@ public abstract class DBI_JDBC implements DBI {
                         temp.setId(Visit.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
                         createOrUpdate(temp, true);
                     }
+                    WildLogDataState.increaseCounterForNameChanges();
                 }
                 // Update
                 state = conn.prepareStatement(updateVisit);
@@ -897,6 +903,7 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 state = conn.prepareStatement(createVisit);
+                WildLogDataState.increaseCounterForAddOrDelete();
             }
             state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
             if (inVisit.getStartDate() != null) {
@@ -956,6 +963,7 @@ public abstract class DBI_JDBC implements DBI {
                 }
                 // Insert
                 state = conn.prepareStatement(createSighting);
+                WildLogDataState.increaseCounterForAddOrDelete();
             }
             // Populate the values
             state.setLong(1, inSighting.getSightingCounter());
@@ -1134,6 +1142,7 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
+            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
@@ -1168,6 +1177,7 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
+            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
@@ -1201,6 +1211,7 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
+            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
@@ -1227,6 +1238,7 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
+            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }

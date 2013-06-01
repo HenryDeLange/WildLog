@@ -246,6 +246,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel10 = new javax.swing.JLabel();
         cmbSizeType = new javax.swing.JComboBox();
         btnSlideshow = new javax.swing.JButton();
+        btnBrowse = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(227, 240, 227));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -775,6 +776,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         });
 
+        btnBrowse.setText("Browse");
+        btnBrowse.setName("btnBrowse"); // NOI18N
+        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrowseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout elementIncludesLayout = new javax.swing.GroupLayout(elementIncludes);
         elementIncludes.setLayout(elementIncludesLayout);
         elementIncludesLayout.setHorizontalGroup(
@@ -798,9 +807,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                 .addGap(18, 18, 18)
                                 .addComponent(jScrollPane17)
                                 .addGap(18, 18, 18)
-                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnBrowse)))
                             .addGroup(elementIncludesLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -809,9 +820,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                         .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel68, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel64, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))
+                                    .addComponent(jLabel68, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel64, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(elementIncludesLayout.createSequentialGroup()
                                         .addComponent(jLabel62, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGap(23, 23, 23)))
@@ -964,42 +974,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         elementIncludesLayout.setVerticalGroup(
             elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(elementIncludesLayout.createSequentialGroup()
-                .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addComponent(btnUploadImage)
-                        .addGap(3, 3, 3)
-                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSetMainImage)
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnDeleteImage)))
-                    .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jLabel58))
-                            .addGroup(elementIncludesLayout.createSequentialGroup()
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                        .addGap(5, 5, 5)
-                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(rdbLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(rdbSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(lblNumberOfLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(elementIncludesLayout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jSeparator2)))
-                .addGap(5, 5, 5))
-            .addGroup(elementIncludesLayout.createSequentialGroup()
                 .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(elementIncludesLayout.createSequentialGroup()
                         .addGap(28, 28, 28)
@@ -1148,6 +1122,45 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                             .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(12, 12, 12))
+            .addGroup(elementIncludesLayout.createSequentialGroup()
+                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnBrowse)
+                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(elementIncludesLayout.createSequentialGroup()
+                                .addComponent(btnUploadImage)
+                                .addGap(3, 3, 3)
+                                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnSetMainImage)
+                                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(btnDeleteImage)))
+                            .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(elementIncludesLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jLabel58))
+                            .addGroup(elementIncludesLayout.createSequentialGroup()
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane15, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addGap(5, 5, 5)
+                        .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(elementIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(rdbLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(rdbSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(lblNumberOfLocations, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(elementIncludesLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jSeparator2)))
+                .addGap(5, 5, 5))
         );
 
         add(elementIncludes, java.awt.BorderLayout.CENTER);
@@ -1425,6 +1438,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+        app.getMainFrame().browseSelectedElement(element);
+    }//GEN-LAST:event_btnBrowseActionPerformed
+
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
@@ -1461,6 +1478,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
+    private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnHTML;

@@ -199,6 +199,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtHabitat = new javax.swing.JTextPane();
         btnSlideshow = new javax.swing.JButton();
         btnBulkImport = new javax.swing.JButton();
+        btnBrowse = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(233, 239, 244));
         setMinimumSize(new java.awt.Dimension(1005, 585));
@@ -673,6 +674,14 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
+        btnBrowse.setText("Browse");
+        btnBrowse.setName("btnBrowse"); // NOI18N
+        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrowseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout locationIncludesLayout = new javax.swing.GroupLayout(locationIncludes);
         locationIncludes.setLayout(locationIncludesLayout);
         locationIncludesLayout.setHorizontalGroup(
@@ -729,7 +738,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                                         .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                                        .addGap(120, 120, 120))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnBrowse)
+                                        .addGap(37, 37, 37))))
                             .addGroup(locationIncludesLayout.createSequentialGroup()
                                 .addGap(10, 10, 10)
                                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -914,8 +925,11 @@ public class PanelLocation extends PanelCanSetupHeader {
                                         .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(btnDeleteImage)))
                             .addComponent(btnNextImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(10, 10, 10)
+                            .addGroup(locationIncludesLayout.createSequentialGroup()
+                                .addComponent(btnSunAndMoon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnBrowse)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -943,7 +957,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                                 .addComponent(jLabel44)
                                 .addGap(155, 155, 155)
                                 .addComponent(btnDeleteVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE))))
                     .addComponent(jSeparator6, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(5, 5, 5))
             .addGroup(locationIncludesLayout.createSequentialGroup()
@@ -1212,6 +1226,10 @@ public class PanelLocation extends PanelCanSetupHeader {
         rdbLocationItemStateChanged(null);
     }//GEN-LAST:event_tblVisitMouseReleased
 
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+        app.getMainFrame().browseSelectedLocation(locationWL);
+    }//GEN-LAST:event_btnBrowseActionPerformed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
         if (fotos.size() > 0)
@@ -1222,6 +1240,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddVisit;
+    private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnBulkImport;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteVisit;

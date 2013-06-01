@@ -1,12 +1,16 @@
 package wildlog.data.dataobjects.wrappers;
 
 import java.util.Calendar;
+import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
+import wildlog.html.utils.UtilsHTML;
 
 /**
  * This class wraps a Sighting object in order to return just the Creature name as the toString() value.
  */
-public class SightingWrapper {
+public class SightingWrapper implements DataObjectWithHTML, DataObjectWithWildLogFile {
     // Variables
     private Sighting sighting;
     private boolean isForLocation;
@@ -31,6 +35,16 @@ public class SightingWrapper {
 
     public Sighting getSighting() {
         return sighting;
+    }
+
+    @Override
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
+        return sighting.toHTML(inIsRecursive, inIncludeImages, inApp, inExportType);
+    }
+
+    @Override
+    public String getWildLogFileID() {
+        return sighting.getWildLogFileID();
     }
 
 }

@@ -125,7 +125,9 @@
                                               <Component id="jScrollPane1" pref="0" max="32767" attributes="0"/>
                                               <Component id="jScrollPane2" pref="0" max="32767" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
+                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                          <Component id="btnBrowse" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
                               </Group>
@@ -371,11 +373,15 @@
                                   </Group>
                               </Group>
                               <Component id="btnNextImage" min="-2" pref="50" max="-2" attributes="0"/>
-                              <Component id="btnSunAndMoon" alignment="0" min="-2" pref="35" max="-2" attributes="0"/>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnSunAndMoon" min="-2" pref="35" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="btnBrowse" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
                       </Group>
                   </Group>
-                  <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="jSeparator7" min="-2" pref="10" max="-2" attributes="0"/>
@@ -408,7 +414,7 @@
                                   <Component id="jLabel44" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="155" max="-2" attributes="0"/>
                                   <Component id="btnDeleteVisit" min="-2" pref="30" max="-2" attributes="0"/>
-                                  <EmptySpace pref="17" max="32767" attributes="0"/>
+                                  <EmptySpace pref="7" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -1265,6 +1271,15 @@
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBulkImportActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnBrowse">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Browse"/>
+            <Property name="name" type="java.lang.String" value="btnBrowse" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBrowseActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

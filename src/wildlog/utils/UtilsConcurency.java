@@ -21,21 +21,23 @@ public class UtilsConcurency {
     }
 
     public static boolean tryAndWaitToShutdownExecutorService(ExecutorService inExecutorService) {
-        inExecutorService.shutdown();
-        try {
-            int count = 0;
-            while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < 10) {
-                count++;
-                System.out.println("Bulk Upload: Timer expired while loading images... Resetting... " + count);
+        if (inExecutorService != null) {
+            inExecutorService.shutdown();
+            try {
+                int count = 0;
+                while(!inExecutorService.awaitTermination(6, TimeUnit.MINUTES) && count < 10) {
+                    count++;
+                    System.out.println("Bulk Upload: Timer expired while loading images... Resetting... " + count);
+                }
+                if (!inExecutorService.isTerminated()) {
+                    System.err.println("Bulk Upload Error: Terminating bulk import... " + count);
+                    inExecutorService.shutdownNow();
+                    return false;
+                }
             }
-            if (!inExecutorService.isTerminated()) {
-                System.err.println("Bulk Upload Error: Terminating bulk import... " + count);
-                inExecutorService.shutdownNow();
-                return false;
+            catch (InterruptedException ex) {
+                ex.printStackTrace(System.err);
             }
-        }
-        catch (InterruptedException ex) {
-            ex.printStackTrace(System.err);
         }
         return true;
     }

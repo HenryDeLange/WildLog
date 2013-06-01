@@ -26,6 +26,14 @@ import wildlog.utils.UtilsImageProcessing;
 
 public class GPSDialog extends JDialog {
     private static String lastFilePath = "";
+    private static Latitudes prevLat;
+    private static int prevLatDeg;
+    private static int prevLatMin;
+    private static double prevLatSec;
+    private static Longitudes prevLon;
+    private static int prevLonDeg;
+    private static int prevLonMin;
+    private static double prevLonSec;
     private boolean selectionMade = false;
     private DataObjectWithGPS dataObjectWithGPS;
     private double uiLatitude = 0.0;
@@ -455,14 +463,14 @@ public class GPSDialog extends JDialog {
         }
         selectionMade = true;
         // Now update the "previous" GPS value
-        app.setPrevLat(dataObjectWithGPS.getLatitude());
-        app.setPrevLatDeg(dataObjectWithGPS.getLatDegrees());
-        app.setPrevLatMin(dataObjectWithGPS.getLatMinutes());
-        app.setPrevLatSec(dataObjectWithGPS.getLatSeconds());
-        app.setPrevLon(dataObjectWithGPS.getLongitude());
-        app.setPrevLonDeg(dataObjectWithGPS.getLonDegrees());
-        app.setPrevLonMin(dataObjectWithGPS.getLonMinutes());
-        app.setPrevLonSec(dataObjectWithGPS.getLonSeconds());
+        setPrevLat(dataObjectWithGPS.getLatitude());
+        setPrevLatDeg(dataObjectWithGPS.getLatDegrees());
+        setPrevLatMin(dataObjectWithGPS.getLatMinutes());
+        setPrevLatSec(dataObjectWithGPS.getLatSeconds());
+        setPrevLon(dataObjectWithGPS.getLongitude());
+        setPrevLonDeg(dataObjectWithGPS.getLonDegrees());
+        setPrevLonMin(dataObjectWithGPS.getLonMinutes());
+        setPrevLonSec(dataObjectWithGPS.getLonSeconds());
         // We are done, dispose this dialog
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -540,14 +548,14 @@ public class GPSDialog extends JDialog {
 
     private void btnUsePreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsePreviousActionPerformed
         DataObjectWithGPS temp = new DataObjectWithGPS() {};
-        temp.setLatitude(app.getPrevLat());
-        temp.setLatDegrees(app.getPrevLatDeg());
-        temp.setLatMinutes(app.getPrevLatMin());
-        temp.setLatSeconds(app.getPrevLatSec());
-        temp.setLongitude(app.getPrevLon());
-        temp.setLonDegrees(app.getPrevLonDeg());
-        temp.setLonMinutes(app.getPrevLonMin());
-        temp.setLonSeconds(app.getPrevLonSec());
+        temp.setLatitude(getPrevLat());
+        temp.setLatDegrees(getPrevLatDeg());
+        temp.setLatMinutes(getPrevLatMin());
+        temp.setLatSeconds(getPrevLatSec());
+        temp.setLongitude(getPrevLon());
+        temp.setLonDegrees(getPrevLonDeg());
+        temp.setLonMinutes(getPrevLonMin());
+        temp.setLonSeconds(getPrevLonSec());
         loadUIValues(temp);
         btnSaveActionPerformed(evt);
     }//GEN-LAST:event_btnUsePreviousActionPerformed
@@ -642,6 +650,75 @@ public class GPSDialog extends JDialog {
 
     public boolean isSelectionMade() {
         return selectionMade;
+    }
+
+    // Getters and Setters
+    public static Latitudes getPrevLat() {
+        if (prevLat == null)
+            prevLat = Latitudes.NONE;
+        return prevLat;
+    }
+
+    public static void setPrevLat(Latitudes inPrevLat) {
+        prevLat = inPrevLat;
+    }
+
+    public static int getPrevLatDeg() {
+        return prevLatDeg;
+    }
+
+    public static void setPrevLatDeg(int inPrevLatDeg) {
+        prevLatDeg = inPrevLatDeg;
+    }
+
+    public static int getPrevLatMin() {
+        return prevLatMin;
+    }
+
+    public static void setPrevLatMin(int inPrevLatMin) {
+        prevLatMin = inPrevLatMin;
+    }
+
+    public static double getPrevLatSec() {
+        return prevLatSec;
+    }
+
+    public static void setPrevLatSec(double inPrevLatSec) {
+        prevLatSec = inPrevLatSec;
+    }
+
+    public static Longitudes getPrevLon() {
+        if (prevLon == null)
+            prevLon = Longitudes.NONE;
+        return prevLon;
+    }
+
+    public static void setPrevLon(Longitudes inPrevLon) {
+        prevLon = inPrevLon;
+    }
+
+    public static int getPrevLonDeg() {
+        return prevLonDeg;
+    }
+
+    public static void setPrevLonDeg(int inPrevLonDeg) {
+        prevLonDeg = inPrevLonDeg;
+    }
+
+    public static int getPrevLonMin() {
+        return prevLonMin;
+    }
+
+    public static void setPrevLonMin(int inPrevLonMin) {
+        prevLonMin = inPrevLonMin;
+    }
+
+    public static double getPrevLonSec() {
+        return prevLonSec;
+    }
+
+    public static void setPrevLonSec(double inPrevLonSec) {
+        prevLonSec = inPrevLonSec;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

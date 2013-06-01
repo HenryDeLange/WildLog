@@ -217,6 +217,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnChecklist = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
         btnSlideshow = new javax.swing.JButton();
+        btnBrowse = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(230, 228, 240));
         setMaximumSize(new java.awt.Dimension(1005, 585));
@@ -634,6 +635,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
+        btnBrowse.setText("Browse");
+        btnBrowse.setName("btnBrowse"); // NOI18N
+        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrowseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout visitIncludesLayout = new javax.swing.GroupLayout(visitIncludes);
         visitIncludes.setLayout(visitIncludesLayout);
         visitIncludesLayout.setHorizontalGroup(
@@ -650,9 +659,15 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(2, 2, 2)
                         .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(visitIncludesLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel53)
-                        .addGap(8, 8, 8)
+                        .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(visitIncludesLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel53)
+                                .addGap(8, 8, 8))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(btnBrowse)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, visitIncludesLayout.createSequentialGroup()
@@ -815,7 +830,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                 .addGap(8, 8, 8)
                                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel53)))
+                                    .addGroup(visitIncludesLayout.createSequentialGroup()
+                                        .addComponent(jLabel53)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnBrowse))))
                             .addGroup(visitIncludesLayout.createSequentialGroup()
                                 .addGap(5, 5, 5)
                                 .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1169,6 +1187,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+        app.getMainFrame().browseSelectedVisit(visit);
+    }//GEN-LAST:event_btnBrowseActionPerformed
+
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
@@ -1190,6 +1212,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
+    private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteSighting;

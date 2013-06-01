@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -61,6 +62,8 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.ElementType;
@@ -108,13 +111,19 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private Map<String, Image> oldPreloadedImages = null;
     private ExecutorService executorService;
     private final Object imageCacheLock = new Object();
+    private int browseTabRefreshCounterForAddOrDelete = 0;
 
     public WildLogView(WildLogApp inApp) {
         app = inApp;
         searchElement = new Element();
         searchLocation = new Location();
+
         // Call the generated code to build the GUI
         initComponents();
+
+        // Set some configuration for the tree browser
+        treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
 
         // Setup image cache for the browse tab
         oldPreloadedImages = new HashMap<>(CACHE_LIMIT);
@@ -310,6 +319,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         cmbElementTypesBrowseTab = new javax.swing.JComboBox();
         btnRotate = new javax.swing.JButton();
         btnViewEXIF = new javax.swing.JButton();
+        btnRefreshBrowseTree = new javax.swing.JButton();
         tabLocation = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblLocation = new javax.swing.JTable();
@@ -432,7 +442,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.0");
+        jLabel12.setText("version 4.1");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
@@ -488,7 +498,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         tabHomeLayout.setHorizontalGroup(
             tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                .addContainerGap(866, Short.MAX_VALUE)
+                .addContainerGap(846, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(tabHomeLayout.createSequentialGroup()
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -559,7 +569,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 133, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -623,7 +633,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         );
         imgBrowsePhotosLayout.setVerticalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jScrollPane5.setName("jScrollPane5"); // NOI18N
@@ -654,6 +664,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnGoBrowseSelection.setToolTipText("Open the selected tree entry.");
         btnGoBrowseSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoBrowseSelection.setFocusPainted(false);
+        btnGoBrowseSelection.setFocusable(false);
         btnGoBrowseSelection.setName("btnGoBrowseSelection"); // NOI18N
         btnGoBrowseSelection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -661,29 +672,41 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
 
-        btnZoomIn.setAction(imgBrowsePhotos.getZoomInAction());
         btnZoomIn.setBackground(new java.awt.Color(235, 233, 221));
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnZoomIn.setText("Zoom");
         btnZoomIn.setToolTipText("Zoom the image in.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setFocusPainted(false);
+        btnZoomIn.setFocusable(false);
         btnZoomIn.setName("btnZoomIn"); // NOI18N
+        btnZoomIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomInActionPerformed(evt);
+            }
+        });
 
-        btnZoomOut.setAction(imgBrowsePhotos.getZoomOutAction());
         btnZoomOut.setBackground(new java.awt.Color(235, 233, 221));
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnZoomOut.setText("Zoom");
         btnZoomOut.setToolTipText("Zoom the image out.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setFocusPainted(false);
+        btnZoomOut.setFocusable(false);
         btnZoomOut.setName("btnZoomOut"); // NOI18N
+        btnZoomOut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomOutActionPerformed(evt);
+            }
+        });
 
         btnViewImage.setBackground(new java.awt.Color(235, 233, 221));
         btnViewImage.setText("Open Original File");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
         btnViewImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewImage.setFocusPainted(false);
+        btnViewImage.setFocusable(false);
+        btnViewImage.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnViewImage.setName("btnViewImage"); // NOI18N
         btnViewImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -696,6 +719,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnBrowsePrev.setToolTipText("Load the previous file.");
         btnBrowsePrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowsePrev.setFocusPainted(false);
+        btnBrowsePrev.setFocusable(false);
         btnBrowsePrev.setName("btnBrowsePrev"); // NOI18N
         btnBrowsePrev.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -708,6 +732,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnBrowseNext.setToolTipText("Load the next file.");
         btnBrowseNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowseNext.setFocusPainted(false);
+        btnBrowseNext.setFocusable(false);
         btnBrowseNext.setName("btnBrowseNext"); // NOI18N
         btnBrowseNext.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -745,8 +770,9 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnReport.setToolTipText("View the report for the selected tree entry.");
         btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReport.setFocusPainted(false);
+        btnReport.setFocusable(false);
         btnReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnReport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnReport.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnReport.setName("btnReport"); // NOI18N
         btnReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -759,6 +785,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnDefault.setText("Default");
         btnDefault.setToolTipText("Set the current file as the default (first) file.");
         btnDefault.setFocusPainted(false);
+        btnDefault.setFocusable(false);
         btnDefault.setName("btnDefault"); // NOI18N
         btnDefault.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -777,16 +804,21 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             }
         });
 
-        btnRotate.setAction(imgBrowsePhotos.getRotateCounterClockwiseAction());
         btnRotate.setBackground(new java.awt.Color(235, 233, 221));
         btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
-        btnRotate.setText("Rotate");
+        btnRotate.setText("Rotate Image");
         btnRotate.setToolTipText("Rotate the image counter clockwise.");
         btnRotate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRotate.setFocusPainted(false);
+        btnRotate.setFocusable(false);
         btnRotate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnRotate.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRotate.setName("btnRotate"); // NOI18N
+        btnRotate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRotateActionPerformed(evt);
+            }
+        });
 
         btnViewEXIF.setBackground(new java.awt.Color(235, 233, 221));
         btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
@@ -794,12 +826,24 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         btnViewEXIF.setToolTipText("View the EXIF meta data for the image.");
         btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewEXIF.setFocusPainted(false);
+        btnViewEXIF.setFocusable(false);
         btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnViewEXIF.setName("btnViewEXIF"); // NOI18N
         btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewEXIFActionPerformed(evt);
+            }
+        });
+
+        btnRefreshBrowseTree.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        btnRefreshBrowseTree.setText("Refresh Tree");
+        btnRefreshBrowseTree.setToolTipText("This will collapse all tree nodes and reload the data.");
+        btnRefreshBrowseTree.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnRefreshBrowseTree.setName("btnRefreshBrowseTree"); // NOI18N
+        btnRefreshBrowseTree.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshBrowseTreeActionPerformed(evt);
             }
         });
 
@@ -818,17 +862,18 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addComponent(rdbBrowseDate))
                     .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(tabFotoLayout.createSequentialGroup()
-                                .addGap(113, 113, 113)
-                                .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(tabFotoLayout.createSequentialGroup()
+                            .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+                    .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(tabFotoLayout.createSequentialGroup()
+                        .addComponent(btnRefreshBrowseTree, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
                 .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addGap(9, 9, 9)
@@ -843,17 +888,19 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addGap(2, 2, 2)
                         .addComponent(btnBrowseNext)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnViewImage))
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnReport, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                            .addComponent(btnRotate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -863,21 +910,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabFotoLayout.createSequentialGroup()
                 .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(tabFotoLayout.createSequentialGroup()
-                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rdbBrowseLocation)
-                            .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(rdbBrowseElement)
-                                .addComponent(rdbBrowseDate)))
-                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(tabFotoLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(5, 5, 5)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(tabFotoLayout.createSequentialGroup()
                         .addGap(5, 5, 5)
                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -890,25 +922,43 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                                         .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(btnBrowseNext, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(tabFotoLayout.createSequentialGroup()
-                                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(2, 2, 2)
                                         .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnRotate))))
                                 .addGap(5, 5, 5)
                                 .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)))
                     .addGroup(tabFotoLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(tabFotoLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rdbBrowseLocation)
+                                    .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(rdbBrowseElement)
+                                        .addComponent(rdbBrowseDate)))
+                                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnRefreshDates, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(tabFotoLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane4)
+                                .addGap(5, 5, 5))
+                            .addGroup(tabFotoLayout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(tabFotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnRefreshBrowseTree, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(5, 5, 5))
         );
 
@@ -1090,17 +1140,17 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                             .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE))
                     .addGroup(tabLocationLayout.createSequentialGroup()
                         .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
+                            .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-                            .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+                            .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1118,20 +1168,20 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(tabLocationLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(tabLocationLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(tabLocationLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1313,7 +1363,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE))
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1331,7 +1381,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                         .addComponent(btnAddElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(btnDeleteElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE))
+                    .addComponent(scrlElement, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(tabElementLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1346,7 +1396,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                     .addGroup(tabElementLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                         .addGap(4, 4, 4)
                         .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -1931,29 +1981,40 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         dtpEndDate.setVisible(false);
         btnRefreshDates.setVisible(false);
         cmbElementTypesBrowseTab.setVisible(false);
-        rdbBrowseLocationItemStateChanged(null);
-        rdbBrowseElementItemStateChanged(null);
-        rdbBrowseDateItemStateChanged(null);
+// FIXME: hierdie werk steeds nie, want die tree stoor die hele data object, dus selfs as d dienaam nie verander nie is die content steeds verkeerd...
+// FIXME: (Hoekom werk sightings wel reg... Dit werk vir sightings want die object word gebruik in die edit, waar die res nuwe instances load van die DB...)
+        // Check whether data objects were added or deleted
+//        if (WildLogDataState.getCounterForAddOrDelete() < browseTabRefreshCounterForAddOrDelete) {
+//            // Incredibily enough the counter has gone through all positive integers
+//            browseTabRefreshCounterForAddOrDelete = -1;
+//        }
+//        if (browseTabRefreshCounterForAddOrDelete < WildLogDataState.getCounterForAddOrDelete()) {
+//            // Reload the nodes, since new ones where added or removed
+//            rdbBrowseLocationItemStateChanged(null);
+//            rdbBrowseElementItemStateChanged(null);
+//            rdbBrowseDateItemStateChanged(null);
+//            browseTabRefreshCounterForAddOrDelete = WildLogDataState.getCounterForAddOrDelete();
+//        }
+//        // Check whether data object's names have changed
+//        if (WildLogDataState.getCounterForAddOrDelete() < browseTabRefreshCounterForAddOrDelete) {
+//            // Incredibily enough the counter has gone through all positive integers
+//            browseTabRefreshCounterForAddOrDelete = -1;
+//        }
+//        if (browseTabRefreshCounterForAddOrDelete < WildLogDataState.getCounterForAddOrDelete()) {
+//            // Reload the nodes, since new ones where added or removed
+//            rdbBrowseLocationItemStateChanged(null);
+//            rdbBrowseElementItemStateChanged(null);
+//            rdbBrowseDateItemStateChanged(null);
+//            browseTabRefreshCounterForAddOrDelete = WildLogDataState.getCounterForAddOrDelete();
+//        }
         if (!rdbBrowseElement.isSelected() && !rdbBrowseLocation.isSelected() && !rdbBrowseDate.isSelected()) {
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("Please select a category to browse");
             treBrowsePhoto.setModel(new DefaultTreeModel(root));
         }
-        treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
-        txtBrowseInfo.setText("");
-        lblNumberOfImages.setText("");
-        try {
-            imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
-            if (imgBrowsePhotos.getImage() != null) {
-                if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                else
-                    imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
-            }
-        }
-        catch (IOException ex) {
-            ex.printStackTrace(System.err);
-        }
+//        treBrowsePhoto.setSelectionPaths(null);
+//        txtBrowseInfo.setText("");
+//        lblNumberOfImages.setText("");
+//        setupFile(null);
     }//GEN-LAST:event_tabFotoComponentShown
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
@@ -2007,14 +2068,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
 
     private void treBrowsePhotoValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treBrowsePhotoValueChanged
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            txtBrowseInfo.setText("");
-            try {
-                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
-                lblNumberOfImages.setText("");
-            }
-            catch (IOException ex) {
-                ex.printStackTrace(System.err);
-            }
             // Remove the old preloaded images for the selected node (to save memory)
             synchronized (imageCacheLock) {
                 if (oldPreloadedImages != null) {
@@ -2022,35 +2075,14 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 }
             }
             imageIndex = 0;
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
-                Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtBrowseInfo.setText(tempLocation.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
-                setupFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
-                Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtBrowseInfo.setText(tempElement.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
-                setupFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
-                Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                txtBrowseInfo.setText(tempVisit.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempVisit.getWildLogFileID()));
-                setupFile(fotos);
-            }
-            else
-            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
-                Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                txtBrowseInfo.setText(tempSighting.toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
-                        .replace( "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithHTML
+                && ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                txtBrowseInfo.setText(((DataObjectWithHTML)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
+                        .toHTML(false, false, app, UtilsHTML.ImageExportTypes.ForHTML)
+                            .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
+                List<WildLogFile> fotos = app.getDBI().list(
+                        new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
+                            .getWildLogFileID()));
                 setupFile(fotos);
             }
             else {
@@ -2071,13 +2103,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
-                // Scale image
-                if (imgBrowsePhotos.getImage() != null) {
-                    if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                    else
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
-                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -2096,13 +2121,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
-                // Scale image
-                if (imgBrowsePhotos.getImage() != null) {
-                    if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                    else
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
-                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -2121,13 +2139,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
             try {
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                 lblNumberOfImages.setText("");
-                // Scale image
-                if (imgBrowsePhotos.getImage() != null) {
-                    if (imgBrowsePhotos.getImage().getHeight(null) >= imgBrowsePhotos.getImage().getWidth(null))
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getHeight(null));
-                    else
-                        imgBrowsePhotos.setScale(500.0/imgBrowsePhotos.getImage().getWidth(null));
-                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
@@ -3518,6 +3529,24 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         }
     }//GEN-LAST:event_calcDurationMenuItemActionPerformed
 
+    private void btnRefreshBrowseTreeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshBrowseTreeActionPerformed
+        rdbBrowseLocationItemStateChanged(null);
+        rdbBrowseElementItemStateChanged(null);
+        rdbBrowseDateItemStateChanged(null);
+    }//GEN-LAST:event_btnRefreshBrowseTreeActionPerformed
+
+    private void btnZoomInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomInActionPerformed
+        imgBrowsePhotos.setScale(imgBrowsePhotos.getScale()*1.5);
+    }//GEN-LAST:event_btnZoomInActionPerformed
+
+    private void btnZoomOutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomOutActionPerformed
+        imgBrowsePhotos.setScale(imgBrowsePhotos.getScale()/1.5);
+    }//GEN-LAST:event_btnZoomOutActionPerformed
+
+    private void btnRotateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateActionPerformed
+        //TODO: rotate die actual image file en delete die ou thumbnails
+    }//GEN-LAST:event_btnRotateActionPerformed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -3598,7 +3627,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private void loadPrevFile(List<WildLogFile> inFotos) {
         if (inFotos.size() > imageIndex) {
             imageIndex--;
-            if (imageIndex < 0) imageIndex = inFotos.size() - 1;
+            if (imageIndex == 0) {
+                Toolkit.getDefaultToolkit().beep();
+            }
+            if (imageIndex < 0) {
+                imageIndex = inFotos.size() - 1;
+            }
             setupFile(inFotos);
         }
         else {
@@ -3609,7 +3643,12 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private void loadNextFile(List<WildLogFile> inFotos) {
         if (inFotos.size() > imageIndex) {
             imageIndex++;
-            if (imageIndex >= inFotos.size()) imageIndex = 0;
+            if (imageIndex == inFotos.size() - 1) {
+                Toolkit.getDefaultToolkit().beep();
+            }
+            if (imageIndex >= inFotos.size()) {
+                imageIndex = 0;
+            }
             setupFile(inFotos);
         }
         else {
@@ -3628,44 +3667,74 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
         }
     }
 
-    private void lookupCachedImage(final List<WildLogFile> inFiles) {
-        // FIXME: Daars nog 'n werd issue as mens omtrent 24 keer vinnig next druk op groot kruger fotos dan wys daar net 'n blank screen... Dink as ek die executor stop is wat die veroorsaak...
-//        if (executorService != null) {
-//            executorService.shutdownNow();
-//        }
-        executorService = Executors.newFixedThreadPool(app.getThreadCount());
-        int startIndex = imageIndex - CACHE_LIMIT/2;
-        if (startIndex < 0) {
-            startIndex = 0;
+    private void lookupCachedImage(final List<WildLogFile> inFiles) throws IOException {
+        if (!oldPreloadedImages.containsKey(inFiles.get(imageIndex).getFilePath(true))) {
+            // The image will be loaded, so setup the loading screen so long.
+            imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Loading.png"));
         }
+        executorService = Executors.newFixedThreadPool(app.getThreadCount());
         int size = (int) imgBrowsePhotos.getSize().getWidth();
         if (size > (int) imgBrowsePhotos.getSize().getHeight()) {
             size = (int) imgBrowsePhotos.getSize().getHeight();
         }
-        // TODO: implement wrapping van die cache as mens by die einde kom en weer begin om loop (of stop die next buttons)
-        final int finalSize = size;
+        int startIndex = 0;
+        if (inFiles.size() > CACHE_LIMIT) {
+            startIndex = imageIndex - CACHE_LIMIT/2;
+        }
+        if (startIndex < 0) {
+            startIndex = 0;
+        }
+        // Maak die finale grote twee keer groter om te help met die zoom, dan hoef ek nie weer images te load nie, en mens kan altyd dan original kyk vir ful resolution
+        final int finalSize = size*2;
         final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT);
-        for (int t = startIndex; t < inFiles.size() && t < startIndex + CACHE_LIMIT; t++) {
+        final Object selectedNode = treBrowsePhoto.getLastSelectedPathComponent();
+        int t = startIndex;
+        for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT; t++) {
             final WildLogFile wildLogFile = inFiles.get(t);
             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
                 Image tempImage = oldPreloadedImages.get(wildLogFile.getFilePath(true));
                 if (tempImage != null) {
                     newPreloadedImages.put(wildLogFile.getFilePath(true), tempImage);
-                    if (t == imageIndex) callbackToDoTheImageLoad(tempImage);
+                    callbackToDoTheImageLoad(tempImage, selectedNode, t);
                 }
                 else {
-                    final int i = t;
+                    final int tHandle = t;
                     executorService.submit(new Runnable() {
                         @Override
                         public void run() {
                             Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getFilePath(true), finalSize).getImage();
                             newPreloadedImages.put(wildLogFile.getFilePath(true), tempConcImage);
-                            if (i == imageIndex) callbackToDoTheImageLoad(tempConcImage);
+                            callbackToDoTheImageLoad(tempConcImage, selectedNode, tHandle);
                         }
                     });
                 }
             }
         }
+        // Kyk of die ek moet begin wrap
+        if (t == inFiles.size() && inFiles.size() > CACHE_LIMIT && t < startIndex + CACHE_LIMIT) {
+            for (int i = 0; i <= startIndex + CACHE_LIMIT - t - i; i++) {
+                final WildLogFile wildLogFile = inFiles.get(i);
+                if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                    Image tempImage = oldPreloadedImages.get(wildLogFile.getFilePath(true));
+                    if (tempImage != null) {
+                        newPreloadedImages.put(wildLogFile.getFilePath(true), tempImage);
+                        callbackToDoTheImageLoad(tempImage, selectedNode, i);
+                    }
+                    else {
+                        final int iHandle = i;
+                        executorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getFilePath(true), finalSize).getImage();
+                                newPreloadedImages.put(wildLogFile.getFilePath(true), tempConcImage);
+                                callbackToDoTheImageLoad(tempConcImage, selectedNode, iHandle);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        // refresh die map
         synchronized (imageCacheLock) {
             oldPreloadedImages.clear();
             oldPreloadedImages = newPreloadedImages;
@@ -3678,8 +3747,6 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 try {
                     lblNumberOfImages.setText(imageIndex+1 + " of " + inFotos.size());
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.IMAGE)) {
-                        // TODO: Gebruik 'n mooi loading icon hiervoor
-                        imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
                         lookupCachedImage(inFotos);
                     }
                     else
@@ -3721,13 +3788,61 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
                 imgBrowsePhotos.setToolTipText("");
             }
         }
-        // TODO: implement dalk ander zoom code wat 'n nuwe scaledimage maak
     }
 
-    private void callbackToDoTheImageLoad(Image inImage) {
-        imgBrowsePhotos.setImage(inImage);
+    private void callbackToDoTheImageLoad(Image inImage, Object inSelectedNode, int inImageIndex) {
+        // Only display the image if it is the current active node.
+        // (This is to prevent old node's files that finished after the active node from overwriting the displayed image.)
+        if (inImageIndex == imageIndex && treBrowsePhoto.getLastSelectedPathComponent() == inSelectedNode) {
+            imgBrowsePhotos.setImage(inImage);
+            imgBrowsePhotos.setScale(0.5);
+        }
     }
 
+    public void browseSelectedElement(Element inElement) {
+        rdbBrowseElement.setSelected(true);
+        for (int t = 0; t < treBrowsePhoto.getRowCount()-1; t++) {
+            if (inElement.getPrimaryName().equals(treBrowsePhoto.getPathForRow(t+1).getLastPathComponent().toString())) {
+                treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t+1));
+                treBrowsePhoto.scrollRowToVisible(t+1);
+                treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t+1));
+                break;
+            }
+        }
+        tabbedPanel.setSelectedIndex(1);
+    }
+
+    public void browseSelectedLocation(Location inLocation) {
+        rdbBrowseLocation.setSelected(true);
+        for (int t = 0; t < treBrowsePhoto.getRowCount()-1; t++) {
+            if (inLocation.getName().equals(treBrowsePhoto.getPathForRow(t+1).getLastPathComponent().toString())) {
+                treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t+1));
+                treBrowsePhoto.scrollRowToVisible(t+1);
+                treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t+1));
+                break;
+            }
+        }
+        tabbedPanel.setSelectedIndex(1);
+    }
+
+    public void browseSelectedVisit(Visit inVisit) {
+        rdbBrowseLocation.setSelected(true);
+        for (int t = 0; t < treBrowsePhoto.getRowCount()-1; t++) {
+            if (inVisit.getLocationName().equals(treBrowsePhoto.getPathForRow(t+1).getLastPathComponent().toString())) {
+                treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t+1));
+                for (int i = 0; i < treBrowsePhoto.getModel().getChildCount(treBrowsePhoto.getPathForRow(t+1).getLastPathComponent()); i++) {
+                    if (inVisit.getName().equals(treBrowsePhoto.getPathForRow(t+i+1).getLastPathComponent().toString())) {
+                        treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t+i+1));
+                        treBrowsePhoto.scrollRowToVisible(t+i+1);
+                        treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(t+i+1));
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        tabbedPanel.setSelectedIndex(1);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
@@ -3745,6 +3860,7 @@ public final class WildLogView extends JFrame implements PanelNeedsRefreshWhenSi
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoLocation_LocTab;
     private javax.swing.JButton btnGoVisit_LocTab;
+    private javax.swing.JButton btnRefreshBrowseTree;
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnReport;
     private javax.swing.JButton btnRotate;

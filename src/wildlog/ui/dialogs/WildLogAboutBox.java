@@ -50,7 +50,7 @@ public class WildLogAboutBox extends JDialog {
         versionLabel.setText("Product Version:");
         versionLabel.setName("versionLabel"); // NOI18N
 
-        appVersionLabel.setText("4.0");
+        appVersionLabel.setText("4.1");
         appVersionLabel.setName("appVersionLabel"); // NOI18N
 
         vendorLabel.setFont(vendorLabel.getFont().deriveFont(vendorLabel.getFont().getStyle() | java.awt.Font.BOLD));
