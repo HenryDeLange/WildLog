@@ -5,6 +5,7 @@ import com.drew.imaging.jpeg.JpegProcessingException;
 import com.drew.metadata.Metadata;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -26,6 +27,8 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
+import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class BulkUploadDataLoader {
@@ -43,7 +46,7 @@ public class BulkUploadDataLoader {
             executorService.execute(new Runnable() {
                         @Override
                         public void run() {
-                            loadFileData(tempFile, imageList);
+                            loadFileData(tempFile.toPath(), imageList);
                             try {
                                 inProgressbarTask.setTaskProgress(counter, 0, files.size());
                             }
@@ -53,7 +56,7 @@ public class BulkUploadDataLoader {
                         }
                     });
         }
-        if (!UtilsConcurency.tryAndWaitToShutdownExecutorService(executorService)) {
+        if (!UtilsConcurency.waitForExecutorToShutdown(executorService)) {
             return null;
         }
         // The images must be sorted according to date to make sure they are grouped correctly into sightings
@@ -68,11 +71,11 @@ public class BulkUploadDataLoader {
             // Start off with a value that is garuanteed to be updated for the first record, to get things started...
             Date currentSightingDate = new Date(imageList.get(0).getDate().getTime() - timeDiffInMiliseconds*2);
             // If no image has any date, then all will be in this initial SightingWrapper.
-            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
+            BulkUploadSightingWrapper sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
             for (BulkUploadImageFileWrapper temp : imageList) {
                 if (!temp.isInSameSighting(currentSightingDate, timeDiffInMiliseconds)) {
                     // Start a new sighting and image list for the linked images
-                    sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
+                    sightingKey = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
                     // Set other defaults for the sighting
                     setDefaultsForNewBulkUploadSightings(sightingKey);
                     // Update the map
@@ -110,11 +113,11 @@ public class BulkUploadDataLoader {
         inBulkUploadSightingWrapper.setLifeStatus(LifeStatus.ALIVE);
     }
 
-    private static void loadFileData(File inFile, List<BulkUploadImageFileWrapper> inImageList) {
+    private static void loadFileData(Path inFile, List<BulkUploadImageFileWrapper> inImageList) {
         // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
         Metadata metadata = null;
         try {
-            metadata = JpegMetadataReader.readMetadata(inFile);
+            metadata = JpegMetadataReader.readMetadata(inFile.toFile());
         }
         catch (JpegProcessingException ex) {
             ex.printStackTrace(System.err);
@@ -125,12 +128,12 @@ public class BulkUploadDataLoader {
         Date date = UtilsImageProcessing.getDateFromImage(metadata, inFile);
         if (date != null) {
             BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
-                    inFile, UtilsImageProcessing.getScaledIcon(inFile, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM_SMALL), date);
+                    inFile, UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize()), date);
             wrapper.setDataObjectWithGPS(UtilsImageProcessing.getExifGpsFromJpeg(metadata));
             inImageList.add(wrapper);
         }
         else {
-            System.out.println("Could not determine date for image file: " + inFile.getAbsolutePath());
+            System.out.println("Could not determine date for image file: " + inFile.toAbsolutePath());
         }
     }
 
@@ -156,13 +159,13 @@ public class BulkUploadDataLoader {
         if (inRoot != null) {
             File[] tempFileList = inRoot.listFiles();
             for (File tempFile : tempFileList) {
-            if (inIncludeFolders && tempFile.isDirectory()) {
-                list.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
-            }
-            else {
-                String tempName = tempFile.getName().toLowerCase();
-                if (tempName.endsWith("jpg") || tempName.endsWith("jpeg"))
-                    list.add(tempFile);
+                if (inIncludeFolders && tempFile.isDirectory()) {
+                    list.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
+                }
+                else {
+                    if (WildLogFileExtentions.Images.isJPG(tempFile.toPath())) {
+                        list.add(tempFile);
+                    }
                 }
             }
         }

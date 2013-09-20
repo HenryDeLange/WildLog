@@ -5,7 +5,9 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
-import wildlog.ui.panels.*;
+import wildlog.ui.panels.PanelElement;
+import wildlog.ui.panels.PanelLocation;
+import wildlog.ui.panels.PanelVisit;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 

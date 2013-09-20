@@ -6,14 +6,15 @@ public enum WaterDependancy {
     HIGH("Needs access to water"),
     OPPORTUNISTIC("Not needed, but will use it"),
     LOW("Not effected/interisted"),
-    NONE("None");
-    
+    UNKNOWN("Unknown"),
+    NONE("");
+
     private String text;
-    
+
     WaterDependancy(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;
@@ -25,6 +26,7 @@ public enum WaterDependancy {
         if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
         if (inText.equalsIgnoreCase(OPPORTUNISTIC.text)) return OPPORTUNISTIC;
         if (inText.equalsIgnoreCase(LOW.text)) return LOW;
+        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }

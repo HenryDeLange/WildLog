@@ -1,14 +1,8 @@
 package wildlog.ui.dialogs;
 
-import KmlGenerator.KmlGenerator;
-import KmlGenerator.objects.KmlEntry;
 import java.awt.Color;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import wildlog.WildLogApp;
@@ -18,13 +12,11 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.mapping.utils.UtilsMapGenerator;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 // TODO: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
@@ -65,8 +57,7 @@ public class MappingDialog extends JDialog {
         }
         else {
             if (element.getScientificName() != null && !element.getScientificName().isEmpty()) {
-                // FIXME: Case sensitivaty mag dalk 'n issue wees op ander opperating systems
-                File file = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
+                File file = WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(element.getScientificName()).resolve(element.getScientificName() + ".shp").toFile();
                 if (!file.exists() || file.isDirectory()) {
                     btnViewDistributionMap.setVisible(false);
                     btnViewSightingsAndDistributionMap.setVisible(false);
@@ -396,151 +387,99 @@ public class MappingDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 if (location != null) {
-                    setMessage("Starting the KML Export");
-                    setProgress(0);
-                    // First export to HTML to create the images
-                    setMessage("KML Export: Exporting images...");
-                    UtilsHTML.exportHTML(location, app);
-                    // Nou doen die KML deel
-                    String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
-                    File tempFile = new File(path);
-                    tempFile.mkdirs();
-                    // Make sure icons exist in the KML folder
-                    UtilsKML.copyKmlIcons(app, path);
-                    // KML Stuff
-                    KmlGenerator kmlgen = new KmlGenerator();
-                    String finalPath = path + "WildLogMarkers - Place (" + location.getName() + ").kml";
-                    kmlgen.setKmlPath(finalPath);
-                    // Get entries for Sightings and Locations
-                    Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
-                    setProgress(5);
-                    setMessage("KML Export: " + getProgress() + "%");
-                    // Sightings
-                    Sighting tempSighting = new Sighting();
-                    tempSighting.setLocationName(location.getName());
-                    List<Sighting> listSightings = app.getDBI().list(tempSighting);
-                    Collections.sort(listSightings);
-                    for (int t = 0; t < listSightings.size(); t++) {
-                        String key = listSightings.get(t).getElementName();
-                        if (!entries.containsKey(key)) {
-                            entries.put(key, new ArrayList<KmlEntry>());
-                         }
-                        entries.get(key).add(listSightings.get(t).toKML(t, app));
-                        setProgress(5 + (int)((t/(double)listSightings.size())*85));
-                        setMessage("KML Export: " + getProgress() + "%");
-                    }
-                    // Locations
-                    List<Location> listLocations = app.getDBI().list(new Location(location.getName()));
-                    Collections.sort(listLocations);
-                    for (int t = 0; t < listLocations.size(); t++) {
-                        String key = listLocations.get(t).getName();
-                        if (!entries.containsKey(key)) {
-                            entries.put(key, new ArrayList<KmlEntry>());
-                         }
-                        entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
-                        setProgress(90 + (int)((t/(double)listLocations.size())*5));
-                        setMessage("KML Export: " + getProgress() + "%");
-                    }
-                    setProgress(95);
-                    setMessage("KML Export: " + getProgress() + "%");
-                    // Generate KML
-                    kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
-                    // Try to open the Kml file
-                    UtilsFileProcessing.openFile(finalPath);
-                    setProgress(100);
-                    setMessage("Done with the KML Export");
+                    UtilsKML.exportKML(location, this, app);
                 }
                 if (element != null) {
-                    setMessage("Starting the KML Export");
-                    setProgress(0);
-                    // First export to HTML to create images
-                    setMessage("KML Export: Exporting images...");
-                    UtilsHTML.exportHTML(element, app);
-                    // Nou doen die KML deel
-                    String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
-                    File tempFile = new File(path);
-                    tempFile.mkdirs();
-                    // Make sure icons exist in the KML folder
-                    UtilsKML.copyKmlIcons(app, path);
-                    // KML Stuff
-                    KmlGenerator kmlgen = new KmlGenerator();
-                    String finalPath = path + "WildLogMarkers - Creature (" + element.getPrimaryName() + ").kml";
-                    kmlgen.setKmlPath(finalPath);
-                    // Get entries for Sightings and Locations
-                    Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
-                    setProgress(5);
-                    setMessage("KML Export: " + getProgress() + "%");
-                    // Sightings
-                    Sighting tempSighting = new Sighting();
-                    tempSighting.setElementName(element.getPrimaryName());
-                    List<Sighting> listSightings = app.getDBI().list(tempSighting);
-                    Collections.sort(listSightings);
-                    for (int t = 0; t < listSightings.size(); t++) {
-                        String key = listSightings.get(t).getLocationName();
-                        if (!entries.containsKey(key)) {
-                            entries.put(key, new ArrayList<KmlEntry>());
-                         }
-                        entries.get(key).add(listSightings.get(t).toKML(t, app));
-                        setProgress(5 + (int)((t/(double)listSightings.size())*90));
-                        setMessage("KML Export: " + getProgress() + "%");
-                    }
-                    setProgress(95);
-                    setMessage("KML Export: " + getProgress() + "%");
-                    // Generate KML
-                    kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
-                    // Try to open the Kml file
-                    UtilsFileProcessing.openFile(finalPath);
-                    setProgress(100);
-                    setMessage("Done with the KML Export");
+                    UtilsKML.exportKML(element, this, app);
+//                    setMessage("Starting the KML Export");
+//                    setProgress(0);
+//                    // First export to HTML to create images
+//                    setMessage("KML Export: Exporting images...");
+//                    UtilsHTML.exportHTML(element, app);
+//                    // Nou doen die KML deel
+//                    Path path = WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath();
+//                    Files.createDirectories(path);
+//                    // Make sure icons exist in the KML folder
+//                    UtilsKML.copyKmlIcons(app, path);
+//                    // KML Stuff
+//                    KmlGenerator kmlgen = new KmlGenerator();
+//                    Path finalPath = path.resolve("WildLogMarkers - Creature (" + element.getPrimaryName() + ").kml");
+//                    kmlgen.setKmlPath(finalPath.toString());
+//                    // Get entries for Sightings and Locations
+//                    Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
+//                    setProgress(5);
+//                    setMessage("KML Export: " + getProgress() + "%");
+//                    // Sightings
+//                    Sighting tempSighting = new Sighting();
+//                    tempSighting.setElementName(element.getPrimaryName());
+//                    List<Sighting> listSightings = app.getDBI().list(tempSighting);
+//                    Collections.sort(listSightings);
+//                    for (int t = 0; t < listSightings.size(); t++) {
+//                        String key = listSightings.get(t).getLocationName();
+//                        if (!entries.containsKey(key)) {
+//                            entries.put(key, new ArrayList<KmlEntry>());
+//                         }
+//                        entries.get(key).add(listSightings.get(t).toKML(t, app));
+//                        setProgress(5 + (int)((t/(double)listSightings.size())*90));
+//                        setMessage("KML Export: " + getProgress() + "%");
+//                    }
+//                    setProgress(95);
+//                    setMessage("KML Export: " + getProgress() + "%");
+//                    // Generate KML
+//                    kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
+//                    // Try to open the Kml file
+//                    UtilsFileProcessing.openFile(finalPath);
+//                    setProgress(100);
+//                    setMessage("Done with the KML Export");
                 }
                 if (visit != null) {
-                    setMessage("Starting the KML Export");
-                    setProgress(0);
-                    // First export to HTML to create the images
-                    setMessage("KML Export: Exporting images...");
-                    UtilsHTML.exportHTML(visit, app);
-                    // Nou doen die KML deel
-                    String path = WildLogPaths.WILDLOG_EXPORT_KML.getFullPath();
-                    File tempFile = new File(path);
-                    tempFile.mkdirs();
-                    // Make sure icons exist in the KML folder
-                    UtilsKML.copyKmlIcons(app, path);
-                    // KML Stuff
-                    KmlGenerator kmlgen = new KmlGenerator();
-                    String finalPath = path + "WildLogMarkers - Period (" + visit.getName() + ").kml";
-                    kmlgen.setKmlPath(finalPath);
-                    // Get entries for Sightings and Locations
-                    Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
-                    setProgress(5);
-                    setMessage("KML Export: " + getProgress() + "%");
-                    // Sightings
-                    Sighting tempSighting = new Sighting();
-                    tempSighting.setVisitName(visit.getName());
-                    List<Sighting> listSightings = app.getDBI().list(tempSighting);
-                    Collections.sort(listSightings);
-                    for (int t = 0; t < listSightings.size(); t++) {
-                        String key = listSightings.get(t).getElementName();
-                        if (!entries.containsKey(key)) {
-                            entries.put(key, new ArrayList<KmlEntry>());
-                         }
-                        entries.get(key).add(listSightings.get(t).toKML(t, app));
-                        setProgress(5 + (int)((t/(double)listSightings.size())*90));
-                        setMessage("KML Export: " + getProgress() + "%");
-                    }
-                    setProgress(95);
-                    setMessage("KML Export: " + getProgress() + "%");
-                    // Location
-                    String key = visit.getLocationName();
-                    if (!entries.containsKey(key)) {
-                        entries.put(key, new ArrayList<KmlEntry>());
-                     }
-                    entries.get(key).add(app.getDBI().find(new Location(visit.getLocationName())).toKML(listSightings.size()+1, app));
-                    // Generate KML
-                    kmlgen.generateFile(entries, UtilsKML.getKmlStyles());
-                    // Try to open the Kml file
-                    UtilsFileProcessing.openFile(finalPath);
-                    setProgress(100);
-                    setMessage("Done with the KML Export");
+                    UtilsKML.exportKML(visit, this, app);
+//                    setMessage("Starting the KML Export");
+//                    setProgress(0);
+//                    // First export to HTML to create the images
+//                    setMessage("KML Export: Exporting images...");
+//                    UtilsHTML.exportHTML(visit, app);
+//                    // Nou doen die KML deel
+//                    Path path = WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath();
+//                    Files.createDirectories(path);
+//                    // Make sure icons exist in the KML folder
+//                    UtilsKML.copyKmlIcons(app, path);
+//                    // KML Stuff
+//                    KmlGenerator kmlgen = new KmlGenerator();
+//                    Path finalPath = path.resolve("WildLogMarkers - Period (" + visit.getName() + ").kml");
+//                    kmlgen.setKmlPath(finalPath.toString());
+//                    // Get entries for Sightings and Locations
+//                    Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>();
+//                    setProgress(5);
+//                    setMessage("KML Export: " + getProgress() + "%");
+//                    // Sightings
+//                    Sighting tempSighting = new Sighting();
+//                    tempSighting.setVisitName(visit.getName());
+//                    List<Sighting> listSightings = app.getDBI().list(tempSighting);
+//                    Collections.sort(listSightings);
+//                    for (int t = 0; t < listSightings.size(); t++) {
+//                        String key = listSightings.get(t).getElementName();
+//                        if (!entries.containsKey(key)) {
+//                            entries.put(key, new ArrayList<KmlEntry>());
+//                         }
+//                        entries.get(key).add(listSightings.get(t).toKML(t, app));
+//                        setProgress(5 + (int)((t/(double)listSightings.size())*90));
+//                        setMessage("KML Export: " + getProgress() + "%");
+//                    }
+//                    setProgress(95);
+//                    setMessage("KML Export: " + getProgress() + "%");
+//                    // Location
+//                    String key = visit.getLocationName();
+//                    if (!entries.containsKey(key)) {
+//                        entries.put(key, new ArrayList<KmlEntry>());
+//                     }
+//                    entries.get(key).add(app.getDBI().find(new Location(visit.getLocationName())).toKML(listSightings.size()+1, app));
+//                    // Generate KML
+//                    kmlgen.generateFile(entries, UtilsKML.getKmlStyles(iconPath));
+//                    // Try to open the Kml file
+//                    UtilsFileProcessing.openFile(finalPath);
+//                    setProgress(100);
+//                    setMessage("Done with the KML Export");
                 }
                 return null;
             }
@@ -551,7 +490,7 @@ public class MappingDialog extends JDialog {
     private void btnViewDistributionMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDistributionMapActionPerformed
         // Clear old points
         UtilsMapGenerator.clearMap(app, true);
-        File file = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
+        File file = WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(element.getScientificName()).resolve(element.getScientificName() + ".shp").toFile();
         UtilsMapGenerator.addDistributionMap(app, file);
         this.dispose();
         // Open Map
@@ -563,7 +502,7 @@ public class MappingDialog extends JDialog {
         // Clear old points
         UtilsMapGenerator.clearMap(app, true);
         // Load distribution map
-        File file = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_MAPS.getFullPath(), element.getScientificName(), element.getScientificName() + ".shp"));
+        File file = WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath().resolve(element.getScientificName()).resolve(element.getScientificName() + ".shp").toFile();
         UtilsMapGenerator.addDistributionMap(app, file);
         // Load points
         Sighting sigting = new Sighting();

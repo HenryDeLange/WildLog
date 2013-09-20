@@ -30,10 +30,16 @@ import javax.swing.border.LineBorder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
+import wildlog.WildLogApp;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
+import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class UtilsUI {
+
+    private UtilsUI() {
+    }
 
     public static void doClipboardCopy(String inText) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -56,37 +62,37 @@ public class UtilsUI {
             public void mouseReleased(MouseEvent e) {
                 mouseClicked(e);
             }
+
             @Override
             public void mouseClicked(MouseEvent inEvent) {
                 if ((inEvent.isPopupTrigger() || SwingUtilities.isRightMouseButton(inEvent))) {
-                    // Build the copy popup
                     JPopupMenu clipboardPopup = new JPopupMenu();
-                    JMenuItem copyUserNameItem = new JMenuItem("Copy to clipoard.");
-                    copyUserNameItem.addActionListener(new ActionListener() {
+                    // Build the copy popup
+                    JMenuItem copyItem = new JMenuItem("Copy Selected Text",
+                            UtilsImageProcessing.getScaledIcon(WildLogApp.class.getResource("resources/icons/copy.png"), WildLogThumbnailSizes.TINY.getSize()));
+                    copyItem.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            String text = inTextField.getSelectedText();
-                            if (text == null || text.isEmpty())
-                                text = inTextField.getText();
-                            doClipboardCopy(text);
+                            doClipboardCopy(inTextField.getSelectedText());
                         }
                     });
-                    clipboardPopup.add(copyUserNameItem);
+                    clipboardPopup.add(copyItem);
                     if (!inCopyOnly) {
                         // Build the paste popup
-                        JMenuItem copyPasswordItem = new JMenuItem("Paste from clipboard.");
-                        copyPasswordItem.addActionListener(new ActionListener() {
+                        JMenuItem pasteItem = new JMenuItem("Paste Selected Text",
+                                UtilsImageProcessing.getScaledIcon(WildLogApp.class.getResource("resources/icons/paste.png"), WildLogThumbnailSizes.TINY.getSize()));
+                        pasteItem.addActionListener(new ActionListener() {
                             @Override
-                            public void actionPerformed(ActionEvent inNestedEvent) {
+                            public void actionPerformed(ActionEvent e) {
                                 try {
-                                    inTextField.setText(doClipboardPaste());
+                                    inTextField.replaceSelection(doClipboardPaste());
                                 }
                                 catch (UnsupportedFlavorException | IOException | ClassNotFoundException ex) {
                                     ex.printStackTrace(System.err);
                                 }
                             }
                         });
-                        clipboardPopup.add(copyPasswordItem);
+                        clipboardPopup.add(pasteItem);
                     }
                     // Wrap up and show up the popup
                     clipboardPopup.pack();
@@ -166,11 +172,13 @@ public class UtilsUI {
                 int currentIndex = inTabbedPane.getSelectedIndex();
                 int maxIndex = inTabbedPane.getTabCount()-1;
                 int newIndex = currentIndex - scrollCount;
-                if (newIndex > maxIndex)
+                if (newIndex > maxIndex) {
                     newIndex = maxIndex;
+                }
                 else
-                if (newIndex < 0)
+                if (newIndex < 0) {
                     newIndex = 0;
+                }
                 inTabbedPane.setSelectedIndex(newIndex);
             }
         }
@@ -255,6 +263,34 @@ public class UtilsUI {
         });
         timer.start();
         return timer;
+    }
+
+    /**
+     * Vergelyk die twee Objects en kyk of hulle waarder eenders is. <br/>
+     * <b>WARNING: Gebruik die toString() (case-sensitive) vir meeste classes.</b>
+     * @param inObject1
+     * @param inObject2
+     * @return
+     */
+    public static boolean isTheSame(Object inObject1, Object inObject2) {
+        if (inObject1 == null && inObject2 == null) {
+            return true;
+        }
+        if ((inObject1 == null && inObject2 != null) || (inObject1 != null && inObject2 == null)) {
+            return false;
+        }
+        if (inObject1 != null && inObject2 != null) {
+            if (inObject1.toString() == null && inObject2.toString() == null) {
+                return true;
+            }
+            if ((inObject1.toString() == null && inObject2.toString() != null) || (inObject1.toString() != null && inObject2.toString() == null)) {
+                return false;
+            }
+            if (inObject1.toString().equals(inObject2.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

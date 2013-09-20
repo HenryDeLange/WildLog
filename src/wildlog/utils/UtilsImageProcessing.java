@@ -9,11 +9,13 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -28,29 +30,24 @@ import javax.swing.JLabel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.ui.helpers.ImageFilter;
 
 
 public class UtilsImageProcessing {
-    // Thumbnail sizes
-    /** 100px */
-    public static final int THUMBNAIL_SIZE_SMALL = 100;
-    /** 200px */
-    public static final int THUMBNAIL_SIZE_MEDIUM_SMALL = 200;
-    /** 300px */
-    public static final int THUMBNAIL_SIZE_MEDIUM = 300;
-    /** 500px */
-    public static final int THUMBNAIL_SIZE_LARGE = 500;
-    /** 850px */
-    public static final int THUMBNAIL_SIZE_EXTRA_LARGE = 850;
 
+    private UtilsImageProcessing() {
+    }
 
-    public static ImageIcon getScaledIcon(File inFile, int inSize) {
+    public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize) {
+        // TODO: verander al die JLabels om eerder JavaFx se ImageView te gebruik.  'n Vinnige toets wys dat dit heelwat vinniger mag wees... Die ImageIcon is baie stadig om die icon te maak vir die label, veral sekere nonstandard colour modes in jpg files.
         ImageReader imageReader = null;
-        try (FileImageInputStream inputStream = new FileImageInputStream(inFile)) {
+        FileImageInputStream inputStream = null;
+        try {
+//            long startTime = Calendar.getInstance().getTimeInMillis();
+            inputStream = new FileImageInputStream(inAbsolutePathToScale.toFile());
             Iterator<ImageReader> imageReaderList = ImageIO.getImageReaders(inputStream);
             imageReader = imageReaderList.next();
             imageReader.setInput(inputStream);
@@ -78,184 +75,197 @@ public class UtilsImageProcessing {
                     finalHeight = (int)(imageHeight*ratio);
                 }
             }
+//            System.out.println("----Size calculations took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
             // Mens kan een van die values negatief hou dan sal hy self die image kleiner maak en die aspect ratio hou,
             // maar ek sal in elk geval moet uitwerk of dit landscape of portriate is, so vir eers hou ek maar die kode soos hierbo.
-            return new ImageIcon(getScaledImage(Toolkit.getDefaultToolkit().createImage(inFile.getAbsolutePath()), finalWidth, finalHeight));
+            Image image = Toolkit.getDefaultToolkit().createImage(inAbsolutePathToScale.toAbsolutePath().normalize().toString());
+//            System.out.println("---Loading took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
+            Image img = getScaledImage(image, finalWidth, finalHeight);
+//            System.out.println("**Before new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
+            ImageIcon temp = new ImageIcon(img);
+//            System.out.println("**After new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
+//            System.out.println("--Calculating scale " + inSize + "px took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
+            return temp;
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
         finally {
-            if (imageReader != null)
+            if (imageReader != null) {
                 imageReader.dispose();
+            }
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+            }
         }
-        return getScaledIconForNoImage(inSize);
+        return getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL);
     }
 
-    public static ImageIcon getScaledIcon(String inPath, int inSize) {
-        return getScaledIcon(new File(inPath), inSize);
+    private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
+        return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_SMOOTH);
     }
+
+//    public static ImageIcon getScaledIcon(String inPath, int inSize) {
+//        return getScaledIcon(Paths.get(inPath).normalize().toAbsolutePath(), inSize);
+//    }
 
     public static ImageIcon getScaledIcon(URL inURL, int inSize) {
         try {
-            return getScaledIcon(new File(inURL.toURI()), inSize);
+            return getScaledIcon(Paths.get(inURL.toURI()), inSize);
         }
         catch (URISyntaxException ex) {
             ex.printStackTrace(System.err);
         }
-        return getScaledIcon(inURL.getPath(), inSize);
+        return getScaledIcon(Paths.get(inURL.getPath()), inSize);
     }
 
-    public static ImageIcon getScaledIconForNoImage(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "NoFile.png"));
-        if (!tempFile.exists()) {
-            tempFile.getParentFile().mkdirs();
-            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/NoFile.png");
-            UtilsFileProcessing.copyFile(templateStream, tempFile);
-        }
-        return getScaledIcon(tempFile, inSize);
+    public static ImageIcon getScaledIconForNoFiles(WildLogThumbnailSizes inSize) {
+        return getScaledIconForPlaceholder(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize);
     }
 
-    public static ImageIcon getScaledIconForMovies(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "Movie.png"));
-        if (!tempFile.exists()) {
-            tempFile.getParentFile().mkdirs();
-            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/Movie.png");
-            UtilsFileProcessing.copyFile(templateStream, tempFile);
-        }
-        return getScaledIcon(tempFile, inSize);
+    public static ImageIcon getScaledIconForMovies(WildLogThumbnailSizes inSize) {
+        return getScaledIconForPlaceholder(WildLogSystemImages.MOVIES.getWildLogFile(), inSize);
     }
 
-    public static ImageIcon getScaledIconForOtherFiles(int inSize) {
-        File tempFile = new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(), "System", "OtherFile.png"));
-        if (!tempFile.exists()) {
-            tempFile.getParentFile().mkdirs();
-            InputStream templateStream = WildLogApp.class.getResourceAsStream("resources/icons/OtherFile.png");
-            UtilsFileProcessing.copyFile(templateStream, tempFile);
-        }
-        return getScaledIcon(tempFile, inSize);
+    public static ImageIcon getScaledIconForOtherFiles(WildLogThumbnailSizes inSize) {
+        return getScaledIconForPlaceholder(WildLogSystemImages.OTHER_FILES.getWildLogFile(), inSize);
     }
 
-    private static Image getScaledImage(Image inImage, int inWidth, int inHeight) {
-        return inImage.getScaledInstance(inWidth, inHeight, Image.SCALE_DEFAULT);
+    private static ImageIcon getScaledIconForPlaceholder(WildLogSystemFile inWildLogSystemFile, WildLogThumbnailSizes inSize) {
+        return new ImageIcon(inWildLogSystemFile.getAbsoluteThumbnailPath(inSize).toString());
     }
 
-    // Methods for the buttons on the panels that work with the images
-    public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static int previousImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+        int newImageIndex = inImageIndex;
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            if (inImageIndex > 0) {
-                inImageIndex = inImageIndex - 1;
+            if (newImageIndex > 0) {
+                newImageIndex = newImageIndex - 1;
             }
             else {
-                inImageIndex = fotos.size() - 1;
+                Toolkit.getDefaultToolkit().beep();
+                newImageIndex = fotos.size() - 1;
             }
-            setupFoto(inID, inImageIndex, inImageLabel, inSize, inApp);
+            setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);
         }
-        return inImageIndex;
+        return newImageIndex;
     }
 
-    public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static int nextImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+        int newImageIndex = inImageIndex;
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         if (fotos.size() > 0) {
-            if (inImageIndex < fotos.size() - 1) {
-                inImageIndex = inImageIndex + 1;
+            if (newImageIndex < fotos.size() - 1) {
+                newImageIndex = newImageIndex + 1;
             }
             else {
-                inImageIndex = 0;
+                Toolkit.getDefaultToolkit().beep();
+                newImageIndex = 0;
             }
-            setupFoto(inID, inImageIndex, inImageLabel, inSize, inApp);
+            setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);
         }
-        return inImageIndex;
+        return newImageIndex;
     }
 
     public static int setMainImage(String inID, int inImageIndex, WildLogApp inApp) {
+        int newImageIndex = inImageIndex;
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
         for (int t = 0; t < fotos.size(); t++) {
-            if (t != inImageIndex)
+            if (t != newImageIndex) {
                 fotos.get(t).setDefaultFile(false);
-            else
-                fotos.get(t).setDefaultFile(true);
-            inApp.getDBI().createOrUpdate(fotos.get(t), true);
-        }
-        inImageIndex = 0;
-        return inImageIndex;
-    }
-
-    public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > 0) {
-            WildLogFile tempFoto = fotos.get(inImageIndex);
-            inApp.getDBI().delete(tempFoto);
-            if (fotos.size() > 1) {
-                inImageIndex--;
-                inImageIndex = nextImage(inID, inImageIndex, inImageLabel, inSize, inApp);
             }
             else {
-                inImageLabel.setIcon(getScaledIconForNoImage(inSize));
+                fotos.get(t).setDefaultFile(true);
+            }
+            inApp.getDBI().createOrUpdate(fotos.get(t), true);
+        }
+        newImageIndex = 0;
+        return newImageIndex;
+    }
+
+    public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
+        int newImageIndex = inImageIndex;
+        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
+        if (fotos.size() > 0) {
+            WildLogFile tempFoto = fotos.get(newImageIndex);
+            inApp.getDBI().delete(tempFoto);
+            if (fotos.size() > 1) {
+                newImageIndex = newImageIndex - 1;
+                newImageIndex = nextImage(inID, newImageIndex, inImageLabel, inSize, inApp);
+            }
+            else {
+                inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
             }
         }
         else {
-            inImageLabel.setIcon(getScaledIconForNoImage(inSize));
+            inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
         }
-        return inImageIndex;
+        return newImageIndex;
     }
 
-    public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, int inSize, WildLogApp inApp) {
+    public static void setupFoto(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         if (inImageLabel != null) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-            if (fotos.size() > inImageIndex) {
-                if (fotos.get(inImageIndex).getFileType() != null) {
-                    if (fotos.get(inImageIndex).getFileType().equals(WildLogFileType.IMAGE))
-                        inImageLabel.setIcon(new ImageIcon(fotos.get(inImageIndex).getThumbnailPath(inSize)));
+            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(inID));
+            if (files.size() > inImageIndex) {
+                if (files.get(inImageIndex).getFileType() != null) {
+                    if (files.get(inImageIndex).getFileType().equals(WildLogFileType.IMAGE)) {
+                        inImageLabel.setIcon(new ImageIcon(files.get(inImageIndex).getAbsoluteThumbnailPath(inSize).toString()));
+                    }
                     else
-                    if (fotos.get(inImageIndex).getFileType().equals(WildLogFileType.MOVIE))
+                    if (files.get(inImageIndex).getFileType().equals(WildLogFileType.MOVIE)) {
                         inImageLabel.setIcon(getScaledIconForMovies(inSize));
+                    }
                     else
-                    if (fotos.get(inImageIndex).getFileType().equals(WildLogFileType.OTHER))
+                    if (files.get(inImageIndex).getFileType().equals(WildLogFileType.OTHER)) {
                         inImageLabel.setIcon(getScaledIconForOtherFiles(inSize));
-                    inImageLabel.setToolTipText(fotos.get(inImageIndex).getFilename());
+                    }
+                    inImageLabel.setToolTipText(files.get(inImageIndex).getFilename());
                 }
                 else {
-                    inImageLabel.setIcon(getScaledIconForNoImage(inSize));
+                    inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
                     inImageLabel.setToolTipText("");
                 }
             }
             else {
-                inImageLabel.setIcon(getScaledIconForNoImage(inSize));
+                inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
                 inImageLabel.setToolTipText("");
             }
         }
     }
 
     /**
-     * Convenience method for getDateFromImage(Metadata inMeta, File inFile).
-     * @param inFile
+     * Convenience method for getDateFromImage(Metadata inMeta, Path inPath).
+     * @param inPath
      * @return
      */
-    public static Date getDateFromImage(File inFile) {
+    public static Date getDateFromImage(Path inPath) {
         Metadata metadata = null;
         try {
-            metadata = JpegMetadataReader.readMetadata(inFile);
+            metadata = JpegMetadataReader.readMetadata(inPath.toFile());
         }
         catch (JpegProcessingException | IOException ex) {
             ex.printStackTrace(System.err);
         }
-        return getDateFromImage(metadata, inFile);
+        return getDateFromImage(metadata, inPath);
     }
 
     /**
      * Try to load the date from the EXIF data, if no date could be loaded use the
      * Last Modified date instead.
      * @param inMeta
-     * @param inFile
+     * @param inPath
      * @return
      */
-    public static Date getDateFromImage(Metadata inMeta, File inFile) {
-        Date date = UtilsImageProcessing.getExifDateFromJpeg(inMeta);
+    public static Date getDateFromImage(Metadata inMeta, Path inPath) {
+        Date date = getExifDateFromJpeg(inMeta);
         if (date == null) {
             try {
-                date = new Date(inFile.lastModified());
+                date = new Date(inPath.toFile().lastModified());
             }
             catch (Exception ex) {
                 ex.printStackTrace(System.err);
@@ -267,30 +277,30 @@ public class UtilsImageProcessing {
     /**
      * This method does not treat Images differently. The Last Modified date is
      * returned for all file types.
-     * @param inFile
+     * @param inPath
      * @return
      */
-    public static Date getDateFromFileDate(File inFile) {
-        return new Date(inFile.lastModified());
+    public static Date getDateFromFileDate(Path inPath) {
+        return new Date(inPath.toFile().lastModified());
     }
 
     /**
      * This method will use the FileChooser's filters to determine whether a
      * file is an Image or not and will use the appropriate way to calculate the
      * date.
-     * @param inFile
+     * @param inPath
      * @return
      */
-    public static Date getDateFromFile(File inFile) {
-        if (inFile != null) {
+    public static Date getDateFromFile(Path inPath) {
+        if (inPath != null) {
             Date fileDate;
-            if (new ImageFilter().accept(inFile)) {
+            if (WildLogFileExtentions.Images.isKnownExtention(inPath)) {
                 // Get the date form the image
-                fileDate = UtilsImageProcessing.getDateFromImage(inFile);
+                fileDate = getDateFromImage(inPath);
             }
             else {
-                // Get the date form the movie
-                fileDate = UtilsImageProcessing.getDateFromFileDate(inFile);
+                // Get the date form the file
+                fileDate = getDateFromFileDate(inPath);
             }
             return fileDate;
         }
@@ -305,10 +315,12 @@ public class UtilsImageProcessing {
      */
     public static Date getDateFromWildLogFile(WildLogFile inWildLogFile) {
         if (inWildLogFile != null) {
-            if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType()))
-                return getDateFromImage(new File(inWildLogFile.getFilePath(true)));
-            else
-                return getDateFromFileDate(new File(inWildLogFile.getFilePath(true)));
+            if (WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
+                return getDateFromImage(inWildLogFile.getAbsolutePath());
+            }
+            else {
+                return getDateFromFileDate(inWildLogFile.getAbsolutePath());
+            }
         }
         return null;
     }
@@ -318,7 +330,7 @@ public class UtilsImageProcessing {
         if (inMeta != null) {
             Iterator<Directory> directories = inMeta.getDirectories().iterator();
             while (directories.hasNext()) {
-                Directory directory = (Directory)directories.next();
+                Directory directory = directories.next();
                 Collection<Tag> tags = directory.getTags();
                 for (Tag tag : tags) {
                     if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
@@ -352,7 +364,7 @@ public class UtilsImageProcessing {
         DataObjectWithGPS tempDataObjectWithGPS = new DataObjectWithGPS() {};
         Iterator<Directory> directories = inMeta.getDirectories().iterator();
         while (directories.hasNext()) {
-            Directory directory = (Directory)directories.next();
+            Directory directory = directories.next();
             Collection<Tag> tags = directory.getTags();
             for (Tag tag : tags) {
                 try {
@@ -370,9 +382,9 @@ public class UtilsImageProcessing {
                         // Voorbeeld -33°44'57.0"
                         String temp = tag.getDescription();
                         if (temp != null) {
-                            tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
-                            tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
-                            tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                            tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
+                            tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
+                            tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
                         }
                     }
                     else
@@ -380,9 +392,9 @@ public class UtilsImageProcessing {
                         // Voorbeeld 26°28'7.0"
                         String temp = tag.getDescription();
                         if (temp != null) {
-                            tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf("°")).trim())));
-                            tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf("°")+1, temp.indexOf("'")).trim())));
-                            tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf("'")+1, temp.indexOf("\"")).trim())));
+                            tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
+                            tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
+                            tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
                         }
                     }
                 }
@@ -394,9 +406,9 @@ public class UtilsImageProcessing {
         return tempDataObjectWithGPS;
      }
 
-    public static DataObjectWithGPS getExifGpsFromJpeg(File inFile) {
+    public static DataObjectWithGPS getExifGpsFromJpeg(Path inPath) {
         try {
-            return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inFile));
+            return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inPath.toFile()));
         }
         catch (IOException | JpegProcessingException ex) {
             ex.printStackTrace(System.err);
@@ -404,19 +416,24 @@ public class UtilsImageProcessing {
         return null;
     }
 
-    private static void createThumbnailOnDisk(File inOriginalFile, int inSize) {
-        // Get the thumbnail name
-        File toFileThumbnail = new File(getThumbnailPath(inOriginalFile, inSize));
-        // Make the folder
-        toFileThumbnail.getParentFile().mkdirs();
+    /**
+     * Creates a thumbnail for the provided original absolute path at the give absolute path.
+     * @param inThumbnailAbsolutePath
+     * @param inSize
+     */
+    private static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
         // Resize the file and then save the thumbnail to into WildLog's folders
-        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalFile, inSize);
+        // TODO: Soek 'n beter manier om die image te save wat nie dependant is op die ImageIcon nie...
+        ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize());
         try {
+            // Make the folder
+            Files.createDirectories(inThumbnailAbsolutePath);
+            // Create the image to save
             BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = bufferedImage.createGraphics();
             graphics2D.drawImage(thumbnail.getImage(), 0, 0, null);
             // Hardcoding all thumbnails to be JPG (even originally PNG images)
-            ImageIO.write(bufferedImage, "jpg", toFileThumbnail);
+            ImageIO.write(bufferedImage, "jpg", inThumbnailAbsolutePath.toFile());
             graphics2D.dispose();
         }
         catch (IOException ex) {
@@ -424,39 +441,37 @@ public class UtilsImageProcessing {
         }
     }
 
-    private static String getThumbnailPath(File inOriginalFile, int inSize) {
-        File thumbnail = new File(WildLogPaths.concatPaths(true,
-                WildLogPaths.WILDLOG_THUMBNAILS_IMAGES.getFullPath(),
-                WildLogPaths.stripRootFromPath(
-                    inOriginalFile.getParent(),
-                    WildLogPaths.WILDLOG_FILES_IMAGES.getFullPath()),
-                inOriginalFile.getName()
-            ));
-        String path = thumbnail.getAbsolutePath();
+    /**
+     * Calculates the absolute path to the thumbnail for this size.
+     * @param inWildLogFile
+     * @param inSize
+     * @return
+     */
+    public static Path calculateAbsoluteThumbnailPath(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize) {
+        Path finalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
+                .resolve(inWildLogFile.getRelativePath());
         // Hardcoding all thumbnails to be JPG (even originally PNG images)
-        return path.substring(0, path.lastIndexOf('.')) + "_" + inSize + "px" + ".jpg";
+        String newFilename = finalPath.getFileName().toString()
+                .substring(0, finalPath.getFileName().toString().lastIndexOf('.'))
+                + "_" + inSize.getSize() + "px" + ".jpg";
+        finalPath = finalPath.resolveSibling(newFilename);
+        return finalPath.normalize();
     }
 
+
     /**
-     * The thumbnail will be created if it doesn't already exist.
-     * NOTE: Currently all thumbnails will be JPGs (even if the original was PNG).
-     * @return String of the AbsolutePath to the thumbnail
+     * This method will create the thumbnail if it doesn't already exist and return
+     * the absolute path that points to thumbnail.
+     * @param inWildLogFile
+     * @param inSize
+     * @return
      */
-    public static String getThumbnail(File inOriginalFile, int inSize) {
-        File thumbnail = new File(getThumbnailPath(inOriginalFile, inSize));
-        if (!thumbnail.exists()) {
-            createThumbnailOnDisk(inOriginalFile, inSize);
+    public static Path getAbsoluteThumbnailPathAndCreate(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize) {
+        Path thumbnail = calculateAbsoluteThumbnailPath(inWildLogFile, inSize);
+        if (!Files.exists(thumbnail, LinkOption.NOFOLLOW_LINKS)) {
+            createThumbnailOnDisk(thumbnail, inWildLogFile.getAbsolutePath(), inSize);
         }
-        return thumbnail.getAbsolutePath();
-    }
-
-    /**
-     * The thumbnail will be created if it doesn't already exist.
-     * NOTE: Currently all thumbnails will be JPGs (even if the original was PNG).
-     * @return String of the AbsolutePath to the thumbnail
-     */
-    public static String getThumbnail(String inOriginalPath, int inSize) {
-        return getThumbnail(new File(inOriginalPath), inSize);
+        return thumbnail;
     }
 
 }

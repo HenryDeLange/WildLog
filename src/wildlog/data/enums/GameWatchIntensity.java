@@ -7,14 +7,14 @@ public enum GameWatchIntensity {
     MEDIUM("Lightly Focused"),
     LOW("Not Realy Focused"),
     VERY_LOW("No Focus"),
-    NONE("None");
-            
+    NONE("");
+
     private String text;
-    
+
     GameWatchIntensity(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;

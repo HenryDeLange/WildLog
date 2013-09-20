@@ -6,7 +6,7 @@ public enum SizeType {
     SHOULDER("Shoulder"),
     TOTAL_LENGTH("Total Length"),
     TOTAL_HEIGHT("Total Height"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

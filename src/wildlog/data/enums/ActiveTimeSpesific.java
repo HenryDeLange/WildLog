@@ -9,8 +9,10 @@ public enum ActiveTimeSpesific {
     MID_AFTERNOON("Mid Afternoon - After mid day"),
     AFTERNOON("Afternoon - Before sunset"),
     LATE_AFTERNOON("Late Afternoon - Just after sunset"),
+    EARLY_NIGHT("Early Night - Afternoon Twilight"),
     DEEP_NIGHT("Night - Darkness of night"),
-    NONE("None");
+    LATE_NIGHT("Late Night - Morning Twilight"),
+    NONE("");
 
     private String text;
 
@@ -32,7 +34,9 @@ public enum ActiveTimeSpesific {
         if (inText.equalsIgnoreCase(MID_AFTERNOON.text)) return MID_AFTERNOON;
         if (inText.equalsIgnoreCase(AFTERNOON.text)) return AFTERNOON;
         if (inText.equalsIgnoreCase(LATE_AFTERNOON.text)) return LATE_AFTERNOON;
+        if (inText.equalsIgnoreCase(EARLY_NIGHT.text)) return EARLY_NIGHT;
         if (inText.equalsIgnoreCase(DEEP_NIGHT.text)) return DEEP_NIGHT;
+        if (inText.equalsIgnoreCase(LATE_NIGHT.text)) return LATE_NIGHT;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }

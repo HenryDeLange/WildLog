@@ -6,7 +6,7 @@ public enum TimeFormat {
     AM("AM"),
     PM("PM"),
     UNKNOWN("Unknown"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

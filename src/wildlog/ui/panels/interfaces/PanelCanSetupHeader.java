@@ -21,7 +21,7 @@ public abstract class PanelCanSetupHeader extends JPanel {
     protected URL tabIconURL;
     protected HeaderPanel tabHeader;
 
-    static public enum TabTypes {
+    public static enum TabTypes {
         LOCATION, ELEMENT, VISIT, SIGHTING, BULK_UPLOAD;
     }
 

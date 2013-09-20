@@ -24,19 +24,19 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenSightingAdded;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 
 
 public class ChecklistDialog extends JDialog {
      // Variables:
     private WildLogApp app;
-    private PanelNeedsRefreshWhenSightingAdded panelToRefresh;
+    private PanelNeedsRefreshWhenDataChanges panelToRefresh;
     private Location location;
     private Visit visit;
 
     /** Creates new form PanelMoveVisit */
-    public ChecklistDialog(WildLogApp inApp, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenSightingAdded inPanelToRefresh) {
+    public ChecklistDialog(WildLogApp inApp, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         app = inApp;
         initComponents();
         loadElementList();
@@ -205,7 +205,7 @@ public class ChecklistDialog extends JDialog {
             }
 
             if (panelToRefresh != null) {
-                panelToRefresh.refreshTableForSightings();
+                panelToRefresh.doTheRefresh(null);
             }
             // Close the dialog - (Evt is null if the Image Upload calls save method...)
             if (evt != null) {

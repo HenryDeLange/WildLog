@@ -5,7 +5,7 @@ public enum UnitsWeight {
     GRAM("g"),
     OUNCES("os"),
     POUNDS("pd"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

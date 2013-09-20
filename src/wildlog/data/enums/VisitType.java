@@ -8,7 +8,7 @@ public enum VisitType {
     DAY_VISIT("Day Visit"),
     INCIDENTAL("Incidental"),
     OTHER("Other"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

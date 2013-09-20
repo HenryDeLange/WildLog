@@ -6,8 +6,8 @@ public enum AddFrequency {
     MEDIUM("75 - 90%", "Added frequently. (Most good sightings are added)"),
     LOW("40 - 75%", "Added infrequently. (Only the first sighting per visit)"),
     VERY_LOW("0 - 40%", "Very seldomly added. (Might be so common that it is not realy recorded)"),
-    NONE("None", "None");
-    
+    NONE("", "");
+
     private String text;
     private String description;
 
@@ -23,7 +23,7 @@ public enum AddFrequency {
         text = inText;
         description = inDescription;
     }
-    
+
     @Override
     public String toString() {
         return text;

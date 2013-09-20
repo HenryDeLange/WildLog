@@ -6,7 +6,7 @@ public enum Sex {
     FEMALE("Female"),
     MIXED("Mixed"),
     UNKNOWN("Unknown"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

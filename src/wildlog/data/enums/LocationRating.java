@@ -6,7 +6,7 @@ public enum LocationRating {
     NORMAL("Nice"),
     DECENT("Decent"),
     LOW("Bad"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

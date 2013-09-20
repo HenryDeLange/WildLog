@@ -9,14 +9,15 @@ public enum Weather {
     LIGHT_RAIN("Light rain"),
     HEAVY_RAIN("Heavy rain"),
     OTHER("Other (Can specify in details)"),
-    NONE("None");
-    
+    UNKNOWN("Unknown"),
+    NONE("");
+
     private String text;
-    
+
     Weather(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;
@@ -31,6 +32,7 @@ public enum Weather {
         if (inText.equalsIgnoreCase(LIGHT_RAIN.text)) return LIGHT_RAIN;
         if (inText.equalsIgnoreCase(HEAVY_RAIN.text)) return HEAVY_RAIN;
         if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
+        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }

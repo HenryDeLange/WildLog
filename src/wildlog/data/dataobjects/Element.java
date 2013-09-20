@@ -15,6 +15,10 @@ import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTMLExportTypes;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.WildLogPaths;
 
 public class Element implements Comparable<Element>, DataObjectWithHTML, DataObjectWithWildLogFile {
     public static final String WILDLOGFILE_ID_PREFIX = "ELEMENT-";
@@ -69,10 +73,11 @@ public class Element implements Comparable<Element>, DataObjectWithHTML, DataObj
 
     @Override
     public int compareTo(Element inElement) {
-        if (inElement != null)
+        if (inElement != null) {
             if (primaryName != null && inElement.getPrimaryName() != null) {
                 return(primaryName.compareToIgnoreCase(inElement.getPrimaryName()));
             }
+        }
         return 0;
     }
 
@@ -82,13 +87,13 @@ public class Element implements Comparable<Element>, DataObjectWithHTML, DataObj
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
-        StringBuilder fotoString = new StringBuilder();
-        if (inIncludeImages) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
-            for (int t = 0; t < fotos.size(); t++) {
-                fotoString.append(fotos.get(t).toHTML(inExportType));
-            }
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
+        int progressMarker;
+        if (inIsRecursive) {
+            progressMarker = 30;
+        }
+        else {
+            progressMarker = 95;
         }
         StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
         htmlElement.append("<body bgcolor='#E3F0E3'>");
@@ -131,9 +136,21 @@ public class Element implements Comparable<Element>, DataObjectWithHTML, DataObj
             UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Min Female Weight:</b><br/> ", weightFemaleMin + " " + UtilsHTML.formatObjectAsString(weightUnit));
         if (weightFemaleMax > 0 && !UnitsWeight.NONE.equals(weightUnit))
             UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Max Female Weight:</b><br/> ", weightFemaleMax + " " + UtilsHTML.formatObjectAsString(weightUnit));
-        if (inIncludeImages && fotoString.length() > 0) {
-            htmlElement.append("<br/>");
-            UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Photos:</b><br/>", fotoString);
+        if (inIncludeImages) {
+            StringBuilder filesString = new StringBuilder(300);
+            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+            for (int t = 0; t < files.size(); t++) {
+                filesString.append(files.get(t).toHTML(inExportType));
+                if (inProgressbarTask != null) {
+                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                            + " " + inProgressbarTask.getProgress() + "%");
+                }
+            }
+            if (filesString.length() > 0) {
+                htmlElement.append("<br/>");
+                UtilsHTML.appendIfNotNullNorEmpty(htmlElement, "<br/><b>Photos:</b><br/>", filesString);
+            }
         }
         if (inIsRecursive) {
             htmlElement.append("<br/>");
@@ -142,8 +159,15 @@ public class Element implements Comparable<Element>, DataObjectWithHTML, DataObj
             Sighting tempSighting = new Sighting();
             tempSighting.setElementName(primaryName);
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+            int counter = 0;
             for (Sighting temp : sightings) {
-                htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType));
+                htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
+                if (inProgressbarTask != null) {
+                    inProgressbarTask.setTaskProgress(progressMarker + (int)(((double)counter/sightings.size())*(95-progressMarker)));
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                            + " " + inProgressbarTask.getProgress() + "%");
+                    counter++;
+                }
             }
         }
         htmlElement.append("</td></tr>");
@@ -151,6 +175,91 @@ public class Element implements Comparable<Element>, DataObjectWithHTML, DataObj
         htmlElement.append("<br/>");
         htmlElement.append("</body>");
         return htmlElement.toString();
+    }
+
+    @Override
+    public String getExportPrefix() {
+        return WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toString();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return primaryName;
+    }
+
+    public boolean hasTheSameContent(Element inElement) {
+        if (inElement == null) {
+            return false;
+        }
+        if (UtilsUI.isTheSame(this, inElement)
+                && UtilsUI.isTheSame(getActiveTime(), inElement.getActiveTime())
+                && UtilsUI.isTheSame(getAddFrequency(), inElement.getAddFrequency())
+                && UtilsUI.isTheSame(getBehaviourDescription(), getBehaviourDescription())
+                && UtilsUI.isTheSame(getBreedingDuration(), inElement.getBreedingDuration())
+                && UtilsUI.isTheSame(getBreedingNumber(), inElement.getBreedingNumber())
+                && UtilsUI.isTheSame(getDescription(), inElement.getDescription())
+                && UtilsUI.isTheSame(getDiagnosticDescription(), inElement.getDiagnosticDescription())
+                && UtilsUI.isTheSame(getDistribution(), inElement.getDistribution())
+                && UtilsUI.isTheSame(getEndangeredStatus(), inElement.getEndangeredStatus())
+                && UtilsUI.isTheSame(getFeedingClass(), inElement.getFeedingClass())
+                && UtilsUI.isTheSame(getLifespan(), inElement.getLifespan())
+                && UtilsUI.isTheSame(getNutrition(), inElement.getNutrition())
+                && UtilsUI.isTheSame(getOtherName(), inElement.getOtherName())
+                && UtilsUI.isTheSame(getPrimaryName(), inElement.getPrimaryName())
+                && UtilsUI.isTheSame(getReferenceID(), inElement.getReferenceID())
+                && UtilsUI.isTheSame(getScientificName(), inElement.getScientificName())
+                && UtilsUI.isTheSame(getSizeFemaleMax(), inElement.getSizeFemaleMax())
+                && UtilsUI.isTheSame(getSizeFemaleMin(), inElement.getSizeFemaleMin())
+                && UtilsUI.isTheSame(getSizeMaleMax(), inElement.getSizeMaleMax())
+                && UtilsUI.isTheSame(getSizeMaleMin(), inElement.getSizeMaleMin())
+                && UtilsUI.isTheSame(getSizeType(), inElement.getSizeType())
+                && UtilsUI.isTheSame(getSizeUnit(), inElement.getSizeUnit())
+                && UtilsUI.isTheSame(getType(), inElement.getType())
+                && UtilsUI.isTheSame(getWaterDependance(), inElement.getWaterDependance())
+                && UtilsUI.isTheSame(getWeightFemaleMax(), inElement.getWeightFemaleMax())
+                && UtilsUI.isTheSame(getWeightFemaleMin(), inElement.getWeightFemaleMin())
+                && UtilsUI.isTheSame(getWeightMaleMax(), inElement.getWeightMaleMax())
+                && UtilsUI.isTheSame(getWeightMaleMin(), inElement.getWeightMaleMin())
+                && UtilsUI.isTheSame(getWeightUnit(), inElement.getWeightUnit())
+                && UtilsUI.isTheSame(getWishListRating(), inElement.getWishListRating())) {
+            return true;
+        }
+        return false;
+    }
+
+    public Element cloneShallow() {
+        Element element = new Element();
+        element.setActiveTime(activeTime);
+        element.setAddFrequency(addFrequency);
+        element.setBehaviourDescription(behaviourDescription);
+        element.setBreedingDuration(breedingDuration);
+        element.setBreedingNumber(breedingNumber);
+        element.setDescription(description);
+        element.setDiagnosticDescription(diagnosticDescription);
+        element.setDistribution(distribution);
+        element.setEndangeredStatus(endangeredStatus);
+        element.setFeedingClass(feedingClass);
+        element.setLifespan(lifespan);
+        element.setNutrition(nutrition);
+        element.setOtherName(otherName);
+        element.setPrimaryName(primaryName);
+        element.setReferenceID(referenceID);
+        element.setScientificName(scientificName);
+        element.setSizeFemaleMax(sizeFemaleMax);
+        element.setSizeFemaleMin(sizeFemaleMin);
+        element.setSizeMaleMax(sizeMaleMin);
+        element.setSizeMaleMin(sizeMaleMin);
+        element.setSizeType(sizeType);
+        element.setSizeUnit(sizeUnit);
+        element.setType(type);
+        element.setWaterDependance(waterDependance);
+        element.setWeightFemaleMax(weightFemaleMax);
+        element.setWeightFemaleMin(weightFemaleMin);
+        element.setWeightMaleMax(weightMaleMax);
+        element.setWeightMaleMin(weightMaleMin);
+        element.setWeightUnit(weightUnit);
+        element.setWishListRating(wishListRating);
+        return element;
     }
 
 

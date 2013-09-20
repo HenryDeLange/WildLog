@@ -1,40 +1,39 @@
 package wildlog.utils;
 
-import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FileDialog;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ImageFilter;
-import wildlog.ui.helpers.ImagePreview;
 import wildlog.ui.helpers.MovieFilter;
 
-public final class UtilsFileProcessing {
-    // Extentions
-    public final static String jpeg = "jpeg";
-    public final static String jpg = "jpg";
-    public final static String gif = "gif";
-    public final static String tiff = "tiff";
-    public final static String tif = "tif";
-    public final static String png = "png";
-    // private variables
-    private static String lastFilePath = "";
+public class UtilsFileProcessing {
+    private static Path lastFilePath = null;
 
-    /** Get the extension of a file. */
+    private UtilsFileProcessing() {
+    }
+
+    /** Get the extension of a file.
+     * @param inFile
+     * @return
+     */
     public static String getExtension(File inFile) {
         String ext = null;
         int i = inFile.getName().lastIndexOf('.');
@@ -46,127 +45,146 @@ public final class UtilsFileProcessing {
 
     /**
      * Upload a file using a FileChooser dialog.
+     * @param inApp
+     * @return
      */
     public static List<File> showFileUploadDialog(final WildLogApp inApp) {
-//        // Native File Upload Window. Het Thumbnails, maar het nie Multi Select nie :(
-//        FileDialog d = new FileDialog(new Frame(), "Select Images", FileDialog.LOAD);
-//        d.setDirectory(lastFilePath);
-//        d.setVisible(true);
-        final JFileChooser fileChooser;
-        if (lastFilePath.length() > 0)
-            fileChooser = new JFileChooser(lastFilePath);
-        else
-            fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(true);
-        fileChooser.setFileFilter(new MovieFilter());
-        fileChooser.setFileFilter(new ImageFilter());
-        fileChooser.setAccessory(new ImagePreview(fileChooser));
-        fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        final FileDialog fileChooser = new FileDialog(inApp.getMainFrame(), "Select Files", FileDialog.LOAD);
+//        final JFileChooser fileChooser = new JFileChooser();
+        if (lastFilePath != null) {
+//            fileChooser.setCurrentDirectory(Paths.get(lastFilePath).toFile());
+            fileChooser.setDirectory(lastFilePath.toString());
+        }
+//        fileChooser.setAcceptAllFileFilterUsed(true);
+//        fileChooser.setFileFilter(new MovieFilter());
+//        fileChooser.setFileFilter(new ImageFilter());
+//        fileChooser.setAccessory(new ImagePreview(fileChooser));
+        // TODO: Ek nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FIleChooser :D
+        fileChooser.setFilenameFilter(new MovieFilter());
+//        fileChooser.setFile("*.jpg");
+        fileChooser.setFilenameFilter(new ImageFilter());
+//        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setMultipleMode(true);
+//        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setPreferredSize(new Dimension(950, 550));
-        int result = UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+        UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
-                return fileChooser.showOpenDialog(inApp.getMainFrame().getContentPane());
+//                return fileChooser.showOpenDialog(inApp.getMainFrame().getContentPane());
+                fileChooser.setVisible(true);
+                return 0;
             }
         });
-        return Arrays.asList(fileChooser.getSelectedFiles());
+//        return Arrays.asList(fileChooser.getSelectedFiles());
+        return Arrays.asList(fileChooser.getFiles());
     }
 
-    /**
-     * Upload a file using a List of Files. (Used with FileDrop.)
-     */
-    public static int uploadFilesUsingList(String inID, String inFolderName, JLabel inImageLabel, int inSize, WildLogApp inApp, List<File> inFiles) {
-        inApp.getMainFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        performFileUpload(inID, inFolderName, inFiles.toArray(new File[inFiles.size()]), inImageLabel, inSize, inApp);
-        inApp.getMainFrame().setCursor(Cursor.getDefaultCursor());
-        // return new image index
-        return 0;
-    }
-
-    public static void performFileUpload(final String inID, final String inFolderName, final File[] inFiles, JLabel inImageLabel, int inSize, final WildLogApp inApp) {
+    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp) {
+        // Submit the work to the executor
         ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
         for (int t = 0; t < inFiles.length; t++) {
-            final File fromFile = inFiles[t];
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    if (fromFile != null && fromFile.isFile()) {
-                        lastFilePath = fromFile.getPath();
-                        // Is an image
-                        if (new ImageFilter().accept(fromFile)) {
-                            saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inFolderName, fromFile, inApp, inID);
-                        }
-                        else
-                        // Is a movie
-                        if (new MovieFilter().accept(fromFile)) {
-                            saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inFolderName, fromFile, inApp, inID);
-                        }
-                        else {
-                            saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inFolderName, fromFile, inApp, inID);
+            if (inFiles[t] != null) {
+                final File fromFile = inFiles[t];
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        Path fromPath = fromFile.toPath();
+                        if (Files.isRegularFile(fromPath)) {
+                            lastFilePath = fromPath;
+                            // Is an image
+                            if (WildLogFileExtentions.Images.isKnownExtention(fromPath)) {
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, inApp, inID);
+                            }
+                            else
+                            // Is a movie
+                            if (WildLogFileExtentions.Movies.isKnownExtention(fromPath)) {
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, inApp, inID);
+                            }
+                            else {
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, inApp, inID);
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
-        UtilsConcurency.tryAndWaitToShutdownExecutorService(executorService);
-        UtilsImageProcessing.setupFoto(inID, 0, inImageLabel, inSize, inApp);
+        // Wait to finish the work
+        UtilsConcurency.waitForExecutorToShutdownWithPopup(executorService);
+        // Update the image that is displayed
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                UtilsImageProcessing.setupFoto(inID, 0, inImageLabel, inSize, inApp);
+            }
+        });
     }
 
-    private static void saveOriginalFile(WildLogPaths inFilePaths, WildLogFileType inFileType, String inFolderName, File inFromFile, WildLogApp inApp, String inID) {
+    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, WildLogApp inApp, String inID) {
         // Make the folder
-        new File(inFilePaths.getFullPath() + inFolderName).mkdirs();
-        // Setup the output files
-        File toFile_Original = new File(WildLogPaths.concatPaths(true, inFilePaths.getFullPath(), inFolderName, inFromFile.getName()));
-        // Check that the filename is unique
-        while (toFile_Original.exists()) {
-            toFile_Original = new File(WildLogPaths.concatPaths(true, toFile_Original.getParent(), "wl_" + toFile_Original.getName()));
+        Path toFolder = inWorkspacePath.getAbsoluteFullPath().resolve(inPrefixFolder).normalize().toAbsolutePath();
+        try {
+            Files.createDirectories(toFolder);
         }
-        // Copy the original file into WildLog's folders
-        copyFile(inFromFile, toFile_Original);
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        // Setup the output files
+        Path toFile = toFolder.resolve(inFromFile.getFileName());
+        // Check that the filename is unique
+        while (Files.exists(toFile)) {
+            toFile = toFolder.resolve("wl_" + toFile.getFileName());
+        }
+        // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
+        copyFile(inFromFile, toFile, false, false);
         // Save the database entry
-        inApp.getDBI().createOrUpdate(
-                new WildLogFile(
+        WildLogFile wildLogFile = new WildLogFile(
                         inID,
-                        toFile_Original.getName(),
-                        WildLogPaths.stripRootFromPath(toFile_Original.getAbsolutePath(), WildLogPaths.getFullWorkspacePrefix()),
-                        inFileType)
-                , false);
+                        toFile.getFileName().toString(),
+                        WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
+                        inFileType);
+        inApp.getDBI().createOrUpdate(wildLogFile, false);
+        // Create the default thumbnails if it is an image
+        // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
+        if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                wildLogFile.getAbsoluteThumbnailPath(size);
+            }
+        }
     }
 
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {
         List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > 0) {
-            String fileName = fotos.get(inIndex).getFilePath(true);
-            openFile(fileName);
+        if (fotos.size() > inIndex) {
+            openFile(fotos.get(inIndex).getAbsolutePath());
         }
     }
 
-    public static void openFile(String inPath) {
+    public static void openFile(Path inPath) {
         if (inPath != null) {
             try {
-                Desktop.getDesktop().open(new File(inPath));
+                Desktop.getDesktop().open(inPath.normalize().toAbsolutePath().toFile());
             }
             catch (IOException ex) {
+                System.out.println("Problem opening file in the OS. Trying other method now...");
                 ex.printStackTrace(System.err);
                 // Backup Plan - Because of Java 6 bug for avi files
                 try {
                     String os = System.getProperty("os.name").toLowerCase();
                     if (os.indexOf("mac") != -1)
                     {
-                        String[] commands = {"open", "%s", inPath};
+                        String[] commands = {"open", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                     else
                     if ((os.indexOf("windows") != -1 || os.indexOf("nt") != -1) && (os.equals("windows 95") || os.equals("windows 98")))
                     {
-                        String[] commands = {"command.com", "/C", "start", "%s", inPath};
+                        String[] commands = {"command.com", "/C", "start", "%s", inPath.normalize().toAbsolutePath().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                     else
                     if (os.indexOf("windows") != -1 || os.indexOf("nt") != -1)
                     {
-                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath};
+                        String[] commands = {"cmd", "/c", "start", "\"DoNothing\"", inPath.normalize().toAbsolutePath().toFile().toString()};
                         Runtime.getRuntime().exec(commands);
                     }
                 }
@@ -177,60 +195,55 @@ public final class UtilsFileProcessing {
         }
     }
 
-    public static void copyFile(File inFileToRead, File inFileToWrite) {
-        FileOutputStream outputStream = null;
-        FileInputStream inputStream = null;
+    /**
+     * Makes a copy of the ToRead file to the ToWrite file.
+     * @param inFileToRead
+     * @param inFileToWrite
+     * @param inOverwriteExisting
+     * @param inCheckExists
+     */
+    public static void copyFile(Path inFileToRead, Path inFileToWrite, boolean inOverwriteExisting, boolean inCheckExists) {
         try {
-            outputStream = new FileOutputStream(inFileToWrite);
-            inputStream = new FileInputStream(inFileToRead);
-            inputStream.getChannel().transferTo(0, inFileToRead.length(), outputStream.getChannel());
+            Files.createDirectories(inFileToWrite.getParent());
+            if (!inOverwriteExisting) {
+                if (inCheckExists) {
+                    if (!Files.exists(inFileToWrite)) {
+                        Files.copy(inFileToRead, inFileToWrite);
+                    }
+                }
+                else {
+                    // This will throw an exception if the file already exists
+                    Files.copy(inFileToRead, inFileToWrite);
+                }
+            }
+            else {
+                Files.copy(inFileToRead, inFileToWrite, StandardCopyOption.REPLACE_EXISTING);
+            }
         }
         catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
-        finally {
-            if (inputStream != null)
-                try {
-                    inputStream.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                }
-            if (outputStream != null)
-                try {
-                    outputStream.close();
-                }
-                catch (IOException ex) {
-                    ex.printStackTrace(System.err);
-                }
-        }
     }
 
-    public static void copyFile(InputStream inFileToRead, File inFileToWrite) {
-        if (!inFileToWrite.exists()) {
-            InputStream fileInput = null;
-            FileOutputStream fileOutput = null;
+    /**
+     * This method is used to copy internal files (inside the JAR) into the workspace for further use.
+     * @param inFileToRead
+     * @param inFileToWrite
+     */
+    public static void createFileFromStream(InputStream inFileToRead, Path inFileToWrite) {
+        if (!Files.exists(inFileToWrite)) {
             try {
-                fileInput = inFileToRead;
-                if (fileInput != null) {
-                    fileOutput = new FileOutputStream(inFileToWrite);
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = fileInput.read(buf)) > 0) {
-                        fileOutput.write(buf, 0, len);
-                    }
-                    fileOutput.flush();
-                }
+                Files.createDirectories(inFileToWrite.getParent());
+                Files.copy(inFileToRead, inFileToWrite);
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);
             }
             finally {
                 try {
-                    if (fileInput != null)
-                        fileInput.close();
-                    if (fileOutput != null)
-                        fileOutput.close();
+                    if (inFileToRead != null) {
+                        inFileToRead.close();
+                    }
                 }
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
@@ -239,22 +252,44 @@ public final class UtilsFileProcessing {
         }
     }
 
-    public static void deleteRecursive(File inFile) throws IOException {
-        if (inFile.isDirectory()) {
-            for (File content : inFile.listFiles())
-                deleteRecursive(content);
+    /**
+     * This method will create a file at the specified path containing the provided bytes, replacing any existing files.
+     * @param inBytesToWrite
+     * @param inFileToWrite
+     */
+    public static void createFileFromBytes(byte[] inBytesToWrite, Path inFileToWrite) {
+        try {
+            Files.createDirectories(inFileToWrite.getParent());
+            Files.write(inFileToWrite, inBytesToWrite, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
         }
-        if (inFile.exists() && !inFile.delete())
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    public static void deleteRecursive(File inFile) throws IOException {
+        // TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
+        if (inFile.isDirectory()) {
+            for (File content : inFile.listFiles()) {
+                deleteRecursive(content);
+            }
+        }
+        if (inFile.exists() && !inFile.delete()) {
             throw new FileNotFoundException("Failed to delete file: " + inFile);
+        }
     }
 
     public static void deleteRecursiveOnlyEmptyFolders(File inFile) throws IOException {
+        // TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
         if (inFile.isDirectory()) {
-            for (File content : inFile.listFiles())
+            for (File content : inFile.listFiles()) {
                 deleteRecursiveOnlyEmptyFolders(content);
-            if (inFile.listFiles().length == 0)
-                if (!inFile.delete())
+            }
+            if (inFile.listFiles().length == 0) {
+                if (!inFile.delete()) {
                     throw new FileNotFoundException("Failed to delete folder: " + inFile);
+                }
+            }
         }
     }
 

@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -16,6 +18,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.ImageIcon;
@@ -44,7 +49,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    private static String WILDLOG_SETTINGS_FOLDER = (System.getProperty("user.home") + File.separatorChar + "WildLog Settings" + File.separatorChar);
+    private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath();
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
     private JXMapKit mapOnline;
@@ -63,19 +68,23 @@ public class WildLogApp extends Application {
         super.initialize(arg0);
         // Get the threadcount
         threadCount = (int)(Runtime.getRuntime().availableProcessors() * 1.5);
-        if (threadCount < 3)
+        if (threadCount < 3) {
             threadCount = 3;
+        }
         // Makse sure all the basic data/file folders are in place
-        File tempFolder = new File(WildLogPaths.WILDLOG_DATA.getFullPath());
-        tempFolder.mkdirs();
-        tempFolder = new File(WildLogPaths.WILDLOG_FILES.getFullPath());
-        tempFolder.mkdirs();
-        tempFolder = new File(WildLogPaths.WILDLOG_FILES_IMAGES.getFullPath());
-        tempFolder.mkdirs();
-        tempFolder = new File(WildLogPaths.WILDLOG_FILES_MOVIES.getFullPath());
-        tempFolder.mkdirs();
-        tempFolder = new File(WildLogPaths.WILDLOG_FILES_OTHER.getFullPath());
-        tempFolder.mkdirs();
+        try {
+            Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
+            Files.createDirectories(WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_FILES.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_FILES_IMAGES.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_FILES_MOVIES.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_FILES_OTHER.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_MAPS.getAbsoluteFullPath());
+            Files.createDirectories(WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath());
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
         // Open the database
         // If this fails then it might be corrupt or already open. Ask the user to select a new workspace folder.
         boolean openedWorkspace;
@@ -96,7 +105,7 @@ public class WildLogApp extends Application {
         }
         while (openedWorkspace == false);
         // Check to do monthly backup
-        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
         if (!dirs.exists()) {
             dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY);
         }
@@ -107,7 +116,7 @@ public class WildLogApp extends Application {
     private boolean openWorkspace() {
         try {
             dbi = new DBI_h2(this);
-            System.out.println("Workspace opened at: " + WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), WildLogPaths.WILDLOG.toString()));
+            System.out.println("Workspace opened at: " + WildLogPaths.getFullWorkspacePrefix().toString());
         }
         catch (Exception ex) {
             System.err.println("Could not open the Workspace. Will try to ask the user to try a new Workspace folder.");
@@ -138,6 +147,8 @@ public class WildLogApp extends Application {
         JPanel background = new JPanel();
         background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
         glassPane.add(background, BorderLayout.CENTER);
+        glassPane.addMouseListener(new MouseAdapter() {});
+        glassPane.addKeyListener(new KeyAdapter() {});
     }
 
     /**
@@ -150,15 +161,17 @@ public class WildLogApp extends Application {
 
     /**
      * Main method launching the application.
+     * @param args
      */
     public static void main(String[] args) {
         boolean logToFile = false;
         // Check for a overwritten settings folder and configuration to log to a logging file or not
+        // TODO: verander dalk die args om van die key-value props gebruik te maak (Kan glo as args -Dname=value in stuur en dit dan as 'n Properties in die hande kry...)
         if (args != null && args.length >= 1) {
             for (String arg : args) {
                 if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {
-                    // Voorbeeld: settings_folder_location="./WildLog Settings/"
-                    WILDLOG_SETTINGS_FOLDER = arg.substring("settings_folder_location=".length());
+                    // Voorbeeld: settings_folder_location="./WildLogSettings/"
+                    ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(arg.substring("settings_folder_location=".length())).toAbsolutePath();
                 }
                 else
                 if (arg != null && "log_to_file".equalsIgnoreCase(arg.toLowerCase())) {
@@ -186,14 +199,18 @@ public class WildLogApp extends Application {
 //                }
             }
         }
-        // Make sure the Settings folder exists
-        File folder = new File(WILDLOG_SETTINGS_FOLDER);
-        folder.mkdirs();
+        try {
+            // Make sure the Settings folder exists
+            Files.createDirectories(ACTIVE_WILDLOG_SETTINGS_FOLDER);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
         // Enable logging to file
         if (logToFile) {
             try {
                 // Saving the orginal stream
-                PrintStream fileStream = new PrintStream(new FileOutputStream(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "errorlog.txt"), true));
+                PrintStream fileStream = new PrintStream(new FileOutputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt").toFile()), true);
                 // Redirecting console output to file
                 System.setOut(fileStream);
                 // Redirecting runtime exceptions to file
@@ -213,7 +230,7 @@ public class WildLogApp extends Application {
             ex.printStackTrace(System.out);
             FileWriter writer = null;
             try {
-                writer = new FileWriter(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "wildloghome"));
+                writer = new FileWriter(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome").toFile());
                 if (new File(File.separator).canWrite()) {
                     writer.write(File.separator);
                 }
@@ -246,15 +263,27 @@ public class WildLogApp extends Application {
         }
         System.out.println("STARTING UP WildLog - "
                 + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
-        System.out.println("WildLog Setting Folder: " + WILDLOG_SETTINGS_FOLDER);
-        // Launch the application
+        System.out.println("WildLog Setting Folder: " + ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
+        // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
     }
 
     private static void configureWildLogHomeBasedOnSettingsFile() throws IOException {
-        // Using try-with-resource to close the reader when done, the error should still be thrown if something goes wrong
-        try (BufferedReader reader = new BufferedReader(new FileReader(WildLogPaths.concatPaths(true, WILDLOG_SETTINGS_FOLDER, "wildloghome")))) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("wildloghome").toFile()));
             WildLogPaths.setWorkspacePrefix(reader.readLine());
+        }
+        // No catch: The error should be thrown if something goes wrong
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+            }
         }
     }
 
@@ -288,10 +317,10 @@ public class WildLogApp extends Application {
         super.shutdown();
         view.setVisible(false);
         view.dispose();
-        if (dbi != null)
+        if (dbi != null) {
             dbi.close();
-        System.out.println("SHUTTING DOWN WildLog - "
-                + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+        }
+        System.out.println("SHUTTING DOWN WildLog - " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
         System.out.println();
     }
 
@@ -396,8 +425,8 @@ public class WildLogApp extends Application {
         return threadCount;
     }
 
-    public static String getWILDLOG_SETTINGS_FOLDER() {
-        return WILDLOG_SETTINGS_FOLDER;
+    public static Path getACTIVE_WILDLOG_SETTINGS_FOLDER() {
+        return ACTIVE_WILDLOG_SETTINGS_FOLDER;
     }
 
     public WildLogView getMainFrame() {

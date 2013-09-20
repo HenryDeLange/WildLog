@@ -1,151 +1,125 @@
 package wildlog.utils;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
+/**
+ * This enum centralizes all file path related logic for the application. </br>
+ * General notes and recommended use: </br>
+ *  - For relative paths all enums defined here will <b>start with a File Separator</b>. </br>
+ *  - All paths defined here will <b>end without File Separators</b>.
+ */
 public enum WildLogPaths {
-    WILDLOG (File.separatorChar + "WildLog" + File.separatorChar),
-    WILDLOG_DATA (File.separatorChar + "WildLog" + File.separatorChar + "Data" + File.separatorChar),
-    WILDLOG_FILES (File.separatorChar + "WildLog" + File.separatorChar + "Files" + File.separatorChar),
-    WILDLOG_FILES_IMAGES (File.separatorChar + "WildLog" + File.separatorChar + "Files" + File.separatorChar + "Images" + File.separatorChar),
-    WILDLOG_FILES_MOVIES (File.separatorChar + "WildLog" + File.separatorChar + "Files" + File.separatorChar + "Movies" + File.separatorChar),
-    WILDLOG_FILES_OTHER (File.separatorChar + "WildLog" + File.separatorChar + "Files" + File.separatorChar + "Other" + File.separatorChar),
-    WILDLOG_THUMBNAILS_IMAGES (File.separatorChar + "WildLog" + File.separatorChar + "Thumbnails" + File.separatorChar),
-    WILDLOG_MAPS (File.separatorChar + "WildLog" + File.separatorChar + "Maps" + File.separatorChar),
-    WILDLOG_BACKUPS (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar),
-    WILDLOG_BACKUPS_MONTHLY (File.separatorChar + "WildLog" + File.separatorChar + "Backup" + File.separatorChar + "Auto" + File.separatorChar),
-    WILDLOG_EXPORT (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar),
-    WILDLOG_EXPORT_KML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "KML" + File.separatorChar),
-    WILDLOG_EXPORT_CSV (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "CSV" + File.separatorChar),
-    WILDLOG_EXPORT_HTML (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "HTML" + File.separatorChar),
-    WILDLOG_EXPORT_SLIDESHOW (File.separatorChar + "WildLog" + File.separatorChar + "Export" + File.separatorChar + "Slideshow" + File.separatorChar)
-    ;
+    /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
+    DEFAUL_SETTINGS_FOLDER         (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
+    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
+    OPEN_H2                        (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.3.171.jar")),
+    /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
+    OPEN_OPENMAP                   (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
+    /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
+     * The workspacePRefix already has this value appended. */
+    DEFAULT_WORKSPACE_NAME         (Paths.get("WildLog")),
+    // These are the values that can be reused.
+    WILDLOG_DATA                   (Paths.get("Data")),
+    WILDLOG_FILES                  (Paths.get("Files")),
+    WILDLOG_FILES_IMAGES           (Paths.get("Files", "Images")),
+    WILDLOG_FILES_MOVIES           (Paths.get("Files", "Movies")),
+    WILDLOG_FILES_OTHER            (Paths.get("Files", "Other")),
+    WILDLOG_THUMBNAILS             (Paths.get("Thumbnails")),
+    WILDLOG_MAPS                   (Paths.get("Maps")),
+    WILDLOG_BACKUPS                (Paths.get("Backup")),
+    WILDLOG_BACKUPS_MONTHLY        (Paths.get("Backup", "Auto")),
+    WILDLOG_EXPORT                 (Paths.get("Export")),
+    WILDLOG_EXPORT_KML             (Paths.get("Export", "KML")),
+    WILDLOG_EXPORT_KML_THUMBNAILS  (Paths.get("Export", "KML", "Thumbnails")),
+    WILDLOG_EXPORT_CSV             (Paths.get("Export", "CSV")),
+    WILDLOG_EXPORT_HTML            (Paths.get("Export", "HTML")),
+    WILDLOG_EXPORT_HTML_THUMBNAILS (Paths.get("Export", "HTML", "Thumbnails")),
+    WILDLOG_EXPORT_SLIDESHOW       (Paths.get("Export", "Slideshow"));
 
-    private static String currentWorkspacePrefix;
-    private String path;
+    private static Path workspacePrefix;
+    private Path path;
 
-    private WildLogPaths(String inPath) {
-        path = inPath;
+    private WildLogPaths(Path inPath) {
+        path = inPath.normalize();
     }
 
     /**
      * This sets the workspace's prefix that will be used. Can be relative/absolute.
-     * @param inRoot
+     * @param inPrefix
      */
     public static void setWorkspacePrefix(String inPrefix) {
-        if (inPrefix == null)
-            currentWorkspacePrefix = getFullWorkspacePrefix(); // Dit sal 'n "mooi" waarde return
-        else
-            currentWorkspacePrefix = inPrefix;
-        // Sanitize the value to be consistent (never end in a File.sepperator, never include terminating wildlog, etc.)
-        currentWorkspacePrefix = concatPaths(false, currentWorkspacePrefix, File.separator);
-        if (currentWorkspacePrefix.charAt(0) != File.separatorChar && currentWorkspacePrefix.charAt(1) != ':')
-            currentWorkspacePrefix = concatPaths(false, File.separator, currentWorkspacePrefix);
-        if (currentWorkspacePrefix.toLowerCase().endsWith(WildLogPaths.WILDLOG.toString().toLowerCase())) {
-            // The name might be tricky to parse when it ends with WildLog so we have to do some extra checks,
-            // because the user can select either c:\MyWildLog(\WildLog\Data) or c:\MyWildLog\WildLog(\Data)...
-            // I'll use the presence of the WildLog\Data folder to test for Workspaces.
-            File testFile = new File(concatPaths(true, currentWorkspacePrefix, WildLogPaths.WILDLOG_DATA.toString().replace(WildLogPaths.WILDLOG.toString(), File.separator)));
-            if (testFile.exists() && testFile.isDirectory() && testFile.canRead() && testFile.canWrite()) {
-                // I assume the user selected the WildLog folder and we need to strip it from the worspace prefix's path
-                currentWorkspacePrefix = concatPaths(false, currentWorkspacePrefix.substring(0, currentWorkspacePrefix.length() - WildLogPaths.WILDLOG.toString().length()), File.separator);
-            }
+        if (inPrefix == null || inPrefix.isEmpty()) {
+            workspacePrefix = Paths.get(File.separator).normalize().toAbsolutePath();
+        }
+        else {
+            workspacePrefix = Paths.get(inPrefix).normalize().toAbsolutePath();
+        }
+        // Add the WildLog folder to the prefix if it was selected
+        if (!workspacePrefix.endsWith(DEFAULT_WORKSPACE_NAME.getRelativePath())) {
+            workspacePrefix = workspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath());
         }
     }
 
     /**
-     * Get the WorkspacePrefix + the Path.
+     * Get the absolute path of WorkspacePrefix + path.
      * WARNING: Rather use relative paths to cater for different drive letters, etc.
+     * @return
      */
-    public String getFullPath() {
-        return concatPaths(false, getFullWorkspacePrefix(), path);
+    public Path getAbsoluteFullPath() {
+        return workspacePrefix.resolve(path).normalize().toAbsolutePath();
     }
 
     /**
-     * Get only the Path. This is relative to the WildLog folder.
+     * Get only the Path. (For DEFAULT_WORKSPACE_NAME paths this is relative to the WildLog folder,
+     * <b>including the WildLog folder</b> in the path.)
+     * @return
      */
-    public String getRelativePath() {
+    public Path getRelativePath() {
         return path;
     }
 
     /**
      * This will return the full path of the Workspace Prefix.
-     * WARNING: Some tweaking is done to the to make it behave nicely...
+     * This value will not include the 'WildLog' at the end.
+     * @return
      */
-    public static String getFullWorkspacePrefix() {
-        if (currentWorkspacePrefix == null)
-            currentWorkspacePrefix = File.listRoots()[0].getPath();
-        return new File(currentWorkspacePrefix).getAbsolutePath();
+    public static Path getFullWorkspacePrefix() {
+        return workspacePrefix.toAbsolutePath();
     }
 
-    /**
-     * This will return the full path of the Workspace Prefix. It will start with a File.separatorChar.
-     * WARNING: Some tweaking is done to the to make it behave nicely...
-     */
-    public static String getRelativeWorkspacePrefix() {
-        return getFullWorkspacePrefix().substring(2);
-    }
-
-    /**
-     * This method will concatenate two path segments and make sure that only one File.separatorChar is used.
-     * Optionally the returned value will always end without a File.separatorChar.
-     * WARNING: The presence of any NULL values will return null.
-     *          Empty Strings will be ignored.
-     *          Multiple File.seperatorChar's are possible/allowed next one another if present in the original parts.
-     */
-    public static String concatPaths(boolean inTrimFileSeparatorFromEnd, String... inPathParts) {
-        String finalPath = "";
-        for (String part : inPathParts) {
-            if (part == null) {
-                return null;
-            }
-            if (!part.isEmpty()) {
-                if (finalPath.length() == 0) {
-                    finalPath = part;
-                    continue;
-                }
-                if (finalPath.charAt(finalPath.length()-1) == File.separatorChar
-                        && part.charAt(0) == File.separatorChar) {
-                    finalPath = finalPath + part.substring(1);
-                    continue;
-                }
-                else
-                if (finalPath.charAt(finalPath.length()-1) != File.separatorChar
-                        && part.charAt(0) != File.separatorChar) {
-                    finalPath = finalPath + File.separatorChar + part;
-                    continue;
-                }
-                else {
-                    finalPath = finalPath + part;
-                    continue;
-                }
-            }
-        }
-        if (inTrimFileSeparatorFromEnd) {
-            while (finalPath.length() > 1 && finalPath.endsWith(File.separator)) {
-                finalPath = finalPath.substring(0, finalPath.lastIndexOf(File.separatorChar));
-            }
-        }
-        return finalPath;
-    }
-
-    @Override
     /**
      * Returns the Path (relative to the WildLog folder).
      */
+    @Override
     public String toString() {
-        return getRelativePath();
+        return getRelativePath().toString();
     }
 
-    /**
-     * This method will strip the first root part from the path.
-     * WARNING: This method assumes that both the inPath and inRoot are
-     * absolute proper paths.
-     */
-    public static String stripRootFromPath(String inPath, String inRoot) {
-        if (inPath.toLowerCase().startsWith(inRoot.toLowerCase()))
-            return inPath.substring(inRoot.length());
-        else
-            return inPath;
+    // Related enums
+    public enum WildLogPathPrefixes {
+        PREFIX_ELEMENT ("Creatures"),
+        PREFIX_LOCATION ("Places"),
+        PREFIX_VISIT ("Periods"),
+        PREFIX_SIGHTING ("Observations"),
+        WILDLOG_SYSTEM_DUMP ("WildLogSystem");
+
+        private String value;
+
+        WildLogPathPrefixes (String inString) {
+            value = inString;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+
+        public Path toPath() {
+            return Paths.get(value);
+        }
+
     }
 
 }

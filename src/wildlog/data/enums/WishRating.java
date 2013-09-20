@@ -7,14 +7,14 @@ public enum WishRating {
     HIGH("High - Always great to see"),
     NORMAL("Normal - Nice to see"),
     LOW("Low - Commonly seen"),
-    NONE("None");
-    
+    NONE("");
+
     private String text;
-    
+
     WishRating(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;

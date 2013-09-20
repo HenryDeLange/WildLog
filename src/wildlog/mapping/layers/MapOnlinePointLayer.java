@@ -20,8 +20,8 @@ import org.jdesktop.swingx.mapviewer.WaypointPainter;
 import org.jdesktop.swingx.mapviewer.WaypointRenderer;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.helpers.WildLogScrollPanel;
-import wildlog.html.utils.UtilsHTML;
 
 /**
  *
@@ -112,7 +112,7 @@ public class MapOnlinePointLayer {
                 if (comp instanceof WildLogScrollPanel) {
                     scrollPane = (WildLogScrollPanel)comp;
                     JTextPane textPane = (JTextPane)scrollPane.getViewport().getComponent(0);
-                    textPane.setText("Showing " + (clickedPointIndex+1) + " of " + clickedPoints.size() + "<br/>" + clickedPoints.get(clickedPointIndex).objectWithHTML.toHTML(false, true, inApp, UtilsHTML.ImageExportTypes.ForMap));
+                    textPane.setText("Showing " + (clickedPointIndex+1) + " of " + clickedPoints.size() + "<br/>" + clickedPoints.get(clickedPointIndex).objectWithHTML.toHTML(false, true, inApp, UtilsHTMLExportTypes.ForMap, null));
                     break;
                 }
             }

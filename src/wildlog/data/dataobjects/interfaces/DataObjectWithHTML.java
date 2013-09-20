@@ -1,8 +1,9 @@
 package wildlog.data.dataobjects.interfaces;
 
 import wildlog.WildLogApp;
-import wildlog.html.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTMLExportTypes;
+import wildlog.ui.helpers.ProgressbarTask;
 
-public interface DataObjectWithHTML {
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType);
+public interface DataObjectWithHTML extends DataObjectBasicInfo {
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask);
 }

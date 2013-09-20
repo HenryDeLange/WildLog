@@ -1,5 +1,6 @@
 package wildlog.ui.helpers;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,17 +15,23 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogThumbnailSizes;
 
 
 public final class UtilTableGenerator {
 
     // METHODS:
     public static void setupCompleteElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
+        // Setup loading message
+        inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         // Load data
         String[] columnNames = {
+                                "Thumbnail",
                                 "Creature Name",
                                 "Other Name",
                                 "Type",
@@ -35,10 +42,25 @@ public final class UtilTableGenerator {
         List<Element> tempList = null;
         tempList = inApp.getDBI().list(inElement);
 
-        Object[][] tempTable = new Object[tempList.size()][6];
+        Object[][] tempTable = new Object[tempList.size()][columnNames.length];
         for (int t = 0; t < tempList.size(); t++) {
             Element tempElement = tempList.get(t);
             int i = 0;
+            WildLogFile image = inApp.getDBI().find(new WildLogFile(tempElement.getWildLogFileID()));
+            if (image != null) {
+                try {
+                    tempTable[t][i++] = UtilsImageProcessing.getScaledIcon(
+                            image.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL),
+                            WildLogThumbnailSizes.VERY_SMALL.getSize());
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace(System.err);
+                    tempTable[t][i] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+                }
+            }
+            else {
+                tempTable[t][i++] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+            }
             tempTable[t][i++] = tempElement.getPrimaryName();
             tempTable[t][i++] = tempElement.getOtherName();
             tempTable[t][i++] = tempElement.getType();
@@ -48,6 +70,10 @@ public final class UtilTableGenerator {
         }
         // Create the model
         DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
+            @Override
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
@@ -59,26 +85,40 @@ public final class UtilTableGenerator {
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(210);
+                column.setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+                column.setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
             }
-            else if (i == 1) {
-                column.setPreferredWidth(180);
+            else
+            if (i == 1) {
+                column.setPreferredWidth(200);
             }
-            else if (i == 2) {
+            else
+            if (i == 2) {
+                column.setPreferredWidth(120);
+            }
+            else
+            if (i == 3) {
                 column.setPreferredWidth(50);
             }
-            else if (i == 3) {
+            else
+            if (i == 4) {
                 column.setPreferredWidth(40);
             }
-            else if (i == 4) {
-                column.setPreferredWidth(140);
+            else
+            if (i == 5) {
+                column.setPreferredWidth(130);
             }
-            else if (i == 5) {
+            else
+            if (i == 6) {
                 column.setPreferredWidth(60);
             }
         }
         // Setup sorting
-        setupRowSorter(inTable, 0);
+        setupRowSorter(inTable, 1);
+        // Set row height
+        inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+        // FIXME: 'n hack vir nou, maar verander al die tables om meer effective te wees (nie heeltyd alles oor create nie) en ordentelikke renderes te gebruik...
+        inTable.getCellRenderer(0, 0).getTableCellRendererComponent(inTable, null, false, true, 0, 0).setBackground(Color.BLACK);
     }
 
     public static void setupShortElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
@@ -125,8 +165,11 @@ public final class UtilTableGenerator {
     }
 
     public static void setupCompleteLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
+        // Setup loading message
+        inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         // Load data
         String[] columnNames = {
+                                "Thumbnail",
                                 "Place Name",
                                 "Rating",
                                 "Wildlife Rating",
@@ -134,10 +177,26 @@ public final class UtilTableGenerator {
                                 "Longitude"
                                 };
         List<Location> tempList = inApp.getDBI().list(inLocation);
-        Object[][] tempTable = new Object[tempList.size()][6];
+        Object[][] tempTable = new Object[tempList.size()][columnNames.length];
         for (int t = 0; t < tempList.size(); t++) {
             Location tempLocation = tempList.get(t);
             int i = 0;
+            WildLogFile image = inApp.getDBI().find(new WildLogFile(tempLocation.getWildLogFileID()));
+            if (image != null) {
+                try {
+                    tempTable[t][i++] = UtilsImageProcessing.getScaledIcon(
+                            image.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL),
+                            WildLogThumbnailSizes.VERY_SMALL.getSize());
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace(System.err);
+                    // TODO: handle movie en other files se display beter
+                    tempTable[t][i] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+                }
+            }
+            else {
+                tempTable[t][i++] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+            }
             tempTable[t][i++] = tempLocation.getName();
             tempTable[t][i++] = tempLocation.getRating();
             tempTable[t][i++] = tempLocation.getGameViewingRating();
@@ -145,35 +204,52 @@ public final class UtilTableGenerator {
             tempTable[t][i++] = UtilsGps.getLongitudeString(tempLocation);
         }
         // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
+        DefaultTableModel tableModel = new DefaultTableModel(tempTable, columnNames) {
+            @Override
+            public Class getColumnClass(int column) {
+                return getValueAt(0, column).getClass();
+            }
             @Override
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return false;
             }
         };
-        inTable.setModel(table);
+        inTable.setModel(tableModel);
         // Resize the columns
         TableColumn column = null;
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
             column = inTable.getColumnModel().getColumn(i);
             if (i == 0) {
-                column.setPreferredWidth(220);
+                column.setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+                column.setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
             }
-            else if (i == 1) {
+            else
+            if (i == 1) {
+                column.setPreferredWidth(200);
+            }
+            else
+            if (i == 2) {
                 column.setPreferredWidth(30);
             }
-            else if (i == 2) {
+            else
+            if (i == 3) {
                 column.setPreferredWidth(30);
             }
-            else if (i == 3) {
+            else
+            if (i == 4) {
                 column.setPreferredWidth(25);
             }
-            else if (i == 4) {
+            else
+            if (i == 5) {
                 column.setPreferredWidth(25);
             }
         }
         // Setup sorting
-        setupRowSorter(inTable, 0);
+        setupRowSorter(inTable, 1);
+        // Set row height
+        inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+        // FIXME: 'n hack vir nou, maar verander al die tables om meer effective te wees (nie heeltyd alles oor create nie) en ordentelikke renderes te gebruik...
+        inTable.getCellRenderer(0, 0).getTableCellRendererComponent(inTable, null, false, true, 0, 0).setBackground(Color.BLACK);
     }
 
     public static void setupCompleteVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
@@ -375,7 +451,7 @@ public final class UtilTableGenerator {
         String[] columnNames = {
                                 "Creature Name",
                                 "Date",
-                                "View Rating",
+                                "Evidence",
                                 "Certainty",
                                 "Type",
                                 "ID",
@@ -392,13 +468,13 @@ public final class UtilTableGenerator {
                 int i = 0;
                 tempTable[t][i++] = tempSighting.getElementName();
                 tempTable[t][i++] = tempSighting.getDate();
-                tempTable[t][i++] = tempSighting.getViewRating();
+                tempTable[t][i++] = tempSighting.getSightingEvidence();
                 tempTable[t][i++] = tempSighting.getCertainty();
                 tempTable[t][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
                 tempTable[t][i++] = tempSighting.getSightingCounter();
                 if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null)
                     if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE))
-                        tempTable[t][i++] = "Yes";
+                        tempTable[t][i++] = "GPS";
                     else tempTable[t][i++] = "";
                 else
                     tempTable[t][i++] = "";

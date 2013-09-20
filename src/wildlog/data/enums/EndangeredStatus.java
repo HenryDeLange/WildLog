@@ -9,21 +9,21 @@ public enum EndangeredStatus {
     VU("Vu", "Vunerable"),
     NT("Nt", "Near threatened"),
     LC("Lc", "Least Concern"),
-    NONE("", "None");
-    
+    NONE("", "");
+
     private String text;
     private String key;
-    
+
     EndangeredStatus(String inKey, String inText) {
         text = inText;
         key = inKey;
     }
-    
+
     @Override
     public String toString() {
         return text;
     }
-    
+
     public String key() {
         return key;
     }

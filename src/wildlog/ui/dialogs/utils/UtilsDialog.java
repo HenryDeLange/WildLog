@@ -37,11 +37,14 @@ import wildlog.data.dataobjects.WildLogFile;
 
 public class UtilsDialog {
 
-    public static void addModalBackgroundPanel(RootPaneContainer inParentContainer, Window inWindow) {
+    private UtilsDialog() {
+    }
+
+    public static void addModalBackgroundPanel(RootPaneContainer inParentContainer, Window inPopupWindow) {
         // Note: The actual background colour, etc. is set once in the WildLogApp class.
         final JPanel glassPane = (JPanel)inParentContainer.getGlassPane();
         glassPane.setVisible(true);
-        inWindow.addWindowListener(new WindowAdapter() {
+        inPopupWindow.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosed(e);
@@ -50,7 +53,7 @@ public class UtilsDialog {
         });
     }
 
-    public static void addModalBackgroundPanel(JDialog inParentContainer, Window inWindow) {
+    public static void addModalBackgroundPanel(JDialog inParentContainer, Window inPopupWindow) {
         // Setup the glassPane for modal popups
         final JPanel glassPane = (JPanel)inParentContainer.getGlassPane();
         glassPane.setLayout(new BorderLayout());
@@ -59,10 +62,10 @@ public class UtilsDialog {
         glassPane.removeAll();
         glassPane.add(background, BorderLayout.CENTER);
         // The inWindow will be null if we just want to set the background on a dialog's own GlassPane (for JOptionPane popups).
-        if (inWindow != null) {
+        if (inPopupWindow != null) {
             glassPane.setVisible(true);
             // Setup the hiding of the pane
-            inWindow.addWindowListener(new WindowAdapter() {
+            inPopupWindow.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
                     super.windowClosed(e);
@@ -106,7 +109,7 @@ public class UtilsDialog {
                     Metadata meta = JpegMetadataReader.readMetadata(inFile);
                     Iterator<Directory> directories = meta.getDirectories().iterator();
                     breakAllWhiles: while (directories.hasNext()) {
-                        Directory directory = (Directory)directories.next();
+                        Directory directory = directories.next();
                         Collection<Tag> tags = directory.getTags();
                         for (Tag tag : tags) {
                             String name = tag.getTagName();
@@ -179,10 +182,9 @@ public class UtilsDialog {
     }
 
     public static void showExifPopup(String inID, int inIndex, WildLogApp inApp) {
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > 0) {
-            String fileName = fotos.get(inIndex).getFilePath(true);
-            showExifPopup(inApp, new File(fileName));
+        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(inID));
+        if (files.size() > 0) {
+            showExifPopup(inApp, files.get(inIndex).getAbsolutePath().toFile());
         }
     }
 
@@ -192,11 +194,13 @@ public class UtilsDialog {
 
     public static int showDialogBackgroundWrapper(RootPaneContainer inParentContainer, DialogWrapper inDialogWrapper) {
         // TODO: Maybe one day replace this method with a propper custom message/dialog class that will work in a similar way to the JOptionPane, but is setup to use the Glasspane, etc.
-        if (inParentContainer != null)
+        if (inParentContainer != null) {
             inParentContainer.getGlassPane().setVisible(true);
+        }
         int result = inDialogWrapper.showDialog();
-        if (inParentContainer != null)
+        if (inParentContainer != null) {
             inParentContainer.getGlassPane().setVisible(false);
+        }
         return result;
     }
 

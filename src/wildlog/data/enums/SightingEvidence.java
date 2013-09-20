@@ -5,7 +5,7 @@ public enum SightingEvidence {
     SEEN("Seen"),
     HEARD("Heard"),
     OTHER_EVIDENCE("Other Evidence"),
-    NONE("None");
+    NONE("");
 
 
     private String text;

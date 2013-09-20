@@ -426,11 +426,16 @@ public class SunMoonDialog extends JDialog {
                 // Hours
                 if (TimeFormat.PM.equals(cmbTimeFormat.getSelectedItem())) {
                     int tempHours = 12 + (Integer)spnHours.getValue();
-                    if (tempHours >= 24) calendar.set(Calendar.HOUR_OF_DAY, tempHours - 12);
-                    else calendar.set(Calendar.HOUR_OF_DAY, tempHours);
+                    if (tempHours >= 24) {
+                        calendar.set(Calendar.HOUR_OF_DAY, tempHours - 12);
+                    }
+                    else {
+                        calendar.set(Calendar.HOUR_OF_DAY, tempHours);
+                    }
                 }
-                else
+                else {
                     calendar.set(Calendar.HOUR_OF_DAY, (Integer)spnHours.getValue());
+                }
                 // Minutes
                 calendar.set(Calendar.MINUTE, (Integer)spnMinutes.getValue());
             }

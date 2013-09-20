@@ -1,6 +1,7 @@
 package wildlog.data.dbi;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,8 +48,9 @@ import wildlog.data.enums.Weather;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
-import wildlog.data.utils.WildLogDataState;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogThumbnailSizes;
 
 public abstract class DBI_JDBC implements DBI {
     // Variables
@@ -294,11 +296,11 @@ public abstract class DBI_JDBC implements DBI {
         WildLogFile tempFile = null;
         try {
             String sql = findFile;
-            if (inFile.getFilePath(false) != null) {
+            if (inFile.getDBFilePath() != null) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
-                state.setString(1, UtilsData.sanitizeString(inFile.getFilePath(false)));
+                state.setString(1, UtilsData.sanitizeString(inFile.getDBFilePath()));
             }
             else
             if (inFile.getId() != null) {
@@ -313,7 +315,7 @@ public abstract class DBI_JDBC implements DBI {
                     tempFile = new WildLogFile();
                     tempFile.setId(results.getString("ID"));
                     tempFile.setFilename(results.getString("FILENAME"));
-                    tempFile.setFilePath(results.getString("ORIGINALPATH"));
+                    tempFile.setDBFilePath(results.getString("ORIGINALPATH"));
                     tempFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
                     tempFile.setUploadDate(results.getDate("UPLOADDATE"));
                     tempFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
@@ -633,7 +635,7 @@ public abstract class DBI_JDBC implements DBI {
                 WildLogFile tempFoto = new WildLogFile();
                 tempFoto.setId(results.getString("ID"));
                 tempFoto.setFilename(results.getString("FILENAME"));
-                tempFoto.setFilePath(results.getString("ORIGINALPATH"));
+                tempFoto.setDBFilePath(results.getString("ORIGINALPATH"));
                 tempFoto.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
                 tempFoto.setUploadDate(results.getDate("UPLOADDATE"));
                 tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
@@ -731,7 +733,6 @@ public abstract class DBI_JDBC implements DBI {
                         temp.setId(Element.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
                         createOrUpdate(temp, true);
                     }
-                    WildLogDataState.increaseCounterForNameChanges();
                 }
                 // Update
                 state = conn.prepareStatement(updateElement);
@@ -740,7 +741,6 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 state = conn.prepareStatement(createElement);
-                WildLogDataState.increaseCounterForAddOrDelete();
             }
             state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getPrimaryName()), 150));
             state.setString(2, UtilsData.limitLength(UtilsData.sanitizeString(inElement.getOtherName()), 150));
@@ -821,7 +821,6 @@ public abstract class DBI_JDBC implements DBI {
                         temp.setId(Location.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
                         createOrUpdate(temp, true);
                     }
-                    WildLogDataState.increaseCounterForNameChanges();
                 }
                 // Update
                 state = conn.prepareStatement(updateLocation);
@@ -830,7 +829,6 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 state = conn.prepareStatement(createLocation);
-                WildLogDataState.increaseCounterForAddOrDelete();
             }
             state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inLocation.getName()), 150));
             state.setString(2, UtilsData.sanitizeString(inLocation.getDescription()));
@@ -894,7 +892,6 @@ public abstract class DBI_JDBC implements DBI {
                         temp.setId(Visit.WILDLOGFILE_ID_PREFIX + UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
                         createOrUpdate(temp, true);
                     }
-                    WildLogDataState.increaseCounterForNameChanges();
                 }
                 // Update
                 state = conn.prepareStatement(updateVisit);
@@ -903,7 +900,6 @@ public abstract class DBI_JDBC implements DBI {
             else {
                 // Insert
                 state = conn.prepareStatement(createVisit);
-                WildLogDataState.increaseCounterForAddOrDelete();
             }
             state.setString(1, UtilsData.limitLength(UtilsData.sanitizeString(inVisit.getName()), 150));
             if (inVisit.getStartDate() != null) {
@@ -963,14 +959,15 @@ public abstract class DBI_JDBC implements DBI {
                 }
                 // Insert
                 state = conn.prepareStatement(createSighting);
-                WildLogDataState.increaseCounterForAddOrDelete();
             }
             // Populate the values
             state.setLong(1, inSighting.getSightingCounter());
-            if (inSighting.getDate() != null)
-            	state.setTimestamp(2, new Timestamp(inSighting.getDate().getTime()));
-            else
-            	state.setTimestamp(2, null);
+            if (inSighting.getDate() != null) {
+                state.setTimestamp(2, new Timestamp(inSighting.getDate().getTime()));
+            }
+            else {
+                state.setTimestamp(2, null);
+            }
             state.setString(3, UtilsData.sanitizeString(inSighting.getElementName()));
             state.setString(4, UtilsData.sanitizeString(inSighting.getLocationName()));
             state.setString(5, UtilsData.sanitizeString(inSighting.getVisitName()));
@@ -1029,7 +1026,7 @@ public abstract class DBI_JDBC implements DBI {
             }
             state.setString(1, UtilsData.sanitizeString(inFile.getId()));
             state.setString(2, UtilsData.sanitizeString(inFile.getFilename()));
-            state.setString(3, UtilsData.sanitizeString(inFile.getFilePath(false)));
+            state.setString(3, UtilsData.sanitizeString(inFile.getDBFilePath()));
             state.setString(4, UtilsData.stringFromObject(inFile.getFileType()));
             if (inFile.getUploadDate() != null) {
                 state.setDate(5, new java.sql.Date(inFile.getUploadDate().getTime()));
@@ -1044,7 +1041,7 @@ public abstract class DBI_JDBC implements DBI {
                 state.setBoolean(6, false);
             }
             if (inUpdate) {
-                state.setString(7, UtilsData.sanitizeString(inFile.getFilePath(false)));
+                state.setString(7, UtilsData.sanitizeString(inFile.getDBFilePath()));
             }
             state.executeUpdate();
         }
@@ -1142,7 +1139,6 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
-            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
@@ -1177,7 +1173,6 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
-            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
@@ -1211,7 +1206,6 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
-            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
@@ -1238,24 +1232,35 @@ public abstract class DBI_JDBC implements DBI {
         }
         finally {
             closeStatement(state);
-            WildLogDataState.increaseCounterForAddOrDelete();
         }
         return true;
     }
 
     @Override
-    public boolean delete(WildLogFile inFoto) {
-        // Note: this method only deletes one file at a time
+    public boolean delete(WildLogFile inWildLogFile) {
+        // Note: This method only deletes one file at a time, and all it's "default" thumbnails
         PreparedStatement state = null;
         try {
             state = conn.prepareStatement(deleteFile);
-            state.setString(1, UtilsData.sanitizeString(inFoto.getDBFilePath()));
+            state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
             // Delete File from database
             state.executeUpdate();
             // Delete the file on the PC
-            File tempFile = new File(inFoto.getFilePath(true));
-            tempFile.delete();
-            // NOTE: Huidiglik gaan dit die thumbnails agter los, dis OK vir nou want mens kan alle thumbnails delete soos mens wil, maar sal nice wees om dit ook skoon te maak
+            try {
+                Files.deleteIfExists(inWildLogFile.getAbsolutePath());
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            // Delete "default/known" thumbnails
+            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                try {
+                    Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(inWildLogFile, size));
+                }
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
+                }
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);

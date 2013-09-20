@@ -1,12 +1,17 @@
 package wildlog.data.dataobjects;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogSystemImages;
+import wildlog.utils.WildLogThumbnailSizes;
 
 public class WildLogFile implements Comparable<WildLogFile> {
     private String id; // The id should be in the format: location-kruger or creature-rooibok
@@ -25,11 +30,7 @@ public class WildLogFile implements Comparable<WildLogFile> {
     }
 
     public WildLogFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        id = inID;
-        filename = inFilename;
-        originalFileLocation = inFilePath;
-        uploadDate = Calendar.getInstance().getTime();
-        fileType = inFileType;
+        this(inID, inFilename, inFilePath, inFileType, Calendar.getInstance().getTime());
     }
 
     public WildLogFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType, Date inUploadDate) {
@@ -43,26 +44,22 @@ public class WildLogFile implements Comparable<WildLogFile> {
     // METHODS:
     @Override
     public String toString() {
-        return filename + " - " + originalFileLocation;
+        return "[WildLogFile=" + originalFileLocation + "]";
     }
 
     @Override
     public int compareTo(WildLogFile inWildLogFile) {
         if (inWildLogFile != null) {
             if (WildLogFileType.IMAGE.equals(fileType) && WildLogFileType.IMAGE.equals(inWildLogFile.getFileType())) {
-                File file1 = new File(this.getFilePath(true));
-                File file2 = new File(inWildLogFile.getFilePath(true));
-                Date date1 = UtilsImageProcessing.getDateFromImage(file1);
-                Date date2 = UtilsImageProcessing.getDateFromImage(file2);
+                Date date1 = UtilsImageProcessing.getDateFromImage(getAbsolutePath());
+                Date date2 = UtilsImageProcessing.getDateFromImage(inWildLogFile.getAbsolutePath());
                 if (date1 != null && date2 != null) {
                     return date1.compareTo(date2);
                 }
             }
             else {
-                File file1 = new File(this.getFilePath(true));
-                File file2 = new File(inWildLogFile.getFilePath(true));
-                Date date1 = UtilsImageProcessing.getDateFromFileDate(file1);
-                Date date2 = UtilsImageProcessing.getDateFromFileDate(file2);
+                Date date1 = UtilsImageProcessing.getDateFromFileDate(getAbsolutePath());
+                Date date2 = UtilsImageProcessing.getDateFromFileDate(inWildLogFile.getAbsolutePath());
                 if (date1 != null && date2 != null) {
                     return date1.compareTo(date2);
                 }
@@ -71,31 +68,48 @@ public class WildLogFile implements Comparable<WildLogFile> {
         return 0;
     }
 
-    public String toHTML(UtilsHTML.ImageExportTypes inExportType) {
-        if (fileType.equals(WildLogFileType.IMAGE))
-            // Moet die getter hier gebruik want ek wil die File().exists() doen...
-            return "<a href='" + getFilePath(true) + "' target='_blank'>"
-                    + UtilsHTML.generateHTMLImages(getThumbnailPath(UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a>";
+    public String toHTML(UtilsHTMLExportTypes inExportType) {
+        String startTag = "<a href='../../../" + getRelativePath().toString().replace(File.separator, "/") + "' target='_blank'>";
+        // Moet die getAbsoluteThumbnailPath(..) hier gebruik want ek wil die File().exists() doen en dit create as dit nie bestaan nie...
+        if (fileType.equals(WildLogFileType.IMAGE)) {
+            return startTag + UtilsHTML.generateHTMLImages(this, inExportType) + "</a>";
+        }
         else
-        if (fileType.equals(WildLogFileType.MOVIE))
-            return "<a href='" + getFilePath(true) + "' target='_blank'>"
-                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
-                        new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath(), "Movie.png")),
-                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a> ";
+        if (fileType.equals(WildLogFileType.MOVIE)) {
+            return startTag + UtilsHTML.generateHTMLImages(WildLogSystemImages.MOVIES.getWildLogFile(), inExportType) + "</a> ";
+        }
         else
-        if (fileType.equals(WildLogFileType.OTHER))
-            return "<a href='" + getFilePath(true) + "' target='_blank'>"
-                    + UtilsHTML.generateHTMLImages(UtilsImageProcessing.getThumbnail(
-                        new File(WildLogPaths.concatPaths(true, WildLogPaths.WILDLOG_EXPORT_HTML.getRelativePath(), "OtherFile.png")),
-                        UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM), inExportType) + "</a> ";
-        else
+        if (fileType.equals(WildLogFileType.OTHER)) {
+            return startTag + UtilsHTML.generateHTMLImages(WildLogSystemImages.OTHER_FILES.getWildLogFile(), inExportType) + "</a> ";
+        }
+        else {
             return "";
+        }
     }
 
-    public String getThumbnailPath(int inSize) {
-        return UtilsImageProcessing.getThumbnail(
-                WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(),originalFileLocation),
-                inSize);
+    /**
+     * Returns the relative path including the WildLog prefix for the workspace.
+     * @return
+     */
+    public Path getRelativePath() {
+        return Paths.get(originalFileLocation).normalize();
+    }
+
+    /**
+     * Returns the absolute path of the file, including root, workspace location and relative path.
+     * @return
+     */
+    public Path getAbsolutePath() {
+        return WildLogPaths.getFullWorkspacePrefix().resolve(originalFileLocation).normalize();
+    }
+
+    /**
+     * Convenience method for UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate().
+     * @param inSize
+     * @return
+     */
+    public Path getAbsoluteThumbnailPath(WildLogThumbnailSizes inSize) {
+        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize);
     }
 
     // GETTERS and SETTERS
@@ -103,16 +117,18 @@ public class WildLogFile implements Comparable<WildLogFile> {
         return uploadDate;
     }
 
-    public String getFilePath(boolean inGetFullpath) {
-        // Dis bietjie van 'n hack, maar dit help met geskuifde folders...
-        if (inGetFullpath)
-            return WildLogPaths.concatPaths(true, WildLogPaths.getFullWorkspacePrefix(), originalFileLocation);
-        else
-            return WildLogPaths.concatPaths(false, File.separator, originalFileLocation);
-    }
-
+    /**
+     * This will be the relative path, as stored in the database.<br/>
+     * This path should always start without a file separator.<br/>
+     * The path should also always use '/' characters as path separators.<br/>
+     * (Relative path for workspace: ex. WildLog/Files/Images/Observation/Kruger/IMGP3365.JPG)
+     * @return
+     */
     public String getDBFilePath() {
-        return originalFileLocation;
+        if (originalFileLocation == null) {
+            return null;
+        }
+        return Paths.get(originalFileLocation).normalize().toString().replace("\\", "/");
     }
 
     public WildLogFileType getFileType() {
@@ -123,8 +139,15 @@ public class WildLogFile implements Comparable<WildLogFile> {
         uploadDate = inDate;
     }
 
-    public void setFilePath(String inOriginalFileLocation) {
-        originalFileLocation = inOriginalFileLocation;
+    /**
+     * This needs to be the relative path that will be stored in the database.<br/>
+     * This path should always start without a file separator.<br/>
+     * The path should always use '/' characters as path separators.<br/>
+     * (Relative path for workspace: ex. WildLog/Files/Images/Observation/Kruger/IMGP3365.JPG)
+     * @param inFilePathFromDB
+     */
+    public void setDBFilePath(String inFilePathFromDB) {
+        originalFileLocation = Paths.get(inFilePathFromDB).normalize().toString().replace("\\", "/");
     }
 
     public void setFileType(WildLogFileType inFileType) {
@@ -135,24 +158,24 @@ public class WildLogFile implements Comparable<WildLogFile> {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String inId) {
+        id = inId;
     }
 
     public String getFilename() {
         return filename;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
+    public void setFilename(String inFilename) {
+        filename = inFilename;
     }
 
     public boolean isDefaultFile() {
         return defaultFile;
     }
 
-    public void setDefaultFile(boolean defaultFile) {
-        this.defaultFile = defaultFile;
+    public void setDefaultFile(boolean inDefaultFile) {
+        defaultFile = inDefaultFile;
     }
 
 }

@@ -5,7 +5,7 @@ public enum UnitsSize {
     CENTI_METER("cm"),
     FEET("ft"),
     INCHES("in"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

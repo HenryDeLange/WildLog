@@ -15,14 +15,20 @@ import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class MoveVisitDialog extends JDialog {
-     // Variables:
     private WildLogApp app;
 
-    /** Creates new form MoveVisitDialog */
-    public MoveVisitDialog(WildLogApp inApp) {
+    public MoveVisitDialog(WildLogApp inApp, Visit inVisit) {
         app = inApp;
         initComponents();
         loadLists();
+        // If a visit was specified, select and lock the UI
+        if (inVisit != null) {
+            lstFromLocation.setSelectedValue(inVisit.getLocationName(), true);
+            lstFromLocation.setEnabled(false);
+            lstFromLocationValueChanged(null);
+            lstVisit.setSelectedValue(inVisit.getName(), true);
+            lstVisit.setEnabled(false);
+        }
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -72,16 +78,15 @@ public class MoveVisitDialog extends JDialog {
         lstFromLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
         lstFromLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
-        lstFromLocation.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                lstFromLocationMouseReleased(evt);
+        lstFromLocation.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstFromLocationValueChanged(evt);
             }
         });
         jScrollPane1.setViewportView(lstFromLocation);
 
         jScrollPane2.setName("jScrollPane2"); // NOI18N
 
-        lstVisit.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstVisit.setName("lstVisit"); // NOI18N
         lstVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
         jScrollPane2.setViewportView(lstVisit);
@@ -149,37 +154,25 @@ public class MoveVisitDialog extends JDialog {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lstFromLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstFromLocationMouseReleased
-        DefaultListModel visitModel = new DefaultListModel();
-        if (lstFromLocation.getSelectedIndex() >= 0) {
-            Location tempLocation = (Location)lstFromLocation.getSelectedValue();
-            Visit temp = new Visit();
-            temp.setLocationName(tempLocation.getName());
-            List<Visit> visits = app.getDBI().list(temp);
-            Collections.sort(visits);
-            for (Visit tempVisit : visits)
-                visitModel.addElement(tempVisit);
-        }
-        lstVisit.setModel(visitModel);
-    }//GEN-LAST:event_lstFromLocationMouseReleased
-
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            Location tempLocation = (Location)lstToLocation.getSelectedValue();
+            String tempLocation = (String)lstToLocation.getSelectedValue();
             // Update the Visit
-            Visit tempVisit = (Visit)lstVisit.getSelectedValue();
-            tempVisit.setLocationName(tempLocation.getName());
-            app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
-            // Update the sightings
-            Sighting temp = new Sighting();
-            temp.setVisitName(tempVisit.getName());
-            List<Sighting> sightings = app.getDBI().list(temp);
-            for (Sighting tempSighting : sightings) {
-                tempSighting.setLocationName(tempLocation.getName());
-                tempSighting.setVisitName(tempVisit.getName());
-                app.getDBI().createOrUpdate(tempSighting);
+            for (String tempVisitName : (List<String>) lstVisit.getSelectedValuesList()) {
+                Visit tempVisit = app.getDBI().find(new Visit(tempVisitName));
+                tempVisit.setLocationName(tempLocation);
+                app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
+                // Update the sightings
+                Sighting temp = new Sighting();
+                temp.setVisitName(tempVisit.getName());
+                List<Sighting> sightings = app.getDBI().list(temp);
+                for (Sighting tempSighting : sightings) {
+                    tempSighting.setLocationName(tempLocation);
+                    tempSighting.setVisitName(tempVisit.getName());
+                    app.getDBI().createOrUpdate(tempSighting);
+                }
             }
-            this.dispose();
+            dispose();
         }
         else {
             getGlassPane().setVisible(true);
@@ -190,21 +183,36 @@ public class MoveVisitDialog extends JDialog {
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
 
+    private void lstFromLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFromLocationValueChanged
+        DefaultListModel<String> visitModel = new DefaultListModel<String>();
+        if (lstFromLocation.getSelectedIndex() >= 0) {
+            String tempLocation = (String)lstFromLocation.getSelectedValue();
+            Visit temp = new Visit();
+            temp.setLocationName(tempLocation);
+            List<Visit> visits = app.getDBI().list(temp);
+            Collections.sort(visits);
+            for (Visit tempVisit : visits) {
+                visitModel.addElement(tempVisit.getName());
+            }
+        }
+        lstVisit.setModel(visitModel);
+    }//GEN-LAST:event_lstFromLocationValueChanged
+
 
     // Private Methods
     private void loadLists() {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
         Collections.sort(locations);
-        DefaultListModel fromLocationModel = new DefaultListModel();
-        DefaultListModel toLocationModel = new DefaultListModel();
+        DefaultListModel<String> fromLocationModel = new DefaultListModel<String>();
+        DefaultListModel<String> toLocationModel = new DefaultListModel<String>();
         for (Location tempLocation : locations) {
-            fromLocationModel.addElement(tempLocation);
-            toLocationModel.addElement(tempLocation);
+            fromLocationModel.addElement(tempLocation.getName());
+            toLocationModel.addElement(tempLocation.getName());
         }
         lstFromLocation.setModel(fromLocationModel);
         lstToLocation.setModel(toLocationModel);
-        lstFromLocationMouseReleased(null);
+        lstFromLocationValueChanged(null);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -219,5 +227,4 @@ public class MoveVisitDialog extends JDialog {
     private javax.swing.JList lstToLocation;
     private javax.swing.JList lstVisit;
     // End of variables declaration//GEN-END:variables
-
 }

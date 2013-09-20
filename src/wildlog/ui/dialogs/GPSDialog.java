@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.List;
@@ -39,31 +40,35 @@ public class GPSDialog extends JDialog {
     private double uiLatitude = 0.0;
     private double uiLongitude = 0.0;
     private WildLogApp app;
+    private Component parent;
 
 
-    public GPSDialog(WildLogApp inApp, JFrame parent, DataObjectWithGPS inDataObjectWithGPS) {
-        super(parent);
+    public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
+        super(inParent);
+        parent = inParent;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JFrames)
-        UtilsDialog.setDialogToCenter(parent, this);
-        UtilsDialog.addModalBackgroundPanel(parent, this);
+        UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
-    public GPSDialog(WildLogApp inApp, JDialog parent, DataObjectWithGPS inDataObjectWithGPS) {
-        super(parent);
+    public GPSDialog(WildLogApp inApp, JDialog inParent, DataObjectWithGPS inDataObjectWithGPS) {
+        super(inParent);
+        parent = inParent;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JDialogs)
-        UtilsDialog.setDialogToCenter(parent, this);
-        UtilsDialog.addModalBackgroundPanel(parent, this);
+        UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
     private void doSetup(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
         app = inApp;
         dataObjectWithGPS = inDataObjectWithGPS;
-        if (dataObjectWithGPS == null)
+        if (dataObjectWithGPS == null) {
             dispose();
+        }
         // Need to set a few settings onthe content pane before continuing (for example size, background color, etc.)
         getContentPane().setPreferredSize(new Dimension(410, 210));
         // Initialize the auto generated code
@@ -98,7 +103,7 @@ public class GPSDialog extends JDialog {
             @Override
             public void filesDropped(List<File> inFiles) {
                 if (inFiles != null && inFiles.size() == 1) {
-                    loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(inFiles.get(0)));
+                    loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(inFiles.get(0).toPath()));
                 }
             }
         });
@@ -121,8 +126,9 @@ public class GPSDialog extends JDialog {
 
     private void loadDefaultLatAndLon() {
         Latitudes tempLat = dataObjectWithGPS.getLatitude();
-        if (tempLat == null || Latitudes.NONE.equals(tempLat))
+        if (tempLat == null || Latitudes.NONE.equals(tempLat)) {
             tempLat = app.getWildLogOptions().getDefaultInputLatitude();
+        }
         if (Latitudes.NORTH.equals(tempLat)) {
             tglNorth.setSelected(true);
         }
@@ -131,8 +137,9 @@ public class GPSDialog extends JDialog {
             tglSouth.setSelected(true);
         }
         Longitudes tempLon = dataObjectWithGPS.getLongitude();
-        if (tempLon == null || Longitudes.NONE.equals(tempLon))
+        if (tempLon == null || Longitudes.NONE.equals(tempLon)) {
             tempLon = app.getWildLogOptions().getDefaultInputLongitude();
+        }
         if (Longitudes.EAST.equals(tempLon)) {
             tglEast.setSelected(true);
         }
@@ -432,14 +439,18 @@ public class GPSDialog extends JDialog {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         // Get lat and long enums
-        if (tglNorth.isSelected())
+        if (tglNorth.isSelected()) {
             dataObjectWithGPS.setLatitude(Latitudes.NORTH);
-        else
+        }
+        else {
             dataObjectWithGPS.setLatitude(Latitudes.SOUTH);
-        if (tglEast.isSelected())
+        }
+        if (tglEast.isSelected()) {
             dataObjectWithGPS.setLongitude(Longitudes.EAST);
-        else
+        }
+        else {
             dataObjectWithGPS.setLongitude(Longitudes.WEST);
+        }
         // Get the number values
         if (tglDecimalDegrees.isSelected()) {
             // Use decimal degrees
@@ -476,31 +487,39 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void tglNorthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglNorthActionPerformed
-        if (tglNorth.isSelected())
+        if (tglNorth.isSelected()) {
             tglSouth.setSelected(false);
-        else
+        }
+        else {
             tglNorth.setSelected(true);
+        }
     }//GEN-LAST:event_tglNorthActionPerformed
 
     private void tglSouthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglSouthActionPerformed
-        if (tglSouth.isSelected())
+        if (tglSouth.isSelected()) {
             tglNorth.setSelected(false);
-        else
+        }
+        else {
             tglSouth.setSelected(true);
+        }
     }//GEN-LAST:event_tglSouthActionPerformed
 
     private void tglWestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglWestActionPerformed
-        if (tglWest.isSelected())
+        if (tglWest.isSelected()) {
             tglEast.setSelected(false);
-        else
+        }
+        else {
             tglWest.setSelected(true);
+        }
     }//GEN-LAST:event_tglWestActionPerformed
 
     private void tglEastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglEastActionPerformed
-        if (tglEast.isSelected())
+        if (tglEast.isSelected()) {
             tglWest.setSelected(false);
-        else
+        }
+        else {
             tglEast.setSelected(true);
+        }
     }//GEN-LAST:event_tglEastActionPerformed
 
     private void tglDecimalDegreesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglDecimalDegreesActionPerformed
@@ -527,17 +546,19 @@ public class GPSDialog extends JDialog {
 
     private void btnUseGPXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseGPXActionPerformed
         JFileChooser fileChooser;
-        if (lastFilePath != null && lastFilePath.length() > 0)
+        if (lastFilePath != null && lastFilePath.length() > 0) {
             fileChooser = new JFileChooser(lastFilePath);
-        else
+        }
+        else {
             fileChooser = new JFileChooser();
+        }
         fileChooser.setAcceptAllFileFilterUsed(true);
         fileChooser.setFileFilter(new GpxFilter());
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         getGlassPane().setVisible(true);
-        int result = fileChooser.showOpenDialog(app.getMainFrame());
+        int result = fileChooser.showOpenDialog(parent);
         getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();
@@ -562,22 +583,24 @@ public class GPSDialog extends JDialog {
 
     private void btnUseImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseImageActionPerformed
         JFileChooser fileChooser;
-        if (lastFilePath != null && lastFilePath.length() > 0)
+        if (lastFilePath != null && lastFilePath.length() > 0) {
             fileChooser = new JFileChooser(lastFilePath);
-        else
+        }
+        else {
             fileChooser = new JFileChooser();
+        }
         fileChooser.setAcceptAllFileFilterUsed(true);
         fileChooser.setFileFilter(new ImageFilter());
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         getGlassPane().setVisible(true);
-        int result = fileChooser.showOpenDialog(app.getMainFrame());
+        int result = fileChooser.showOpenDialog(parent);
         getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();
             lastFilePath = file.getAbsolutePath();
-            loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(file));
+            loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(file.toPath()));
         }
     }//GEN-LAST:event_btnUseImageActionPerformed
 
@@ -654,8 +677,9 @@ public class GPSDialog extends JDialog {
 
     // Getters and Setters
     public static Latitudes getPrevLat() {
-        if (prevLat == null)
+        if (prevLat == null) {
             prevLat = Latitudes.NONE;
+        }
         return prevLat;
     }
 
@@ -688,8 +712,9 @@ public class GPSDialog extends JDialog {
     }
 
     public static Longitudes getPrevLon() {
-        if (prevLon == null)
+        if (prevLon == null) {
             prevLon = Longitudes.NONE;
+        }
         return prevLon;
     }
 

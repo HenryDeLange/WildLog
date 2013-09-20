@@ -10,14 +10,14 @@ public enum ElementType {
     INSECT("Insect"),
     PLANT("Plant"),
     OTHER("Other"),
-    NONE("None");
-    
+    NONE("");
+
     private String text;
-    
+
     ElementType(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;
@@ -40,5 +40,5 @@ public enum ElementType {
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
     }
-    
+
 }

@@ -7,14 +7,14 @@ public enum ViewRating {
     NORMAL("Normal"),
     BAD("Bad"),
     VERY_BAD("Very bad"),
-    NONE("None");
-    
+    NONE("");
+
     private String text;
-    
+
     ViewRating(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;

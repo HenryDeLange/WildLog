@@ -22,6 +22,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.utils.WildLogThumbnailSizes;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -38,7 +39,7 @@ public class ElementSelectionBox extends JDialog {
         initComponents();
         loadElementList();
         // Setup the escape key
-        final ElementSelectionBox thisHandler = (ElementSelectionBox)this;
+        final ElementSelectionBox thisHandler = this;
         thisHandler.getRootPane().registerKeyboardAction(
                 new ActionListener() {
                     @Override
@@ -53,7 +54,7 @@ public class ElementSelectionBox extends JDialog {
         UtilsDialog.setDialogToCenter(app.getMainFrame(), thisHandler);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), thisHandler);
         // Set the initial value
-        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + inSelectedElement, 0, lblElementImage, 150, app);
+        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + inSelectedElement, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         lstElements.setSelectedValue(inSelectedElement, true);
     }
 
@@ -215,7 +216,7 @@ public class ElementSelectionBox extends JDialog {
                     lstElementsValueChanged(null);
                 }
                 else {
-                    lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
+                    lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
                     lstElements.clearSelection();
                 }
             }
@@ -226,10 +227,10 @@ public class ElementSelectionBox extends JDialog {
         if (!lstElements.getSelectionModel().isSelectionEmpty()) {
             String selectedName = lstElements.getSelectedValue().toString();
             // Change the image
-            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblElementImage, 150, app);
+            UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         }
         else {
-            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
+            lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         }
     }//GEN-LAST:event_lstElementsValueChanged
 
@@ -256,8 +257,9 @@ public class ElementSelectionBox extends JDialog {
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void lstElementsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lstElementsKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnSelectActionPerformed(null);
+        }
     }//GEN-LAST:event_lstElementsKeyReleased
 
     private void lstElementsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lstElementsMouseClicked
@@ -289,10 +291,12 @@ public class ElementSelectionBox extends JDialog {
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         Element searchElement = new Element();
         searchElement.setType((ElementType)cmbElementType.getSelectedItem());
-        if (ElementType.NONE.equals(searchElement.getType()))
+        if (ElementType.NONE.equals(searchElement.getType())) {
             searchElement.setType(null);
-        if (txtElementName.getText().length() > 0)
+        }
+        if (txtElementName.getText().length() > 0) {
             searchElement.setPrimaryName(txtElementName.getText());
+        }
         List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElement));
         Collections.sort(elements);
         DefaultListModel model = (DefaultListModel)lstElements.getModel();

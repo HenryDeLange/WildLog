@@ -55,6 +55,8 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
@@ -97,7 +99,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         });
         txtLocationName.setText(inLocationName);
         // Setup the tab's content
-        lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
+        lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         setupTab(inProgressbarTask);
         // Pre-select the location if present
         if (inLocationName != null && !inLocationName.isEmpty()) {
@@ -143,8 +145,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private void loadImages(ProgressbarTask inProgressbarTask) {
         // Get the list of files from the folder to import from
-        if (importPath == null)
+        if (importPath == null) {
             importPath = showFileChooser();
+        }
         // Setup the datamodel
         DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
         model.getDataVector().clear();
@@ -159,10 +162,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 
     private File showFileChooser() {
         final JFileChooser fileChooser;
-        if (lastFilePath != null && lastFilePath.length() > 0)
+        if (lastFilePath != null && lastFilePath.length() > 0) {
             fileChooser = new JFileChooser(lastFilePath);
-        else
+        }
+        else {
             fileChooser = new JFileChooser();
+        }
         fileChooser.setDialogTitle("Select a folder to import");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -174,14 +179,17 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 return fileChooser.showOpenDialog(app.getMainFrame());
             }
         });
-        if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFile() == null)
+        if (result == JFileChooser.ERROR_OPTION || result != JFileChooser.APPROVE_OPTION || fileChooser.getSelectedFile() == null) {
             return null;
+        }
         else {
             lastFilePath = fileChooser.getSelectedFile().getAbsolutePath();
-            if (fileChooser.getSelectedFile().isDirectory())
+            if (fileChooser.getSelectedFile().isDirectory()) {
                 return fileChooser.getSelectedFile();
-            else
+            }
+            else {
                 return fileChooser.getSelectedFile().getParentFile();
+            }
         }
     }
 
@@ -572,14 +580,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             // Cahnge the image
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + selectedName));
             if (fotos.size() > 0) {
-                UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedName, imageIndex, lblLocationImage, 100, app);
+                UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedName, imageIndex, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
             }
             else {
-                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
+                lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
             }
         }
         else {
-            lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoImage(100));
+            lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
     }//GEN-LAST:event_lstLocationValueChanged
 
@@ -591,8 +599,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     lstLocation.scrollRectToVisible(lstLocation.getCellBounds(t, t));
                     break;
                 }
-                else
+                else {
                     lstLocation.getSelectionModel().clearSelection();
+                }
             }
         }
     }//GEN-LAST:event_txtLocationNameKeyReleased
@@ -753,7 +762,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
                                 List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
                                 for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
-                                    files.add(imageWrapper.getFile());
+                                    files.add(imageWrapper.getFile().toFile());
                                     if (imageWrapper.getDate().getTime() < startDate.getTime()) {
                                         startDate = imageWrapper.getDate();
                                     }
@@ -775,10 +784,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 }
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(
-                                            sightingWrapper.getWildLogFileID(),
-                                            "Observations" + File.separatorChar + sightingWrapper.toString(),
-                                            files.toArray(new File[files.size()]),
-                                            null, UtilsImageProcessing.THUMBNAIL_SIZE_MEDIUM, app);
+                                        sightingWrapper.getWildLogFileID(),
+                                        WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath().resolve(sightingWrapper.toPath()),
+                                        files.toArray(new File[files.size()]),
+                                        null, WildLogThumbnailSizes.NORMAL,
+                                        app);
                                 // Update the progress
                                 try {
                                     progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());
@@ -789,7 +799,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             }
                         });
                     }
-                    if (!UtilsConcurency.tryAndWaitToShutdownExecutorService(executorService)) {
+                    if (!UtilsConcurency.waitForExecutorToShutdown(executorService)) {
                         UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                             @Override
                             public int showDialog() {
@@ -835,14 +845,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 for (Element element : elements) {
                     if (sightingWrapper.getElementName().equalsIgnoreCase(element.getPrimaryName())) {
                         JLabel tempLabel = new JLabel();
-                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, 150, app);
+                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_SMALL, app);
                         sightingWrapper.setIcon(tempLabel.getIcon());
                         foundElement = true;
                         break;
                     }
                 }
                 if (!foundElement) {
-                    sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoImage(150));
+                    sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
                 }
             }
         }

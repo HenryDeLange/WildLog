@@ -5,14 +5,14 @@ public enum GameViewRating {
     GOOD("Good"),
     MEDIUM("Medium"),
     BAD("Bad"),
-    NONE("None");
-    
+    NONE("");
+
     private String text;
-    
+
     GameViewRating(String inText) {
         text = inText;
     }
-    
+
     @Override
     public String toString() {
         return text;

@@ -9,7 +9,11 @@ import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 
 
-public final class AstroCalculator {
+public class AstroCalculator {
+
+    private AstroCalculator() {
+    }
+
     public static ActiveTimeSpesific getSunCategory(Date inDate, double inLatitude, double inLongitude) {
         double[] day = SunTimes.calculateTimes(inDate, inLatitude, inLongitude, SunTimes.SUNRISE_AND_SET);
         //double[] twilight = SunTimes.calculateTimes(inDate, inLatitude, inLongitude, SunTimes.CIVIL_TWILIGHT);
@@ -20,20 +24,25 @@ public final class AstroCalculator {
         if (time >= day[SunTimes.RISE] && time <= day[SunTimes.SET]) {
             // Gedurende die dag
             double interval = (day[SunTimes.SET] - day[SunTimes.RISE])/5;
-            if (time >= (day[SunTimes.RISE]) && time < (day[SunTimes.RISE] + interval))
+            if (time >= (day[SunTimes.RISE]) && time < (day[SunTimes.RISE] + interval)) {
                 return ActiveTimeSpesific.MORNING;
+            }
             else
-            if (time >= (day[SunTimes.RISE] + interval) && time < (day[SunTimes.RISE] + interval*2))
+            if (time >= (day[SunTimes.RISE] + interval) && time < (day[SunTimes.RISE] + interval*2)) {
                 return ActiveTimeSpesific.MID_MORNING;
+            }
             else
-            if (time >= (day[SunTimes.RISE] + interval*2) && time < (day[SunTimes.RISE] + interval*3))
+            if (time >= (day[SunTimes.RISE] + interval*2) && time < (day[SunTimes.RISE] + interval*3)) {
                 return ActiveTimeSpesific.MIDDAY;
+            }
             else
-            if (time >= (day[SunTimes.RISE] + interval*3) && time < (day[SunTimes.RISE] + interval*4))
+            if (time >= (day[SunTimes.RISE] + interval*3) && time < (day[SunTimes.RISE] + interval*4)) {
                 return ActiveTimeSpesific.MID_AFTERNOON;
+            }
             else
-            if (time >= (day[SunTimes.RISE] + interval*4) && time <= (day[SunTimes.RISE] + interval*5))
+            if (time >= (day[SunTimes.RISE] + interval*4) && time <= (day[SunTimes.RISE] + interval*5)) {
                 return ActiveTimeSpesific.AFTERNOON;
+            }
         }
         else
         if (time >= nearnight[SunTimes.RISE] && time < day[SunTimes.RISE]) {
@@ -63,16 +72,20 @@ public final class AstroCalculator {
         calendar.setTime(inDate);
         double time = (double)(calendar.get(Calendar.HOUR_OF_DAY) + (((double)calendar.get(Calendar.MINUTE)) / 60.0));
         if (values[MoonTimes.RISE] <= values[MoonTimes.SET]) {
-            if (time >= values[MoonTimes.RISE] && time <= values[MoonTimes.SET])
+            if (time >= values[MoonTimes.RISE] && time <= values[MoonTimes.SET]) {
                 return Moonlight.MOON_SHINING;
+            }
         }
         else {
-            if (time >= values[MoonTimes.RISE])
+            if (time >= values[MoonTimes.RISE]) {
                 return Moonlight.MOON_SHINING;
+            }
             else
-            if (values[MoonTimes.RISE] == MoonTimes.ABOVE_HORIZON && time <= values[MoonTimes.SET])
+            if (values[MoonTimes.RISE] == MoonTimes.ABOVE_HORIZON && time <= values[MoonTimes.SET]) {
                 return Moonlight.MOON_SHINING;
+            }
         }
         return Moonlight.NO_MOON;
     }
+
 }

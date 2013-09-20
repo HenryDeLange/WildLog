@@ -5,7 +5,7 @@ public enum LifeStatus {
     ALIVE("Alive"),
     DEAD("Dead"),
     UNKNOWN("Unknown"),
-    NONE("None");
+    NONE("");
 
     private String text;
 

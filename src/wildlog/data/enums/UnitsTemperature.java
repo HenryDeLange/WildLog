@@ -3,7 +3,7 @@ package wildlog.data.enums;
 public enum UnitsTemperature {
     CELSIUS("C", "Celsius"),
     FAHRENHEIT("F", "Fahrenheit"),
-    NONE("", "None");
+    NONE("", "");
 
     private String key;
     private String text;

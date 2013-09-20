@@ -12,6 +12,7 @@ import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.utils.WildLogThumbnailSizes;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -32,7 +33,7 @@ public class ImageBox extends JPanel {
     public final void populateUI() {
         // Setup the image label
         lblImage.setIcon(imageWrapper.getIcon());
-        lblImage.setToolTipText(imageWrapper.getFile().getName());
+        lblImage.setToolTipText(imageWrapper.getFile().getFileName().toString());
     }
 
     /** This method is called from within the constructor to
@@ -154,7 +155,7 @@ public class ImageBox extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        UtilsFileProcessing.openFile(imageWrapper.getFile().getAbsolutePath());
+        UtilsFileProcessing.openFile(imageWrapper.getFile());
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void btnUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpActionPerformed
@@ -177,7 +178,7 @@ public class ImageBox extends JPanel {
         // Perform the add and remember to let the model know
         DefaultTableModel model = ((DefaultTableModel)table.getModel());
         BulkUploadSightingWrapper currentSightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
-        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoImage(150));
+        BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper);
         newSightingWrapper.setDate(imageWrapper.getDate());
         BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
@@ -222,8 +223,9 @@ public class ImageBox extends JPanel {
         if (currentListWrapper.getImageList().isEmpty()) {
             model.removeRow(row);
         }
-        else
+        else {
             model.fireTableCellUpdated(row, col);
+        }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void moveImageToNewRow(int inDelta) {
@@ -243,8 +245,9 @@ public class ImageBox extends JPanel {
         if (currentListWrapper.getImageList().isEmpty()) {
             model.removeRow(row);
         }
-        else
+        else {
             model.fireTableCellUpdated(row, col);
+        }
     }
 
     public JTable getTable() {

@@ -13,6 +13,7 @@ import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.utils.WildLogThumbnailSizes;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -214,7 +215,7 @@ public class InfoBox extends JPanel {
         dialog.setVisible(true);
         // Update the UI
         table.getCellEditor().stopCellEditing();
-        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getElementName(), 0, lblImage, 150, app);
+        UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getElementName(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         sightingWrapper.setIcon(lblImage.getIcon());
         populateUI();
     }//GEN-LAST:event_btnEditActionPerformed

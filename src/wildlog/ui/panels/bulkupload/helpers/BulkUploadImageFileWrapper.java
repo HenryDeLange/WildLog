@@ -1,6 +1,6 @@
 package wildlog.ui.panels.bulkupload.helpers;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.Date;
 import javax.swing.Icon;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
@@ -10,16 +10,16 @@ import wildlog.ui.panels.bulkupload.ImageBox;
 public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFileWrapper> {
     private Icon icon;
     private ImageBox imageBox;
-    private File file;
+    private Path file;
     private Date date;
     private DataObjectWithGPS dataObjectWithGPS;
 
 
-    public BulkUploadImageFileWrapper(File inFile, Icon inIcon, Date inDate) {
+    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, Date inDate) {
         this(inFile, inIcon, inDate, null);
     }
 
-    public BulkUploadImageFileWrapper(File inFile, Icon inIcon, Date inDate, ImageBox inImageBox) {
+    public BulkUploadImageFileWrapper(Path inFile, Icon inIcon, Date inDate, ImageBox inImageBox) {
         file = inFile;
         icon = inIcon;
         date = inDate;
@@ -47,22 +47,25 @@ public class BulkUploadImageFileWrapper implements Comparable<BulkUploadImageFil
         if (date != null && inObject != null && inObject.getDate() != null) {
             return date.compareTo(inObject.getDate());
         }
-        else
+        else {
             return 0;
+        }
     }
 
     public boolean isInSameSighting(Date inDate, long inWindowPeriodInMiliseconds) {
-        if (inDate == null)
+        if (inDate == null) {
             return false;
-        else
+        }
+        else {
             return date.getTime() <= (inDate.getTime() + inWindowPeriodInMiliseconds);
+        }
     }
 
-    public File getFile() {
+    public Path getFile() {
         return file;
     }
 
-    public void setFile(File inFile) {
+    public void setFile(Path inFile) {
         file = inFile;
     }
 

@@ -30,12 +30,22 @@
  */
 package wildlog.ui.helpers;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 
-
+/**
+ * Die class in nie meer nodig as ek die native file upload window gebruik nie,
+ * maar ek hou dit maar vir eers in die projek want ek mag dit dalk op ander OSes wil gebruik.
+ * @deprecated
+ */
+@Deprecated
 public class ImagePreview extends JComponent implements PropertyChangeListener {
     private ImageIcon thumbnail = null;
     private File file = null;
@@ -54,12 +64,10 @@ public class ImagePreview extends JComponent implements PropertyChangeListener {
         //because the image we're trying to load is probably not one
         //of this program's own resources.
         ImageIcon tmpIcon = new ImageIcon(file.getPath());
-        if (tmpIcon != null) {
-            if (tmpIcon.getIconWidth() > 200) {
-                thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance(200, -1, Image.SCALE_DEFAULT));
-            } else { //no need to miniaturize
-                thumbnail = tmpIcon;
-            }
+        if (tmpIcon.getIconWidth() > 200) {
+            thumbnail = new ImageIcon(tmpIcon.getImage().getScaledInstance(200, -1, Image.SCALE_DEFAULT));
+        } else { //no need to miniaturize
+            thumbnail = tmpIcon;
         }
     }
 

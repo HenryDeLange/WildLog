@@ -5,21 +5,22 @@ import java.util.Collections;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
-import org.jdesktop.application.Task;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.enums.WildLogFileType;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
-import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
-
+/**
+ * Wys die popup om SlideShows to maak.
+ * Ongelukkig weet ek nie hoelank dit gaan vat nie so die ProgressBar kan nie vordering wys nie.
+ */
 public class SlideshowDialog extends JDialog {
     private WildLogApp app;
     private Visit visit;
@@ -33,10 +34,8 @@ public class SlideshowDialog extends JDialog {
         visit = inVisit;
         location = inLocation;
         element = inElement;
-
         // Auto generated code
         initComponents();
-
         // Determine what buttons to show
         if (visit == null) {
             btnSlideshowVisit.setVisible(false);
@@ -50,10 +49,8 @@ public class SlideshowDialog extends JDialog {
             btnSlideshowElement.setVisible(false);
             btnSlideshowElementSightings.setVisible(false);
         }
-
         // Pack
         pack();
-
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
@@ -196,23 +193,15 @@ public class SlideshowDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSlideshowVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
-                for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                        if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getFilePath(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getFilePath(true));
-                        }
-                    }
-                }
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + ".mov");
-                setMessage("Done with the Slideshow");
+                setMessage("Creating the Slideshow for '" + visit.getName() + "'");
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, new WildLogFile(visit.getWildLogFileID()));
+                setMessage("Creating the Slideshow for '" + visit.getName() + "' (Busy writing the file, this may take a while.)");
+                UtilsMovies.generateSlideshow(slideshowList, app,
+                        WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(visit.getName() + ".mov"));
+                setMessage("Done with the Slideshow for '" + visit.getName() + "'");
                 return null;
             }
         });
@@ -220,32 +209,23 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowVisitActionPerformed
 
     private void btnSlideshowVisitSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
+                setMessage("Creating the Slideshow for '" + visit.getName() + "'");
                 Sighting temp = new Sighting();
                 temp.setVisitName(visit.getName());
                 List<Sighting> sightingList = app.getDBI().list(temp);
                 Collections.sort(sightingList);
-                for (int t = 0; t < sightingList.size(); t++) {
-                    Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
-                    for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                            // Only using JPGs because otherwise it might break the video
-                            if (tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
-                                tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
-                                slideshowList.add(tempFile.getFilePath(true));
-                            }
-                        }
-                    }
+                List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
+                for (Sighting tempSighting : sightingList) {
+                    slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
                 }
                 // Now create the slideshow
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + visit.getName() + "_Observations.mov");
-                setMessage("Done with the Slideshow");
+                setMessage("Creating the Slideshow for '" + visit.getName() + "' (Busy writing the file, this may take a while.)");
+                UtilsMovies.generateSlideshow(slideshowList, app,
+                        WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(visit.getName() + "_Observations.mov"));
+                setMessage("Done with the Slideshow for '" + visit.getName() + "'");
                 return null;
             }
         });
@@ -253,23 +233,15 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowVisitSightingsActionPerformed
 
     private void btnSlideshowLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowLocationActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
-                for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                        if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getFilePath(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getFilePath(true));
-                        }
-                    }
-                }
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + location.getName() + ".mov");
-                setMessage("Done with the Slideshow");
+                setMessage("Creating the Slideshow for '" + location.getName() + "'");
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, new WildLogFile(location.getWildLogFileID()));
+                setMessage("Creating the Slideshow for '" + location.getName() + "' (Busy writing the file, this may take a while.)");
+                UtilsMovies.generateSlideshow(slideshowList, app,
+                        WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(location.getName() + ".mov"));
+                setMessage("Done with the Slideshow for '" + location.getName() + "'");
                 return null;
             }
         });
@@ -277,32 +249,23 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowLocationActionPerformed
 
     private void btnSlideshowLocationSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowLocationSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
+                setMessage("Creating the Slideshow for '" + location.getName() + "'");
                 Sighting temp = new Sighting();
                 temp.setLocationName(location.getName());
                 List<Sighting> sightingList = app.getDBI().list(temp);
                 Collections.sort(sightingList);
-                for (int t = 0; t < sightingList.size(); t++) {
-                    Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
-                    for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                            // Only using JPGs because otherwise it might break the video
-                            if (tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
-                                tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
-                                slideshowList.add(tempFile.getFilePath(true));
-                            }
-                        }
-                    }
+                List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
+                for (Sighting tempSighting : sightingList) {
+                    slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
                 }
                 // Now create the slideshow
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + location.getName() + "_Observations.mov");
-                setMessage("Done with the Slideshow");
+                setMessage("Creating the Slideshow for '" + location.getName() + "' (Busy writing the file, this may take a while.)");
+                UtilsMovies.generateSlideshow(slideshowList, app,
+                        WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(location.getName() + "_Observations.mov"));
+                setMessage("Done with the Slideshow for '" + location.getName() + "'");
                 return null;
             }
         });
@@ -310,23 +273,15 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowLocationSightingsActionPerformed
 
     private void btnSlideshowElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowElementActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
-                List<WildLogFile> files = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
-                for (WildLogFile tempFile : files) {
-                    if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                        if (tempFile.getFilePath(true).toLowerCase().endsWith("jpg") ||
-                            tempFile.getFilePath(true).toLowerCase().endsWith("jpeg")) {
-                            slideshowList.add(tempFile.getFilePath(true));
-                        }
-                    }
-                }
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + element.getPrimaryName() + ".mov");
-                setMessage("Done with the Slideshow");
+                setMessage("Creating the Slideshow for '" + element.getPrimaryName() + "'");
+                List<String> slideshowList = UtilsMovies.getFilePaths(app, new WildLogFile(element.getWildLogFileID()));
+                setMessage("Creating the Slideshow for '" + element.getPrimaryName() + "' (Busy writing the file, this may take a while.)");
+                UtilsMovies.generateSlideshow(slideshowList, app,
+                        WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(element.getPrimaryName() + ".mov"));
+                setMessage("Done with the Slideshow for '" + element.getPrimaryName() + "'");
                 return null;
             }
         });
@@ -334,32 +289,23 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowElementActionPerformed
 
     private void btnSlideshowElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowElementSightingsActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new Task(app) {
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the Slideshow");
-                List<String> slideshowList = new ArrayList<String>();
+                setMessage("Creating the Slideshow for '" + element.getPrimaryName() + "'");
                 Sighting temp = new Sighting();
                 temp.setElementName(element.getPrimaryName());
                 List<Sighting> sightingList = app.getDBI().list(temp);
                 Collections.sort(sightingList);
-                for (int t = 0; t < sightingList.size(); t++) {
-                    Sighting tempSighting = sightingList.get(t);
-                    List<WildLogFile> files = app.getDBI().list(new WildLogFile(tempSighting.getWildLogFileID()));
-                    for (WildLogFile tempFile : files) {
-                        if (WildLogFileType.IMAGE.equals(tempFile.getFileType())) {
-                            // Only using JPGs because otherwise it might break the video
-                            if (tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpg) ||
-                                tempFile.getFilePath(true).toLowerCase().endsWith(UtilsFileProcessing.jpeg)) {
-                                slideshowList.add(tempFile.getFilePath(true));
-                            }
-                        }
-                    }
+                List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
+                for (Sighting tempSighting : sightingList) {
+                    slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
                 }
                 // Now create the slideshow
-                setMessage("Creating the Slideshow: (writing the file, this may take a while...)");
-                UtilsMovies.generateSlideshow(slideshowList, app, WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getFullPath().substring(2) + element.getPrimaryName() + "_Observations.mov");
-                setMessage("Done with the Slideshow");
+                setMessage("Creating the Slideshow for '" + element.getPrimaryName() + "' (Busy writing the file, this may take a while.)");
+                UtilsMovies.generateSlideshow(slideshowList, app,
+                        WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(element.getPrimaryName() + "_Observations.mov"));
+                setMessage("Done with the Slideshow for '" + element.getPrimaryName() + "'");
                 return null;
             }
         });

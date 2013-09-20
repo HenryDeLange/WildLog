@@ -1,6 +1,10 @@
 package wildlog.data.dataobjects;
 
 import KmlGenerator.objects.KmlEntry;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
@@ -22,9 +26,13 @@ import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 import wildlog.html.utils.UtilsHTML;
+import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.utils.WildLogPaths;
 
 public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>, DataObjectWithHTML, DataObjectWithKML, DataObjectWithWildLogFile {
+    private static final NumberFormat formatter = new DecimalFormat("0000000");
     public static final String WILDLOGFILE_ID_PREFIX = "SIGHTING-";
     private long sightingCounter; // Used as index (ID)
     private Date date; // must include time
@@ -63,12 +71,23 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         return locationName + " (" + elementName + ") [" + sightingCounter + "]";
     }
 
+    /**
+     * Return the Path representing the folder names where the files for this sighting should be stored.
+     * This path is relative to the normal prefix, such as 'Files/Images/Observation'
+     * and does not include the filename. For example: "Rooibok/Kruger/[id]".
+     * @return
+     */
+    public Path toPath() {
+        return Paths.get(elementName, locationName, "Sighting-" + formatter.format(sightingCounter));
+    }
+
     @Override
     public int compareTo(Sighting inSighting) {
-        if (inSighting != null)
+        if (inSighting != null) {
             if (date != null && inSighting.getDate() != null) {
                 return(date.compareTo(inSighting.getDate()));
             }
+        }
         return 0;
     }
 
@@ -78,13 +97,13 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     }
 
     @Override
-    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTML.ImageExportTypes inExportType) {
-        StringBuilder fotoString = new StringBuilder();
-        if (inIncludeImages) {
-            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
-            for (int t = 0; t < fotos.size(); t++) {
-                fotoString.append(fotos.get(t).toHTML(inExportType));
-            }
+    public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
+        int progressMarker;
+        if (inIsRecursive) {
+            progressMarker = 30;
+        }
+        else {
+            progressMarker = 95;
         }
         StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
         htmlSighting.append("<body bgcolor='#EEEAD3'>");
@@ -98,15 +117,17 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/> ", UtilsHTML.formatDateAsString(date, true), true);
-        if (durationMinutes >= 0 && durationSeconds > 0)
+        if (durationMinutes >= 0 && durationSeconds > 0) {
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Duration:</b><br/> ", durationMinutes + " minutes, " + durationSeconds + " seconds", true);
+        }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time of Day:</b><br/> ", timeOfDay, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moon Phase:</b><br/> ", moonPhase + " % Full", true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Moonlight:</b><br/> ", moonlight, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Number of Creatures:</b><br/> ", numberOfElements, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Weather:</b><br/> ", weather, true);
-        if (unitsTemperature != null && !UnitsTemperature.NONE.equals(unitsTemperature))
+        if (unitsTemperature != null && !UnitsTemperature.NONE.equals(unitsTemperature)) {
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Temperature:</b><br/> ", temperature + " " + unitsTemperature, true);
+        }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Sex:</b><br/> ", sex, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Life Status:</b><br/> ", lifeStatus, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Evidence:</b><br/> ", sightingEvidence, true);
@@ -114,9 +135,21 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Certainty:</b><br/> ", certainty, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Tag:</b><br/> ", tag, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Details:</b><br/> ", details, true);
-        if (inIncludeImages && fotoString.length() > 0) {
-            htmlSighting.append("<br/>");
-            htmlSighting.append("<br/><b>Photos:</b><br/>").append(fotoString);
+        if (inIncludeImages) {
+            StringBuilder filesString = new StringBuilder(500);
+            List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+            for (int t = 0; t < files.size(); t++) {
+                filesString.append(files.get(t).toHTML(inExportType));
+                if (inProgressbarTask != null) {
+                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                            + " " + inProgressbarTask.getProgress() + "%");
+                }
+            }
+            if (filesString.length() > 0) {
+                htmlSighting.append("<br/>");
+                htmlSighting.append("<br/><b>Photos:</b><br/>").append(filesString);
+            }
         }
         htmlSighting.append("</td></tr>");
         htmlSighting.append("</table>");
@@ -130,7 +163,7 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
         KmlEntry entry = new KmlEntry();
         entry.setId(inID);
         entry.setName(elementName);
-        entry.setDescription(this.toHTML(false, true, inApp, UtilsHTML.ImageExportTypes.ForKML));
+        entry.setDescription(toHTML(false, true, inApp, UtilsHTMLExportTypes.ForKML, null));
         Element element = inApp.getDBI().find(new Element(elementName));
         if (element.getType() != null) {
             if (element.getType().equals(ElementType.ANIMAL)) {
@@ -300,7 +333,9 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
     }
 
     public String getDetails() {
-        if (details == null) details = "";
+        if (details == null) {
+            details = "";
+        }
         return details;
     }
 
@@ -450,6 +485,16 @@ public class Sighting extends DataObjectWithGPS implements Comparable<Sighting>,
 
     public void setDurationSeconds(double inDurationSeconds) {
         durationSeconds = inDurationSeconds;
+    }
+
+    @Override
+    public String getExportPrefix() {
+        return WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toString();
+    }
+
+    @Override
+    public String getDisplayName() {
+        return toString();
     }
 
 }

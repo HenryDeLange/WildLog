@@ -57,14 +57,14 @@ public class DBI_h2 extends DBI_JDBC {
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
             try {
-                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve("wildlog") + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
             }
             catch (JdbcSQLException ex) {
                 System.out.println("Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
                 ex.printStackTrace(System.out);
                 // Might be trying to use the wrong password, try again with old password and update it
                 props = new Properties();
-                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getFullPath() + "wildlog;AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve("wildlog") + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
                 state = conn.createStatement();
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
@@ -144,7 +144,7 @@ public class DBI_h2 extends DBI_JDBC {
         try {
             state = conn.createStatement();
             // Backup
-            File dirs = new File(inFolder.getFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+            File dirs = new File(inFolder.getAbsoluteFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
             dirs.mkdirs();
             // Create a database file backup
             state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");
