@@ -9,6 +9,9 @@ import wildlog.data.enums.Longitudes;
 public final class UtilsGps {
     public static final String NO_GPS_POINT = "No GPS";
 
+    private UtilsGps() {
+    }
+
     public static double getLatDecimalDegree(DataObjectWithGPS inDataObjectWithGPS) {
         return getDecimalDegree(
                 inDataObjectWithGPS.getLatitude(),

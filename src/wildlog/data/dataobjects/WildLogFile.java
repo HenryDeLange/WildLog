@@ -109,7 +109,18 @@ public class WildLogFile implements Comparable<WildLogFile> {
      * @return
      */
     public Path getAbsoluteThumbnailPath(WildLogThumbnailSizes inSize) {
-        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize);
+        if (WildLogFileType.IMAGE.equals(getFileType())) {
+            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(this, inSize);
+        }
+        else
+        if (WildLogFileType.MOVIE.equals(getFileType())) {
+            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.MOVIES.getWildLogFile(), inSize);
+        }
+        else
+        if (WildLogFileType.OTHER.equals(getFileType())) {
+            return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.OTHER_FILES.getWildLogFile(), inSize);
+        }
+        return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize);
     }
 
     // GETTERS and SETTERS

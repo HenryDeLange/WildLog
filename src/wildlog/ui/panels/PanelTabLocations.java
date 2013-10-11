@@ -30,13 +30,9 @@ public class PanelTabLocations extends javax.swing.JPanel {
         tabbedPanel = inTabbedPanel;
         searchLocation = new Location();
         initComponents();
-        // Prevent reordering of the tables' columns
-        tblElement_LocTab.getTableHeader().setReorderingAllowed(false);
-        tblLocation.getTableHeader().setReorderingAllowed(false);
-        tblVisit.getTableHeader().setReorderingAllowed(false);
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement_LocTab);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
     }
 
@@ -59,9 +55,9 @@ public class PanelTabLocations extends javax.swing.JPanel {
         btnAddLocation = new javax.swing.JButton();
         btnDeleteLocation = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
-        tblElement_LocTab = new javax.swing.JTable();
+        tblElement = new javax.swing.JTable();
         btnGoVisit_LocTab = new javax.swing.JButton();
-        lblImage_LocTab = new javax.swing.JLabel();
+        lblImage = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(194, 207, 214));
@@ -161,21 +157,21 @@ public class PanelTabLocations extends javax.swing.JPanel {
             }
         });
 
-        tblElement_LocTab.setAutoCreateRowSorter(true);
-        tblElement_LocTab.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblElement_LocTab.setSelectionBackground(new java.awt.Color(82, 115, 79));
-        tblElement_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblElement.setAutoCreateRowSorter(true);
+        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+        tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
+        tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblElement_LocTabMouseClicked(evt);
+                tblElementMouseClicked(evt);
             }
         });
-        tblElement_LocTab.addKeyListener(new java.awt.event.KeyAdapter() {
+        tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblElement_LocTabKeyPressed(evt);
+                tblElementKeyPressed(evt);
             }
         });
-        jScrollPane3.setViewportView(tblElement_LocTab);
+        jScrollPane3.setViewportView(tblElement);
 
         btnGoVisit_LocTab.setBackground(new java.awt.Color(194, 207, 214));
         btnGoVisit_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
@@ -188,17 +184,17 @@ public class PanelTabLocations extends javax.swing.JPanel {
             }
         });
 
-        lblImage_LocTab.setBackground(new java.awt.Color(0, 0, 0));
-        lblImage_LocTab.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblImage_LocTab.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        lblImage_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblImage_LocTab.setMaximumSize(new java.awt.Dimension(300, 300));
-        lblImage_LocTab.setMinimumSize(new java.awt.Dimension(300, 300));
-        lblImage_LocTab.setOpaque(true);
-        lblImage_LocTab.setPreferredSize(new java.awt.Dimension(300, 300));
-        lblImage_LocTab.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblImage.setBackground(new java.awt.Color(0, 0, 0));
+        lblImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblImage.setMaximumSize(new java.awt.Dimension(300, 300));
+        lblImage.setMinimumSize(new java.awt.Dimension(300, 300));
+        lblImage.setOpaque(true);
+        lblImage.setPreferredSize(new java.awt.Dimension(300, 300));
+        lblImage.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                lblImage_LocTabMouseReleased(evt);
+                lblImageMouseReleased(evt);
             }
         });
 
@@ -232,7 +228,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
                             .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(12, 12, 12)
-                        .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -257,7 +253,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lblImage_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -280,20 +276,26 @@ public class PanelTabLocations extends javax.swing.JPanel {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
             if (fotos.size() > 0) {
-                UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage_LocTab, WildLogThumbnailSizes.NORMAL, app);
+                UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
-                lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+                lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
-            // Get Visits
             UtilTableGenerator.setupShortVisitTable(app, tblVisit, tempLocation);
-            // Get All Elements seen
-            UtilTableGenerator.setupElementsForLocationTable(app, tblElement_LocTab, tempLocation);
+            UtilTableGenerator.setupElementsForLocationTable(app, tblElement, tempLocation);
         }
         else {
-            lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-            tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
-            tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+            UtilTableGenerator.setupShortVisitTable(app, tblVisit, null);
+            UtilTableGenerator.setupElementsForLocationTable(app, tblElement, null);
+            if (tblLocation.getSelectedRowCount() == 0) {
+                tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
+                tblElement.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
+            }
+            else {
+                tblVisit.setModel(new DefaultTableModel(new String[]{"More Than One Place Selected"}, 0));
+                tblElement.setModel(new DefaultTableModel(new String[]{"More Than One Place Selected"}, 0));
+            }
         }
     }//GEN-LAST:event_tblLocationMouseReleased
 
@@ -330,9 +332,9 @@ public class PanelTabLocations extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
 
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
-        int[] selectedRows = tblElement_LocTab.getSelectedRows();
+        int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilPanelGenerator.openPanelAsTab(app, (String)(tblElement_LocTab.getValueAt(selectedRows[t], 0)),
+            UtilPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
@@ -388,41 +390,39 @@ public class PanelTabLocations extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteLocationActionPerformed
 
-    private void tblElement_LocTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElement_LocTabMouseClicked
+    private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
         if (evt.getClickCount() == 2) {
             btnGoElement_LocTabActionPerformed(null);
         }
-    }//GEN-LAST:event_tblElement_LocTabMouseClicked
+    }//GEN-LAST:event_tblElementMouseClicked
 
-    private void tblElement_LocTabKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElement_LocTabKeyPressed
+    private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoElement_LocTabActionPerformed(null);
         }
-    }//GEN-LAST:event_tblElement_LocTabKeyPressed
+    }//GEN-LAST:event_tblElementKeyPressed
 
     private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
         if (tblLocation.getSelectedRow() != -1) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getValueAt(selectedRows[t], 0)),
+                UtilPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getValueAt(selectedRows[t], 1)),
                     PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
             }
         }
     }//GEN-LAST:event_btnGoVisit_LocTabActionPerformed
 
-    private void lblImage_LocTabMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImage_LocTabMouseReleased
+    private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
             UtilsFileProcessing.openFile(tempLocation.getWildLogFileID(), 0, app);
         }
-    }//GEN-LAST:event_lblImage_LocTabMouseReleased
+    }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         UtilTableGenerator.setupCompleteLocationTable(app, tblLocation, searchLocation);
-        tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
-        tblElement_LocTab.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
-        lblImage_LocTab.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        tblLocationMouseReleased(null);
     }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -437,8 +437,8 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JLabel lblImage_LocTab;
-    private javax.swing.JTable tblElement_LocTab;
+    private javax.swing.JLabel lblImage;
+    private javax.swing.JTable tblElement;
     private javax.swing.JTable tblLocation;
     private javax.swing.JTable tblVisit;
     // End of variables declaration//GEN-END:variables

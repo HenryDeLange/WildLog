@@ -1,4 +1,4 @@
-package wildlog.ui.helpers;
+package wildlog.ui.helpers.filters;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import javax.swing.filechooser.FileFilter;
 import wildlog.utils.WildLogFileExtentions;
 
-public class ImageFilter extends FileFilter implements FilenameFilter {
+public class MovieFilter extends FileFilter implements FilenameFilter {
 
     @Override
     public boolean accept(File inFile) {
@@ -19,12 +19,12 @@ public class ImageFilter extends FileFilter implements FilenameFilter {
 
     @Override
     public String getDescription() {
-        return "Images";
+        return "Movies";
     }
 
     @Override
     public boolean accept(File inFileDirectory, String inName) {
-        return WildLogFileExtentions.Images.isKnownExtention(inName.substring(inName.lastIndexOf('.') + 1));
+        return WildLogFileExtentions.Movies.isKnownExtention(inName.substring(inName.lastIndexOf('.') + 1));
     }
 
 }

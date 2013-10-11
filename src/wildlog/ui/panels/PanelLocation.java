@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.AccommodationType;
@@ -99,9 +100,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         setupNumberOfImages();
 
         // Setup the tables
-        tblElement.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
-        tblVisit.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
 
         // setup the file dropping
@@ -234,6 +233,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         lblLocation = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
+        lblNumberOfSightings = new javax.swing.JLabel();
         pnlFiles = new javax.swing.JPanel();
         btnSetMainImage = new javax.swing.JButton();
         lblNumberOfImages = new javax.swing.JLabel();
@@ -294,7 +294,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         pnlTables = new javax.swing.JPanel();
         rdbVisit = new javax.swing.JRadioButton();
         rdbLocation = new javax.swing.JRadioButton();
-        jSeparator6 = new javax.swing.JSeparator();
         jLabel44 = new javax.swing.JLabel();
         btnGoElement = new javax.swing.JButton();
         jScrollPane11 = new javax.swing.JScrollPane();
@@ -327,8 +326,12 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel7.setText("Periods:");
+        jLabel7.setText("Observations:");
         jLabel7.setName("jLabel7"); // NOI18N
+
+        lblNumberOfSightings.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblNumberOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
 
         pnlFiles.setBackground(new java.awt.Color(233, 239, 244));
         pnlFiles.setName("pnlFiles"); // NOI18N
@@ -1018,10 +1021,6 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        jSeparator6.setForeground(new java.awt.Color(102, 102, 102));
-        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jSeparator6.setName("jSeparator6"); // NOI18N
-
         jLabel44.setText("List of all Creatures seen:");
         jLabel44.setName("jLabel44"); // NOI18N
 
@@ -1066,53 +1065,45 @@ public class PanelLocation extends PanelCanSetupHeader {
         pnlTables.setLayout(pnlTablesLayout);
         pnlTablesLayout.setHorizontalGroup(
             pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlTablesLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlTablesLayout.createSequentialGroup()
-                        .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTablesLayout.createSequentialGroup()
+                .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator2)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlTablesLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
                         .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(pnlTablesLayout.createSequentialGroup()
                                 .addGap(3, 3, 3)
-                                .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel44, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(pnlTablesLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlTablesLayout.createSequentialGroup()
-                                        .addGap(160, 160, 160)
-                                        .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(pnlTablesLayout.createSequentialGroup()
                                         .addGap(50, 50, 50)
                                         .addComponent(rdbVisit))
                                     .addGroup(pnlTablesLayout.createSequentialGroup()
                                         .addGap(120, 120, 120)
                                         .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(rdbLocation)))
-                            .addGroup(pnlTablesLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(rdbLocation))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(0, 0, 0))
         );
         pnlTablesLayout.setVerticalGroup(
             pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTablesLayout.createSequentialGroup()
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(3, 3, 3)
+                .addComponent(jLabel44)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+                .addGap(3, 3, 3)
                 .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator6)
-                    .addGroup(pnlTablesLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel44)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(5, 5, 5)
-                        .addGroup(pnlTablesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(rdbLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(5, 5, 5))
+                    .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdbVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rdbLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0))
         );
 
         javax.swing.GroupLayout locationIncludesLayout = new javax.swing.GroupLayout(locationIncludes);
@@ -1123,9 +1114,10 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(29, 29, 29)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34))
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jSeparator1)
                     .addGroup(locationIncludesLayout.createSequentialGroup()
                         .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1133,9 +1125,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addComponent(pnlButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(pnlVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5)
-                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlFiles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlTables, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlFiles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlTables, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
         locationIncludesLayout.setVerticalGroup(
@@ -1145,7 +1137,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addComponent(lblLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(locationIncludesLayout.createSequentialGroup()
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(locationIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblNumberOfSightings, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGap(3, 3, 3)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(3, 3, 3)
@@ -1167,11 +1161,11 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
         txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
-
         rdbLocation.setSelected(true);
-        //if (locationWL.getSubAreas().size() > 1) cmbSubAreas.setSelectedIndex(1);
-
         if (locationWL.getName() != null) {
+            Sighting sighting = new Sighting();
+            sighting.setLocationName(locationWL.getName());
+            lblNumberOfSightings.setText(Integer.toString(app.getDBI().list(sighting).size()));
             Visit tempVisit = new Visit();
             tempVisit.setLocationName(locationWL.getName());
             List<Visit> visits = app.getDBI().list(tempVisit);
@@ -1180,11 +1174,9 @@ public class PanelLocation extends PanelCanSetupHeader {
             UtilTableGenerator.setupElementsForLocationTable(app, tblElement, locationWL);
         }
         else {
+            lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
-            tblVisit.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
-            tblElement.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
         }
-
         lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
         btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
@@ -1245,10 +1237,15 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
-                    UtilTableGenerator.setupElementsForVisitTable(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 0))));
+                    UtilTableGenerator.setupElementsForVisitTable(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 1))));
                 }
                 else {
-                    tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Period"}, 0));
+                    if (tblVisit.getSelectedRowCount() == 0) {
+                        tblElement.setModel(new DefaultTableModel(new String[]{"Please Selected a Period"}, 0));
+                    }
+                    else {
+                        tblElement.setModel(new DefaultTableModel(new String[]{"More Than One Period Selected"}, 0));
+                    }
                 }
             }
             lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
@@ -1279,7 +1276,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!isPopup) {
             int[] selectedRows = tblElement.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilPanelGenerator.openPanelAsTab(app, (String)tblElement.getValueAt(selectedRows[t], 0), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
+                UtilPanelGenerator.openPanelAsTab(app, (String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
             }
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
@@ -1297,7 +1294,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    Visit visit = app.getDBI().find(new Visit((String)tblVisit.getValueAt(selectedRows[t], 0)));
+                    Visit visit = app.getDBI().find(new Visit((String)tblVisit.getValueAt(selectedRows[t], 1)));
                     UtilPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
                     app.getDBI().delete(visit);
                 }
@@ -1317,7 +1314,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!isPopup) {
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilPanelGenerator.openPanelAsTab(app, (String)tblVisit.getValueAt(selectedRows[t], 0), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
+                UtilPanelGenerator.openPanelAsTab(app, (String)tblVisit.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
             }
         }
     }//GEN-LAST:event_btnGoVisitActionPerformed
@@ -1498,12 +1495,12 @@ public class PanelLocation extends PanelCanSetupHeader {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JLabel lblImage;
     private javax.swing.JLabel lblLocation;
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfImages;
+    private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblNumberOfVisits;
     private javax.swing.JPanel locationIncludes;
     private javax.swing.JList lstAccommodationType;

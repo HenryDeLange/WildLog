@@ -38,11 +38,15 @@ public class WildLogSystemFile extends WildLogFile{
 
     @Override
     public Path getAbsolutePath() {
+        // Make sure the file original file has been copied out of the JAR and is in the thumbnails folder.
+        copyOriginalFileToThumbnails();
         return originalPath;
     }
 
     @Override
     public Path getRelativePath() {
+        // Make sure the file original file has been copied out of the JAR and is in the thumbnails folder.
+        copyOriginalFileToThumbnails();
         return WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath().relativize(originalPath).normalize();
     }
 

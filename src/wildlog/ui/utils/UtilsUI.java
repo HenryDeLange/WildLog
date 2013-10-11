@@ -36,7 +36,8 @@ import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogThumbnailSizes;
 
 
-public class UtilsUI {
+public final class UtilsUI {
+    public final static String TABLE_KEY_FILTER_CALLBACK_NAME = "DO_WILDLOG_UPDATE";
 
     private UtilsUI() {
     }
@@ -107,6 +108,8 @@ public class UtilsUI {
         inTxtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent inEvent) {
+                inTable.getSelectionModel().clearSelection();
+                inTable.firePropertyChange(TABLE_KEY_FILTER_CALLBACK_NAME, 0, 1);
                 if (inEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
                    inTxtSearch.setText("");
                 }

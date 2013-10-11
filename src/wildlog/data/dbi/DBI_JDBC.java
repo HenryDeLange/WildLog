@@ -19,6 +19,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.ActiveTime;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -96,6 +97,8 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String deleteSighting = "DELETE FROM SIGHTINGS WHERE SIGHTINGCOUNTER = ?";
     protected static final String deleteElement = "DELETE FROM ELEMENTS WHERE PRIMARYNAME = ?";
     protected static final String deleteFile = "DELETE FROM FILES WHERE ORIGINALPATH = ?";
+    // Queries
+    protected static final String queryLocationCountForElement = "select SIGHTINGS.LOCATIONNAME, count(*) cnt from SIGHTINGS where SIGHTINGS.ELEMENTNAME = ? group by SIGHTINGS.LOCATIONNAME order by cnt desc";
 
     public DBI_JDBC() {
     }
@@ -535,17 +538,34 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(sql);
                 state.setLong(1, inSighting.getSightingCounter());
             }
-            else if (inSighting.getElementName() != null) {
+            else
+            if (inSighting.getElementName() != null && inSighting.getLocationName() != null) {
+                sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
+            }
+            else
+            if (inSighting.getElementName() != null && inSighting.getVisitName() != null) {
+                sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
+            }
+            else
+            if (inSighting.getElementName() != null) {
                 sql = sql + " WHERE ELEMENTNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
             }
-            else if (inSighting.getLocationName() != null) {
+            else
+            if (inSighting.getLocationName() != null) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
             }
-            else if (inSighting.getVisitName() != null) {
+            else
+            if (inSighting.getVisitName() != null) {
                 sql = sql + " WHERE VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getVisitName()));
@@ -1501,4 +1521,32 @@ public abstract class DBI_JDBC implements DBI {
             printSQLException(sqle);
         }
     }
+
+    public List<LocationCount> queryLocationCountForElement(Element inElement) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        List<LocationCount> tempList = new ArrayList<LocationCount>();
+        try {
+            String sql = queryLocationCountForElement;
+            state = conn.prepareStatement(sql);
+            if (inElement != null) {
+                state.setString(1, inElement.getPrimaryName());
+            }
+            else {
+                state.setString(1, null);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                tempList.add(new LocationCount(results.getString(1), results.getInt(2)));
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return tempList;
+    }
+
 }

@@ -35,7 +35,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 
 
-public class UtilsDialog {
+public final class UtilsDialog {
 
     private UtilsDialog() {
     }

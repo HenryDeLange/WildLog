@@ -22,7 +22,7 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public class UtilsKML {
+public final class UtilsKML {
 
     private UtilsKML() {
     }

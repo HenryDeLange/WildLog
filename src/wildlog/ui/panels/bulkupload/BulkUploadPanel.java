@@ -36,7 +36,7 @@ import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.CustomMouseWheelScroller;
-import wildlog.ui.helpers.ImageFilter;
+import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilPanelGenerator;

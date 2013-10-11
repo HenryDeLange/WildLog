@@ -1,7 +1,7 @@
-package wildlog.ui.helpers;
+package wildlog.ui.helpers.filters;
 
 import java.io.File;
-import javax.swing.filechooser.*;
+import javax.swing.filechooser.FileFilter;
 import wildlog.utils.UtilsFileProcessing;
 
 public class GpxFilter extends FileFilter {

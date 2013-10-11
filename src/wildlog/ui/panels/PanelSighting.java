@@ -585,6 +585,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 260, 70));
 
+        cmbWeather.setMaximumRowCount(9);
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
         cmbWeather.setSelectedItem(sighting.getWeather());
         cmbWeather.setEnabled(!disableEditing);

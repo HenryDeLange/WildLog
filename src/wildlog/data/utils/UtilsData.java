@@ -1,6 +1,9 @@
 package wildlog.data.utils;
 
-public class UtilsData {
+public final class UtilsData {
+
+    private UtilsData() {
+    }
 
     public static String limitLength(String inString, int inLength) {
         if (inString == null)

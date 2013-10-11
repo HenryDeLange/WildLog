@@ -1294,7 +1294,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuCreateSlideshowActionPerformed
 
     private void mnuDBConsoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuDBConsoleActionPerformed
-        UtilsFileProcessing.openFile(WildLogPaths.OPEN_OPENMAP.getRelativePath());
+        UtilsFileProcessing.openFile(WildLogPaths.OPEN_H2.getRelativePath());
     }//GEN-LAST:event_mnuDBConsoleActionPerformed
 
     private void mnuOpenMapAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOpenMapAppActionPerformed

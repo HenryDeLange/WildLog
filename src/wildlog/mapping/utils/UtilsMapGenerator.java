@@ -8,6 +8,9 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 
 public final class UtilsMapGenerator {
 
+    private UtilsMapGenerator() {
+    }
+
     public static void addPoint(final double inLatitude, final double inLongitude, final Color inColor, DataObjectWithHTML inObjectWithHTML, WildLogApp inApp, boolean inIsDistributionMap) {
         if (!inApp.getWildLogOptions().isIsOnlinemapTheDefault() || inIsDistributionMap) {
             inApp.getMapOffline().addPoint(inLatitude, inLongitude, inColor);

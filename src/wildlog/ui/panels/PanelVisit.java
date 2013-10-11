@@ -12,7 +12,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -109,7 +108,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         imageSightingIndex = 0;
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         // Setup the table
-        tblSightings.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
 
         // setup the file dropping
@@ -1018,9 +1016,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(visitIncludesLayout.createSequentialGroup()
                                 .addComponent(lblVisitName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(22, 22, 22)
+                                .addGap(5, 5, 5)
                                 .addComponent(jLabel8)
-                                .addGap(15, 15, 15)
+                                .addGap(0, 0, 0)
                                 .addComponent(lblNumberOfElements, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jSeparator3)
                             .addGroup(visitIncludesLayout.createSequentialGroup()
@@ -1080,7 +1078,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfElements.setText(Integer.toString(allElements.size()));
         }
         else {
-            tblSightings.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
+            UtilTableGenerator.setupCompleteSightingTable(app, tblSightings, null);
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
@@ -1095,7 +1093,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             int select = -1;
             for (int t = 0; t < tblSightings.getModel().getRowCount(); t++) {
-                if ((Long)(tblSightings.getValueAt(t, 5)) == sighting.getSightingCounter())
+                if ((Long)(tblSightings.getValueAt(t, 6)) == sighting.getSightingCounter())
                 {
                     select = t;
                     break;
@@ -1123,7 +1121,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     }
            });
             if (result == JOptionPane.YES_OPTION) {
-                sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
+                sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 6)));
                 app.getDBI().delete(sighting);
                 sighting = null;
                 refreshSightingInfo();
@@ -1179,7 +1177,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 5)));
+            sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 6)));
         }
         else {
             sighting = null;

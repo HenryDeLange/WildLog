@@ -17,7 +17,7 @@ import wildlog.WildLogApp;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
-public class UtilsConcurency {
+public final class UtilsConcurency {
 
     private UtilsConcurency() {
     }

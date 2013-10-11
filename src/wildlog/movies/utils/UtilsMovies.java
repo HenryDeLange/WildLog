@@ -18,7 +18,7 @@ import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
-public class UtilsMovies {
+public final class UtilsMovies {
 
     private UtilsMovies() {
     }

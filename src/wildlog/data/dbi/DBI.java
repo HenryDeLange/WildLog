@@ -3,11 +3,12 @@ package wildlog.data.dbi;
 import java.util.Date;
 import java.util.List;
 import wildlog.data.dataobjects.Element;
-import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.utils.WildLogPaths;
 
 
@@ -47,4 +48,6 @@ public interface DBI {
     public boolean delete(Sighting inSighting);
     public boolean delete(WildLogFile inFile);
 
+    public List<LocationCount> queryLocationCountForElement(Element inElement);
+    
 }

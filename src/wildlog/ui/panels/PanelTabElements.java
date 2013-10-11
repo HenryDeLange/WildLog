@@ -30,11 +30,8 @@ public class PanelTabElements extends javax.swing.JPanel {
         tabbedPanel = inTabbedPanel;
         searchElement = new Element();
         initComponents();
-        // Prevent reordering of the tables' columns
-        tblElement.getTableHeader().setReorderingAllowed(false);
-        tblLocation_EleTab.getTableHeader().setReorderingAllowed(false);
         // Add key listeners to table to allow the selection of rows based on key events.
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation_EleTab);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         // Add key listener for textfields to auto search the tables
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
@@ -57,7 +54,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         btnAddElement = new javax.swing.JButton();
         btnDeleteElement = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tblLocation_EleTab = new javax.swing.JTable();
+        tblLocation = new javax.swing.JTable();
         cmbType = new javax.swing.JComboBox();
         btnGoLocation = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
@@ -76,7 +73,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         tblElement.setAutoCreateRowSorter(true);
         tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblElement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
         tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -84,6 +80,11 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblElementMouseReleased(evt);
+            }
+        });
+        tblElement.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                tblElementPropertyChange(evt);
             }
         });
         tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -132,21 +133,21 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
         });
 
-        tblLocation_EleTab.setAutoCreateRowSorter(true);
-        tblLocation_EleTab.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        tblLocation_EleTab.setSelectionBackground(new java.awt.Color(67, 97, 113));
-        tblLocation_EleTab.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblLocation.setAutoCreateRowSorter(true);
+        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+        tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
+        tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblLocation_EleTabMouseClicked(evt);
+                tblLocationMouseClicked(evt);
             }
         });
-        tblLocation_EleTab.addKeyListener(new java.awt.event.KeyAdapter() {
+        tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblLocation_EleTabKeyPressed(evt);
+                tblLocationKeyPressed(evt);
             }
         });
-        jScrollPane6.setViewportView(tblLocation_EleTab);
+        jScrollPane6.setViewportView(tblLocation);
 
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
@@ -277,11 +278,17 @@ public class PanelTabElements extends javax.swing.JPanel {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
             // Get Locations
-            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation_EleTab, tempElement);
+            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, tempElement);
         }
         else {
+            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, null);
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-            tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
+            if (tblElement.getSelectedRowCount() == 0) {
+                tblLocation.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
+            }
+            else {
+                tblLocation.setModel(new DefaultTableModel(new String[]{"More Than One Creature Selected"}, 0));
+            }
         }
     }//GEN-LAST:event_tblElementMouseReleased
 
@@ -330,17 +337,17 @@ public class PanelTabElements extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnDeleteElementActionPerformed
 
-    private void tblLocation_EleTabMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocation_EleTabMouseClicked
+    private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
         if (evt.getClickCount() == 2) {
             btnGoLocationActionPerformed(null);
         }
-    }//GEN-LAST:event_tblLocation_EleTabMouseClicked
+    }//GEN-LAST:event_tblLocationMouseClicked
 
-    private void tblLocation_EleTabKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocation_EleTabKeyPressed
+    private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoLocationActionPerformed(null);
         }
-    }//GEN-LAST:event_tblLocation_EleTabKeyPressed
+    }//GEN-LAST:event_tblLocationKeyPressed
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element();
@@ -350,14 +357,13 @@ public class PanelTabElements extends javax.swing.JPanel {
         }
         UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
         txtSearch.setText("");
-        UtilTableGenerator.setupLocationsForElementTable(app, tblLocation_EleTab, null);
-        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        tblElementMouseReleased(null);
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
-        int[] selectedRows = tblLocation_EleTab.getSelectedRows();
+        int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilPanelGenerator.openPanelAsTab(app, (String)(tblLocation_EleTab.getValueAt(selectedRows[t], 0)),
+            UtilPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoLocationActionPerformed
@@ -370,12 +376,18 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
-        tblLocation_EleTab.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
         txtSearch.setText("");
         cmbType.setSelectedItem(ElementType.NONE);
+        // Don't need to load the table again here, since the selecting the combobox (above line) does it already.
+        //UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
     }//GEN-LAST:event_formComponentShown
+
+    private void tblElementPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tblElementPropertyChange
+        if (UtilsUI.TABLE_KEY_FILTER_CALLBACK_NAME.equals(evt.getPropertyName())) {
+            tblElementMouseReleased(null);
+        }
+    }//GEN-LAST:event_tblElementPropertyChange
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddElement;
@@ -391,7 +403,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private javax.swing.JLabel lblImage;
     private javax.swing.JScrollPane scrlElement;
     private javax.swing.JTable tblElement;
-    private javax.swing.JTable tblLocation_EleTab;
+    private javax.swing.JTable tblLocation;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

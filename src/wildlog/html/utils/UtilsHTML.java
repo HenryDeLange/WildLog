@@ -16,7 +16,7 @@ import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogThumbnailSizes;
 
 
-public class UtilsHTML {
+public final class UtilsHTML {
     private static SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)");
     private static SimpleDateFormat simpleDateFormatWithoutTime = new SimpleDateFormat("E, dd MMM yyyy");
 

@@ -21,10 +21,10 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.helpers.ImageFilter;
-import wildlog.ui.helpers.MovieFilter;
+import wildlog.ui.helpers.filters.ImageFilter;
+import wildlog.ui.helpers.filters.MovieFilter;
 
-public class UtilsFileProcessing {
+public final class UtilsFileProcessing {
     private static Path lastFilePath = null;
 
     private UtilsFileProcessing() {

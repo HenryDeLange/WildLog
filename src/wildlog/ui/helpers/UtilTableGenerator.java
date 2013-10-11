@@ -1,13 +1,19 @@
 package wildlog.ui.helpers;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import wildlog.WildLogApp;
@@ -16,22 +22,33 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
+import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.helpers.cellrenderers.DateCellRenderer;
+import wildlog.ui.helpers.cellrenderers.DateTimeCellRenderer;
+import wildlog.ui.helpers.cellrenderers.IconCellRenderer;
+import wildlog.ui.helpers.cellrenderers.TextCellRenderer;
+import wildlog.ui.helpers.cellrenderers.WildLogDataModelWrappertCellRenderer;
+import wildlog.ui.helpers.cellrenderers.WildLogTableModel;
+import wildlog.ui.helpers.cellrenderers.WildLogTableModelDataWrapper;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogThumbnailSizes;
 
-
 public final class UtilTableGenerator {
 
-    // METHODS:
-    public static void setupCompleteElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
-        // Setup loading message
-        inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        // Load data
+    private UtilTableGenerator() {
+    }
+
+    public static void setupCompleteElementTable(final WildLogApp inApp, JTable inTable, Element inElement) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
-                                "Thumbnail",
+                                "",
                                 "Creature Name",
                                 "Other Name",
                                 "Type",
@@ -39,86 +56,50 @@ public final class UtilTableGenerator {
                                 "Wish Rating",
                                 "Add Frequency"
                                 };
-        List<Element> tempList = null;
-        tempList = inApp.getDBI().list(inElement);
-
-        Object[][] tempTable = new Object[tempList.size()][columnNames.length];
-        for (int t = 0; t < tempList.size(); t++) {
-            Element tempElement = tempList.get(t);
-            int i = 0;
-            WildLogFile image = inApp.getDBI().find(new WildLogFile(tempElement.getWildLogFileID()));
-            if (image != null) {
-                try {
-                    tempTable[t][i++] = UtilsImageProcessing.getScaledIcon(
-                            image.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL),
-                            WildLogThumbnailSizes.VERY_SMALL.getSize());
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace(System.err);
-                    tempTable[t][i] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
-                }
+        // Load data from DB
+        final List<Element> listElements = inApp.getDBI().list(inElement);
+        if (!listElements.isEmpty()) {
+            ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+            // Setup new table data
+            final Object[][] data = new Object[listElements.size()][columnNames.length];
+            for (int t = 0; t < listElements.size(); t++) {
+                final int finalT = t;
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        Element tempElement = listElements.get(finalT);
+                        data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
+                        data[finalT][i++] = tempElement.getPrimaryName();
+                        data[finalT][i++] = tempElement.getOtherName();
+                        data[finalT][i++] = tempElement.getType();
+                        data[finalT][i++] = tempElement.getFeedingClass();
+                        data[finalT][i++] = tempElement.getWishListRating();
+                        data[finalT][i++] = tempElement.getAddFrequency();
+                    }
+                });
             }
-            else {
-                tempTable[t][i++] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
-            }
-            tempTable[t][i++] = tempElement.getPrimaryName();
-            tempTable[t][i++] = tempElement.getOtherName();
-            tempTable[t][i++] = tempElement.getType();
-            tempTable[t][i++] = tempElement.getFeedingClass();
-            tempTable[t][i++] = tempElement.getWishListRating();
-            tempTable[t][i++] = tempElement.getAddFrequency();
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            // Create the new model
+            setupTableModel(inTable, data, columnNames);
+            // Setup the column and row sizes etc.
+            setupRenderersAndThumbnailRows(inTable, false);
+            inTable.getColumnModel().getColumn(1).setPreferredWidth(240);
+            inTable.getColumnModel().getColumn(2).setPreferredWidth(170);
+            inTable.getColumnModel().getColumn(3).setPreferredWidth(70);
+            inTable.getColumnModel().getColumn(3).setMaxWidth(80);
+            inTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+            inTable.getColumnModel().getColumn(4).setMaxWidth(110);
+            inTable.getColumnModel().getColumn(5).setPreferredWidth(150);
+            inTable.getColumnModel().getColumn(5).setMaxWidth(155);
+            inTable.getColumnModel().getColumn(6).setPreferredWidth(90);
+            inTable.getColumnModel().getColumn(6).setMaxWidth(95);
+            // Setup default sorting
+            setupRowSorter(inTable, 1);
         }
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public Class getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
-            }
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-                column.setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            }
-            else
-            if (i == 1) {
-                column.setPreferredWidth(200);
-            }
-            else
-            if (i == 2) {
-                column.setPreferredWidth(120);
-            }
-            else
-            if (i == 3) {
-                column.setPreferredWidth(50);
-            }
-            else
-            if (i == 4) {
-                column.setPreferredWidth(40);
-            }
-            else
-            if (i == 5) {
-                column.setPreferredWidth(130);
-            }
-            else
-            if (i == 6) {
-                column.setPreferredWidth(60);
-            }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
         }
-        // Setup sorting
-        setupRowSorter(inTable, 1);
-        // Set row height
-        inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-        // FIXME: 'n hack vir nou, maar verander al die tables om meer effective te wees (nie heeltyd alles oor create nie) en ordentelikke renderes te gebruik...
-        inTable.getCellRenderer(0, 0).getTableCellRendererComponent(inTable, null, false, true, 0, 0).setBackground(Color.BLACK);
     }
 
     public static void setupShortElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
@@ -131,21 +112,15 @@ public final class UtilTableGenerator {
         List<Element> tempList = null;
         tempList = inApp.getDBI().list(inElement);
 
-        Object[][] tempTable = new Object[tempList.size()][4];
+        Object[][] data = new Object[tempList.size()][4];
         for (int t = 0; t < tempList.size(); t++) {
             Element tempElement = tempList.get(t);
             int i = 0;
-            tempTable[t][i++] = tempElement.getPrimaryName();
-            tempTable[t][i++] = tempElement.getType();
-            tempTable[t][i++] = tempElement.getFeedingClass();
+            data[t][i++] = tempElement.getPrimaryName();
+            data[t][i++] = tempElement.getType();
+            data[t][i++] = tempElement.getFeedingClass();
         }
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        inTable.setModel(table);
+        setupTableModel(inTable, data, columnNames);
         // Resize the columns
         TableColumn column = null;
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
@@ -164,230 +139,190 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupCompleteLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
-        // Setup loading message
-        inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
-        // Load data
+    public static void setupCompleteLocationTable(final WildLogApp inApp, JTable inTable, Location inLocation) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
-                                "Thumbnail",
+                                "",
                                 "Place Name",
                                 "Rating",
                                 "Wildlife Rating",
                                 "Latitude",
                                 "Longitude"
                                 };
-        List<Location> tempList = inApp.getDBI().list(inLocation);
-        Object[][] tempTable = new Object[tempList.size()][columnNames.length];
-        for (int t = 0; t < tempList.size(); t++) {
-            Location tempLocation = tempList.get(t);
-            int i = 0;
-            WildLogFile image = inApp.getDBI().find(new WildLogFile(tempLocation.getWildLogFileID()));
-            if (image != null) {
-                try {
-                    tempTable[t][i++] = UtilsImageProcessing.getScaledIcon(
-                            image.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL),
-                            WildLogThumbnailSizes.VERY_SMALL.getSize());
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace(System.err);
-                    // TODO: handle movie en other files se display beter
-                    tempTable[t][i] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
-                }
+        // Load data from DB
+        final List<Location> listLocations = inApp.getDBI().list(inLocation);
+        if (!listLocations.isEmpty()) {
+            ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+            // Setup new table data
+            final Object[][] data = new Object[listLocations.size()][columnNames.length];
+            for (int t = 0; t < listLocations.size(); t++) {
+                final int finalT = t;
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        Location tempLocation = listLocations.get(finalT);
+                        data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
+                        data[finalT][i++] = tempLocation.getName();
+                        data[finalT][i++] = tempLocation.getRating();
+                        data[finalT][i++] = tempLocation.getGameViewingRating();
+                        data[finalT][i++] = new WildLogTableModelDataWrapper(
+                                UtilsGps.getLatitudeString(tempLocation), UtilsGps.getLatDecimalDegree(tempLocation));
+                        data[finalT][i++] = new WildLogTableModelDataWrapper(
+                                UtilsGps.getLongitudeString(tempLocation), UtilsGps.getLonDecimalDegree(tempLocation));
+                    }
+                });
             }
-            else {
-                tempTable[t][i++] = UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
-            }
-            tempTable[t][i++] = tempLocation.getName();
-            tempTable[t][i++] = tempLocation.getRating();
-            tempTable[t][i++] = tempLocation.getGameViewingRating();
-            tempTable[t][i++] = UtilsGps.getLatitudeString(tempLocation);
-            tempTable[t][i++] = UtilsGps.getLongitudeString(tempLocation);
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            // Create the new model
+            setupTableModel(inTable, data, columnNames);
+            // Setup the column and row sizes etc.
+            setupRenderersAndThumbnailRows(inTable, false);
+            inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+            inTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+            inTable.getColumnModel().getColumn(2).setMaxWidth(120);
+            inTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+            inTable.getColumnModel().getColumn(3).setMaxWidth(120);
+            inTable.getColumnModel().getColumn(4).setPreferredWidth(110);
+            inTable.getColumnModel().getColumn(4).setMaxWidth(125);
+            inTable.getColumnModel().getColumn(5).setPreferredWidth(110);
+            inTable.getColumnModel().getColumn(5).setMaxWidth(125);
+            // Setup default sorting
+            setupRowSorter(inTable, 1);
         }
-        // Create the model
-        DefaultTableModel tableModel = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public Class getColumnClass(int column) {
-                return getValueAt(0, column).getClass();
-            }
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        inTable.setModel(tableModel);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-                column.setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            }
-            else
-            if (i == 1) {
-                column.setPreferredWidth(200);
-            }
-            else
-            if (i == 2) {
-                column.setPreferredWidth(30);
-            }
-            else
-            if (i == 3) {
-                column.setPreferredWidth(30);
-            }
-            else
-            if (i == 4) {
-                column.setPreferredWidth(25);
-            }
-            else
-            if (i == 5) {
-                column.setPreferredWidth(25);
-            }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
         }
-        // Setup sorting
-        setupRowSorter(inTable, 1);
-        // Set row height
-        inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-        // FIXME: 'n hack vir nou, maar verander al die tables om meer effective te wees (nie heeltyd alles oor create nie) en ordentelikke renderes te gebruik...
-        inTable.getCellRenderer(0, 0).getTableCellRendererComponent(inTable, null, false, true, 0, 0).setBackground(Color.BLACK);
     }
 
-    public static void setupCompleteVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
-        // Load data
+    public static void setupCompleteVisitTable(final WildLogApp inApp, JTable inTable, Location inLocation) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
+                                "",
                                 "Period Name",
                                 "Start Date",
                                 "End Date",
-                                "Game Watching",
                                 "Period Type",
-                                "Observations"
+                                "Observations",
+                                "Creatures"
                                 };
+        // Load data from DB
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
-        List<Visit> tempList = inApp.getDBI().list(temp);
-        Object[][] tempTable;
-        if (tempList != null) {
-            tempTable = new Object[tempList.size()][6];
-            for (int t = 0; t < tempList.size(); t++) {
-                Visit tempVisit = tempList.get(t);
-                int i = 0;
-                tempTable[t][i++] = tempVisit.getName();
-                tempTable[t][i++] = tempVisit.getStartDate();
-                tempTable[t][i++] = tempVisit.getEndDate();
-                tempTable[t][i++] = tempVisit.getGameWatchingIntensity();
-                tempTable[t][i++] = tempVisit.getType();
-                Sighting tempSighting = new Sighting();
-                tempSighting.setVisitName(tempVisit.getName());
-                tempTable[t][i++] = inApp.getDBI().list(tempSighting).size();
+        final List<Visit> listVisits = inApp.getDBI().list(temp);
+        if (!listVisits.isEmpty()) {
+            ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+            // Setup new table data
+            final Object[][] data = new Object[listVisits.size()][columnNames.length];
+            for (int t = 0; t < listVisits.size(); t++) {
+                final int finalT = t;
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        Visit tempVisit = listVisits.get(finalT);
+                        data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
+                        data[finalT][i++] = tempVisit.getName();
+                        data[finalT][i++] = tempVisit.getStartDate();
+                        data[finalT][i++] = tempVisit.getEndDate();
+                        data[finalT][i++] = tempVisit.getType();
+                        Sighting tempSighting = new Sighting();
+                        tempSighting.setVisitName(tempVisit.getName());
+                        List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
+                        data[finalT][i++] = listSightings.size();
+                        Set<String> countElements = new HashSet<String>(listSightings.size()/2);
+                        for (Sighting sighting : listSightings) {
+                            if (!countElements.contains(sighting.getElementName())) {
+                                countElements.add(sighting.getElementName());
+                            }
+                        }
+                        data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                    }
+                });
             }
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            // Create the new model
+            setupTableModel(inTable, data, columnNames);
+            // Setup the column and row sizes etc.
+            setupRenderersAndThumbnailRows(inTable, false);
+            inTable.getColumnModel().getColumn(1).setPreferredWidth(130);
+            inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
+            inTable.getColumnModel().getColumn(2).setMaxWidth(95);
+            inTable.getColumnModel().getColumn(3).setPreferredWidth(85);
+            inTable.getColumnModel().getColumn(3).setMaxWidth(95);
+            inTable.getColumnModel().getColumn(4).setPreferredWidth(80);
+            inTable.getColumnModel().getColumn(4).setMaxWidth(125);
+            inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
+            inTable.getColumnModel().getColumn(5).setMaxWidth(85);
+            inTable.getColumnModel().getColumn(6).setPreferredWidth(70);
+            inTable.getColumnModel().getColumn(6).setMaxWidth(80);
+            // Setup default sorting
+            setupRowSorter(inTable, 2, 3, 1, SortOrder.DESCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
         }
-        else tempTable = new Object[0][0];
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (column == 1 || column == 2) {
-                    return Date.class;
-                }
-                if (column == 5) {
-                    return Integer.class;
-                }
-                return Object.class;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(160);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(45);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(45);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(75);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(30);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(30);
-            }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
         }
-        // Setup sorting
-        setupRowSorter(inTable, 1);
     }
 
-    public static void setupShortVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
-        // Load data
+    public static void setupShortVisitTable(final WildLogApp inApp, JTable inTable, Location inLocation) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
+                                "",
                                 "Period Name",
                                 "Start Date",
                                 "Observations"
                                 };
-        Visit temp = new Visit();
-        temp.setLocationName(inLocation.getName());
-        List<Visit> tempList = inApp.getDBI().list(temp);
-        Object[][] tempTable;
-        if (tempList != null) {
-            tempTable = new Object[tempList.size()][4];
-            for (int t = 0; t < tempList.size(); t++) {
-                Visit tempVisit = tempList.get(t);
-                int i = 0;
-                tempTable[t][i++] = tempVisit.getName();
-                tempTable[t][i++] = tempVisit.getStartDate();
-                Sighting tempSighting = new Sighting();
-                tempSighting.setVisitName(tempVisit.getName());
-                tempTable[t][i++] = inApp.getDBI().list(tempSighting).size();
+        // Load data from DB
+        if (inLocation != null) {
+            Visit temp = new Visit();
+            temp.setLocationName(inLocation.getName());
+            final List<Visit> listVisits = inApp.getDBI().list(temp);
+            if (!listVisits.isEmpty()) {
+                ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                // Setup new table data
+                final Object[][] data = new Object[listVisits.size()][columnNames.length];
+                for (int t = 0; t < listVisits.size(); t++) {
+                    final int finalT = t;
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            int i = 0;
+                            Visit tempVisit = listVisits.get(finalT);
+                            data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
+                            data[finalT][i++] = tempVisit.getName();
+                            data[finalT][i++] = tempVisit.getStartDate();
+                            Sighting tempSighting = new Sighting();
+                            tempSighting.setVisitName(tempVisit.getName());
+                            data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                        }
+                    });
+                }
+                UtilsConcurency.waitForExecutorToShutdown(executorService);
+                // Create the new model
+                setupTableModel(inTable, data, columnNames);
+                // Setup the column and row sizes etc.
+                setupRenderersAndThumbnailRows(inTable, false);
+                inTable.getColumnModel().getColumn(1).setPreferredWidth(85);
+                inTable.getColumnModel().getColumn(2).setPreferredWidth(90);
+                inTable.getColumnModel().getColumn(2).setMaxWidth(90);
+                inTable.getColumnModel().getColumn(3).setPreferredWidth(45);
+                inTable.getColumnModel().getColumn(3).setMaxWidth(85);
+                // Setup default sorting
+                setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+            }
+            else {
+                inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
             }
         }
-        else tempTable = new Object[0][0];
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (column == 1) {
-                    return Date.class;
-                }
-                if (column == 3) {
-                    return Integer.class;
-                }
-                return Object.class;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(150);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(50);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(15);
-            }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
         }
-        // Setup sorting
-        setupRowSorter(inTable, 1);
     }
 
     public static void setupVeryShortVisitTable(WildLogApp inApp, JTable inTable, Location inLocation) {
@@ -400,33 +335,20 @@ public final class UtilTableGenerator {
         Visit temp = new Visit();
         temp.setLocationName(inLocation.getName());
         List<Visit> tempList = inApp.getDBI().list(temp);
-        Object[][] tempTable;
+        Object[][] data;
         if (tempList != null) {
-            tempTable = new Object[tempList.size()][3];
+            data = new Object[tempList.size()][3];
             for (int t = 0; t < tempList.size(); t++) {
                 Visit tempVisit = tempList.get(t);
                 int i = 0;
-                tempTable[t][i++] = tempVisit.getName();
-                tempTable[t][i++] = tempVisit.getStartDate();
-                tempTable[t][i++] = tempVisit.getType();
+                data[t][i++] = tempVisit.getName();
+                data[t][i++] = tempVisit.getStartDate();
+                data[t][i++] = tempVisit.getType();
             }
         }
-        else tempTable = new Object[0][0];
+        else data = new Object[0][0];
         // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (column == 1) {
-                    return Date.class;
-                }
-                return Object.class;
-            }
-        };
-        inTable.setModel(table);
+        setupTableModel(inTable, data, columnNames);
         // Resize the columns
         TableColumn column = null;
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
@@ -446,9 +368,12 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 1);
     }
 
-    public static void setupCompleteSightingTable(WildLogApp inApp, JTable inTable, Visit inVisit) {
-        // Load data
+    public static void setupCompleteSightingTable(final WildLogApp inApp, JTable inTable, Visit inVisit) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
+                                "",
                                 "Creature Name",
                                 "Date",
                                 "Evidence",
@@ -457,223 +382,246 @@ public final class UtilTableGenerator {
                                 "ID",
                                 "GPS"
                                 };
-        Sighting temp = new Sighting();
-        temp.setVisitName(inVisit.getName());
-        List<Sighting> tempList = inApp.getDBI().list(temp);
-        Object[][] tempTable;
-        if (tempList != null) {
-            tempTable = new Object[tempList.size()][7];
-            for (int t = 0; t < tempList.size(); t++) {
-                Sighting tempSighting = tempList.get(t);
-                int i = 0;
-                tempTable[t][i++] = tempSighting.getElementName();
-                tempTable[t][i++] = tempSighting.getDate();
-                tempTable[t][i++] = tempSighting.getSightingEvidence();
-                tempTable[t][i++] = tempSighting.getCertainty();
-                tempTable[t][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
-                tempTable[t][i++] = tempSighting.getSightingCounter();
-                if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null)
-                    if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE))
-                        tempTable[t][i++] = "GPS";
-                    else tempTable[t][i++] = "";
-                else
-                    tempTable[t][i++] = "";
+        // Load data from DB
+        Sighting sighting = new Sighting();
+        sighting.setVisitName(inVisit.getName());
+        final List<Sighting> listSightings = inApp.getDBI().list(sighting);
+        if (!listSightings.isEmpty()) {
+            ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+            // Setup new table data
+            final Object[][] data = new Object[listSightings.size()][columnNames.length];
+            for (int t = 0; t < listSightings.size(); t++) {
+                final int finalT = t;
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        Sighting tempSighting = listSightings.get(finalT);
+                        data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
+                        data[finalT][i++] = tempSighting.getElementName();
+                        data[finalT][i++] = tempSighting.getDate();
+                        data[finalT][i++] = tempSighting.getSightingEvidence();
+                        data[finalT][i++] = tempSighting.getCertainty();
+                        data[finalT][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
+                        data[finalT][i++] = tempSighting.getSightingCounter();
+                        if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
+                            if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
+                                data[finalT][i++] = "GPS";
+                            }
+                            else {
+                                data[finalT][i++] = "";
+                            }
+                        }
+                        else {
+                            data[finalT][i++] = "";
+                        }
+                    }
+                });
             }
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            // Create the new model
+            setupTableModel(inTable, data, columnNames);
+            // Setup the column and row sizes etc.
+            setupRenderersAndThumbnailRows(inTable, false);
+            inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+            inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
+            inTable.getColumnModel().getColumn(2).setMaxWidth(95);
+            inTable.getColumnModel().getColumn(3).setPreferredWidth(85);
+            inTable.getColumnModel().getColumn(3).setMaxWidth(125);
+            inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
+            inTable.getColumnModel().getColumn(4).setMaxWidth(125);
+            inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
+            inTable.getColumnModel().getColumn(5).setMaxWidth(80);
+            inTable.getColumnModel().getColumn(6).setPreferredWidth(45);
+            inTable.getColumnModel().getColumn(6).setMaxWidth(75);
+            inTable.getColumnModel().getColumn(7).setPreferredWidth(35);
+            inTable.getColumnModel().getColumn(7).setMaxWidth(35);
+            // Setup default sorting
+            setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
         }
-        else tempTable = new Object[0][0];
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (column == 1) {
-                    return Date.class;
-                }
-                return Object.class;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(160);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(75);
-                column.setCellRenderer(new DateTimeCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(55);
-            }
-            else if (i == 3) {
-                column.setPreferredWidth(70);
-            }
-            else if (i == 4) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 5) {
-                column.setPreferredWidth(10);
-            }
-            else if (i == 6) {
-                column.setPreferredWidth(10);
-            }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
         }
-        // Setup sorting
-        setupRowSorter(inTable, 1);
     }
 
-    public static void setupElementsForVisitTable(WildLogApp inApp, JTable inTable, Visit inVisit) {
-        // Load data
+    public static void setupElementsForVisitTable(final WildLogApp inApp, JTable inTable, final Visit inVisit) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
+                                "",
                                 "Creature Name",
                                 "Type",
-                                "Class"
+                                "Class",
+                                "Observations"
                                 };
-        Sighting temp = new Sighting();
-        temp.setVisitName(inVisit.getName());
-        List<Sighting> allSightings = inApp.getDBI().list(temp);
-        List<String> allElements = new ArrayList<String>();
-        for (Sighting tempSighting : allSightings) {
-            if (!allElements.contains(tempSighting.getElementName()))
-                allElements.add(tempSighting.getElementName());
-        }
-        Object[][] tempTable = null;
-        tempTable = new Object[allElements.size()][3];
-        for (int t = 0; t < allElements.size(); t++) {
-            Element tempElement = inApp.getDBI().find(new Element(allElements.get(t)));
-            int i = 0;
-            tempTable[t][i++] = tempElement.getPrimaryName();
-            tempTable[t][i++] = tempElement.getType();
-            tempTable[t][i++] = tempElement.getFeedingClass();
-        }
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(110);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(30);
-            }
-        }
-        // Setup sorting
-        setupRowSorter(inTable, 0);
-    }
-
-    public static void setupElementsForLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
-        // Load data
-        String[] columnNames = {
-                                "Creature Name",
-                                "Type",
-                                "Class"
-                                };
-        Sighting temp = new Sighting();
-        if (inLocation.getName() != null)
-            temp.setLocationName(inLocation.getName());
-        List<Sighting> allSightings = inApp.getDBI().list(temp);
-        List<String> allElements = new ArrayList<String>();
-        for (Sighting tempSighting : allSightings) {
-            if (!allElements.contains(tempSighting.getElementName()))
-                allElements.add(tempSighting.getElementName());
-        }
-        Object[][] tempTable = null;
-        tempTable = new Object[allElements.size()][3];
-        for (int t = 0; t < allElements.size(); t++) {
-            Element tempElement = inApp.getDBI().find(new Element(allElements.get(t)));
-            int i = 0;
-            tempTable[t][i++] = tempElement.getPrimaryName();
-            tempTable[t][i++] = tempElement.getType();
-            tempTable[t][i++] = tempElement.getFeedingClass();
-        }
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(110);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(35);
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(30);
-            }
-        }
-        // Setup sorting
-        setupRowSorter(inTable, 0);
-    }
-
-    public static void setupLocationsForElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
-        // Load data
-        String[] columnNames = {
-                                "Place Name",
-                                "Wildlife Rating"
-                                };
-        List<String> allLocations = new ArrayList<String>();
-        Object[][] tempTable = null;
-        if (inElement != null) {
+        // Load data from DB
+        if (inVisit != null) {
             Sighting temp = new Sighting();
-            if (inElement.getPrimaryName() != null)
-                temp.setElementName(inElement.getPrimaryName());
+            temp.setVisitName(inVisit.getName());
             List<Sighting> allSightings = inApp.getDBI().list(temp);
-            for (int t = 0; t < allSightings.size(); t++) {
-                if (!allLocations.contains(allSightings.get(t).getLocationName()))
-                    allLocations.add(allSightings.get(t).getLocationName());
+            final List<String> listElements = new ArrayList<String>();
+            for (Sighting tempSighting : allSightings) {
+                if (!listElements.contains(tempSighting.getElementName())) {
+                    listElements.add(tempSighting.getElementName());
+                }
             }
-            tempTable = new Object[allLocations.size()][3];
-            for (int t = 0; t < allLocations.size(); t++) {
-                Location tempLocation = inApp.getDBI().find(new Location(allLocations.get(t)));
-                int i = 0;
-                tempTable[t][i++] = tempLocation.getName();
-                tempTable[t][i++] = tempLocation.getGameViewingRating();
+            if (!listElements.isEmpty()) {
+                ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                // Setup new table data
+                final Object[][] data = new Object[listElements.size()][columnNames.length];
+                for (int t = 0; t < listElements.size(); t++) {
+                    final int finalT = t;
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            int i = 0;
+                            Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
+                            data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
+                            data[finalT][i++] = tempElement.getPrimaryName();
+                            data[finalT][i++] = tempElement.getType();
+                            data[finalT][i++] = tempElement.getFeedingClass();
+                            Sighting tempSighting = new Sighting();
+                            tempSighting.setVisitName(inVisit.getName());
+                            tempSighting.setElementName(tempElement.getPrimaryName());
+                            data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                        }
+                    });
+                }
+                UtilsConcurency.waitForExecutorToShutdown(executorService);
+                // Create the new model
+                setupTableModel(inTable, data, columnNames);
+                // Setup the column and row sizes etc.
+                setupRenderersAndThumbnailRows(inTable, false);
+                inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                inTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+                inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+                inTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+                inTable.getColumnModel().getColumn(3).setMaxWidth(105);
+                inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
+                inTable.getColumnModel().getColumn(4).setMaxWidth(85);
+                // Setup default sorting
+                setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+            }
+            else {
+                inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
             }
         }
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
+        }
+    }
+
+    public static void setupElementsForLocationTable(final WildLogApp inApp, JTable inTable, final Location inLocation) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
+        String[] columnNames = {
+                                "",
+                                "Creature Name",
+                                "Type",
+                                "Class",
+                                "Observations"
+                                };
+        // Load data from DB
+        if (inLocation != null) {
+            Sighting temp = new Sighting();
+            temp.setLocationName(inLocation.getName());
+            List<Sighting> allSightings = inApp.getDBI().list(temp);
+            final List<String> listElements = new ArrayList<String>();
+            for (Sighting tempSighting : allSightings) {
+                if (!listElements.contains(tempSighting.getElementName())) {
+                    listElements.add(tempSighting.getElementName());
+                }
             }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(150);
+            if (!listElements.isEmpty()) {
+                ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                // Setup new table data
+                final Object[][] data = new Object[listElements.size()][columnNames.length];
+                for (int t = 0; t < listElements.size(); t++) {
+                    final int finalT = t;
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            int i = 0;
+                            Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
+                            data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
+                            data[finalT][i++] = tempElement.getPrimaryName();
+                            data[finalT][i++] = tempElement.getType();
+                            data[finalT][i++] = tempElement.getFeedingClass();
+                            Sighting tempSighting = new Sighting();
+                            tempSighting.setLocationName(inLocation.getName());
+                            tempSighting.setElementName(tempElement.getPrimaryName());
+                            data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                        }
+                    });
+                }
+                UtilsConcurency.waitForExecutorToShutdown(executorService);
+                // Create the new model
+                setupTableModel(inTable, data, columnNames);
+                // Setup the column and row sizes etc.
+                setupRenderersAndThumbnailRows(inTable, false);
+                inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                inTable.getColumnModel().getColumn(2).setPreferredWidth(80);
+                inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+                inTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+                inTable.getColumnModel().getColumn(3).setMaxWidth(105);
+                inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
+                inTable.getColumnModel().getColumn(4).setMaxWidth(85);
+                // Setup default sorting
+                setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
             }
-            else if (i == 1) {
-                column.setPreferredWidth(20);
+            else {
+                inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
             }
         }
-        // Setup sorting
-        setupRowSorter(inTable, 0);
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
+        }
+    }
+
+    public static void setupLocationsForElementTable(final WildLogApp inApp, JTable inTable, Element inElement) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
+        String[] columnNames = {
+                                "",
+                                "Place Name",
+                                "Observations"
+                                };
+        // Load data from DB
+        final List<LocationCount> listLocationCounts = inApp.getDBI().queryLocationCountForElement(inElement);
+        if (!listLocationCounts.isEmpty()) {
+            ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+            // Setup new table data
+            final Object[][] data = new Object[listLocationCounts.size()][columnNames.length];
+            for (int t = 0; t < listLocationCounts.size(); t++) {
+                final int finalT = t;
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        Location tempLocation = inApp.getDBI().find(new Location(listLocationCounts.get(finalT).getLocationName()));
+                        data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
+                        data[finalT][i++] = tempLocation.getName();
+                        data[finalT][i++] = listLocationCounts.get(finalT).getCount();
+                    }
+                });
+            }
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            // Create the new model
+            setupTableModel(inTable, data, columnNames);
+            // Setup the column and row sizes etc.
+            setupRenderersAndThumbnailRows(inTable, false);
+            inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
+            inTable.getColumnModel().getColumn(2).setPreferredWidth(75);
+            inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+            // Setup default sorting
+            setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+        }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
+        }
     }
 
     public static void setupShortLocationTable(WildLogApp inApp, JTable inTable, Location inLocation) {
@@ -684,20 +632,14 @@ public final class UtilTableGenerator {
         List<Location> tempList = null;
         tempList = inApp.getDBI().list(inLocation);
 
-        Object[][] tempTable = new Object[tempList.size()][2];
+        Object[][] data = new Object[tempList.size()][2];
         for (int t = 0; t < tempList.size(); t++) {
             Location tempLocation = tempList.get(t);
             int i = 0;
-            tempTable[t][i++] = tempLocation.getName();
+            data[t][i++] = tempLocation.getName();
         }
         // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-        };
-        inTable.setModel(table);
+        setupTableModel(inTable, data, columnNames);
         // Resize the columns
         TableColumn column = null;
         for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
@@ -710,66 +652,73 @@ public final class UtilTableGenerator {
         setupRowSorter(inTable, 0);
     }
 
-    public static void setupSightingsForElementTable(WildLogApp inApp, JTable inTable, Element inElement) {
-        // Load data
+    public static void setupSightingsForElementTable(final WildLogApp inApp, JTable inTable, Element inElement) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Setup column names
         String[] columnNames = {
+                                "",
                                 "Place Name",
                                 "Date",
-                                "ID"
+                                "ID" // hidden field
                                 };
-        Sighting templateSighting = new Sighting();
-        templateSighting.setElementName(inElement.getPrimaryName());
-        List<Sighting> tempList = inApp.getDBI().list(templateSighting);
-        Object[][] tempTable;
-        if (tempList != null) {
-            tempTable = new Object[tempList.size()][3];
-            for (int t = 0; t < tempList.size(); t++) {
-                Sighting tempSighting = tempList.get(t);
-                int i = 0;
-                tempTable[t][i++] = tempSighting.getLocationName();
-                tempTable[t][i++] = tempSighting.getDate();
-                tempTable[t][i++] = tempSighting.getSightingCounter();
+        // Load data from DB
+        Sighting tempSighting = new Sighting();
+        tempSighting.setElementName(inElement.getPrimaryName());
+        final List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
+        if (!listSightings.isEmpty()) {
+            ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+            // Setup new table data
+            final Object[][] data = new Object[listSightings.size()][columnNames.length + 1];
+            for (int t = 0; t < listSightings.size(); t++) {
+                final int finalT = t;
+                executorService.submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        int i = 0;
+                        Sighting tempSighting = listSightings.get(finalT);
+                        data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
+                        data[finalT][i++] = tempSighting.getLocationName();
+                        data[finalT][i++] = tempSighting.getDate();
+                        data[finalT][i++] = tempSighting.getSightingCounter();
+                    }
+                });
             }
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            // Create the new model
+            setupTableModel(inTable, data, columnNames);
+            // Setup the column and row sizes etc.
+            setupRenderersAndThumbnailRows(inTable, false);
+            inTable.getColumnModel().getColumn(1).setPreferredWidth(135);
+            inTable.getColumnModel().getColumn(2).setPreferredWidth(75);
+            inTable.removeColumn(inTable.getColumnModel().getColumn(3));
+            // Setup default sorting
+            setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
         }
-        else tempTable = new Object[0][0];
-        // Create the model
-        DefaultTableModel table = new DefaultTableModel(tempTable, columnNames) {
-            @Override
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return false;
-            }
-            @Override
-            public Class<?> getColumnClass(int column) {
-                if (column == 1) {
-                    return Date.class;
-                }
-                return Object.class;
-            }
-        };
-        inTable.setModel(table);
-        // Resize the columns
-        TableColumn column = null;
-        for (int i = 0; i < inTable.getColumnModel().getColumnCount(); i++) {
-            column = inTable.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(135);
-            }
-            else if (i == 1) {
-                column.setPreferredWidth(75);
-                column.setCellRenderer(new DateCellRenderer());
-            }
-            else if (i == 2) {
-                column.setPreferredWidth(5);
-            }
+        else {
+            inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
         }
-        // Setup sorting
-        setupRowSorter(inTable, 1);
     }
 
 
-    private static void setupRowSorter(JTable inTable, int inColumn) {
+    public static void setupRowSorter(JTable inTable, int inColumn) {
         List<SortKey> tempList = new ArrayList<SortKey>(1);
         tempList.add(new SortKey(inColumn, SortOrder.ASCENDING));
+        inTable.getRowSorter().setSortKeys(tempList);
+    }
+
+    public static void setupRowSorter(JTable inTable, int inColumn1, int inColumn2, SortOrder inSortOrder1, SortOrder inSortOrder2) {
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(inColumn1, inSortOrder1));
+        tempList.add(new SortKey(inColumn2, inSortOrder2));
+        inTable.getRowSorter().setSortKeys(tempList);
+    }
+
+    public static void setupRowSorter(JTable inTable, int inColumn1, int inColumn2, int inColumn3, SortOrder inSortOrder1, SortOrder inSortOrder2, SortOrder inSortOrder3) {
+        List<SortKey> tempList = new ArrayList<SortKey>(1);
+        tempList.add(new SortKey(inColumn1, inSortOrder1));
+        tempList.add(new SortKey(inColumn2, inSortOrder2));
+        tempList.add(new SortKey(inColumn3, inSortOrder3));
         inTable.getRowSorter().setSortKeys(tempList);
     }
 
@@ -807,6 +756,45 @@ public final class UtilTableGenerator {
             vector.addElement(convertToVector(objectArray));
         }
         return vector;
+    }
+
+    private static void setupTableModel(JTable inTable, Object[][] inData, String[] inColumnNames) {
+        inTable.setModel(new WildLogTableModel(inData, inColumnNames));
+    }
+
+    private static ImageIcon setupThumbnailIcon(WildLogApp inApp, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
+        WildLogFile wildLogFile = inApp.getDBI().find(new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID()));
+        if (wildLogFile != null) {
+            return UtilsImageProcessing.getScaledIcon(
+                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL),
+                    WildLogThumbnailSizes.VERY_SMALL.getSize());
+        }
+        return UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+    }
+
+    private static void setupRenderersAndThumbnailRows(JTable inTable, boolean inShowDatesWithTime) {
+        inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+        inTable.getColumnModel().getColumn(0).setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+        inTable.getColumnModel().getColumn(0).setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+        inTable.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.VERY_SMALL.getSize()));
+        inTable.setDefaultRenderer(Object.class, new TextCellRenderer(1));
+        inTable.setDefaultRenderer(Integer.class, new TextCellRenderer(1));
+        inTable.setDefaultRenderer(Long.class, new TextCellRenderer(1));
+        inTable.setDefaultRenderer(WildLogTableModelDataWrapper.class, new WildLogDataModelWrappertCellRenderer());
+        if (inShowDatesWithTime) {
+            inTable.setDefaultRenderer(Date.class, new DateTimeCellRenderer());
+        }
+        else {
+            inTable.setDefaultRenderer(Date.class, new DateCellRenderer());
+        }
+    }
+
+    private static void setupLoadingHeader(JTable inTable) {
+        // Setup header
+        inTable.getTableHeader().setReorderingAllowed(false);
+        ((DefaultTableCellRenderer) inTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
+        // Setup loading message
+        inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
     }
 
 }
