@@ -32,8 +32,8 @@ import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -902,7 +902,6 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane12.setName("jScrollPane12"); // NOI18N
 
         tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1170,8 +1169,8 @@ public class PanelLocation extends PanelCanSetupHeader {
             tempVisit.setLocationName(locationWL.getName());
             List<Visit> visits = app.getDBI().list(tempVisit);
             lblNumberOfVisits.setText(Integer.toString(visits.size()));
-            UtilTableGenerator.setupCompleteVisitTable(app, tblVisit, locationWL);
-            UtilTableGenerator.setupElementsForLocationTable(app, tblElement, locationWL);
+            UtilsTableGenerator.setupVisitTableLarge(app, tblVisit, locationWL);
+            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
         }
         else {
             lblNumberOfSightings.setText("0");
@@ -1185,7 +1184,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                UtilPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName()), (JTabbedPane)getParent());
+                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName()), (JTabbedPane)getParent());
                 return null;
             }
         });
@@ -1233,11 +1232,11 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
         if (locationWL.getName() != null) {
             if (rdbLocation.isSelected()) {
-                UtilTableGenerator.setupElementsForLocationTable(app, tblElement, locationWL);
+                UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
             }
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
-                    UtilTableGenerator.setupElementsForVisitTable(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 1))));
+                    UtilsTableGenerator.setupElementsTableMediumForVisit(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 1))));
                 }
                 else {
                     if (tblVisit.getSelectedRowCount() == 0) {
@@ -1276,7 +1275,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!isPopup) {
             int[] selectedRows = tblElement.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilPanelGenerator.openPanelAsTab(app, (String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
+                UtilsPanelGenerator.openPanelAsTab(app, (String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
             }
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
@@ -1295,7 +1294,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
                     Visit visit = app.getDBI().find(new Visit((String)tblVisit.getValueAt(selectedRows[t], 1)));
-                    UtilPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
+                    UtilsPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
                     app.getDBI().delete(visit);
                 }
                 formComponentShown(null);
@@ -1306,7 +1305,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void btnAddVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddVisitActionPerformed
         btnUpdateActionPerformed(evt);
         if (!txtName.getBackground().equals(Color.RED)) {
-            UtilPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
+            UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
         }
     }//GEN-LAST:event_btnAddVisitActionPerformed
 
@@ -1314,7 +1313,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!isPopup) {
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilPanelGenerator.openPanelAsTab(app, (String)tblVisit.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
+                UtilsPanelGenerator.openPanelAsTab(app, (String)tblVisit.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
             }
         }
     }//GEN-LAST:event_btnGoVisitActionPerformed

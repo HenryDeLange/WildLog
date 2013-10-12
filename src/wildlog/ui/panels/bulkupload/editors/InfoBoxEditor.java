@@ -13,11 +13,11 @@ import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor {
     private Object editorValue;
     private WildLogApp app;
-    private JTextField txtLocation;
+    private JTable tblLocation;
     private JTextField txtVisit;
 
-    public InfoBoxEditor(WildLogApp inApp, JTextField inTxtLocation, JTextField inTxtVisit) {
-        txtLocation = inTxtLocation;
+    public InfoBoxEditor(WildLogApp inApp, JTable inTblLocation, JTextField inTxtVisit) {
+        tblLocation = inTblLocation;
         txtVisit = inTxtVisit;
         app = inApp;
     }
@@ -35,7 +35,7 @@ public class InfoBoxEditor extends AbstractCellEditor implements TableCellEditor
     @Override
     public Component getTableCellEditorComponent(JTable inTable, Object inValue, boolean inIsSelected, int inRow, int inColumn) {
         editorValue = inValue;
-        return InfoBoxRenderer.drawInfoBox(inTable, inValue, app, txtLocation, txtVisit, inRow);
+        return InfoBoxRenderer.drawInfoBox(inTable, inValue, app, tblLocation, txtVisit, inRow);
     }
 
 }

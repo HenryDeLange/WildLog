@@ -11,8 +11,8 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -68,8 +68,6 @@ public class PanelTabLocations extends javax.swing.JPanel {
         });
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
         tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
         tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
@@ -98,8 +96,6 @@ public class PanelTabLocations extends javax.swing.JPanel {
         jLabel2.setText("List of Periods at the selected Place:");
 
         tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblVisit.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -158,8 +154,6 @@ public class PanelTabLocations extends javax.swing.JPanel {
         });
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -281,13 +275,13 @@ public class PanelTabLocations extends javax.swing.JPanel {
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
-            UtilTableGenerator.setupShortVisitTable(app, tblVisit, tempLocation);
-            UtilTableGenerator.setupElementsForLocationTable(app, tblElement, tempLocation);
+            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocation);
+            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocation);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-            UtilTableGenerator.setupShortVisitTable(app, tblVisit, null);
-            UtilTableGenerator.setupElementsForLocationTable(app, tblElement, null);
+            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, null);
+            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, null);
             if (tblLocation.getSelectedRowCount() == 0) {
                 tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
                 tblElement.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
@@ -326,7 +320,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
@@ -334,13 +328,13 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
 
     private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
-        UtilPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
+        UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
     }//GEN-LAST:event_btnAddLocationActionPerformed
 
     private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
@@ -361,7 +355,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
                     tempVisit.setLocationName(tempLocation.getName());
                     List<Visit> visits = app.getDBI().list(tempVisit);
                     for (int i = 0; i < visits.size(); i++) {
-                        UtilPanelGenerator.removeOpenedTab(visits.get(i).getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
+                        UtilsPanelGenerator.removeOpenedTab(visits.get(i).getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
                     }
                     // Daar kan steeds tabs wees wat nuwe visits het vir die location wat nog nie gesave was nie wat ek ook moet toe maak...
                     // Build up list and delete on components not index to prevent index issues when removing
@@ -382,7 +376,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
                         tabbedPanel.remove(headerPanel.getParentPanel());
                     }
                     // Remove die loation se eie tab
-                    UtilPanelGenerator.removeOpenedTab(tempLocation.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
+                    UtilsPanelGenerator.removeOpenedTab(tempLocation.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
                     app.getDBI().delete(tempLocation);
                 }
                 formComponentShown(null);
@@ -407,7 +401,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getValueAt(selectedRows[t], 1)),
+                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getValueAt(selectedRows[t], 1)),
                     PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
             }
         }
@@ -421,7 +415,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        UtilTableGenerator.setupCompleteLocationTable(app, tblLocation, searchLocation);
+        UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, searchLocation);
         tblLocationMouseReleased(null);
     }//GEN-LAST:event_formComponentShown
 

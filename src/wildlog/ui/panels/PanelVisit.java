@@ -30,8 +30,8 @@ import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
@@ -607,7 +607,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addComponent(btnChecklist, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -707,7 +707,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
                                         .addGap(104, 104, 104)
                                         .addComponent(cmbGameWatchIntensity, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 6, Short.MAX_VALUE))
+                                .addGap(0, 11, Short.MAX_VALUE))
                             .addComponent(jScrollPane14)))
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -781,7 +781,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         tblSightings.setAutoCreateRowSorter(true);
-        tblSightings.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblSightings.setName("tblSightings"); // NOI18N
         tblSightings.setSelectionBackground(new java.awt.Color(125, 120, 93));
         tblSightings.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -1063,7 +1062,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblSightingImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         if (visit.getName() != null) {
-            UtilTableGenerator.setupCompleteSightingTable(app, tblSightings, visit);
+            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit);
             Sighting tempSighting = new Sighting();
             tempSighting.setVisitName(visit.getName());
             List<Sighting> sightings = app.getDBI().list(tempSighting);
@@ -1078,7 +1077,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfElements.setText(Integer.toString(allElements.size()));
         }
         else {
-            UtilTableGenerator.setupCompleteSightingTable(app, tblSightings, null);
+            UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, null);
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
@@ -1204,7 +1203,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         if (sighting != null) {
-            UtilPanelGenerator.openPanelAsTab(app, sighting.getElementName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
+            UtilsPanelGenerator.openPanelAsTab(app, sighting.getElementName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 

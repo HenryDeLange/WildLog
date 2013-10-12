@@ -12,7 +12,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 
-public final class UtilPanelGenerator {
+public final class UtilsPanelGenerator {
 
     // METHODS:
     private static PanelElement getNewElementPanel(WildLogApp inApp) {

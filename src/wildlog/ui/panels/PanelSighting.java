@@ -18,8 +18,8 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
@@ -46,7 +46,7 @@ import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
-import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -111,60 +111,49 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Auto-generated code
         initComponents();
 
-        // Setup tables
-        UtilTableGenerator.setupShortElementTable(app, tblElement, searchElement);
-        UtilTableGenerator.setupShortLocationTable(app, tblLocation, searchLocation);
+        // Setup Location and Element tables
+        UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
+        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, searchLocation);
 
         // Setup default values for tables
         if (locationWL != null) {
-            int select = -1;
-            for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
-                if (tblLocation.getValueAt(t, 0).equals(locationWL.getName())) {
-                    select = t;
+            // Wag eers vir die table om klaar te load voor ek iets probeer select
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
+                        if (tblLocation.getValueAt(t, 1).equals(locationWL.getName())) {
+                            tblLocation.getSelectionModel().setSelectionInterval(t, t);
+                            int scrollRow = t;
+                            if (t < (tblLocation.getModel().getRowCount()) - 1) {
+                                scrollRow = t + 1;
+                            }
+                            tblLocation.scrollRectToVisible(tblLocation.getCellRect(scrollRow, 0, true));
+                            break;
+                        }
+                    }
                 }
-            }
-            if (select >= 0) {
-                tblLocation.getSelectionModel().setSelectionInterval(select, select);
-                if (select > 3) {
-                    tblLocation.scrollRectToVisible(tblLocation.getCellRect(select-3, 0, true));
-                }
-            }
+            });
         }
         if (element != null) {
-            int select = -1;
-            for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                if (tblElement.getValueAt(t, 0).equals(element.getPrimaryName())) {
-                    select = t;
+            // Wag eers vir die table om klaar te load voor ek iets probeer select
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
+                        if (tblElement.getValueAt(t, 1).equals(element.getPrimaryName())) {
+                            tblElement.getSelectionModel().setSelectionInterval(t, t);
+                            int scrollRow = t;
+                            if (t < (tblElement.getModel().getRowCount()) - 1) {
+                                scrollRow = t + 1;
+                            }
+                            tblElement.scrollRectToVisible(tblElement.getCellRect(scrollRow, 0, true));
+                            break;
+                        }
+                    }
                 }
-            }
-            if (select >= 0) {
-                tblElement.getSelectionModel().setSelectionInterval(select, select);
-                if (select > 5) {
-                    tblElement.scrollRectToVisible(tblElement.getCellRect(select-5, 0, true));
-                }
-            }
+            });
         }
-        if (locationWL != null && visit != null) {
-            // Build the table
-            UtilTableGenerator.setupVeryShortVisitTable(app, tblVisit, locationWL);
-            // Select the visit
-            int select = -1;
-            for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
-                if (tblVisit.getValueAt(t, 0).equals(visit.getName())) {
-                    select = t;
-                }
-            }
-            if (select >= 0) {
-                tblVisit.getSelectionModel().setSelectionInterval(select, select);
-                if (select > 2) {
-                    tblVisit.scrollRectToVisible(tblVisit.getCellRect(select-2, 0, true));
-                }
-            }
-        }
-        else {
-            tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Place"}, 0));
-        }
-
         // Setup location and element images
         if (locationWL != null) {
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
@@ -191,12 +180,32 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
 
+        // Setup virist table after the Location has been setup
+        UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
+        // Select the visit
+        if (visit != null) {
+            // Wag eers vir die table om klaar te load voor ek iets probeer select
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
+                        if (tblVisit.getValueAt(t, 1).equals(visit.getName())) {
+                            tblVisit.getSelectionModel().setSelectionInterval(t, t);
+                            int scrollRow = t;
+                            if (t < (tblVisit.getModel().getRowCount()) - 1) {
+                                scrollRow = t + 1;
+                            }
+                            tblVisit.scrollRectToVisible(tblVisit.getCellRect(scrollRow, 0, true));
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+
         //Setup Table ordering and sorting
-        tblElement.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
-        tblLocation.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
-        tblVisit.getTableHeader().setReorderingAllowed(false);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
 
         // Lat Lon stuff
@@ -468,7 +477,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sclElement.setName("sclElement"); // NOI18N
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblElement.setEnabled(!disableEditing);
         tblElement.setName("tblElement"); // NOI18N
         tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
@@ -714,7 +722,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sclLocation.setName("sclLocation"); // NOI18N
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblLocation.setEnabled(!disableEditing && !bulkUploadMode);
         tblLocation.setName("tblLocation"); // NOI18N
         tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
@@ -737,7 +744,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sclVisit.setName("sclVisit"); // NOI18N
 
         tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblVisit.setEnabled(!disableEditing && !bulkUploadMode);
         tblVisit.setName("tblVisit"); // NOI18N
         tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
@@ -1254,7 +1260,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
-            element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 0)));
+            element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 1)));
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
         }
         else {
@@ -1283,7 +1289,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         if (!bulkUploadMode) {
             if (tblVisit.getSelectedRowCount() == 1) {
-                visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 0).toString()));
+                visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 1).toString()));
             }
             else {
                 visit = null;
@@ -1294,15 +1300,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!bulkUploadMode) {
             if (tblLocation.getSelectedRowCount() == 1) {
-                locationWL = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 0).toString()));
-                UtilTableGenerator.setupVeryShortVisitTable(app, tblVisit, locationWL);
+                locationWL = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString()));
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
                 btnAddNewVisit.setEnabled(true);
                 visit = null;
                 UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), 0, lblLocationImage, WildLogThumbnailSizes.SMALL, app);
             }
             else {
                 locationWL = null;
-                tblVisit.setModel(new DefaultTableModel(new String[]{"Select a Place"}, 0));
+                UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
                 btnAddNewVisit.setEnabled(false);
                 visit = null;
                 lblLocationImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
@@ -1317,7 +1323,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (!ElementType.NONE.equals(type)) {
                 searchElement.setType(type);
             }
-            UtilTableGenerator.setupShortElementTable(app, tblElement, searchElement);
+            UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
             txtSearch.setText("");
             // Clear Images
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
@@ -1571,11 +1577,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
             else
             if (inIndicator instanceof PanelLocation) {
-                UtilTableGenerator.setupShortLocationTable(app, tblLocation, searchLocation);
+                UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, searchLocation);
             }
             else
             if (inIndicator instanceof PanelElement) {
-                UtilTableGenerator.setupShortElementTable(app, tblElement, searchElement);
+                UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
             }
         }
     }

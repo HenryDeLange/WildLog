@@ -246,9 +246,12 @@ public class UtilsImageProcessing {
     public static Date getDateFromImage(Path inPath) {
         Metadata metadata = null;
         try {
-            metadata = JpegMetadataReader.readMetadata(inPath.toFile());
+            if (WildLogFileExtentions.Images.isJPG(inPath)) {
+                metadata = JpegMetadataReader.readMetadata(inPath.toFile());
+            }
         }
         catch (JpegProcessingException | IOException ex) {
+            System.err.println("Could not read Meta data from file. The file extention might be wrong...");
             ex.printStackTrace(System.err);
         }
         return getDateFromImage(metadata, inPath);

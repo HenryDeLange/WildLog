@@ -11,8 +11,8 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ElementType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -71,8 +71,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         });
 
         tblElement.setAutoCreateRowSorter(true);
-        tblElement.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblElement.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
         tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -134,8 +132,6 @@ public class PanelTabElements extends javax.swing.JPanel {
         });
 
         tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tblLocation.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
         tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
         tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -278,10 +274,10 @@ public class PanelTabElements extends javax.swing.JPanel {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
             // Get Locations
-            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, tempElement);
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, tempElement);
         }
         else {
-            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, null);
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, null);
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             if (tblElement.getSelectedRowCount() == 0) {
                 tblLocation.setModel(new DefaultTableModel(new String[]{"No Creature Selected"}, 0));
@@ -307,13 +303,13 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnAddElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddElementActionPerformed
-        UtilPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
+        UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
     }//GEN-LAST:event_btnAddElementActionPerformed
 
     private void btnDeleteElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteElementActionPerformed
@@ -329,7 +325,7 @@ public class PanelTabElements extends javax.swing.JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblElement.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    UtilPanelGenerator.removeOpenedTab((String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel);
+                    UtilsPanelGenerator.removeOpenedTab((String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel);
                     app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 1)));
                 }
                 formComponentShown(null);
@@ -355,7 +351,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         if (!ElementType.NONE.equals(type)) {
             searchElement.setType(type);
         }
-        UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
+        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement);
         txtSearch.setText("");
         tblElementMouseReleased(null);
     }//GEN-LAST:event_cmbTypeActionPerformed
@@ -363,7 +359,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoLocationActionPerformed
@@ -379,7 +375,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         txtSearch.setText("");
         cmbType.setSelectedItem(ElementType.NONE);
         // Don't need to load the table again here, since the selecting the combobox (above line) does it already.
-        //UtilTableGenerator.setupCompleteElementTable(app, tblElement, searchElement);
+        //UtilTableGenerator.setupElementTableLarge(app, tblElement, searchElement);
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
     }//GEN-LAST:event_formComponentShown
 

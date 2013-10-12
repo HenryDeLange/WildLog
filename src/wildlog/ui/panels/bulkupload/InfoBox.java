@@ -13,9 +13,9 @@ import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.utils.WildLogThumbnailSizes;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class InfoBox extends JPanel {
@@ -23,14 +23,14 @@ public class InfoBox extends JPanel {
     private static final SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
     private WildLogApp app;
     private BulkUploadSightingWrapper sightingWrapper;
-    private JTextField txtLocation;
+    private JTable tblLocation;
     private JTextField txtVisit;
     private JTable table;
 
-    /** Creates new form InfoBox */
-    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JTextField inTxtLocation, JTextField inTxtVisit, JTable inTable) {
+
+    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JTable inTblLocation, JTextField inTxtVisit, JTable inTable) {
         app = inApp;
-        txtLocation = inTxtLocation;
+        tblLocation = inTblLocation;
         txtVisit = inTxtVisit;
         table = inTable;
         initComponents();
@@ -203,11 +203,15 @@ public class InfoBox extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        Location tempLocation = null;
+        if (tblLocation.getSelectedRowCount() == 1) {
+            tempLocation = new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString());
+        }
         PanelSighting dialog = new PanelSighting(
                 app,
                 app.getMainFrame(), "Edit the Observation",
                 sightingWrapper,
-                new Location(txtLocation.getText()),
+                tempLocation,
                 new Visit(txtVisit.getText()),
                 new Element(sightingWrapper.getElementName()),
                 null,
@@ -221,7 +225,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
-        final ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app, sightingWrapper.getElementName());
+        ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app, sightingWrapper.getElementName());
         dialog.setVisible(true);
         // Set the label to the selected text
         table.getCellEditor().stopCellEditing();

@@ -41,7 +41,7 @@ import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.helpers.UtilPanelGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.cellrenderers.WildLogTreeCellRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
@@ -681,17 +681,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilPanelGenerator.openPanelAsTab(app, tempLocation.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
+                UtilsPanelGenerator.openPanelAsTab(app, tempLocation.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilPanelGenerator.openPanelAsTab(app, tempElement.getPrimaryName(), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
+                UtilsPanelGenerator.openPanelAsTab(app, tempElement.getPrimaryName(), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
             }
             else
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                UtilPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel,
+                UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel,
                     app.getDBI().find(new Location(tempVisit.getLocationName())));
             }
             else

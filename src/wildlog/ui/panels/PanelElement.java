@@ -39,8 +39,8 @@ import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.helpers.UtilPanelGenerator;
-import wildlog.ui.helpers.UtilTableGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
@@ -1498,7 +1498,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             if (rdbLocations.isSelected()) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    UtilPanelGenerator.openPanelAsTab(app, (String)tblLocation.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
+                    UtilsPanelGenerator.openPanelAsTab(app, (String)tblLocation.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
                 }
             }
             else {
@@ -1536,7 +1536,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
-        UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, element);
+        UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
         tblLocation.setSelectionBackground(new Color(67,97,113));
         rdbLocations.setSelected(true);
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
@@ -1581,7 +1581,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
-                UtilTableGenerator.setupSightingsForElementTable(app, tblLocation, element);
+                UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element);
                 tblLocation.setSelectionBackground(new Color(125,120,93));
             }
             else {
@@ -1589,7 +1589,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             }
         }
         else {
-            UtilTableGenerator.setupLocationsForElementTable(app, tblLocation, element);
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
             tblLocation.setSelectionBackground(new Color(67,97,113));
         }
         lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));

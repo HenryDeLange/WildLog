@@ -68,7 +68,7 @@ import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.helpers.UtilPanelGenerator;
+import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
@@ -1198,7 +1198,7 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                UtilPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null), tabbedPanel);
+                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null), tabbedPanel);
                 return null;
             }
         });
