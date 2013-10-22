@@ -257,7 +257,7 @@ public class ReportSightingByLocation extends javax.swing.JFrame {
         if (chartTime != null)
             pnlScrollPane.remove(chartTime);
         chartTime = new BarChart(580, 630);
-        List<Sighting> sightings = app.getDBI().searchSightingOnDate(startDate, endDate);
+        List<Sighting> sightings = app.getDBI().searchSightingOnDate(startDate, endDate, Sighting.class);
         for (Sighting sighting : sightings) {
             numOfElements.add(sighting.getElementName());
             // Time

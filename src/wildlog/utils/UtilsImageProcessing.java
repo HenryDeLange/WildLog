@@ -34,6 +34,7 @@ import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 
 
 public class UtilsImageProcessing {

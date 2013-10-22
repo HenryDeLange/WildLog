@@ -3,63 +3,25 @@ package wildlog.data.dataobjects;
 import KmlGenerator.objects.KmlEntry;
 import java.util.List;
 import wildlog.WildLogApp;
-import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
-import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
-import wildlog.data.enums.AccommodationType;
-import wildlog.data.enums.CateringType;
-import wildlog.data.enums.GameViewRating;
-import wildlog.data.enums.LocationRating;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.WildLogPaths;
 
-public class Location extends DataObjectWithGPS implements Comparable<Location>, DataObjectWithHTML, DataObjectWithKML, DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "LOCATION-";
-    private String name; // Used as index (ID)
-    private String description;
-    private LocationRating rating;
-    private GameViewRating gameViewingRating;
-    private String habitatType;
-    private List<AccommodationType> accommodationType;
-    private CateringType catering;
-    private String contactNumbers;
-    private String website;
-    private String email;
-    private String directions;
 
-    // CONSTRUCTORS:
+public class Location extends LocationCore implements DataObjectWithHTML, DataObjectWithKML {
+
     public Location() {
+        super();
     }
 
     public Location(String inName) {
-        name = inName;
+        super(inName);
     }
 
-    // METHODS:
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public int compareTo(Location inLocation) {
-        if (inLocation != null) {
-            if (name != null && inLocation.getName() != null) {
-                return(name.compareToIgnoreCase(inLocation.getName()));
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + name;
-    }
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
@@ -105,7 +67,7 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
-                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                 }
             }
@@ -126,7 +88,7 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
                 htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, inProgressbarTask)).append("<br/>");
                 if (inProgressbarTask != null) {
                     inProgressbarTask.setTaskProgress(progressMarker + (int)(((double)counter/visits.size())*(95-progressMarker)));
-                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;
                 }
@@ -159,147 +121,6 @@ public class Location extends DataObjectWithGPS implements Comparable<Location>,
     @Override
     public String getDisplayName() {
         return name;
-    }
-
-    public boolean hasTheSameContent(Location inLocation) {
-        if (inLocation == null) {
-            return false;
-        }
-        if (UtilsUI.isTheSame(this, inLocation)
-                && UtilsUI.isTheSame(getAccommodationType(), inLocation.getAccommodationType())
-                && UtilsUI.isTheSame(getCatering(), inLocation.getCatering())
-                && UtilsUI.isTheSame(getContactNumbers(), inLocation.getContactNumbers())
-                && UtilsUI.isTheSame(getDescription(), inLocation.getDescription())
-                && UtilsUI.isTheSame(getDirections(), inLocation.getDirections())
-                && UtilsUI.isTheSame(getEmail(), inLocation.getEmail())
-                && UtilsUI.isTheSame(getGameViewingRating(), inLocation.getGameViewingRating())
-                && UtilsUI.isTheSame(getHabitatType(), inLocation.getHabitatType())
-                && UtilsUI.isTheSame(getName(), inLocation.getName())
-                && UtilsUI.isTheSame(getRating(), inLocation.getRating())
-                && UtilsUI.isTheSame(getWebsite(), inLocation.getWebsite())
-                && UtilsUI.isTheSame(getLatDegrees(), inLocation.getLatDegrees())
-                && UtilsUI.isTheSame(getLatMinutes(), inLocation.getLatMinutes())
-                && UtilsUI.isTheSame(getLatSeconds(), inLocation.getLatSeconds())
-                && UtilsUI.isTheSame(getLonDegrees(), inLocation.getLonDegrees())
-                && UtilsUI.isTheSame(getLonMinutes(), inLocation.getLonMinutes())
-                && UtilsUI.isTheSame(getLonSeconds(), inLocation.getLonSeconds())
-                && UtilsUI.isTheSame(getLongitude(), inLocation.getLongitude())) {
-            return true;
-        }
-        return false;
-    }
-
-    public Location cloneShallow() {
-        Location location = new Location();
-        location.setAccommodationType(accommodationType);
-        location.setCatering(catering);
-        location.setContactNumbers(contactNumbers);
-        location.setDescription(description);
-        location.setDirections(directions);
-        location.setEmail(email);
-        location.setGameViewingRating(gameViewingRating);
-        location.setHabitatType(habitatType);
-        location.setName(name);
-        location.setRating(rating);
-        location.setWebsite(website);
-        location.setLatDegrees(latDegrees);
-        location.setLatMinutes(latMinutes);
-        location.setLatSeconds(latSeconds);
-        location.setLonDegrees(lonDegrees);
-        location.setLonMinutes(lonMinutes);
-        location.setLonSeconds(lonSeconds);
-        location.setLongitude(longitude);
-        return location;
-    }
-
-    // GETTERS:
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public LocationRating getRating() {
-        return rating;
-    }
-
-    public GameViewRating getGameViewingRating() {
-        return gameViewingRating;
-    }
-
-    public String getHabitatType() {
-        return habitatType;
-    }
-
-    public List<AccommodationType> getAccommodationType() {
-        return accommodationType;
-    }
-
-    public String getContactNumbers() {
-        return contactNumbers;
-    }
-
-    public CateringType getCatering() {
-        return catering;
-    }
-
-    public String getDirections() {
-        return directions;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    // SETTERS:
-    public void setName(String inName) {
-        name = inName;
-    }
-
-    public void setDescription(String inDescription) {
-        description = inDescription;
-    }
-
-    public void setRating(LocationRating inRating) {
-        rating = inRating;
-    }
-
-    public void setGameViewingRating(GameViewRating inGameViewingRating) {
-        gameViewingRating = inGameViewingRating;
-    }
-
-    public void setHabitatType(String inHabitatType) {
-        habitatType = inHabitatType;
-    }
-
-    public void setAccommodationType(List<AccommodationType> inAccommodationType) {
-        accommodationType = inAccommodationType;
-    }
-
-    public void setContactNumbers(String inContactNumbers) {
-        contactNumbers = inContactNumbers;
-    }
-
-    public void setCatering(CateringType inCatering) {
-        catering = inCatering;
-    }
-
-    public void setDirections(String inDirections) {
-        directions = inDirections;
-    }
-
-    public void setEmail(String inEmail) {
-        email = inEmail;
-    }
-
-    public void setWebsite(String inWebsite) {
-        website = inWebsite;
     }
 
 }

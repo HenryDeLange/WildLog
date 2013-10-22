@@ -20,6 +20,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -28,7 +29,6 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class BulkUploadDataLoader {

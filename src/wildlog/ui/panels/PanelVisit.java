@@ -20,6 +20,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.AdvancedDialog;
@@ -39,7 +40,6 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {

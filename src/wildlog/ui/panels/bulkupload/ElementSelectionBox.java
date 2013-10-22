@@ -16,12 +16,12 @@ import javax.swing.border.LineBorder;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class ElementSelectionBox extends JDialog {

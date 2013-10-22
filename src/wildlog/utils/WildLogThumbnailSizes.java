@@ -1,4 +1,4 @@
-package wildlog.utils;
+package wildlog.data.enums.utils;
 
 public enum WildLogThumbnailSizes {
     /** 20px */

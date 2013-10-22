@@ -21,6 +21,7 @@ import wildlog.data.enums.AccommodationType;
 import wildlog.data.enums.CateringType;
 import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.utils.UtilsGps;
@@ -42,7 +43,6 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class PanelLocation extends PanelCanSetupHeader {

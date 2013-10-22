@@ -10,6 +10,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ElementType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
@@ -17,7 +18,6 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class PanelTabElements extends javax.swing.JPanel {

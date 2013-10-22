@@ -31,6 +31,7 @@ import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.MappingDialog;
@@ -48,7 +49,6 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {

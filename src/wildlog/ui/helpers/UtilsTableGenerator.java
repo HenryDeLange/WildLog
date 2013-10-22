@@ -26,6 +26,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.cellrenderers.DateCellRenderer;
 import wildlog.ui.helpers.cellrenderers.DateTimeCellRenderer;
@@ -36,7 +37,7 @@ import wildlog.ui.helpers.cellrenderers.WildLogTableModel;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModelDataWrapper;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogThumbnailSizes;
+
 
 public final class UtilsTableGenerator {
 
@@ -667,7 +668,7 @@ public final class UtilsTableGenerator {
                                         "Observations"
                                         };
                 // Load data from DB
-                final List<LocationCount> listLocationCounts = inApp.getDBI().queryLocationCountForElement(inElement);
+                final List<LocationCount> listLocationCounts = inApp.getDBI().queryLocationCountForElement(inElement, LocationCount.class);
                 if (!listLocationCounts.isEmpty()) {
                     ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
                     // Setup new table data

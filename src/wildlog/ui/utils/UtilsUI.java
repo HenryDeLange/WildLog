@@ -31,9 +31,9 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public final class UtilsUI {
@@ -119,7 +119,7 @@ public final class UtilsUI {
                 }
                 // Note: The regexFilter method seems to be able to take optional parameters...
                 // The (?i) makes the matching ignore case...
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + inTxtSearch.getText()));
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + inTxtSearch.getText(), 1));
                 // Kan dit ook glo so doen:
                 //sorter.setRowFilter(RowFilter.regexFilter(Pattern.compile(txtSearchField.getText(), Pattern.CASE_INSENSITIVE).toString()));
                 inTable.setRowSorter(sorter);
@@ -129,38 +129,47 @@ public final class UtilsUI {
 
     public static void attachKeyListernerToSelectKeyedRows(final JTable inTable) {
         inTable.addKeyListener(new KeyAdapter() {
+            private long lastEvent = 0;
+            private String currentWord;
+
             @Override
             public void keyPressed(KeyEvent inEvent) {
-                if ((inEvent.getKeyChar() >= 'A' && inEvent.getKeyChar() <= 'z') || (inEvent.getKeyChar() >= '0' && inEvent.getKeyChar() <= '9')) {
-                    int select = -1;
+                if ((inEvent.getKeyChar() >= 'A' && inEvent.getKeyChar() <= 'z')
+                        || (inEvent.getKeyChar() >= '0' && inEvent.getKeyChar() <= '9')
+                        || (inEvent.getKeyChar() == ' ')) {
+                    if (inEvent.getWhen() - lastEvent < 1000) {
+                        // Handle this as part of the same word
+                        currentWord = currentWord + inEvent.getKeyChar();
+                    }
+                    else {
+                        // Handle this as a new event
+                        currentWord = ""+inEvent.getKeyChar();
+                    }
+                    // Select the row
                     for (int t = 0; t < inTable.getRowSorter().getViewRowCount(); t++) {
-                        if (inTable.getValueAt(t, 0).toString().toLowerCase().startsWith((""+inEvent.getKeyChar()).toLowerCase())) {
-                            select = t;
-                            // A new letter was selected by the user, so go to the first line.
-                            if (inTable.getValueAt(inTable.getSelectedRow(), 0).toString().toLowerCase().charAt(0) != inEvent.getKeyChar()) {
-                                break;
-                            }
-                            else {
-                                // The same letter was pressed as the selected row, thus go to the next line (if it exists and matches).
-                                if (t > inTable.getSelectedRow()) {
-                                    break;
-                                }
-                            }
+                        if (inTable.getValueAt(t, 1).toString().toLowerCase().startsWith(currentWord.toLowerCase())) {
+                            inTable.getSelectionModel().setSelectionInterval(t, t);
+                            inTable.scrollRectToVisible(inTable.getCellRect(t, 0, true));
+                            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+                                    new MouseEvent(inTable, MouseEvent.MOUSE_RELEASED, new Date().getTime(),
+                                            0, inTable.getMousePosition().x, inTable.getMousePosition().y, 1, false));
+                            break;
                         }
                     }
-                    if (select >= 0) {
-                        inTable.getSelectionModel().setSelectionInterval(select, select);
-                        inTable.scrollRectToVisible(inTable.getCellRect(select, 0, true));
-                        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-                                new MouseEvent(
-                                        inTable,
-                                        MouseEvent.MOUSE_RELEASED,
-                                        new Date().getTime(),
-                                        0,
-                                        inTable.getMousePosition().x,
-                                        inTable.getMousePosition().y,
-                                        1,
-                                        false));
+                    // Record the event time
+                    lastEvent = inEvent.getWhen();
+                }
+                else {
+                    if (inEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
+                        lastEvent = 0;
+                        currentWord = "";
+                    }
+                    else
+                    if (inEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE) {
+                        if (currentWord.length() >= 1) {
+                            lastEvent = inEvent.getWhen();
+                            currentWord = currentWord.substring(0, currentWord.length()-1);
+                        }
                     }
                 }
             }
@@ -266,34 +275,6 @@ public final class UtilsUI {
         });
         timer.start();
         return timer;
-    }
-
-    /**
-     * Vergelyk die twee Objects en kyk of hulle waarder eenders is. <br/>
-     * <b>WARNING: Gebruik die toString() (case-sensitive) vir meeste classes.</b>
-     * @param inObject1
-     * @param inObject2
-     * @return
-     */
-    public static boolean isTheSame(Object inObject1, Object inObject2) {
-        if (inObject1 == null && inObject2 == null) {
-            return true;
-        }
-        if ((inObject1 == null && inObject2 != null) || (inObject1 != null && inObject2 == null)) {
-            return false;
-        }
-        if (inObject1 != null && inObject2 != null) {
-            if (inObject1.toString() == null && inObject2.toString() == null) {
-                return true;
-            }
-            if ((inObject1.toString() == null && inObject2.toString() != null) || (inObject1.toString() != null && inObject2.toString() == null)) {
-                return false;
-            }
-            if (inObject1.toString().equals(inObject2.toString())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

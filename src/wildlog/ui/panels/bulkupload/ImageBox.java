@@ -8,11 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
-import wildlog.utils.WildLogThumbnailSizes;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 

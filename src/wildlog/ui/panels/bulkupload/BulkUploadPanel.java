@@ -31,6 +31,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.VisitType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -55,7 +56,6 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
@@ -568,7 +568,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             @Override
             protected Object doInBackground() throws Exception {
                 // Make sure the location is OK
-                if (tblLocation.getSelectedRowCount() != 1 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
+                if (tblLocation.getSelectedRowCount() == 1 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
                     // Make sure the visit is OK
                     final Visit visit = new Visit(txtVisitName.getText());
                     if (app.getDBI().find(visit) != null) {

@@ -41,6 +41,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -52,7 +53,6 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataChanges {

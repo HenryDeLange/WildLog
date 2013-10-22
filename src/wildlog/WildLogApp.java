@@ -37,8 +37,8 @@ import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
 import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.WildLogOptions;
-import wildlog.data.dbi.DBI;
-import wildlog.data.dbi.DBI_h2;
+import wildlog.data.dbi.WildLogDBI;
+import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -57,9 +57,9 @@ public class WildLogApp extends Application {
     // Other settings
     private WildLogOptions wildLogOptions;
     private int threadCount;
-    // Make sure the application uses the same DBI instance...
-    // The DBI is initialized in startup() and closed in shutdown()
-    private DBI dbi;
+    // Make sure the application uses the same WildLogDBI instance...
+    // The WildLogDBI is initialized in startup() and closed in shutdown()
+    private WildLogDBI dbi;
     private WildLogView view;
 
     @Override
@@ -115,7 +115,7 @@ public class WildLogApp extends Application {
 
     private boolean openWorkspace() {
         try {
-            dbi = new DBI_h2(this);
+            dbi = new WildLogDBI_h2(this);
             System.out.println("Workspace opened at: " + WildLogPaths.getFullWorkspacePrefix().toString());
         }
         catch (Exception ex) {
@@ -324,7 +324,7 @@ public class WildLogApp extends Application {
         System.out.println();
     }
 
-    public DBI getDBI() {
+    public WildLogDBI getDBI() {
         return dbi;
     }
 

@@ -9,13 +9,13 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class InfoBox extends JPanel {

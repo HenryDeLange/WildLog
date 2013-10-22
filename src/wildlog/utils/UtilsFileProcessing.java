@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;

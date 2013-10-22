@@ -1,57 +1,24 @@
 package wildlog.data.dataobjects;
 
-import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
-import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
-import wildlog.data.enums.GameWatchIntensity;
-import wildlog.data.enums.VisitType;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.WildLogPaths;
 
-public class Visit implements Comparable<Visit>, DataObjectWithHTML, DataObjectWithWildLogFile {
-    public static final String WILDLOGFILE_ID_PREFIX = "VISIT-";
-    private String name; // Used as index (ID)
-    private Date startDate;
-    private Date endDate;
-    private String description;
-    private GameWatchIntensity gameWatchingIntensity;
-    private VisitType type;
-    private String locationName;
 
-    // CONSTRUCTORS:
+public class Visit extends VisitCore implements DataObjectWithHTML {
+
     public Visit() {
     }
 
     public Visit(String inName) {
-        name = inName;
+        super(inName);
     }
 
-    // METHODS:
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public int compareTo(Visit inVisit) {
-        if (inVisit != null) {
-            if (name != null && inVisit.getName() != null) {
-                return(name.compareToIgnoreCase(inVisit.getName()));
-            }
-        }
-        return 0;
-    }
-
-    @Override
-    public String getWildLogFileID() {
-        return WILDLOGFILE_ID_PREFIX + name;
-    }
-
+    
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
         int progressMarker;
@@ -121,95 +88,6 @@ public class Visit implements Comparable<Visit>, DataObjectWithHTML, DataObjectW
     @Override
     public String getDisplayName() {
         return name;
-    }
-
-    public boolean hasTheSameContent(Visit inVisit) {
-        if (inVisit == null) {
-            return false;
-        }
-        if (UtilsUI.isTheSame(this, inVisit)
-                && UtilsUI.isTheSame(getDescription(), inVisit.getDescription())
-                && UtilsUI.isTheSame(getEndDate(), inVisit.getEndDate())
-                && UtilsUI.isTheSame(getGameWatchingIntensity(), inVisit.getGameWatchingIntensity())
-                && UtilsUI.isTheSame(getLocationName(), inVisit.getLocationName())
-                && UtilsUI.isTheSame(getName(), inVisit.getName())
-                && UtilsUI.isTheSame(getStartDate(), inVisit.getStartDate())
-                && UtilsUI.isTheSame(getType(), inVisit.getType())) {
-            return true;
-        }
-        return false;
-    }
-
-    public Visit cloneShallow() {
-        Visit visit = new Visit();
-        visit.setDescription(description);
-        visit.setEndDate(endDate);
-        visit.setGameWatchingIntensity(gameWatchingIntensity);
-        visit.setLocationName(locationName);
-        visit.setName(name);
-        visit.setStartDate(startDate);
-        visit.setStartDate(startDate);
-        visit.setType(type);
-        return visit;
-    }
-
-
-    // GETTERS:
-    public String getName() {
-        return name;
-    }
-
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public GameWatchIntensity getGameWatchingIntensity() {
-        return gameWatchingIntensity;
-    }
-
-    public VisitType getType() {
-        return type;
-    }
-
-    // SETTERS:
-    public void setName(String inName) {
-        name = inName;
-    }
-
-    public void setStartDate(Date inStartDate) {
-        startDate = inStartDate;
-    }
-
-    public void setEndDate(Date inEndDate) {
-        endDate = inEndDate;
-    }
-
-    public void setDescription(String inDescription) {
-        description = inDescription;
-    }
-
-    public void setGameWatchingIntensity(GameWatchIntensity inGameWatchingIntensity) {
-        gameWatchingIntensity = inGameWatchingIntensity;
-    }
-
-    public void setType(VisitType inType) {
-        type = inType;
-    }
-
-    public String getLocationName() {
-        return locationName;
-    }
-
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
     }
 
 }

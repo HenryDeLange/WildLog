@@ -36,6 +36,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
@@ -48,7 +49,6 @@ import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataChanges {
@@ -989,7 +989,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
             // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-            List<Sighting> sightings = new ArrayList<Sighting>(app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate()));
+            List<Sighting> sightings = new ArrayList<Sighting>(app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class));
             Collections.sort(sightings);
             for (Sighting tempSighting : sightings) {
                 DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, true));

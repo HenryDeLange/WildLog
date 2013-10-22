@@ -10,10 +10,10 @@ import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 
 public final class UtilsHTML {

@@ -3,49 +3,33 @@ package wildlog.data.dataobjects;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogSystemImages;
-import wildlog.utils.WildLogThumbnailSizes;
 
-public class WildLogFile implements Comparable<WildLogFile> {
-    private String id; // The id should be in the format: location-kruger or creature-rooibok
-    private String filename;
-    private String originalFileLocation; // This is used as the DB table ID
-    private Date uploadDate;
-    private WildLogFileType fileType;
-    private boolean defaultFile = false;
 
-    // CONSTRUCTORS:
+public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFile> {
+
     public WildLogFile() {
     }
 
     public WildLogFile(String inID) {
-        id = inID;
+        super(inID);
     }
 
     public WildLogFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
-        this(inID, inFilename, inFilePath, inFileType, Calendar.getInstance().getTime());
+        super(inID, inFilename, inFilePath, inFileType);
     }
 
     public WildLogFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType, Date inUploadDate) {
-        id = inID;
-        filename = inFilename;
-        originalFileLocation = inFilePath;
-        uploadDate = inUploadDate;
-        fileType = inFileType;
+        super(inID, inFilename, inFilePath, inFileType, inUploadDate);
     }
 
-    // METHODS:
-    @Override
-    public String toString() {
-        return "[WildLogFile=" + originalFileLocation + "]";
-    }
 
     @Override
     public int compareTo(WildLogFile inWildLogFile) {
@@ -123,11 +107,6 @@ public class WildLogFile implements Comparable<WildLogFile> {
         return UtilsImageProcessing.getAbsoluteThumbnailPathAndCreate(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize);
     }
 
-    // GETTERS and SETTERS
-    public Date getUploadDate() {
-        return uploadDate;
-    }
-
     /**
      * This will be the relative path, as stored in the database.<br/>
      * This path should always start without a file separator.<br/>
@@ -135,19 +114,12 @@ public class WildLogFile implements Comparable<WildLogFile> {
      * (Relative path for workspace: ex. WildLog/Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @return
      */
+    @Override
     public String getDBFilePath() {
         if (originalFileLocation == null) {
             return null;
         }
         return Paths.get(originalFileLocation).normalize().toString().replace("\\", "/");
-    }
-
-    public WildLogFileType getFileType() {
-        return fileType;
-    }
-
-    public void setUploadDate(Date inDate) {
-        uploadDate = inDate;
     }
 
     /**
@@ -157,36 +129,9 @@ public class WildLogFile implements Comparable<WildLogFile> {
      * (Relative path for workspace: ex. WildLog/Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @param inFilePathFromDB
      */
+    @Override
     public void setDBFilePath(String inFilePathFromDB) {
         originalFileLocation = Paths.get(inFilePathFromDB).normalize().toString().replace("\\", "/");
-    }
-
-    public void setFileType(WildLogFileType inFileType) {
-        fileType = inFileType;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String inId) {
-        id = inId;
-    }
-
-    public String getFilename() {
-        return filename;
-    }
-
-    public void setFilename(String inFilename) {
-        filename = inFilename;
-    }
-
-    public boolean isDefaultFile() {
-        return defaultFile;
-    }
-
-    public void setDefaultFile(boolean inDefaultFile) {
-        defaultFile = inDefaultFile;
     }
 
 }

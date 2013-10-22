@@ -58,6 +58,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.WildLogFileType;
+import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.mapping.utils.UtilsGps;
@@ -79,7 +80,6 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
-import wildlog.utils.WildLogThumbnailSizes;
 
 /**
  * The application's main frame.
