@@ -53,7 +53,8 @@ import wildlog.utils.UtilsImageProcessing;
 
 public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataChanges {
     private final Object imageCacheLock = new Object();
-    private final int CACHE_LIMIT = 5;
+    private final int CACHE_LIMIT_FOR_SELECTED_NODE = 5;
+    private final int CACHE_LIMIT_FOR_NEIGHBOURING_NODES = 3;
     private Map<String, Image> oldPreloadedImages = null;
     private ExecutorService executorService;
     private Enumeration<TreePath> previousExpandedTreeNodes;
@@ -68,7 +69,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         tabbedPanel = inTabbedPanel;
         initComponents();
         // Setup image cache for the browse tab
-        oldPreloadedImages = new HashMap<>(CACHE_LIMIT);
+        oldPreloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
         // Set some configuration for the tree browser
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
@@ -336,6 +337,14 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         treBrowsePhoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 treBrowsePhotoMouseReleased(evt);
+            }
+        });
+        treBrowsePhoto.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
+            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
+                treBrowsePhotoTreeCollapsed(evt);
+            }
+            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt) {
+                treBrowsePhotoTreeExpanded(evt);
             }
         });
         treBrowsePhoto.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
@@ -712,12 +721,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void treBrowsePhotoValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treBrowsePhotoValueChanged
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
-            // Remove the old preloaded images for the selected node (to save memory)
-            synchronized (imageCacheLock) {
-                if (oldPreloadedImages != null) {
-                    oldPreloadedImages.clear();
-                }
-            }
             imageIndex = 0;
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithHTML
                 && ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
@@ -926,6 +929,24 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_treBrowsePhotoMouseReleased
 
+    private void treBrowsePhotoTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treBrowsePhotoTreeExpanded
+        // Hierdie werk nie lekker met die browse button op die panels nie want die expand baie nodes op 'n slag...
+//        // Re-setup the file to load the catch again for the new rows
+//        List<WildLogFile> fotos = app.getDBI().list(
+//            new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
+//                .getWildLogFileID()));
+//        setupFile(fotos);
+    }//GEN-LAST:event_treBrowsePhotoTreeExpanded
+
+    private void treBrowsePhotoTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treBrowsePhotoTreeCollapsed
+        // Hierdie werk nie lekker met die browse button op die panels nie want die expand baie nodes op 'n slag...
+//        // Re-setup the file to load the catch again for the new rows
+//        List<WildLogFile> fotos = app.getDBI().list(
+//            new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
+//                .getWildLogFileID()));
+//        setupFile(fotos);
+    }//GEN-LAST:event_treBrowsePhotoTreeCollapsed
+
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -1046,77 +1067,122 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }
 
     private void lookupCachedImage(final List<WildLogFile> inFiles) throws IOException {
-        if (!oldPreloadedImages.containsKey(inFiles.get(imageIndex).getAbsolutePath().toString())) {
-            // The image will be loaded, so setup the loading screen so long.
-            imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Loading.png"));
-        }
         executorService = Executors.newFixedThreadPool(app.getThreadCount());
+        // Maak die finale grote twee keer groter om te help met die zoom, dan hoef ek nie weer images te load nie, en mens kan altyd dan original kyk vir ful resolution
         int size = (int) imgBrowsePhotos.getSize().getWidth();
         if (size > (int) imgBrowsePhotos.getSize().getHeight()) {
             size = (int) imgBrowsePhotos.getSize().getHeight();
         }
-        int startIndex = 0;
-        if (inFiles.size() > CACHE_LIMIT) {
-            startIndex = imageIndex - CACHE_LIMIT/2;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        // Maak die finale grote twee keer groter om te help met die zoom, dan hoef ek nie weer images te load nie, en mens kan altyd dan original kyk vir ful resolution
         final int finalSize = size*2;
-        final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT);
+        final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
         final Object selectedNode = treBrowsePhoto.getLastSelectedPathComponent();
-        int t = startIndex;
-        for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT; t++) {
-            final WildLogFile wildLogFile = inFiles.get(t);
-            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                Image tempImage = oldPreloadedImages.get(wildLogFile.getAbsolutePath().toString());
-                if (tempImage != null) {
-                    newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempImage);
-                    callbackToDoTheImageLoad(tempImage, selectedNode, t);
-                }
-                else {
-                    final int tHandle = t;
-                    executorService.submit(new Runnable() {
-                        @Override
-                        public void run() {
-                            // TODO: Probeer weg beweeg van ImageIcon want dis baie stadig... 'n JavaFX komponent sal seker goed kan werk.
-                            Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), finalSize).getImage();
-                            newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempConcImage);
-                            callbackToDoTheImageLoad(tempConcImage, selectedNode, tHandle);
-                        }
-                    });
-                }
+        // 1) Cache die volgende en vorige fotos vir die huidige node.
+        if (inFiles != null && !inFiles.isEmpty() && WildLogFileType.IMAGE.equals(inFiles.get(imageIndex).getFileType())) {
+            int startIndex = 0;
+            if (inFiles.size() > CACHE_LIMIT_FOR_SELECTED_NODE) {
+                startIndex = imageIndex - CACHE_LIMIT_FOR_SELECTED_NODE/2;
             }
-        }
-        // Kyk of ek dit moet begin wrap
-        if (t == inFiles.size() && inFiles.size() > CACHE_LIMIT && t < startIndex + CACHE_LIMIT) {
-            for (int i = 0; i <= startIndex + CACHE_LIMIT - t - i; i++) {
-                final WildLogFile wildLogFile = inFiles.get(i);
+            if (startIndex < 0) {
+                startIndex = 0;
+            }
+            if (!oldPreloadedImages.containsKey(inFiles.get(imageIndex).getAbsolutePath().toString())) {
+                // The image will be loaded, so setup the loading screen so long.
+                imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Loading.png"));
+            }
+            int t = startIndex;
+            for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE; t++) {
+                final WildLogFile wildLogFile = inFiles.get(t);
                 if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
                     Image tempImage = oldPreloadedImages.get(wildLogFile.getAbsolutePath().toString());
                     if (tempImage != null) {
                         newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempImage);
-                        callbackToDoTheImageLoad(tempImage, selectedNode, i);
+                        callbackToDoTheImageLoad(tempImage, selectedNode, t);
                     }
                     else {
-                        final int iHandle = i;
+                        final int tHandle = t;
                         executorService.submit(new Runnable() {
                             @Override
                             public void run() {
+                                // TODO: Probeer weg beweeg van ImageIcon want dis baie stadig... 'n JavaFX komponent sal seker goed kan werk.
                                 Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), finalSize).getImage();
                                 newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempConcImage);
-                                callbackToDoTheImageLoad(tempConcImage, selectedNode, iHandle);
+                                callbackToDoTheImageLoad(tempConcImage, selectedNode, tHandle);
                             }
                         });
                     }
                 }
+            }
+            // Kyk of ek dit moet begin wrap
+            if (t == inFiles.size() && inFiles.size() > CACHE_LIMIT_FOR_SELECTED_NODE && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE) {
+                for (int i = 0; i <= startIndex + CACHE_LIMIT_FOR_SELECTED_NODE - t - i; i++) {
+                    final WildLogFile wildLogFile = inFiles.get(i);
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                        Image tempImage = oldPreloadedImages.get(wildLogFile.getAbsolutePath().toString());
+                        if (tempImage != null) {
+                            newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempImage);
+                            callbackToDoTheImageLoad(tempImage, selectedNode, i);
+                        }
+                        else {
+                            final int iHandle = i;
+                            executorService.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), finalSize).getImage();
+                                    newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempConcImage);
+                                    callbackToDoTheImageLoad(tempConcImage, selectedNode, iHandle);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        // 2) Cache die volgende en vorige node
+        final int selectedRow = treBrowsePhoto.getSelectionRows()[0];
+        List<Integer> preloadNodeRows = new ArrayList<Integer>(CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
+        for (int x = 0; x < (CACHE_LIMIT_FOR_NEIGHBOURING_NODES/2); x++) {
+            if ((selectedRow - x - 1) >= 0) {
+                preloadNodeRows.add(selectedRow - x - 1);
+            }
+        }
+        for (int y = 0; y <= (CACHE_LIMIT_FOR_NEIGHBOURING_NODES - preloadNodeRows.size()); y++) {
+            if ((selectedRow + y + 1) < treBrowsePhoto.getRowCount()) {
+                preloadNodeRows.add(selectedRow + y + 1);
+            }
+        }
+        for (int row : preloadNodeRows) {
+            final DefaultMutableTreeNode tempNode = (DefaultMutableTreeNode)treBrowsePhoto.getPathForRow(row).getLastPathComponent();
+            if (tempNode.getUserObject() instanceof DataObjectWithWildLogFile) {
+                final List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(((DataObjectWithWildLogFile)tempNode.getUserObject()).getWildLogFileID()));
+                doConcurrentLoad(newPreloadedImages, fotos, 0, tempNode, finalSize);
             }
         }
         // refresh die map
         synchronized (imageCacheLock) {
             oldPreloadedImages.clear();
             oldPreloadedImages = newPreloadedImages;
+        }
+    }
+
+    private void doConcurrentLoad(final Map<String, Image> inNewPreloadedImages, final List<WildLogFile> inFiles, final int inIndex, final DefaultMutableTreeNode inNode, final int inFinalSize) {
+        if (!inFiles.isEmpty()) {
+            if (WildLogFileType.IMAGE.equals(inFiles.get(inIndex).getFileType())) {
+                Image tempImage = oldPreloadedImages.get(inFiles.get(inIndex).getAbsolutePath().toString());
+                if (tempImage != null) {
+                    inNewPreloadedImages.put(inFiles.get(inIndex).getAbsolutePath().toString(), tempImage);
+                    callbackToDoTheImageLoad(tempImage, inNode, inIndex);
+                }
+                else {
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            Image tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize).getImage();
+                            inNewPreloadedImages.put(inFiles.get(inIndex).getAbsolutePath().toString(), tempConcImage);
+                            callbackToDoTheImageLoad(tempConcImage, inNode, inIndex);
+                        }
+                    });
+                }
+            }
         }
     }
 
@@ -1131,10 +1197,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.MOVIE)) {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Movie.png"));
+                        lookupCachedImage(inFotos);
                     }
                     else
                     if (inFotos.get(imageIndex).getFileType().equals(WildLogFileType.OTHER)) {
                         imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/OtherFile.png"));
+                        lookupCachedImage(inFotos);
                     }
                 }
                 catch (IOException ex) {
@@ -1148,6 +1216,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 try {
                     imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/NoFile.png"));
                     lblNumberOfImages.setText("0 of 0");
+                    lookupCachedImage(inFotos);
                 }
                 catch (IOException ex) {
                     ex.printStackTrace(System.err);
@@ -1176,7 +1245,45 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         // (This is to prevent old node's files that finished after the active node from overwriting the displayed image.)
         if (inImageIndex == imageIndex && treBrowsePhoto.getLastSelectedPathComponent() == inSelectedNode) {
             imgBrowsePhotos.setImage(inImage);
-            imgBrowsePhotos.setScale(0.5);
+            double ratio;
+            // Adjust the longest side's size
+            int imageWidth = inImage.getWidth(null);
+            int imageHeight = inImage.getHeight(null);
+            if (imageHeight >= imageWidth) {
+                // Portrait image
+                if (imageHeight >= imgBrowsePhotos.getHeight()) {
+                    ratio = (double)imageHeight/imgBrowsePhotos.getHeight();
+                }
+                else {
+                    ratio = (double)imgBrowsePhotos.getHeight()/imageHeight;
+                }
+            }
+            else {
+                // Landscape image
+                if (imageWidth >= imgBrowsePhotos.getWidth()) {
+                    ratio = (double)imageWidth/imgBrowsePhotos.getWidth();
+                }
+                else {
+                    ratio = (double)imgBrowsePhotos.getWidth()/imageWidth;
+                }
+            }
+            // Check the shortest side's sizes to make sure they also fit into the display size (since it isn't a square)
+            imageWidth = (int) (inImage.getWidth(null)/ratio);
+            imageHeight = (int) (inImage.getHeight(null)/ratio);
+            if (imgBrowsePhotos.getHeight() >= imageWidth) {
+                // Portrait image
+                if (imageWidth >= imgBrowsePhotos.getWidth()) {
+                    ratio = ratio*(double)imageWidth/imgBrowsePhotos.getWidth();
+                }
+            }
+            else {
+                // Landscape image
+                if (imageHeight >= imgBrowsePhotos.getHeight()) {
+                    ratio = ratio*(double)imageHeight/imgBrowsePhotos.getHeight();
+                }
+            }
+            // Adjust the scale of the image to fit
+            imgBrowsePhotos.setScale(1/ratio);
         }
     }
 
