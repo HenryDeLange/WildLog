@@ -142,7 +142,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app);
+                app, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

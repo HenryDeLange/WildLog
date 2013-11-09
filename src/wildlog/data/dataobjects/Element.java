@@ -15,6 +15,7 @@ import wildlog.utils.WildLogPaths;
 public class Element extends ElementCore implements DataObjectWithHTML {
 
     public Element() {
+        super();
     }
 
     public Element(String inPrimaryName) {

@@ -161,7 +161,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app);
+                app, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

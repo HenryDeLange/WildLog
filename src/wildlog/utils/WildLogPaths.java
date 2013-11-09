@@ -14,7 +14,7 @@ public enum WildLogPaths {
     /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
     DEFAUL_SETTINGS_FOLDER         (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-    OPEN_H2                        (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.3.171.jar")),
+    OPEN_H2                        (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.3.174.jar")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
     OPEN_OPENMAP                   (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
@@ -36,6 +36,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_CSV             (Paths.get("Export", "CSV")),
     WILDLOG_EXPORT_HTML            (Paths.get("Export", "HTML")),
     WILDLOG_EXPORT_HTML_THUMBNAILS (Paths.get("Export", "HTML", "Thumbnails")),
+    WILDLOG_EXPORT_WILDNOTE_SYNC   (Paths.get("Export", "WildNoteSync")),
     WILDLOG_EXPORT_SLIDESHOW       (Paths.get("Export", "Slideshow"));
 
     private static Path workspacePrefix;
@@ -81,8 +82,8 @@ public enum WildLogPaths {
     }
 
     /**
-     * This will return the full path of the Workspace Prefix.
-     * This value will not include the 'WildLog' at the end.
+     * This will return the full absolute path of the Workspace Prefix.
+     * This value will not include the 'WildLog' part.
      * @return
      */
     public static Path getFullWorkspacePrefix() {

@@ -57,6 +57,16 @@ import wildlog.utils.WildLogPaths;
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
     public WildLogDBI_h2(final WildLogApp inApp) throws Exception {
+        this(inApp, "jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve("wildlog") + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+    }
+
+    /**
+     * WARNING: Only use this constructor if you want to connect to a second H2 DB instance. The default
+     * workspace database should use a constructor that does NOT specify the connection URL.
+     * @param inApp
+     * @param inConnectionURL
+     */
+    public WildLogDBI_h2(final WildLogApp inApp, String inConnectionURL) throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
@@ -67,14 +77,14 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             props.setProperty("USER", "wildlog");
             props.setProperty("PASSWORD", "wildlog");
             try {
-                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve("wildlog") + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+                conn = DriverManager.getConnection(inConnectionURL, props);
             }
             catch (JdbcSQLException ex) {
                 System.out.println("Could not connect to database, could be an old version. Try to connect and update the database using the old username and password...");
                 ex.printStackTrace(System.out);
                 // Might be trying to use the wrong password, try again with old password and update it
                 props = new Properties();
-                conn = DriverManager.getConnection("jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve("wildlog") + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", props);
+                conn = DriverManager.getConnection(inConnectionURL, props);
                 state = conn.createStatement();
                 state.execute("CREATE USER wildlog PASSWORD 'wildlog' ADMIN");
                 state.close();
@@ -87,16 +97,19 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state = conn.createStatement();
             if (!results.next()) {
                 state.execute(tableElements);
+                createOrUpdate(new Element("Unknown Creature"), null);
             }
             results = conn.getMetaData().getTables(null, null, "LOCATIONS", null);
             state = conn.createStatement();
             if (!results.next()) {
                 state.execute(tableLocations);
+                createOrUpdate(new Location("Some Place"), null);
             }
             results = conn.getMetaData().getTables(null, null, "VISITS", null);
             state = conn.createStatement();
             if (!results.next()) {
                 state.execute(tableVisits);
+                createOrUpdate(new Visit("Casual Observations", "Some Place"), null);
             }
             results = conn.getMetaData().getTables(null, null, "SIGHTINGS", null);
             state = conn.createStatement();
@@ -114,21 +127,23 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.execute(tableWildLogOptions);
             }
 
-            doUpdates(inApp); // This also creates the WildLogOptions row the first time
+            // Check database version and perform updates if required.
+            // This also creates the WildLogOptions row the first time
+            doUpdates(inApp);
         }
         catch (ClassNotFoundException cnfe) {
-            System.err.println("\nUnable to load the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
+            System.err.println("\nUnable to load the JDBC driver.");
             System.err.println("Please check your CLASSPATH.");
             cnfe.printStackTrace(System.err);
             started = false;
         }
         catch (InstantiationException ie) {
-            System.err.println("\nUnable to instantiate the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
+            System.err.println("\nUnable to instantiate the JDBC driver.");
             ie.printStackTrace(System.err);
             started = false;
         }
         catch (IllegalAccessException iae) {
-            System.err.println("\nNot allowed to access the JDBC driver org.apache.derby.jdbc.EmbeddedDriver");
+            System.err.println("\nNot allowed to access the JDBC driver.");
             iae.printStackTrace(System.err);
             started = false;
         }
@@ -393,7 +408,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         return true;
     }
 
-    public void doUpdates(final WildLogApp inApp) {
+    private void doUpdates(final WildLogApp inApp) {
         Statement state = null;
         ResultSet results = null;
         try {
@@ -411,13 +426,20 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     if (results.getInt("VERSION") == 0) {
                         doUpdate1();
                     }
+                    else
                     if (results.getInt("VERSION") == 1) {
                         doUpdate2();
                     }
+                    else
                     if (results.getInt("VERSION") == 2) {
                         doUpdate3();
                     }
+                    else
                     if (results.getInt("VERSION") == 3) {
+                        doUpdate4();
+                    }
+                    else
+                    if (results.getInt("VERSION") == 4) {
                         fullyUpdated = true;
                         break;
                     }
@@ -570,6 +592,34 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         System.out.println("Finished update 3");
+    }
+
+    private void doUpdate4() {
+        System.out.println("Starting update 4");
+        // This update removes and alters some tables and adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Make changes to Location
+            state.execute("ALTER TABLE LOCATIONS ADD COLUMN GPSACCURACY varchar(50)");
+            // Make changes to Sightings
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACY varchar(50)");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
+            state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
+            // Make changes to Files
+            // NOTE: This assumes that v3 Workspace clean has been run
+            state.execute("UPDATE FILES SET ORIGINALPATH = replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/', '')");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        System.out.println("Finished update 4");
     }
 
 }

@@ -12,13 +12,18 @@ import wildlog.utils.WildLogPaths;
 public class Visit extends VisitCore implements DataObjectWithHTML {
 
     public Visit() {
+        super();
     }
 
     public Visit(String inName) {
         super(inName);
     }
 
-    
+    public Visit(String inName, String inLocationName) {
+        super(inName, inLocationName);
+    }
+
+
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
         int progressMarker;

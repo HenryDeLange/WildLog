@@ -29,6 +29,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.Latitudes;
@@ -37,6 +38,7 @@ import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.Sex;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
@@ -260,6 +262,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             cmbEvidence.setSelectedItem(SightingEvidence.SEEN);
             cmbViewRating.setSelectedItem(ViewRating.NORMAL);
             cmbLifeStatus.setSelectedItem(LifeStatus.ALIVE);
+            cmbTimeAccuracy.setSelectedItem(TimeAccuracy.GOOD);
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             spnNumberOfElements.setValue(0);
             spnMoonPhase.setValue(-1);
@@ -293,7 +296,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app);
+                app, true);
         imageIndex = 0;
     }
 
@@ -438,6 +441,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewElement = new javax.swing.JButton();
         btnAddNewLocation = new javax.swing.JButton();
         btnAddNewVisit = new javax.swing.JButton();
+        jLabel22 = new javax.swing.JLabel();
+        cmbTimeAccuracy = new javax.swing.JComboBox();
+        jLabel23 = new javax.swing.JLabel();
+        cmbAge = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
@@ -560,7 +567,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel8.setText("Weather:");
         jLabel8.setName("jLabel8"); // NOI18N
-        sightingIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, -1, 20));
+        sightingIncludes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, 20));
 
         jLabel9.setText("Rating:");
         jLabel9.setName("jLabel9"); // NOI18N
@@ -572,7 +579,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel12.setText("Certainty:");
         jLabel12.setName("jLabel12"); // NOI18N
-        sightingIncludes.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 130, -1, 20));
+        sightingIncludes.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 135, -1, 20));
 
         jLabel13.setText("Details:");
         jLabel13.setName("jLabel13"); // NOI18N
@@ -591,7 +598,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         txtDetails.setName("txtDetails"); // NOI18N
         jScrollPane2.setViewportView(txtDetails);
 
-        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 260, 70));
+        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 260, 80));
 
         cmbWeather.setMaximumRowCount(9);
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
@@ -599,7 +606,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbWeather.setEnabled(!disableEditing);
         cmbWeather.setFocusable(false);
         cmbWeather.setName("cmbWeather"); // NOI18N
-        sightingIncludes.add(cmbWeather, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, 210, -1));
+        sightingIncludes.add(cmbWeather, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 210, -1));
 
         cmbTimeOfDay.setMaximumRowCount(9);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
@@ -607,7 +614,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setFocusable(false);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
-        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, 210, 20));
+        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 67, 210, 20));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -621,7 +628,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbCertainty.setEnabled(!disableEditing);
         cmbCertainty.setFocusable(false);
         cmbCertainty.setName("cmbCertainty"); // NOI18N
-        sightingIncludes.add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 130, 140, -1));
+        sightingIncludes.add(cmbCertainty, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 135, 140, -1));
 
         lblElementImage.setBackground(new java.awt.Color(0, 0, 0));
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -668,9 +675,10 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
         sightingIncludes.add(cmbElementType, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 330, 90, -1));
 
+        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel18.setText("GPS:");
         jLabel18.setName("jLabel18"); // NOI18N
-        sightingIncludes.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, 20));
+        sightingIncludes.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, 20));
 
         txtSearch.setEnabled(!disableEditing);
         txtSearch.setName("txtSearch"); // NOI18N
@@ -709,14 +717,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel4.setText("Evidence:");
         jLabel4.setName("jLabel4"); // NOI18N
-        sightingIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 100, -1, 20));
+        sightingIncludes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, -1, 20));
 
         cmbEvidence.setModel(new DefaultComboBoxModel(SightingEvidence.values()));
         cmbEvidence.setSelectedItem(sighting.getSightingEvidence());
         cmbEvidence.setEnabled(!disableEditing);
         cmbEvidence.setFocusable(false);
         cmbEvidence.setName("cmbEvidence"); // NOI18N
-        sightingIncludes.add(cmbEvidence, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 100, 140, -1));
+        sightingIncludes.add(cmbEvidence, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 110, 140, -1));
 
         sclLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
         sclLocation.setName("sclLocation"); // NOI18N
@@ -819,14 +827,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingID.setName("lblSightingID"); // NOI18N
-        sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 300, 120, 20));
+        sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 120, 50));
 
         spnNumberOfElements.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         spnNumberOfElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnNumberOfElements.setEditor(new javax.swing.JSpinner.NumberEditor(spnNumberOfElements, "#"));
         spnNumberOfElements.setEnabled(!disableEditing);
         spnNumberOfElements.setName("spnNumberOfElements"); // NOI18N
-        sightingIncludes.add(spnNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 70, -1));
+        sightingIncludes.add(spnNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 140, -1));
 
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
@@ -852,11 +860,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel3.setText("Moon Phase:");
         jLabel3.setName("jLabel3"); // NOI18N
-        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, 20));
+        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, 20));
 
         jLabel5.setText("% Full");
         jLabel5.setName("jLabel5"); // NOI18N
-        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 40, 20));
+        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 40, 20));
 
         btnCalculateSunAndMoon.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
@@ -877,47 +885,51 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel11.setText("Moonlight:");
         jLabel11.setName("jLabel11"); // NOI18N
-        sightingIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, 20));
+        sightingIncludes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 225, -1, 20));
 
         cmbMoonlight.setModel(new DefaultComboBoxModel(Moonlight.values()));
         cmbMoonlight.setSelectedItem(sighting.getMoonlight());
         cmbMoonlight.setEnabled(!disableEditing);
         cmbMoonlight.setFocusable(false);
         cmbMoonlight.setName("cmbMoonlight"); // NOI18N
-        sightingIncludes.add(cmbMoonlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 210, -1));
+        sightingIncludes.add(cmbMoonlight, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 225, 210, -1));
 
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
+        spnHours.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "00"));
         spnHours.setEnabled(!disableEditing);
         spnHours.setFocusable(false);
         spnHours.setName("spnHours"); // NOI18N
-        sightingIncludes.add(spnHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 40, -1));
+        sightingIncludes.add(spnHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 40, 20));
 
         spnMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
+        spnMinutes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "00"));
         spnMinutes.setEnabled(!disableEditing);
         spnMinutes.setFocusable(false);
         spnMinutes.setName("spnMinutes"); // NOI18N
-        sightingIncludes.add(spnMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 40, -1));
+        sightingIncludes.add(spnMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 40, 40, 20));
 
         spnMoonPhase.setModel(new javax.swing.SpinnerNumberModel(0, -1, 100, 1));
         spnMoonPhase.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnMoonPhase.setEditor(new javax.swing.JSpinner.NumberEditor(spnMoonPhase, "##"));
         spnMoonPhase.setEnabled(!disableEditing);
         spnMoonPhase.setName("spnMoonPhase"); // NOI18N
-        sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, 67, -1));
+        sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 67, -1));
 
+        txtLatitude.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         txtLatitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
         txtLatitude.setEnabled(false);
         txtLatitude.setName("txtLatitude"); // NOI18N
-        sightingIncludes.add(txtLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 130, 105, -1));
+        sightingIncludes.add(txtLatitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 105, 20));
 
+        txtLongitude.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         txtLongitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
         txtLongitude.setEnabled(false);
         txtLongitude.setName("txtLongitude"); // NOI18N
-        sightingIncludes.add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 105, -1));
+        sightingIncludes.add(txtLongitude, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, 105, 20));
 
         btnGPS.setBackground(new java.awt.Color(208, 204, 181));
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
@@ -934,11 +946,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnGPSActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 130, 100, 40));
+        sightingIncludes.add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 100, 40));
 
         jLabel7.setText("Temperature:");
         jLabel7.setName("jLabel7"); // NOI18N
-        sightingIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, 20));
+        sightingIncludes.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 255, -1, 20));
 
         spnTemperature.setModel(new javax.swing.SpinnerNumberModel(0.0d, -130.0d, 140.0d, 1.0d));
         spnTemperature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -950,23 +962,23 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 spnTemperatureStateChanged(evt);
             }
         });
-        sightingIncludes.add(spnTemperature, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 60, -1));
+        sightingIncludes.add(spnTemperature, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 255, 60, -1));
 
         cmbTemperatureUnits.setModel(new DefaultComboBoxModel(UnitsTemperature.values()));
         cmbTemperatureUnits.setSelectedItem(sighting.getUnitsTemperature());
         cmbTemperatureUnits.setEnabled(!disableEditing);
         cmbTemperatureUnits.setFocusable(false);
         cmbTemperatureUnits.setName("cmbTemperatureUnits"); // NOI18N
-        sightingIncludes.add(cmbTemperatureUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 140, -1));
+        sightingIncludes.add(cmbTemperatureUnits, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 255, 140, -1));
 
         jSeparator3.setForeground(new java.awt.Color(153, 153, 153));
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator3.setName("jSeparator3"); // NOI18N
         sightingIncludes.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(515, 305, 10, 62));
 
-        jLabel14.setText("Time of day:");
+        jLabel14.setText("Time of Day:");
         jLabel14.setName("jLabel14"); // NOI18N
-        sightingIncludes.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, 20));
+        sightingIncludes.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 67, -1, 20));
 
         jSeparator4.setForeground(new java.awt.Color(153, 153, 153));
         jSeparator4.setName("jSeparator4"); // NOI18N
@@ -978,25 +990,25 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel15.setText("Sex:");
         jLabel15.setName("jLabel15"); // NOI18N
-        sightingIncludes.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, -1, 20));
+        sightingIncludes.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 35, -1, 20));
 
         cmbSex.setModel(new DefaultComboBoxModel(Sex.values()));
         cmbSex.setSelectedItem(sighting.getSex());
         cmbSex.setEnabled(!disableEditing);
         cmbSex.setFocusable(false);
         cmbSex.setName("cmbSex"); // NOI18N
-        sightingIncludes.add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 40, 140, -1));
+        sightingIncludes.add(cmbSex, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 35, 140, -1));
 
         jLabel16.setText("Status:");
         jLabel16.setName("jLabel16"); // NOI18N
-        sightingIncludes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, 20));
+        sightingIncludes.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 85, -1, 20));
 
         cmbLifeStatus.setModel(new DefaultComboBoxModel(LifeStatus.values()));
         cmbLifeStatus.setSelectedItem(sighting.getLifeStatus());
         cmbLifeStatus.setEnabled(!disableEditing);
         cmbLifeStatus.setFocusable(false);
         cmbLifeStatus.setName("cmbLifeStatus"); // NOI18N
-        sightingIncludes.add(cmbLifeStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, 140, -1));
+        sightingIncludes.add(cmbLifeStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 85, 140, -1));
 
         jLabel17.setText("Info  Tag:");
         jLabel17.setName("jLabel17"); // NOI18N
@@ -1010,27 +1022,27 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel19.setText("Duration:");
         jLabel19.setName("jLabel19"); // NOI18N
-        sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, 20));
+        sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 20));
 
         spnDurationMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 1440, 1));
         spnDurationMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationMinutes, "0"));
         spnDurationMinutes.setEnabled(!disableEditing);
         spnDurationMinutes.setName("spnDurationMinutes"); // NOI18N
-        sightingIncludes.add(spnDurationMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 50, -1));
+        sightingIncludes.add(spnDurationMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, 50, -1));
 
         jLabel20.setText("minutes");
         jLabel20.setName("jLabel20"); // NOI18N
-        sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 100, -1, 20));
+        sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 120, -1, 20));
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 60.0d, 1.0d));
         spnDurationSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationSeconds, "00"));
         spnDurationSeconds.setEnabled(!disableEditing);
         spnDurationSeconds.setName("spnDurationSeconds"); // NOI18N
-        sightingIncludes.add(spnDurationSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 100, 50, -1));
+        sightingIncludes.add(spnDurationSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 50, -1));
 
         jLabel21.setText("seconds");
         jLabel21.setName("jLabel21"); // NOI18N
-        sightingIncludes.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 100, -1, 20));
+        sightingIncludes.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 120, -1, 20));
 
         btnCalculateDuration.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
@@ -1083,6 +1095,24 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         });
         sightingIncludes.add(btnAddNewVisit, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 370, 30, 20));
+
+        jLabel22.setText("Time Accuracy:");
+        jLabel22.setName("jLabel22"); // NOI18N
+        sightingIncludes.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 95, -1, 20));
+
+        cmbTimeAccuracy.setModel(new DefaultComboBoxModel(TimeAccuracy.values()));
+        cmbTimeAccuracy.setSelectedItem(sighting.getTimeAccuracy());
+        cmbTimeAccuracy.setName("cmbTimeAccuracy"); // NOI18N
+        sightingIncludes.add(cmbTimeAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 95, 210, -1));
+
+        jLabel23.setText("Age:");
+        jLabel23.setName("jLabel23"); // NOI18N
+        sightingIncludes.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, -1, -1));
+
+        cmbAge.setModel(new DefaultComboBoxModel(Age.values()));
+        cmbAge.setSelectedItem(sighting.getAge());
+        cmbAge.setName("cmbAge"); // NOI18N
+        sightingIncludes.add(cmbAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 140, -1));
 
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -1181,6 +1211,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sighting.setSex((Sex)cmbSex.getSelectedItem());
         sighting.setDurationMinutes(Integer.parseInt(spnDurationMinutes.getValue().toString()));
         sighting.setDurationSeconds(Double.parseDouble(spnDurationSeconds.getValue().toString()));
+        sighting.setTimeAccuracy((TimeAccuracy)cmbTimeAccuracy.getSelectedItem());
+        sighting.setAge((Age)cmbAge.getSelectedItem());
 
         // NOTE: The GPS info is already set on the Sighting object by the GPS popup component
 
@@ -1601,6 +1633,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnSetMainImage;
     private javax.swing.JButton btnUpdateSighting;
     private javax.swing.JButton btnUploadImage;
+    private javax.swing.JComboBox cmbAge;
     private javax.swing.JComboBox cmbCertainty;
     private javax.swing.JComboBox cmbElementType;
     private javax.swing.JComboBox cmbEvidence;
@@ -1608,6 +1641,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JComboBox cmbMoonlight;
     private javax.swing.JComboBox cmbSex;
     private javax.swing.JComboBox cmbTemperatureUnits;
+    private javax.swing.JComboBox cmbTimeAccuracy;
     private javax.swing.JComboBox cmbTimeFormat;
     private javax.swing.JComboBox cmbTimeOfDay;
     private javax.swing.JComboBox cmbViewRating;
@@ -1627,6 +1661,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

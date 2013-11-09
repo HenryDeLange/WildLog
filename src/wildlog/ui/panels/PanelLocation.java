@@ -151,7 +151,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app);
+                app, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

@@ -702,7 +702,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath().resolve(sightingWrapper.toPath()),
                                         files.toArray(new File[files.size()]),
                                         null, WildLogThumbnailSizes.NORMAL,
-                                        app);
+                                        app, false);
                                 // Update the progress
                                 try {
                                     progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());

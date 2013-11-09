@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.io.File;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -12,15 +13,16 @@ import javax.swing.JOptionPane;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
+import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.mapping.gpx.GpxReader;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
+import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.filters.GpxFilter;
 import wildlog.ui.helpers.filters.ImageFilter;
-import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -35,12 +37,13 @@ public class GPSDialog extends JDialog {
     private static int prevLonDeg;
     private static int prevLonMin;
     private static double prevLonSec;
+    private static GPSAccuracy prevAccuracy;
+    private final Component parent;
+    private WildLogApp app;
     private boolean selectionMade = false;
     private DataObjectWithGPS dataObjectWithGPS;
     private double uiLatitude = 0.0;
     private double uiLongitude = 0.0;
-    private WildLogApp app;
-    private Component parent;
 
 
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
@@ -90,6 +93,13 @@ public class GPSDialog extends JDialog {
         loadUIValues(dataObjectWithGPS);
         // Load the defaults if no values were provided
         loadDefaultLatAndLon();
+        // Load the accuracy
+        if (dataObjectWithGPS.getGPSAccuracy() != null) {
+            cmbAccuracy.setSelectedItem(dataObjectWithGPS.getGPSAccuracy());
+        }
+        else {
+            cmbAccuracy.setSelectedItem(GPSAccuracy.GOOD);
+        }
         // Setup the drag and drop on the butons
         FileDrop.SetupFileDrop(btnUseGPX, false, new FileDrop.Listener() {
             @Override
@@ -227,6 +237,8 @@ public class GPSDialog extends JDialog {
         spnLonMin = new javax.swing.JSpinner();
         spnLonSec = new javax.swing.JSpinner();
         spnLonDecimal = new javax.swing.JSpinner();
+        jLabel3 = new javax.swing.JLabel();
+        cmbAccuracy = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure GPS Point");
@@ -234,6 +246,7 @@ public class GPSDialog extends JDialog {
         setMinimumSize(new java.awt.Dimension(410, 210));
         setModal(true);
         setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(415, 295));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -434,6 +447,15 @@ public class GPSDialog extends JDialog {
         spnLonDecimal.setName("spnLonDecimal"); // NOI18N
         getContentPane().add(spnLonDecimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 170, 190, 30));
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Accuracy:");
+        jLabel3.setName("jLabel3"); // NOI18N
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
+
+        cmbAccuracy.setModel(new DefaultComboBoxModel(GPSAccuracy.values()));
+        cmbAccuracy.setName("cmbAccuracy"); // NOI18N
+        getContentPane().add(cmbAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 390, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -472,6 +494,7 @@ public class GPSDialog extends JDialog {
             dataObjectWithGPS.setLatSeconds((Double)spnLatSec.getValue());
             dataObjectWithGPS.setLonSeconds((Double)spnLonSec.getValue());
         }
+        dataObjectWithGPS.setGPSAccuracy((GPSAccuracy)cmbAccuracy.getSelectedItem());
         selectionMade = true;
         // Now update the "previous" GPS value
         setPrevLat(dataObjectWithGPS.getLatitude());
@@ -482,6 +505,7 @@ public class GPSDialog extends JDialog {
         setPrevLonDeg(dataObjectWithGPS.getLonDegrees());
         setPrevLonMin(dataObjectWithGPS.getLonMinutes());
         setPrevLonSec(dataObjectWithGPS.getLonSeconds());
+        setPrevAccuracy(dataObjectWithGPS.getGPSAccuracy());
         // We are done, dispose this dialog
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -577,6 +601,8 @@ public class GPSDialog extends JDialog {
         temp.setLonDegrees(getPrevLonDeg());
         temp.setLonMinutes(getPrevLonMin());
         temp.setLonSeconds(getPrevLonSec());
+        temp.setGPSAccuracy(getPrevAccuracy());
+        cmbAccuracy.setSelectedItem(temp.getGPSAccuracy());
         loadUIValues(temp);
         btnSaveActionPerformed(evt);
     }//GEN-LAST:event_btnUsePreviousActionPerformed
@@ -746,14 +772,24 @@ public class GPSDialog extends JDialog {
         prevLonSec = inPrevLonSec;
     }
 
+    public static GPSAccuracy getPrevAccuracy() {
+        return prevAccuracy;
+    }
+
+    public static void setPrevAccuracy(GPSAccuracy inPrevAccuracy) {
+        prevAccuracy = inPrevAccuracy;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUseGPX;
     private javax.swing.JButton btnUseImage;
     private javax.swing.JButton btnUseMap;
     private javax.swing.JButton btnUsePrevious;
+    private javax.swing.JComboBox cmbAccuracy;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSpinner spnLatDecimal;
     private javax.swing.JSpinner spnLatDeg;

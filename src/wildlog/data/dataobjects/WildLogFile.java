@@ -16,6 +16,7 @@ import wildlog.utils.WildLogSystemImages;
 public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFile> {
 
     public WildLogFile() {
+        super();
     }
 
     public WildLogFile(String inID) {

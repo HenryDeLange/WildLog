@@ -26,8 +26,9 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
     private static final NumberFormat numberFormatter = new DecimalFormat("0000000");
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    
+
     public Sighting() {
+        super();
     }
 
     public Sighting(long inSightingCounter) {
@@ -65,7 +66,9 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Period:</b><br/> ", visitName, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Latitude:</b><br/> ", UtilsGps.getLatitudeString(this), true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Longitude:</b><br/> ", UtilsGps.getLongitudeString(this), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/> ", UtilsHTML.formatDateAsString(date, true), true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time Accuracy:</b><br/> ", timeAccuracy, true);
         if (durationMinutes >= 0 && durationSeconds > 0) {
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Duration:</b><br/> ", durationMinutes + " minutes, " + durationSeconds + " seconds", true);
         }
@@ -78,6 +81,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Temperature:</b><br/> ", temperature + " " + unitsTemperature, true);
         }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Sex:</b><br/> ", sex, true);
+        UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Age:</b><br/> ", age, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Life Status:</b><br/> ", lifeStatus, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Evidence:</b><br/> ", sightingEvidence, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>View Rating:</b><br/> ", viewRating, true);

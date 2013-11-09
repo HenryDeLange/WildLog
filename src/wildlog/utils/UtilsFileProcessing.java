@@ -80,7 +80,7 @@ public final class UtilsFileProcessing {
         return Arrays.asList(fileChooser.getFiles());
     }
 
-    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp) {
+    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup) {
         // Submit the work to the executor
         ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
         for (int t = 0; t < inFiles.length; t++) {
@@ -109,8 +109,13 @@ public final class UtilsFileProcessing {
                 });
             }
         }
-        // Wait to finish the work
-        UtilsConcurency.waitForExecutorToShutdownWithPopup(executorService);
+        if (inWithSlowProcessPopup) {
+            // Wait to finish the work
+            UtilsConcurency.waitForExecutorToShutdownWithPopup(executorService);
+        }
+        else {
+            UtilsConcurency.waitForExecutorToShutdown(executorService);
+        }
         // Update the image that is displayed
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -268,6 +273,11 @@ public final class UtilsFileProcessing {
         }
     }
 
+    /**
+     * Delete the specified file, or if it is a folder then delete all of it's content and then the folder itself.
+     * @param inFile
+     * @throws IOException
+     */
     public static void deleteRecursive(File inFile) throws IOException {
         // TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
         if (inFile.isDirectory()) {
@@ -280,6 +290,11 @@ public final class UtilsFileProcessing {
         }
     }
 
+    /**
+     * Delete the specified file, or if it is a folder only delete it (and it's content) if it is empty.
+     * @param inFile
+     * @throws IOException
+     */
     public static void deleteRecursiveOnlyEmptyFolders(File inFile) throws IOException {
         // TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
         if (inFile.isDirectory()) {
@@ -292,6 +307,11 @@ public final class UtilsFileProcessing {
                 }
             }
         }
+    }
+
+    public static String getAlphaNumericVersion(String inString) {
+        // Regex black magic van die web af...
+        return inString.replaceAll("[^A-Za-z0-9.]+", "");
     }
 
 }
