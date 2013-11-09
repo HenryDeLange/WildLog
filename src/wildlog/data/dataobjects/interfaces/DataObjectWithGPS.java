@@ -1,7 +1,9 @@
 package wildlog.data.dataobjects.interfaces;
 
+import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+
 
 public abstract class DataObjectWithGPS {
     protected Latitudes latitude;
@@ -12,6 +14,8 @@ public abstract class DataObjectWithGPS {
     protected int lonDegrees;
     protected int lonMinutes;
     protected double lonSeconds;
+    protected GPSAccuracy gpsAccuracy;
+
 
     public int getLatDegrees() {
         return latDegrees;
@@ -75,6 +79,14 @@ public abstract class DataObjectWithGPS {
 
     public void setLongitude(Longitudes inLongitude) {
         longitude = inLongitude;
+    }
+
+    public GPSAccuracy getGPSAccuracy() {
+        return gpsAccuracy;
+    }
+
+    public void setGPSAccuracy(GPSAccuracy inGPSAccuracy) {
+        gpsAccuracy = inGPSAccuracy;
     }
 
 }

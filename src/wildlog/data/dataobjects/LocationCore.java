@@ -75,7 +75,8 @@ public class LocationCore extends DataObjectWithGPS implements Comparable<Locati
                 && UtilsData.isTheSame(getLonDegrees(), inLocation.getLonDegrees())
                 && UtilsData.isTheSame(getLonMinutes(), inLocation.getLonMinutes())
                 && UtilsData.isTheSame(getLonSeconds(), inLocation.getLonSeconds())
-                && UtilsData.isTheSame(getLongitude(), inLocation.getLongitude());
+                && UtilsData.isTheSame(getLongitude(), inLocation.getLongitude())
+                && UtilsData.isTheSame(getGPSAccuracy(), inLocation.getGPSAccuracy());
     }
 
     public <T extends LocationCore> T cloneShallow() {
@@ -99,6 +100,7 @@ public class LocationCore extends DataObjectWithGPS implements Comparable<Locati
             location.setLonMinutes(lonMinutes);
             location.setLonSeconds(lonSeconds);
             location.setLongitude(longitude);
+            location.setGPSAccuracy(gpsAccuracy);
             return location;
         }
         catch (InstantiationException ex) {

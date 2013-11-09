@@ -4,11 +4,13 @@ import java.util.Date;
 import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.Sex;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
@@ -38,6 +40,8 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
     protected UnitsTemperature unitsTemperature;
     protected int durationMinutes;
     protected double durationSeconds;
+    protected TimeAccuracy timeAccuracy;
+    protected Age age;
 
 
     public SightingCore() {
@@ -47,7 +51,7 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
         sightingCounter = inSightingCounter;
     }
 
-    
+
     @Override
     public String toString() {
         return locationName + " (" + elementName + ") [" + sightingCounter + "]";
@@ -245,6 +249,22 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
 
     public void setDurationSeconds(double inDurationSeconds) {
         durationSeconds = inDurationSeconds;
+    }
+
+    public TimeAccuracy getTimeAccuracy() {
+        return timeAccuracy;
+    }
+
+    public void setTimeAccuracy(TimeAccuracy inTimeAccuracy) {
+        timeAccuracy = inTimeAccuracy;
+    }
+
+    public Age getAge() {
+        return age;
+    }
+
+    public void setAge(Age inAge) {
+        age = inAge;
     }
 
 }

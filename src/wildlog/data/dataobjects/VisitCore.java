@@ -25,6 +25,11 @@ public class VisitCore implements Comparable<VisitCore>, DataObjectWithWildLogFi
         name = inName;
     }
 
+    public VisitCore(String inName, String inLocationName) {
+        name = inName;
+        locationName = inLocationName;
+    }
+
 
     @Override
     public String toString() {
