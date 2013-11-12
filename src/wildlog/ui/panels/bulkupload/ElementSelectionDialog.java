@@ -24,7 +24,7 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class ElementSelectionBox extends JDialog {
+public class ElementSelectionDialog extends JDialog {
     private static String previousElement = "";
     private WildLogApp app;
     private boolean selectionMade = false;
@@ -32,12 +32,12 @@ public class ElementSelectionBox extends JDialog {
     private Element searchElement;
 
 
-    public ElementSelectionBox(Frame inParent, boolean inIsModal, WildLogApp inApp, final String inSelectedElement) {
+    public ElementSelectionDialog(Frame inParent, boolean inIsModal, WildLogApp inApp, final String inSelectedElement) {
         super(inParent, inIsModal);
         app = inApp;
         initComponents();
         // Setup the escape key
-        final ElementSelectionBox thisHandler = this;
+        final ElementSelectionDialog thisHandler = this;
         thisHandler.getRootPane().registerKeyboardAction(
                 new ActionListener() {
                     @Override
@@ -116,6 +116,11 @@ public class ElementSelectionBox extends JDialog {
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtSearch.setName("txtSearch"); // NOI18N
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
         jPanel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 220, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -125,6 +130,7 @@ public class ElementSelectionBox extends JDialog {
 
         lblElementImage.setBackground(new java.awt.Color(0, 0, 0));
         lblElementImage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblElementImage.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         lblElementImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         lblElementImage.setName("lblElementImage"); // NOI18N
         lblElementImage.setOpaque(true);
@@ -192,6 +198,9 @@ public class ElementSelectionBox extends JDialog {
         tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblElementKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblElementKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(tblElement);
@@ -295,12 +304,24 @@ public class ElementSelectionBox extends JDialog {
         lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
     }//GEN-LAST:event_cmbElementTypeActionPerformed
 
+    private void tblElementKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyReleased
+        tblElementMouseReleased(null);
+    }//GEN-LAST:event_tblElementKeyReleased
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        tblElementMouseReleased(null);
+    }//GEN-LAST:event_txtSearchActionPerformed
+
     public boolean isSelectionMade() {
         return selectionMade;
     }
 
     public void setSelectionMade(boolean inSelectionMade) {
         selectionMade = inSelectionMade;
+    }
+
+    public static String getPreviousElement() {
+        return previousElement;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

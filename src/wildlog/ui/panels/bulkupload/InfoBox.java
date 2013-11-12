@@ -2,6 +2,7 @@ package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
 import java.text.SimpleDateFormat;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -21,16 +22,16 @@ import wildlog.utils.UtilsImageProcessing;
 public class InfoBox extends JPanel {
     private static final SimpleDateFormat dateFormater = new SimpleDateFormat("dd MMM yyyy");
     private static final SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
-    private WildLogApp app;
-    private BulkUploadSightingWrapper sightingWrapper;
-    private JTable tblLocation;
-    private JTextField txtVisit;
-    private JTable table;
+    private final WildLogApp app;
+    private final BulkUploadSightingWrapper sightingWrapper;
+    private final JLabel lblLocation;
+    private final JTextField txtVisit;
+    private final JTable table;
 
 
-    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JTable inTblLocation, JTextField inTxtVisit, JTable inTable) {
+    public InfoBox(WildLogApp inApp, BulkUploadSightingWrapper inBulkUploadSightingWrapper, JLabel inLblLocation, JTextField inTxtVisit, JTable inTable) {
         app = inApp;
-        tblLocation = inTblLocation;
+        lblLocation = inLblLocation;
         txtVisit = inTxtVisit;
         table = inTable;
         initComponents();
@@ -154,14 +155,19 @@ public class InfoBox extends JPanel {
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 85, 150, 150));
 
         btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.gif"))); // NOI18N
-        btnChooseCreature.setText("Creature");
-        btnChooseCreature.setToolTipText("Select a Creature for this Observation.");
+        btnChooseCreature.setText("<html><u>Creature</u></html>");
+        btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previous Creature.");
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseCreature.setFocusPainted(false);
         btnChooseCreature.setFocusable(false);
         btnChooseCreature.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnChooseCreature.setMargin(new java.awt.Insets(2, 4, 2, 2));
         btnChooseCreature.setName("btnChooseCreature"); // NOI18N
+        btnChooseCreature.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnChooseCreatureMouseReleased(evt);
+            }
+        });
         btnChooseCreature.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChooseCreatureActionPerformed(evt);
@@ -204,8 +210,8 @@ public class InfoBox extends JPanel {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         Location tempLocation = null;
-        if (tblLocation.getSelectedRowCount() == 1) {
-            tempLocation = new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString());
+        if (lblLocation.getText() != null && !lblLocation.getText().isEmpty()) {
+            tempLocation = new Location(lblLocation.getText());
         }
         PanelSighting dialog = new PanelSighting(
                 app,
@@ -225,7 +231,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
-        ElementSelectionBox dialog = new ElementSelectionBox(app.getMainFrame(), true, app, sightingWrapper.getElementName());
+        ElementSelectionDialog dialog = new ElementSelectionDialog(app.getMainFrame(), true, app, sightingWrapper.getElementName());
         dialog.setVisible(true);
         // Set the label to the selected text
         table.getCellEditor().stopCellEditing();
@@ -247,6 +253,19 @@ public class InfoBox extends JPanel {
             lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
         }
     }//GEN-LAST:event_btnGPSActionPerformed
+
+    private void btnChooseCreatureMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseCreatureMouseReleased
+        if (evt.isPopupTrigger()) {
+            if (ElementSelectionDialog.getPreviousElement() != null && !ElementSelectionDialog.getPreviousElement().isEmpty()) {
+                // Set the label to the selected text
+                table.getCellEditor().stopCellEditing();
+                sightingWrapper.setElementName(ElementSelectionDialog.getPreviousElement());
+                UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + ElementSelectionDialog.getPreviousElement(), 0, lblImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                sightingWrapper.setIcon(lblImage.getIcon());
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_btnChooseCreatureMouseReleased
 
     public void setRowBackground(Color inColor) {
         this.setBackground(inColor);

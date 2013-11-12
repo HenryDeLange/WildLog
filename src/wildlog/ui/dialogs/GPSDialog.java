@@ -276,7 +276,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(btnUsePrevious, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 130, 30));
 
         btnUseImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
-        btnUseImage.setText("Load from Image");
+        btnUseImage.setText("<html><u>Load from Image</u></html>");
         btnUseImage.setToolTipText("Browse to an image with GPS data, or drag-and-drop the image on this button.");
         btnUseImage.setFocusPainted(false);
         btnUseImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -304,7 +304,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(btnUseMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 10, 130, 30));
 
         btnUseGPX.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPX.png"))); // NOI18N
-        btnUseGPX.setText("Load From GPX");
+        btnUseGPX.setText("<html><u>Load From GPX</u></html>");
         btnUseGPX.setToolTipText("Browse to a GPX file, or drag-and-drop the file onto the button.");
         btnUseGPX.setFocusPainted(false);
         btnUseGPX.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

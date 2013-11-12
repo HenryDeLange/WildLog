@@ -270,7 +270,7 @@ public final class UtilsTableGenerator {
                                         countElements.add(sighting.getElementName());
                                     }
                                 }
-                                data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                                data[finalT][i++] = countElements.size();
                             }
                         });
                     }
@@ -333,9 +333,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
                                     data[finalT][i++] = tempVisit.getName();
                                     data[finalT][i++] = tempVisit.getStartDate();
-                                    Sighting tempSighting = new Sighting();
-                                    tempSighting.setVisitName(tempVisit.getName());
-                                    data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                                    data[finalT][i++] = inApp.getDBI().count(new Sighting(null, null, tempVisit.getName()));
                                 }
                             });
                         }
@@ -547,10 +545,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][i++] = tempElement.getPrimaryName();
                                     data[finalT][i++] = tempElement.getType();
                                     data[finalT][i++] = tempElement.getFeedingClass();
-                                    Sighting tempSighting = new Sighting();
-                                    tempSighting.setVisitName(inVisit.getName());
-                                    tempSighting.setElementName(tempElement.getPrimaryName());
-                                    data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                                    data[finalT][i++] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, inVisit.getName()));
                                 }
                             });
                         }
@@ -621,10 +616,7 @@ public final class UtilsTableGenerator {
                                     data[finalT][i++] = tempElement.getPrimaryName();
                                     data[finalT][i++] = tempElement.getType();
                                     data[finalT][i++] = tempElement.getFeedingClass();
-                                    Sighting tempSighting = new Sighting();
-                                    tempSighting.setLocationName(inLocation.getName());
-                                    tempSighting.setElementName(tempElement.getPrimaryName());
-                                    data[finalT][i++] = inApp.getDBI().list(tempSighting).size();
+                                    data[finalT][i++] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), inLocation.getName(), null));
                                 }
                             });
                         }

@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -109,6 +108,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(pnlTop.getBackground());
         dtpEndDate.getComponent(1).setBackground(pnlTop.getBackground());
+        // Load the location icon
+        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedLocationName, 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
     }
 
     public final void setupTab(ProgressbarTask inProgressbarTask) {
@@ -128,20 +129,20 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     private void getLocationList() {
-        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, new Location());
-        // Pre-select the location if present
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
-                    if (tblLocation.getValueAt(t, 1).equals(selectedLocationName)) {
-                        tblLocation.getSelectionModel().setSelectionInterval(t, t);
-                        tblLocation.scrollRectToVisible(tblLocation.getCellRect(t, 0, true));
-                        break;
-                    }
-                }
-            }
-        });
+//        UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, new Location());
+//        // Pre-select the location if present
+//        SwingUtilities.invokeLater(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
+//                    if (tblLocation.getValueAt(t, 1).equals(selectedLocationName)) {
+//                        tblLocation.getSelectionModel().setSelectionInterval(t, t);
+//                        tblLocation.scrollRectToVisible(tblLocation.getCellRect(t, 0, true));
+//                        break;
+//                    }
+//                }
+//            }
+//        });
     }
 
     private void loadImages(ProgressbarTask inProgressbarTask) {
@@ -225,9 +226,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel5 = new javax.swing.JLabel();
         cmbVisitType = new javax.swing.JComboBox();
         jSeparator3 = new javax.swing.JSeparator();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblLocation = new javax.swing.JTable();
         jSeparator4 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
+        lblLocation = new javax.swing.JLabel();
+        lblImageLocation = new javax.swing.JLabel();
+        btnSelectLocation = new javax.swing.JButton();
         scrTable = new javax.swing.JScrollPane();
         tblBulkImport = new javax.swing.JTable();
 
@@ -299,6 +302,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnReload.setToolTipText("<html>Reload the Bulk Import using the provided settings. <br/>Warning: All changes will be lost.</html>");
         btnReload.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnReload.setFocusPainted(false);
+        btnReload.setFocusable(false);
         btnReload.setName("btnReload"); // NOI18N
         btnReload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -327,6 +331,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         btnGPSForAll.setToolTipText("The specified GPS point will be applied to all currently defined Observations.");
         btnGPSForAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPSForAll.setFocusPainted(false);
+        btnGPSForAll.setFocusable(false);
         btnGPSForAll.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPSForAll.setMargin(new java.awt.Insets(2, 6, 2, 6));
         btnGPSForAll.setName("btnGPSForAll"); // NOI18N
@@ -355,37 +360,72 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jSeparator3.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator3.setName("jSeparator3"); // NOI18N
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
-        jScrollPane1.setName("jScrollPane1"); // NOI18N
-
-        tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setName("tblLocation"); // NOI18N
-        tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
-        tblLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                tblLocationMouseReleased(evt);
-            }
-        });
-        tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tblLocationKeyReleased(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tblLocation);
-
         jSeparator4.setBackground(new java.awt.Color(196, 220, 172));
         jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jSeparator4.setName("jSeparator4"); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel1.setText("Place Name:");
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        lblLocation.setBackground(new java.awt.Color(233, 239, 244));
+        lblLocation.setText(selectedLocationName);
+        lblLocation.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 2, 1, 1));
+        lblLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        lblLocation.setName("lblLocation"); // NOI18N
+        lblLocation.setOpaque(true);
+        lblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lblLocationMousePressed(evt);
+            }
+        });
+
+        lblImageLocation.setBackground(new java.awt.Color(0, 0, 0));
+        lblImageLocation.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblImageLocation.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        lblImageLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblImageLocation.setName("lblImageLocation"); // NOI18N
+        lblImageLocation.setOpaque(true);
+        lblImageLocation.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                lblImageLocationMouseReleased(evt);
+            }
+        });
+
+        btnSelectLocation.setBackground(new java.awt.Color(153, 180, 115));
+        btnSelectLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
+        btnSelectLocation.setText("Place");
+        btnSelectLocation.setToolTipText("Select a Place to use for all Observation.");
+        btnSelectLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSelectLocation.setFocusPainted(false);
+        btnSelectLocation.setFocusable(false);
+        btnSelectLocation.setIconTextGap(2);
+        btnSelectLocation.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSelectLocation.setName("btnSelectLocation"); // NOI18N
+        btnSelectLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectLocationActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlTopLayout = new javax.swing.GroupLayout(pnlTop);
         pnlTop.setLayout(pnlTopLayout);
         pnlTopLayout.setHorizontalGroup(
             pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTopLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                .addGap(5, 5, 5)
+                .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlTopLayout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(pnlTopLayout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addComponent(lblImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSelectLocation)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(8, 8, 8)
                 .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlTopLayout.createSequentialGroup()
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 5, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -429,11 +469,11 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(5, 5, 5)
                                         .addComponent(jLabel7)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE))))
                     .addGroup(pnlTopLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addComponent(jSeparator1)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
                 .addComponent(btnGPSForAll, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -449,47 +489,56 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlTopLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jSeparator4)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jSeparator4)
+                        .addComponent(jSeparator2)
+                        .addComponent(jSeparator3)
+                        .addGroup(pnlTopLayout.createSequentialGroup()
+                            .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(btnGPSForAll, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(pnlTopLayout.createSequentialGroup()
+                                    .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(pnlTopLayout.createSequentialGroup()
+                                            .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(txtVisitName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(cmbVisitType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(8, 8, 8)
+                                            .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                                .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(10, 10, 10)
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGap(12, 12, 12)
+                            .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(chkIncludeSubfolders)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(chkShowInactiveTimes))
+                            .addGap(3, 3, 3)
+                            .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(pnlTopLayout.createSequentialGroup()
+                            .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(10, 10, 10)
+                            .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlTopLayout.createSequentialGroup()
+                        .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlTopLayout.createSequentialGroup()
-                                .addGap(0, 0, 0)
-                                .addComponent(btnGPSForAll, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(2, 2, 2)
+                                .addComponent(lblImageLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(pnlTopLayout.createSequentialGroup()
-                                .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlTopLayout.createSequentialGroup()
-                                        .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(txtVisitName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cmbVisitType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(8, 8, 8)
-                                        .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(dtpStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(dtpEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(10, 10, 10)
-                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(chkIncludeSubfolders)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkShowInactiveTimes))
-                        .addGap(3, 3, 3)
-                        .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlTopLayout.createSequentialGroup()
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(btnReload, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(344, 344, 344))
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSelectLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         add(pnlTop, java.awt.BorderLayout.PAGE_START);
@@ -519,13 +568,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tblBulkImport.getTableHeader().setResizingAllowed(false);
         tblBulkImport.getTableHeader().setReorderingAllowed(false);
         scrTable.setViewportView(tblBulkImport);
-        tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
-        tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
-        tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
-        tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, tblLocation, txtVisitName));
-        tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, tblLocation, txtVisitName));
-        tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
-        tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());
+        if (tblBulkImport.getColumnModel().getColumnCount() > 0) {
+            tblBulkImport.getColumnModel().getColumn(0).setMinWidth(240);
+            tblBulkImport.getColumnModel().getColumn(0).setPreferredWidth(240);
+            tblBulkImport.getColumnModel().getColumn(0).setMaxWidth(240);
+            tblBulkImport.getColumnModel().getColumn(0).setCellEditor(new InfoBoxEditor(app, lblLocation, txtVisitName));
+            tblBulkImport.getColumnModel().getColumn(0).setCellRenderer(new InfoBoxRenderer(app, lblLocation, txtVisitName));
+            tblBulkImport.getColumnModel().getColumn(1).setCellEditor(new ImageBoxEditor());
+            tblBulkImport.getColumnModel().getColumn(1).setCellRenderer(new ImageBoxRenderer());
+        }
 
         add(scrTable, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
@@ -568,7 +619,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
             @Override
             protected Object doInBackground() throws Exception {
                 // Make sure the location is OK
-                if (tblLocation.getSelectedRowCount() == 1 && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
+                if (selectedLocationName != null && !selectedLocationName.isEmpty() && txtVisitName.getText() != null && !txtVisitName.getText().isEmpty()) {
                     // Make sure the visit is OK
                     final Visit visit = new Visit(txtVisitName.getText());
                     if (app.getDBI().find(visit) != null) {
@@ -626,7 +677,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     this.setTaskProgress(0);
                     closeTab();
                     // Process the Location
-                    Location location = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString()));
+                    Location location = app.getDBI().find(new Location(selectedLocationName));
                     app.getDBI().createOrUpdate(location, null);
                     // Process the Visit
                     visit.setLocationName(location.getName());
@@ -791,28 +842,37 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         }
     }//GEN-LAST:event_btnGPSForAllActionPerformed
 
-    private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
-        if (tblLocation.getSelectedRowCount() == 1) {
-            selectedLocationName = tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString();
+    private void btnSelectLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectLocationActionPerformed
+        LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), true, app, lblLocation.getText());
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade() && dialog.getLocationName() != null && dialog.getLocationName().length() > 0) {
+            selectedLocationName = dialog.getLocationName();
+            lblLocation.setText(selectedLocationName);
+            UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedLocationName, 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
         }
-        else {
-            selectedLocationName = null;
-        }
-    }//GEN-LAST:event_tblLocationMouseReleased
+    }//GEN-LAST:event_btnSelectLocationActionPerformed
 
-    private void tblLocationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyReleased
-        tblLocationMouseReleased(null);
-    }//GEN-LAST:event_tblLocationKeyReleased
+    private void lblImageLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageLocationMouseReleased
+        if (lblLocation.getText() != null && !lblLocation.getText().isEmpty()) {
+            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + lblLocation.getText(), 0, app);
+        }
+    }//GEN-LAST:event_lblImageLocationMouseReleased
+
+    private void lblLocationMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationMousePressed
+        btnSelectLocationActionPerformed(null);
+    }//GEN-LAST:event_lblLocationMousePressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGPSForAll;
     private javax.swing.JButton btnReload;
+    private javax.swing.JButton btnSelectLocation;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkIncludeSubfolders;
     private javax.swing.JCheckBox chkShowInactiveTimes;
     private javax.swing.JComboBox cmbVisitType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -820,16 +880,16 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblImageLocation;
+    private javax.swing.JLabel lblLocation;
     private javax.swing.JPanel pnlTop;
     private javax.swing.JScrollPane scrTable;
     private javax.swing.JSpinner spnInactivityTime;
     private javax.swing.JTable tblBulkImport;
-    private javax.swing.JTable tblLocation;
     private javax.swing.JTextField txtVisitName;
     // End of variables declaration//GEN-END:variables
 }

@@ -1162,13 +1162,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
         rdbLocation.setSelected(true);
         if (locationWL.getName() != null) {
-            Sighting sighting = new Sighting();
-            sighting.setLocationName(locationWL.getName());
-            lblNumberOfSightings.setText(Integer.toString(app.getDBI().list(sighting).size()));
-            Visit tempVisit = new Visit();
-            tempVisit.setLocationName(locationWL.getName());
-            List<Visit> visits = app.getDBI().list(tempVisit);
-            lblNumberOfVisits.setText(Integer.toString(visits.size()));
+            lblNumberOfSightings.setText(Integer.toString(app.getDBI().count(new Sighting(null, locationWL.getName(), null))));
+            lblNumberOfVisits.setText(Integer.toString(app.getDBI().count(new Visit(null, locationWL.getName()))));
             UtilsTableGenerator.setupVisitTableLarge(app, tblVisit, locationWL);
             UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
         }
@@ -1176,7 +1171,13 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
         }
-        lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+        // Wait for the table to finish loading
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+            }
+        });
         btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
 
@@ -1230,6 +1231,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
+        lblNumberOfElements.setText("0");
         if (locationWL.getName() != null) {
             if (rdbLocation.isSelected()) {
                 UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
@@ -1247,10 +1249,13 @@ public class PanelLocation extends PanelCanSetupHeader {
                     }
                 }
             }
-            lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
-        }
-        else {
-            lblNumberOfElements.setText("0");
+            // Wait for the table to finish loading
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    lblNumberOfElements.setText(Integer.toString(tblElement.getRowCount()));
+                }
+            });
         }
     }//GEN-LAST:event_rdbLocationItemStateChanged
 
@@ -1431,7 +1436,9 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_tblVisitMouseClicked
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
-        rdbLocationItemStateChanged(null);
+        if (rdbVisit.isSelected()) {
+            rdbLocationItemStateChanged(null);
+        }
     }//GEN-LAST:event_tblVisitMouseReleased
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed

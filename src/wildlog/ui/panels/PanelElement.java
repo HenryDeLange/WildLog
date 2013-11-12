@@ -1528,9 +1528,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         if (element.getPrimaryName() != null) {
-            Sighting sighting = new Sighting();
-            sighting.setElementName(element.getPrimaryName());
-            lblNumberOfSightings.setText(Integer.toString(app.getDBI().list(sighting).size()));
+            lblNumberOfSightings.setText(Integer.toString(app.getDBI().count(new Sighting(element.getPrimaryName(), null, null))));
         }
         else {
             lblNumberOfSightings.setText("0");
@@ -1539,7 +1537,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
         tblLocation.setSelectionBackground(new Color(67,97,113));
         rdbLocations.setSelected(true);
-        lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+        // Wait for the table to finish loading
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+            }
+        });
         btnUpdate.requestFocusInWindow();
     }//GEN-LAST:event_formComponentShown
 
@@ -1579,6 +1583,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_tblLocationKeyPressed
 
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
+        lblNumberOfLocations.setText("0");
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
                 UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element);
@@ -1592,7 +1597,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
             tblLocation.setSelectionBackground(new Color(67,97,113));
         }
-        lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+        // Wait for the table to finish loading
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                lblNumberOfLocations.setText(Integer.toString(tblLocation.getRowCount()));
+            }
+        });
     }//GEN-LAST:event_rdbSightingsItemStateChanged
 
     private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked

@@ -120,7 +120,7 @@ public final class UtilsDialog {
                     txtPane.setText(temp);
                     txtPane.setCaretPosition(0);
                     JScrollPane scroll = new JScrollPane(txtPane);
-                    scroll.setPreferredSize(new Dimension(500, 750));
+                    scroll.setPreferredSize(new Dimension(580, 750));
                     frame.getContentPane().add(scroll);
                     frame.pack();
                     frame.setLocationRelativeTo(inApp.getMainFrame());

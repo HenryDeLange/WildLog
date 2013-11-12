@@ -35,6 +35,10 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         super(inSightingCounter);
     }
 
+    public Sighting(String inElementName, String inLocationName, String inVisitName) {
+        super(inElementName, inLocationName, inVisitName);
+    }
+
 
     /**
      * Return the Path representing the folder names where the files for this sighting should be stored.

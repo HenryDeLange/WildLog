@@ -263,9 +263,9 @@ public final class WildLogView extends JFrame {
         tabElement = new javax.swing.JPanel();
         statusPanel = new javax.swing.JPanel();
         statusMessageLabel = new javax.swing.JLabel();
-        statusAnimationLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         progressBar = new javax.swing.JProgressBar();
+        statusAnimationLabel = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
@@ -318,7 +318,7 @@ public final class WildLogView extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
-        setPreferredSize(new java.awt.Dimension(1000, 630));
+        setPreferredSize(new java.awt.Dimension(1000, 650));
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -483,7 +483,7 @@ public final class WildLogView extends JFrame {
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 139, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -513,61 +513,36 @@ public final class WildLogView extends JFrame {
 
         statusPanel.setBackground(new java.awt.Color(232, 238, 220));
         statusPanel.setName("statusPanel"); // NOI18N
+        statusPanel.setLayout(new java.awt.BorderLayout(10, 0));
 
         statusMessageLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         statusMessageLabel.setAlignmentY(0.0F);
+        statusMessageLabel.setMaximumSize(new java.awt.Dimension(2147483647, 20));
+        statusMessageLabel.setMinimumSize(new java.awt.Dimension(100, 20));
         statusMessageLabel.setName("statusMessageLabel"); // NOI18N
-
-        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
-        statusAnimationLabel.setPreferredSize(new java.awt.Dimension(20, 20));
+        statusMessageLabel.setPreferredSize(new java.awt.Dimension(500, 20));
+        statusPanel.add(statusMessageLabel, java.awt.BorderLayout.CENTER);
 
         jPanel1.setBackground(new java.awt.Color(232, 238, 220));
-        jPanel1.setMaximumSize(new java.awt.Dimension(450, 25));
+        jPanel1.setMaximumSize(new java.awt.Dimension(400, 20));
         jPanel1.setMinimumSize(new java.awt.Dimension(50, 16));
         jPanel1.setName("jPanel1"); // NOI18N
-        jPanel1.setPreferredSize(new java.awt.Dimension(320, 16));
+        jPanel1.setLayout(new java.awt.BorderLayout(5, 0));
 
-        progressBar.setMaximumSize(new java.awt.Dimension(450, 25));
+        progressBar.setMaximumSize(new java.awt.Dimension(400, 20));
         progressBar.setMinimumSize(new java.awt.Dimension(50, 14));
         progressBar.setName("progressBar"); // NOI18N
         progressBar.setPreferredSize(new java.awt.Dimension(320, 14));
+        jPanel1.add(progressBar, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(progressBar, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(2, 2, 2)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
-        );
+        statusAnimationLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        statusAnimationLabel.setMaximumSize(new java.awt.Dimension(20, 20));
+        statusAnimationLabel.setMinimumSize(new java.awt.Dimension(20, 20));
+        statusAnimationLabel.setName("statusAnimationLabel"); // NOI18N
+        statusAnimationLabel.setPreferredSize(new java.awt.Dimension(20, 20));
+        jPanel1.add(statusAnimationLabel, java.awt.BorderLayout.EAST);
 
-        javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
-        statusPanel.setLayout(statusPanelLayout);
-        statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 346, Short.MAX_VALUE)
-                .addGap(10, 10, 10)
-                .addComponent(statusAnimationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusMessageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(statusAnimationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        statusPanel.add(jPanel1, java.awt.BorderLayout.EAST);
 
         getContentPane().add(statusPanel, java.awt.BorderLayout.PAGE_END);
 
@@ -951,10 +926,10 @@ public final class WildLogView extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tabHomeComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_tabHomeComponentShown
-        lblLocations.setText("Places: " + app.getDBI().list(new Location()).size());
-        lblVisits.setText("Periods: " + app.getDBI().list(new Visit()).size());
-        lblSightings.setText("Observations: " + app.getDBI().list(new Sighting()).size());
-        lblCreatures.setText("Creatures: " + app.getDBI().list(new Element()).size());
+        lblLocations.setText("Places: " + app.getDBI().count(new Location()));
+        lblVisits.setText("Periods: " + app.getDBI().count(new Visit()));
+        lblSightings.setText("Observations: " + app.getDBI().count(new Sighting()));
+        lblCreatures.setText("Creatures: " + app.getDBI().count(new Element()));
     }//GEN-LAST:event_tabHomeComponentShown
 
     private void chkMnuUseWMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseWMSItemStateChanged

@@ -84,7 +84,7 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Load from Image"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Load from Image&lt;/u&gt;&lt;/html&gt;"/>
         <Property name="toolTipText" type="java.lang.String" value="Browse to an image with GPS data, or drag-and-drop the image on this button."/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
@@ -130,7 +130,7 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/GPX.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Load From GPX"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Load From GPX&lt;/u&gt;&lt;/html&gt;"/>
         <Property name="toolTipText" type="java.lang.String" value="Browse to a GPX file, or drag-and-drop the file onto the button."/>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>

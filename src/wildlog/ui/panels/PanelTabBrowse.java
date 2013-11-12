@@ -94,7 +94,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         rdbBrowseDate = new javax.swing.JRadioButton();
         btnRotate = new javax.swing.JButton();
         lblNumberOfImages = new javax.swing.JLabel();
-        btnViewEXIF = new javax.swing.JButton();
         btnViewImage = new javax.swing.JButton();
         btnRefreshDates = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -109,6 +108,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnGoBrowseSelection = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         treBrowsePhoto = new javax.swing.JTree();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        btnViewEXIF = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -193,21 +196,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        btnViewEXIF.setBackground(new java.awt.Color(235, 233, 221));
-        btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
-        btnViewEXIF.setText("View EXIF");
-        btnViewEXIF.setToolTipText("View the EXIF meta data for the image.");
-        btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnViewEXIF.setFocusPainted(false);
-        btnViewEXIF.setFocusable(false);
-        btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnViewEXIF.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnViewEXIFActionPerformed(evt);
-            }
-        });
-
         btnViewImage.setBackground(new java.awt.Color(235, 233, 221));
         btnViewImage.setText("Open Original File");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
@@ -234,21 +222,25 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        jScrollPane5.setMaximumSize(new java.awt.Dimension(320, 32767));
         jScrollPane5.setPreferredSize(new java.awt.Dimension(230, 600));
 
         txtBrowseInfo.setEditable(false);
         txtBrowseInfo.setContentType("text/html"); // NOI18N
         txtBrowseInfo.setText("");
         txtBrowseInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtBrowseInfo.setMaximumSize(new java.awt.Dimension(250, 2147483647));
         jScrollPane5.setViewportView(txtBrowseInfo);
 
         btnZoomOut.setBackground(new java.awt.Color(235, 233, 221));
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
-        btnZoomOut.setText("Zoom");
+        btnZoomOut.setText("Zoom Out");
         btnZoomOut.setToolTipText("Zoom the image out.");
         btnZoomOut.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomOut.setFocusPainted(false);
         btnZoomOut.setFocusable(false);
+        btnZoomOut.setIconTextGap(2);
+        btnZoomOut.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnZoomOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnZoomOutActionPerformed(evt);
@@ -257,10 +249,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnDefault.setBackground(new java.awt.Color(235, 233, 221));
         btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
-        btnDefault.setText("Default");
+        btnDefault.setText("Make Default");
         btnDefault.setToolTipText("Set the current file as the default (first) file.");
         btnDefault.setFocusPainted(false);
         btnDefault.setFocusable(false);
+        btnDefault.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnDefault.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDefaultActionPerformed(evt);
@@ -293,11 +286,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnZoomIn.setBackground(new java.awt.Color(235, 233, 221));
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnZoomIn.setText("Zoom");
+        btnZoomIn.setText("Zoom In");
         btnZoomIn.setToolTipText("Zoom the image in.");
         btnZoomIn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoomIn.setFocusPainted(false);
         btnZoomIn.setFocusable(false);
+        btnZoomIn.setIconTextGap(2);
+        btnZoomIn.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnZoomIn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnZoomInActionPerformed(evt);
@@ -311,11 +306,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         imgBrowsePhotos.setLayout(imgBrowsePhotosLayout);
         imgBrowsePhotosLayout.setHorizontalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 549, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         imgBrowsePhotosLayout.setVerticalGroup(
             imgBrowsePhotosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 522, Short.MAX_VALUE)
         );
 
         dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
@@ -334,6 +329,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("root");
         treBrowsePhoto.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        treBrowsePhoto.setToolTipText("");
         treBrowsePhoto.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 treBrowsePhotoMouseReleased(evt);
@@ -354,12 +350,42 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        jButton1.setText("Set Default");
+        jButton1.setToolTipText("Set this file as the default for the relevant Creature.");
+        jButton1.setMargin(new java.awt.Insets(2, 4, 2, 4));
+
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        jButton2.setText("Set Default");
+        jButton2.setToolTipText("Set this file as the default for the relevant Place.");
+        jButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        jButton3.setText("Set Default");
+        jButton3.setToolTipText("Set this file as the default for the relevant Period.");
+        jButton3.setMargin(new java.awt.Insets(2, 4, 2, 4));
+
+        btnViewEXIF.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        btnViewEXIF.setText("View EXIF");
+        btnViewEXIF.setToolTipText("View the EXIF meta data for the image.");
+        btnViewEXIF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewEXIF.setFocusPainted(false);
+        btnViewEXIF.setFocusable(false);
+        btnViewEXIF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewEXIF.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnViewEXIF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewEXIFActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rdbBrowseLocation)
@@ -380,65 +406,62 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(9, 9, 9)
                         .addComponent(btnBrowsePrev)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(btnDefault, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(2, 2, 2)
+                        .addGap(5, 5, 5)
+                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(5, 5, 5)
                         .addComponent(btnBrowseNext)
+                        .addGap(15, 15, 15)
+                        .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15)
+                        .addComponent(btnRotate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnViewEXIF))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnDefault)
+                        .addGap(25, 25, 25)
+                        .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(5, 5, 5))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDefault)
+                            .addComponent(jButton1)
+                            .addComponent(jButton2)
+                            .addComponent(jButton3)
+                            .addComponent(btnViewImage))
                         .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnBrowsePrev, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnDefault)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(btnBrowseNext, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(2, 2, 2)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(btnRotate))))
-                                .addGap(5, 5, 5)
-                                .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnBrowsePrev, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                                .addComponent(btnBrowseNext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(lblNumberOfImages, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnZoomOut, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnZoomIn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnViewEXIF, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRotate, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(3, 3, 3)
+                        .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -464,7 +487,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRefreshBrowseTree, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                .addGap(5, 5, 5))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -733,6 +756,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 setupFile(fotos);
             }
             else {
+                txtBrowseInfo.setText("<html><div style='font-size:9px;font-family:verdana;'><i>"
+                        + "Select one of the categories to the left to browse by. "
+                        + "<br><br>Left-click on a tree node to select it. "
+                        + "<br><br>Right-click on a tree node for additional options. "
+                        + "<br><br>Double-click or click the +/- icons to expand/collapse the tree node."
+                        + "</i></div></html>");
                 setupFile(null);
             }
             // Maak paar display issues reg
@@ -742,8 +771,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         if (!rdbBrowseElement.isSelected() && !rdbBrowseLocation.isSelected() && !rdbBrowseDate.isSelected()) {
-            DefaultMutableTreeNode root = new DefaultMutableTreeNode("Please select a category to browse...");
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode("Please select a category above to browse...");
             treBrowsePhoto.setModel(new DefaultTreeModel(root));
+            treBrowsePhoto.setSelectionRow(0);
             dtpStartDate.setVisible(false);
             dtpEndDate.setVisible(false);
             btnRefreshDates.setVisible(false);
@@ -1382,6 +1412,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblNumberOfImages;

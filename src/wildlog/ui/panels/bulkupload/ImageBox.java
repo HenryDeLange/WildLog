@@ -4,11 +4,14 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import wildlog.WildLogApp;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
@@ -56,6 +59,7 @@ public class ImageBox extends JPanel {
         btnRemove = new javax.swing.JButton();
         btnNewSighting = new javax.swing.JButton();
         btnClone = new javax.swing.JButton();
+        btnZoom = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(235, 246, 220));
         setName("Form"); // NOI18N
@@ -86,7 +90,7 @@ public class ImageBox extends JPanel {
                 btnUpActionPerformed(evt);
             }
         });
-        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 100));
+        add(btnUp, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 5, 30, 60));
 
         btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
         btnDown.setToolTipText("Move the image DOWN to the Observation below.");
@@ -100,7 +104,7 @@ public class ImageBox extends JPanel {
                 btnDownActionPerformed(evt);
             }
         });
-        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 105, 30, 100));
+        add(btnDown, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 65, 30, 60));
 
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
@@ -152,6 +156,20 @@ public class ImageBox extends JPanel {
             }
         });
         add(btnClone, new org.netbeans.lib.awtextra.AbsoluteConstraints(95, 205, 70, 30));
+
+        btnZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Search.gif"))); // NOI18N
+        btnZoom.setToolTipText("Show zoom popup.");
+        btnZoom.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnZoom.setFocusPainted(false);
+        btnZoom.setFocusable(false);
+        btnZoom.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnZoom.setName("btnZoom"); // NOI18N
+        btnZoom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnZoomMousePressed(evt);
+            }
+        });
+        add(btnZoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 125, 30, 80));
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
@@ -228,6 +246,18 @@ public class ImageBox extends JPanel {
         }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    private void btnZoomMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZoomMousePressed
+        JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom Popup", true);
+        JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
+        dialog.add(lblZoomImage);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        UtilsDialog.addEscapeKeyListener(dialog);
+        UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), dialog);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnZoomMousePressed
+
     private void moveImageToNewRow(int inDelta) {
         // Make sure to call stop editing after getting the row and col
         int row = table.getEditingRow();
@@ -269,6 +299,7 @@ public class ImageBox extends JPanel {
     private javax.swing.JButton btnNewSighting;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnUp;
+    private javax.swing.JButton btnZoom;
     private javax.swing.JLabel lblImage;
     // End of variables declaration//GEN-END:variables
 }
