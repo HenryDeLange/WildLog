@@ -51,6 +51,11 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
         sightingCounter = inSightingCounter;
     }
 
+    public SightingCore(String inElementName, String inLocationName, String inVisitName) {
+        elementName = inElementName;
+        locationName = inLocationName;
+        visitName = inVisitName;
+    }
 
     @Override
     public String toString() {

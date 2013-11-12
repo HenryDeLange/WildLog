@@ -60,6 +60,12 @@ public abstract class DBI_JDBC implements DBI {
     protected static final String tableSightings = "CREATE TABLE SIGHTINGS (SIGHTINGCOUNTER bigint PRIMARY KEY NOT NULL,   SIGHTINGDATE timestamp NOT NULL,   ELEMENTNAME varchar(150) NOT NULL, LOCATIONNAME varchar(150) NOT NULL, VISITNAME varchar(150) NOT NULL, TIMEOFDAY varchar(50), WEATHER varchar(50), VIEWRATING varchar(50), CERTAINTY varchar(50), NUMBEROFELEMENTS int, DETAILS longvarchar, LATITUDEINDICATOR varchar(10), LATDEGREES int, LATMINUTES int, LATSECONDS double, LONGITUDEINDICATOR varchar(10), LONDEGREES int, LONMINUTES int, LONSECONDS double, SIGHTINGEVIDENCE varchar(50), MOONLIGHT varchar(50), MOONPHASE int, TEMPERATURE double, TEMPERATUREUNIT varchar(15), LIFESTATUS varchar(15), SEX varchar(15), TAG longvarchar, UNKNOWNTIME smallint, DURATIONMINUTES int, DURATIONSECONDS double, GPSACCURACY varchar(50), TIMEACCURACY varchar(50), AGE varchar(50))";
     protected static final String tableFiles = "CREATE TABLE FILES (ID varchar(175), FILENAME varchar(255), ORIGINALPATH varchar(500), FILETYPE varchar(50), UPLOADDATE date, ISDEFAULT smallint)";
     protected static final String tableWildLogOptions = "CREATE TABLE WILDLOG (VERSION int DEFAULT " + WILDLOG_DB_VERSION + ", DEFAULTLATITUDE double DEFAULT -28.7, DEFAULTLONGITUDE double DEFAULT 24.7, DEFAULTSLIDESHOWSPEED float(52) DEFAULT 1.5, DEFAULTSLIDESHOWSIZE int DEFAULT 750, DEFAULTLATOPTION varchar(10) DEFAULT '', DEFAULTLONOPTION varchar(10) DEFAULT '', DEFAULTONLINEMAP smallint DEFAULT true)";
+    // Count
+    protected static final String countLocation = "SELECT count(*) FROM LOCATIONS";
+    protected static final String countVisit = "SELECT count(*) FROM VISITS";
+    protected static final String countSighting = "SELECT count(*) FROM SIGHTINGS";
+    protected static final String countElement = "SELECT count(*) FROM ELEMENTS";
+    protected static final String countFile = "SELECT count(*) FROM FILES";
     // Find
     protected static final String findLocation = "SELECT * FROM LOCATIONS WHERE NAME = ?";
     protected static final String findVisit = "SELECT * FROM VISITS WHERE NAME = ?";
@@ -98,6 +104,7 @@ public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
 
+    // TODO: Dis is tyd om meer indexes op die koelomme te sit, ek het 'n huge performance boost gesien toe ek FILES en VISITS en SIGHTINGS beter index. Ek moet dit laat gebeur vir nuwe DBs en oues.
 
     public DBI_JDBC() {
     }
@@ -115,6 +122,188 @@ public abstract class DBI_JDBC implements DBI {
         catch (SQLException sqle) {
             printSQLException(sqle);
         }
+    }
+
+    @Override
+    public <T extends ElementCore> int count(T inElement) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countElement;
+            if (inElement.getPrimaryName() != null && !inElement.getPrimaryName().isEmpty()) {
+                sql = sql + " WHERE PRIMARYNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inElement.getPrimaryName());
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
+    }
+
+    @Override
+    public <T extends LocationCore> int count(T inLocation) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countLocation;
+            if (inLocation.getName() != null && !inLocation.getName().isEmpty()) {
+                sql = sql + " WHERE NAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inLocation.getName());
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
+    }
+
+    @Override
+    public <T extends VisitCore> int count(T inVisit) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countVisit;
+            if (inVisit.getName() != null) {
+                sql = sql + " WHERE NAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
+            }
+            else if (inVisit.getLocationName() != null) {
+                sql = sql + " WHERE LOCATIONNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inVisit.getLocationName()));
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
+    }
+
+    @Override
+    public <T extends SightingCore> int count(T inSighting) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countSighting;
+            if (inSighting.getSightingCounter() > 0) {
+                sql = sql + " WHERE SIGHTINGCOUNTER = ?";
+                state = conn.prepareStatement(sql);
+                state.setLong(1, inSighting.getSightingCounter());
+            }
+            else
+            if (inSighting.getElementName() != null && !inSighting.getElementName().isEmpty() && inSighting.getLocationName() != null && !inSighting.getLocationName().isEmpty()) {
+                sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
+            }
+            else
+            if (inSighting.getElementName() != null && !inSighting.getElementName().isEmpty() && inSighting.getVisitName() != null && !inSighting.getVisitName().isEmpty()) {
+                sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
+            }
+            else
+            if (inSighting.getElementName() != null && !inSighting.getElementName().isEmpty()) {
+                sql = sql + " WHERE ELEMENTNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+            }
+            else
+            if (inSighting.getLocationName() != null && !inSighting.getLocationName().isEmpty()) {
+                sql = sql + " WHERE LOCATIONNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
+            }
+            else
+            if (inSighting.getVisitName() != null && !inSighting.getVisitName().isEmpty()) {
+                sql = sql + " WHERE VISITNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getVisitName()));
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
+    }
+
+    @Override
+    public <T extends WildLogFileCore> int count(T inWildLogFile) {
+        PreparedStatement state = null;
+        ResultSet results = null;
+        int count = 0;
+        try {
+            String sql = countFile;
+            if (inWildLogFile.getId() != null && !inWildLogFile.getId().isEmpty()) {
+                sql = sql + " WHERE ID = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inWildLogFile.getId());
+            }
+            else {
+                state = conn.prepareStatement(sql);
+            }
+            results = state.executeQuery();
+            while (results.next()) {
+                count = results.getInt(1);
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return count;
     }
 
     @Override
@@ -328,6 +517,9 @@ public abstract class DBI_JDBC implements DBI {
             String sql = findFile;
             if (inWildLogFile.getDBFilePath() != null) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
+                if (inWildLogFile.isDefaultFile()) {
+                    sql = sql + " AND ISDEFAULT = true";
+                }
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
@@ -335,6 +527,9 @@ public abstract class DBI_JDBC implements DBI {
             else
             if (inWildLogFile.getId() != null) {
                 sql = sql + " WHERE ID = ?";
+                if (inWildLogFile.isDefaultFile()) {
+                    sql = sql + " AND ISDEFAULT = true";
+                }
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
@@ -825,7 +1020,6 @@ public abstract class DBI_JDBC implements DBI {
             closeStatement(state);
         }
         return true;
-
     }
 
     @Override

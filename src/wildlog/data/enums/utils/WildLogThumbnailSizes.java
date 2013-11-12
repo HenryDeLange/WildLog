@@ -17,8 +17,8 @@ public enum WildLogThumbnailSizes {
     NORMAL(300),
     /** 500px */
     LARGE(500),
-    /** 850px */
-    VERY_LARGE(850),
+    /** 700px */
+    VERY_LARGE(700),
     /** 128px */
     SYNC_EXPORT(128);
 

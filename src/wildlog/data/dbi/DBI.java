@@ -15,6 +15,12 @@ public interface DBI {
 
     public void close();
 
+    public <T extends ElementCore> int count(T inElement);
+    public <T extends LocationCore> int count(T inLocation);
+    public <T extends VisitCore> int count(T inVisit);
+    public <T extends SightingCore> int count(T inSighting);
+    public <T extends WildLogFileCore> int count(T inWildLogFile);
+
     public <T extends ElementCore> T find(T inElement);
     public <T extends LocationCore> T find(T inLocation);
     public <T extends VisitCore> T find(T inVisit);
