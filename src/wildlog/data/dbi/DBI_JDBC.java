@@ -104,11 +104,91 @@ public abstract class DBI_JDBC implements DBI {
     // Variables
     protected Connection conn;
 
-    // TODO: Dis is tyd om meer indexes op die koelomme te sit, ek het 'n huge performance boost gesien toe ek FILES en VISITS en SIGHTINGS beter index. Ek moet dit laat gebeur vir nuwe DBs en oues.
-
     public DBI_JDBC() {
     }
 
+    @Override
+    public boolean initialize() {
+        Statement state = null;
+        ResultSet results = null;
+        boolean started = true;
+        try {
+            // Create tables
+            results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableElements);
+                // Create other indexes
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+                // Create default entry
+                createOrUpdate(new ElementCore("Unknown Creature"), null);
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "LOCATIONS", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableLocations);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
+                createOrUpdate(new LocationCore("Some Place"), null);
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "VISITS", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableVisits);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
+                createOrUpdate(new VisitCore("Casual Observations", "Some Place"), null);
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "SIGHTINGS", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableSightings);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_CNT ON SIGHTINGS (SIGHTINGCOUNTER)");
+                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
+                state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "FILES", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableFiles);
+                state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+                state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
+                closeStatement(state);
+            }
+            closeResultset(results);
+            results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
+            if (!results.next()) {
+                state = conn.createStatement();
+                state.execute(tableWildLogOptions);
+                closeStatement(state);
+            }
+        }
+        catch (SQLException sqle) {
+            printSQLException(sqle);
+            started = false;
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        return started;
+    }
 
     @Override
     public void close() {
