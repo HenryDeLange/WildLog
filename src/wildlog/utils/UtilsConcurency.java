@@ -68,19 +68,28 @@ public final class UtilsConcurency {
      * If it fails it will try to force the shutdown.
      * Tasks will be allowed about 50 minutes to complete, which should really be enough unless something went very wrong. <br/>
      * <b>In addition this method will show a popup message (semi-modal) if the task is taking longer than about 1 second.
-     * @param inExecutorService
+     * @param inExecutorService - The service to stop and wait for.
+     * @param inParent - If the parent is a JDialog pass it in, otherwise use null to use the application's main frame.
      * @return
      */
-    public static boolean waitForExecutorToShutdownWithPopup(final ExecutorService inExecutorService) {
+    public static boolean waitForExecutorToShutdownWithPopup(final ExecutorService inExecutorService, JDialog inParent) {
         if (inExecutorService != null) {
             inExecutorService.shutdown();
             try {
                 // Do the initial short wait
                 if (!inExecutorService.awaitTermination(1150, TimeUnit.MILLISECONDS)) {
                     // If we are still running the popup should be displayed and then continue the work
-                    final JDialog popup = new JDialog(WildLogApp.getApplication().getMainFrame(), "Long Running Process", false);
-                    popup.setVisible(false);
-                    UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), popup);
+                    final JDialog popup;
+                    if (inParent instanceof JDialog) {
+                        popup = new JDialog(inParent, "Long Running Process", false);
+                        popup.setVisible(false);
+                        UtilsDialog.addModalBackgroundPanel(inParent, popup);
+                    }
+                    else {
+                        popup = new JDialog(WildLogApp.getApplication().getMainFrame(), "Long Running Process", false);
+                        popup.setVisible(false);
+                        UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), popup);
+                    }
                     popup.setEnabled(false);
                     ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon.gif"));
                     popup.setIconImage(icon.getImage());

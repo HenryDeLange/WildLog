@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
@@ -80,7 +81,7 @@ public final class UtilsFileProcessing {
         return Arrays.asList(fileChooser.getFiles());
     }
 
-    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup) {
+    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent) {
         // Submit the work to the executor
         ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
         for (int t = 0; t < inFiles.length; t++) {
@@ -111,7 +112,7 @@ public final class UtilsFileProcessing {
         }
         if (inWithSlowProcessPopup) {
             // Wait to finish the work
-            UtilsConcurency.waitForExecutorToShutdownWithPopup(executorService);
+            UtilsConcurency.waitForExecutorToShutdownWithPopup(executorService, inParent);
         }
         else {
             UtilsConcurency.waitForExecutorToShutdown(executorService);

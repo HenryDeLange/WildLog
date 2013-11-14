@@ -2,6 +2,7 @@ package wildlog.ui.panels;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
@@ -151,7 +152,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true);
+                app, true, null);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -1358,6 +1359,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(locationWL.getName());
                     lastSavedLocation = locationWL.cloneShallow();
+                    Toolkit.getDefaultToolkit().beep();
                 }
                 else {
                     txtName.setBackground(Color.RED);

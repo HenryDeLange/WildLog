@@ -2,6 +2,7 @@ package wildlog.ui.panels;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -161,7 +162,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true);
+                app, true, null);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -1363,6 +1364,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
                     txtPrimaryName.setText(element.getPrimaryName());
                     lastSavedElement = element.cloneShallow();
+                    Toolkit.getDefaultToolkit().beep();
                 }
                 else {
                     txtPrimaryName.setBackground(Color.RED);

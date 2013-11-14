@@ -1,6 +1,7 @@
 package wildlog.ui.panels;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -296,8 +297,19 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true);
-        imageIndex = 0;
+                app, true, this);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                imageIndex = 0;
+                // Update the label showing the number of images
+                setupNumberOfImages();
+                // Calculate duration
+                if ((int)spnDurationMinutes.getValue() == 0 && (double)spnDurationSeconds.getValue() == 0.0) {
+                    btnCalculateDurationActionPerformed(null);
+                }
+            }
+        });
     }
 
     private void setupSightingInfo() {
@@ -1147,6 +1159,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Perform the save action
         if (locationWL != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
             if (saveSighting()) {
+                Toolkit.getDefaultToolkit().beep();
                 // (Evt is null if the Image Upload calls save method and the dialog shouldn't be closed)
                 // Premare to close dialog
                 if (panelToRefresh != null) {
@@ -1275,12 +1288,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             // Now upload the files
             if (locationWL != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
                 uploadFiles(inFiles);
-                // Update the label showing the number of images
-                setupNumberOfImages();
-                // Calculate duration
-                if ((int)spnDurationMinutes.getValue() == 0 && (double)spnDurationSeconds.getValue() == 0.0) {
-                    btnCalculateDurationActionPerformed(null);
-                }
             }
         }
     }

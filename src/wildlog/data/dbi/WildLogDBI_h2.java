@@ -90,43 +90,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 state.close();
                 System.out.println("Database username and password updated.");
             }
-
-            // Create tables
-            // TODO: EK kan ook 'n H2 "if not exists" command gebruik in die query in plaas van die story aangesien ek basies net H2 support as DB...
-            results = conn.getMetaData().getTables(null, null, "ELEMENTS", null);
-            state = conn.createStatement();
-            if (!results.next()) {
-                state.execute(tableElements);
-                createOrUpdate(new Element("Unknown Creature"), null);
-            }
-            results = conn.getMetaData().getTables(null, null, "LOCATIONS", null);
-            state = conn.createStatement();
-            if (!results.next()) {
-                state.execute(tableLocations);
-                createOrUpdate(new Location("Some Place"), null);
-            }
-            results = conn.getMetaData().getTables(null, null, "VISITS", null);
-            state = conn.createStatement();
-            if (!results.next()) {
-                state.execute(tableVisits);
-                createOrUpdate(new Visit("Casual Observations", "Some Place"), null);
-            }
-            results = conn.getMetaData().getTables(null, null, "SIGHTINGS", null);
-            state = conn.createStatement();
-            if (!results.next()) {
-                state.execute(tableSightings);
-            }
-            results = conn.getMetaData().getTables(null, null, "FILES", null);
-            state = conn.createStatement();
-            if (!results.next()) {
-                state.execute(tableFiles);
-            }
-            results = conn.getMetaData().getTables(null, null, "WILDLOG", null);
-            state = conn.createStatement();
-            if (!results.next()) {
-                state.execute(tableWildLogOptions);
-            }
-
+            // Create table, indexes, etc.
+            started = initialize();
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
             doUpdates(inApp);
@@ -608,8 +573,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
             // Make changes to Files
-            // NOTE: This assumes that v3 Workspace clean has been run
+            // NOTE: It is best to make sure that v3 Workspace clean has been run
             state.execute("UPDATE FILES SET ORIGINALPATH = replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/', '')");
+            // Create indexes
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
+            state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS SIGHTING_CNT ON SIGHTINGS (SIGHTINGCOUNTER)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT ON SIGHTINGS (ELEMENTNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_LOCATION ON SIGHTINGS (LOCATIONNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_VISIT ON SIGHTINGS (VISITNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_LOCATION ON SIGHTINGS (ELEMENTNAME, LOCATIONNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_ELEMENT_VISIT ON SIGHTINGS (ELEMENTNAME, VISITNAME)");
+            state.execute("CREATE INDEX IF NOT EXISTS SIGHTING_DATE ON SIGHTINGS (SIGHTINGDATE)");
+            state.execute("CREATE UNIQUE INDEX IF NOT EXISTS FILE_ORGPATH ON FILES (ORIGINALPATH)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID ON FILES (ID)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_FILETYPE ON FILES (FILETYPE)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
+            state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
         }

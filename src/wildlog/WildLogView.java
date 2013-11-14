@@ -1567,7 +1567,7 @@ public final class WildLogView extends JFrame {
                                             inWildLogFile.getId(),
                                             inExpectedPrefix,
                                             new File[]{inWildLogFile.getAbsolutePath().toFile()},
-                                            null, WildLogThumbnailSizes.NORMAL, app, false);
+                                            null, WildLogThumbnailSizes.NORMAL, app, false, null);
                                     // Delete the wrong entry
                                     app.getDBI().delete(inWildLogFile);
                                     fileCount.counter++;

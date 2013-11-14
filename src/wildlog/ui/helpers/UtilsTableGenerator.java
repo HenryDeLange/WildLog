@@ -441,61 +441,66 @@ public final class UtilsTableGenerator {
                                         "GPS"
                                         };
                 // Load data from DB
-                Sighting sighting = new Sighting();
-                sighting.setVisitName(inVisit.getName());
-                final List<Sighting> listSightings = inApp.getDBI().list(sighting);
-                if (!listSightings.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
-                    // Setup new table data
-                    final Object[][] data = new Object[listSightings.size()][columnNames.length];
-                    for (int t = 0; t < listSightings.size(); t++) {
-                        final int finalT = t;
-                        executorService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                int i = 0;
-                                Sighting tempSighting = listSightings.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
-                                data[finalT][i++] = tempSighting.getElementName();
-                                data[finalT][i++] = tempSighting.getDate();
-                                data[finalT][i++] = tempSighting.getSightingEvidence();
-                                data[finalT][i++] = tempSighting.getCertainty();
-                                data[finalT][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
-                                data[finalT][i++] = tempSighting.getSightingCounter();
-                                if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
-                                    if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
-                                        data[finalT][i++] = "GPS";
+                if (inVisit != null) {
+                    Sighting sighting = new Sighting();
+                    sighting.setVisitName(inVisit.getName());
+                    final List<Sighting> listSightings = inApp.getDBI().list(sighting);
+                    if (!listSightings.isEmpty()) {
+                        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                        // Setup new table data
+                        final Object[][] data = new Object[listSightings.size()][columnNames.length];
+                        for (int t = 0; t < listSightings.size(); t++) {
+                            final int finalT = t;
+                            executorService.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    int i = 0;
+                                    Sighting tempSighting = listSightings.get(finalT);
+                                    data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
+                                    data[finalT][i++] = tempSighting.getElementName();
+                                    data[finalT][i++] = tempSighting.getDate();
+                                    data[finalT][i++] = tempSighting.getSightingEvidence();
+                                    data[finalT][i++] = tempSighting.getCertainty();
+                                    data[finalT][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
+                                    data[finalT][i++] = tempSighting.getSightingCounter();
+                                    if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
+                                        if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
+                                            data[finalT][i++] = "GPS";
+                                        }
+                                        else {
+                                            data[finalT][i++] = "";
+                                        }
                                     }
                                     else {
                                         data[finalT][i++] = "";
                                     }
                                 }
-                                else {
-                                    data[finalT][i++] = "";
-                                }
-                            }
-                        });
+                            });
+                        }
+                        UtilsConcurency.waitForExecutorToShutdown(executorService);
+                        // Create the new model
+                        setupTableModel(inTable, data, columnNames);
+                        // Setup the column and row sizes etc.
+                        setupRenderersAndThumbnailRows(inTable, false);
+                        inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                        inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
+                        inTable.getColumnModel().getColumn(2).setMaxWidth(95);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(85);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(125);
+                        inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(4).setMaxWidth(125);
+                        inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(5).setMaxWidth(80);
+                        inTable.getColumnModel().getColumn(6).setPreferredWidth(45);
+                        inTable.getColumnModel().getColumn(6).setMaxWidth(75);
+                        inTable.getColumnModel().getColumn(7).setPreferredWidth(35);
+                        inTable.getColumnModel().getColumn(7).setMaxWidth(35);
+                        // Setup default sorting
+                        setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
-                    // Create the new model
-                    setupTableModel(inTable, data, columnNames);
-                    // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false);
-                    inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
-                    inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
-                    inTable.getColumnModel().getColumn(2).setMaxWidth(95);
-                    inTable.getColumnModel().getColumn(3).setPreferredWidth(85);
-                    inTable.getColumnModel().getColumn(3).setMaxWidth(125);
-                    inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
-                    inTable.getColumnModel().getColumn(4).setMaxWidth(125);
-                    inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
-                    inTable.getColumnModel().getColumn(5).setMaxWidth(80);
-                    inTable.getColumnModel().getColumn(6).setPreferredWidth(45);
-                    inTable.getColumnModel().getColumn(6).setMaxWidth(75);
-                    inTable.getColumnModel().getColumn(7).setPreferredWidth(35);
-                    inTable.getColumnModel().getColumn(7).setMaxWidth(35);
-                    // Setup default sorting
-                    setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                    else {
+                        inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
+                    }
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
