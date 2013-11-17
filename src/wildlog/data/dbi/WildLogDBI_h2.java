@@ -360,11 +360,32 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         // Note: This method only deletes one file at a time, and all it's "default" thumbnails.
         // First, remove the database entry.
         super.delete(inWildLogFile);
+        // Next, delete the original image
+        try {
+            if (inWildLogFile instanceof WildLogFile) {
+                Files.deleteIfExists(((WildLogFile) inWildLogFile).getAbsolutePath());
+            }
+            else {
+                WildLogFile temp = new WildLogFile();
+                temp.setDBFilePath(inWildLogFile.getDBFilePath());
+                Files.deleteIfExists(temp.getAbsolutePath());
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
         // Then, try to delete the "default/known" thumbnails.
         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
             try {
                 // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
-                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath((WildLogFile) inWildLogFile, size));
+                if (inWildLogFile instanceof WildLogFile) {
+                    Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath((WildLogFile) inWildLogFile, size));
+                }
+                else {
+                    WildLogFile temp = new WildLogFile();
+                    temp.setDBFilePath(inWildLogFile.getDBFilePath());
+                    Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(temp, size));
+                }
             }
             catch (IOException ex) {
                 ex.printStackTrace(System.err);

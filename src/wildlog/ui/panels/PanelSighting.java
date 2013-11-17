@@ -297,7 +297,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true, this);
+                app, true, this, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

@@ -152,7 +152,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true, null);
+                app, true, null, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -1172,6 +1172,14 @@ public class PanelLocation extends PanelCanSetupHeader {
             lblNumberOfSightings.setText("0");
             lblNumberOfVisits.setText("0");
         }
+        List<WildLogFile> files = app.getDBI().list(new WildLogFile(locationWL.getWildLogFileID()));
+        if (files.size() > 0) {
+            UtilsImageProcessing.setupFoto(locationWL.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        }
+        else {
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        }
+        setupNumberOfImages();
         // Wait for the table to finish loading
         SwingUtilities.invokeLater(new Runnable() {
             @Override

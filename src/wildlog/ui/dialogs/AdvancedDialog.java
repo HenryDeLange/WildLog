@@ -119,7 +119,7 @@ public class AdvancedDialog extends JDialog {
     private void btnMoveVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveVisitActionPerformed
         getGlassPane().setVisible(true);
         int result = JOptionPane.showConfirmDialog(this,
-                        "<html>It is strongly recommended that you backup your data (WildLog folder) before continuing. <br>"
+                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
                         + "Do you want to continue now?</html>",
                         "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {

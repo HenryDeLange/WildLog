@@ -81,7 +81,7 @@ public final class UtilsFileProcessing {
         return Arrays.asList(fileChooser.getFiles());
     }
 
-    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent) {
+    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, final boolean inCreateThumbnails) {
         // Submit the work to the executor
         ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
         for (int t = 0; t < inFiles.length; t++) {
@@ -95,15 +95,15 @@ public final class UtilsFileProcessing {
                             lastFilePath = fromPath;
                             // Is an image
                             if (WildLogFileExtentions.Images.isKnownExtention(fromPath)) {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, inApp, inID);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, inApp, inID, inCreateThumbnails);
                             }
                             else
                             // Is a movie
                             if (WildLogFileExtentions.Movies.isKnownExtention(fromPath)) {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, inApp, inID);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, inApp, inID, inCreateThumbnails);
                             }
                             else {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, inApp, inID);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, inApp, inID, inCreateThumbnails);
                             }
                         }
                     }
@@ -126,7 +126,7 @@ public final class UtilsFileProcessing {
         });
     }
 
-    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, WildLogApp inApp, String inID) {
+    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, WildLogApp inApp, String inID, boolean inCreateThumbnails) {
         // Make the folder
         Path toFolder = inWorkspacePath.getAbsoluteFullPath().resolve(inPrefixFolder).normalize().toAbsolutePath();
         try {
@@ -152,9 +152,11 @@ public final class UtilsFileProcessing {
         inApp.getDBI().createOrUpdate(wildLogFile, false);
         // Create the default thumbnails if it is an image
         // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
-        if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                wildLogFile.getAbsoluteThumbnailPath(size);
+        if (inCreateThumbnails) {
+            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                    wildLogFile.getAbsoluteThumbnailPath(size);
+                }
             }
         }
     }

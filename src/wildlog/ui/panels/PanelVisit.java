@@ -143,7 +143,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true, null);
+                app, true, null, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -1082,7 +1082,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             lblNumberOfSightings.setText("0");
             lblNumberOfElements.setText("0");
         }
-
+        List<WildLogFile> files = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
+        if (files.size() > 0) {
+            UtilsImageProcessing.setupFoto(visit.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        }
+        else {
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        }
+        setupNumberOfImages();
         if (visit.getName() != null) {
             lblVisitName.setText(visit.getName() + " - [" + locationForVisit.getName() + "]");
         }

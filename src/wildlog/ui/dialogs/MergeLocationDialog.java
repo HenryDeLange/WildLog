@@ -14,21 +14,14 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
-public class MoveVisitDialog extends JDialog {
+public class MergeLocationDialog extends JDialog {
     private WildLogApp app;
 
-    public MoveVisitDialog(WildLogApp inApp, Visit inVisit) {
+
+    public MergeLocationDialog(WildLogApp inApp) {
         app = inApp;
         initComponents();
         loadLists();
-        // If a visit was specified, select and lock the UI
-        if (inVisit != null) {
-            lstFromLocation.setSelectedValue(inVisit.getLocationName(), true);
-            lstFromLocation.setEnabled(false);
-            lstFromLocationValueChanged(null);
-            lstVisit.setSelectedValue(inVisit.getName(), true);
-            lstVisit.setEnabled(false);
-        }
         // Setup the default behavior
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
         UtilsDialog.addEscapeKeyListener(this);
@@ -50,27 +43,28 @@ public class MoveVisitDialog extends JDialog {
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstFromLocation = new javax.swing.JList();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        lstVisit = new javax.swing.JList();
         jScrollPane3 = new javax.swing.JScrollPane();
         lstToLocation = new javax.swing.JList();
         btnConfirm = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Move A Period To A New Place");
+        setTitle("Merge Two Periods");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Visit.gif")).getImage());
-        setMinimumSize(new java.awt.Dimension(750, 550));
+        setMaximumSize(new java.awt.Dimension(650, 500));
+        setMinimumSize(new java.awt.Dimension(650, 500));
         setModal(true);
         setName("Form"); // NOI18N
+        setPreferredSize(new java.awt.Dimension(650, 500));
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel1.setText("Select the Place you want to move the Period from:");
+        jLabel1.setText("Remove this Place:");
         jLabel1.setName("jLabel1"); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel2.setText("Select the Place you want to move the Period to:");
+        jLabel2.setText("Keep this Place:");
         jLabel2.setName("jLabel2"); // NOI18N
 
         jScrollPane1.setName("jScrollPane1"); // NOI18N
@@ -78,18 +72,7 @@ public class MoveVisitDialog extends JDialog {
         lstFromLocation.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstFromLocation.setName("lstFromLocation"); // NOI18N
         lstFromLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
-        lstFromLocation.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                lstFromLocationValueChanged(evt);
-            }
-        });
         jScrollPane1.setViewportView(lstFromLocation);
-
-        jScrollPane2.setName("jScrollPane2"); // NOI18N
-
-        lstVisit.setName("lstVisit"); // NOI18N
-        lstVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
-        jScrollPane2.setViewportView(lstVisit);
 
         jScrollPane3.setName("jScrollPane3"); // NOI18N
 
@@ -99,7 +82,7 @@ public class MoveVisitDialog extends JDialog {
         jScrollPane3.setViewportView(lstToLocation);
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnConfirm.setToolTipText("Move the selected Period to the new Place.");
+        btnConfirm.setToolTipText("Move the Observations from the selected Period to the new Period and then delete the inital Period.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N
@@ -109,94 +92,83 @@ public class MoveVisitDialog extends JDialog {
             }
         });
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel3.setText("Select the Period to be moved:");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Select the two Places to merge:");
         jLabel3.setName("jLabel3"); // NOI18N
+
+        jLabel5.setText("<html>All Periods and Observations from the first Place will be changed to point to the second Place, then the first Place will be deleted.</html>");
+        jLabel5.setName("jLabel5"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(250, 250, 250)
-                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(10, 10, 10))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(10, 10, 10)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(5, 5, 5)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(10, 10, 10)
-                        .addComponent(jLabel2)
-                        .addGap(5, 5, 5)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
                         .addComponent(jLabel3)
-                        .addGap(5, 5, 5)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(43, 43, 43)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnConfirm, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(5, 5, 5)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(10, 10, 10))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        if (lstVisit.getSelectedIndex() >= 0 && lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
-            String tempLocation = (String)lstToLocation.getSelectedValue();
-            // Update the Visit
-            for (String tempVisitName : (List<String>) lstVisit.getSelectedValuesList()) {
-                Visit tempVisit = app.getDBI().find(new Visit(tempVisitName));
-                tempVisit.setLocationName(tempLocation);
-                app.getDBI().createOrUpdate(tempVisit, tempVisit.getName());
-                // Update the sightings
-                Sighting temp = new Sighting();
-                temp.setVisitName(tempVisit.getName());
-                List<Sighting> sightings = app.getDBI().list(temp);
-                for (Sighting tempSighting : sightings) {
-                    tempSighting.setLocationName(tempLocation);
-                    tempSighting.setVisitName(tempVisit.getName());
-                    app.getDBI().createOrUpdate(tempSighting);
-                }
+        if (lstFromLocation.getSelectedIndex() >= 0 && lstToLocation.getSelectedIndex() >= 0) {
+            Location tempFromLocation = app.getDBI().find(new Location((String)lstFromLocation.getSelectedValue()));
+            List<Visit> listVisits = app.getDBI().list(new Visit(null, tempFromLocation.getName()));
+            for (Visit visit : listVisits) {
+                visit.setLocationName((String)lstToLocation.getSelectedValue());
+                app.getDBI().createOrUpdate(visit, visit.getName());
             }
+            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, (String)lstFromLocation.getSelectedValue(), null));
+            for (Sighting sighting : listSightings) {
+                sighting.setLocationName((String)lstToLocation.getSelectedValue());
+                app.getDBI().createOrUpdate(sighting);
+            }
+            app.getDBI().delete(tempFromLocation);
             dispose();
         }
         else {
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(this,
-                    "Please select a From Place and Period. Then select a To Place.",
+                    "Please select a From Place. Then select a To Place.",
                     "Value Not Selected", JOptionPane.INFORMATION_MESSAGE);
             getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnConfirmActionPerformed
-
-    private void lstFromLocationValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstFromLocationValueChanged
-        DefaultListModel<String> visitModel = new DefaultListModel<String>();
-        if (lstFromLocation.getSelectedIndex() >= 0) {
-            String tempLocation = (String)lstFromLocation.getSelectedValue();
-            Visit temp = new Visit();
-            temp.setLocationName(tempLocation);
-            List<Visit> visits = app.getDBI().list(temp);
-            Collections.sort(visits);
-            for (Visit tempVisit : visits) {
-                visitModel.addElement(tempVisit.getName());
-            }
-        }
-        lstVisit.setModel(visitModel);
-    }//GEN-LAST:event_lstFromLocationValueChanged
 
 
     // Private Methods
@@ -212,7 +184,6 @@ public class MoveVisitDialog extends JDialog {
         }
         lstFromLocation.setModel(fromLocationModel);
         lstToLocation.setModel(toLocationModel);
-        lstFromLocationValueChanged(null);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -220,11 +191,10 @@ public class MoveVisitDialog extends JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JList lstFromLocation;
     private javax.swing.JList lstToLocation;
-    private javax.swing.JList lstVisit;
     // End of variables declaration//GEN-END:variables
 }

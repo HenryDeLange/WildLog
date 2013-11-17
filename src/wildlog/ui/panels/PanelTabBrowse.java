@@ -1,10 +1,16 @@
 package wildlog.ui.panels;
 
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +31,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
+import mediautil.gen.Log;
+import mediautil.image.jpeg.LLJTran;
+import mediautil.image.jpeg.LLJTranException;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -49,6 +58,8 @@ import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
+import wildlog.utils.WildLogPaths;
 
 
 public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataChanges {
@@ -108,9 +119,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnGoBrowseSelection = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         treBrowsePhoto = new javax.swing.JTree();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSetDefaultElementImage = new javax.swing.JButton();
+        btnSetDefaultLocationImage = new javax.swing.JButton();
+        btnSetDefaultVisitImage = new javax.swing.JButton();
         btnViewEXIF = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(235, 233, 221));
@@ -197,6 +208,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         btnViewImage.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
         btnViewImage.setText("Open Original File");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
         btnViewImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -350,20 +362,35 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        jButton1.setText("Set Default");
-        jButton1.setToolTipText("Set this file as the default for the relevant Creature.");
-        jButton1.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSetDefaultElementImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnSetDefaultElementImage.setText("Set Default");
+        btnSetDefaultElementImage.setToolTipText("Set this file as the default for the relevant Creature.");
+        btnSetDefaultElementImage.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSetDefaultElementImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetDefaultElementImageActionPerformed(evt);
+            }
+        });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
-        jButton2.setText("Set Default");
-        jButton2.setToolTipText("Set this file as the default for the relevant Place.");
-        jButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSetDefaultLocationImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnSetDefaultLocationImage.setText("Set Default");
+        btnSetDefaultLocationImage.setToolTipText("Set this file as the default for the relevant Place.");
+        btnSetDefaultLocationImage.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSetDefaultLocationImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetDefaultLocationImageActionPerformed(evt);
+            }
+        });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        jButton3.setText("Set Default");
-        jButton3.setToolTipText("Set this file as the default for the relevant Period.");
-        jButton3.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSetDefaultVisitImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnSetDefaultVisitImage.setText("Set Default");
+        btnSetDefaultVisitImage.setToolTipText("Set this file as the default for the relevant Period.");
+        btnSetDefaultVisitImage.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnSetDefaultVisitImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetDefaultVisitImageActionPerformed(evt);
+            }
+        });
 
         btnViewEXIF.setBackground(new java.awt.Color(235, 233, 221));
         btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
@@ -426,13 +453,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnDefault)
                         .addGap(25, 25, 25)
-                        .addComponent(jButton1)
+                        .addComponent(btnSetDefaultElementImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnSetDefaultLocationImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
+                        .addComponent(btnSetDefaultVisitImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnViewImage))
                     .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
@@ -444,9 +471,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnDefault)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2)
-                            .addComponent(jButton3)
+                            .addComponent(btnSetDefaultElementImage)
+                            .addComponent(btnSetDefaultLocationImage)
+                            .addComponent(btnSetDefaultVisitImage)
                             .addComponent(btnViewImage))
                         .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -557,7 +584,71 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_rdbBrowseDateItemStateChanged
 
     private void btnRotateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRotateActionPerformed
-        //TODO: rotate die actual image file en delete die ou thumbnails
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof DataObjectWithWildLogFile) {
+                DataObjectWithWildLogFile tempNode = (DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(tempNode.getWildLogFileID()));
+                if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
+                    WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                        try {
+                            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                            app.getMainFrame().getGlassPane().setVisible(true);
+                            // Raise the Debug Level which is normally LEVEL_INFO. Only Warning messages will be printed by MediaUtil.
+                            Log.debugLevel = Log.LEVEL_WARNING;
+                            // Initialize LLJTran and Read the entire Image including Appx markers
+                            LLJTran llj = new LLJTran(wildLogFile.getAbsolutePath().toFile());
+                            // If you pass the 2nd parameter as false, Exif information is not loaded and hence will not be written.
+                            llj.read(LLJTran.READ_ALL, true);
+                            // Transform the image using default options along with transformation of the Orientation tags.
+                            int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_ORIENTATION;
+                            llj.transform(LLJTran.ROT_90, options);
+                            // Save the Vertical mirror of the Transformed image without Exif header.
+                            if (!Files.exists(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath())) {
+                                Files.createDirectories(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath());
+                            }
+                            OutputStream out = new BufferedOutputStream(new FileOutputStream(WildLogPaths.WILDLOG_TEMP.getAbsoluteFullPath().resolve("vmirror.jpg").toFile()));
+                            // Turn off OPT_WRITE_APPXS flag to Skip writing Exif.
+                            options = LLJTran.OPT_DEFAULTS & ~LLJTran.OPT_WRITE_APPXS;
+                            // Save with vertical transformation without changing the llj image.
+                            llj.transform(out, LLJTran.FLIP_V, options);
+                            out.close();
+                            // Get a new name for the file (because if the same name is used the ImageIcons don't get refreshed if they have been viewed already since Java chaches them)
+                            WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType());
+                            newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
+                            while (Files.exists(newWildLogFile.getAbsolutePath())) {
+                                String newFilename = wildLogFile.getRelativePath().getFileName().toString();
+                                newFilename = newFilename.substring(0, newFilename.lastIndexOf('.')) + "_r.jpg";
+                                newWildLogFile.setDBFilePath(newWildLogFile.getRelativePath().getParent().resolve(newFilename).toString());
+                            }
+                            // Save the Image which is already transformed as specified by the input transformation earlier, along with the Exif header.
+                            out = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()));
+                            llj.save(out, LLJTran.OPT_WRITE_ALL);
+                            out.close();
+                            // Delete old DB file enrty and save new one
+                            app.getDBI().delete(wildLogFile);
+                            app.getDBI().createOrUpdate(newWildLogFile, false);
+                            // Cleanup
+                            llj.freeMemory();
+                            // Reload the image
+                            oldPreloadedImages.remove(wildLogFile.getAbsolutePath().toString());
+                            setupFile(app.getDBI().list(newWildLogFile));
+                            // Recreate the thumbnails
+                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                                newWildLogFile.getAbsoluteThumbnailPath(size);
+                            }
+                        }
+                        catch (LLJTranException | IOException ex) {
+                            ex.printStackTrace(System.err);
+                        }
+                        finally {
+                            app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+                            app.getMainFrame().getGlassPane().setVisible(false);
+                        }
+                    }
+                }
+            }
+        }
     }//GEN-LAST:event_btnRotateActionPerformed
 
     private void btnViewEXIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewEXIFActionPerformed
@@ -754,6 +845,22 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
                         .getWildLogFileID()));
                 setupFile(fotos);
+                if ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                    btnSetDefaultElementImage.setEnabled(true);
+                    btnSetDefaultLocationImage.setEnabled(true);
+                    btnSetDefaultVisitImage.setEnabled(true);
+                }
+                else
+                if ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                    btnSetDefaultElementImage.setEnabled(false);
+                    btnSetDefaultLocationImage.setEnabled(true);
+                    btnSetDefaultVisitImage.setEnabled(false);
+                }
+                else {
+                    btnSetDefaultElementImage.setEnabled(false);
+                    btnSetDefaultLocationImage.setEnabled(false);
+                    btnSetDefaultVisitImage.setEnabled(false);
+                }
             }
             else {
                 txtBrowseInfo.setText("<html><div style='font-size:9px;font-family:verdana;'><i>"
@@ -763,9 +870,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         + "<br><br>Double-click or click the +/- icons to expand/collapse the tree node."
                         + "</i></div></html>");
                 setupFile(null);
+                btnSetDefaultElementImage.setEnabled(false);
+                btnSetDefaultLocationImage.setEnabled(false);
+                btnSetDefaultVisitImage.setEnabled(false);
             }
             // Maak paar display issues reg
             txtBrowseInfo.getCaret().setDot(0);
+        }
+        else {
+            btnSetDefaultElementImage.setEnabled(false);
+            btnSetDefaultLocationImage.setEnabled(false);
+            btnSetDefaultVisitImage.setEnabled(false);
         }
     }//GEN-LAST:event_treBrowsePhotoValueChanged
 
@@ -976,6 +1091,138 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 //                .getWildLogFileID()));
 //        setupFile(fotos);
     }//GEN-LAST:event_treBrowsePhotoTreeCollapsed
+
+    private void btnSetDefaultElementImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDefaultElementImageActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                SightingWrapper sightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(sightingWrapper.getWildLogFileID()));
+                if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
+                    WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName()));
+                        for (WildLogFile tempFile : files) {
+                            tempFile.setDefaultFile(false);
+                            app.getDBI().createOrUpdate(tempFile, true);
+                        }
+                        UtilsFileProcessing.performFileUpload(
+                            Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(),
+                            WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath().resolve(sightingWrapper.getSighting().getElementName()),
+                            new File[] {wildLogFile.getAbsolutePath().toFile()},
+                            null,
+                            WildLogThumbnailSizes.NORMAL,
+                            app, true, null, true);
+                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
+                                Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), wildLogFile.getFilename(),
+                                WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
+                                    WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath().resolve(sightingWrapper.getSighting().getElementName())
+                                    .resolve(wildLogFile.getFilename())).toString(),
+                                WildLogFileType.IMAGE));
+                        newWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSetDefaultElementImageActionPerformed
+
+    private void btnSetDefaultLocationImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDefaultLocationImageActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                SightingWrapper sightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(sightingWrapper.getWildLogFileID()));
+                if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
+                    WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName()));
+                        for (WildLogFile tempFile : files) {
+                            tempFile.setDefaultFile(false);
+                            app.getDBI().createOrUpdate(tempFile, true);
+                        }
+                        UtilsFileProcessing.performFileUpload(
+                            Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(),
+                            WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(sightingWrapper.getSighting().getLocationName()),
+                            new File[] {wildLogFile.getAbsolutePath().toFile()},
+                            null,
+                            WildLogThumbnailSizes.NORMAL,
+                            app, true, null, true);
+                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
+                                Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), wildLogFile.getFilename(),
+                                WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
+                                    WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(sightingWrapper.getSighting().getLocationName())
+                                    .resolve(wildLogFile.getFilename())).toString(),
+                                WildLogFileType.IMAGE));
+                        newWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                    }
+                }
+            }
+            else
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                Visit visit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
+                if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
+                    WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName()));
+                        for (WildLogFile tempFile : files) {
+                            tempFile.setDefaultFile(false);
+                            app.getDBI().createOrUpdate(tempFile, true);
+                        }
+                        UtilsFileProcessing.performFileUpload(
+                            Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(),
+                            WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(visit.getLocationName()),
+                            new File[] {wildLogFile.getAbsolutePath().toFile()},
+                            null,
+                            WildLogThumbnailSizes.NORMAL,
+                            app, true, null, true);
+                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
+                                Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), wildLogFile.getFilename(),
+                                WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
+                                    WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(visit.getLocationName())
+                                    .resolve(wildLogFile.getFilename())).toString(),
+                                WildLogFileType.IMAGE));
+                        newWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSetDefaultLocationImageActionPerformed
+
+    private void btnSetDefaultVisitImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDefaultVisitImageActionPerformed
+        if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+            if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                SightingWrapper sightingWrapper = (SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                List<WildLogFile> listWildLogFile = app.getDBI().list(new WildLogFile(sightingWrapper.getWildLogFileID()));
+                if (listWildLogFile != null && !listWildLogFile.isEmpty() && listWildLogFile.size() > imageIndex) {
+                    WildLogFile wildLogFile = listWildLogFile.get(imageIndex);
+                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType()) && WildLogFileExtentions.Images.isJPG(wildLogFile.getAbsolutePath())) {
+                        List<WildLogFile> files = app.getDBI().list(new WildLogFile(Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName()));
+                        for (WildLogFile tempFile : files) {
+                            tempFile.setDefaultFile(false);
+                            app.getDBI().createOrUpdate(tempFile, true);
+                        }
+                        UtilsFileProcessing.performFileUpload(
+                            Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(),
+                            WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath().resolve(sightingWrapper.getSighting().getVisitName()),
+                            new File[] {wildLogFile.getAbsolutePath().toFile()},
+                            null,
+                            WildLogThumbnailSizes.NORMAL,
+                            app, true, null, true);
+                        WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
+                                Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), wildLogFile.getFilename(),
+                                WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
+                                    WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath().resolve(sightingWrapper.getSighting().getVisitName())
+                                    .resolve(wildLogFile.getFilename())).toString(),
+                                WildLogFileType.IMAGE));
+                        newWildLogFile.setDefaultFile(true);
+                        app.getDBI().createOrUpdate(newWildLogFile, true);
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnSetDefaultVisitImageActionPerformed
 
     private void browseByLocation() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
@@ -1403,6 +1650,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnRefreshBrowseTree;
     private javax.swing.JButton btnRefreshDates;
     private javax.swing.JButton btnRotate;
+    private javax.swing.JButton btnSetDefaultElementImage;
+    private javax.swing.JButton btnSetDefaultLocationImage;
+    private javax.swing.JButton btnSetDefaultVisitImage;
     private javax.swing.JButton btnViewEXIF;
     private javax.swing.JButton btnViewImage;
     private javax.swing.JButton btnZoomIn;
@@ -1412,9 +1662,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;
     private org.jdesktop.swingx.JXImageView imgBrowsePhotos;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JLabel lblNumberOfImages;

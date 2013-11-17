@@ -162,7 +162,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
-                app, true, null);
+                app, true, null, true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -1536,6 +1536,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblNumberOfSightings.setText("0");
             lblNumberOfLocations.setText("0");
         }
+        List<WildLogFile> files = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
+        if (files.size() > 0) {
+            UtilsImageProcessing.setupFoto(element.getWildLogFileID(), imageIndex, lblImage, WildLogThumbnailSizes.NORMAL, app);
+        }
+        else {
+            lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        }
+        setupNumberOfImages();
         UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
         tblLocation.setSelectionBackground(new Color(67,97,113));
         rdbLocations.setSelected(true);

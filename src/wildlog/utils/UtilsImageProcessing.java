@@ -191,20 +191,22 @@ public class UtilsImageProcessing {
 
     public static int removeImage(String inID, int inImageIndex, JLabel inImageLabel, WildLogThumbnailSizes inSize, WildLogApp inApp) {
         int newImageIndex = inImageIndex;
-        List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
-        if (fotos.size() > 0) {
-            WildLogFile tempFoto = fotos.get(newImageIndex);
-            inApp.getDBI().delete(tempFoto);
-            if (fotos.size() > 1) {
-                newImageIndex = newImageIndex - 1;
-                newImageIndex = nextImage(inID, newImageIndex, inImageLabel, inSize, inApp);
+        if (inImageLabel != null) {
+            List<WildLogFile> fotos = inApp.getDBI().list(new WildLogFile(inID));
+            if (fotos.size() > 0) {
+                WildLogFile tempFoto = fotos.get(newImageIndex);
+                inApp.getDBI().delete(tempFoto);
+                if (fotos.size() > 1) {
+                    newImageIndex = newImageIndex - 1;
+                    newImageIndex = nextImage(inID, newImageIndex, inImageLabel, inSize, inApp);
+                }
+                else {
+                    inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
+                }
             }
             else {
                 inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
             }
-        }
-        else {
-            inImageLabel.setIcon(getScaledIconForNoFiles(inSize));
         }
         return newImageIndex;
     }
@@ -425,13 +427,15 @@ public class UtilsImageProcessing {
      * @param inThumbnailAbsolutePath
      * @param inSize
      */
-    private static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
+    public static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
         // Resize the file and then save the thumbnail to into WildLog's folders
         // TODO: Soek 'n beter manier om die image te save wat nie dependant is op die ImageIcon nie...
         ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize());
         try {
             // Make the folder
-            Files.createDirectories(inThumbnailAbsolutePath);
+            if (!Files.exists(inThumbnailAbsolutePath, LinkOption.NOFOLLOW_LINKS)) {
+                Files.createDirectories(inThumbnailAbsolutePath);
+            }
             // Create the image to save
             BufferedImage bufferedImage = new BufferedImage(thumbnail.getIconWidth(), thumbnail.getIconHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D graphics2D = bufferedImage.createGraphics();

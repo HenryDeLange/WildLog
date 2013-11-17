@@ -86,7 +86,7 @@ public class ChecklistDialog extends JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Add New Sightings - CheckList");
+        setTitle("Add New Observations (CheckList)");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/CheckList.png")).getImage());
         setMinimumSize(new java.awt.Dimension(760, 550));
         setModal(true);

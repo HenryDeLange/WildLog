@@ -23,6 +23,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.EventObject;
+import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -32,6 +34,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import org.jdesktop.application.Application;
+import org.jdesktop.application.TaskMonitor;
+import org.jdesktop.application.TaskService;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.netbeans.lib.awtextra.AbsoluteConstraints;
@@ -135,8 +139,8 @@ public class WildLogApp extends Application {
         view = new WildLogView(this);
         view.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent inEvent) {
-                quit(null);
+            public void windowClosing(WindowEvent e) {
+                exit();
             }
         });
         view.setLocationRelativeTo(null);
@@ -149,6 +153,55 @@ public class WildLogApp extends Application {
         glassPane.add(background, BorderLayout.CENTER);
         glassPane.addMouseListener(new MouseAdapter() {});
         glassPane.addKeyListener(new KeyAdapter() {});
+        addExitListener(new ExitListener() {
+            @Override
+            public boolean canExit(EventObject event) {
+                boolean doShutdown = true;
+                try {
+                    TaskMonitor taskMonitor = getContext().getTaskMonitor();
+                    if (taskMonitor.getTasks() != null && !taskMonitor.getTasks().isEmpty()) {
+                        int result = UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return JOptionPane.showConfirmDialog(getMainFrame(),
+                                        "<html>There are background processes running that have not finished yet. "
+                                                + "<br>It is <b>recommended to wait for these processes to finish</b>."
+                                                + "<br>(See the progressbar at the bottom right hand corner for details.)"
+                                                + "<br><b>Continue to Exit WildLog?</b></html>",
+                                        "Warning! Unfinished Processes...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                }
+                        });
+                        if (result == JOptionPane.YES_OPTION) {
+                            System.out.println("Trying to stop running processes before exiting...");
+                            // Try to stop the running processes before the DB gets closed
+                            TaskService taskService = getContext().getTaskService();
+                            taskService.shutdownNow();
+                            try {
+                                taskService.awaitTermination(3, TimeUnit.SECONDS);
+                            }
+                            catch (InterruptedException ex) {
+                                // This will break lots of threads... SO lets just ignore the errors :P
+                                //ex.printStackTrace(System.err);
+                            }
+                        }
+                        else {
+                            doShutdown = false;
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace(System.err);
+                }
+                return doShutdown;
+            }
+            @Override
+            public void willExit(EventObject event) {
+                if (dbi != null) {
+                    dbi.close();
+                    System.out.println("Closing database...");
+                }
+            }
+        });
     }
 
     /**
@@ -315,11 +368,6 @@ public class WildLogApp extends Application {
     @Override
     protected void shutdown() {
         super.shutdown();
-        view.setVisible(false);
-        view.dispose();
-        if (dbi != null) {
-            dbi.close();
-        }
         System.out.println("SHUTTING DOWN WildLog - " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
         System.out.println();
     }

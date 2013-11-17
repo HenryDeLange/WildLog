@@ -863,12 +863,10 @@ public final class UtilsTableGenerator {
         inTable.setModel(new WildLogTableModel(inData, inColumnNames));
     }
 
-    public static ImageIcon setupThumbnailIcon(WildLogApp inApp, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
+    private static ImageIcon setupThumbnailIcon(WildLogApp inApp, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
         WildLogFile wildLogFile = inApp.getDBI().find(new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID()));
         if (wildLogFile != null) {
-            return UtilsImageProcessing.getScaledIcon(
-                    wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL),
-                    WildLogThumbnailSizes.VERY_SMALL.getSize());
+            return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
         }
         return UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
     }
