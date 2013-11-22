@@ -461,9 +461,8 @@ public class UtilsImageProcessing {
         // Hardcoding all thumbnails to be JPG (even originally PNG images)
         String newFilename = finalPath.getFileName().toString()
                 .substring(0, finalPath.getFileName().toString().lastIndexOf('.'))
-                + "_" + inSize.getSize() + "px" + ".jpg";
-        finalPath = finalPath.resolveSibling(newFilename);
-        return finalPath.normalize();
+                + "_" + inSize.getSize() + "px.jpg";
+        return finalPath.resolveSibling(newFilename)/*.normalize()*/;
     }
 
 
@@ -476,7 +475,7 @@ public class UtilsImageProcessing {
      */
     public static Path getAbsoluteThumbnailPathAndCreate(WildLogFile inWildLogFile, WildLogThumbnailSizes inSize) {
         Path thumbnail = calculateAbsoluteThumbnailPath(inWildLogFile, inSize);
-        if (!Files.exists(thumbnail, LinkOption.NOFOLLOW_LINKS)) {
+        if (!Files.exists(thumbnail)) {
             createThumbnailOnDisk(thumbnail, inWildLogFile.getAbsolutePath(), inSize);
         }
         return thumbnail;

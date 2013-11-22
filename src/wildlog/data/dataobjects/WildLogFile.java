@@ -73,7 +73,8 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
     }
 
     /**
-     * Returns the relative path including the WildLog prefix for the workspace.
+     * Returns the relative path (similar to the value stored in the database) excluding the
+     * WildLog Workspace prefix.
      * @return
      */
     public Path getRelativePath() {
@@ -110,9 +111,9 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
 
     /**
      * This will be the relative path, as stored in the database.<br/>
-     * This path should always start without a file separator.<br/>
+     * This path should never start without a file separator.<br/>
      * The path should also always use '/' characters as path separators.<br/>
-     * (Relative path for workspace: ex. WildLog/Files/Images/Observation/Kruger/IMGP3365.JPG)
+     * (Relative path for workspace: ex. Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @return
      */
     @Override
@@ -125,9 +126,9 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
 
     /**
      * This needs to be the relative path that will be stored in the database.<br/>
-     * This path should always start without a file separator.<br/>
+     * This path should never start without a file separator.<br/>
      * The path should always use '/' characters as path separators.<br/>
-     * (Relative path for workspace: ex. WildLog/Files/Images/Observation/Kruger/IMGP3365.JPG)
+     * (Relative path for workspace: ex. Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @param inFilePathFromDB
      */
     @Override

@@ -213,7 +213,7 @@ public class MergeVisitDialog extends JDialog {
                 for (Sighting sighting : sightings) {
                     sighting.setLocationName((String)lstToLocation.getSelectedValue());
                     sighting.setVisitName((String)lstToVisit.getSelectedValue());
-                    app.getDBI().createOrUpdate(sighting);
+                    app.getDBI().createOrUpdate(sighting, false);
                 }
                 app.getDBI().delete(tempFromVisit);
             }

@@ -56,8 +56,10 @@ import wildlog.utils.WildLogPaths;
 
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
-    public WildLogDBI_h2(final WildLogApp inApp) throws Exception {
-        this(inApp, "jdbc:h2:" + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve("wildlog") + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+    public WildLogDBI_h2() throws Exception {
+        this("jdbc:h2:"
+                + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
     }
 
     /**
@@ -66,7 +68,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
      * @param inApp
      * @param inConnectionURL
      */
-    public WildLogDBI_h2(final WildLogApp inApp, String inConnectionURL) throws Exception {
+    public WildLogDBI_h2(String inConnectionURL) throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
@@ -94,7 +96,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             started = initialize();
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
-            doUpdates(inApp);
+            doUpdates();
         }
         catch (ClassNotFoundException cnfe) {
             System.err.println("\nUnable to load the JDBC driver.");
@@ -310,7 +312,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 tempSighting.setTimeUnknown(results.getBoolean("UNKNOWNTIME"));
                 tempSighting.setDurationMinutes(results.getInt("DURATIONMINUTES"));
                 tempSighting.setDurationSeconds(results.getDouble("DURATIONSECONDS"));
-                createOrUpdate(tempSighting);
+                createOrUpdate(tempSighting, false);
             }
             // TODO: CSV Import of Files
 //            results = state.executeQuery("CALL CSVREAD('" + inPath + "Files.csv')");
@@ -394,7 +396,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         return true;
     }
 
-    private void doUpdates(final WildLogApp inApp) {
+    private void doUpdates() {
         Statement state = null;
         ResultSet results = null;
         try {
@@ -432,17 +434,17 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 }
             }
             if (!fullyUpdated) {
-                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
                     public int showDialog() {
-                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
+                        JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
                                 "The database could not be fully updated. Make sure it is not in use or broken"
                                 + "and that you are running the latest version of the application.",
                                 "WildLog Error: Can't Initialize Database", JOptionPane.ERROR_MESSAGE);
                         return -1;
                     }
                 });
-                inApp.exit();
+                WildLogApp.getApplication().exit();
             }
         }
         catch (SQLException ex) {

@@ -24,6 +24,8 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.EventObject;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -46,6 +48,7 @@ import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -65,6 +68,9 @@ public class WildLogApp extends Application {
     // The WildLogDBI is initialized in startup() and closed in shutdown()
     private WildLogDBI dbi;
     private WildLogView view;
+    // TODO: Ek dink nie ek gebruik hierdie executor huidiglik nie... Dis half vir future use...
+    private ExecutorService sharedExecutor;
+
 
     @Override
     protected void initialize(String[] arg0) {
@@ -75,6 +81,7 @@ public class WildLogApp extends Application {
         if (threadCount < 3) {
             threadCount = 3;
         }
+        sharedExecutor = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory("WildLogShared-NeverShutdown"));
         // Makse sure all the basic data/file folders are in place
         try {
             Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
@@ -119,7 +126,7 @@ public class WildLogApp extends Application {
 
     private boolean openWorkspace() {
         try {
-            dbi = new WildLogDBI_h2(this);
+            dbi = new WildLogDBI_h2();
             System.out.println("Workspace opened at: " + WildLogPaths.getFullWorkspacePrefix().toString());
         }
         catch (Exception ex) {
@@ -206,7 +213,7 @@ public class WildLogApp extends Application {
 
     /**
      * A convenient static getter for the application instance.
-     * @return the instance of WildLogBetaApp
+     * @return the instance of WildLogApp
      */
     public static WildLogApp getApplication() {
         return Application.getInstance(WildLogApp.class);
@@ -479,6 +486,16 @@ public class WildLogApp extends Application {
 
     public WildLogView getMainFrame() {
         return view;
+    }
+
+    /**
+     * This ExecutorService is shared and available to the entire application and
+     * should thus only process tasks that does not require the service to
+     * shutdown (or wait for execution to finish).
+     * @return
+     */
+    public ExecutorService getSharedExecutor() {
+        return sharedExecutor;
     }
 
 }

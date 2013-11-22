@@ -78,6 +78,7 @@ import wildlog.ui.dialogs.MergeVisitDialog;
 import wildlog.ui.dialogs.MoveVisitDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
+import wildlog.ui.dialogs.WorkspaceExportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -86,6 +87,7 @@ import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
@@ -287,6 +289,7 @@ public final class WildLogView extends JFrame {
         importMenu = new javax.swing.JMenu();
         mnuImportCSV = new javax.swing.JMenuItem();
         mnuImportWorkspace = new javax.swing.JMenuItem();
+        mnuImportWildNote = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mnuBulkImport = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
@@ -359,7 +362,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.1");
+        jLabel12.setText("version 4.1.beta");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
@@ -559,7 +562,7 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuChangeWorkspaceMenuItem.setText("Select Different Workspace Folder");
+        mnuChangeWorkspaceMenuItem.setText("Switch Active Workspaces");
         mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
         mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
         mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -572,8 +575,8 @@ public final class WildLogView extends JFrame {
         jSeparator1.setName("jSeparator1"); // NOI18N
         workspaceMenu.add(jSeparator1);
 
-        mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuCleanWorkspace.setText("Check and Clean Default Workspace Folder");
+        mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuCleanWorkspace.setText("Check and Clean the Workspace");
         mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove nonessential files.");
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
         mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -653,7 +656,7 @@ public final class WildLogView extends JFrame {
         exportMenu.add(mnuExportKML);
 
         mnuExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuExportWorkspace.setText("Export to Workspace");
+        mnuExportWorkspace.setText("Export to New Workspace");
         mnuExportWorkspace.setToolTipText("Export the specified data to a new WildLog Workspace.");
         mnuExportWorkspace.setName("mnuExportWorkspace"); // NOI18N
         mnuExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -691,7 +694,7 @@ public final class WildLogView extends JFrame {
         importMenu.add(mnuImportCSV);
 
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuImportWorkspace.setText("Import from Workspace");
+        mnuImportWorkspace.setText("Import from Another Workspace");
         mnuImportWorkspace.setToolTipText("Import all the data in the specified WildLog Workspace.");
         mnuImportWorkspace.setName("mnuImportWorkspace"); // NOI18N
         mnuImportWorkspace.addActionListener(new java.awt.event.ActionListener() {
@@ -700,6 +703,11 @@ public final class WildLogView extends JFrame {
             }
         });
         importMenu.add(mnuImportWorkspace);
+
+        mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuImportWildNote.setText("Import WildNote Sync File");
+        mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
+        importMenu.add(mnuImportWildNote);
 
         jSeparator7.setName("jSeparator7"); // NOI18N
         importMenu.add(jSeparator7);
@@ -1181,7 +1189,7 @@ public final class WildLogView extends JFrame {
                                     double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                                     sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
                                     sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
-                                    app.getDBI().createOrUpdate(sighting);
+                                    app.getDBI().createOrUpdate(sighting, false);
                                 }
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
@@ -1211,7 +1219,7 @@ public final class WildLogView extends JFrame {
                                     if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())) {
                                         sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
                                     }
-                                    app.getDBI().createOrUpdate(sighting);
+                                    app.getDBI().createOrUpdate(sighting, false);
                                 }
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
@@ -1913,7 +1921,7 @@ public final class WildLogView extends JFrame {
                                     app.getDBI().createOrUpdate(newLocation, null);
                                 }
                                 sighting.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting);
+                                app.getDBI().createOrUpdate(sighting, false);
                             }
                             // Check Element
                             Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
@@ -1928,7 +1936,7 @@ public final class WildLogView extends JFrame {
                                     app.getDBI().createOrUpdate(newElement, null);
                                 }
                                 sighting.setElementName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting);
+                                app.getDBI().createOrUpdate(sighting, false);
                             }
                             // Check Visit
                             Visit tempVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
@@ -1952,7 +1960,7 @@ public final class WildLogView extends JFrame {
                                     app.getDBI().createOrUpdate(newLocation, null);
                                 }
                                 sighting.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting);
+                                app.getDBI().createOrUpdate(sighting, false);
                             }
                             // Make sure the Sighting is using a legitimate Location-Visit pair
                             Visit checkSightingVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
@@ -1968,7 +1976,7 @@ public final class WildLogView extends JFrame {
                                 }
                                 // Update sighting
                                 sighting.setLocationName("WildLog_lost_and_found");
-                                app.getDBI().createOrUpdate(sighting);
+                                app.getDBI().createOrUpdate(sighting, false);
                                 // Update visit
                                 checkSightingVisit.setLocationName("WildLog_lost_and_found");
                                 app.getDBI().createOrUpdate(checkSightingVisit, checkSightingVisit.getName());
@@ -1984,7 +1992,7 @@ public final class WildLogView extends JFrame {
                         setMessage("Cleanup Step 6: (Optional) Recreating default thumbnails... " + getProgress() + "%");
                         finalHandleFeedback.println("6) Recreate the default thumbnails for all images.");
                         final List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile());
-                        ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount());
+                        ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
                         final CleanupCounter countThumbnails = new CleanupCounter();
                         for (final WildLogFile wildLogFile : listFiles) {
                             executorService.submit(new Runnable() {
@@ -2113,7 +2121,7 @@ public final class WildLogView extends JFrame {
                                     double seconds = difference - minutes*60.0;
                                     sighting.setDurationMinutes(minutes);
                                     sighting.setDurationSeconds((double)seconds);
-                                    app.getDBI().createOrUpdate(sighting);
+                                    app.getDBI().createOrUpdate(sighting, false);
                                 }
                                 setProgress(0 + (int)((t/(double)sightingList.size())*100));
                                 setMessage("Duration Calculation: " + getProgress() + "%");
@@ -2143,7 +2151,7 @@ public final class WildLogView extends JFrame {
                                         double seconds = difference - minutes*60.0;
                                         sighting.setDurationMinutes(minutes);
                                         sighting.setDurationSeconds((double)seconds);
-                                        app.getDBI().createOrUpdate(sighting);
+                                        app.getDBI().createOrUpdate(sighting, false);
                                     }
                                 }
                                 setProgress(0 + (int)((t/(double)sightingList.size())*100));
@@ -2174,7 +2182,7 @@ public final class WildLogView extends JFrame {
                     // Setup export DB
                     setTaskProgress(20);
                     setMessage("Export WildNote Sync " + getProgress() + "%");
-                    syncDBI = new WildLogDBI_h2(app, "jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+                    syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
                     // Export the elements
                     List<Element> listElements = app.getDBI().list(new Element());
                     setTaskProgress(20);
@@ -2285,7 +2293,8 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuImportWorkspaceActionPerformed
 
     private void mnuExportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportWorkspaceActionPerformed
-        // TODO add your handling code here:
+        WorkspaceExportDialog dialog = new WorkspaceExportDialog(app);
+        dialog.setVisible(true);
     }//GEN-LAST:event_mnuExportWorkspaceActionPerformed
 
     public void browseSelectedElement(Element inElement) {
@@ -2351,6 +2360,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuExportWorkspace;
     private javax.swing.JMenuItem mnuGPSInput;
     private javax.swing.JMenuItem mnuImportCSV;
+    private javax.swing.JMenuItem mnuImportWildNote;
     private javax.swing.JMenuItem mnuImportWorkspace;
     private javax.swing.JMenuItem mnuMapStartMenuItem;
     private javax.swing.JMenuItem mnuMergeElements;

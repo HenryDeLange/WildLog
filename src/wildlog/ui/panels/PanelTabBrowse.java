@@ -16,10 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -56,6 +59,7 @@ import wildlog.ui.helpers.cellrenderers.WildLogTreeCellRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
@@ -63,10 +67,12 @@ import wildlog.utils.WildLogPaths;
 
 
 public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataChanges {
-    private final Object imageCacheLock = new Object();
     private final int CACHE_LIMIT_FOR_SELECTED_NODE = 5;
     private final int CACHE_LIMIT_FOR_NEIGHBOURING_NODES = 3;
-    private Map<String, Image> oldPreloadedImages = null;
+    // TODO: Not the sexiest code, but it seems to work now... Maybe oneday I can waste more time on it and try to get rid of some of the lists I'm keeping track off...
+    private Map<String, Image> preloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
+    private Map<String, Future> submittedTasks = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
+    private Set<String> preloadedImageNames = new HashSet<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
     private ExecutorService executorService;
     private Enumeration<TreePath> previousExpandedTreeNodes;
     private TreePath previousSelectedTreeNode;
@@ -75,15 +81,15 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private Element searchElementBrowseTab;
     private int imageIndex = 0;
 
+
     public PanelTabBrowse(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
         tabbedPanel = inTabbedPanel;
+        executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BrowsePrefetcher"));
         initComponents();
-        // Setup image cache for the browse tab
-        oldPreloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
         // Set some configuration for the tree browser
         treBrowsePhoto.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer(app));
+        treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer());
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtBrowseInfo, true);
     }
@@ -459,7 +465,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSetDefaultVisitImage)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewImage))
+                        .addComponent(btnViewImage, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(imgBrowsePhotos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
@@ -616,10 +622,21 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             // Get a new name for the file (because if the same name is used the ImageIcons don't get refreshed if they have been viewed already since Java chaches them)
                             WildLogFile newWildLogFile = new WildLogFile(wildLogFile.getId(), wildLogFile.getFilename(), wildLogFile.getDBFilePath(), wildLogFile.getFileType());
                             newWildLogFile.setDefaultFile(wildLogFile.isDefaultFile());
+                            int shortenedAttempt = 0;
                             while (Files.exists(newWildLogFile.getAbsolutePath())) {
                                 String newFilename = wildLogFile.getRelativePath().getFileName().toString();
                                 newFilename = newFilename.substring(0, newFilename.lastIndexOf('.')) + "_r.jpg";
+                                if (newFilename.endsWith("_r_r_r_r.jpg")) {
+                                    if (shortenedAttempt == 0) {
+                                        newFilename = newFilename.replace("_r_r_r_r.jpg", ".jpg");
+                                    }
+                                    else {
+                                        newFilename = newFilename.replace("_r_r_r_r.jpg", "_" + shortenedAttempt + "_r.jpg");
+                                    }
+                                    shortenedAttempt++;
+                                }
                                 newWildLogFile.setDBFilePath(newWildLogFile.getRelativePath().getParent().resolve(newFilename).toString());
+                                newWildLogFile.setFilename(newFilename);
                             }
                             // Save the Image which is already transformed as specified by the input transformation earlier, along with the Exif header.
                             out = new BufferedOutputStream(new FileOutputStream(newWildLogFile.getAbsolutePath().toFile()));
@@ -630,8 +647,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             app.getDBI().createOrUpdate(newWildLogFile, false);
                             // Cleanup
                             llj.freeMemory();
+                            // Stop any future tasks that might be submitted to prefent us loading the file unnessesarily
+                            Future future = submittedTasks.remove(wildLogFile.getAbsolutePath().toString());
+                            if (future != null) {
+                                future.cancel(true);
+                            }
                             // Reload the image
-                            oldPreloadedImages.remove(wildLogFile.getAbsolutePath().toString());
+                            preloadedImages.remove(wildLogFile.getAbsolutePath().toString());
                             setupFile(app.getDBI().list(newWildLogFile));
                             // Recreate the thumbnails
                             for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
@@ -645,6 +667,17 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
                             app.getMainFrame().getGlassPane().setVisible(false);
                         }
+                    }
+                    else {
+                        UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                    "Currently WildLog can only rotate JPG images.",
+                                    "Not a JPG Image",
+                                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        });
                     }
                 }
             }
@@ -841,10 +874,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 txtBrowseInfo.setText(((DataObjectWithHTML)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
                     .toHTML(false, false, app, UtilsHTMLExportTypes.ForHTML, null)
                     .replace("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>", ""));
-                List<WildLogFile> fotos = app.getDBI().list(
-                    new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
-                        .getWildLogFileID()));
-                setupFile(fotos);
+                List<WildLogFile> files = app.getDBI().list(new WildLogFile(
+                        ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
+                                .getWildLogFileID()));
+                setupFile(files);
                 if ((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                     btnSetDefaultElementImage.setEnabled(true);
                     btnSetDefaultLocationImage.setEnabled(true);
@@ -1225,6 +1258,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnSetDefaultVisitImageActionPerformed
 
     private void browseByLocation() {
+        // TODO: Verander die storie om die nodes te lazy load, een level op 'n slag, inplaas van die hele DB soos nou
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
@@ -1254,6 +1288,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }
 
     private void browseByElement() {
+        // TODO: Verander die storie om die nodes te lazy load, een level op 'n slag, inplaas van die hele DB soos nou
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (searchElementBrowseTab == null) {
             searchElementBrowseTab = new Element();
@@ -1284,6 +1319,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }
 
     private void browseByDate() {
+        // TODO: Verander die storie om die nodes te lazy load, een level op 'n slag, inplaas van die hele DB soos nou
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
             // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
@@ -1344,7 +1380,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }
 
     private void lookupCachedImage(final List<WildLogFile> inFiles) throws IOException {
-        executorService = Executors.newFixedThreadPool(app.getThreadCount());
         // Maak die finale grote twee keer groter om te help met die zoom, dan hoef ek nie weer images te load nie, en mens kan altyd dan original kyk vir ful resolution
         int size = (int) imgBrowsePhotos.getSize().getWidth();
         if (size > (int) imgBrowsePhotos.getSize().getHeight()) {
@@ -1352,7 +1387,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
         final int finalSize = size*2;
         final Map<String, Image> newPreloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
-        final Object selectedNode = treBrowsePhoto.getLastSelectedPathComponent();
+        final Set<String> newRequestedImages = new HashSet<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
+        final DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) treBrowsePhoto.getLastSelectedPathComponent();
         // 1) Cache die volgende en vorige fotos vir die huidige node.
         if (inFiles != null && !inFiles.isEmpty() && WildLogFileType.IMAGE.equals(inFiles.get(imageIndex).getFileType())) {
             int startIndex = 0;
@@ -1362,55 +1398,19 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             if (startIndex < 0) {
                 startIndex = 0;
             }
-            if (!oldPreloadedImages.containsKey(inFiles.get(imageIndex).getAbsolutePath().toString())) {
+            String tempKey = inFiles.get(imageIndex).getAbsolutePath().toString();
+            if (!preloadedImages.containsKey(tempKey)) {
                 // The image will be loaded, so setup the loading screen so long.
                 imgBrowsePhotos.setImage(app.getClass().getResource("resources/icons/Loading.png"));
             }
             int t = startIndex;
             for (; t < inFiles.size() && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE; t++) {
-                final WildLogFile wildLogFile = inFiles.get(t);
-                if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                    Image tempImage = oldPreloadedImages.get(wildLogFile.getAbsolutePath().toString());
-                    if (tempImage != null) {
-                        newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempImage);
-                        callbackToDoTheImageLoad(tempImage, selectedNode, t);
-                    }
-                    else {
-                        final int tHandle = t;
-                        executorService.submit(new Runnable() {
-                            @Override
-                            public void run() {
-                                // TODO: Probeer weg beweeg van ImageIcon want dis baie stadig... 'n JavaFX komponent sal seker goed kan werk.
-                                Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), finalSize).getImage();
-                                newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempConcImage);
-                                callbackToDoTheImageLoad(tempConcImage, selectedNode, tHandle);
-                            }
-                        });
-                    }
-                }
+                doConcurrentLoad(newPreloadedImages, newRequestedImages, inFiles, t, selectedNode, finalSize);
             }
             // Kyk of ek dit moet begin wrap
             if (t == inFiles.size() && inFiles.size() > CACHE_LIMIT_FOR_SELECTED_NODE && t < startIndex + CACHE_LIMIT_FOR_SELECTED_NODE) {
                 for (int i = 0; i <= startIndex + CACHE_LIMIT_FOR_SELECTED_NODE - t - i; i++) {
-                    final WildLogFile wildLogFile = inFiles.get(i);
-                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                        Image tempImage = oldPreloadedImages.get(wildLogFile.getAbsolutePath().toString());
-                        if (tempImage != null) {
-                            newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempImage);
-                            callbackToDoTheImageLoad(tempImage, selectedNode, i);
-                        }
-                        else {
-                            final int iHandle = i;
-                            executorService.submit(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Image tempConcImage = UtilsImageProcessing.getScaledIcon(wildLogFile.getAbsolutePath(), finalSize).getImage();
-                                    newPreloadedImages.put(wildLogFile.getAbsolutePath().toString(), tempConcImage);
-                                    callbackToDoTheImageLoad(tempConcImage, selectedNode, iHandle);
-                                }
-                            });
-                        }
-                    }
+                    doConcurrentLoad(newPreloadedImages, newRequestedImages, inFiles, i, selectedNode, finalSize);
                 }
             }
         }
@@ -1430,35 +1430,73 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         for (int row : preloadNodeRows) {
             final DefaultMutableTreeNode tempNode = (DefaultMutableTreeNode)treBrowsePhoto.getPathForRow(row).getLastPathComponent();
             if (tempNode.getUserObject() instanceof DataObjectWithWildLogFile) {
-                final List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(((DataObjectWithWildLogFile)tempNode.getUserObject()).getWildLogFileID()));
-                doConcurrentLoad(newPreloadedImages, fotos, 0, tempNode, finalSize);
+                final List<WildLogFile> files = app.getDBI().list(new WildLogFile(((DataObjectWithWildLogFile)tempNode.getUserObject()).getWildLogFileID()));
+                doConcurrentLoad(newPreloadedImages, newRequestedImages, files, 0, tempNode, finalSize);
             }
         }
         // refresh die map
-        synchronized (imageCacheLock) {
-            oldPreloadedImages.clear();
-            oldPreloadedImages = newPreloadedImages;
+        // Stop any future tasks for images no longer in the cache that might be submitted to prefent us loading the file unnessesarily
+        for (String imagesInOldCache : preloadedImageNames) {
+            boolean found = false;
+            for (String imagesInNewCache : newRequestedImages) {
+                if (imagesInOldCache.equals(imagesInNewCache)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Future future = submittedTasks.remove(imagesInOldCache);
+                if (future != null) {
+                    future.cancel(false);
+                }
+            }
         }
+        List<String> tasksToRemove = new ArrayList<>(submittedTasks.size());
+        for (String taskKey : submittedTasks.keySet()) {
+            Future future = submittedTasks.get(taskKey);
+            if (future.isDone()) {
+                tasksToRemove.add(taskKey);
+            }
+            else
+            if (future.isCancelled()) {
+                tasksToRemove.add(taskKey);
+            }
+        }
+        for (String taskKey : tasksToRemove) {
+            submittedTasks.remove(taskKey);
+        }
+        preloadedImages.clear();
+        preloadedImages = newPreloadedImages;
+        preloadedImageNames = newRequestedImages;
     }
 
-    private void doConcurrentLoad(final Map<String, Image> inNewPreloadedImages, final List<WildLogFile> inFiles, final int inIndex, final DefaultMutableTreeNode inNode, final int inFinalSize) {
+    private void doConcurrentLoad(final Map<String, Image> inNewPreloadedImages, final Set<String> inNewRequestedImages, final List<WildLogFile> inFiles, final int inIndex, final DefaultMutableTreeNode inNode, final int inFinalSize) throws IOException {
         if (!inFiles.isEmpty()) {
             if (WildLogFileType.IMAGE.equals(inFiles.get(inIndex).getFileType())) {
-                Image tempImage = oldPreloadedImages.get(inFiles.get(inIndex).getAbsolutePath().toString());
+                final String tempKey = inFiles.get(inIndex).getAbsolutePath().toString();
+                Image tempImage = preloadedImages.get(tempKey);
                 if (tempImage != null) {
-                    inNewPreloadedImages.put(inFiles.get(inIndex).getAbsolutePath().toString(), tempImage);
+                    // Load die image in altwee maps sodat al die verskillende "contains" reg werk...
+                    inNewPreloadedImages.put(tempKey, tempImage);
+                    preloadedImages.put(tempKey, tempImage);
                     callbackToDoTheImageLoad(tempImage, inNode, inIndex);
                 }
                 else {
-                    executorService.submit(new Runnable() {
-                        @Override
-                        public void run() {
-                            Image tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize).getImage();
-                            inNewPreloadedImages.put(inFiles.get(inIndex).getAbsolutePath().toString(), tempConcImage);
-                            callbackToDoTheImageLoad(tempConcImage, inNode, inIndex);
-                        }
-                    });
+                    if (!submittedTasks.containsKey(tempKey)) {
+                        submittedTasks.put(tempKey, executorService.submit(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Image tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize).getImage();
+                                        // Load die image in altwee maps sodat al die verskillende "contains" reg werk...
+                                        inNewPreloadedImages.put(tempKey, tempConcImage);
+                                        preloadedImages.put(tempKey, tempConcImage);
+                                        callbackToDoTheImageLoad(tempConcImage, inNode, inIndex);
+                                    }
+                                })
+                            );
+                    }
                 }
+                inNewRequestedImages.add(tempKey);
             }
         }
     }
@@ -1606,34 +1644,34 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
     public void browseSelectedVisit(final Visit inVisit) {
         if (inVisit != null) {
-        rdbBrowseLocation.setSelected(true);
-        tabbedPanel.setSelectedIndex(1);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (int t = 0; t < treBrowsePhoto.getRowCount()-1; t++) {
-                if (inVisit.getLocationName().equals(treBrowsePhoto.getPathForRow(t+1).getLastPathComponent().toString())) {
-                    treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t+1));
-                    final int finalT = t;
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                                for (int i = 0; i < treBrowsePhoto.getModel().getChildCount(treBrowsePhoto.getPathForRow(finalT+2).getLastPathComponent()); i++) {
-                                    if (inVisit.getName().equals(treBrowsePhoto.getPathForRow(finalT+i+1).getLastPathComponent().toString())) {
-                                        treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(finalT+i+1));
-                                        treBrowsePhoto.scrollRowToVisible(finalT+i+1);
-                                        treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(finalT+i+1));
-                                        break;
+            rdbBrowseLocation.setSelected(true);
+            tabbedPanel.setSelectedIndex(1);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    for (int t = 0; t < treBrowsePhoto.getRowCount() - 1; t++) {
+                        if (inVisit.getLocationName().equals(treBrowsePhoto.getPathForRow(t + 1).getLastPathComponent().toString())) {
+                            treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(t + 1));
+                            final int finalT = t;
+// FIXME: Die visit select nog nie altyd reg nie, veral as mens eers een vroeg in die lys kies en dan een wil view op 'n ander location naby aan die einde van die lys
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (int i = 0; i < treBrowsePhoto.getModel().getChildCount(treBrowsePhoto.getPathForRow(finalT + 2).getLastPathComponent()); i++) {
+                                        if (inVisit.getName().equals(treBrowsePhoto.getPathForRow(finalT + i + 1).getLastPathComponent().toString())) {
+                                            treBrowsePhoto.expandPath(treBrowsePhoto.getPathForRow(finalT + i + 1));
+                                            treBrowsePhoto.scrollRowToVisible(finalT + i + 1);
+                                            treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForRow(finalT + i + 1));
+                                            break;
+                                        }
                                     }
                                 }
+                            });
+                            break;
                         }
-                    });
-                    break;
+                    }
                 }
-            }
-            }
-        });
-
+            });
         }
     }
 

@@ -26,6 +26,7 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
@@ -39,7 +40,7 @@ public class BulkUploadDataLoader {
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>(files.size());
         // First load all the images and sort them according to date
-        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Load)"));
         for (int t = 0; t < files.size(); t++) {
             final File tempFile = files.get(t);
             final int counter = t;

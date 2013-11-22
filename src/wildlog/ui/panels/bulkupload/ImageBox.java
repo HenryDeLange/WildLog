@@ -251,10 +251,11 @@ public class ImageBox extends JPanel {
         JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
         dialog.add(lblZoomImage);
         dialog.pack();
-        dialog.setLocationRelativeTo(this);
+//        dialog.setLocationRelativeTo(this);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         UtilsDialog.addEscapeKeyListener(dialog);
         UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), dialog);
+        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), dialog);
         dialog.setVisible(true);
     }//GEN-LAST:event_btnZoomMousePressed
 

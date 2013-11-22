@@ -12,7 +12,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 
 
-public class WildLogTreeCellRenderer extends DefaultTreeCellRenderer{
+public class WorkspaceTreeCellRenderer extends DefaultTreeCellRenderer {
     private final static ImageIcon iconLocation = new ImageIcon(WildLogApp.class.getResource("resources/icons/Location.gif"));
     private final static ImageIcon iconVisit = new ImageIcon(WildLogApp.class.getResource("resources/icons/Visit.gif"));
     private final static ImageIcon iconElement = new ImageIcon(WildLogApp.class.getResource("resources/icons/Element.gif"));
@@ -20,36 +20,37 @@ public class WildLogTreeCellRenderer extends DefaultTreeCellRenderer{
     private final static ImageIcon iconExpanded = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small.gif"));
     private final static ImageIcon iconSelected = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Icon Small Selected.gif"));
 
-
-    public WildLogTreeCellRenderer() {
+    public WorkspaceTreeCellRenderer() {
     }
+
 
     @Override
     public Component getTreeCellRendererComponent(JTree inTree, Object inValue, boolean inSelected, boolean inExpanded, boolean inLeaf, int inRow, boolean inHasFocus) {
         if (inValue instanceof DefaultMutableTreeNode) {
-            DefaultMutableTreeNode node = (DefaultMutableTreeNode)inValue;
-            if (node.getUserObject() instanceof Location) {
-                setIcon(iconLocation);
-            }
-            else
-            if (node.getUserObject() instanceof Visit) {
-                setIcon(iconVisit);
-            }
-            else
-            if (node.getUserObject() instanceof Element) {
-                setIcon(iconElement);
-            }
-            else
-            if (node.getUserObject() instanceof SightingWrapper) {
-                setIcon(iconSighting);
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) inValue;
+            if (node.getUserObject() instanceof WorkspaceTreeDataWrapper) {
+            WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) node.getUserObject();
+                if (dataWrapper.isSelected()) {
+                    setIcon(iconExpanded);
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof Location) {
+                    setIcon(iconLocation);
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof Visit) {
+                    setIcon(iconVisit);
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof Element) {
+                    setIcon(iconElement);
+                }
+                else
+                if (dataWrapper.getDataObject() instanceof SightingWrapper) {
+                    setIcon(iconSighting);
+                }
             }
             else {
-                setIcon(iconExpanded);
-            }
-            if (inExpanded || inHasFocus) {
-                setIcon(iconExpanded);
-            }
-            if (inSelected) {
                 setIcon(iconSelected);
             }
             setText(inValue.toString());

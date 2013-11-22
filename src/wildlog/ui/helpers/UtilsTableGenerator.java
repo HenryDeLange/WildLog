@@ -1,11 +1,13 @@
 package wildlog.ui.helpers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.ImageIcon;
@@ -35,11 +37,13 @@ import wildlog.ui.helpers.cellrenderers.TextCellRenderer;
 import wildlog.ui.helpers.cellrenderers.WildLogDataModelWrappertCellRenderer;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModel;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModelDataWrapper;
-import wildlog.utils.UtilsConcurency;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsImageProcessing;
 
 
 public final class UtilsTableGenerator {
+    private static final ExecutorService executorService =
+            Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_TableGenerator"));
 
     private UtilsTableGenerator() {
     }
@@ -64,14 +68,14 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 final List<Element> listElements = inApp.getDBI().list(inElement);
                 if (!listElements.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                     // Setup new table data
                     final Object[][] data = new Object[listElements.size()][columnNames.length];
                     for (int t = 0; t < listElements.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Element tempElement = listElements.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
@@ -81,10 +85,16 @@ public final class UtilsTableGenerator {
                                 data[finalT][i++] = tempElement.getFeedingClass();
                                 data[finalT][i++] = tempElement.getWishListRating();
                                 data[finalT][i++] = tempElement.getAddFrequency();
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
@@ -125,23 +135,29 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 final List<Element> listElements = inApp.getDBI().list(inElement);
                 if (!listElements.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                     // Setup new table data
                     final Object[][] data = new Object[listElements.size()][columnNames.length];
                     for (int t = 0; t < listElements.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Element tempElement = listElements.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
                                 data[finalT][i++] = tempElement.getPrimaryName();
                                 data[finalT][i++] = tempElement.getType();
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
@@ -178,14 +194,14 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 final List<Location> listLocations = inApp.getDBI().list(inLocation);
                 if (!listLocations.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listLocations.size());
                     // Setup new table data
                     final Object[][] data = new Object[listLocations.size()][columnNames.length];
                     for (int t = 0; t < listLocations.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Location tempLocation = listLocations.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
@@ -196,10 +212,16 @@ public final class UtilsTableGenerator {
                                         UtilsGps.getLatitudeString(tempLocation), UtilsGps.getLatDecimalDegree(tempLocation));
                                 data[finalT][i++] = new WildLogTableModelDataWrapper(
                                         UtilsGps.getLongitudeString(tempLocation), UtilsGps.getLonDecimalDegree(tempLocation));
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
@@ -245,14 +267,14 @@ public final class UtilsTableGenerator {
                 temp.setLocationName(inLocation.getName());
                 final List<Visit> listVisits = inApp.getDBI().list(temp);
                 if (!listVisits.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
                     // Setup new table data
                     final Object[][] data = new Object[listVisits.size()][columnNames.length];
                     for (int t = 0; t < listVisits.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Visit tempVisit = listVisits.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
@@ -271,10 +293,16 @@ public final class UtilsTableGenerator {
                                     }
                                 }
                                 data[finalT][i++] = countElements.size();
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
@@ -320,24 +348,30 @@ public final class UtilsTableGenerator {
                     temp.setLocationName(inLocation.getName());
                     final List<Visit> listVisits = inApp.getDBI().list(temp);
                     if (!listVisits.isEmpty()) {
-                        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                        Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
                         // Setup new table data
                         final Object[][] data = new Object[listVisits.size()][columnNames.length];
                         for (int t = 0; t < listVisits.size(); t++) {
                             final int finalT = t;
-                            executorService.submit(new Runnable() {
+                            listCallables.add(new Callable<Object>() {
                                 @Override
-                                public void run() {
+                                public Object call() throws Exception {
                                     int i = 0;
                                     Visit tempVisit = listVisits.get(finalT);
                                     data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
                                     data[finalT][i++] = tempVisit.getName();
                                     data[finalT][i++] = tempVisit.getStartDate();
                                     data[finalT][i++] = inApp.getDBI().count(new Sighting(null, null, tempVisit.getName()));
+                                    return null;
                                 }
                             });
                         }
-                        UtilsConcurency.waitForExecutorToShutdown(executorService);
+                        try {
+                            executorService.invokeAll(listCallables);
+                        }
+                        catch (InterruptedException ex) {
+                            ex.printStackTrace(System.err);
+                        }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
@@ -381,24 +415,30 @@ public final class UtilsTableGenerator {
                     temp.setLocationName(inLocation.getName());
                     final List<Visit> listVisits = inApp.getDBI().list(temp);
                     if (!listVisits.isEmpty()) {
-                        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                        Collection<Callable<Object>> listCallables = new ArrayList<>(listVisits.size());
                         // Setup new table data
                         final Object[][] data = new Object[listVisits.size()][columnNames.length];
                         for (int t = 0; t < listVisits.size(); t++) {
                             final int finalT = t;
-                            executorService.submit(new Runnable() {
+                            listCallables.add(new Callable<Object>() {
                                 @Override
-                                public void run() {
+                                public Object call() throws Exception {
                                     int i = 0;
                                     Visit tempVisit = listVisits.get(finalT);
                                     data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
                                     data[finalT][i++] = tempVisit.getName();
                                     data[finalT][i++] = tempVisit.getStartDate();
                                     data[finalT][i++] = tempVisit.getType();
+                                    return null;
                                 }
                             });
                         }
-                        UtilsConcurency.waitForExecutorToShutdown(executorService);
+                        try {
+                            executorService.invokeAll(listCallables);
+                        }
+                        catch (InterruptedException ex) {
+                            ex.printStackTrace(System.err);
+                        }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
@@ -446,14 +486,14 @@ public final class UtilsTableGenerator {
                     sighting.setVisitName(inVisit.getName());
                     final List<Sighting> listSightings = inApp.getDBI().list(sighting);
                     if (!listSightings.isEmpty()) {
-                        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                        Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                         // Setup new table data
                         final Object[][] data = new Object[listSightings.size()][columnNames.length];
                         for (int t = 0; t < listSightings.size(); t++) {
                             final int finalT = t;
-                            executorService.submit(new Runnable() {
+                            listCallables.add(new Callable<Object>() {
                                 @Override
-                                public void run() {
+                                public Object call() throws Exception {
                                     int i = 0;
                                     Sighting tempSighting = listSightings.get(finalT);
                                     data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
@@ -474,10 +514,16 @@ public final class UtilsTableGenerator {
                                     else {
                                         data[finalT][i++] = "";
                                     }
+                                    return null;
                                 }
                             });
                         }
-                        UtilsConcurency.waitForExecutorToShutdown(executorService);
+                        try {
+                            executorService.invokeAll(listCallables);
+                        }
+                        catch (InterruptedException ex) {
+                            ex.printStackTrace(System.err);
+                        }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
@@ -536,14 +582,14 @@ public final class UtilsTableGenerator {
                         }
                     }
                     if (!listElements.isEmpty()) {
-                        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                        Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                         // Setup new table data
                         final Object[][] data = new Object[listElements.size()][columnNames.length];
                         for (int t = 0; t < listElements.size(); t++) {
                             final int finalT = t;
-                            executorService.submit(new Runnable() {
+                            listCallables.add(new Callable<Object>() {
                                 @Override
-                                public void run() {
+                                public Object call() throws Exception {
                                     int i = 0;
                                     Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
                                     data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
@@ -551,10 +597,16 @@ public final class UtilsTableGenerator {
                                     data[finalT][i++] = tempElement.getType();
                                     data[finalT][i++] = tempElement.getFeedingClass();
                                     data[finalT][i++] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, inVisit.getName()));
+                                    return null;
                                 }
                             });
                         }
-                        UtilsConcurency.waitForExecutorToShutdown(executorService);
+                        try {
+                            executorService.invokeAll(listCallables);
+                        }
+                        catch (InterruptedException ex) {
+                            ex.printStackTrace(System.err);
+                        }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
@@ -607,14 +659,14 @@ public final class UtilsTableGenerator {
                         }
                     }
                     if (!listElements.isEmpty()) {
-                        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                        Collection<Callable<Object>> listCallables = new ArrayList<>(listElements.size());
                         // Setup new table data
                         final Object[][] data = new Object[listElements.size()][columnNames.length];
                         for (int t = 0; t < listElements.size(); t++) {
                             final int finalT = t;
-                            executorService.submit(new Runnable() {
+                            listCallables.add(new Callable<Object>() {
                                 @Override
-                                public void run() {
+                                public Object call() throws Exception {
                                     int i = 0;
                                     Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
                                     data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
@@ -622,10 +674,16 @@ public final class UtilsTableGenerator {
                                     data[finalT][i++] = tempElement.getType();
                                     data[finalT][i++] = tempElement.getFeedingClass();
                                     data[finalT][i++] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), inLocation.getName(), null));
+                                    return null;
                                 }
                             });
                         }
-                        UtilsConcurency.waitForExecutorToShutdown(executorService);
+                        try {
+                            executorService.invokeAll(listCallables);
+                        }
+                        catch (InterruptedException ex) {
+                            ex.printStackTrace(System.err);
+                        }
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
@@ -667,23 +725,29 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 final List<LocationCount> listLocationCounts = inApp.getDBI().queryLocationCountForElement(inElement, LocationCount.class);
                 if (!listLocationCounts.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listLocationCounts.size());
                     // Setup new table data
                     final Object[][] data = new Object[listLocationCounts.size()][columnNames.length];
                     for (int t = 0; t < listLocationCounts.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Location tempLocation = inApp.getDBI().find(new Location(listLocationCounts.get(finalT).getLocationName()));
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
                                 data[finalT][i++] = tempLocation.getName();
                                 data[finalT][i++] = listLocationCounts.get(finalT).getCount();
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
@@ -716,22 +780,28 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 final List<Location> listLocations = inApp.getDBI().list(inLocation);
                 if (!listLocations.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listLocations.size());
                     // Setup new table data
                     final Object[][] data = new Object[listLocations.size()][columnNames.length];
                     for (int t = 0; t < listLocations.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Location tempLocation = listLocations.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
                                 data[finalT][i++] = tempLocation.getName();
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
@@ -766,24 +836,30 @@ public final class UtilsTableGenerator {
                 tempSighting.setElementName(inElement.getPrimaryName());
                 final List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
                 if (!listSightings.isEmpty()) {
-                    ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                     // Setup new table data
                     final Object[][] data = new Object[listSightings.size()][columnNames.length + 1];
                     for (int t = 0; t < listSightings.size(); t++) {
                         final int finalT = t;
-                        executorService.submit(new Runnable() {
+                        listCallables.add(new Callable<Object>() {
                             @Override
-                            public void run() {
+                            public Object call() throws Exception {
                                 int i = 0;
                                 Sighting tempSighting = listSightings.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
                                 data[finalT][i++] = tempSighting.getLocationName();
                                 data[finalT][i++] = tempSighting.getDate();
                                 data[finalT][i++] = tempSighting.getSightingCounter();
+                                return null;
                             }
                         });
                     }
-                    UtilsConcurency.waitForExecutorToShutdown(executorService);
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.

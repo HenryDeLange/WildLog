@@ -148,7 +148,7 @@ public class MergeElementsDialog extends JDialog {
             List<Sighting> sightings = app.getDBI().list(templateSighting);
             for (Sighting tempSighting : sightings) {
                 tempSighting.setElementName(keepElement.getPrimaryName());
-                app.getDBI().createOrUpdate(tempSighting);
+                app.getDBI().createOrUpdate(tempSighting, false);
             }
             app.getDBI().delete(replaceElement);
             // Close the window

@@ -169,7 +169,7 @@ public class MoveVisitDialog extends JDialog {
                 for (Sighting tempSighting : sightings) {
                     tempSighting.setLocationName(tempLocation);
                     tempSighting.setVisitName(tempVisit.getName());
-                    app.getDBI().createOrUpdate(tempSighting);
+                    app.getDBI().createOrUpdate(tempSighting, false);
                 }
             }
             dispose();

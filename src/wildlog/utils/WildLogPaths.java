@@ -18,8 +18,10 @@ public enum WildLogPaths {
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
     OPEN_OPENMAP                   (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
-     * The workspacePRefix already has this value appended. */
+     * The workspacePrefix already has this value appended. */
     DEFAULT_WORKSPACE_NAME         (Paths.get("WildLog")),
+    /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the database name. */
+    DEFAULT_DATABASE_NAME          (Paths.get("wildlog")),
     // These are the values that can be reused.
     WILDLOG_DATA                   (Paths.get("Data")),
     WILDLOG_FILES                  (Paths.get("Files")),
@@ -40,7 +42,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_WILDNOTE_SYNC   (Paths.get("Export", "WildNoteSync")),
     WILDLOG_EXPORT_SLIDESHOW       (Paths.get("Export", "Slideshow"));
 
-    private static Path workspacePrefix;
+    private static Path activeWorkspacePrefix;
     private Path path;
 
     private WildLogPaths(Path inPath) {
@@ -53,14 +55,14 @@ public enum WildLogPaths {
      */
     public static void setWorkspacePrefix(String inPrefix) {
         if (inPrefix == null || inPrefix.isEmpty()) {
-            workspacePrefix = Paths.get(File.separator).normalize().toAbsolutePath();
+            activeWorkspacePrefix = Paths.get(File.separator).normalize().toAbsolutePath();
         }
         else {
-            workspacePrefix = Paths.get(inPrefix).normalize().toAbsolutePath();
+            activeWorkspacePrefix = Paths.get(inPrefix).normalize().toAbsolutePath();
         }
         // Add the WildLog folder to the prefix if it was selected
-        if (!workspacePrefix.endsWith(DEFAULT_WORKSPACE_NAME.getRelativePath())) {
-            workspacePrefix = workspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath());
+        if (!activeWorkspacePrefix.endsWith(DEFAULT_WORKSPACE_NAME.getRelativePath())) {
+            activeWorkspacePrefix = activeWorkspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath());
         }
     }
 
@@ -70,7 +72,7 @@ public enum WildLogPaths {
      * @return
      */
     public Path getAbsoluteFullPath() {
-        return workspacePrefix.resolve(path).normalize().toAbsolutePath();
+        return activeWorkspacePrefix.resolve(path).normalize().toAbsolutePath();
     }
 
     /**
@@ -88,7 +90,7 @@ public enum WildLogPaths {
      * @return
      */
     public static Path getFullWorkspacePrefix() {
-        return workspacePrefix.toAbsolutePath();
+        return activeWorkspacePrefix.toAbsolutePath();
     }
 
     /**

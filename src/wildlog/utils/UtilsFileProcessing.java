@@ -83,7 +83,7 @@ public final class UtilsFileProcessing {
 
     public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, final boolean inCreateThumbnails) {
         // Submit the work to the executor
-        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount());
+        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_FileUpload"));
         for (int t = 0; t < inFiles.length; t++) {
             if (inFiles[t] != null) {
                 final File fromFile = inFiles[t];
@@ -209,13 +209,13 @@ public final class UtilsFileProcessing {
      * @param inFileToRead
      * @param inFileToWrite
      * @param inOverwriteExisting
-     * @param inCheckExists
+     * @param inPreventExistsErrors
      */
-    public static void copyFile(Path inFileToRead, Path inFileToWrite, boolean inOverwriteExisting, boolean inCheckExists) {
+    public static void copyFile(Path inFileToRead, Path inFileToWrite, boolean inOverwriteExisting, boolean inPreventExistsErrors) {
         try {
             Files.createDirectories(inFileToWrite.getParent());
             if (!inOverwriteExisting) {
-                if (inCheckExists) {
+                if (inPreventExistsErrors) {
                     if (!Files.exists(inFileToWrite)) {
                         Files.copy(inFileToRead, inFileToWrite);
                     }
