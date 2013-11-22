@@ -597,9 +597,6 @@ public abstract class DBI_JDBC implements DBI {
             String sql = findFile;
             if (inWildLogFile.getDBFilePath() != null) {
                 sql = sql + " WHERE ORIGINALPATH = ?";
-                if (inWildLogFile.isDefaultFile()) {
-                    sql = sql + " AND ISDEFAULT = true";
-                }
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
@@ -607,9 +604,6 @@ public abstract class DBI_JDBC implements DBI {
             else
             if (inWildLogFile.getId() != null) {
                 sql = sql + " WHERE ID = ?";
-                if (inWildLogFile.isDefaultFile()) {
-                    sql = sql + " AND ISDEFAULT = true";
-                }
                 sql = sql + " ORDER BY ISDEFAULT desc, ORIGINALPATH";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
@@ -1042,7 +1036,7 @@ public abstract class DBI_JDBC implements DBI {
                     List<SightingCore> sightings = list(sighting);
                     for (SightingCore temp : sightings) {
                         temp.setElementName(inElement.getPrimaryName());
-                        createOrUpdate(temp);
+                        createOrUpdate(temp, false);
                     }
                     // Update the Files
                     List<WildLogFileCore> wildLogFiles = list(new WildLogFileCore(ElementCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
@@ -1123,7 +1117,7 @@ public abstract class DBI_JDBC implements DBI {
                     List<SightingCore> sightings = list(sighting);
                     for (SightingCore temp : sightings) {
                         temp.setLocationName(inLocation.getName());
-                        createOrUpdate(temp);
+                        createOrUpdate(temp, false);
                     }
                     // Update the Visits
                     List<VisitCore> visits = list(new VisitCore(inOldName));
@@ -1201,7 +1195,7 @@ public abstract class DBI_JDBC implements DBI {
                     List<SightingCore> sightings = list(sighting);
                     for (SightingCore temp : sightings) {
                         temp.setVisitName(inVisit.getName());
-                        createOrUpdate(temp);
+                        createOrUpdate(temp, false);
                     }
                     // Update the Files
                     List<WildLogFileCore> wildLogFiles = list(new WildLogFileCore(VisitCore.WILDLOGFILE_ID_PREFIX + UtilsData.sanitizeString(inOldName)));
@@ -1249,30 +1243,33 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> boolean createOrUpdate(T inSighting) {
+    public <T extends SightingCore> boolean createOrUpdate(T inSighting, boolean inNewButKeepID) {
         PreparedStatement state = null;
         Statement tempState = null;
         ResultSet results = null;
         boolean isUpdate = false;
         try {
-            if (inSighting.getSightingCounter() > 0) {
+            if (inSighting.getSightingCounter() > 0 && !inNewButKeepID) {
                 // Note: No need to update the files, because once a sighting has an ID it never changes
                 // Update
                 state = conn.prepareStatement(updateSighting);
                 isUpdate = true;
             }
             else {
-                // Get the max ID and then run the query.
-                tempState = conn.createStatement();
-                results = tempState.executeQuery("SELECT MAX(SIGHTINGCOUNTER) FROM SIGHTINGS");
-                if (results.next()) {
-                    long sightingCounter = results.getLong(1);
-                    sightingCounter++;
-                    // Need to set the counter on the sighting for images to upload correctly and the below code to work
-                    inSighting.setSightingCounter(sightingCounter);
-                }
-                else {
-                    return false;
+                if (!inNewButKeepID) {
+                    // Get the max ID and then run the query.
+                    tempState = conn.createStatement();
+                    results = tempState.executeQuery("SELECT MAX(SIGHTINGCOUNTER) FROM SIGHTINGS");
+                    if (results.next()) {
+                        long sightingCounter = results.getLong(1);
+                        sightingCounter++;
+                        // Need to set the counter on the sighting for images to upload correctly and the below code to work
+                        inSighting.setSightingCounter(sightingCounter);
+                    }
+                    else {
+                        // Need to set the counter on the sighting for images to upload correctly and the below code to work
+                        inSighting.setSightingCounter(1);
+                    }
                 }
                 // Insert
                 state = conn.prepareStatement(createSighting);
