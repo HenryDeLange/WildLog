@@ -3,6 +3,7 @@ package wildlog.ui.dialogs;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -81,6 +82,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         rdbExportThumbnails = new javax.swing.JRadioButton();
         chkReduceGPS = new javax.swing.JCheckBox();
         chkRemoveDescriptions = new javax.swing.JCheckBox();
+        chkRemoveTime = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         rdbOrderByLocation = new javax.swing.JRadioButton();
         rdbOrderByElement = new javax.swing.JRadioButton();
@@ -160,10 +162,15 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         rdbExportThumbnails.setFocusPainted(false);
 
         chkReduceGPS.setText("Reduced GPS Accuracy");
+        chkReduceGPS.setToolTipText("If selected all GPS points accuracy will be reduced to degrees and minutes, no seconds.");
         chkReduceGPS.setFocusPainted(false);
 
         chkRemoveDescriptions.setText("Remove Descriptions");
+        chkRemoveDescriptions.setToolTipText("If selected the description fields won't be exported.");
         chkRemoveDescriptions.setFocusPainted(false);
+
+        chkRemoveTime.setText("Remove Time");
+        chkRemoveTime.setToolTipText("If selected Observations' Time won't be exported, but the Sun and Moon Phase data will still be exported.");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Sort Order:");
@@ -240,7 +247,9 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(chkReduceGPS)
                                         .addGap(20, 20, 20)
-                                        .addComponent(chkRemoveDescriptions)))
+                                        .addComponent(chkRemoveDescriptions)
+                                        .addGap(20, 20, 20)
+                                        .addComponent(chkRemoveTime)))
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(5, 5, 5))))
@@ -265,8 +274,9 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         .addGap(1, 1, 1)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkReduceGPS)
-                            .addComponent(chkRemoveDescriptions))))
-                .addGap(5, 5, 5)
+                            .addComponent(chkRemoveDescriptions)
+                            .addComponent(chkRemoveTime))))
+                .addGap(4, 4, 4)
                 .addComponent(jLabel1)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -303,7 +313,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             int totalNodes = getNumberOfNodes(treWorkspace.getModel());
                             setProgress(2);
                             setMessage("Workspace Export: " + getProgress() + "%");
-                            saveSelectedChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter());
+                            saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter());
                             setProgress(100);
                             setMessage("Workspace Export: " + getProgress() + "%");
                         }
@@ -379,7 +389,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         }
     }
 
-    private void saveSelectedChildren(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter) {
+    private void saveChildren(WildLogDBI inNewDBI, Path inDestinationWorkspace, DefaultMutableTreeNode inNode, int inTotalNodes, ProgressbarTask inProgressbarTask, ProgressCounter inCounter) {
         if (inNode.getUserObject() instanceof WorkspaceTreeDataWrapper) {
             WorkspaceTreeDataWrapper dataWrapper = (WorkspaceTreeDataWrapper) inNode.getUserObject();
             if (dataWrapper.isSelected()) {
@@ -428,6 +438,15 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     if (chkRemoveDescriptions.isSelected()) {
                         sighting.setDetails("");
                     }
+                    if (chkRemoveTime.isSelected()) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(sighting.getDate());
+                        calendar.set(Calendar.HOUR_OF_DAY, 0);
+                        calendar.set(Calendar.MINUTE, 0);
+                        calendar.set(Calendar.SECOND, 0);
+                        calendar.set(Calendar.MILLISECOND, 0);
+                        sighting.setDate(calendar.getTime());
+                    }
                     if (inNewDBI.find(sighting) == null) {
                         // Note: The sighting ID needs to be the same for the linked images to work...
                         inNewDBI.createOrUpdate(sighting, true);
@@ -441,7 +460,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         }
         for (int t = 0; t < treWorkspace.getModel().getChildCount(inNode); t++) {
             DefaultMutableTreeNode childNode = (DefaultMutableTreeNode) treWorkspace.getModel().getChild(inNode, t);
-            saveSelectedChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter);
+            saveChildren(inNewDBI, inDestinationWorkspace, childNode, inTotalNodes, inProgressbarTask, inCounter);
         }
     }
 
@@ -642,6 +661,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JButton btnConfirm;
     private javax.swing.JCheckBox chkReduceGPS;
     private javax.swing.JCheckBox chkRemoveDescriptions;
+    private javax.swing.JCheckBox chkRemoveTime;
     private javax.swing.ButtonGroup grpFiles;
     private javax.swing.ButtonGroup grpImages;
     private javax.swing.ButtonGroup grpTreeOrder;

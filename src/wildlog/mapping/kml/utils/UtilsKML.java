@@ -223,6 +223,11 @@ public final class UtilsKML {
         if (inDataObject instanceof Visit) {
             tempSighting.setVisitName(inDataObject.getDisplayName());
         }
+        else {
+            if (inDataObject instanceof Sighting) {
+                tempSighting = (Sighting) inDataObject;
+            }
+        }
         List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
         Collections.sort(listSightings);
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>(50);
@@ -250,6 +255,10 @@ public final class UtilsKML {
             else
             if (inDataObject instanceof Visit) {
                 searchLocation = new Location(((Visit) inDataObject).getLocationName());
+            }
+            else
+            if (inDataObject instanceof Sighting) {
+                searchLocation = new Location(((Sighting) inDataObject).getLocationName());
             }
             else {
                 searchLocation = new Location();

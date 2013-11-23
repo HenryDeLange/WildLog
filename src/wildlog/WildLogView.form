@@ -89,17 +89,30 @@
             <Property name="name" type="java.lang.String" value="backupMenu" noResource="true"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuBackupDB">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuBackupDatabase">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Backup Database"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;This makes a backup of the database. &lt;br/&gt;&lt;b&gt;Note: This does not backup the files, only the database is backed up.&lt;/b&gt; &lt;br/&gt;To backup the data and files it is recommended to make a manual copy of the entire workspace.&lt;/html&gt;"/>
-                <Property name="name" type="java.lang.String" value="mnuBackupDB" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="mnuBackupDatabase" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupDBActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupDatabaseActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuBackupWorkspace">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Backup Workspace"/>
+                <Property name="toolTipText" type="java.lang.String" value="Backup the Workspace using the Workspace Export feature."/>
+                <Property name="name" type="java.lang.String" value="mnuBackupWorkspace" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuBackupWorkspaceActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -163,9 +176,6 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportWildNoteSync">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Export WildNote Sync File"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export the Creatures to a sync file that can be loaded in WildNote."/>
                 <Property name="name" type="java.lang.String" value="mnuExportWildNoteSync" noResource="true"/>
@@ -202,6 +212,7 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import from Another Workspace"/>
                 <Property name="toolTipText" type="java.lang.String" value="Import all the data in the specified WildLog Workspace."/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="mnuImportWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -210,12 +221,13 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportWildNote">
               <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
-                </Property>
                 <Property name="text" type="java.lang.String" value="Import WildNote Sync File"/>
+                <Property name="enabled" type="boolean" value="false"/>
                 <Property name="name" type="java.lang.String" value="mnuImportWildNote" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportWildNoteActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">
               <Properties>
@@ -884,7 +896,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="6b" green="7a" red="73" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="WildLog.Support@gmail.com"/>
+                    <Property name="text" type="java.lang.String" value="support@mywild.co.za"/>
                     <Property name="name" type="java.lang.String" value="jLabel8" noResource="true"/>
                   </Properties>
                 </Component>

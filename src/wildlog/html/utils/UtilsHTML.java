@@ -72,7 +72,7 @@ public final class UtilsHTML {
         else
         if (inExportType.equals(UtilsHTMLExportTypes.ForMap)) {
             // Gebruik URI hier om in Windows en Linux reg te werk
-            return "<img src=\"" + toFileAsRelativePath.toFile().toURI().toString() + "\"/>  ";
+            return "<img src=\"" + inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL).toUri().toString() + "\"/>  ";
         }
         return "[image error]";
     }

@@ -1,7 +1,5 @@
 package wildlog.ui.dialogs;
 
-import java.awt.Component;
-import java.awt.Dimension;
 import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -38,7 +36,6 @@ public class GPSDialog extends JDialog {
     private static int prevLonMin;
     private static double prevLonSec;
     private static GPSAccuracy prevAccuracy;
-    private final Component parent;
     private WildLogApp app;
     private boolean selectionMade = false;
     private DataObjectWithGPS dataObjectWithGPS;
@@ -48,7 +45,6 @@ public class GPSDialog extends JDialog {
 
     public GPSDialog(WildLogApp inApp, JFrame inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
-        parent = inParent;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JFrames)
@@ -58,7 +54,6 @@ public class GPSDialog extends JDialog {
 
     public GPSDialog(WildLogApp inApp, JDialog inParent, DataObjectWithGPS inDataObjectWithGPS) {
         super(inParent);
-        parent = inParent;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp, inDataObjectWithGPS);
         // Setup the default behavior (this is for JDialogs)
@@ -72,8 +67,8 @@ public class GPSDialog extends JDialog {
         if (dataObjectWithGPS == null) {
             dispose();
         }
-        // Need to set a few settings onthe content pane before continuing (for example size, background color, etc.)
-        getContentPane().setPreferredSize(new Dimension(410, 210));
+        // Need to set a few settings on the content pane before continuing (for example size, background color, etc.)
+        getContentPane().setPreferredSize(getPreferredSize());
         // Initialize the auto generated code
         initComponents();
         // Hide stuff
@@ -582,7 +577,7 @@ public class GPSDialog extends JDialog {
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         getGlassPane().setVisible(true);
-        int result = fileChooser.showOpenDialog(parent);
+        int result = fileChooser.showOpenDialog(this);
         getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();
@@ -621,7 +616,7 @@ public class GPSDialog extends JDialog {
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         getGlassPane().setVisible(true);
-        int result = fileChooser.showOpenDialog(parent);
+        int result = fileChooser.showOpenDialog(this);
         getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
             File file = fileChooser.getSelectedFile();

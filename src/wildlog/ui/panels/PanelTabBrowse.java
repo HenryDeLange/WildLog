@@ -1068,7 +1068,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             popup.add(mnuReport);
             // Export
             JMenuItem mnuExport = new JMenuItem("Export",
-                    UtilsImageProcessing.getScaledIcon(WildLogApp.class.getResource("resources/icons/HTML Icon.gif"), WildLogThumbnailSizes.VERY_TINY.getSize()));
+                    UtilsImageProcessing.getScaledIcon(WildLogApp.class.getResource("resources/icons/Export.png"), WildLogThumbnailSizes.VERY_TINY.getSize()));
             mnuExport.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

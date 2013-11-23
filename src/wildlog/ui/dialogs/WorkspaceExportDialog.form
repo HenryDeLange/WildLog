@@ -87,6 +87,8 @@
                                       <Component id="chkReduceGPS" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                                       <Component id="chkRemoveDescriptions" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                                      <Component id="chkRemoveTime" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -122,10 +124,11 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="chkReduceGPS" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="chkRemoveDescriptions" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkRemoveTime" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -253,13 +256,21 @@
     <Component class="javax.swing.JCheckBox" name="chkReduceGPS">
       <Properties>
         <Property name="text" type="java.lang.String" value="Reduced GPS Accuracy"/>
+        <Property name="toolTipText" type="java.lang.String" value="If selected all GPS points accuracy will be reduced to degrees and minutes, no seconds."/>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="chkRemoveDescriptions">
       <Properties>
         <Property name="text" type="java.lang.String" value="Remove Descriptions"/>
+        <Property name="toolTipText" type="java.lang.String" value="If selected the description fields won&apos;t be exported."/>
         <Property name="focusPainted" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkRemoveTime">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Remove Time"/>
+        <Property name="toolTipText" type="java.lang.String" value="If selected Observations&apos; Time won&apos;t be exported, but the Sun and Moon Phase data will still be exported."/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">

@@ -578,10 +578,10 @@
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/Export.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export"/>
-                <Property name="toolTipText" type="java.lang.String" value="View the HTML export for this Period."/>
+                <Property name="toolTipText" type="java.lang.String" value="Show available exports for this Period."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -603,7 +603,7 @@
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Advanced"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">

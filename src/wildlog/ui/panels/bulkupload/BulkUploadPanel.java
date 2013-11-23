@@ -685,7 +685,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // Continue processing the Sighting
                                 sightingWrapper.setLocationName(locationHandle.getName());
                                 sightingWrapper.setVisitName(visit.getName());
-                                // Makje sure the default moonphase is set to -1 (for when the code below doesn't overwrite it)
+                                // Make sure the default moonphase is set to -1 (for when the code below doesn't overwrite it)
                                 sightingWrapper.setMoonPhase(-1);
                                 // If the sighting's GPS point is set then try to calculate Sun and Moon
                                 if (sightingWrapper.getDate() != null

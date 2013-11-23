@@ -1,18 +1,30 @@
 package wildlog.ui.dialogs;
 
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
+import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.PanelVisit;
+import wildlog.utils.UtilsImageProcessing;
+
 
 public class AdvancedDialog extends JDialog {
     private WildLogApp app;
     private Visit visit;
     private PanelVisit panelVisit;
+
 
     public AdvancedDialog(WildLogApp inApp, Visit inVisit, PanelVisit inPanelVisit) {
         super(inApp.getMainFrame());
@@ -41,29 +53,30 @@ public class AdvancedDialog extends JDialog {
     private void initComponents() {
 
         btnCorrectTime = new javax.swing.JButton();
+        btnSetDuration = new javax.swing.JButton();
+        btnSetAllGPS = new javax.swing.JButton();
         btnMoveVisit = new javax.swing.JButton();
-        btnCorrectTime1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Available Maps");
-        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Map_Small.gif")).getImage());
+        setTitle("Advanced Options");
+        setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Selected.gif")).getImage());
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        btnCorrectTime.setText("Correct Date and Time");
+        btnCorrectTime.setText("Adjust the Date and Time for all Observations");
         btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
         btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCorrectTime.setFocusPainted(false);
         btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCorrectTime.setIconTextGap(10);
-        btnCorrectTime.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnCorrectTime.setMaximumSize(new java.awt.Dimension(250, 35));
-        btnCorrectTime.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnCorrectTime.setIconTextGap(9);
+        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnCorrectTime.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnCorrectTime.setMinimumSize(new java.awt.Dimension(265, 35));
         btnCorrectTime.setName("btnCorrectTime"); // NOI18N
-        btnCorrectTime.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnCorrectTime.setPreferredSize(new java.awt.Dimension(265, 35));
         btnCorrectTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCorrectTimeActionPerformed(evt);
@@ -71,18 +84,56 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnCorrectTime);
 
-        btnMoveVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        btnSetDuration.setText("Recalculate the Duration for all Observations");
+        btnSetDuration.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
+        btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetDuration.setFocusPainted(false);
+        btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSetDuration.setIconTextGap(9);
+        btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnSetDuration.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnSetDuration.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnSetDuration.setName("btnSetDuration"); // NOI18N
+        btnSetDuration.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnSetDuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetDurationActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSetDuration);
+
+        btnSetAllGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnSetAllGPS.setText("Set ons GPS point for all Observations");
+        btnSetAllGPS.setToolTipText("");
+        btnSetAllGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetAllGPS.setFocusPainted(false);
+        btnSetAllGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSetAllGPS.setIconTextGap(6);
+        btnSetAllGPS.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnSetAllGPS.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnSetAllGPS.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnSetAllGPS.setName("btnSetAllGPS"); // NOI18N
+        btnSetAllGPS.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnSetAllGPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetAllGPSActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSetAllGPS);
+
+        btnMoveVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
         btnMoveVisit.setText("Move Period to Different Place");
         btnMoveVisit.setToolTipText("Move this Period to a different Place.");
         btnMoveVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMoveVisit.setFocusPainted(false);
         btnMoveVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnMoveVisit.setIconTextGap(10);
+        btnMoveVisit.setIconTextGap(6);
         btnMoveVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnMoveVisit.setMaximumSize(new java.awt.Dimension(250, 35));
-        btnMoveVisit.setMinimumSize(new java.awt.Dimension(250, 35));
+        btnMoveVisit.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnMoveVisit.setMinimumSize(new java.awt.Dimension(265, 35));
         btnMoveVisit.setName("btnMoveVisit"); // NOI18N
-        btnMoveVisit.setPreferredSize(new java.awt.Dimension(250, 35));
+        btnMoveVisit.setPreferredSize(new java.awt.Dimension(265, 35));
         btnMoveVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMoveVisitActionPerformed(evt);
@@ -90,30 +141,34 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnMoveVisit);
 
-        btnCorrectTime1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnCorrectTime1.setText("Set the GPS position for all Observations");
-        btnCorrectTime1.setToolTipText("");
-        btnCorrectTime1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCorrectTime1.setFocusPainted(false);
-        btnCorrectTime1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCorrectTime1.setIconTextGap(10);
-        btnCorrectTime1.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnCorrectTime1.setMaximumSize(new java.awt.Dimension(250, 35));
-        btnCorrectTime1.setMinimumSize(new java.awt.Dimension(250, 35));
-        btnCorrectTime1.setName("btnCorrectTime1"); // NOI18N
-        btnCorrectTime1.setPreferredSize(new java.awt.Dimension(250, 35));
-        btnCorrectTime1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCorrectTime1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnCorrectTime1);
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCorrectTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrectTimeActionPerformed
-
+        DateChangeDialog dialog = new DateChangeDialog(app, this);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+            for (Sighting sighting : listSightings) {
+                sighting.setDate(new Date(sighting.getDate().getTime() + dialog.getTimeAdjustment()));
+                // Because the sighting's date changed I need to recalculate the Sun and Moon phase
+                if (sighting.getDate() != null
+                        && sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
+                        && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
+                    // Sun
+                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                    // Moon
+                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                }
+                // Save the changes
+                app.getDBI().createOrUpdate(sighting, false);
+            }
+            panelVisit.doTheRefresh(null);
+            dispose();
+        }
     }//GEN-LAST:event_btnCorrectTimeActionPerformed
 
     private void btnMoveVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveVisitActionPerformed
@@ -133,14 +188,67 @@ public class AdvancedDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnMoveVisitActionPerformed
 
-    private void btnCorrectTime1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrectTime1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCorrectTime1ActionPerformed
+    private void btnSetAllGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetAllGPSActionPerformed
+        Sighting tempSighting = new Sighting();
+        GPSDialog dialog = new GPSDialog(app, this, tempSighting);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+            for (Sighting sighting : listSightings) {
+                sighting.setLatitude(tempSighting.getLatitude());
+                sighting.setLatDegrees(tempSighting.getLatDegrees());
+                sighting.setLatMinutes(tempSighting.getLatMinutes());
+                sighting.setLatSeconds(tempSighting.getLatSeconds());
+                sighting.setLongitude(tempSighting.getLongitude());
+                sighting.setLonDegrees(tempSighting.getLonDegrees());
+                sighting.setLonMinutes(tempSighting.getLonMinutes());
+                sighting.setLonSeconds(tempSighting.getLonSeconds());
+                // Because the sighting's GPS point changed I need to recalculate the Sun and Moon phase
+                if (sighting.getDate() != null
+                        && sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
+                        && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
+                    // Sun
+                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                    // Moon
+                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                }
+                // Save the changes
+                app.getDBI().createOrUpdate(sighting, false);
+            }
+            panelVisit.doTheRefresh(null);
+            dispose();
+        }
+    }//GEN-LAST:event_btnSetAllGPSActionPerformed
+
+    private void btnSetDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDurationActionPerformed
+        List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+        for (Sighting sighting : listSightings) {
+            List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+            if (files != null && !files.isEmpty()) {
+                Collections.sort(files);
+                Date startDate = UtilsImageProcessing.getDateFromFile(files.get(0).getAbsolutePath());
+                Date endDate = UtilsImageProcessing.getDateFromFile(files.get(files.size()-1).getAbsolutePath());
+                double difference = (endDate.getTime() - startDate.getTime())/1000;
+                int minutes = (int)difference/60;
+                double seconds = difference - minutes*60.0;
+                sighting.setDurationMinutes(minutes);
+                sighting.setDurationSeconds(seconds);
+            }
+            // Save the changes
+            app.getDBI().createOrUpdate(sighting, false);
+        }
+        panelVisit.doTheRefresh(null);
+        dispose();
+    }//GEN-LAST:event_btnSetDurationActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCorrectTime;
-    private javax.swing.JButton btnCorrectTime1;
     private javax.swing.JButton btnMoveVisit;
+    private javax.swing.JButton btnSetAllGPS;
+    private javax.swing.JButton btnSetDuration;
     // End of variables declaration//GEN-END:variables
 }

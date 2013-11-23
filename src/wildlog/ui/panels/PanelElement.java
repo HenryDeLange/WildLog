@@ -34,19 +34,17 @@ import wildlog.data.enums.WaterDependancy;
 import wildlog.data.enums.WishRating;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
-import wildlog.html.utils.UtilsHTML;
+import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
-import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -575,9 +573,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         });
 
         btnHTML.setBackground(new java.awt.Color(227, 240, 227));
-        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         btnHTML.setText("Export");
-        btnHTML.setToolTipText("View the HTML export for this Creature.");
+        btnHTML.setToolTipText("Show available exports for this Creature.");
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1623,13 +1621,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_tblLocationMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(element, app, this));
-                return null;
-            }
-        });
+        ExportDialog dialog = new ExportDialog(app, null, element, null, null);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed

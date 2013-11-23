@@ -24,8 +24,8 @@ import wildlog.data.enums.GameViewRating;
 import wildlog.data.enums.LocationRating;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
-import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
@@ -771,9 +771,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         });
 
         btnHTML.setBackground(new java.awt.Color(233, 239, 244));
-        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         btnHTML.setText("Export");
-        btnHTML.setToolTipText("View the HTML export for this Place.");
+        btnHTML.setToolTipText("Show available exports for this Place.");
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1223,13 +1223,8 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnSunAndMoonActionPerformed
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(locationWL, app, this));
-                return null;
-            }
-        });
+        ExportDialog dialog = new ExportDialog(app, locationWL, null, null, null);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed

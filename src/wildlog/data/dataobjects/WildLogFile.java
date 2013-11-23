@@ -55,7 +55,6 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
 
     public String toHTML(UtilsHTMLExportTypes inExportType) {
         String startTag = "<a href='../../../" + getRelativePath().toString().replace(File.separator, "/") + "' target='_blank'>";
-        // Moet die getAbsoluteThumbnailPath(..) hier gebruik want ek wil die File().exists() doen en dit create as dit nie bestaan nie...
         if (fileType.equals(WildLogFileType.IMAGE)) {
             return startTag + UtilsHTML.generateHTMLImages(this, inExportType) + "</a>";
         }

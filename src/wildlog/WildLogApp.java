@@ -165,6 +165,7 @@ public class WildLogApp extends Application {
             public boolean canExit(EventObject event) {
                 boolean doShutdown = true;
                 try {
+                    // TODO: check ook hier vir enige unsaved tabs...
                     TaskMonitor taskMonitor = getContext().getTaskMonitor();
                     if (taskMonitor.getTasks() != null && !taskMonitor.getTasks().isEmpty()) {
                         int result = UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {

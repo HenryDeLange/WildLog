@@ -279,7 +279,8 @@ public final class WildLogView extends JFrame {
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
         javax.swing.JMenuItem mnuExitApp = new javax.swing.JMenuItem();
         backupMenu = new javax.swing.JMenu();
-        mnuBackupDB = new javax.swing.JMenuItem();
+        mnuBackupDatabase = new javax.swing.JMenuItem();
+        mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         mnyExportCSV = new javax.swing.JMenuItem();
         mnuExportHTML = new javax.swing.JMenuItem();
@@ -324,7 +325,6 @@ public final class WildLogView extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("WildLog");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
-        setPreferredSize(new java.awt.Dimension(1000, 650));
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
         mainPanel.setMinimumSize(new java.awt.Dimension(1000, 630));
@@ -410,7 +410,7 @@ public final class WildLogView extends JFrame {
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(115, 122, 107));
-        jLabel8.setText("WildLog.Support@gmail.com");
+        jLabel8.setText("support@mywild.co.za");
         jLabel8.setName("jLabel8"); // NOI18N
 
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
@@ -607,16 +607,27 @@ public final class WildLogView extends JFrame {
         backupMenu.setText("Backup");
         backupMenu.setName("backupMenu"); // NOI18N
 
-        mnuBackupDB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
-        mnuBackupDB.setText("Backup Database");
-        mnuBackupDB.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire workspace.</html>");
-        mnuBackupDB.setName("mnuBackupDB"); // NOI18N
-        mnuBackupDB.addActionListener(new java.awt.event.ActionListener() {
+        mnuBackupDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
+        mnuBackupDatabase.setText("Backup Database");
+        mnuBackupDatabase.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire workspace.</html>");
+        mnuBackupDatabase.setName("mnuBackupDatabase"); // NOI18N
+        mnuBackupDatabase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuBackupDBActionPerformed(evt);
+                mnuBackupDatabaseActionPerformed(evt);
             }
         });
-        backupMenu.add(mnuBackupDB);
+        backupMenu.add(mnuBackupDatabase);
+
+        mnuBackupWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuBackupWorkspace.setText("Backup Workspace");
+        mnuBackupWorkspace.setToolTipText("Backup the Workspace using the Workspace Export feature.");
+        mnuBackupWorkspace.setName("mnuBackupWorkspace"); // NOI18N
+        mnuBackupWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuBackupWorkspaceActionPerformed(evt);
+            }
+        });
+        backupMenu.add(mnuBackupWorkspace);
 
         menuBar.add(backupMenu);
 
@@ -666,7 +677,6 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnuExportWorkspace);
 
-        mnuExportWildNoteSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuExportWildNoteSync.setText("Export WildNote Sync File");
         mnuExportWildNoteSync.setToolTipText("Export the Creatures to a sync file that can be loaded in WildNote.");
         mnuExportWildNoteSync.setName("mnuExportWildNoteSync"); // NOI18N
@@ -696,6 +706,7 @@ public final class WildLogView extends JFrame {
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWorkspace.setText("Import from Another Workspace");
         mnuImportWorkspace.setToolTipText("Import all the data in the specified WildLog Workspace.");
+        mnuImportWorkspace.setEnabled(false);
         mnuImportWorkspace.setName("mnuImportWorkspace"); // NOI18N
         mnuImportWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -704,9 +715,14 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportWorkspace);
 
-        mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWildNote.setText("Import WildNote Sync File");
+        mnuImportWildNote.setEnabled(false);
         mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
+        mnuImportWildNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportWildNoteActionPerformed(evt);
+            }
+        });
         importMenu.add(mnuImportWildNote);
 
         jSeparator7.setName("jSeparator7"); // NOI18N
@@ -1463,7 +1479,7 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuSunAndMoonActionPerformed
 
-    private void mnuBackupDBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupDBActionPerformed
+    private void mnuBackupDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupDatabaseActionPerformed
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -1482,7 +1498,7 @@ public final class WildLogView extends JFrame {
                 return null;
             }
         });
-    }//GEN-LAST:event_mnuBackupDBActionPerformed
+    }//GEN-LAST:event_mnuBackupDatabaseActionPerformed
 
     private void mnuExitAppActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExitAppActionPerformed
 //        // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
@@ -2289,13 +2305,22 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMergeVisitActionPerformed
 
     private void mnuImportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWorkspaceActionPerformed
-        // TODO add your handling code here:
+        // TODO
     }//GEN-LAST:event_mnuImportWorkspaceActionPerformed
 
     private void mnuExportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportWorkspaceActionPerformed
         WorkspaceExportDialog dialog = new WorkspaceExportDialog(app);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuExportWorkspaceActionPerformed
+
+    private void mnuImportWildNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWildNoteActionPerformed
+        // TODO
+    }//GEN-LAST:event_mnuImportWildNoteActionPerformed
+
+    private void mnuBackupWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupWorkspaceActionPerformed
+        WorkspaceExportDialog dialog = new WorkspaceExportDialog(app);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_mnuBackupWorkspaceActionPerformed
 
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
@@ -2345,7 +2370,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenu mappingMenu;
     private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem mnuBackupDB;
+    private javax.swing.JMenuItem mnuBackupDatabase;
+    private javax.swing.JMenuItem mnuBackupWorkspace;
     private javax.swing.JMenuItem mnuBulkImport;
     private javax.swing.JMenuItem mnuCalcDuration;
     private javax.swing.JMenuItem mnuCalcSunMoon;

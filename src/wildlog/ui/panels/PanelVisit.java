@@ -23,21 +23,19 @@ import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
-import wildlog.html.utils.UtilsHTML;
 import wildlog.ui.dialogs.AdvancedDialog;
 import wildlog.ui.dialogs.ChecklistDialog;
+import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
-import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
-import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -562,9 +560,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
 
         btnHTML.setBackground(new java.awt.Color(230, 228, 240));
-        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         btnHTML.setText("Export");
-        btnHTML.setToolTipText("View the HTML export for this Period.");
+        btnHTML.setToolTipText("Show available exports for this Period.");
         btnHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnHTML.setFocusPainted(false);
         btnHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -578,7 +576,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
 
         btnAdvanced.setBackground(new java.awt.Color(230, 228, 240));
-        btnAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        btnAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         btnAdvanced.setText("Advanced");
         btnAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1270,13 +1268,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_tblSightingsMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                UtilsFileProcessing.openFile(UtilsHTML.exportHTML(visit, app, this));
-                return null;
-            }
-        });
+        ExportDialog dialog = new ExportDialog(app, null, null, visit, null);
+        dialog.setVisible(true);
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
