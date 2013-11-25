@@ -125,7 +125,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 @Override
                 public void run() {
                     for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
-                        if (tblLocation.getValueAt(t, 1).equals(locationWL.getName())) {
+                        if (tblLocation.getModel().getValueAt(t, 1).equals(locationWL.getName())) {
                             tblLocation.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
                             if (t < (tblLocation.getModel().getRowCount()) - 1) {
@@ -144,7 +144,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 @Override
                 public void run() {
                     for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                        if (tblElement.getValueAt(t, 1).equals(element.getPrimaryName())) {
+                        if (tblElement.getModel().getValueAt(t, 1).equals(element.getPrimaryName())) {
                             tblElement.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
                             if (t < (tblElement.getModel().getRowCount()) - 1) {
@@ -192,7 +192,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 @Override
                 public void run() {
                     for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
-                        if (tblVisit.getValueAt(t, 1).equals(visit.getName())) {
+                        if (tblVisit.getModel().getValueAt(t, 1).equals(visit.getName())) {
                             tblVisit.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
                             if (t < (tblVisit.getModel().getRowCount()) - 1) {
@@ -1159,7 +1159,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Perform the save action
         if (locationWL != null && element != null && visit != null && dtpSightingDate.getDate() != null) {
             if (saveSighting()) {
-                Toolkit.getDefaultToolkit().beep();
+                if (app.getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
                 // (Evt is null if the Image Upload calls save method and the dialog shouldn't be closed)
                 // Premare to close dialog
                 if (panelToRefresh != null) {
@@ -1299,7 +1301,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
-            element = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 1)));
+            element = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
             UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, lblElementImage, WildLogThumbnailSizes.SMALL, app);
         }
         else {
@@ -1328,7 +1330,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         if (!bulkUploadMode) {
             if (tblVisit.getSelectedRowCount() == 1) {
-                visit = app.getDBI().find(new Visit(tblVisit.getValueAt(tblVisit.getSelectedRow(), 1).toString()));
+                visit = app.getDBI().find(new Visit(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1).toString()));
             }
             else {
                 visit = null;
@@ -1339,7 +1341,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!bulkUploadMode) {
             if (tblLocation.getSelectedRowCount() == 1) {
-                locationWL = app.getDBI().find(new Location(tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString()));
+                locationWL = app.getDBI().find(new Location(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString()));
                 UtilsTableGenerator.setupVisitTableSmallWithType(app, tblVisit, locationWL);
                 btnAddNewVisit.setEnabled(true);
                 visit = null;

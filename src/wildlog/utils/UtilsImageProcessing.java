@@ -149,7 +149,9 @@ public class UtilsImageProcessing {
                 newImageIndex = newImageIndex - 1;
             }
             else {
-                Toolkit.getDefaultToolkit().beep();
+                if (inApp.getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
                 newImageIndex = fotos.size() - 1;
             }
             setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);
@@ -165,7 +167,9 @@ public class UtilsImageProcessing {
                 newImageIndex = newImageIndex + 1;
             }
             else {
-                Toolkit.getDefaultToolkit().beep();
+                if (inApp.getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
                 newImageIndex = 0;
             }
             setupFoto(inID, newImageIndex, inImageLabel, inSize, inApp);

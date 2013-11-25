@@ -109,6 +109,9 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(5).setMaxWidth(155);
                     inTable.getColumnModel().getColumn(6).setPreferredWidth(90);
                     inTable.getColumnModel().getColumn(6).setMaxWidth(95);
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
                 }
@@ -165,6 +168,9 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(60);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
                 }
@@ -235,6 +241,9 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(4).setMaxWidth(125);
                     inTable.getColumnModel().getColumn(5).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(5).setMaxWidth(125);
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
                 }
@@ -318,6 +327,9 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(5).setMaxWidth(85);
                     inTable.getColumnModel().getColumn(6).setPreferredWidth(70);
                     inTable.getColumnModel().getColumn(6).setMaxWidth(80);
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 2, 3, 1, SortOrder.DESCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
                 }
@@ -381,6 +393,9 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(2).setMaxWidth(90);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(45);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(85);
+                        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                            inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                        }
                         // Setup default sorting
                         setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                     }
@@ -448,6 +463,9 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(2).setMaxWidth(90);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(55);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(125);
+                        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                            inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                        }
                         // Setup default sorting
                         setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                     }
@@ -541,6 +559,9 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(6).setMaxWidth(75);
                         inTable.getColumnModel().getColumn(7).setPreferredWidth(35);
                         inTable.getColumnModel().getColumn(7).setMaxWidth(35);
+                        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                            inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                        }
                         // Setup default sorting
                         setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                     }
@@ -618,6 +639,9 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(3).setMaxWidth(105);
                         inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
                         inTable.getColumnModel().getColumn(4).setMaxWidth(85);
+                        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                            inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                        }
                         // Setup default sorting
                         setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                     }
@@ -695,6 +719,9 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(3).setMaxWidth(105);
                         inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
                         inTable.getColumnModel().getColumn(4).setMaxWidth(85);
+                        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                            inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                        }
                         // Setup default sorting
                         setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                     }
@@ -755,6 +782,9 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(75);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                 }
@@ -807,6 +837,9 @@ public final class UtilsTableGenerator {
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
                 }
@@ -866,7 +899,11 @@ public final class UtilsTableGenerator {
                     setupRenderersAndThumbnailRows(inTable, false);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(135);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(75);
+                    // Hide the field from the view, but I need it for loading the Sighting
                     inTable.removeColumn(inTable.getColumnModel().getColumn(3));
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
                     // Setup default sorting
                     setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
                 }
@@ -940,21 +977,34 @@ public final class UtilsTableGenerator {
     }
 
     private static ImageIcon setupThumbnailIcon(WildLogApp inApp, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
-        WildLogFile wildLogFile = inApp.getDBI().find(new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID()));
-        if (wildLogFile != null) {
-            return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
+        if (inApp.getWildLogOptions().isUseThumbnailTables()) {
+            WildLogFile wildLogFile = inApp.getDBI().find(new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID()));
+            if (wildLogFile != null) {
+                return new ImageIcon(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL).toString());
+            }
+            return UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
         }
-        return UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.VERY_SMALL);
+        else {
+            return null;
+        }
     }
 
     private static void setupRenderersAndThumbnailRows(JTable inTable, boolean inShowDatesWithTime) {
-        inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-        inTable.getColumnModel().getColumn(0).setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-        inTable.getColumnModel().getColumn(0).setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-        inTable.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.VERY_SMALL.getSize()));
-        inTable.setDefaultRenderer(Object.class, new TextCellRenderer(1));
-        inTable.setDefaultRenderer(Integer.class, new TextCellRenderer(1));
-        inTable.setDefaultRenderer(Long.class, new TextCellRenderer(1));
+        int primaryColumn;
+        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+            inTable.setRowHeight(25);
+            primaryColumn = 0;
+        }
+        else {
+            inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0).setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0).setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.VERY_SMALL.getSize()));
+            primaryColumn = 1;
+        }
+        inTable.setDefaultRenderer(Object.class, new TextCellRenderer(primaryColumn));
+        inTable.setDefaultRenderer(Integer.class, new TextCellRenderer(primaryColumn));
+        inTable.setDefaultRenderer(Long.class, new TextCellRenderer(primaryColumn));
         inTable.setDefaultRenderer(WildLogTableModelDataWrapper.class, new WildLogDataModelWrappertCellRenderer());
         if (inShowDatesWithTime) {
             inTable.setDefaultRenderer(Date.class, new DateTimeCellRenderer());

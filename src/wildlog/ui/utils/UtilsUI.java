@@ -147,7 +147,7 @@ public final class UtilsUI {
                     }
                     // Select the row
                     for (int t = 0; t < inTable.getRowSorter().getViewRowCount(); t++) {
-                        if (inTable.getValueAt(t, 1).toString().toLowerCase().startsWith(currentWord.toLowerCase())) {
+                        if (inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), 1).toString().toLowerCase().startsWith(currentWord.toLowerCase())) {
                             inTable.getSelectionModel().setSelectionInterval(t, t);
                             inTable.scrollRectToVisible(inTable.getCellRect(t, 0, true));
                             Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(

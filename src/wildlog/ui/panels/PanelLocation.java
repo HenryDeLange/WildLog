@@ -1242,7 +1242,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
             else {
                 if  (tblVisit.getSelectedRowCount() == 1) {
-                    UtilsTableGenerator.setupElementsTableMediumForVisit(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getValueAt(tblVisit.getSelectedRow(), 1))));
+                    UtilsTableGenerator.setupElementsTableMediumForVisit(app, tblElement, app.getDBI().find(new Visit((String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(tblVisit.getSelectedRow()), 1))));
                 }
                 else {
                     if (tblVisit.getSelectedRowCount() == 0) {
@@ -1284,7 +1284,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!isPopup) {
             int[] selectedRows = tblElement.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
+                UtilsPanelGenerator.openPanelAsTab(app, (String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
             }
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
@@ -1302,7 +1302,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblVisit.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    Visit visit = app.getDBI().find(new Visit((String)tblVisit.getValueAt(selectedRows[t], 1)));
+                    Visit visit = app.getDBI().find(new Visit((String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)));
                     UtilsPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
                     app.getDBI().delete(visit);
                 }
@@ -1322,7 +1322,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         if (!isPopup) {
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (String)tblVisit.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
+                UtilsPanelGenerator.openPanelAsTab(app, (String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
             }
         }
     }//GEN-LAST:event_btnGoVisitActionPerformed
@@ -1362,7 +1362,9 @@ public class PanelLocation extends PanelCanSetupHeader {
                     txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(locationWL.getName());
                     lastSavedLocation = locationWL.cloneShallow();
-                    Toolkit.getDefaultToolkit().beep();
+                    if (app.getWildLogOptions().isEnableSounds()) {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                 }
                 else {
                     txtName.setBackground(Color.RED);

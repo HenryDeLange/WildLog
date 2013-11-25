@@ -1098,7 +1098,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         if (sighting != null) {
             int select = -1;
             for (int t = 0; t < tblSightings.getModel().getRowCount(); t++) {
-                if ((Long)(tblSightings.getValueAt(t, 6)) == sighting.getSightingCounter())
+                if ((Long)(tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(t), 6)) == sighting.getSightingCounter())
                 {
                     select = t;
                     break;
@@ -1126,7 +1126,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     }
            });
             if (result == JOptionPane.YES_OPTION) {
-                sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 6)));
+                sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6)));
                 app.getDBI().delete(sighting);
                 sighting = null;
                 refreshSightingInfo();
@@ -1182,7 +1182,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Long)tblSightings.getValueAt(tblSightings.getSelectedRow(), 6)));
+            sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6)));
         }
         else {
             sighting = null;
@@ -1315,7 +1315,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     txtName.setBackground(new java.awt.Color(204, 255, 204));
                     txtName.setText(visit.getName());
                     lastSavedVisit = visit.cloneShallow();
-                    Toolkit.getDefaultToolkit().beep();
+                    if (app.getWildLogOptions().isEnableSounds()) {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                 }
                 else {
                     txtName.setBackground(Color.RED);

@@ -267,7 +267,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
             // Get Image
-            final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
+            final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
             if (fotos.size() > 0) {
                 UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
@@ -320,7 +320,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
@@ -328,7 +328,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
@@ -350,7 +350,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(selectedRows[t], 1)));
+                    Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)));
                     Visit tempVisit = new Visit();
                     tempVisit.setLocationName(tempLocation.getName());
                     List<Visit> visits = app.getDBI().list(tempVisit);
@@ -398,10 +398,10 @@ public class PanelTabLocations extends javax.swing.JPanel {
 
     private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
         if (tblLocation.getSelectedRow() != -1) {
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
+            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getValueAt(selectedRows[t], 1)),
+                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)),
                     PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
             }
         }
@@ -409,7 +409,7 @@ public class PanelTabLocations extends javax.swing.JPanel {
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
+            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
             UtilsFileProcessing.openFile(tempLocation.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased

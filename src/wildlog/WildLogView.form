@@ -344,6 +344,93 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="extraMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Extra"/>
+            <Property name="name" type="java.lang.String" value="extraMenu" noResource="true"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExifMenuItem">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Image EXIF Data Reader"/>
+                <Property name="toolTipText" type="java.lang.String" value="Browse to any image on your computer and view the EXIF data."/>
+                <Property name="name" type="java.lang.String" value="mnuExifMenuItem" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExifMenuItemActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuCreateSlideshow">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/Slideshow_Small.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Create a Slideshow"/>
+                <Property name="toolTipText" type="java.lang.String" value="Create a slideshow using a folder of images anywhere on your computer."/>
+                <Property name="name" type="java.lang.String" value="mnuCreateSlideshow" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateSlideshowActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuSunAndMoon">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon_big.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="View Sun And Moon Phase"/>
+                <Property name="toolTipText" type="java.lang.String" value="Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location."/>
+                <Property name="name" type="java.lang.String" value="mnuSunAndMoon" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSunAndMoonActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="externalMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="External Tools"/>
+                <Property name="toolTipText" type="java.lang.String" value="Easy access to some useful external (third party) tools bundled with this application."/>
+                <Property name="name" type="java.lang.String" value="externalMenu" noResource="true"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuDBConsole">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Open H2 Database Console"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open the DB console bundled with the H2 database to access the database used by WildLog."/>
+                    <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuDBConsoleActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuOpenMapApp">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Map Icon.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Open OpenMap GIS Software"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Open the OpenMap application in standand alone mode."/>
+                    <Property name="name" type="java.lang.String" value="mnuOpenMapApp" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOpenMapAppActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+          </SubComponents>
+        </Menu>
         <Menu class="javax.swing.JMenu" name="settingsMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Settings"/>
@@ -436,89 +523,63 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="extraMenu">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Extra"/>
-            <Property name="name" type="java.lang.String" value="extraMenu" noResource="true"/>
-          </Properties>
-          <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExifMenuItem">
+            <Menu class="javax.swing.JMenu" name="mnuPerformance">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Image EXIF Data Reader"/>
-                <Property name="toolTipText" type="java.lang.String" value="Browse to any image on your computer and view the EXIF data."/>
-                <Property name="name" type="java.lang.String" value="mnuExifMenuItem" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExifMenuItemActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuCreateSlideshow">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Slideshow_Small.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Create a Slideshow"/>
-                <Property name="toolTipText" type="java.lang.String" value="Create a slideshow using a folder of images anywhere on your computer."/>
-                <Property name="name" type="java.lang.String" value="mnuCreateSlideshow" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateSlideshowActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuSunAndMoon">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon_big.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="View Sun And Moon Phase"/>
-                <Property name="toolTipText" type="java.lang.String" value="Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location."/>
-                <Property name="name" type="java.lang.String" value="mnuSunAndMoon" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSunAndMoonActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator3">
-              <Properties>
-                <Property name="name" type="java.lang.String" value="jSeparator3" noResource="true"/>
-              </Properties>
-            </MenuItem>
-            <Menu class="javax.swing.JMenu" name="externalMenu">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="External Tools"/>
-                <Property name="toolTipText" type="java.lang.String" value="Easy access to some useful external (third party) tools bundled with this application."/>
-                <Property name="name" type="java.lang.String" value="externalMenu" noResource="true"/>
+                <Property name="text" type="java.lang.String" value="Performance Settings"/>
+                <Property name="name" type="java.lang.String" value="mnuPerformance" noResource="true"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuDBConsole">
+                <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuUseIconTables">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
+                    <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="app.getWildLogOptions().isUseThumbnailTables()" type="code"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Open H2 Database Console"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the DB console bundled with the H2 database to access the database used by WildLog."/>
-                    <Property name="name" type="java.lang.String" value="mnuDBConsole" noResource="true"/>
+                    <Property name="text" type="java.lang.String" value="Show Thumbnails On Tables"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select this option to show thumbnails in the tables. Disabling this option will result in the tables loading much faster, but they won&apos;t show any thumbnails."/>
+                    <Property name="name" type="java.lang.String" value="chkMnuUseIconTables" noResource="true"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuDBConsoleActionPerformed"/>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuUseIconTablesItemStateChanged"/>
                   </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuOpenMapApp">
+                <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuBrowseWithThumbnails">
                   <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Map Icon.gif"/>
+                    <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="app.getWildLogOptions().isUseThumnailBrowsing()" type="code"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Open OpenMap GIS Software"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Open the OpenMap application in standand alone mode."/>
-                    <Property name="name" type="java.lang.String" value="mnuOpenMapApp" noResource="true"/>
+                    <Property name="text" type="java.lang.String" value="Use Thumbnails On The Browse Tab"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select this option to use large thumbnails in the Browse Tab instead of the original files. Enabling this option should improve performance on the Browse Tab, but reduce the image quality."/>
+                    <Property name="name" type="java.lang.String" value="chkMnuBrowseWithThumbnails" noResource="true"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuOpenMapAppActionPerformed"/>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuBrowseWithThumbnailsItemStateChanged"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="mnuOther">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Other Settings"/>
+                <Property name="name" type="java.lang.String" value="mnuOther" noResource="true"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JCheckBoxMenuItem" name="chkMnuEnableSounds">
+                  <Properties>
+                    <Property name="selected" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="app.getWildLogOptions().isEnableSounds()" type="code"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Enable Beep Sounds"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select this option to enable the application to play a beep sounds in response to user input."/>
+                    <Property name="name" type="java.lang.String" value="chkMnuEnableSounds" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="chkMnuEnableSoundsItemStateChanged"/>
                   </Events>
                 </MenuItem>
               </SubComponents>

@@ -596,7 +596,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
             // Make changes to Files
-            // NOTE: It is best to make sure that v3 Workspace clean has been run
+            // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
             state.execute("UPDATE FILES SET ORIGINALPATH = replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/', '')");
             // Create indexes
             state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
@@ -618,6 +618,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_DEFAULT ON FILES (ID, ISDEFAULT)");
             state.execute("CREATE INDEX IF NOT EXISTS FILE_ORGPATH_DEFAULT ON FILES (ORIGINALPATH, ISDEFAULT)");
             state.execute("CREATE INDEX IF NOT EXISTS FILE_ID_TYPE_DEFAULT ON FILES (ID, FILETYPE, ISDEFAULT)");
+            // Make changes to Wildlog settings
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILTABLES smallint DEFAULT true");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
         }

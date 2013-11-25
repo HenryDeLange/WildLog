@@ -1344,7 +1344,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (inFotos.size() > imageIndex) {
             imageIndex--;
             if (imageIndex < 0) {
-                Toolkit.getDefaultToolkit().beep();
+                if (app.getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
                 imageIndex = inFotos.size() - 1;
             }
             setupFile(inFotos);
@@ -1358,7 +1360,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (inFotos.size() > imageIndex) {
             imageIndex++;
             if (imageIndex >= inFotos.size()) {
-                Toolkit.getDefaultToolkit().beep();
+                if (app.getWildLogOptions().isEnableSounds()) {
+                    Toolkit.getDefaultToolkit().beep();
+                }
                 imageIndex = 0;
             }
             setupFile(inFotos);
@@ -1486,7 +1490,13 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         submittedTasks.put(tempKey, executorService.submit(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Image tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize).getImage();
+                                        Image tempConcImage;
+                                        if (WildLogApp.getApplication().getWildLogOptions().isUseThumnailBrowsing()) {
+                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE), inFinalSize).getImage();
+                                        }
+                                        else {
+                                            tempConcImage = UtilsImageProcessing.getScaledIcon(inFiles.get(inIndex).getAbsolutePath(), inFinalSize).getImage();
+                                        }
                                         // Load die image in altwee maps sodat al die verskillende "contains" reg werk...
                                         inNewPreloadedImages.put(tempKey, tempConcImage);
                                         preloadedImages.put(tempKey, tempConcImage);

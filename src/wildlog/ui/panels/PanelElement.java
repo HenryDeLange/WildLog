@@ -1362,7 +1362,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     txtPrimaryName.setBackground(new java.awt.Color(204, 255, 204));
                     txtPrimaryName.setText(element.getPrimaryName());
                     lastSavedElement = element.cloneShallow();
-                    Toolkit.getDefaultToolkit().beep();
+                    if (app.getWildLogOptions().isEnableSounds()) {
+                        Toolkit.getDefaultToolkit().beep();
+                    }
                 }
                 else {
                     txtPrimaryName.setBackground(Color.RED);
@@ -1498,12 +1500,12 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             if (rdbLocations.isSelected()) {
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    UtilsPanelGenerator.openPanelAsTab(app, (String)tblLocation.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
+                    UtilsPanelGenerator.openPanelAsTab(app, (String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
                 }
             }
             else {
                 if (tblLocation.getSelectedRowCount() == 1) {
-                    Location location = app.getDBI().find(new Location((String)tblLocation.getValueAt(tblLocation.getSelectedRow(), 1)));
+                    Location location = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
                     // Vir sightings moet ek die model gebruik om by die ID uit te kom want die column is remove van die view
                     Sighting sighting = app.getDBI().find(new Sighting((Long)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 3)));
                     PanelSighting dialog = new PanelSighting(
@@ -1516,8 +1518,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                         @Override
                         public int showDialog() {
                             JOptionPane.showMessageDialog(app.getMainFrame(),
-                                    "You can't view multiple Observations at once.",
-                                    "Please Note", JOptionPane.INFORMATION_MESSAGE);
+                                    "Please choose one Observation to view.",
+                                    "Slect Observation To View", JOptionPane.INFORMATION_MESSAGE);
                             return -1;
                         }
                     });

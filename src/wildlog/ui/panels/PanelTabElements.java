@@ -265,7 +265,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
             // Get Image
-            Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 1)));
+            Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
             if (fotos.size() > 0) {
                 UtilsImageProcessing.setupFoto(tempElement.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
@@ -303,7 +303,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
@@ -325,8 +325,8 @@ public class PanelTabElements extends javax.swing.JPanel {
             if (result == JOptionPane.YES_OPTION) {
                 int[] selectedRows = tblElement.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
-                    UtilsPanelGenerator.removeOpenedTab((String)tblElement.getValueAt(selectedRows[t], 1), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel);
-                    app.getDBI().delete(new Element((String)tblElement.getValueAt(selectedRows[t], 1)));
+                    UtilsPanelGenerator.removeOpenedTab((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel);
+                    app.getDBI().delete(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)));
                 }
                 formComponentShown(null);
             }
@@ -359,14 +359,14 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getValueAt(selectedRows[t], 1)),
+            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
-            Element tempElement = app.getDBI().find(new Element((String)tblElement.getValueAt(tblElement.getSelectedRow(), 1)));
+            Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
             UtilsFileProcessing.openFile(tempElement.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased

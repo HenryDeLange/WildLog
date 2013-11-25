@@ -57,7 +57,7 @@ public class LocationSelectionDialog extends JDialog {
             @Override
             public void run() {
                 for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
-                    if (tblLocation.getValueAt(t, 1).equals(inSelectedLocation)) {
+                    if (tblLocation.getModel().getValueAt(t, 1).equals(inSelectedLocation)) {
                         tblLocation.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblLocation.getModel().getRowCount()) - 1) {
@@ -177,14 +177,14 @@ public class LocationSelectionDialog extends JDialog {
 
     private void lblImageLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageLocationMouseReleased
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + tblLocation.getValueAt(tblLocation.getSelectedRow(), 1), 0, app);
+            UtilsFileProcessing.openFile(Location.WILDLOGFILE_ID_PREFIX + tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1), 0, app);
         }
     }//GEN-LAST:event_lblImageLocationMouseReleased
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         if (tblLocation.getSelectedRowCount() == 1) {
             selectionMade = true;
-            selectedLocationName = tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString();
+            selectedLocationName = tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString();
             tblLocation.setBorder(null);
             dispose();
         }
@@ -199,7 +199,7 @@ public class LocationSelectionDialog extends JDialog {
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (!tblLocation.getSelectionModel().isSelectionEmpty()) {
-            String selectedName = tblLocation.getValueAt(tblLocation.getSelectedRow(), 1).toString();
+            String selectedName = tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString();
             // Change the image
             UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblImageLocation, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         }

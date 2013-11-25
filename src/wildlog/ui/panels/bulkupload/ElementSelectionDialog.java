@@ -64,7 +64,7 @@ public class ElementSelectionDialog extends JDialog {
             @Override
             public void run() {
                 for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if (tblElement.getValueAt(t, 1).equals(inSelectedElement)) {
+                    if (tblElement.getModel().getValueAt(t, 1).equals(inSelectedElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getModel().getRowCount()) - 1) {
@@ -222,14 +222,14 @@ public class ElementSelectionDialog extends JDialog {
 
     private void lblElementImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblElementImageMouseReleased
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
-            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + tblElement.getValueAt(tblElement.getSelectedRow(), 1), 0, app);
+            UtilsFileProcessing.openFile(Element.WILDLOGFILE_ID_PREFIX + tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1), 0, app);
         }
     }//GEN-LAST:event_lblElementImageMouseReleased
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         if (tblElement.getSelectedRowCount() == 1) {
             selectionMade = true;
-            selectedElementName = tblElement.getValueAt(tblElement.getSelectedRow(), 1).toString();
+            selectedElementName = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1).toString();
             previousElement = selectedElementName;
             tblElement.setBorder(null);
             dispose();
@@ -247,7 +247,7 @@ public class ElementSelectionDialog extends JDialog {
             public void run() {
                 // Select the previous element
                 for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if (tblElement.getValueAt(t, 1).equals(previousElement)) {
+                    if (tblElement.getModel().getValueAt(t, 1).equals(previousElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getModel().getRowCount()) - 1) {
@@ -271,7 +271,7 @@ public class ElementSelectionDialog extends JDialog {
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (!tblElement.getSelectionModel().isSelectionEmpty()) {
-            String selectedName = tblElement.getValueAt(tblElement.getSelectedRow(), 1).toString();
+            String selectedName = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1).toString();
             // Change the image
             UtilsImageProcessing.setupFoto(Element.WILDLOGFILE_ID_PREFIX + selectedName, 0, lblElementImage, WildLogThumbnailSizes.MEDIUM_SMALL, app);
         }

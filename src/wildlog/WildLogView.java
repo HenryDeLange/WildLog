@@ -302,6 +302,14 @@ public final class WildLogView extends JFrame {
         mnuMergeElements = new javax.swing.JMenuItem();
         mnuMergeLocations = new javax.swing.JMenuItem();
         mnuMergeVisit = new javax.swing.JMenuItem();
+        extraMenu = new javax.swing.JMenu();
+        mnuExifMenuItem = new javax.swing.JMenuItem();
+        mnuCreateSlideshow = new javax.swing.JMenuItem();
+        mnuSunAndMoon = new javax.swing.JMenuItem();
+        jSeparator3 = new javax.swing.JPopupMenu.Separator();
+        externalMenu = new javax.swing.JMenu();
+        mnuDBConsole = new javax.swing.JMenuItem();
+        mnuOpenMapApp = new javax.swing.JMenuItem();
         settingsMenu = new javax.swing.JMenu();
         mappingMenu = new javax.swing.JMenu();
         chkMnuUseWMS = new javax.swing.JCheckBoxMenuItem();
@@ -311,14 +319,11 @@ public final class WildLogView extends JFrame {
         slideshowMenu = new javax.swing.JMenu();
         mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
         mnuSetSlideshowSize = new javax.swing.JMenuItem();
-        extraMenu = new javax.swing.JMenu();
-        mnuExifMenuItem = new javax.swing.JMenuItem();
-        mnuCreateSlideshow = new javax.swing.JMenuItem();
-        mnuSunAndMoon = new javax.swing.JMenuItem();
-        jSeparator3 = new javax.swing.JPopupMenu.Separator();
-        externalMenu = new javax.swing.JMenu();
-        mnuDBConsole = new javax.swing.JMenuItem();
-        mnuOpenMapApp = new javax.swing.JMenuItem();
+        mnuPerformance = new javax.swing.JMenu();
+        chkMnuUseIconTables = new javax.swing.JCheckBoxMenuItem();
+        chkMnuBrowseWithThumbnails = new javax.swing.JCheckBoxMenuItem();
+        mnuOther = new javax.swing.JMenu();
+        chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem mnuAbout = new javax.swing.JMenuItem();
 
@@ -817,6 +822,75 @@ public final class WildLogView extends JFrame {
 
         menuBar.add(advancedMenu);
 
+        extraMenu.setText("Extra");
+        extraMenu.setName("extraMenu"); // NOI18N
+
+        mnuExifMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        mnuExifMenuItem.setText("Image EXIF Data Reader");
+        mnuExifMenuItem.setToolTipText("Browse to any image on your computer and view the EXIF data.");
+        mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
+        mnuExifMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExifMenuItemActionPerformed(evt);
+            }
+        });
+        extraMenu.add(mnuExifMenuItem);
+
+        mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
+        mnuCreateSlideshow.setText("Create a Slideshow");
+        mnuCreateSlideshow.setToolTipText("Create a slideshow using a folder of images anywhere on your computer.");
+        mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
+        mnuCreateSlideshow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCreateSlideshowActionPerformed(evt);
+            }
+        });
+        extraMenu.add(mnuCreateSlideshow);
+
+        mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
+        mnuSunAndMoon.setText("View Sun And Moon Phase");
+        mnuSunAndMoon.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
+        mnuSunAndMoon.setName("mnuSunAndMoon"); // NOI18N
+        mnuSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSunAndMoonActionPerformed(evt);
+            }
+        });
+        extraMenu.add(mnuSunAndMoon);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        extraMenu.add(jSeparator3);
+
+        externalMenu.setText("External Tools");
+        externalMenu.setToolTipText("Easy access to some useful external (third party) tools bundled with this application.");
+        externalMenu.setName("externalMenu"); // NOI18N
+
+        mnuDBConsole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
+        mnuDBConsole.setText("Open H2 Database Console");
+        mnuDBConsole.setToolTipText("Open the DB console bundled with the H2 database to access the database used by WildLog.");
+        mnuDBConsole.setName("mnuDBConsole"); // NOI18N
+        mnuDBConsole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuDBConsoleActionPerformed(evt);
+            }
+        });
+        externalMenu.add(mnuDBConsole);
+
+        mnuOpenMapApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Map Icon.gif"))); // NOI18N
+        mnuOpenMapApp.setText("Open OpenMap GIS Software");
+        mnuOpenMapApp.setToolTipText("Open the OpenMap application in standand alone mode.");
+        mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
+        mnuOpenMapApp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuOpenMapAppActionPerformed(evt);
+            }
+        });
+        externalMenu.add(mnuOpenMapApp);
+
+        extraMenu.add(externalMenu);
+
+        menuBar.add(extraMenu);
+
         settingsMenu.setText("Settings");
         settingsMenu.setName("settingsMenu"); // NOI18N
 
@@ -889,76 +963,52 @@ public final class WildLogView extends JFrame {
 
         settingsMenu.add(slideshowMenu);
 
+        mnuPerformance.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
+        mnuPerformance.setText("Performance Settings");
+        mnuPerformance.setName("mnuPerformance"); // NOI18N
+
+        chkMnuUseIconTables.setSelected(app.getWildLogOptions().isUseThumbnailTables());
+        chkMnuUseIconTables.setText("Show Thumbnails On Tables");
+        chkMnuUseIconTables.setToolTipText("Select this option to show thumbnails in the tables. Disabling this option will result in the tables loading much faster, but they won't show any thumbnails.");
+        chkMnuUseIconTables.setName("chkMnuUseIconTables"); // NOI18N
+        chkMnuUseIconTables.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuUseIconTablesItemStateChanged(evt);
+            }
+        });
+        mnuPerformance.add(chkMnuUseIconTables);
+
+        chkMnuBrowseWithThumbnails.setSelected(app.getWildLogOptions().isUseThumnailBrowsing());
+        chkMnuBrowseWithThumbnails.setText("Use Thumbnails On The Browse Tab");
+        chkMnuBrowseWithThumbnails.setToolTipText("Select this option to use large thumbnails in the Browse Tab instead of the original files. Enabling this option should improve performance on the Browse Tab, but reduce the image quality.");
+        chkMnuBrowseWithThumbnails.setName("chkMnuBrowseWithThumbnails"); // NOI18N
+        chkMnuBrowseWithThumbnails.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuBrowseWithThumbnailsItemStateChanged(evt);
+            }
+        });
+        mnuPerformance.add(chkMnuBrowseWithThumbnails);
+
+        settingsMenu.add(mnuPerformance);
+
+        mnuOther.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuOther.setText("Other Settings");
+        mnuOther.setName("mnuOther"); // NOI18N
+
+        chkMnuEnableSounds.setSelected(app.getWildLogOptions().isEnableSounds());
+        chkMnuEnableSounds.setText("Enable Beep Sounds");
+        chkMnuEnableSounds.setToolTipText("Select this option to enable the application to play a beep sounds in response to user input.");
+        chkMnuEnableSounds.setName("chkMnuEnableSounds"); // NOI18N
+        chkMnuEnableSounds.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuEnableSoundsItemStateChanged(evt);
+            }
+        });
+        mnuOther.add(chkMnuEnableSounds);
+
+        settingsMenu.add(mnuOther);
+
         menuBar.add(settingsMenu);
-
-        extraMenu.setText("Extra");
-        extraMenu.setName("extraMenu"); // NOI18N
-
-        mnuExifMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
-        mnuExifMenuItem.setText("Image EXIF Data Reader");
-        mnuExifMenuItem.setToolTipText("Browse to any image on your computer and view the EXIF data.");
-        mnuExifMenuItem.setName("mnuExifMenuItem"); // NOI18N
-        mnuExifMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExifMenuItemActionPerformed(evt);
-            }
-        });
-        extraMenu.add(mnuExifMenuItem);
-
-        mnuCreateSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
-        mnuCreateSlideshow.setText("Create a Slideshow");
-        mnuCreateSlideshow.setToolTipText("Create a slideshow using a folder of images anywhere on your computer.");
-        mnuCreateSlideshow.setName("mnuCreateSlideshow"); // NOI18N
-        mnuCreateSlideshow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuCreateSlideshowActionPerformed(evt);
-            }
-        });
-        extraMenu.add(mnuCreateSlideshow);
-
-        mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
-        mnuSunAndMoon.setText("View Sun And Moon Phase");
-        mnuSunAndMoon.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
-        mnuSunAndMoon.setName("mnuSunAndMoon"); // NOI18N
-        mnuSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSunAndMoonActionPerformed(evt);
-            }
-        });
-        extraMenu.add(mnuSunAndMoon);
-
-        jSeparator3.setName("jSeparator3"); // NOI18N
-        extraMenu.add(jSeparator3);
-
-        externalMenu.setText("External Tools");
-        externalMenu.setToolTipText("Easy access to some useful external (third party) tools bundled with this application.");
-        externalMenu.setName("externalMenu"); // NOI18N
-
-        mnuDBConsole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
-        mnuDBConsole.setText("Open H2 Database Console");
-        mnuDBConsole.setToolTipText("Open the DB console bundled with the H2 database to access the database used by WildLog.");
-        mnuDBConsole.setName("mnuDBConsole"); // NOI18N
-        mnuDBConsole.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuDBConsoleActionPerformed(evt);
-            }
-        });
-        externalMenu.add(mnuDBConsole);
-
-        mnuOpenMapApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Map Icon.gif"))); // NOI18N
-        mnuOpenMapApp.setText("Open OpenMap GIS Software");
-        mnuOpenMapApp.setToolTipText("Open the OpenMap application in standand alone mode.");
-        mnuOpenMapApp.setName("mnuOpenMapApp"); // NOI18N
-        mnuOpenMapApp.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuOpenMapAppActionPerformed(evt);
-            }
-        });
-        externalMenu.add(mnuOpenMapApp);
-
-        extraMenu.add(externalMenu);
-
-        menuBar.add(extraMenu);
 
         helpMenu.setText("About");
         helpMenu.setName("helpMenu"); // NOI18N
@@ -2322,6 +2372,26 @@ public final class WildLogView extends JFrame {
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuBackupWorkspaceActionPerformed
 
+    private void chkMnuUseIconTablesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseIconTablesItemStateChanged
+        WildLogOptions options = app.getWildLogOptions();
+        options.setUseThumbnailTables(chkMnuUseIconTables.isSelected());
+        app.setWildLogOptions(options);
+        tabbedPanel.setSelectedIndex(0);
+    }//GEN-LAST:event_chkMnuUseIconTablesItemStateChanged
+
+    private void chkMnuBrowseWithThumbnailsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuBrowseWithThumbnailsItemStateChanged
+        WildLogOptions options = app.getWildLogOptions();
+        options.setUseThumnailBrowsing(chkMnuBrowseWithThumbnails.isSelected());
+        app.setWildLogOptions(options);
+        tabbedPanel.setSelectedIndex(0);
+    }//GEN-LAST:event_chkMnuBrowseWithThumbnailsItemStateChanged
+
+    private void chkMnuEnableSoundsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuEnableSoundsItemStateChanged
+        WildLogOptions options = app.getWildLogOptions();
+        options.setEnableSounds(chkMnuEnableSounds.isSelected());
+        app.setWildLogOptions(options);
+    }//GEN-LAST:event_chkMnuEnableSoundsItemStateChanged
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -2341,6 +2411,9 @@ public final class WildLogView extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
+    private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
+    private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
+    private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;
     private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu externalMenu;
@@ -2394,6 +2467,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuMergeVisit;
     private javax.swing.JMenuItem mnuMoveVisits;
     private javax.swing.JMenuItem mnuOpenMapApp;
+    private javax.swing.JMenu mnuOther;
+    private javax.swing.JMenu mnuPerformance;
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;
