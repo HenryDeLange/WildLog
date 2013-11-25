@@ -13,6 +13,9 @@ public class WildLogOptions {
     private Latitudes defaultInputLatitude;
     private Longitudes defaultInputLongitude;
     private boolean isOnlinemapTheDefault;
+    private boolean useThumbnailTables;
+    private boolean useThumnailBrowsing;
+    private boolean enableSounds;
 
 
     public int getDatabaseVersion() {
@@ -77,6 +80,30 @@ public class WildLogOptions {
 
     public void setIsOnlinemapTheDefault(boolean inIsOnlinemapTheDefault) {
         isOnlinemapTheDefault = inIsOnlinemapTheDefault;
+    }
+
+    public boolean isUseThumbnailTables() {
+        return useThumbnailTables;
+    }
+
+    public void setUseThumbnailTables(boolean inUseThumbnailTables) {
+        useThumbnailTables = inUseThumbnailTables;
+    }
+
+    public boolean isUseThumnailBrowsing() {
+        return useThumnailBrowsing;
+    }
+
+    public void setUseThumnailBrowsing(boolean inUseThumnailBrowsing) {
+        useThumnailBrowsing = inUseThumnailBrowsing;
+    }
+
+    public boolean isEnableSounds() {
+        return enableSounds;
+    }
+
+    public void setEnableSounds(boolean inEnableSounds) {
+        enableSounds = inEnableSounds;
     }
 
 }
