@@ -60,14 +60,21 @@ public class ElementSelectionDialog extends JDialog {
         UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
+        final int columnToUse;
+        if (app.getWildLogOptions().isUseThumbnailTables()) {
+            columnToUse = 1;
+        }
+        else {
+            columnToUse = 0;
+        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if (tblElement.getModel().getValueAt(t, 1).equals(inSelectedElement)) {
+                for (int t = 0; t < tblElement.getRowCount(); t++) {
+                    if (tblElement.getValueAt(t, columnToUse).equals(inSelectedElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
-                        if (t < (tblElement.getModel().getRowCount()) - 1) {
+                        if (t < (tblElement.getRowCount()) - 1) {
                             scrollRow = t + 1;
                         }
                         tblElement.scrollRectToVisible(tblElement.getCellRect(scrollRow, 0, true));

@@ -53,14 +53,21 @@ public class LocationSelectionDialog extends JDialog {
         UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, new Location());
         // Load selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
+        final int columnToUse;
+        if (app.getWildLogOptions().isUseThumbnailTables()) {
+            columnToUse = 1;
+        }
+        else {
+            columnToUse = 0;
+        }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
-                    if (tblLocation.getModel().getValueAt(t, 1).equals(inSelectedLocation)) {
+                for (int t = 0; t < tblLocation.getRowCount(); t++) {
+                    if (tblLocation.getValueAt(t, columnToUse).equals(inSelectedLocation)) {
                         tblLocation.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
-                        if (t < (tblLocation.getModel().getRowCount()) - 1) {
+                        if (t < (tblLocation.getRowCount()) - 1) {
                             scrollRow = t + 1;
                         }
                         tblLocation.scrollRectToVisible(tblLocation.getCellRect(scrollRow, 0, true));

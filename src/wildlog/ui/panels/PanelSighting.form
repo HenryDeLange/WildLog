@@ -403,7 +403,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="90" y="67" width="210" height="20"/>
+              <AbsoluteConstraints x="90" y="67" width="210" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -562,7 +562,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="10" y="330" width="190" height="20"/>
+              <AbsoluteConstraints x="10" y="330" width="190" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -780,7 +780,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="300" y="330" width="210" height="20"/>
+              <AbsoluteConstraints x="300" y="330" width="210" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -877,7 +877,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="190" y="40" width="110" height="20"/>
+              <AbsoluteConstraints x="190" y="40" width="110" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -914,6 +914,38 @@
             </Constraint>
           </Constraints>
         </Component>
+        <Component class="javax.swing.JButton" name="btnCalculateSunAndMoon">
+          <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="b5" green="cc" red="d0" type="rgb"/>
+            </Property>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon.gif"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate &lt;b&gt;Time of Day&lt;/b&gt; and &lt;b&gt; Moon Phase&lt;/b&gt;&lt;/html&gt;"/>
+            <Property name="toolTipText" type="java.lang.String" value="Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates."/>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
+            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="!disableEditing" type="code"/>
+            </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
+              <Insets value="[2, 2, 2, 2]"/>
+            </Property>
+            <Property name="name" type="java.lang.String" value="btnCalculateSunAndMoon" noResource="true"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalculateSunAndMoonActionPerformed"/>
+          </Events>
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+              <AbsoluteConstraints x="520" y="113" width="110" height="-1"/>
+            </Constraint>
+          </Constraints>
+        </Component>
         <Component class="javax.swing.JButton" name="btnGetDateFromImage">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -942,7 +974,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="520" y="75" width="110" height="40"/>
+              <AbsoluteConstraints x="520" y="75" width="110" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -979,38 +1011,6 @@
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="265" y="200" width="40" height="20"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="javax.swing.JButton" name="btnCalculateSunAndMoon">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="b5" green="cc" red="d0" type="rgb"/>
-            </Property>
-            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/wildlog/resources/icons/SunAndMoon.gif"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate &lt;b&gt;Time of Day&lt;/b&gt; and &lt;b&gt; Moon Phase&lt;/b&gt;&lt;/html&gt;"/>
-            <Property name="toolTipText" type="java.lang.String" value="Automatically calculate the Sun and Moon phase based on the date and GPS co-ordinates."/>
-            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-              <Color id="Hand Cursor"/>
-            </Property>
-            <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="!disableEditing" type="code"/>
-            </Property>
-            <Property name="focusPainted" type="boolean" value="false"/>
-            <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-              <Insets value="[2, 2, 2, 2]"/>
-            </Property>
-            <Property name="name" type="java.lang.String" value="btnCalculateSunAndMoon" noResource="true"/>
-          </Properties>
-          <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCalculateSunAndMoonActionPerformed"/>
-          </Events>
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="520" y="120" width="110" height="45"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1197,7 +1197,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="200" y="150" width="100" height="40"/>
+              <AbsoluteConstraints x="200" y="150" width="-1" height="40"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1414,6 +1414,9 @@
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="0" maximum="1440" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>
             </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
+            </Property>
             <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
               <SpinnerEditor format="0" type="3"/>
             </Property>
@@ -1443,6 +1446,9 @@
           <Properties>
             <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
               <SpinnerModel initial="0.0" maximum="60.0" minimum="0.0" numberType="java.lang.Double" stepSize="1.0" type="number"/>
+            </Property>
+            <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+              <Color id="Hand Cursor"/>
             </Property>
             <Property name="editor" type="javax.swing.JComponent" editor="org.netbeans.modules.form.editors.SpinnerEditorEditor">
               <SpinnerEditor format="00" type="3"/>
@@ -1494,7 +1500,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="520" y="170" width="110" height="45"/>
+              <AbsoluteConstraints x="520" y="166" width="110" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1510,6 +1516,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 4, 2, 4]"/>
             </Property>
@@ -1536,6 +1543,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 4, 2, 4]"/>
             </Property>
@@ -1562,6 +1570,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
+            <Property name="focusPainted" type="boolean" value="false"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 4, 2, 4]"/>
             </Property>
@@ -1622,6 +1631,7 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getAge()" type="code"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="cmbAge" noResource="true"/>
           </Properties>
           <Constraints>

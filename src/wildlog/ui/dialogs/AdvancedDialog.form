@@ -69,7 +69,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Duration.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Recalculate the Duration for all Observations"/>
-        <Property name="toolTipText" type="java.lang.String" value="Automatically adjust the time of all Observations by the specified amount."/>
+        <Property name="toolTipText" type="java.lang.String" value="Automatically calculate the duration of the Observations based on the dates of the uploaded files."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -100,7 +100,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Set ons GPS point for all Observations"/>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="toolTipText" type="java.lang.String" value="All Observations for this Period will be assigned the specified GPS value."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

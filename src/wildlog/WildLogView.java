@@ -45,6 +45,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
@@ -2126,11 +2127,20 @@ public final class WildLogView extends JFrame {
                     }
                     // Open the summary document
                     UtilsFileProcessing.openFile(feedbackFile);
-                    // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
-                    // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
-                    app.getMainFrame().setVisible(false);
-                    app.quit(null);
                     return null;
+                }
+                @Override
+                protected void finished() {
+                    super.finished();
+                    // Using invokeLater because I hope the progressbar will have finished by then, otherwise the popup is shown
+                    // that asks wether you want to clos ethe application or not, and it's best to rather restart after the cleanup.
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Close the application to be safe (make sure no wierd references/paths are still used, etc.)
+                            app.quit(null);
+                        }
+                    });
                 }
             });
         }

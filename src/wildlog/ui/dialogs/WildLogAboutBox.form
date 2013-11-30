@@ -27,7 +27,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Component id="imageLabel" min="-2" pref="132" max="-2" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -52,14 +52,14 @@
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="imageLabel" min="-2" pref="180" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
@@ -93,7 +93,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -169,7 +169,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appDescLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa;Use at own risk.&lt;br&gt; &#xa;WildLog was written in Java by Henry de Lange and uses third party libraries to help with some of the functionality including OpenMap, H2 and SwingX, JMF, MetadataExtractor and MediaUtil.&#xa;&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt; Use at own risk.&lt;br&gt;  WildLog was written in Java by Henry de Lange and uses third party libraries to help with some of the functionality including OpenMap, H2 and SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="appDescLabel" noResource="true"/>
       </Properties>
       <AuxValues>
@@ -231,7 +231,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="emailAddressLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="WildLog.Support@gmail.com"/>
+        <Property name="text" type="java.lang.String" value="support@mywild.co.za"/>
         <Property name="name" type="java.lang.String" value="emailAddressLabel" noResource="true"/>
       </Properties>
       <AuxValues>

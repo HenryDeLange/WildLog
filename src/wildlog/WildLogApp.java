@@ -35,6 +35,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.InsetsUIResource;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
@@ -57,6 +60,7 @@ import wildlog.utils.WildLogPaths;
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath();
+    private static boolean useNimbusLF = false;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
     private JXMapKit mapOnline;
@@ -142,20 +146,24 @@ public class WildLogApp extends Application {
      */
     @Override
     protected void startup() {
-//        // TODO: Die Nimbus lyk baie eenders tussen Windows en Linux, en dit lyk baiebeter as die default op Ubuntu :)
-//        // Try to set the Nimbus look and feel
-//        try {
-//            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        }
-//        catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-//            // We'll try to go ahead without the Nimbus LookAndFeel
-//            System.out.println("Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
-//        }
+        if (useNimbusLF) {
+            // Try to set the Nimbus look and feel
+            try {
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                    if ("Nimbus".equals(info.getName())) {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        // Make the global button margins smaller, because Nimbus ignores the setting on the buttons
+                        UIManager.getLookAndFeelDefaults().put("Button.contentMargins", new InsetsUIResource(0,0,0,0));
+                        UIManager.getLookAndFeelDefaults().put("ToggleButton.contentMargins", new InsetsUIResource(0,0,0,0));
+                        break;
+                    }
+                }
+            }
+            catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                // We'll try to go ahead without the Nimbus LookAndFeel
+                System.out.println("Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
+            }
+        }
         // Show the main frame
         view = new WildLogView(this);
         view.addWindowListener(new WindowAdapter() {
@@ -256,26 +264,12 @@ public class WildLogApp extends Application {
                 if (arg != null && "log_to_file".equalsIgnoreCase(arg.toLowerCase())) {
                     logToFile = true;
                 }
-// Die storie werk nie regtig in Ubuntu nie...
-//                else
-//                if (arg != null && arg.startsWith("font_size=")) {
-//                    // Change the font size to a standard size (in an attempt to have the panels render the same on other platforms, especially Ubuntu...).. Dit werk nie in Ubuntu nie...
-//                    try {
-//                        int newFontSize = Integer.parseInt(arg.substring("font_size=".length()));
-//                        UIDefaults uiDefaults = UIManager.getDefaults();
-//                        Enumeration keys = uiDefaults.keys();
-//                        while (keys.hasMoreElements()) {
-//                            Object key = keys.nextElement();
-//                            if ((key instanceof String) && (((String)key).endsWith(".font"))) {
-//                                FontUIResource font = (FontUIResource)UIManager.get(key);
-//                                uiDefaults.put(key, new FontUIResource(font.getName(), font.getStyle(), newFontSize));
-//                            }
-//                        }
-//                    }
-//                    catch (NumberFormatException ex) {
-//                        ex.printStackTrace(System.err);
-//                    }
-//                }
+                else
+                if (arg != null && arg.startsWith("nimbus")) {
+                    // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
+                    // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
+                    useNimbusLF = true;
+                }
             }
         }
         try {

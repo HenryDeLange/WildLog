@@ -119,16 +119,23 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, searchLocation);
 
         // Setup default values for tables
+        final int columnToUse;
+        if (app.getWildLogOptions().isUseThumbnailTables()) {
+            columnToUse = 1;
+        }
+        else {
+            columnToUse = 0;
+        }
         if (locationWL != null) {
             // Wag eers vir die table om klaar te load voor ek iets probeer select
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    for (int t = 0; t < tblLocation.getModel().getRowCount(); t++) {
-                        if (tblLocation.getModel().getValueAt(t, 1).equals(locationWL.getName())) {
+                    for (int t = 0; t < tblLocation.getRowCount(); t++) {
+                        if (tblLocation.getValueAt(t, columnToUse).equals(locationWL.getName())) {
                             tblLocation.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
-                            if (t < (tblLocation.getModel().getRowCount()) - 1) {
+                            if (t < (tblLocation.getRowCount()) - 1) {
                                 scrollRow = t + 1;
                             }
                             tblLocation.scrollRectToVisible(tblLocation.getCellRect(scrollRow, 0, true));
@@ -143,11 +150,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                        if (tblElement.getModel().getValueAt(t, 1).equals(element.getPrimaryName())) {
+                    for (int t = 0; t < tblElement.getRowCount(); t++) {
+                        if (tblElement.getValueAt(t, columnToUse).equals(element.getPrimaryName())) {
                             tblElement.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
-                            if (t < (tblElement.getModel().getRowCount()) - 1) {
+                            if (t < (tblElement.getRowCount()) - 1) {
                                 scrollRow = t + 1;
                             }
                             tblElement.scrollRectToVisible(tblElement.getCellRect(scrollRow, 0, true));
@@ -191,11 +198,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    for (int t = 0; t < tblVisit.getModel().getRowCount(); t++) {
-                        if (tblVisit.getModel().getValueAt(t, 1).equals(visit.getName())) {
+                    for (int t = 0; t < tblVisit.getRowCount(); t++) {
+                        if (tblVisit.getValueAt(t, columnToUse).equals(visit.getName())) {
                             tblVisit.getSelectionModel().setSelectionInterval(t, t);
                             int scrollRow = t;
-                            if (t < (tblVisit.getModel().getRowCount()) - 1) {
+                            if (t < (tblVisit.getRowCount()) - 1) {
                                 scrollRow = t + 1;
                             }
                             tblVisit.scrollRectToVisible(tblVisit.getCellRect(scrollRow, 0, true));
@@ -418,11 +425,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeFormat = new javax.swing.JComboBox();
         lblSightingID = new javax.swing.JLabel();
         spnNumberOfElements = new javax.swing.JSpinner();
+        btnCalculateSunAndMoon = new javax.swing.JButton();
         btnGetDateFromImage = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        btnCalculateSunAndMoon = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         cmbMoonlight = new javax.swing.JComboBox();
         spnHours = new javax.swing.JSpinner();
@@ -626,7 +633,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setFocusable(false);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
-        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 67, 210, 20));
+        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 67, 210, -1));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -694,7 +701,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         txtSearch.setEnabled(!disableEditing);
         txtSearch.setName("txtSearch"); // NOI18N
-        sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 190, 20));
+        sightingIncludes.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, 190, -1));
 
         btnDeleteImage.setBackground(new java.awt.Color(208, 204, 181));
         btnDeleteImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
@@ -791,7 +798,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         txtSearchLocation.setEnabled(!disableEditing && !bulkUploadMode);
         txtSearchLocation.setName("txtSearchLocation"); // NOI18N
-        sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 210, 20));
+        sightingIncludes.add(txtSearchLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 210, -1));
 
         lblVisit.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblVisit.setText("Period:");
@@ -835,7 +842,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 cmbTimeFormatActionPerformed(evt);
             }
         });
-        sightingIncludes.add(cmbTimeFormat, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 110, 20));
+        sightingIncludes.add(cmbTimeFormat, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 110, -1));
 
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingID.setName("lblSightingID"); // NOI18N
@@ -847,36 +854,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnNumberOfElements.setEnabled(!disableEditing);
         spnNumberOfElements.setName("spnNumberOfElements"); // NOI18N
         sightingIncludes.add(spnNumberOfElements, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 140, -1));
-
-        btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
-        btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
-        btnGetDateFromImage.setText("<html>Load <b>Date</b> from <b>Image </b>EXIF</html>");
-        btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
-        btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
-        btnGetDateFromImage.setFocusPainted(false);
-        btnGetDateFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGetDateFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
-        btnGetDateFromImage.setName("btnGetDateFromImage"); // NOI18N
-        btnGetDateFromImage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGetDateFromImageActionPerformed(evt);
-            }
-        });
-        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 110, 40));
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Time:");
-        jLabel2.setName("jLabel2"); // NOI18N
-        sightingIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, 20));
-
-        jLabel3.setText("Moon Phase:");
-        jLabel3.setName("jLabel3"); // NOI18N
-        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, 20));
-
-        jLabel5.setText("% Full");
-        jLabel5.setName("jLabel5"); // NOI18N
-        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 200, 40, 20));
 
         btnCalculateSunAndMoon.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
@@ -893,7 +870,37 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateSunAndMoonActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, 45));
+        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 113, 110, -1));
+
+        btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
+        btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
+        btnGetDateFromImage.setText("<html>Load <b>Date</b> from <b>Image </b>EXIF</html>");
+        btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
+        btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnGetDateFromImage.setFocusPainted(false);
+        btnGetDateFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGetDateFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnGetDateFromImage.setName("btnGetDateFromImage"); // NOI18N
+        btnGetDateFromImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGetDateFromImageActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 110, -1));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel2.setText("Time:");
+        jLabel2.setName("jLabel2"); // NOI18N
+        sightingIncludes.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, 20));
+
+        jLabel3.setText("Moon Phase:");
+        jLabel3.setName("jLabel3"); // NOI18N
+        sightingIncludes.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, 20));
+
+        jLabel5.setText("% Full");
+        jLabel5.setName("jLabel5"); // NOI18N
+        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 200, 40, 20));
 
         jLabel11.setText("Moonlight:");
         jLabel11.setName("jLabel11"); // NOI18N
@@ -958,7 +965,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnGPSActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, 100, 40));
+        sightingIncludes.add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 150, -1, 40));
 
         jLabel7.setText("Temperature:");
         jLabel7.setName("jLabel7"); // NOI18N
@@ -1037,6 +1044,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sightingIncludes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, 20));
 
         spnDurationMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 1440, 1));
+        spnDurationMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnDurationMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationMinutes, "0"));
         spnDurationMinutes.setEnabled(!disableEditing);
         spnDurationMinutes.setName("spnDurationMinutes"); // NOI18N
@@ -1047,6 +1055,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sightingIncludes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 120, -1, 20));
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 60.0d, 1.0d));
+        spnDurationSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnDurationSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationSeconds, "00"));
         spnDurationSeconds.setEnabled(!disableEditing);
         spnDurationSeconds.setName("spnDurationSeconds"); // NOI18N
@@ -1070,12 +1079,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateDurationActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 170, 110, 45));
+        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 166, 110, -1));
 
         btnAddNewElement.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddNewElement.setToolTipText("Add new Creature");
         btnAddNewElement.setEnabled(!disableEditing);
+        btnAddNewElement.setFocusPainted(false);
         btnAddNewElement.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewElement.setName("btnAddNewElement"); // NOI18N
         btnAddNewElement.addActionListener(new java.awt.event.ActionListener() {
@@ -1089,6 +1099,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddNewLocation.setToolTipText("Add new Place");
         btnAddNewLocation.setEnabled(!disableEditing && !bulkUploadMode);
+        btnAddNewLocation.setFocusPainted(false);
         btnAddNewLocation.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewLocation.setName("btnAddNewLocation"); // NOI18N
         btnAddNewLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -1102,6 +1113,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddNewVisit.setToolTipText("Add new Period");
         btnAddNewVisit.setEnabled(!disableEditing && !bulkUploadMode);
+        btnAddNewVisit.setFocusPainted(false);
         btnAddNewVisit.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewVisit.setName("btnAddNewVisit"); // NOI18N
         btnAddNewVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -1126,6 +1138,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbAge.setModel(new DefaultComboBoxModel(Age.values()));
         cmbAge.setSelectedItem(sighting.getAge());
+        cmbAge.setFocusable(false);
         cmbAge.setName("cmbAge"); // NOI18N
         sightingIncludes.add(cmbAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 140, -1));
 

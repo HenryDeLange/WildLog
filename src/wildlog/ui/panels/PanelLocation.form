@@ -380,20 +380,20 @@
                                   <Component id="txtLatitude" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <EmptySpace min="-2" pref="140" max="-2" attributes="0"/>
-                                      <Component id="btnGPS" min="-2" pref="100" max="-2" attributes="0"/>
+                                      <Component id="btnGPS" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jLabel42" max="32767" attributes="0"/>
-                                  <Component id="jLabel41" min="-2" pref="79" max="-2" attributes="0"/>
+                                  <Component id="jLabel41" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="cmbGameRating" pref="133" max="32767" attributes="0"/>
                                   <Component id="cmbRating" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="23" max="32767" attributes="0"/>
+                              <EmptySpace pref="28" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -460,7 +460,7 @@
                           <Component id="txtName" max="32767" attributes="0"/>
                           <Component id="jLabel48" min="-2" pref="20" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -484,7 +484,7 @@
                               <Component id="txtLongitude" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
@@ -1278,17 +1278,11 @@
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
-                                              <Component id="rdbVisit" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="120" max="-2" attributes="0"/>
-                                              <Component id="lblNumberOfElements" min="-2" pref="30" max="-2" attributes="0"/>
-                                          </Group>
-                                          <Component id="rdbLocation" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                      <Component id="rdbLocation" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <Component id="rdbVisit" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
+                                      <Component id="lblNumberOfElements" min="-2" pref="30" max="-2" attributes="0"/>
                                       <EmptySpace max="32767" attributes="0"/>
                                       <Component id="btnGoElement" min="-2" pref="130" max="-2" attributes="0"/>
                                   </Group>
@@ -1310,9 +1304,11 @@
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnGoElement" alignment="1" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="rdbVisit" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
                           <Component id="lblNumberOfElements" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
-                          <Component id="rdbLocation" alignment="0" min="-2" pref="30" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                              <Component id="rdbLocation" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                              <Component id="rdbVisit" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>

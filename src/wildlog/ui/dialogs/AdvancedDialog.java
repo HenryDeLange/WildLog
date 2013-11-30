@@ -86,7 +86,7 @@ public class AdvancedDialog extends JDialog {
 
         btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
         btnSetDuration.setText("Recalculate the Duration for all Observations");
-        btnSetDuration.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
+        btnSetDuration.setToolTipText("Automatically calculate the duration of the Observations based on the dates of the uploaded files.");
         btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetDuration.setFocusPainted(false);
         btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -105,7 +105,7 @@ public class AdvancedDialog extends JDialog {
 
         btnSetAllGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnSetAllGPS.setText("Set ons GPS point for all Observations");
-        btnSetAllGPS.setToolTipText("");
+        btnSetAllGPS.setToolTipText("All Observations for this Period will be assigned the specified GPS value.");
         btnSetAllGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetAllGPS.setFocusPainted(false);
         btnSetAllGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

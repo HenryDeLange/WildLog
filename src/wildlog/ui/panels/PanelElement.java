@@ -673,45 +673,38 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             .addGroup(pnlNamesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel55)
+                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtOtherName)
                     .addGroup(pnlNamesLayout.createSequentialGroup()
-                        .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlNamesLayout.createSequentialGroup()
-                                .addComponent(txtScienceName)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(txtReferenceID, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtPrimaryName)))
-                    .addGroup(pnlNamesLayout.createSequentialGroup()
-                        .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtScienceName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtOtherName)))
+                        .addComponent(txtReferenceID, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPrimaryName))
                 .addGap(5, 5, 5))
         );
         pnlNamesLayout.setVerticalGroup(
             pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlNamesLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlNamesLayout.createSequentialGroup()
-                        .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPrimaryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(5, 5, 5)
-                        .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtOtherName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlNamesLayout.createSequentialGroup()
-                        .addGap(48, 48, 48)
-                        .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtScienceName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtReferenceID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))))
+                .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPrimaryName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtOtherName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtScienceName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtReferenceID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(5, 5, 5))
         );
 
@@ -722,19 +715,16 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbFeedingClass.setSelectedItem(element.getFeedingClass());
         cmbFeedingClass.setFocusable(false);
         cmbFeedingClass.setName("cmbFeedingClass"); // NOI18N
-        cmbFeedingClass.setPreferredSize(new java.awt.Dimension(150, 20));
 
         cmbEndangeredStatus.setModel(new DefaultComboBoxModel(EndangeredStatus.values()));
         cmbEndangeredStatus.setSelectedItem(element.getEndangeredStatus());
         cmbEndangeredStatus.setFocusable(false);
         cmbEndangeredStatus.setName("cmbEndangeredStatus"); // NOI18N
-        cmbEndangeredStatus.setPreferredSize(new java.awt.Dimension(150, 20));
 
         cmbAddFrequency.setModel(new DefaultComboBoxModel(wildlog.data.enums.AddFrequency.values()));
         cmbAddFrequency.setSelectedItem(element.getAddFrequency());
         cmbAddFrequency.setFocusable(false);
         cmbAddFrequency.setName("cmbAddFrequency"); // NOI18N
-        cmbAddFrequency.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jLabel1.setText("Feeding Class:");
         jLabel1.setName("jLabel1"); // NOI18N
@@ -755,21 +745,17 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbActiveTime.setSelectedItem(element.getActiveTime());
         cmbActiveTime.setFocusable(false);
         cmbActiveTime.setName("cmbActiveTime"); // NOI18N
-        cmbActiveTime.setPreferredSize(new java.awt.Dimension(150, 20));
 
         txtbreedingDuration.setText(element.getBreedingDuration());
         txtbreedingDuration.setName("txtbreedingDuration"); // NOI18N
-        txtbreedingDuration.setPreferredSize(new java.awt.Dimension(150, 20));
 
         txtBreedingNumber.setText(element.getBreedingNumber());
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
-        txtBreedingNumber.setPreferredSize(new java.awt.Dimension(150, 20));
 
         cmbWaterDependance.setModel(new DefaultComboBoxModel(wildlog.data.enums.WaterDependancy.values()));
         cmbWaterDependance.setSelectedItem(element.getWaterDependance());
         cmbWaterDependance.setFocusable(false);
         cmbWaterDependance.setName("cmbWaterDependance"); // NOI18N
-        cmbWaterDependance.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jLabel62.setText("Endangered:");
         jLabel62.setName("jLabel62"); // NOI18N
@@ -779,7 +765,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbType.setSelectedItem(element.getType());
         cmbType.setFocusable(false);
         cmbType.setName("cmbType"); // NOI18N
-        cmbType.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jLabel64.setText("Active Time:");
         jLabel64.setName("jLabel64"); // NOI18N
@@ -789,7 +774,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         txtLifespan.setText(element.getLifespan());
         txtLifespan.setName("txtLifespan"); // NOI18N
-        txtLifespan.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jLabel76.setText("Breeding:");
         jLabel76.setName("jLabel76"); // NOI18N
@@ -801,7 +785,6 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         cmbWishList.setSelectedItem(element.getWishListRating());
         cmbWishList.setFocusable(false);
         cmbWishList.setName("cmbWishList"); // NOI18N
-        cmbWishList.setPreferredSize(new java.awt.Dimension(150, 20));
 
         jLabel60.setText("Creature Type:");
         jLabel60.setToolTipText("");
@@ -841,16 +824,16 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                             .addComponent(cmbType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)
                         .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
                             .addComponent(jLabel67)
                             .addComponent(jLabel75, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel77)
                             .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(3, 3, 3)
                         .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLifespan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtbreedingDuration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtBreedingNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtLifespan)
+                            .addComponent(txtbreedingDuration)
+                            .addComponent(txtBreedingNumber)
                             .addGroup(pnlInfo1Layout.createSequentialGroup()
                                 .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cmbFeedingClass, 0, 185, Short.MAX_VALUE)
@@ -1088,47 +1071,43 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                     .addGroup(pnlInfo2Layout.createSequentialGroup()
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                .addGap(100, 100, 100)
-                                .addComponent(jLabel3)
-                                .addGap(44, 44, 44)
-                                .addComponent(jLabel6))
+                                .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addComponent(spnSizeMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo2Layout.createSequentialGroup()
+                                .addComponent(jLabel72, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(10, 10, 10)
+                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                        .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(32, 32, 32)
-                                        .addComponent(spnSizeMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(spnSizeMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(5, 5, 5)
-                                        .addComponent(jLabel4)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(cmbSizeUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                        .addComponent(jLabel72, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(20, 20, 20)
-                                        .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(5, 5, 5)
-                                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(10, 10, 10)
+                                .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel10)
+                                .addGap(11, 11, 11)
+                                .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addComponent(spnSizeMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(5, 5, 5)
+                                .addComponent(jLabel4)
+                                .addGap(12, 12, 12)
+                                .addComponent(cmbSizeUnits, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(20, 20, 20)
+                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addGap(93, 93, 93)
+                                .addComponent(jLabel7)
+                                .addGap(44, 44, 44)
+                                .addComponent(jLabel8)
+                                .addGap(127, 151, Short.MAX_VALUE))
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
                                 .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlInfo2Layout.createSequentialGroup()
                                         .addComponent(jLabel73)
                                         .addGap(20, 20, 20)
-                                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                                .addGap(10, 10, 10)
-                                                .addComponent(jLabel7)
-                                                .addGap(44, 44, 44)
-                                                .addComponent(jLabel8))
-                                            .addGroup(pnlInfo2Layout.createSequentialGroup()
-                                                .addComponent(spnWeightMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(10, 10, 10)
-                                                .addComponent(spnWeightMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(spnWeightMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(spnWeightMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(5, 5, 5)
                                         .addComponent(jLabel5)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1138,66 +1117,82 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                                         .addGap(8, 8, 8)
                                         .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                        .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(pnlInfo2Layout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(jLabel3)
+                        .addGap(44, 44, 44)
+                        .addComponent(jLabel6)
+                        .addGap(0, 517, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
         );
         pnlInfo2Layout.setVerticalGroup(
             pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlInfo2Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel59)
-                    .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfo2Layout.createSequentialGroup()
+                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
-                .addGap(10, 10, 10)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel61)
-                    .addComponent(jScrollPane18)
-                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addComponent(jLabel69)
-                        .addGap(6, 6, 6)
-                        .addComponent(jScrollPane1)))
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel6))
-                        .addGap(1, 1, 1)
-                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel71)
-                            .addComponent(spnSizeMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(spnSizeMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cmbSizeUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel73)
                             .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cmbWeightUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(cmbWeightUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(spnWeightMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(spnWeightMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(10, 10, 10)
+                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel74)
+                            .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(pnlInfo2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(5, 5, 5)
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel8))
-                        .addGap(1, 1, 1)
+                            .addComponent(jLabel59)
+                            .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addGap(10, 10, 10)
                         .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(spnWeightMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(spnWeightMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(10, 10, 10)
-                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel72)
-                    .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel74)
-                    .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(spnWeightFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(spnWeightFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel61)
+                            .addComponent(jScrollPane18)
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addComponent(jLabel69)
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane1)))
+                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addGap(5, 5, 5)
+                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel6))
+                                .addGap(1, 1, 1)
+                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel71)
+                                    .addComponent(spnSizeMaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(spnSizeMaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cmbSizeUnits, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(pnlInfo2Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel8))))
+                        .addGap(11, 11, 11)
+                        .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel72)
+                            .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(spnSizeFemaleMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(spnSizeFemaleMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(pnlInfo2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cmbSizeType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGap(5, 5, 5))
         );
 
