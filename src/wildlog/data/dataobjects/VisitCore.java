@@ -74,7 +74,6 @@ public class VisitCore implements Comparable<VisitCore>, DataObjectWithWildLogFi
             visit.setLocationName(locationName);
             visit.setName(name);
             visit.setStartDate(startDate);
-            visit.setStartDate(startDate);
             visit.setType(type);
             return visit;
         }

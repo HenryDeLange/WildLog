@@ -1,5 +1,7 @@
 package wildlog.data.utils;
 
+import java.util.Date;
+
 public final class UtilsData {
 
     private UtilsData() {
@@ -80,6 +82,12 @@ public final class UtilsData {
             return false;
         }
         if (inObject1 != null && inObject2 != null) {
+            if (inObject1 instanceof Date && inObject2 instanceof Date) {
+                // Dates are sometimes java.util.Date and othertimes java.swl.Date and they have different toString() methods
+                if (((Date) inObject1).getTime() == ((Date) inObject2).getTime()) {
+                    return true;
+                }
+            }
             if (inObject1.toString() == null && inObject2.toString() == null) {
                 return true;
             }

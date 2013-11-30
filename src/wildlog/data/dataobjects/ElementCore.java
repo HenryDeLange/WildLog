@@ -138,7 +138,7 @@ public class ElementCore implements Comparable<ElementCore>, DataObjectWithWildL
             element.setScientificName(scientificName);
             element.setSizeFemaleMax(sizeFemaleMax);
             element.setSizeFemaleMin(sizeFemaleMin);
-            element.setSizeMaleMax(sizeMaleMin);
+            element.setSizeMaleMax(sizeMaleMax);
             element.setSizeMaleMin(sizeMaleMin);
             element.setSizeType(sizeType);
             element.setSizeUnit(sizeUnit);
