@@ -34,7 +34,7 @@ import wildlog.ui.helpers.cellrenderers.DateCellRenderer;
 import wildlog.ui.helpers.cellrenderers.DateTimeCellRenderer;
 import wildlog.ui.helpers.cellrenderers.IconCellRenderer;
 import wildlog.ui.helpers.cellrenderers.TextCellRenderer;
-import wildlog.ui.helpers.cellrenderers.WildLogDataModelWrappertCellRenderer;
+import wildlog.ui.helpers.cellrenderers.WildLogDataModelWrapperCellRenderer;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModel;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModelDataWrapper;
 import wildlog.utils.NamedThreadFactory;
@@ -1005,7 +1005,7 @@ public final class UtilsTableGenerator {
         inTable.setDefaultRenderer(Object.class, new TextCellRenderer(primaryColumn));
         inTable.setDefaultRenderer(Integer.class, new TextCellRenderer(primaryColumn));
         inTable.setDefaultRenderer(Long.class, new TextCellRenderer(primaryColumn));
-        inTable.setDefaultRenderer(WildLogTableModelDataWrapper.class, new WildLogDataModelWrappertCellRenderer());
+        inTable.setDefaultRenderer(WildLogTableModelDataWrapper.class, new WildLogDataModelWrapperCellRenderer());
         if (inShowDatesWithTime) {
             inTable.setDefaultRenderer(Date.class, new DateTimeCellRenderer());
         }

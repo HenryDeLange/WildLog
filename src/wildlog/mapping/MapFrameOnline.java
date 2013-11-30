@@ -8,9 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import org.jdesktop.swingx.JXMapKit;
 import wildlog.WildLogApp;
-import wildlog.mapping.layers.MapOnlinePointLayer;
 import wildlog.mapping.helpers.WildLogMapMouseListener;
 import wildlog.mapping.helpers.WildLogScrollPanel;
+import wildlog.mapping.layers.MapOnlinePointLayer;
 
 
 public class MapFrameOnline extends JFrame {
@@ -23,7 +23,7 @@ public class MapFrameOnline extends JFrame {
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
         textPane.setContentType("text/html");
-        textPane.setPreferredSize(new Dimension(330, 450));
+        textPane.setPreferredSize(new Dimension(350, 450));
         WildLogScrollPanel scrollPane = new WildLogScrollPanel(textPane);
         map.getMainMap().add(scrollPane);
         // FIXME: Maak dat die dialog altyd weg gaan as mens click

@@ -7,7 +7,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 
-public class WildLogDataModelWrappertCellRenderer extends DefaultTableCellRenderer {
+public class WildLogDataModelWrapperCellRenderer extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
@@ -15,6 +15,9 @@ public class WildLogDataModelWrappertCellRenderer extends DefaultTableCellRender
         setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         setVerticalAlignment(JLabel.CENTER);
         setHorizontalAlignment(JLabel.CENTER);
+        if (!inTable.isEnabled()) {
+            this.setEnabled(false);
+        }
         return this;
     }
 

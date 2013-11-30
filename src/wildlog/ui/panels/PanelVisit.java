@@ -170,17 +170,22 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     @Override
-    public void closeTab() {
+    public boolean closeTab() {
         btnUpdate.requestFocus();
         populateVisitFromUI();
         if (lastSavedVisit.hasTheSameContent(visit)) {
             ((JTabbedPane)getParent()).remove(this);
+            return true;
         }
         else {
             int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab?", "You have unsaved data",
+                    String name = visit.getName();
+                    if (name ==null || name.isEmpty()) {
+                        name = "<New Period>";
+                    }
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab for " + name + "?", "You have unsaved data",
                             JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
             });
@@ -189,13 +194,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 if (visit.getName().trim().length() > 0 && UtilsData.checkCharacters(visit.getName().trim())) {
                     // Do the save action without closing the tab to show the error message
                     ((JTabbedPane)getParent()).remove(this);
+                    return true;
                 }
             }
             else
             if (result == JOptionPane.NO_OPTION) {
                 ((JTabbedPane)getParent()).remove(this);
+                return true;
             }
         }
+        return false;
     }
 
     @Override

@@ -314,7 +314,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void setupSightingInfo() {
         // Display the ID
-        lblSightingID.setText("Observation ID: " + Long.toString(sighting.getSightingCounter()));
+        lblSightingID.setText("<html>Observation ID: " + Long.toString(sighting.getSightingCounter()) + "</html>");
         // Load the values from the Sighting object
         setUIFieldsFromSightingDate();
         cmbCertainty.setSelectedItem(sighting.getCertainty());
@@ -876,7 +876,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel5.setText("% Full");
         jLabel5.setName("jLabel5"); // NOI18N
-        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 40, 20));
+        sightingIncludes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(265, 200, 40, 20));
 
         btnCalculateSunAndMoon.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
@@ -929,7 +929,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnMoonPhase.setEditor(new javax.swing.JSpinner.NumberEditor(spnMoonPhase, "##"));
         spnMoonPhase.setEnabled(!disableEditing);
         spnMoonPhase.setName("spnMoonPhase"); // NOI18N
-        sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 67, -1));
+        sightingIncludes.add(spnMoonPhase, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 170, -1));
 
         txtLatitude.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         txtLatitude.setDisabledTextColor(new java.awt.Color(23, 23, 23));
@@ -1075,6 +1075,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewElement.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddNewElement.setToolTipText("Add new Creature");
+        btnAddNewElement.setEnabled(!disableEditing);
         btnAddNewElement.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewElement.setName("btnAddNewElement"); // NOI18N
         btnAddNewElement.addActionListener(new java.awt.event.ActionListener() {
@@ -1087,6 +1088,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewLocation.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddNewLocation.setToolTipText("Add new Place");
+        btnAddNewLocation.setEnabled(!disableEditing && !bulkUploadMode);
         btnAddNewLocation.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewLocation.setName("btnAddNewLocation"); // NOI18N
         btnAddNewLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -1099,6 +1101,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         btnAddNewVisit.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnAddNewVisit.setToolTipText("Add new Period");
+        btnAddNewVisit.setEnabled(!disableEditing && !bulkUploadMode);
         btnAddNewVisit.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnAddNewVisit.setName("btnAddNewVisit"); // NOI18N
         btnAddNewVisit.addActionListener(new java.awt.event.ActionListener() {
@@ -1557,6 +1560,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             UtilsDialog.addEscapeKeyListener(popup);
             popup.setVisible(true);
             popup.dispose();
+        }
+        else {
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please select a Place first, and then try again to add a new Period.",
+                    "No Place Selected", JOptionPane.WARNING_MESSAGE);
+            getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnAddNewVisitActionPerformed
 

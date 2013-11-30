@@ -28,6 +28,9 @@ public class DateCellRenderer extends DefaultTableCellRenderer {
         else {
             setText("");
         }
+        if (!inTable.isEnabled()) {
+            this.setEnabled(false);
+        }
         return this;
     }
 

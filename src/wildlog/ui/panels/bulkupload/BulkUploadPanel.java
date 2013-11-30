@@ -123,8 +123,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }
 
     @Override
-    public void closeTab() {
+    public boolean closeTab() {
         ((JTabbedPane)getParent()).remove(this);
+        return true;
     }
 
     private void loadImages(ProgressbarTask inProgressbarTask) {

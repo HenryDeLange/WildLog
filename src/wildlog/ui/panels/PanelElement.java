@@ -78,6 +78,8 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             btnSetMainImage.setEnabled(false);
             btnSlideshow.setEnabled(false);
             btnUploadImage.setEnabled(false);
+            rdbLocations.setEnabled(false);
+            rdbSightings.setEnabled(false);
         }
     }
 
@@ -180,17 +182,22 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }
 
     @Override
-    public void closeTab() {
+    public boolean closeTab() {
         btnUpdate.requestFocus();
         populateElementFromUI();
         if (lastSavedElement.hasTheSameContent(element)) {
             ((JTabbedPane)getParent()).remove(this);
+             return true;
         }
         else {
             int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab?", "You have unsaved data",
+                    String name = element.getPrimaryName();
+                    if (name ==null || name.isEmpty()) {
+                        name = "<New Creature>";
+                    }
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab for " + name + "?", "You have unsaved data",
                             JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
             });
@@ -199,13 +206,16 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 if (element.getPrimaryName().trim().length() > 0 && UtilsData.checkCharacters(element.getPrimaryName().trim())) {
                     // Do the save action without closing the tab to show the error message
                     ((JTabbedPane)getParent()).remove(this);
+                     return true;
                 }
             }
             else
             if (result == JOptionPane.NO_OPTION) {
                 ((JTabbedPane)getParent()).remove(this);
+                 return true;
             }
         }
+         return false;
     }
 
     @Override

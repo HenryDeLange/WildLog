@@ -29,13 +29,6 @@ public class Element extends ElementCore implements DataObjectWithHTML {
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        int progressMarker;
-        if (inIsRecursive) {
-            progressMarker = 30;
-        }
-        else {
-            progressMarker = 95;
-        }
         StringBuilder htmlElement = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Creature: " + primaryName + "</title></head>");
         htmlElement.append("<body bgcolor='#E3F0E3'>");
         htmlElement.append("<table bgcolor='#E3F0E3' width='100%'>");
@@ -91,7 +84,7 @@ public class Element extends ElementCore implements DataObjectWithHTML {
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
+                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*5));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                 }
@@ -112,7 +105,7 @@ public class Element extends ElementCore implements DataObjectWithHTML {
             for (Sighting temp : sightings) {
                 htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress(progressMarker + (int)(((double)counter/sightings.size())*(95-progressMarker)));
+                    inProgressbarTask.setTaskProgress((int)(((double)counter/sightings.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;

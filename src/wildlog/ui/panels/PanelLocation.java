@@ -78,6 +78,8 @@ public class PanelLocation extends PanelCanSetupHeader {
             btnSlideshow.setEnabled(false);
             btnSunAndMoon.setEnabled(false);
             btnUploadImage.setEnabled(false);
+            rdbLocation.setEnabled(false);
+            rdbVisit.setEnabled(false);
         }
     }
 
@@ -173,17 +175,22 @@ public class PanelLocation extends PanelCanSetupHeader {
     }
 
     @Override
-    public void closeTab() {
+    public boolean closeTab() {
         btnUpdate.requestFocus();
         populateLocationFromUI();
         if (lastSavedLocation.hasTheSameContent(locationWL)) {
             ((JTabbedPane)getParent()).remove(this);
+             return true;
         }
         else {
             int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                 @Override
                 public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab?", "You have unsaved data",
+                    String name = locationWL.getName();
+                    if (name ==null || name.isEmpty()) {
+                        name = "<New Place>";
+                    }
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(), "Save before closing this tab for " + name + "?", "You have unsaved data",
                             JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
             });
@@ -192,13 +199,16 @@ public class PanelLocation extends PanelCanSetupHeader {
                 if (locationWL.getName().trim().length() > 0 && UtilsData.checkCharacters(locationWL.getName().trim())) {
                     // Do the save action without closing the tab to show the error message
                     ((JTabbedPane)getParent()).remove(this);
+                     return true;
                 }
             }
             else
             if (result == JOptionPane.NO_OPTION) {
                 ((JTabbedPane)getParent()).remove(this);
+                 return true;
             }
         }
+         return false;
     }
 
     // Need to look again later at listbox and how I use it...
@@ -1208,7 +1218,13 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
     private void btnGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGPSActionPerformed
-        GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), locationWL);
+        GPSDialog dialog;
+        if (!isPopup) {
+            dialog = new GPSDialog(app, app.getMainFrame(), locationWL);
+        }
+        else {
+            dialog = new GPSDialog(app, (JDialog) this.getParent().getParent().getParent().getParent(), locationWL);
+        }
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));

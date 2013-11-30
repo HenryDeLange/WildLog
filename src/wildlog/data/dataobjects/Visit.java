@@ -26,13 +26,6 @@ public class Visit extends VisitCore implements DataObjectWithHTML {
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        int progressMarker;
-        if (inIsRecursive) {
-            progressMarker = 30;
-        }
-        else {
-            progressMarker = 95;
-        }
         StringBuilder htmlVisit = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Periods: " + name + "</title></head>");
         htmlVisit.append("<body bgcolor='#E6E4F0'>");
         htmlVisit.append("<table bgcolor='#E6E4F0' width='100%'>");
@@ -50,8 +43,8 @@ public class Visit extends VisitCore implements DataObjectWithHTML {
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
-                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*5));
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                 }
             }
@@ -69,10 +62,10 @@ public class Visit extends VisitCore implements DataObjectWithHTML {
             List<Sighting> sightings = inApp.getDBI().list(tempSighting);
             int counter = 0;
             for (int t = 0; t < sightings.size(); t++) {
-                htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, inProgressbarTask)).append("<br/>");
+                htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress(progressMarker + (int)(((double)counter/sightings.size())*(95-progressMarker)));
-                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(" "))
+                    inProgressbarTask.setTaskProgress((int)(((double)counter/sightings.size())*(94)));
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;
                 }

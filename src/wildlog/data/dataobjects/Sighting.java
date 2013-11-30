@@ -52,13 +52,6 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        int progressMarker;
-        if (inIsRecursive) {
-            progressMarker = 30;
-        }
-        else {
-            progressMarker = 95;
-        }
         StringBuilder htmlSighting = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Sightings ID: " + sightingCounter + "</title></head>");
         htmlSighting.append("<body bgcolor='#EEEAD3'>");
         htmlSighting.append("<table bgcolor='#EEEAD3' width='100%'>");
@@ -98,7 +91,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
+                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*99));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                 }

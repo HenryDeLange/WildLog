@@ -142,6 +142,20 @@ public class WildLogApp extends Application {
      */
     @Override
     protected void startup() {
+//        // TODO: Die Nimbus lyk baie eenders tussen Windows en Linux, en dit lyk baiebeter as die default op Ubuntu :)
+//        // Try to set the Nimbus look and feel
+//        try {
+//            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        }
+//        catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+//            // We'll try to go ahead without the Nimbus LookAndFeel
+//            System.out.println("Could not load the Nimbus Look and Feel. The application will continue to launch, but there may be some display problems...");
+//        }
         // Show the main frame
         view = new WildLogView(this);
         view.addWindowListener(new WindowAdapter() {
@@ -165,7 +179,11 @@ public class WildLogApp extends Application {
             public boolean canExit(EventObject event) {
                 boolean doShutdown = true;
                 try {
-                    // TODO: check ook hier vir enige unsaved tabs...
+                    // Waarsku as daar tabs is wat nie gesave is nie
+                    if (!view.closeAllTabs()) {
+                        return false;
+                    }
+                    // Waarsku as daar progressbar tasks is wat nog hardloop
                     TaskMonitor taskMonitor = getContext().getTaskMonitor();
                     if (taskMonitor.getTasks() != null && !taskMonitor.getTasks().isEmpty()) {
                         int result = UtilsDialog.showDialogBackgroundWrapper(getMainFrame(), new UtilsDialog.DialogWrapper() {

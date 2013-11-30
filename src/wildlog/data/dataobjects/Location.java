@@ -25,13 +25,6 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
 
     @Override
     public String toHTML(boolean inIsRecursive, boolean inIncludeImages, WildLogApp inApp, UtilsHTMLExportTypes inExportType, ProgressbarTask inProgressbarTask) {
-        int progressMarker;
-        if (inIsRecursive) {
-            progressMarker = 30;
-        }
-        else {
-            progressMarker = 95;
-        }
         StringBuilder htmlLocation = new StringBuilder("<head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/><title>Place: " + name + "</title></head>");
         htmlLocation.append("<body bgcolor='E9EFF4'>");
         htmlLocation.append("<table bgcolor='#E9EFF4' width='100%'>");
@@ -67,7 +60,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             for (int t = 0; t < files.size(); t++) {
                 filesString.append(files.get(t).toHTML(inExportType));
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*progressMarker));
+                    inProgressbarTask.setTaskProgress((int)(((double)t/files.size())*5));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                 }
@@ -86,9 +79,9 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             List<Visit> visits = inApp.getDBI().list(tempVisit);
             int counter = 0;
             for (int t = 0; t < visits.size(); t++) {
-                htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, inProgressbarTask)).append("<br/>");
+                htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress(progressMarker + (int)(((double)counter/visits.size())*(95-progressMarker)));
+                    inProgressbarTask.setTaskProgress((int)(((double)counter/visits.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;

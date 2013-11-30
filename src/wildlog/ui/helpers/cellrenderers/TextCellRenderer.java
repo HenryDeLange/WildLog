@@ -27,6 +27,9 @@ public class TextCellRenderer extends DefaultTableCellRenderer {
         else {
             setHorizontalAlignment(JLabel.CENTER);
         }
+        if (!inTable.isEnabled()) {
+            this.setEnabled(false);
+        }
         return this;
     }
 

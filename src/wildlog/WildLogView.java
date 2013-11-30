@@ -45,7 +45,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileFilter;
@@ -86,6 +85,7 @@ import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
+import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
@@ -2404,8 +2404,14 @@ public final class WildLogView extends JFrame {
         panelTabBrowse.browseSelectedVisit(inVisit);
     }
 
-    JProgressBar getProgressBar() {
-        return progressBar;
+    public boolean closeAllTabs() {
+        boolean closeStatus = true;
+        while ((tabbedPanel.getTabCount() > 4) && (closeStatus)) {
+            tabbedPanel.setSelectedIndex(4);
+            PanelCanSetupHeader tab = (PanelCanSetupHeader) tabbedPanel.getComponentAt(4);
+            closeStatus = tab.closeTab();
+        }
+        return closeStatus;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -116,7 +116,13 @@ public abstract class PanelCanSetupHeader extends JPanel {
         UtilsUI.attachMouseScrollToTabs(tabbedPane, tempTabHeader, -1);
     }
 
-    public abstract void closeTab();
+    /**
+     * Closes the tab. Some implementations may show a popup to ask whether to save the tab or not.
+     * Return true if the tab was closes (regardless of being saved or not) and false if the
+     * tab was not closed (for example the Cancel option was selected on the popup).
+     * @return
+     */
+    public abstract boolean closeTab();
 
     public HeaderPanel getTabHeader() {
         return tabHeader;
