@@ -81,7 +81,7 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
             for (int t = 0; t < visits.size(); t++) {
                 htmlLocation.append("<br/>").append(visits.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)counter/visits.size())*(94)));
+                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/visits.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;

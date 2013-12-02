@@ -1,9 +1,19 @@
 package wildlog.movies.jpegmovie;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import javax.media.*;
+import javax.media.ConfigureCompleteEvent;
+import javax.media.ControllerEvent;
+import javax.media.ControllerListener;
+import javax.media.DataSink;
+import javax.media.EndOfMediaEvent;
+import javax.media.Format;
+import javax.media.Manager;
+import javax.media.MediaLocator;
+import javax.media.PrefetchCompleteEvent;
+import javax.media.Processor;
+import javax.media.RealizeCompleteEvent;
+import javax.media.ResourceUnavailableEvent;
 import javax.media.control.TrackControl;
 import javax.media.datasink.DataSinkErrorEvent;
 import javax.media.datasink.DataSinkEvent;
@@ -105,18 +115,7 @@ public class JpgToMovie implements ControllerListener, DataSinkListener {
     }
 
     private MediaLocator createMediaLocator(String inURL) {
-        MediaLocator mediaLocator;
-        if (inURL.indexOf(":") > 0) {
-            mediaLocator = new MediaLocator(inURL);
-        }
-        else
-        if (inURL.startsWith(File.separator)) {
-            mediaLocator = new MediaLocator("file:" + inURL);
-        }
-        else {
-            String file = "file:" + System.getProperty("user.dir") + File.separator + inURL;
-            mediaLocator = new MediaLocator(file);
-        }
+        MediaLocator mediaLocator = new MediaLocator("file:" + inURL);
         return mediaLocator;
     }
 

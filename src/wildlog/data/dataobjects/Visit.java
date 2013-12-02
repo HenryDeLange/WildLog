@@ -64,7 +64,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML {
             for (int t = 0; t < sightings.size(); t++) {
                 htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)counter/sightings.size())*(94)));
+                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;

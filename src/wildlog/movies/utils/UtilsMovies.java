@@ -1,13 +1,12 @@
 package wildlog.movies.utils;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
@@ -61,37 +60,43 @@ public final class UtilsMovies {
         // Now create the slideshow
         JpgToMovie jpgToMovie = new JpgToMovie();
         if (inFilePaths.size() > 0) {
-            Path finalPath = Paths.get(File.separator).resolve(inOutputFilename.toAbsolutePath().getRoot().relativize(
-                    inOutputFilename.toAbsolutePath())).normalize();
-            // FIXME: ek dink ek moet die drive letter en dubbel punt strip van die path voor die storie sal werk...
             if (jpgToMovie.createMovieFromJpgs(
                     inApp.getWildLogOptions().getDefaultSlideshowSize(),
                     inApp.getWildLogOptions().getDefaultSlideshowSpeed(),
-                    inFilePaths, finalPath.toString())) {
+                    inFilePaths, inOutputFilename.toAbsolutePath().toString())) {
                 // Lastly launch the file
                 UtilsFileProcessing.openFile(inOutputFilename);
             }
             else {
-                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                    public int showDialog() {
-                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                                "There was a problem generating the slideshow.",
-                                "Error", JOptionPane.ERROR_MESSAGE);
-                        return -1;
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                JOptionPane.showMessageDialog(inApp.getMainFrame(),
+                                        "There was a problem generating the slideshow.",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                                return -1;
+                            }
+                        });
                     }
                 });
             }
         }
         else {
-            // FIXME: Die gekleurde background wys nie vir die dialogs nie want die SLideshowDialog popup verwyder dit wanneer dit dispose word. Dis tricky om te fix want die storie gebreur in verskillende threads ook nog...
-            UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            SwingUtilities.invokeLater(new Runnable() {
                 @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(inApp.getMainFrame(),
-                            "Can't generate Slideshow if there aren't any JPG images.",
-                            "No Images to Process", JOptionPane.INFORMATION_MESSAGE);
-                    return -1;
+                public void run() {
+                    UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(inApp.getMainFrame(),
+                                    "Can't generate Slideshow if there aren't any JPG images.",
+                                    "No Images to Process", JOptionPane.INFORMATION_MESSAGE);
+                            return -1;
+                        }
+                    });
                 }
             });
         }

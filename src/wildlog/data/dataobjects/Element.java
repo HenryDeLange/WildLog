@@ -105,7 +105,7 @@ public class Element extends ElementCore implements DataObjectWithHTML {
             for (Sighting temp : sightings) {
                 htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
                 if (inProgressbarTask != null) {
-                    inProgressbarTask.setTaskProgress((int)(((double)counter/sightings.size())*(94)));
+                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
                     inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
                             + " " + inProgressbarTask.getProgress() + "%");
                     counter++;
