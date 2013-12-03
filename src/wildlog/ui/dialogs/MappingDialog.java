@@ -19,7 +19,7 @@ import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.WildLogPaths;
 
-// TODO: Baie van hierdie logic herhaal op baie plekke, probeer dit sentraliseer...
+
 public class MappingDialog extends JDialog {
     private WildLogApp app;
     private Location location;

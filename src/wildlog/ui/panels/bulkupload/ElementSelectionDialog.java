@@ -331,6 +331,10 @@ public class ElementSelectionDialog extends JDialog {
         return previousElement;
     }
 
+    public static void setPreviousElement(String inPreviousElement) {
+        ElementSelectionDialog.previousElement = inPreviousElement;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnPreviousElement;
     private javax.swing.JButton btnSelect;

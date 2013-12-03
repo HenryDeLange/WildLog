@@ -778,28 +778,31 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        // Reload the locations as they might have changed
-        // FIXME
+        // Reload the location (espesially the image) as it might have changed
+        if (app.getDBI().find(new Location(selectedLocationName)) == null) {
+            selectedLocationName = "";
+            lblLocation.setText(selectedLocationName);
+        }
+        UtilsImageProcessing.setupFoto(Location.WILDLOGFILE_ID_PREFIX + selectedLocationName, 0, lblImageLocation, WildLogThumbnailSizes.SMALL, app);
         // Re-check all species images already assigned since some might have changed
-        // FIXME
-        DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
+        DefaultTableModel model = ((DefaultTableModel) tblBulkImport.getModel());
         for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
+            BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper) model.getValueAt(rowCount, 0);
             if (sightingWrapper.getElementName() != null && !sightingWrapper.getElementName().isEmpty()) {
-                List<Element> elements = app.getDBI().list(new Element());
-                boolean foundElement = false;
-                for (Element element : elements) {
-                    if (sightingWrapper.getElementName().equalsIgnoreCase(element.getPrimaryName())) {
-                        JLabel tempLabel = new JLabel();
-                        UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_SMALL, app);
-                        sightingWrapper.setIcon(tempLabel.getIcon());
-                        foundElement = true;
-                        break;
-                    }
+                Element element = app.getDBI().find(new Element(sightingWrapper.getElementName()));
+                if (element != null) {
+                    JLabel tempLabel = new JLabel();
+                    UtilsImageProcessing.setupFoto(element.getWildLogFileID(), 0, tempLabel, WildLogThumbnailSizes.MEDIUM_SMALL, app);
+                    sightingWrapper.setIcon(tempLabel.getIcon());
                 }
-                if (!foundElement) {
+                else {
+                    if (sightingWrapper.getElementName().equalsIgnoreCase(ElementSelectionDialog.getPreviousElement())) {
+                        ElementSelectionDialog.setPreviousElement("");
+                    }
+                    sightingWrapper.setElementName("");
                     sightingWrapper.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
                 }
+                ((DefaultTableModel) tblBulkImport.getModel()).fireTableDataChanged();
             }
         }
         btnUpdate.requestFocusInWindow();

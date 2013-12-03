@@ -24,8 +24,6 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.EventObject;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -51,7 +49,6 @@ import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -73,7 +70,7 @@ public class WildLogApp extends Application {
     private WildLogDBI dbi;
     private WildLogView view;
     // TODO: Ek dink nie ek gebruik hierdie executor huidiglik nie... Dis half vir future use...
-    private ExecutorService sharedExecutor;
+//    private ExecutorService sharedExecutor;
 
 
     @Override
@@ -85,7 +82,7 @@ public class WildLogApp extends Application {
         if (threadCount < 3) {
             threadCount = 3;
         }
-        sharedExecutor = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory("WildLogShared-NeverShutdown"));
+//        sharedExecutor = Executors.newFixedThreadPool(threadCount, new NamedThreadFactory("WildLogShared-NeverShutdown"));
         // Makse sure all the basic data/file folders are in place
         try {
             Files.createDirectories(WildLogPaths.getFullWorkspacePrefix());
@@ -501,14 +498,14 @@ public class WildLogApp extends Application {
         return view;
     }
 
-    /**
-     * This ExecutorService is shared and available to the entire application and
-     * should thus only process tasks that does not require the service to
-     * shutdown (or wait for execution to finish).
-     * @return
-     */
-    public ExecutorService getSharedExecutor() {
-        return sharedExecutor;
-    }
+//    /**
+//     * This ExecutorService is shared and available to the entire application and
+//     * should thus only process tasks that does not require the service to
+//     * shutdown (or wait for execution to finish).
+//     * @return
+//     */
+//    public ExecutorService getSharedExecutor() {
+//        return sharedExecutor;
+//    }
 
 }
