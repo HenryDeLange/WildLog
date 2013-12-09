@@ -211,7 +211,7 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countElement;
-            if (inElement.getPrimaryName() != null && !inElement.getPrimaryName().isEmpty()) {
+            if (inElement.getPrimaryName() != null && inElement.getPrimaryName().length() > 0) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, inElement.getPrimaryName());
@@ -240,7 +240,7 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countLocation;
-            if (inLocation.getName() != null && !inLocation.getName().isEmpty()) {
+            if (inLocation.getName() != null && inLocation.getName().length() > 0) {
                 sql = sql + " WHERE NAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, inLocation.getName());
@@ -309,33 +309,33 @@ public abstract class DBI_JDBC implements DBI {
                 state.setLong(1, inSighting.getSightingCounter());
             }
             else
-            if (inSighting.getElementName() != null && !inSighting.getElementName().isEmpty() && inSighting.getLocationName() != null && !inSighting.getLocationName().isEmpty()) {
+            if (inSighting.getElementName() != null && inSighting.getElementName().length() > 0 && inSighting.getLocationName() != null && inSighting.getLocationName().length() > 0) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
                 state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
             }
             else
-            if (inSighting.getElementName() != null && !inSighting.getElementName().isEmpty() && inSighting.getVisitName() != null && !inSighting.getVisitName().isEmpty()) {
+            if (inSighting.getElementName() != null && inSighting.getElementName().length() > 0 && inSighting.getVisitName() != null && inSighting.getVisitName().length() > 0) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
                 state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
             }
             else
-            if (inSighting.getElementName() != null && !inSighting.getElementName().isEmpty()) {
+            if (inSighting.getElementName() != null && inSighting.getElementName().length() > 0) {
                 sql = sql + " WHERE ELEMENTNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
             }
             else
-            if (inSighting.getLocationName() != null && !inSighting.getLocationName().isEmpty()) {
+            if (inSighting.getLocationName() != null && inSighting.getLocationName().length() > 0) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
             }
             else
-            if (inSighting.getVisitName() != null && !inSighting.getVisitName().isEmpty()) {
+            if (inSighting.getVisitName() != null && inSighting.getVisitName().length() > 0) {
                 sql = sql + " WHERE VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getVisitName()));
@@ -364,7 +364,7 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countFile;
-            if (inWildLogFile.getId() != null && !inWildLogFile.getId().isEmpty()) {
+            if (inWildLogFile.getId() != null && inWildLogFile.getId().length() > 0) {
                 sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, inWildLogFile.getId());
