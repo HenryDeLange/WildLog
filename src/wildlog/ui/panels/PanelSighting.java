@@ -52,6 +52,7 @@ import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.SpinnerFixer;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -72,6 +73,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private boolean treatAsNewSighting;
     private boolean disableEditing = false;
     private boolean bulkUploadMode = false;
+    private TimeFormat prevTimeFormat;
 
     // Constructor
     /**
@@ -223,13 +225,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         txtLongitude.setText(UtilsGps.getLatitudeString(sighting));
 
         // Spinners stuff
-        SpinnerFixer.fixSelectAllForSpinners(spnNumberOfElements);
-        SpinnerFixer.fixSelectAllForSpinners(spnHours);
-        SpinnerFixer.fixSelectAllForSpinners(spnMinutes);
-        SpinnerFixer.fixSelectAllForSpinners(spnMoonPhase);
-        SpinnerFixer.fixSelectAllForSpinners(spnTemperature);
-        SpinnerFixer.fixSelectAllForSpinners(spnDurationMinutes);
-        SpinnerFixer.fixSelectAllForSpinners(spnDurationSeconds);
+        SpinnerFixer.configureSpinners(spnNumberOfElements);
+        SpinnerFixer.configureSpinners(spnHours);
+        SpinnerFixer.configureSpinners(spnMinutes);
+        SpinnerFixer.configureSpinners(spnMoonPhase);
+        SpinnerFixer.configureSpinners(spnTemperature);
+        SpinnerFixer.configureSpinners(spnDurationMinutes);
+        SpinnerFixer.configureSpinners(spnDurationSeconds);
 
         if (!disableEditing && !bulkUploadMode) {
             // Only enable drag-and-drop if editing is allowed and not in bulk upload mode
@@ -835,7 +837,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeFormat.setModel(new DefaultComboBoxModel(TimeFormat.values()));
         cmbTimeFormat.setSelectedIndex(0);
         cmbTimeFormat.setEnabled(!disableEditing);
-        cmbTimeFormat.setFocusable(false);
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
         cmbTimeFormat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -916,7 +917,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
         spnHours.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "00"));
+        spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "0"));
         spnHours.setEnabled(!disableEditing);
         spnHours.setFocusable(false);
         spnHours.setName("spnHours"); // NOI18N
@@ -925,7 +926,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         spnMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
         spnMinutes.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(144, 200, 99)));
         spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "00"));
+        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "0"));
         spnMinutes.setEnabled(!disableEditing);
         spnMinutes.setFocusable(false);
         spnMinutes.setName("spnMinutes"); // NOI18N
@@ -1056,7 +1057,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         spnDurationSeconds.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, 60.0d, 1.0d));
         spnDurationSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        spnDurationSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationSeconds, "00"));
+        spnDurationSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnDurationSeconds, "0"));
         spnDurationSeconds.setEnabled(!disableEditing);
         spnDurationSeconds.setName("spnDurationSeconds"); // NOI18N
         sightingIncludes.add(spnDurationSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, 50, -1));
@@ -1519,10 +1520,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_spnTemperatureStateChanged
 
     private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
-        if (TimeFormat.UNKNOWN.equals(cmbTimeFormat.getSelectedItem()) || TimeFormat.NONE.equals(cmbTimeFormat.getSelectedItem())) {
-            spnHours.setValue(0);
-            spnMinutes.setValue(0);
-        }
+        UtilsTime.modeChanged(spnHours, spnMinutes, cmbTimeFormat, prevTimeFormat);
+        prevTimeFormat = (TimeFormat) cmbTimeFormat.getSelectedItem();
     }//GEN-LAST:event_cmbTimeFormatActionPerformed
 
     private void dtpSightingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtpSightingDateActionPerformed
@@ -1597,31 +1596,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         // Get the date from the datepicker
         Date date = dtpSightingDate.getDate();
         if (date != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            try {
-                // Hours
-                if (TimeFormat.PM.equals(cmbTimeFormat.getSelectedItem())) {
-                    int tempHours = 12 + (Integer)spnHours.getValue();
-                    if (tempHours >= 24) {
-                        calendar.set(Calendar.HOUR_OF_DAY, tempHours - 12);
-                    }
-                    else {
-                        calendar.set(Calendar.HOUR_OF_DAY, tempHours);
-                    }
-                }
-                else {
-                    calendar.set(Calendar.HOUR_OF_DAY, (Integer)spnHours.getValue());
-                }
-                // Minutes
-                calendar.set(Calendar.MINUTE, (Integer)spnMinutes.getValue());
-            }
-            catch (NumberFormatException ex) {
-                calendar.set(Calendar.HOUR_OF_DAY, -1);
-                calendar.set(Calendar.MINUTE, -1);
-                cmbTimeFormat.setSelectedItem(TimeFormat.NONE);
-            }
-            sighting.setDate(calendar.getTime());
+            sighting.setDate(UtilsTime.getDateFromUI(spnHours, spnMinutes, cmbTimeFormat, date));
         }
         else {
             sighting.setDate(null);

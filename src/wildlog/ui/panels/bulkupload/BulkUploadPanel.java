@@ -105,7 +105,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         tabIconURL = app.getClass().getResource("resources/icons/Bulk Import.png");
 
         // Spinner selection fix
-        SpinnerFixer.fixSelectAllForSpinners(spnInactivityTime);
+        SpinnerFixer.configureSpinners(spnInactivityTime);
         // Make dates pretty
         dtpStartDate.getComponent(1).setBackground(pnlTop.getBackground());
         dtpEndDate.getComponent(1).setBackground(pnlTop.getBackground());

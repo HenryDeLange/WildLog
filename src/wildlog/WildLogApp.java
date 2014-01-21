@@ -279,6 +279,7 @@ public class WildLogApp extends Application {
         // Enable logging to file
         if (logToFile) {
             try {
+// FIXME: Dit lyk assof die output file skielik heeltyd van voor af overwrite word en nie append nie...
                 // Saving the orginal stream
                 PrintStream fileStream = new PrintStream(new FileOutputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt").toFile()), true);
                 // Redirecting console output to file

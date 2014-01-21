@@ -44,10 +44,10 @@ public class DateChangeDialog extends JDialog {
         // Setup the glasspane on this dialog as well for the JOptionPane's
         UtilsDialog.addModalBackgroundPanel(this, null);
         // Fix spinners
-        SpinnerFixer.fixSelectAllForSpinners(spnDays);
-        SpinnerFixer.fixSelectAllForSpinners(spnHours);
-        SpinnerFixer.fixSelectAllForSpinners(spnMinutes);
-        SpinnerFixer.fixSelectAllForSpinners(spnSeconds);
+        SpinnerFixer.configureSpinners(spnDays);
+        SpinnerFixer.configureSpinners(spnHours);
+        SpinnerFixer.configureSpinners(spnMinutes);
+        SpinnerFixer.configureSpinners(spnSeconds);
         // Set focus
         btnSave.requestFocusInWindow();
     }
@@ -124,6 +124,7 @@ public class DateChangeDialog extends JDialog {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 95, -1, 20));
 
         spnDays.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnDays.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnDays.setEditor(new javax.swing.JSpinner.NumberEditor(spnDays, "0"));
         spnDays.setName("spnDays"); // NOI18N
         getContentPane().add(spnDays, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 95, 50, -1));
@@ -133,6 +134,7 @@ public class DateChangeDialog extends JDialog {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(108, 95, -1, 20));
 
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
+        spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "0"));
         spnHours.setName("spnHours"); // NOI18N
         getContentPane().add(spnHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 95, 40, -1));
@@ -142,7 +144,8 @@ public class DateChangeDialog extends JDialog {
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(196, 95, -1, 20));
 
         spnMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
-        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "00"));
+        spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "0"));
         spnMinutes.setName("spnMinutes"); // NOI18N
         getContentPane().add(spnMinutes, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 95, 50, -1));
 
@@ -151,7 +154,8 @@ public class DateChangeDialog extends JDialog {
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(302, 95, -1, 20));
 
         spnSeconds.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
-        spnSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnSeconds, "00"));
+        spnSeconds.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnSeconds.setEditor(new javax.swing.JSpinner.NumberEditor(spnSeconds, "0"));
         spnSeconds.setName("spnSeconds"); // NOI18N
         getContentPane().add(spnSeconds, new org.netbeans.lib.awtextra.AbsoluteConstraints(349, 95, 50, -1));
 

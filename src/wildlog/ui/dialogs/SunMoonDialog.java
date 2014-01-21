@@ -21,6 +21,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 
 
@@ -28,6 +29,7 @@ public class SunMoonDialog extends JDialog {
     private DataObjectWithGPS dataObjectWithGPS;
     private WildLogApp app;
     private Date date;
+    private TimeFormat prevTimeFormat;
 
     /** Creates new form GPSDialog */
     public SunMoonDialog(WildLogApp inApp, DataObjectWithGPS inDataObjectWithGPS) {
@@ -61,8 +63,8 @@ public class SunMoonDialog extends JDialog {
         // Make date pretty
         dtpDate.getComponent(1).setBackground(this.getBackground());
         // Spinners stuff
-        SpinnerFixer.fixSelectAllForSpinners(spnHours);
-        SpinnerFixer.fixSelectAllForSpinners(spnMinutes);
+        SpinnerFixer.configureSpinners(spnHours);
+        SpinnerFixer.configureSpinners(spnMinutes);
         // Attach clipboard
         UtilsUI.attachClipboardPopup((JTextComponent)spnHours.getEditor().getComponent(0));
         UtilsUI.attachClipboardPopup((JTextComponent)spnMinutes.getEditor().getComponent(0));
@@ -327,7 +329,8 @@ public class SunMoonDialog extends JDialog {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 45, -1, 20));
 
         spnHours.setModel(new javax.swing.SpinnerNumberModel(0, 0, 23, 1));
-        spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "00"));
+        spnHours.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnHours.setEditor(new javax.swing.JSpinner.NumberEditor(spnHours, "0"));
         spnHours.setName("spnHours"); // NOI18N
         spnHours.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -337,7 +340,8 @@ public class SunMoonDialog extends JDialog {
         getContentPane().add(spnHours, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 45, 40, -1));
 
         spnMinutes.setModel(new javax.swing.SpinnerNumberModel(0, 0, 59, 1));
-        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "00"));
+        spnMinutes.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        spnMinutes.setEditor(new javax.swing.JSpinner.NumberEditor(spnMinutes, "0"));
         spnMinutes.setName("spnMinutes"); // NOI18N
         spnMinutes.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -410,6 +414,8 @@ public class SunMoonDialog extends JDialog {
     }//GEN-LAST:event_spnMinutesStateChanged
 
     private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
+        UtilsTime.modeChanged(spnHours, spnMinutes, cmbTimeFormat, prevTimeFormat);
+        prevTimeFormat = (TimeFormat) cmbTimeFormat.getSelectedItem();
         updateTimeFromUI();
         // If a GPS is provided then do the loading, otherwise skip it to avoid the error
         if (!UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
@@ -420,31 +426,7 @@ public class SunMoonDialog extends JDialog {
 
     private void updateTimeFromUI() {
         if (date != null) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
-            try {
-                // Hours
-                if (TimeFormat.PM.equals(cmbTimeFormat.getSelectedItem())) {
-                    int tempHours = 12 + (Integer)spnHours.getValue();
-                    if (tempHours >= 24) {
-                        calendar.set(Calendar.HOUR_OF_DAY, tempHours - 12);
-                    }
-                    else {
-                        calendar.set(Calendar.HOUR_OF_DAY, tempHours);
-                    }
-                }
-                else {
-                    calendar.set(Calendar.HOUR_OF_DAY, (Integer)spnHours.getValue());
-                }
-                // Minutes
-                calendar.set(Calendar.MINUTE, (Integer)spnMinutes.getValue());
-            }
-            catch (NumberFormatException ex) {
-                calendar.set(Calendar.HOUR_OF_DAY, -1);
-                calendar.set(Calendar.MINUTE, -1);
-                cmbTimeFormat.setSelectedItem(TimeFormat.NONE);
-            }
-            date = calendar.getTime();
+            date = UtilsTime.getDateFromUI(spnHours, spnMinutes, cmbTimeFormat, date);
         }
     }
 

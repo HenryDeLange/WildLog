@@ -63,11 +63,13 @@ import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.utils.WildLogConstants;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.mapping.utils.UtilsGps;
@@ -78,10 +80,12 @@ import wildlog.ui.dialogs.MergeVisitDialog;
 import wildlog.ui.dialogs.MoveVisitDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
+import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.filters.WildNoteSyncFilter;
 import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
@@ -284,10 +288,11 @@ public final class WildLogView extends JFrame {
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
         mnyExportCSV = new javax.swing.JMenuItem();
-        mnuExportHTML = new javax.swing.JMenuItem();
-        mnuExportKML = new javax.swing.JMenuItem();
         mnuExportWorkspace = new javax.swing.JMenuItem();
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
+        jSeparator9 = new javax.swing.JPopupMenu.Separator();
+        mnuExportHTML = new javax.swing.JMenuItem();
+        mnuExportKML = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         mnuImportCSV = new javax.swing.JMenuItem();
         mnuImportWorkspace = new javax.swing.JMenuItem();
@@ -326,7 +331,8 @@ public final class WildLogView extends JFrame {
         mnuOther = new javax.swing.JMenu();
         chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem mnuAbout = new javax.swing.JMenuItem();
+        javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
+        mnuAboutWildNote = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("WildLog");
@@ -373,7 +379,7 @@ public final class WildLogView extends JFrame {
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(186, 210, 159));
-        jLabel15.setText("http://remotecamera-sa.blogspot.com");
+        jLabel15.setText("http://cameratrap.mywild.co.za");
         jLabel15.setName("jLabel15"); // NOI18N
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Feature 1.png"))); // NOI18N
@@ -650,6 +656,31 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnyExportCSV);
 
+        mnuExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuExportWorkspace.setText("Export to New Workspace");
+        mnuExportWorkspace.setToolTipText("Export the specified data to a new WildLog Workspace.");
+        mnuExportWorkspace.setName("mnuExportWorkspace"); // NOI18N
+        mnuExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportWorkspaceActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportWorkspace);
+
+        mnuExportWildNoteSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
+        mnuExportWildNoteSync.setText("Export WildNote Sync File");
+        mnuExportWildNoteSync.setToolTipText("Export the Creatures to a sync file that can be loaded in WildNote.");
+        mnuExportWildNoteSync.setName("mnuExportWildNoteSync"); // NOI18N
+        mnuExportWildNoteSync.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportWildNoteSyncActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportWildNoteSync);
+
+        jSeparator9.setName("jSeparator9"); // NOI18N
+        exportMenu.add(jSeparator9);
+
         mnuExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         mnuExportHTML.setText("Export All to HTML");
         mnuExportHTML.setToolTipText("Export all data and linked files to HTML files. (Viewable in a web browser, etc.)");
@@ -672,27 +703,6 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnuExportKML);
 
-        mnuExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuExportWorkspace.setText("Export to New Workspace");
-        mnuExportWorkspace.setToolTipText("Export the specified data to a new WildLog Workspace.");
-        mnuExportWorkspace.setName("mnuExportWorkspace"); // NOI18N
-        mnuExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportWorkspaceActionPerformed(evt);
-            }
-        });
-        exportMenu.add(mnuExportWorkspace);
-
-        mnuExportWildNoteSync.setText("Export WildNote Sync File");
-        mnuExportWildNoteSync.setToolTipText("Export the Creatures to a sync file that can be loaded in WildNote.");
-        mnuExportWildNoteSync.setName("mnuExportWildNoteSync"); // NOI18N
-        mnuExportWildNoteSync.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportWildNoteSyncActionPerformed(evt);
-            }
-        });
-        exportMenu.add(mnuExportWildNoteSync);
-
         menuBar.add(exportMenu);
 
         importMenu.setText("Import");
@@ -701,7 +711,6 @@ public final class WildLogView extends JFrame {
         mnuImportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
         mnuImportCSV.setText("Import from CSV");
         mnuImportCSV.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV Export.)</html>");
-        mnuImportCSV.setEnabled(false);
         mnuImportCSV.setName("mnuImportCSV"); // NOI18N
         mnuImportCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -713,7 +722,6 @@ public final class WildLogView extends JFrame {
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWorkspace.setText("Import from Another Workspace");
         mnuImportWorkspace.setToolTipText("Import all the data in the specified WildLog Workspace.");
-        mnuImportWorkspace.setEnabled(false);
         mnuImportWorkspace.setName("mnuImportWorkspace"); // NOI18N
         mnuImportWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -722,8 +730,8 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportWorkspace);
 
+        mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuImportWildNote.setText("Import WildNote Sync File");
-        mnuImportWildNote.setEnabled(false);
         mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
         mnuImportWildNote.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1015,16 +1023,27 @@ public final class WildLogView extends JFrame {
         helpMenu.setText("About");
         helpMenu.setName("helpMenu"); // NOI18N
 
-        mnuAbout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuAbout.setText("About WildLog");
-        mnuAbout.setToolTipText("Display information about this version of WildLog.");
-        mnuAbout.setName("mnuAbout"); // NOI18N
-        mnuAbout.addActionListener(new java.awt.event.ActionListener() {
+        mnuAboutWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuAboutWildLog.setText("About WildLog");
+        mnuAboutWildLog.setToolTipText("Display information about this version of WildLog.");
+        mnuAboutWildLog.setName("mnuAboutWildLog"); // NOI18N
+        mnuAboutWildLog.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAboutActionPerformed(evt);
+                mnuAboutWildLogActionPerformed(evt);
             }
         });
-        helpMenu.add(mnuAbout);
+        helpMenu.add(mnuAboutWildLog);
+
+        mnuAboutWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
+        mnuAboutWildNote.setText("About WildNote");
+        mnuAboutWildNote.setToolTipText("More information about WildNote.");
+        mnuAboutWildNote.setName("mnuAboutWildNote"); // NOI18N
+        mnuAboutWildNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutWildNoteActionPerformed(evt);
+            }
+        });
+        helpMenu.add(mnuAboutWildNote);
 
         menuBar.add(helpMenu);
 
@@ -1328,16 +1347,39 @@ public final class WildLogView extends JFrame {
                     });
                 if (result == JFileChooser.APPROVE_OPTION) {
                     tabbedPanel.setSelectedIndex(0);
-                    String path = fileChooser.getSelectedFile().getPath() + File.separatorChar;
+                    Path path = fileChooser.getSelectedFile().toPath();
                     app.getMainFrame().getGlassPane().setVisible(true);
                     String prefix = JOptionPane.showInputDialog(app.getMainFrame(),
                             "<html>Please provide a prefix to use for the imported data. "
                             + "<br>The prefix will be used to map the imported data to new unique records. "
                             + "<br>You can manually merge Creatures and move Periods afterwards.</html>",
                             "Import CSV Data", JOptionPane.QUESTION_MESSAGE);
-                    if (prefix != null && !prefix.isEmpty()) {
                     app.getMainFrame().getGlassPane().setVisible(false);
-                        if (!app.getDBI().doImportCSV(path, prefix)) {
+                    if (prefix != null && !prefix.isEmpty()) {
+                        app.getMainFrame().getGlassPane().setVisible(true);
+                        int choice = JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "<html><b>Would you like to exclude the WildLog File references</b>? "
+                                + "<br><br><hr>"
+                                + "<br>Note: The CSV Import can not import the actual files, but only the database links "
+                                + "<br>to the files. If you select NO, then you will have to manually copy the files into the correct folders."
+                                + "<br><br><hr>"
+                                + "<br>It is <b>strongly recommended</b> to select <b>YES</b> to prevent more than one record to be "
+                                + "<br>linked to the same file. The import will fail if a duplicate link is attempted.</html>",
+                                "Exclude Database File References", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        app.getMainFrame().getGlassPane().setVisible(false);
+                        boolean excludeWildLogFiles = false;
+                        if (choice == JOptionPane.YES_OPTION || choice == JOptionPane.CLOSED_OPTION) {
+                            excludeWildLogFiles = true;
+                        }
+                        boolean hasErrors = false;
+                        try {
+                            hasErrors = !app.getDBI().doImportCSV(path, prefix, !excludeWildLogFiles);
+                        }
+                        catch (Exception ex) {
+                            ex.printStackTrace(System.err);
+                            hasErrors = true;
+                        }
+                        if (hasErrors) {
                             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                                 @Override
                                 public int showDialog() {
@@ -1416,7 +1458,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Starting the CSV Export");
                 Path path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
                 Files.createDirectories(path);
-                app.getDBI().doExportCSV(path.toString());
+                app.getDBI().doExportCSV(path);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath());
                 setMessage("Done with the CSV Export");
                 return null;
@@ -1558,10 +1600,10 @@ public final class WildLogView extends JFrame {
         app.quit(evt);
     }//GEN-LAST:event_mnuExitAppActionPerformed
 
-    private void mnuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutActionPerformed
+    private void mnuAboutWildLogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutWildLogActionPerformed
         JDialog aboutBox = new WildLogAboutBox(app);
         aboutBox.setVisible(true);
-    }//GEN-LAST:event_mnuAboutActionPerformed
+    }//GEN-LAST:event_mnuAboutWildLogActionPerformed
 
     private void mnuChangeWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceMenuItemActionPerformed
         if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(app.getMainFrame(), false)) {
@@ -2255,9 +2297,9 @@ public final class WildLogView extends JFrame {
                     // Make sure the old files are deleted
                     Files.createDirectories(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath());
                     UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().toFile());
-                    Path syncDatabase = WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve("wildlogSync");
+                    Path syncDatabase = WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE);
                     // Setup export DB
-                    setTaskProgress(20);
+                    setTaskProgress(10);
                     setMessage("Export WildNote Sync " + getProgress() + "%");
                     syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
                     // Export the elements
@@ -2310,7 +2352,7 @@ public final class WildLogView extends JFrame {
                         syncDBI.close();
                     }
                 }
-                setProgress(80);
+                setProgress(90);
                 setMessage("Export WildNote Sync " + getProgress() + "%");
                 // Zip the content to make copying it accross easier
                 UtilsCompression.zipIt(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve("WildNoteSync.zip").toString(),
@@ -2366,7 +2408,47 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMergeVisitActionPerformed
 
     private void mnuImportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWorkspaceActionPerformed
-        // TODO
+        // TODO: show warning and info message to confirm the user wants to continue and knwos to select an closed workspace
+
+        // TODO: Ask wether to include the files of not.
+        
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileFilter(new WildNoteSyncFilter());
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return fileChooser.showOpenDialog(app.getMainFrame());
+            }
+        });
+        if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setProgress(0);
+                    setMessage("Import WildLog Workspace " + getProgress() + "%");
+                    WildLogDBI syncDBI = null;
+                    try {
+                        // TODO: Do the juicy stuffs
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                    finally {
+                        if (syncDBI != null) {
+                            syncDBI.close();
+                        }
+                    }
+                    setProgress(100);
+                    setMessage("Import WildLog Workspace Done");
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_mnuImportWorkspaceActionPerformed
 
     private void mnuExportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportWorkspaceActionPerformed
@@ -2375,7 +2457,101 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuExportWorkspaceActionPerformed
 
     private void mnuImportWildNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWildNoteActionPerformed
-        // TODO
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        fileChooser.setDialogTitle("Please select the WildNote Sync export file to use.");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setFileFilter(new WildNoteSyncFilter());
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return fileChooser.showOpenDialog(app.getMainFrame());
+            }
+        });
+        if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setProgress(0);
+                    setMessage("Import WildNote Sync " + getProgress() + "%");
+                    WildLogDBI syncDBI = null;
+                    try {
+                        // Setup export DB
+                        setTaskProgress(5);
+                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        syncDBI = new WildLogDBI_h2("jdbc:h2:" + fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent()
+                                .resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE).toString()
+                                    + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+                        // Setup the Location
+                        Location wildNoteLocation = app.getDBI().find(new Location(WildLogConstants.WILDNOTE_LOCATION_NAME));
+                        if (wildNoteLocation == null) {
+                            wildNoteLocation = new Location(WildLogConstants.WILDNOTE_LOCATION_NAME);
+                            app.getDBI().createOrUpdate(wildNoteLocation, null);
+                        }
+                        setTaskProgress(10);
+                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        // Setup the Visit
+                        if (app.getDBI().find(new Visit(WildLogConstants.WILDNOTE_VISIT_NAME, WildLogConstants.WILDNOTE_LOCATION_NAME)) == null) {
+                            app.getDBI().createOrUpdate(new Visit(WildLogConstants.WILDNOTE_VISIT_NAME, WildLogConstants.WILDNOTE_LOCATION_NAME), null);
+                        }
+                        setTaskProgress(15);
+                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        // Import the Elements
+                        List<Element> listElements = syncDBI.list(new Element());
+                        for (int t = 0; t < listElements.size(); t++) {
+                            Element element = listElements.get(t);
+                            if (app.getDBI().find(element) == null) {
+                                app.getDBI().createOrUpdate(element, null);
+                            }
+                            setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
+                            setMessage("Import WildNote Sync " + getProgress() + "%");
+                        }
+                        setTaskProgress(25);
+                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        // Import the Sightings
+                        List<Sighting> listSightings = syncDBI.list(new Sighting());
+                        for (int t = 0; t < listSightings.size(); t++) {
+                            Sighting sighting = listSightings.get(t);
+                            sighting.setSightingCounter(0);
+                            // Calculate the "auto" fields (sun, moon, etc.)
+                            sighting.setCertainty(Certainty.SURE);
+                            if (sighting.getDate() != null && sighting.getLatitude() != null && sighting.getLongitude() != null
+                                    && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())) {
+                                double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                                // Sun
+                                sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                                // Moon
+                                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                                sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                            }
+                            app.getDBI().createOrUpdate(sighting, false);
+                            setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));
+                            setMessage("Import WildNote Sync " + getProgress() + "%");
+                        }
+                        setTaskProgress(95);
+                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        UtilsPanelGenerator.openPanelAsTab(app, WildLogConstants.WILDNOTE_VISIT_NAME,
+                                PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, wildNoteLocation);
+                        setTaskProgress(97);
+                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                    finally {
+                        if (syncDBI != null) {
+                            syncDBI.close();
+                        }
+                    }
+                    setProgress(100);
+                    setMessage("Import WildNote Sync Done");
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_mnuImportWildNoteActionPerformed
 
     private void mnuBackupWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupWorkspaceActionPerformed
@@ -2402,6 +2578,11 @@ public final class WildLogView extends JFrame {
         options.setEnableSounds(chkMnuEnableSounds.isSelected());
         app.setWildLogOptions(options);
     }//GEN-LAST:event_chkMnuEnableSoundsItemStateChanged
+
+    private void mnuAboutWildNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutWildNoteActionPerformed
+        JDialog aboutBox = new WildNoteAboutBox();
+        aboutBox.setVisible(true);
+    }//GEN-LAST:event_mnuAboutWildNoteActionPerformed
 
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
@@ -2452,6 +2633,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JPopupMenu.Separator jSeparator7;
     private javax.swing.JPopupMenu.Separator jSeparator8;
+    private javax.swing.JPopupMenu.Separator jSeparator9;
     private javax.swing.JLabel lblCreatures;
     private javax.swing.JLabel lblLocations;
     private javax.swing.JLabel lblSightings;
@@ -2460,6 +2642,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenu mappingMenu;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem mnuAboutWildNote;
     private javax.swing.JMenuItem mnuBackupDatabase;
     private javax.swing.JMenuItem mnuBackupWorkspace;
     private javax.swing.JMenuItem mnuBulkImport;

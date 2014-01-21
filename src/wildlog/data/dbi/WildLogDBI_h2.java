@@ -3,6 +3,7 @@ package wildlog.data.dbi;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,33 +22,6 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import static wildlog.data.dbi.DBI_JDBC.WILDLOG_DB_VERSION;
-import wildlog.data.enums.AccommodationType;
-import wildlog.data.enums.ActiveTime;
-import wildlog.data.enums.ActiveTimeSpesific;
-import wildlog.data.enums.AddFrequency;
-import wildlog.data.enums.CateringType;
-import wildlog.data.enums.Certainty;
-import wildlog.data.enums.ElementType;
-import wildlog.data.enums.EndangeredStatus;
-import wildlog.data.enums.FeedingClass;
-import wildlog.data.enums.GameViewRating;
-import wildlog.data.enums.GameWatchIntensity;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.LifeStatus;
-import wildlog.data.enums.LocationRating;
-import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.Moonlight;
-import wildlog.data.enums.Sex;
-import wildlog.data.enums.SightingEvidence;
-import wildlog.data.enums.SizeType;
-import wildlog.data.enums.UnitsSize;
-import wildlog.data.enums.UnitsTemperature;
-import wildlog.data.enums.UnitsWeight;
-import wildlog.data.enums.ViewRating;
-import wildlog.data.enums.VisitType;
-import wildlog.data.enums.WaterDependancy;
-import wildlog.data.enums.Weather;
-import wildlog.data.enums.WishRating;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsImageProcessing;
@@ -65,7 +39,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     /**
      * WARNING: Only use this constructor if you want to connect to a second H2 DB instance. The default
      * workspace database should use a constructor that does NOT specify the connection URL.
-     * @param inApp
      * @param inConnectionURL
      */
     public WildLogDBI_h2(String inConnectionURL) throws Exception {
@@ -137,7 +110,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         try {
             state = conn.createStatement();
             // Backup
-            File dirs = new File(inFolder.getAbsoluteFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+            File dirs = inFolder.getAbsoluteFullPath().resolve("Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")").toFile();
             dirs.mkdirs();
             // Create a database file backup
             state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");
@@ -162,24 +135,24 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public void doExportCSV(String inPath) {
+    public void doExportCSV(Path inPath) {
         Statement state = null;
         try {
             state = conn.createStatement();
             // Export Elements
-            state.execute("CALL CSVWRITE('" + inPath + "Elements.csv', 'SELECT * FROM ELEMENTS')");
+            state.execute("CALL CSVWRITE('" + inPath.resolve("Elements.csv").toAbsolutePath().toString() + "', 'SELECT * FROM ELEMENTS')");
             // Export Locations
-            state.execute("CALL CSVWRITE('" + inPath + "Locations.csv', 'SELECT * FROM LOCATIONS')");
+            state.execute("CALL CSVWRITE('" + inPath.resolve("Locations.csv").toAbsolutePath().toString() + "', 'SELECT * FROM LOCATIONS')");
             // Export Visits
-            state.execute("CALL CSVWRITE('" + inPath + "Visits.csv', 'SELECT * FROM VISITS')");
+            state.execute("CALL CSVWRITE('" + inPath.resolve("Visits.csv").toAbsolutePath().toString() + "', 'SELECT * FROM VISITS')");
             // Export Sightings
-            state.execute("CALL CSVWRITE('" + inPath + "Sightings.csv', "
+            state.execute("CALL CSVWRITE('" + inPath.resolve("Sightings.csv").toAbsolutePath().toString() + "', "
                     + "'SELECT * "
                     + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1  WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0) LatDecDeg"
                     + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1  WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0) LonDecDeg"
                     + " FROM SIGHTINGS')");
             // Export Files
-            state.execute("CALL CSVWRITE('" + inPath + "Files.csv', 'SELECT * FROM FILES')");
+            state.execute("CALL CSVWRITE('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "', 'SELECT * FROM FILES')");
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -199,134 +172,57 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public boolean doImportCSV(String inPath, String inPrefix) {
+    public boolean doImportCSV(Path inPath, String inPrefix, boolean includeWildLogFilesTable) {
         Statement state = null;
         ResultSet results = null;
+        boolean success = true;
         try {
             state = conn.createStatement();
             // Import Elements
-            results = state.executeQuery("CALL CSVREAD('" + inPath + "Elements.csv')");
+            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Elements.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Element tempElement = new Element();
+                populateElement(results, tempElement);
                 tempElement.setPrimaryName(inPrefix + results.getString("PRIMARYNAME"));
-                tempElement.setOtherName(results.getString("OTHERNAME"));
-                tempElement.setScientificName(results.getString("SCIENTIFICNAME"));
-                tempElement.setDescription(results.getString("DESCRIPTION"));
-                tempElement.setDistribution(results.getString("DISTRIBUTION"));
-                tempElement.setNutrition(results.getString("NUTRITION"));
-                tempElement.setWaterDependance(WaterDependancy.getEnumFromText(results.getString("WATERDEPENDANCE")));
-                tempElement.setSizeMaleMin(results.getDouble("SIZEMALEMIN"));
-                tempElement.setSizeMaleMax(results.getDouble("SIZEMALEMAX"));
-                tempElement.setSizeFemaleMin(results.getDouble("SIZEFEMALEMIN"));
-                tempElement.setSizeFemaleMax(results.getDouble("SIZEFEMALEMAX"));
-                tempElement.setSizeUnit(UnitsSize.getEnumFromText(results.getString("SIZEUNIT")));
-                tempElement.setSizeType(SizeType.getEnumFromText(results.getString("SIZETYPE")));
-                tempElement.setWeightMaleMin(results.getDouble("WEIGHTMALEMIN"));
-                tempElement.setWeightMaleMax(results.getDouble("WEIGHTMALEMAX"));
-                tempElement.setWeightFemaleMin(results.getDouble("WEIGHTFEMALEMIN"));
-                tempElement.setWeightFemaleMax(results.getDouble("WEIGHTFEMALEMAX"));
-                tempElement.setWeightUnit(UnitsWeight.getEnumFromText(results.getString("WEIGHTUNIT")));
-                tempElement.setBreedingDuration(results.getString("BREEDINGDURATION"));
-                tempElement.setBreedingNumber(results.getString("BREEDINGNUMBER"));
-                tempElement.setWishListRating(WishRating.getEnumFromText(results.getString("WISHLISTRATING")));
-                tempElement.setDiagnosticDescription(results.getString("DIAGNOSTICDESCRIPTION"));
-                tempElement.setActiveTime(ActiveTime.getEnumFromText(results.getString("ACTIVETIME")));
-                tempElement.setEndangeredStatus(EndangeredStatus.getEnumFromText(results.getString("ENDANGEREDSTATUS")));
-                tempElement.setBehaviourDescription(results.getString("BEHAVIOURDESCRIPTION"));
-                tempElement.setAddFrequency(AddFrequency.getEnumFromText(results.getString("ADDFREQUENCY")));
-                tempElement.setType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
-                tempElement.setFeedingClass(FeedingClass.getEnumFromText(results.getString("FEEDINGCLASS")));
-                tempElement.setLifespan(results.getString("LIFESPAN"));
-                tempElement.setReferenceID(results.getString("REFERENCEID"));
-                createOrUpdate(tempElement, null);
+                success = success && createOrUpdate(tempElement, null);
             }
             // Import Locations
-            results = state.executeQuery("CALL CSVREAD('" + inPath + "Locations.csv')");
+            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Locations.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Location tempLocation = new Location();
+                populateLocation(results, tempLocation);
                 tempLocation.setName(inPrefix + results.getString("NAME"));
-                tempLocation.setDescription(results.getString("DESCRIPTION"));
-                tempLocation.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
-                tempLocation.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
-                tempLocation.setHabitatType(results.getString("HABITATTYPE"));
-                tempLocation.setAccommodationType(AccommodationType.getEnumFromText(results.getString("ACCOMMODATIONTYPE")));
-                tempLocation.setCatering(CateringType.getEnumFromText(results.getString("CATERING")));
-                tempLocation.setContactNumbers(results.getString("CONTACTNUMBERS"));
-                tempLocation.setWebsite(results.getString("WEBSITE"));
-                tempLocation.setEmail(results.getString("EMAIL"));
-                tempLocation.setDirections(results.getString("DIRECTIONS"));
-                tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
-                tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
-                tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSeconds(results.getFloat("LATSECONDS"));
-                tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
-                tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
-                tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSeconds(results.getFloat("LONSECONDS"));
-                createOrUpdate(tempLocation, null);
+                success = success && createOrUpdate(tempLocation, null);
             }
             // Import Visits
-            results = state.executeQuery("CALL CSVREAD('" + inPath + "Visits.csv')");
+            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Visits.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Visit tempVisit = new Visit();
+                populateVisit(results, tempVisit);
                 tempVisit.setName(inPrefix + results.getString("NAME"));
-                tempVisit.setStartDate(results.getDate("STARTDATE"));
-                tempVisit.setEndDate(results.getDate("ENDDATE"));
-                tempVisit.setDescription(results.getString("DESCRIPTION"));
-                tempVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(results.getString("GAMEWATCHINGINTENSITY")));
-                tempVisit.setType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
                 tempVisit.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
-                createOrUpdate(tempVisit, null);
+                success = success && createOrUpdate(tempVisit, null);
             }
             // Import Sightings
-            results = state.executeQuery("CALL CSVREAD('" + inPath + "Sightings.csv')");
+            results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Sightings.csv").toAbsolutePath().toString() + "')");
             while (results.next()) {
                 Sighting tempSighting = new Sighting();
+                populateSighting(results, tempSighting);
                 tempSighting.setSightingCounter(0);
-                tempSighting.setDate(results.getTimestamp("SIGHTINGDATE"));
                 tempSighting.setElementName(inPrefix + results.getString("ELEMENTNAME"));
                 tempSighting.setLocationName(inPrefix + results.getString("LOCATIONNAME"));
                 tempSighting.setVisitName(inPrefix + results.getString("VISITNAME"));
-                tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
-                tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
-                tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
-                tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
-                tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
-                tempSighting.setDetails(results.getString("DETAILS"));
-                tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
-                tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
-                tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSeconds(results.getDouble("LATSECONDS"));
-                tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
-                tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
-                tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSeconds(results.getDouble("LONSECONDS"));
-                tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
-                tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
-                tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
-                tempSighting.setTemperature(results.getDouble("TEMPERATURE"));
-                tempSighting.setUnitsTemperature(UnitsTemperature.getEnumFromText(results.getString("TEMPERATUREUNIT")));
-                tempSighting.setLifeStatus(LifeStatus.getEnumFromText(results.getString("LIFESTATUS")));
-                tempSighting.setSex(Sex.getEnumFromText(results.getString("SEX")));
-                tempSighting.setTag(results.getString("TAG"));
-                tempSighting.setTimeUnknown(results.getBoolean("UNKNOWNTIME"));
-                tempSighting.setDurationMinutes(results.getInt("DURATIONMINUTES"));
-                tempSighting.setDurationSeconds(results.getDouble("DURATIONSECONDS"));
-                createOrUpdate(tempSighting, false);
+                success = success && createOrUpdate(tempSighting, false);
             }
-            // TODO: CSV Import of Files
-//            results = state.executeQuery("CALL CSVREAD('" + inPath + "Files.csv')");
-//            while (results.next()) {
-//                Foto tempFoto = new Foto();
-//                tempFoto.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
-//                tempFoto.setFilename(results.getString("FILENAME"));
-//                tempFoto.setFileLocation(results.getString("FILEPATH"));
-//                tempFoto.setOriginalFotoLocation(results.getString("ORIGINALPATH"));
-//                tempFoto.setFotoType(FotoType.getEnumFromText(results.getString("FILETYPE")));
-//                tempFoto.setDate(results.getDate("UPLOADDATE"));
-//                tempFoto.setDefaultFile(results.getBoolean("ISDEFAULT"));
-//                createOrUpdate(tempFoto, false);
-//            }
+            if (includeWildLogFilesTable) {
+                results = state.executeQuery("CALL CSVREAD('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "')");
+                while (results.next()) {
+                    WildLogFile wildLogFile = new WildLogFile();
+                    populateWildLogFile(results, wildLogFile);
+                    wildLogFile.setId(results.getString("ID").replaceFirst("-", "-" + inPrefix)); // 'location-loc1' becomes 'location-prefixloc1'
+                    success = success && createOrUpdate(wildLogFile, false);
+                }
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);
@@ -354,7 +250,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 printSQLException(sqle);
             }
         }
-        return true;
+        return success;
     }
 
     @Override

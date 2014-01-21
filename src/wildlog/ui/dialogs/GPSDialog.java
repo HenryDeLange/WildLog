@@ -75,14 +75,14 @@ public class GPSDialog extends JDialog {
         spnLatDecimal.setVisible(false);
         spnLonDecimal.setVisible(false);
         // Fix the selection of the spinners
-        SpinnerFixer.fixSelectAllForSpinners(spnLatDecimal);
-        SpinnerFixer.fixSelectAllForSpinners(spnLatDeg);
-        SpinnerFixer.fixSelectAllForSpinners(spnLatMin);
-        SpinnerFixer.fixSelectAllForSpinners(spnLatSec);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonDecimal);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonDeg);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonMin);
-        SpinnerFixer.fixSelectAllForSpinners(spnLonSec);
+        SpinnerFixer.configureSpinners(spnLatDecimal);
+        SpinnerFixer.configureSpinners(spnLatDeg);
+        SpinnerFixer.configureSpinners(spnLatMin);
+        SpinnerFixer.configureSpinners(spnLatSec);
+        SpinnerFixer.configureSpinners(spnLonDecimal);
+        SpinnerFixer.configureSpinners(spnLonDeg);
+        SpinnerFixer.configureSpinners(spnLonMin);
+        SpinnerFixer.configureSpinners(spnLonSec);
         // Setup the ui Lat and Lon
         // Get existing value from passed in dataObjectWithGPS
         loadUIValues(dataObjectWithGPS);
@@ -391,7 +391,7 @@ public class GPSDialog extends JDialog {
         });
         getContentPane().add(tglDegMinSec, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 155, 60, 45));
 
-        spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, -90, 90, 1));
+        spnLatDeg.setModel(new javax.swing.SpinnerNumberModel(0, 0, 90, 1));
         spnLatDeg.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnLatDeg.setEditor(new javax.swing.JSpinner.NumberEditor(spnLatDeg, "#"));
         spnLatDeg.setName("spnLatDeg"); // NOI18N
