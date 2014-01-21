@@ -397,36 +397,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempElement = (T) inElement.getClass().newInstance();
-                tempElement.setPrimaryName(results.getString("PRIMARYNAME"));
-                tempElement.setOtherName(results.getString("OTHERNAME"));
-                tempElement.setScientificName(results.getString("SCIENTIFICNAME"));
-                tempElement.setDescription(results.getString("DESCRIPTION"));
-                tempElement.setDistribution(results.getString("DISTRIBUTION"));
-                tempElement.setNutrition(results.getString("NUTRITION"));
-                tempElement.setWaterDependance(WaterDependancy.getEnumFromText(results.getString("WATERDEPENDANCE")));
-                tempElement.setSizeMaleMin(results.getDouble("SIZEMALEMIN"));
-                tempElement.setSizeMaleMax(results.getDouble("SIZEMALEMAX"));
-                tempElement.setSizeFemaleMin(results.getDouble("SIZEFEMALEMIN"));
-                tempElement.setSizeFemaleMax(results.getDouble("SIZEFEMALEMAX"));
-                tempElement.setSizeUnit(UnitsSize.getEnumFromText(results.getString("SIZEUNIT")));
-                tempElement.setSizeType(SizeType.getEnumFromText(results.getString("SIZETYPE")));
-                tempElement.setWeightMaleMin(results.getDouble("WEIGHTMALEMIN"));
-                tempElement.setWeightMaleMax(results.getDouble("WEIGHTMALEMAX"));
-                tempElement.setWeightFemaleMin(results.getDouble("WEIGHTFEMALEMIN"));
-                tempElement.setWeightFemaleMax(results.getDouble("WEIGHTFEMALEMAX"));
-                tempElement.setWeightUnit(UnitsWeight.getEnumFromText(results.getString("WEIGHTUNIT")));
-                tempElement.setBreedingDuration(results.getString("BREEDINGDURATION"));
-                tempElement.setBreedingNumber(results.getString("BREEDINGNUMBER"));
-                tempElement.setWishListRating(WishRating.getEnumFromText(results.getString("WISHLISTRATING")));
-                tempElement.setDiagnosticDescription(results.getString("DIAGNOSTICDESCRIPTION"));
-                tempElement.setActiveTime(ActiveTime.getEnumFromText(results.getString("ACTIVETIME")));
-                tempElement.setEndangeredStatus(EndangeredStatus.getEnumFromText(results.getString("ENDANGEREDSTATUS")));
-                tempElement.setBehaviourDescription(results.getString("BEHAVIOURDESCRIPTION"));
-                tempElement.setAddFrequency(AddFrequency.getEnumFromText(results.getString("ADDFREQUENCY")));
-                tempElement.setType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
-                tempElement.setFeedingClass(FeedingClass.getEnumFromText(results.getString("FEEDINGCLASS")));
-                tempElement.setLifespan(results.getString("LIFESPAN"));
-                tempElement.setReferenceID(results.getString("REFERENCEID"));
+                populateElement(results, tempElement);
             }
         }
         catch (SQLException ex) {
@@ -444,6 +415,39 @@ public abstract class DBI_JDBC implements DBI {
         return tempElement;
     }
 
+    protected <T extends ElementCore> void populateElement(ResultSet inResults, T inElement) throws SQLException {
+        inElement.setPrimaryName(inResults.getString("PRIMARYNAME"));
+        inElement.setOtherName(inResults.getString("OTHERNAME"));
+        inElement.setScientificName(inResults.getString("SCIENTIFICNAME"));
+        inElement.setDescription(inResults.getString("DESCRIPTION"));
+        inElement.setDistribution(inResults.getString("DISTRIBUTION"));
+        inElement.setNutrition(inResults.getString("NUTRITION"));
+        inElement.setWaterDependance(WaterDependancy.getEnumFromText(inResults.getString("WATERDEPENDANCE")));
+        inElement.setSizeMaleMin(inResults.getDouble("SIZEMALEMIN"));
+        inElement.setSizeMaleMax(inResults.getDouble("SIZEMALEMAX"));
+        inElement.setSizeFemaleMin(inResults.getDouble("SIZEFEMALEMIN"));
+        inElement.setSizeFemaleMax(inResults.getDouble("SIZEFEMALEMAX"));
+        inElement.setSizeUnit(UnitsSize.getEnumFromText(inResults.getString("SIZEUNIT")));
+        inElement.setSizeType(SizeType.getEnumFromText(inResults.getString("SIZETYPE")));
+        inElement.setWeightMaleMin(inResults.getDouble("WEIGHTMALEMIN"));
+        inElement.setWeightMaleMax(inResults.getDouble("WEIGHTMALEMAX"));
+        inElement.setWeightFemaleMin(inResults.getDouble("WEIGHTFEMALEMIN"));
+        inElement.setWeightFemaleMax(inResults.getDouble("WEIGHTFEMALEMAX"));
+        inElement.setWeightUnit(UnitsWeight.getEnumFromText(inResults.getString("WEIGHTUNIT")));
+        inElement.setBreedingDuration(inResults.getString("BREEDINGDURATION"));
+        inElement.setBreedingNumber(inResults.getString("BREEDINGNUMBER"));
+        inElement.setWishListRating(WishRating.getEnumFromText(inResults.getString("WISHLISTRATING")));
+        inElement.setDiagnosticDescription(inResults.getString("DIAGNOSTICDESCRIPTION"));
+        inElement.setActiveTime(ActiveTime.getEnumFromText(inResults.getString("ACTIVETIME")));
+        inElement.setEndangeredStatus(EndangeredStatus.getEnumFromText(inResults.getString("ENDANGEREDSTATUS")));
+        inElement.setBehaviourDescription(inResults.getString("BEHAVIOURDESCRIPTION"));
+        inElement.setAddFrequency(AddFrequency.getEnumFromText(inResults.getString("ADDFREQUENCY")));
+        inElement.setType(ElementType.getEnumFromText(inResults.getString("ELEMENTTYPE")));
+        inElement.setFeedingClass(FeedingClass.getEnumFromText(inResults.getString("FEEDINGCLASS")));
+        inElement.setLifespan(inResults.getString("LIFESPAN"));
+        inElement.setReferenceID(inResults.getString("REFERENCEID"));
+    }
+
     @Override
     public <T extends LocationCore> T find(T inLocation) {
         T tempLocation = null;
@@ -455,26 +459,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempLocation = (T) inLocation.getClass().newInstance();
-                tempLocation.setName(results.getString("NAME"));
-                tempLocation.setDescription(results.getString("DESCRIPTION"));
-                tempLocation.setRating(LocationRating.getEnumFromText(results.getString("RATING")));
-                tempLocation.setGameViewingRating(GameViewRating.getEnumFromText(results.getString("GAMEVIEWINGRATING")));
-                tempLocation.setHabitatType(results.getString("HABITATTYPE"));
-                tempLocation.setAccommodationType(AccommodationType.getEnumFromText(results.getString("ACCOMMODATIONTYPE")));
-                tempLocation.setCatering(CateringType.getEnumFromText(results.getString("CATERING")));
-                tempLocation.setContactNumbers(results.getString("CONTACTNUMBERS"));
-                tempLocation.setWebsite(results.getString("WEBSITE"));
-                tempLocation.setEmail(results.getString("EMAIL"));
-                tempLocation.setDirections(results.getString("DIRECTIONS"));
-                tempLocation.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
-                tempLocation.setLatDegrees(results.getInt("LATDEGREES"));
-                tempLocation.setLatMinutes(results.getInt("LATMINUTES"));
-                tempLocation.setLatSeconds(results.getDouble("LATSECONDS"));
-                tempLocation.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
-                tempLocation.setLonDegrees(results.getInt("LONDEGREES"));
-                tempLocation.setLonMinutes(results.getInt("LONMINUTES"));
-                tempLocation.setLonSeconds(results.getDouble("LONSECONDS"));
-                tempLocation.setGPSAccuracy(GPSAccuracy.getEnumFromText(results.getString("GPSACCURACY")));
+                populateLocation(results, tempLocation);
             }
         }
         catch (SQLException ex) {
@@ -492,6 +477,29 @@ public abstract class DBI_JDBC implements DBI {
         return tempLocation;
     }
 
+    protected <T extends LocationCore> void populateLocation(ResultSet inResults, T inLocation) throws SQLException {
+        inLocation.setName(inResults.getString("NAME"));
+        inLocation.setDescription(inResults.getString("DESCRIPTION"));
+        inLocation.setRating(LocationRating.getEnumFromText(inResults.getString("RATING")));
+        inLocation.setGameViewingRating(GameViewRating.getEnumFromText(inResults.getString("GAMEVIEWINGRATING")));
+        inLocation.setHabitatType(inResults.getString("HABITATTYPE"));
+        inLocation.setAccommodationType(AccommodationType.getEnumFromText(inResults.getString("ACCOMMODATIONTYPE")));
+        inLocation.setCatering(CateringType.getEnumFromText(inResults.getString("CATERING")));
+        inLocation.setContactNumbers(inResults.getString("CONTACTNUMBERS"));
+        inLocation.setWebsite(inResults.getString("WEBSITE"));
+        inLocation.setEmail(inResults.getString("EMAIL"));
+        inLocation.setDirections(inResults.getString("DIRECTIONS"));
+        inLocation.setLatitude(Latitudes.getEnumFromText(inResults.getString("LATITUDEINDICATOR")));
+        inLocation.setLatDegrees(inResults.getInt("LATDEGREES"));
+        inLocation.setLatMinutes(inResults.getInt("LATMINUTES"));
+        inLocation.setLatSeconds(inResults.getDouble("LATSECONDS"));
+        inLocation.setLongitude(Longitudes.getEnumFromText(inResults.getString("LONGITUDEINDICATOR")));
+        inLocation.setLonDegrees(inResults.getInt("LONDEGREES"));
+        inLocation.setLonMinutes(inResults.getInt("LONMINUTES"));
+        inLocation.setLonSeconds(inResults.getDouble("LONSECONDS"));
+        inLocation.setGPSAccuracy(GPSAccuracy.getEnumFromText(inResults.getString("GPSACCURACY")));
+    }
+
     @Override
     public <T extends VisitCore> T find(T inVisit) {
         PreparedStatement state = null;
@@ -503,13 +511,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempVisit = (T) inVisit.getClass().newInstance();
-                tempVisit.setName(results.getString("NAME"));
-                tempVisit.setStartDate(results.getDate("STARTDATE"));
-                tempVisit.setEndDate(results.getDate("ENDDATE"));
-                tempVisit.setDescription(results.getString("DESCRIPTION"));
-                tempVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(results.getString("GAMEWATCHINGINTENSITY")));
-                tempVisit.setType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
-                tempVisit.setLocationName(results.getString("LOCATIONNAME"));
+                populateVisit(results, tempVisit);
             }
         }
         catch (SQLException ex) {
@@ -527,6 +529,16 @@ public abstract class DBI_JDBC implements DBI {
         return tempVisit;
     }
 
+    protected <T extends VisitCore> void populateVisit(ResultSet inResults, T inVisit) throws SQLException {
+        inVisit.setName(inResults.getString("NAME"));
+        inVisit.setStartDate(inResults.getDate("STARTDATE"));
+        inVisit.setEndDate(inResults.getDate("ENDDATE"));
+        inVisit.setDescription(inResults.getString("DESCRIPTION"));
+        inVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(inResults.getString("GAMEWATCHINGINTENSITY")));
+        inVisit.setType(VisitType.getEnumFromText(inResults.getString("VISITTYPE")));
+        inVisit.setLocationName(inResults.getString("LOCATIONNAME"));
+    }
+
     @Override
     public <T extends SightingCore> T find(T inSighting) {
         PreparedStatement state = null;
@@ -538,39 +550,7 @@ public abstract class DBI_JDBC implements DBI {
             results = state.executeQuery();
             if (results.next()) {
                 tempSighting = (T) inSighting.getClass().newInstance();
-                tempSighting.setSightingCounter(results.getLong("SIGHTINGCOUNTER"));
-                tempSighting.setDate(results.getTimestamp("SIGHTINGDATE"));
-                tempSighting.setElementName(results.getString("ELEMENTNAME"));
-                tempSighting.setLocationName(results.getString("LOCATIONNAME"));
-                tempSighting.setVisitName(results.getString("VISITNAME"));
-                tempSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(results.getString("TIMEOFDAY")));
-                tempSighting.setWeather(Weather.getEnumFromText(results.getString("WEATHER")));
-                tempSighting.setViewRating(ViewRating.getEnumFromText(results.getString("VIEWRATING")));
-                tempSighting.setCertainty(Certainty.getEnumFromText(results.getString("CERTAINTY")));
-                tempSighting.setNumberOfElements(results.getInt("NUMBEROFELEMENTS"));
-                tempSighting.setDetails(results.getString("DETAILS"));
-                tempSighting.setLatitude(Latitudes.getEnumFromText(results.getString("LATITUDEINDICATOR")));
-                tempSighting.setLatDegrees(results.getInt("LATDEGREES"));
-                tempSighting.setLatMinutes(results.getInt("LATMINUTES"));
-                tempSighting.setLatSeconds(results.getDouble("LATSECONDS"));
-                tempSighting.setLongitude(Longitudes.getEnumFromText(results.getString("LONGITUDEINDICATOR")));
-                tempSighting.setLonDegrees(results.getInt("LONDEGREES"));
-                tempSighting.setLonMinutes(results.getInt("LONMINUTES"));
-                tempSighting.setLonSeconds(results.getDouble("LONSECONDS"));
-                tempSighting.setSightingEvidence(SightingEvidence.getEnumFromText(results.getString("SIGHTINGEVIDENCE")));
-                tempSighting.setMoonlight(Moonlight.getEnumFromText(results.getString("MOONLIGHT")));
-                tempSighting.setMoonPhase(results.getInt("MOONPHASE"));
-                tempSighting.setTemperature(results.getDouble("TEMPERATURE"));
-                tempSighting.setUnitsTemperature(UnitsTemperature.getEnumFromText(results.getString("TEMPERATUREUNIT")));
-                tempSighting.setLifeStatus(LifeStatus.getEnumFromText(results.getString("LIFESTATUS")));
-                tempSighting.setSex(Sex.getEnumFromText(results.getString("SEX")));
-                tempSighting.setTag(results.getString("TAG"));
-                tempSighting.setTimeUnknown(results.getBoolean("UNKNOWNTIME"));
-                tempSighting.setDurationMinutes(results.getInt("DURATIONMINUTES"));
-                tempSighting.setDurationSeconds(results.getDouble("DURATIONSECONDS"));
-                tempSighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(results.getString("GPSACCURACY")));
-                tempSighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(results.getString("TIMEACCURACY")));
-                tempSighting.setAge(Age.getEnumFromText(results.getString("AGE")));
+                populateSighting(results, tempSighting);
             }
         }
         catch (SQLException ex) {
@@ -586,6 +566,42 @@ public abstract class DBI_JDBC implements DBI {
             closeStatementAndResultset(state, results);
         }
         return tempSighting;
+    }
+
+    protected <T extends SightingCore> void populateSighting(ResultSet inResults, T inSighting) throws SQLException {
+        inSighting.setSightingCounter(inResults.getLong("SIGHTINGCOUNTER"));
+        inSighting.setDate(inResults.getTimestamp("SIGHTINGDATE"));
+        inSighting.setElementName(inResults.getString("ELEMENTNAME"));
+        inSighting.setLocationName(inResults.getString("LOCATIONNAME"));
+        inSighting.setVisitName(inResults.getString("VISITNAME"));
+        inSighting.setTimeOfDay(ActiveTimeSpesific.getEnumFromText(inResults.getString("TIMEOFDAY")));
+        inSighting.setWeather(Weather.getEnumFromText(inResults.getString("WEATHER")));
+        inSighting.setViewRating(ViewRating.getEnumFromText(inResults.getString("VIEWRATING")));
+        inSighting.setCertainty(Certainty.getEnumFromText(inResults.getString("CERTAINTY")));
+        inSighting.setNumberOfElements(inResults.getInt("NUMBEROFELEMENTS"));
+        inSighting.setDetails(inResults.getString("DETAILS"));
+        inSighting.setLatitude(Latitudes.getEnumFromText(inResults.getString("LATITUDEINDICATOR")));
+        inSighting.setLatDegrees(inResults.getInt("LATDEGREES"));
+        inSighting.setLatMinutes(inResults.getInt("LATMINUTES"));
+        inSighting.setLatSeconds(inResults.getDouble("LATSECONDS"));
+        inSighting.setLongitude(Longitudes.getEnumFromText(inResults.getString("LONGITUDEINDICATOR")));
+        inSighting.setLonDegrees(inResults.getInt("LONDEGREES"));
+        inSighting.setLonMinutes(inResults.getInt("LONMINUTES"));
+        inSighting.setLonSeconds(inResults.getDouble("LONSECONDS"));
+        inSighting.setSightingEvidence(SightingEvidence.getEnumFromText(inResults.getString("SIGHTINGEVIDENCE")));
+        inSighting.setMoonlight(Moonlight.getEnumFromText(inResults.getString("MOONLIGHT")));
+        inSighting.setMoonPhase(inResults.getInt("MOONPHASE"));
+        inSighting.setTemperature(inResults.getDouble("TEMPERATURE"));
+        inSighting.setUnitsTemperature(UnitsTemperature.getEnumFromText(inResults.getString("TEMPERATUREUNIT")));
+        inSighting.setLifeStatus(LifeStatus.getEnumFromText(inResults.getString("LIFESTATUS")));
+        inSighting.setSex(Sex.getEnumFromText(inResults.getString("SEX")));
+        inSighting.setTag(inResults.getString("TAG"));
+        inSighting.setTimeUnknown(inResults.getBoolean("UNKNOWNTIME"));
+        inSighting.setDurationMinutes(inResults.getInt("DURATIONMINUTES"));
+        inSighting.setDurationSeconds(inResults.getDouble("DURATIONSECONDS"));
+        inSighting.setGPSAccuracy(GPSAccuracy.getEnumFromText(inResults.getString("GPSACCURACY")));
+        inSighting.setTimeAccuracy(TimeAccuracy.getEnumFromText(inResults.getString("TIMEACCURACY")));
+        inSighting.setAge(Age.getEnumFromText(inResults.getString("AGE")));
     }
 
     @Override
@@ -612,12 +628,7 @@ public abstract class DBI_JDBC implements DBI {
                 results = state.executeQuery();
                 if (results.next()) {
                     tempFile = (T) inWildLogFile.getClass().newInstance();
-                    tempFile.setId(results.getString("ID"));
-                    tempFile.setFilename(results.getString("FILENAME"));
-                    tempFile.setDBFilePath(results.getString("ORIGINALPATH"));
-                    tempFile.setFileType(WildLogFileType.getEnumFromText(results.getString("FILETYPE")));
-                    tempFile.setUploadDate(results.getDate("UPLOADDATE"));
-                    tempFile.setDefaultFile(results.getBoolean("ISDEFAULT"));
+                    populateWildLogFile(results, tempFile);
                 }
             }
             else {
@@ -637,6 +648,15 @@ public abstract class DBI_JDBC implements DBI {
             closeStatementAndResultset(state, results);
         }
         return tempFile;
+    }
+
+    protected <T extends WildLogFileCore> void populateWildLogFile(ResultSet inResults, T inWildLogFile) throws SQLException {
+        inWildLogFile.setId(inResults.getString("ID"));
+        inWildLogFile.setFilename(inResults.getString("FILENAME"));
+        inWildLogFile.setDBFilePath(inResults.getString("ORIGINALPATH"));
+        inWildLogFile.setFileType(WildLogFileType.getEnumFromText(inResults.getString("FILETYPE")));
+        inWildLogFile.setUploadDate(inResults.getDate("UPLOADDATE"));
+        inWildLogFile.setDefaultFile(inResults.getBoolean("ISDEFAULT"));
     }
 
     @Override
