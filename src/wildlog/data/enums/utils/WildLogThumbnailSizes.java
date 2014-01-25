@@ -1,25 +1,25 @@
 package wildlog.data.enums.utils;
 
 public enum WildLogThumbnailSizes {
-    /** 20px */
+    /** 20px - For Icons */
     VERY_TINY(20),
-    /** 25px */
+    /** 25px - For Icons (larger) */
     TINY(25),
-    /** 60px */
+    /** 60px - For Photos (Tables) */
     VERY_SMALL(60),
-    /** 100px */
+    /** 100px - For Photos (Small Display) */
     SMALL(100),
-    /** 128px */
+    /** 128px - For Photos (WildNote Sync) */
     SYNC_EXPORT(128),
-    /** 150px */
+    /** 150px - For Photos (Medium Display) */
     MEDIUM_SMALL(150),
-    /** 200px */
+    /** 200px - For Photos (Bulk Import) */
     MEDIUM(200),
-    /** 300px */
+    /** 300px - For Photos (Large Display) */
     NORMAL(300),
-    /** 500px */
+    /** 500px - Not Used Currently */
     LARGE(500),
-    /** 700px */
+    /** 700px - For Photos (Browse, Export) */
     VERY_LARGE(700);
 
     private int size;

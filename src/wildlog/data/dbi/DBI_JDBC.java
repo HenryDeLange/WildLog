@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import wildlog.data.dataobjects.ElementCore;
 import wildlog.data.dataobjects.LocationCore;
 import wildlog.data.dataobjects.SightingCore;
@@ -51,6 +52,7 @@ import wildlog.data.utils.UtilsData;
 
 
 public abstract class DBI_JDBC implements DBI {
+    Random randomGenerator = new Random(System.nanoTime());
     // Version
     protected static final int WILDLOG_DB_VERSION = 4;
     // Tables
@@ -1280,19 +1282,15 @@ public abstract class DBI_JDBC implements DBI {
             }
             else {
                 if (!inNewButKeepID) {
-                    // Get the max ID and then run the query.
+                    // Get the new ID
                     tempState = conn.createStatement();
-                    // TODO: Fix hierdie ID storie... Dat dit beter werk want wat gaan nou gebeur as ek uit IDs uit hardloop (sure dit sal lank vat, maar steeds...)
-                    results = tempState.executeQuery("SELECT MAX(SIGHTINGCOUNTER) FROM SIGHTINGS");
-                    if (results.next()) {
-                        long sightingCounter = results.getLong(1);
-                        sightingCounter++;
-                        // Need to set the counter on the sighting for images to upload correctly and the below code to work
-                        inSighting.setSightingCounter(sightingCounter);
-                    }
-                    else {
-                        // Need to set the counter on the sighting for images to upload correctly and the below code to work
-                        inSighting.setSightingCounter(1);
+                    inSighting.setSightingCounter(System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999));
+                    // Make sure it is unique (should almost always be, but let's be safe...)
+                    results = tempState.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter());
+                    while (results.next() && results.getInt(1) > 0) {
+                        // ID already used, try a new ID
+                        inSighting.setSightingCounter(System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999));
+                        results = tempState.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + inSighting.getSightingCounter());
                     }
                 }
                 // Insert
