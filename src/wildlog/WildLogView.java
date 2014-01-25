@@ -82,6 +82,7 @@ import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.WildLogAboutBox;
 import wildlog.ui.dialogs.WildNoteAboutBox;
 import wildlog.ui.dialogs.WorkspaceExportDialog;
+import wildlog.ui.dialogs.WorkspaceImportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -279,6 +280,7 @@ public final class WildLogView extends JFrame {
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
+        mnuCreateWorkspaceMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
@@ -287,16 +289,16 @@ public final class WildLogView extends JFrame {
         mnuBackupDatabase = new javax.swing.JMenuItem();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
-        mnyExportCSV = new javax.swing.JMenuItem();
-        mnuExportWorkspace = new javax.swing.JMenuItem();
+        mnuExportCSV = new javax.swing.JMenuItem();
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
+        mnuExportWorkspace = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
         mnuExportHTML = new javax.swing.JMenuItem();
         mnuExportKML = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         mnuImportCSV = new javax.swing.JMenuItem();
-        mnuImportWorkspace = new javax.swing.JMenuItem();
         mnuImportWildNote = new javax.swing.JMenuItem();
+        mnuImportWorkspace = new javax.swing.JMenuItem();
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mnuBulkImport = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
@@ -574,7 +576,7 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuChangeWorkspaceMenuItem.setText("Switch Active Workspaces");
+        mnuChangeWorkspaceMenuItem.setText("Switch Active Workspace");
         mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
         mnuChangeWorkspaceMenuItem.setName("mnuChangeWorkspaceMenuItem"); // NOI18N
         mnuChangeWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -583,6 +585,17 @@ public final class WildLogView extends JFrame {
             }
         });
         workspaceMenu.add(mnuChangeWorkspaceMenuItem);
+
+        mnuCreateWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuCreateWorkspaceMenuItem.setText("Create New Workspace");
+        mnuCreateWorkspaceMenuItem.setToolTipText("Select a folder where a new Workspace will be created.");
+        mnuCreateWorkspaceMenuItem.setName("mnuCreateWorkspaceMenuItem"); // NOI18N
+        mnuCreateWorkspaceMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCreateWorkspaceMenuItemActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuCreateWorkspaceMenuItem);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         workspaceMenu.add(jSeparator1);
@@ -645,27 +658,16 @@ public final class WildLogView extends JFrame {
 
         exportMenu.setText("Export");
 
-        mnyExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
-        mnyExportCSV.setText("Export All to CSV");
-        mnyExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
-        mnyExportCSV.setName("mnyExportCSV"); // NOI18N
-        mnyExportCSV.addActionListener(new java.awt.event.ActionListener() {
+        mnuExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        mnuExportCSV.setText("Export All to CSV");
+        mnuExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSV.setName("mnuExportCSV"); // NOI18N
+        mnuExportCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnyExportCSVActionPerformed(evt);
+                mnuExportCSVActionPerformed(evt);
             }
         });
-        exportMenu.add(mnyExportCSV);
-
-        mnuExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuExportWorkspace.setText("Export to New Workspace");
-        mnuExportWorkspace.setToolTipText("Export the specified data to a new WildLog Workspace.");
-        mnuExportWorkspace.setName("mnuExportWorkspace"); // NOI18N
-        mnuExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportWorkspaceActionPerformed(evt);
-            }
-        });
-        exportMenu.add(mnuExportWorkspace);
+        exportMenu.add(mnuExportCSV);
 
         mnuExportWildNoteSync.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuExportWildNoteSync.setText("Export WildNote Sync File");
@@ -677,6 +679,17 @@ public final class WildLogView extends JFrame {
             }
         });
         exportMenu.add(mnuExportWildNoteSync);
+
+        mnuExportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuExportWorkspace.setText("Export to New Workspace");
+        mnuExportWorkspace.setToolTipText("Export the specified data to a new WildLog Workspace.");
+        mnuExportWorkspace.setName("mnuExportWorkspace"); // NOI18N
+        mnuExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportWorkspaceActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportWorkspace);
 
         jSeparator9.setName("jSeparator9"); // NOI18N
         exportMenu.add(jSeparator9);
@@ -719,6 +732,16 @@ public final class WildLogView extends JFrame {
         });
         importMenu.add(mnuImportCSV);
 
+        mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
+        mnuImportWildNote.setText("Import WildNote Sync File");
+        mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
+        mnuImportWildNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuImportWildNoteActionPerformed(evt);
+            }
+        });
+        importMenu.add(mnuImportWildNote);
+
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWorkspace.setText("Import from Another Workspace");
         mnuImportWorkspace.setToolTipText("Import all the data in the specified WildLog Workspace.");
@@ -729,16 +752,6 @@ public final class WildLogView extends JFrame {
             }
         });
         importMenu.add(mnuImportWorkspace);
-
-        mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
-        mnuImportWildNote.setText("Import WildNote Sync File");
-        mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
-        mnuImportWildNote.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuImportWildNoteActionPerformed(evt);
-            }
-        });
-        importMenu.add(mnuImportWildNote);
 
         jSeparator7.setName("jSeparator7"); // NOI18N
         importMenu.add(jSeparator7);
@@ -1332,6 +1345,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuBulkImportActionPerformed
 
     private void mnuImportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportCSVActionPerformed
+        tabbedPanel.setSelectedIndex(0);
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -1393,6 +1407,7 @@ public final class WildLogView extends JFrame {
                     }
                 }
                 setMessage("Done with the CSV Import");
+                tabHomeComponentShown(null);
                 return null;
             }
         });
@@ -1451,7 +1466,7 @@ public final class WildLogView extends JFrame {
         UtilsFileProcessing.openFile(WildLogPaths.OPEN_OPENMAP.getRelativePath());
     }//GEN-LAST:event_mnuOpenMapAppActionPerformed
 
-    private void mnyExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnyExportCSVActionPerformed
+    private void mnuExportCSVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportCSVActionPerformed
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -1464,7 +1479,7 @@ public final class WildLogView extends JFrame {
                 return null;
             }
         });
-    }//GEN-LAST:event_mnyExportCSVActionPerformed
+    }//GEN-LAST:event_mnuExportCSVActionPerformed
 
     private void mnuExportHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportHTMLActionPerformed
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
@@ -2110,6 +2125,7 @@ public final class WildLogView extends JFrame {
                                 public void run() {
                                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
                                         if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                                            // Op hiedie stadium kan ek maar alle thumbnails maak want die idee is om die workspace skoon te maak en dinge vat klaar donners lank...
                                             for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
                                                 wildLogFile.getAbsoluteThumbnailPath(size);
                                             }
@@ -2408,46 +2424,56 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuMergeVisitActionPerformed
 
     private void mnuImportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuImportWorkspaceActionPerformed
-        // TODO: show warning and info message to confirm the user wants to continue and knwos to select an closed workspace
-
-        // TODO: Ask wether to include the files of not.
-        
-        final JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setAcceptAllFileFilterUsed(false);
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        fileChooser.setDialogTitle("Please select the WildLog Workspace to use.");
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        fileChooser.setFileFilter(new WildNoteSyncFilter());
+        tabbedPanel.setSelectedIndex(0);
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
             public int showDialog() {
-                return fileChooser.showOpenDialog(app.getMainFrame());
-            }
-        });
-        if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Import WildLog Workspace " + getProgress() + "%");
-                    WildLogDBI syncDBI = null;
-                    try {
-                        // TODO: Do the juicy stuffs
-                    }
-                    catch (Exception ex) {
-                        ex.printStackTrace(System.err);
-                    }
-                    finally {
-                        if (syncDBI != null) {
-                            syncDBI.close();
-                        }
-                    }
-                    setProgress(100);
-                    setMessage("Import WildLog Workspace Done");
-                    return null;
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you backup your Workspace (WildLog folder) before continuing. <br>"
+                        + "Do you want to continue now?</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                 }
             });
+        if (result == JOptionPane.OK_OPTION) {
+            final JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Select the Workspace folder to import");
+            fileChooser.setDialogType(JFileChooser.CUSTOM_DIALOG);
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.setMultiSelectionEnabled(false);
+            result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return fileChooser.showOpenDialog(app.getMainFrame());
+                }
+            });
+            if (result != JFileChooser.ERROR_OPTION && result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+                Path selectedPath;
+                if (fileChooser.getSelectedFile().isDirectory()) {
+                    selectedPath = fileChooser.getSelectedFile().toPath();
+                }
+                else {
+                    selectedPath = fileChooser.getSelectedFile().getParentFile().toPath();
+                }
+                // Make sure it's a valid workspace that was selected
+                if (!selectedPath.endsWith(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath())) {
+                    selectedPath = selectedPath.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
+                }
+                if (Files.exists(selectedPath.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()))) {
+                    // Open the import window
+                    WorkspaceImportDialog dialog = new WorkspaceImportDialog(app, selectedPath);
+                    dialog.setVisible(true);
+                }
+                else {
+                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                    "The selected folder is not a valid existing WildLog Workspace.",
+                                    "Incorrect Workspace Selected", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE);
+                            }
+                        });
+                }
+            }
         }
     }//GEN-LAST:event_mnuImportWorkspaceActionPerformed
 
@@ -2584,6 +2610,44 @@ public final class WildLogView extends JFrame {
         aboutBox.setVisible(true);
     }//GEN-LAST:event_mnuAboutWildNoteActionPerformed
 
+    private void mnuCreateWorkspaceMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateWorkspaceMenuItemActionPerformed
+        if (WildLogApp.configureWildLogHomeBasedOnFileBrowser(app.getMainFrame(), false)) {
+            // Write first
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().resolve("wildloghome").toFile()));
+                writer.write(WildLogPaths.getFullWorkspacePrefix().toString());
+                writer.flush();
+            }
+            catch (IOException ex) {
+                ex.printStackTrace(System.err);
+            }
+            finally {
+                if (writer != null) {
+                    try {
+                        writer.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }
+            // Shutdown
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "The WildLog Workspace has been created. Please restart the application.",
+                            "Done!", JOptionPane.INFORMATION_MESSAGE);
+                    return -1;
+                }
+            });
+            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
+            this.setVisible(false);
+            app.quit(null);
+        }
+    }//GEN-LAST:event_mnuCreateWorkspaceMenuItemActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -2604,6 +2668,10 @@ public final class WildLogView extends JFrame {
             closeStatus = tab.closeTab();
         }
         return closeStatus;
+    }
+
+    public void refreshHomeTab() {
+        tabHomeComponentShown(null);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2651,8 +2719,10 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuCreateSlideshow;
+    private javax.swing.JMenuItem mnuCreateWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuDBConsole;
     private javax.swing.JMenuItem mnuExifMenuItem;
+    private javax.swing.JMenuItem mnuExportCSV;
     private javax.swing.JMenuItem mnuExportHTML;
     private javax.swing.JMenuItem mnuExportKML;
     private javax.swing.JMenuItem mnuExportWildNoteSync;
@@ -2672,7 +2742,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;
-    private javax.swing.JMenuItem mnyExportCSV;
     private javax.swing.JMenu otherMenu;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;

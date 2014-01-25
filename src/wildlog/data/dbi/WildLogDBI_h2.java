@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Properties;
 import javax.swing.JOptionPane;
 import org.h2.jdbc.JdbcSQLException;
@@ -334,7 +335,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     @Override
                     public int showDialog() {
                         JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(),
-                                "The database could not be fully updated. Make sure it is not in use or broken"
+                                "The database could not be fully updated. Make sure it is not in use or broken "
                                 + "and that you are running the latest version of the application.",
                                 "WildLog Error: Can't Initialize Database", JOptionPane.ERROR_MESSAGE);
                         return -1;
@@ -518,6 +519,19 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILTABLES smallint DEFAULT true");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
+            // Update Sightings and WildLog files to use the new UUIDs
+            List<Sighting> listSightings = list(new Sighting());
+            for (Sighting sighting : listSightings) {
+                long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
+                results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
+                while (results.next() && results.getInt(1) > 0) {
+                    // ID already used, try a new ID
+                    newID = System.currentTimeMillis()*1000000L + randomGenerator.nextInt(999999);
+                    results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
+                }
+                state.executeUpdate("UPDATE SIGHTINGS SET SIGHTINGCOUNTER = " + newID + " WHERE SIGHTINGCOUNTER = " + sighting.getSightingCounter());
+                state.executeUpdate("UPDATE FILES SET ID = '" + new Sighting(newID).getWildLogFileID() + "' WHERE ID = '" + sighting.getWildLogFileID() + "'");
+            }
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=4");
         }

@@ -656,9 +656,12 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             preloadedImages.remove(wildLogFile.getAbsolutePath().toString());
                             setupFile(app.getDBI().list(newWildLogFile));
                             // Recreate the thumbnails
-                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                                newWildLogFile.getAbsoluteThumbnailPath(size);
-                            }
+                            // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                            newWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_LARGE);
                         }
                         catch (LLJTranException | IOException ex) {
                             ex.printStackTrace(System.err);

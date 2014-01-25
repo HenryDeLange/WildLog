@@ -31,12 +31,25 @@
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Switch Active Workspaces"/>
+                    <Property name="text" type="java.lang.String" value="Switch Active Workspace"/>
                     <Property name="toolTipText" type="java.lang.String" value="Select another Workspace to use."/>
                     <Property name="name" type="java.lang.String" value="mnuChangeWorkspaceMenuItem" noResource="true"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuChangeWorkspaceMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuCreateWorkspaceMenuItem">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="Create New Workspace"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Select a folder where a new Workspace will be created."/>
+                    <Property name="name" type="java.lang.String" value="mnuCreateWorkspaceMenuItem" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateWorkspaceMenuItemActionPerformed"/>
                   </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator1">
@@ -122,30 +135,17 @@
             <Property name="text" type="java.lang.String" value="Export"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnyExportCSV">
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportCSV">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/CSV Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to CSV"/>
                 <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files. (Open in Excel, ArcGIS, etc.)"/>
-                <Property name="name" type="java.lang.String" value="mnyExportCSV" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="mnuExportCSV" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnyExportCSVActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExportWorkspace">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Export to New Workspace"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export the specified data to a new WildLog Workspace."/>
-                <Property name="name" type="java.lang.String" value="mnuExportWorkspace" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportWorkspaceActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportCSVActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportWildNoteSync">
@@ -159,6 +159,19 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportWildNoteSyncActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportWorkspace">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Export to New Workspace"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export the specified data to a new WildLog Workspace."/>
+                <Property name="name" type="java.lang.String" value="mnuExportWorkspace" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportWorkspaceActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator9">
@@ -213,6 +226,18 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportCSVActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuImportWildNote">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/WildNoteIcon.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Import WildNote Sync File"/>
+                <Property name="name" type="java.lang.String" value="mnuImportWildNote" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportWildNoteActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportWorkspace">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -224,18 +249,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportWorkspaceActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuImportWildNote">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/WildNoteIcon.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Import WildNote Sync File"/>
-                <Property name="name" type="java.lang.String" value="mnuImportWildNote" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportWildNoteActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator7">

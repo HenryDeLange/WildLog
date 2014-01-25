@@ -60,7 +60,7 @@ public enum WildLogPaths {
         else {
             activeWorkspacePrefix = Paths.get(inPrefix).normalize().toAbsolutePath();
         }
-        // Add the WildLog folder to the prefix if it was selected
+        // Add the WildLog folder to the prefix if it was not selected
         if (!activeWorkspacePrefix.endsWith(DEFAULT_WORKSPACE_NAME.getRelativePath())) {
             activeWorkspacePrefix = activeWorkspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath());
         }

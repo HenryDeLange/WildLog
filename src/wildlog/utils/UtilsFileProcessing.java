@@ -52,6 +52,7 @@ public final class UtilsFileProcessing {
      */
     public static List<File> showFileUploadDialog(final WildLogApp inApp) {
         final FileDialog fileChooser = new FileDialog(inApp.getMainFrame(), "Select Files", FileDialog.LOAD);
+//        fileChooser.setIconImage(new ImageIcon(inApp.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
 //        final JFileChooser fileChooser = new JFileChooser();
         if (lastFilePath != null) {
 //            fileChooser.setCurrentDirectory(Paths.get(lastFilePath).toFile());
@@ -154,9 +155,11 @@ public final class UtilsFileProcessing {
         // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
         if (inCreateThumbnails) {
             if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                    wildLogFile.getAbsoluteThumbnailPath(size);
-                }
+                // Maak net die kritiese thumbnails vooruit, want anders vat dinge te lank
+                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
             }
         }
     }

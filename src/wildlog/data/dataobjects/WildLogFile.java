@@ -74,6 +74,7 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
     /**
      * Returns the relative path (similar to the value stored in the database) excluding the
      * WildLog Workspace prefix.
+     * (Relative path for workspace: ex. Files/Images/Observation/Kruger/IMGP3365.JPG)
      * @return
      */
     public Path getRelativePath() {

@@ -323,7 +323,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void setupSightingInfo() {
         // Display the ID
-        lblSightingID.setText("<html>Observation ID: " + Long.toString(sighting.getSightingCounter()) + "</html>");
+        lblSightingID.setText("<html><p align='center'>Observation ID: " + Long.toString(sighting.getSightingCounter()) + "</p></html>");
         // Load the values from the Sighting object
         setUIFieldsFromSightingDate();
         cmbCertainty.setSelectedItem(sighting.getCertainty());
@@ -845,6 +845,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
         sightingIncludes.add(cmbTimeFormat, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, 110, -1));
 
+        lblSightingID.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        lblSightingID.setForeground(new java.awt.Color(102, 102, 102));
         lblSightingID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblSightingID.setName("lblSightingID"); // NOI18N
         sightingIncludes.add(lblSightingID, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 310, 120, 50));
@@ -1268,7 +1270,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }
 
     private void btnUploadImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadImageActionPerformed
+        getGlassPane().setVisible(true);
         uploadImage(UtilsFileProcessing.showFileUploadDialog(app));
+        getGlassPane().setVisible(false);
     }//GEN-LAST:event_btnUploadImageActionPerformed
 
     private void uploadImage(final List<File> inFiles) {
