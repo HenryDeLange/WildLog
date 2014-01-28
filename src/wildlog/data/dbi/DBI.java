@@ -13,7 +13,7 @@ import wildlog.data.dbi.queryobjects.LocationCount;
 
 public interface DBI {
 
-    public boolean initialize();
+    public boolean initialize(boolean inCreateDefaultRecords);
     public void close();
 
     public <T extends ElementCore> int count(T inElement);

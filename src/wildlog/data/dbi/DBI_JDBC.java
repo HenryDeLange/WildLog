@@ -110,7 +110,7 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public boolean initialize() {
+    public boolean initialize(boolean inCreateDefaultRecords) {
         Statement state = null;
         ResultSet results = null;
         boolean started = true;
@@ -125,7 +125,9 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");
                 state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_PRINAME_TYPE ON ELEMENTS (PRIMARYNAME, ELEMENTTYPE)");
                 // Create default entry
-                createOrUpdate(new ElementCore("Unknown Creature"), null);
+                if (inCreateDefaultRecords) {
+                    createOrUpdate(new ElementCore("Unknown Creature"), null);
+                }
                 closeStatement(state);
             }
             closeResultset(results);
@@ -134,7 +136,10 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableLocations);
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS LOCATION_NAME ON LOCATIONS (NAME)");
-                createOrUpdate(new LocationCore("Some Place"), null);
+                // Create default entry
+                if (inCreateDefaultRecords) {
+                    createOrUpdate(new LocationCore("Some Place"), null);
+                }
                 closeStatement(state);
             }
             closeResultset(results);
@@ -144,7 +149,10 @@ public abstract class DBI_JDBC implements DBI {
                 state.execute(tableVisits);
                 state.execute("CREATE UNIQUE INDEX IF NOT EXISTS VISIT_NAME ON VISITS (NAME)");
                 state.execute("CREATE INDEX IF NOT EXISTS VISIT_LOCATION ON VISITS (LOCATIONNAME)");
-                createOrUpdate(new VisitCore("Casual Observations", "Some Place"), null);
+                // Create default entry
+                if (inCreateDefaultRecords) {
+                    createOrUpdate(new VisitCore("Casual Observations", "Some Place"), null);
+                }
                 closeStatement(state);
             }
             closeResultset(results);
