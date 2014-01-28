@@ -83,7 +83,13 @@ public class SpinnerFixer {
                         }
                     }
                     if (editedText.getText().isEmpty() && number != minValue) {
-                        editedText.setText(""+((SpinnerNumberModel)inSpinner.getModel()).getMinimum());
+                        if (((SpinnerNumberModel)inSpinner.getModel()).getMinimum() instanceof Integer) {
+                            editedText.setText(""+((SpinnerNumberModel)inSpinner.getModel()).getMinimum());
+                        }
+                        else {
+                            Double tempValue = (Double) ((SpinnerNumberModel)inSpinner.getModel()).getMinimum();
+                            editedText.setText(""+tempValue.intValue());
+                        }
                     }
                     if (valueAfterEdit > maxValue) {
                         inEvent.consume();

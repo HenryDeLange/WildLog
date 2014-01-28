@@ -34,7 +34,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     public WildLogDBI_h2() throws Exception {
         this("jdbc:h2:"
                 + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", true);
     }
 
     /**
@@ -42,7 +42,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
      * workspace database should use a constructor that does NOT specify the connection URL.
      * @param inConnectionURL
      */
-    public WildLogDBI_h2(String inConnectionURL) throws Exception {
+    public WildLogDBI_h2(String inConnectionURL, boolean inCreateDefaultRecords) throws Exception {
         super();
         Statement state = null;
         ResultSet results = null;
@@ -67,7 +67,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 System.out.println("Database username and password updated.");
             }
             // Create table, indexes, etc.
-            started = initialize();
+            started = initialize(inCreateDefaultRecords);
             // Check database version and perform updates if required.
             // This also creates the WildLogOptions row the first time
             doUpdates();
@@ -136,24 +136,50 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
     }
 
     @Override
-    public void doExportCSV(Path inPath) {
+    public void doExportCSV(Path inPath, boolean inExportAll, Location inLocation, Visit inVisit, Element inElement, Sighting inSighting) {
         Statement state = null;
         try {
             state = conn.createStatement();
+            String sql;
             // Export Elements
-            state.execute("CALL CSVWRITE('" + inPath.resolve("Elements.csv").toAbsolutePath().toString() + "', 'SELECT * FROM ELEMENTS')");
+            if (inExportAll || inElement != null) {
+                sql = "SELECT * FROM ELEMENTS";
+                if (inElement != null && inElement.getPrimaryName()!= null && !inElement.getPrimaryName().isEmpty()) {
+                    sql = sql + " WHERE PRIMARYNAME = ''" + inElement.getPrimaryName().replaceAll("'", "''") + "''";
+                }
+                state.execute("CALL CSVWRITE('" + inPath.resolve("Elements.csv").toAbsolutePath().toString() + "', '" + sql + "')");
+            }
             // Export Locations
-            state.execute("CALL CSVWRITE('" + inPath.resolve("Locations.csv").toAbsolutePath().toString() + "', 'SELECT * FROM LOCATIONS')");
+            if (inExportAll || inLocation != null) {
+                sql = "SELECT * FROM LOCATIONS";
+                if (inLocation != null && inLocation.getName() != null && !inLocation.getName().isEmpty()) {
+                    sql = sql + " WHERE NAME = ''" + inLocation.getName().replaceAll("'", "''") + "''";
+                }
+                state.execute("CALL CSVWRITE('" + inPath.resolve("Locations.csv").toAbsolutePath().toString() + "', '" + sql + "')");
+            }
             // Export Visits
-            state.execute("CALL CSVWRITE('" + inPath.resolve("Visits.csv").toAbsolutePath().toString() + "', 'SELECT * FROM VISITS')");
+            if (inExportAll || inVisit != null) {
+                sql = "SELECT * FROM VISITS";
+                if (inVisit != null && inVisit.getName() != null && !inVisit.getName().isEmpty()) {
+                    sql = sql + " WHERE NAME = ''" + inVisit.getName().replaceAll("'", "''") + "''";
+                }
+                state.execute("CALL CSVWRITE('" + inPath.resolve("Visits.csv").toAbsolutePath().toString() + "', '" + sql + "')");
+            }
             // Export Sightings
-            state.execute("CALL CSVWRITE('" + inPath.resolve("Sightings.csv").toAbsolutePath().toString() + "', "
-                    + "'SELECT * "
+            if (inExportAll || inSighting != null) {
+                sql = "SELECT * "
                     + ", ((CASE WHEN LATITUDEINDICATOR like ''North (+)'' THEN +1  WHEN LATITUDEINDICATOR like ''South (-)'' THEN -1 END) * LatDEGREES + (LatMINUTES + LatSECONDS /60.0)/60.0) LatDecDeg"
                     + ", ((CASE WHEN LONGITUDEINDICATOR like ''East (+)'' THEN +1  WHEN LONGITUDEINDICATOR like ''West (-)'' THEN -1 END) * LonDEGREES + (LonMINUTES + LonSECONDS /60.0)/60.0) LonDecDeg"
-                    + " FROM SIGHTINGS')");
+                    + " FROM SIGHTINGS";
+                if (inSighting != null && inSighting.getSightingCounter() > 0) {
+                    sql = sql + " WHERE SIGHTINGCOUNTER = " +  inSighting.getSightingCounter();
+                }
+                state.execute("CALL CSVWRITE('" + inPath.resolve("Sightings.csv").toAbsolutePath().toString() + "', '" + sql + "')");
+            }
             // Export Files
-            state.execute("CALL CSVWRITE('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "', 'SELECT * FROM FILES')");
+            if (inExportAll) {
+                state.execute("CALL CSVWRITE('" + inPath.resolve("Files.csv").toAbsolutePath().toString() + "', 'SELECT * FROM FILES')");
+            }
         }
         catch (SQLException ex) {
             printSQLException(ex);

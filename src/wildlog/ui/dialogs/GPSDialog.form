@@ -478,6 +478,9 @@
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="new DefaultComboBoxModel(GPSAccuracy.values())" type="code"/>
         </Property>
+        <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="GPSAccuracy.AVERAGE" type="code"/>
+        </Property>
         <Property name="name" type="java.lang.String" value="cmbAccuracy" noResource="true"/>
       </Properties>
       <Constraints>

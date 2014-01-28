@@ -414,7 +414,7 @@ public final class WildLogView extends JFrame {
 
         lblWorkspace.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
         lblWorkspace.setForeground(new java.awt.Color(74, 87, 60));
-        lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblWorkspace.setText("Active Workspace Folder: " + WildLogPaths.getFullWorkspacePrefix().toString());
         lblWorkspace.setName("lblWorkspace"); // NOI18N
 
@@ -434,22 +434,27 @@ public final class WildLogView extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                 .addContainerGap(846, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(tabHomeLayout.createSequentialGroup()
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(tabHomeLayout.createSequentialGroup()
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addGroup(tabHomeLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel8))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
                                 .addGap(110, 110, 110)
                                 .addComponent(jLabel11)
                                 .addGap(16, 16, 16)
                                 .addComponent(jLabel12))
-                            .addGroup(tabHomeLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
                                 .addGap(58, 58, 58)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(tabHomeLayout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addComponent(lblWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(tabHomeLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
                                 .addGap(134, 134, 134)
                                 .addComponent(lblLocations)
                                 .addGap(18, 18, 18)
@@ -458,20 +463,15 @@ public final class WildLogView extends JFrame {
                                 .addComponent(lblCreatures)
                                 .addGap(18, 18, 18)
                                 .addComponent(lblSightings))
-                            .addGroup(tabHomeLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
                                 .addGap(50, 50, 50)
                                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel10)
-                                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel8)))
+                                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(lblWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         tabHomeLayout.setVerticalGroup(
@@ -501,9 +501,9 @@ public final class WildLogView extends JFrame {
                     .addComponent(lblCreatures))
                 .addGap(11, 11, 11)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
+                .addGap(2, 2, 2)
                 .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 143, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -1473,7 +1473,7 @@ public final class WildLogView extends JFrame {
                 setMessage("Starting the CSV Export");
                 Path path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
                 Files.createDirectories(path);
-                app.getDBI().doExportCSV(path);
+                app.getDBI().doExportCSV(path, true, null, null, null, null);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath());
                 setMessage("Done with the CSV Export");
                 return null;
@@ -2317,7 +2317,7 @@ public final class WildLogView extends JFrame {
                     // Setup export DB
                     setTaskProgress(10);
                     setMessage("Export WildNote Sync " + getProgress() + "%");
-                    syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+                    syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
                     // Export the elements
                     List<Element> listElements = app.getDBI().list(new Element());
                     setTaskProgress(20);
@@ -2509,7 +2509,7 @@ public final class WildLogView extends JFrame {
                         setMessage("Import WildNote Sync " + getProgress() + "%");
                         syncDBI = new WildLogDBI_h2("jdbc:h2:" + fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent()
                                 .resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE).toString()
-                                    + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+                                    + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
                         // Setup the Location
                         Location wildNoteLocation = app.getDBI().find(new Location(WildLogConstants.WILDNOTE_LOCATION_NAME));
                         if (wildNoteLocation == null) {

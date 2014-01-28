@@ -56,6 +56,7 @@ public class AdvancedDialog extends JDialog {
         btnSetDuration = new javax.swing.JButton();
         btnSetAllGPS = new javax.swing.JButton();
         btnMoveVisit = new javax.swing.JButton();
+        btnDuplicateSightings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Advanced Options");
@@ -140,6 +141,25 @@ public class AdvancedDialog extends JDialog {
             }
         });
         getContentPane().add(btnMoveVisit);
+
+        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnDuplicateSightings.setText("Find Possible Duplicate Observations");
+        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
+        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDuplicateSightings.setFocusPainted(false);
+        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDuplicateSightings.setIconTextGap(9);
+        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
+        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDuplicateSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDuplicateSightings);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -244,9 +264,15 @@ public class AdvancedDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnSetDurationActionPerformed
 
+    private void btnDuplicateSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDuplicateSightingsActionPerformed
+        // TODO: Skryf dalk vir eers net alle moontlikke duplikate se IDs, datum, GPS en loc/elem/vis in 'n txt file en maak dit oop om te view. Dan kan mens verderrres tappe self maak...
+        
+    }//GEN-LAST:event_btnDuplicateSightingsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCorrectTime;
+    private javax.swing.JButton btnDuplicateSightings;
     private javax.swing.JButton btnMoveVisit;
     private javax.swing.JButton btnSetAllGPS;
     private javax.swing.JButton btnSetDuration;

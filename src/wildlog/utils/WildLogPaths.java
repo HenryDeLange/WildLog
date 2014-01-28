@@ -40,7 +40,9 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_HTML            (Paths.get("Export", "HTML")),
     WILDLOG_EXPORT_HTML_THUMBNAILS (Paths.get("Export", "HTML", "Thumbnails")),
     WILDLOG_EXPORT_WILDNOTE_SYNC   (Paths.get("Export", "WildNoteSync")),
-    WILDLOG_EXPORT_SLIDESHOW       (Paths.get("Export", "Slideshow"));
+    WILDLOG_EXPORT_SLIDESHOW       (Paths.get("Export", "Slideshow")),
+    WILDLOG_EXPORT_FILES           (Paths.get("Export", "OriginalFiles")),
+    WILDLOG_EXPORT_WORKSPACE       (Paths.get("Export", "Workspace"));
 
     private static Path activeWorkspacePrefix;
     private Path path;

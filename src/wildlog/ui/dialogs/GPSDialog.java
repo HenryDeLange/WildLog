@@ -448,6 +448,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, -1, -1));
 
         cmbAccuracy.setModel(new DefaultComboBoxModel(GPSAccuracy.values()));
+        cmbAccuracy.setSelectedItem(GPSAccuracy.AVERAGE);
         cmbAccuracy.setName("cmbAccuracy"); // NOI18N
         getContentPane().add(cmbAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 390, -1));
 

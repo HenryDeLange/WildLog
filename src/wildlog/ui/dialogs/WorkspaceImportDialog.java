@@ -50,7 +50,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         try {
         importDBI = new WildLogDBI_h2("jdbc:h2:"
                 + (importWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE");
+                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
         }
         catch (Exception ex) {
             ex.printStackTrace(System.err);
@@ -327,6 +327,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
+        // TODO: Improve error handeling and feedback
         try {
             if (importWorkspace != null) {
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
