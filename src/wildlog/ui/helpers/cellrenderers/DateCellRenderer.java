@@ -28,6 +28,7 @@ public class DateCellRenderer extends DefaultTableCellRenderer {
         else {
             setText("");
         }
+        setToolTipText(getText());
         if (!inTable.isEnabled()) {
             this.setEnabled(false);
         }

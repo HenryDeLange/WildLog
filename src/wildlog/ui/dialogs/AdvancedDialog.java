@@ -1,5 +1,9 @@
 package wildlog.ui.dialogs;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +21,9 @@ import wildlog.data.enums.Longitudes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.PanelVisit;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogPaths;
 
 
 public class AdvancedDialog extends JDialog {
@@ -265,8 +271,78 @@ public class AdvancedDialog extends JDialog {
     }//GEN-LAST:event_btnSetDurationActionPerformed
 
     private void btnDuplicateSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDuplicateSightingsActionPerformed
-        // TODO: Skryf dalk vir eers net alle moontlikke duplikate se IDs, datum, GPS en loc/elem/vis in 'n txt file en maak dit oop om te view. Dan kan mens verderrres tappe self maak...
-        
+        Path feedbackFile = WildLogPaths.getFullWorkspacePrefix().resolve("DetectDuplicatesFeedback.txt");
+        PrintWriter feedback = null;
+        try {
+            feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+            feedback.println("Checking " + listSightings.size() + " Observations for similarities.");
+            feedback.println("___________________________________________________________________________");
+            List<Sighting> listSightingsToCompare = app.getDBI().list(new Sighting(null, null, visit.getName()));
+            for (Sighting sighting : listSightings) {
+                for (int t = listSightingsToCompare.size() - 1; t >= 0; t--) {
+                    Sighting tempSighting = listSightingsToCompare.get(t);
+                    if (sighting.getSightingCounter() == tempSighting.getSightingCounter()) {
+                        listSightingsToCompare.remove(t);
+                    }
+                    else {
+                        if (sighting.getElementName().equals(tempSighting.getElementName())
+                                && sighting.getLocationName().equals(tempSighting.getLocationName())
+                                && sighting.getVisitName().equals(tempSighting.getVisitName())) {
+                            int rating = 0;
+                            if (sighting.getDate().getTime() == tempSighting.getDate().getTime()) {
+                                // The same time
+                                rating = rating + 5;
+                            }
+                            else
+                            if (sighting.getDate().getTime()/(600000) == tempSighting.getDate().getTime()/(600000)) {
+                                // Only 600000 milliseconds (10 minutes) appart
+                                rating = rating + 2;
+                            }
+                            if (UtilsGps.getLatitudeString(sighting).equals(UtilsGps.getLatitudeString(tempSighting))
+                                    && UtilsGps.getLongitudeString(sighting).equals(UtilsGps.getLongitudeString(tempSighting))) {
+                                // The same place
+                                rating = rating + 5;
+                            }
+                            else
+                            if (Math.abs((int)(UtilsGps.getLatDecimalDegree(sighting)*100) - (int)(UtilsGps.getLatDecimalDegree(tempSighting)*100)) <= 1
+                                    && Math.abs((int)(UtilsGps.getLonDecimalDegree(sighting)*100) - (int)(UtilsGps.getLonDecimalDegree(tempSighting)*100)) <= 1) {
+                                // GPS values close together
+                                rating = rating + 2;
+                            }
+                            // Check rating
+                            if (rating >= 10) {
+                                feedback.println("EXTREMELY SIMILAR: " + sighting.getSightingCounter() + " and " + tempSighting.getSightingCounter());
+                            }
+                            else
+                            if (rating >= 7) {
+                                feedback.println("VERY SIMILAR     : " + sighting.getSightingCounter() + " and " + tempSighting.getSightingCounter());
+                            }
+                            else
+                            if (rating >= 4) {
+                                feedback.println("FAIRLY SIMILAR   : " + sighting.getSightingCounter() + " and " + tempSighting.getSightingCounter());
+                            }
+                            else
+                            if (rating >= 2) {
+                                feedback.println("SLIGHTLY SIMILAR : " + sighting.getSightingCounter() + " and " + tempSighting.getSightingCounter());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        finally {
+            if (feedback != null) {
+                feedback.flush();
+                feedback.close();
+            }
+            // Open the summary document
+            UtilsFileProcessing.openFile(feedbackFile);
+        }
+        dispose();
     }//GEN-LAST:event_btnDuplicateSightingsActionPerformed
 
 

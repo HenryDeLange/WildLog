@@ -15,6 +15,7 @@ public class WildLogDataModelWrapperCellRenderer extends DefaultTableCellRendere
         setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
         setVerticalAlignment(JLabel.CENTER);
         setHorizontalAlignment(JLabel.CENTER);
+        setToolTipText(getText());
         if (!inTable.isEnabled()) {
             this.setEnabled(false);
         }

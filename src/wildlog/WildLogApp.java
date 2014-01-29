@@ -250,7 +250,7 @@ public class WildLogApp extends Application {
     public static void main(String[] args) {
         boolean logToFile = false;
         // Check for a overwritten settings folder and configuration to log to a logging file or not
-        // TODO: verander dalk die args om van die key-value props gebruik te maak (Kan glo as args -Dname=value in stuur en dit dan as 'n Properties in die hande kry...)
+// TODO: verander dalk die args om van 'n properties file gebruik te maak. Dis baie maklikker om te maintain as command line args
         if (args != null && args.length >= 1) {
             for (String arg : args) {
                 if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {

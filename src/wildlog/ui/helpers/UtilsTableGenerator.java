@@ -556,7 +556,7 @@ public final class UtilsTableGenerator {
                         inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
                         inTable.getColumnModel().getColumn(5).setMaxWidth(80);
                         inTable.getColumnModel().getColumn(6).setPreferredWidth(45);
-                        inTable.getColumnModel().getColumn(6).setMaxWidth(75);
+                        inTable.getColumnModel().getColumn(6).setMaxWidth(125);
                         inTable.getColumnModel().getColumn(7).setPreferredWidth(35);
                         inTable.getColumnModel().getColumn(7).setMaxWidth(35);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {

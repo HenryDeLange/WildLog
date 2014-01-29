@@ -63,6 +63,7 @@ public class ExportDialog extends JDialog {
     private void initComponents() {
 
         btnExportHTML = new javax.swing.JButton();
+        btnExportHTMLAdvanced = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
         btnExportFiles = new javax.swing.JButton();
@@ -78,7 +79,7 @@ public class ExportDialog extends JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTML.setText("Export as HTML");
+        btnExportHTML.setText("Export as HTML (Basic)");
         btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTML.setFocusPainted(false);
@@ -95,6 +96,26 @@ public class ExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportHTML);
+
+        btnExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
+        btnExportHTMLAdvanced.setText("Export as HTML (Advanced)");
+        btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
+        btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportHTMLAdvanced.setEnabled(false);
+        btnExportHTMLAdvanced.setFocusPainted(false);
+        btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportHTMLAdvanced.setIconTextGap(10);
+        btnExportHTMLAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportHTMLAdvanced.setMaximumSize(new java.awt.Dimension(230, 35));
+        btnExportHTMLAdvanced.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportHTMLAdvanced.setName("btnExportHTMLAdvanced"); // NOI18N
+        btnExportHTMLAdvanced.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportHTMLAdvanced.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportHTMLAdvancedActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportHTMLAdvanced);
 
         btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
         btnExportKML.setText("Export as KML");
@@ -634,12 +655,17 @@ public class ExportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportFilesObservationsActionPerformed
 
+    private void btnExportHTMLAdvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportHTMLAdvancedActionPerformed
+        // TODO Add advanced HTML rendering here
+    }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
     private javax.swing.JButton btnExportFiles;
     private javax.swing.JButton btnExportFilesObservations;
     private javax.swing.JButton btnExportHTML;
+    private javax.swing.JButton btnExportHTMLAdvanced;
     private javax.swing.JButton btnExportKML;
     private javax.swing.JButton btnExportWorkspace;
     // End of variables declaration//GEN-END:variables
