@@ -18,12 +18,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.EventObject;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -56,7 +58,7 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
-    private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath();
+    private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static boolean useNimbusLF = false;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
@@ -145,6 +147,8 @@ public class WildLogApp extends Application {
     protected void startup() {
         if (useNimbusLF) {
             // Try to set the Nimbus look and feel
+            // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
+            // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
             try {
                 for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                     if ("Nimbus".equals(info.getName())) {
@@ -229,7 +233,7 @@ public class WildLogApp extends Application {
             public void willExit(EventObject event) {
                 if (dbi != null) {
                     dbi.close();
-                    System.out.println("Closing database...");
+                    System.out.println("Closing workspace...");
                 }
             }
         });
@@ -248,27 +252,50 @@ public class WildLogApp extends Application {
      * @param args
      */
     public static void main(String[] args) {
+        // Set default startup settings
+        ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath();
         boolean logToFile = false;
-        // Check for a overwritten settings folder and configuration to log to a logging file or not
-// TODO: verander dalk die args om van 'n properties file gebruik te maak. Dis baie maklikker om te maintain as command line args
-        if (args != null && args.length >= 1) {
-            for (String arg : args) {
-                if (arg != null && arg.toLowerCase().startsWith("settings_folder_location=".toLowerCase())) {
-                    // Voorbeeld: settings_folder_location="./WildLogSettings/"
-                    ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(arg.substring("settings_folder_location=".length())).toAbsolutePath();
+        useNimbusLF = true;
+        // Load the startup settings from the properties file
+        BufferedReader reader = null;
+        try {
+            Path propsPath;
+            if (args.length == 1 && args[0].toLowerCase().startsWith("properties=")) {
+                // If started normally then this arg will be present (from the exe and inside NetBeans)
+                propsPath = Paths.get(args[0].substring("properties=".length()));
+            }
+            else {
+                // As a backup if the arg was not set, then try to get hold of the file in the same folder as the JAR
+                propsPath = Paths.get(WildLogApp.class.getProtectionDomain().getCodeSource().getLocation().toURI())
+                        .getParent().resolve("wildlog.properties");
+            }
+            reader = new BufferedReader(new FileReader(propsPath.toFile()));
+            Properties props = new Properties();
+            props.load(reader);
+            // Set the settings
+            logToFile = Boolean.parseBoolean(props.getProperty("logToFile"));
+            useNimbusLF = Boolean.parseBoolean(props.getProperty("useNimbus"));
+            if (props.getProperty("settingsFolderLocation") != null && !props.getProperty("settingsFolderLocation").trim().isEmpty()) {
+                ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).toAbsolutePath();
+            }
+        }
+        catch (IOException | URISyntaxException ex) {
+            ex.printStackTrace(System.err);
+            JOptionPane.showMessageDialog(null,
+                        "Could not load the settings from the properties on startup. WildLog will continue to start using the default settings.",
+                        "Problem Starting WildLog", JOptionPane.WARNING_MESSAGE);
+        }
+        finally {
+            if (reader != null) {
+                try {
+                    reader.close();
                 }
-                else
-                if (arg != null && "log_to_file".equalsIgnoreCase(arg.toLowerCase())) {
-                    logToFile = true;
-                }
-                else
-                if (arg != null && arg.startsWith("nimbus")) {
-                    // While the Windows Look and Feel is the primary LF it isn't available on all OSes, but Nimbus LF provides a decent
-                    // look that is fairly consistant over different OSes. Thus shis should be the default for Linux (Ubuntu) and I guess Mac.
-                    useNimbusLF = true;
+                catch (IOException ex) {
+                    ex.printStackTrace(System.err);
                 }
             }
         }
+        // After the startup properties have been loaded continue to start the application
         try {
             // Make sure the Settings folder exists
             Files.createDirectories(ACTIVE_WILDLOG_SETTINGS_FOLDER);
@@ -279,9 +306,8 @@ public class WildLogApp extends Application {
         // Enable logging to file
         if (logToFile) {
             try {
-// FIXME: Dit lyk assof die output file skielik heeltyd van voor af overwrite word en nie append nie...
                 // Saving the orginal stream
-                PrintStream fileStream = new PrintStream(new FileOutputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt").toFile()), true);
+                PrintStream fileStream = new PrintStream(new FileOutputStream(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt").toFile(), true), true);
                 // Redirecting console output to file
                 System.setOut(fileStream);
                 // Redirecting runtime exceptions to file
