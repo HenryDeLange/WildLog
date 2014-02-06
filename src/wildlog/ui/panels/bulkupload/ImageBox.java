@@ -247,7 +247,7 @@ public class ImageBox extends JPanel {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnZoomMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZoomMousePressed
-        JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom Popup", true);
+        JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom", true);
         JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
         dialog.add(lblZoomImage);
         dialog.pack();

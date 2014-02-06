@@ -4,6 +4,7 @@ import KmlGenerator.KmlGenerator;
 import KmlGenerator.objects.KmlEntry;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -1700,6 +1701,7 @@ public final class WildLogView extends JFrame {
             glassPane.addKeyListener(new KeyAdapter() {});
             app.getMainFrame().setGlassPane(glassPane);
             app.getMainFrame().getGlassPane().setVisible(true);
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             // Start the process in another thread to allow the UI to update correctly and use the progressbar for feedback
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
@@ -1849,6 +1851,7 @@ public final class WildLogView extends JFrame {
                                 filesWithBadType++;
                             }
                             // Check the WildLogFile's linkage
+                            // FIXME: Ek skiem ek kan hierdie net een keer roep met die generic interfaces, ens.
                             if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())));
@@ -1921,7 +1924,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        Paths.get(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toString(), temp.toString()),
+                                        Paths.get(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toString()).resolve(temp.toPath()),
                                         filesMoved);
                             }
                             else {
@@ -2125,10 +2128,14 @@ public final class WildLogView extends JFrame {
                                 public void run() {
                                     if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
                                         if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                                            // Op hiedie stadium kan ek maar alle thumbnails maak want die idee is om die workspace skoon te maak en dinge vat klaar donners lank...
-                                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                                                wildLogFile.getAbsoluteThumbnailPath(size);
-                                            }
+//                                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+//                                                wildLogFile.getAbsoluteThumbnailPath(size);
+//                                            }
+                                            // Maak net die nodigste thumbnails, want anders vat dinge donners lank
+                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                                         }
                                     }
                                     // Not going to bother with synchornization here, since it's just the progress bar

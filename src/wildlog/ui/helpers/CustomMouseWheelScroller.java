@@ -1,7 +1,8 @@
 package wildlog.ui.helpers;
 
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import javax.swing.JScrollPane;
 
 /**
  *  This class allows you to control the units scrolled for each mouse wheel

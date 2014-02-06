@@ -24,6 +24,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.dbi.WildLogDBI;
@@ -329,6 +330,12 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             int totalNodes = getNumberOfNodes(treWorkspace.getModel());
                             setProgress(2);
                             setMessage("Workspace Export: " + getProgress() + "%");
+                            // Save settings to the new workspace
+                            WildLogOptions options = app.getDBI().find(new WildLogOptions());
+                            newDBI.createOrUpdate(options);
+                            setProgress(3);
+                            setMessage("Workspace Export: " + getProgress() + "%");
+                            // Save the selected nodes
                             saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter());
                             setProgress(100);
                             setMessage("Workspace Export: " + getProgress() + "%");
@@ -464,7 +471,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     }
                 }
             }
-            inProgressbarTask.setTaskProgress(2 + (int)(inCounter.counter/(double)inTotalNodes*97));
+            inProgressbarTask.setTaskProgress(3 + (int)(inCounter.counter/(double)inTotalNodes*96));
             inProgressbarTask.setMessage("Workspace Export: " + inProgressbarTask.getProgress() + "%");
             inCounter.counter++;
         }

@@ -1,5 +1,6 @@
 package wildlog.ui.panels;
 
+import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -301,11 +302,15 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_tblElementKeyReleased
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
+        app.getMainFrame().getGlassPane().setVisible(true);
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
             UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+        app.getMainFrame().getGlassPane().setVisible(false);
     }//GEN-LAST:event_btnGoElementActionPerformed
 
     private void btnAddElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddElementActionPerformed
@@ -357,11 +362,15 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_cmbTypeActionPerformed
 
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
+        app.getMainFrame().getGlassPane().setVisible(true);
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
             UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+        app.getMainFrame().getGlassPane().setVisible(false);
     }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased

@@ -1,5 +1,6 @@
 package wildlog.ui.panels;
 
+import java.awt.Cursor;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -318,19 +319,27 @@ public class PanelTabLocations extends javax.swing.JPanel {
     }//GEN-LAST:event_tblVisitKeyPressed
 
     private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
+        app.getMainFrame().getGlassPane().setVisible(true);
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int[] selectedRows = tblLocation.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
             UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
         }
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+        app.getMainFrame().getGlassPane().setVisible(false);
     }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
 
     private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
+        app.getMainFrame().getGlassPane().setVisible(true);
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         int[] selectedRows = tblElement.getSelectedRows();
         for (int t = 0; t < selectedRows.length; t++) {
             UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)),
                 PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
         }
+        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+        app.getMainFrame().getGlassPane().setVisible(false);
     }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
 
     private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
@@ -398,12 +407,16 @@ public class PanelTabLocations extends javax.swing.JPanel {
 
     private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
         if (tblLocation.getSelectedRow() != -1) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
                 UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)),
                     PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
             }
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+            app.getMainFrame().getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnGoVisit_LocTabActionPerformed
 

@@ -2,6 +2,7 @@ package wildlog.ui.panels;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -1503,10 +1504,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
         if (!isPopup) {
             if (rdbLocations.isSelected()) {
+                app.getMainFrame().getGlassPane().setVisible(true);
+                app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                 int[] selectedRows = tblLocation.getSelectedRows();
                 for (int t = 0; t < selectedRows.length; t++) {
                     UtilsPanelGenerator.openPanelAsTab(app, (String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
                 }
+                app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+                app.getMainFrame().getGlassPane().setVisible(false);
             }
             else {
                 if (tblLocation.getSelectedRowCount() == 1) {

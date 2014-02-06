@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -255,7 +256,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnGPSActionPerformed
 
     private void btnChooseCreatureMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnChooseCreatureMouseReleased
-        if (evt.isPopupTrigger()) {
+        if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
             if (ElementSelectionDialog.getPreviousElement() != null && !ElementSelectionDialog.getPreviousElement().isEmpty()) {
                 // Set the label to the selected text
                 table.getCellEditor().stopCellEditing();

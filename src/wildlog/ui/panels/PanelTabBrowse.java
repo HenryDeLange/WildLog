@@ -974,7 +974,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_formComponentHidden
 
     private void treBrowsePhotoMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treBrowsePhotoMouseReleased
-        if (evt.isPopupTrigger() && (rdbBrowseElement.isSelected() || rdbBrowseLocation.isSelected() || rdbBrowseDate.isSelected())) {
+        if ((evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt))
+                && (rdbBrowseElement.isSelected() || rdbBrowseLocation.isSelected() || rdbBrowseDate.isSelected())) {
             treBrowsePhoto.setSelectionPath(treBrowsePhoto.getPathForLocation(evt.getX(), evt.getY()));
             if (!treBrowsePhoto.isSelectionEmpty()) {
                 JPopupMenu popup = new JPopupMenu();

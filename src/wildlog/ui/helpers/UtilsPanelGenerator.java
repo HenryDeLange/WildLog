@@ -14,7 +14,6 @@ import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 public final class UtilsPanelGenerator {
 
-    // METHODS:
     private static PanelElement getNewElementPanel(WildLogApp inApp) {
         return new PanelElement(inApp, new Element());
     }
@@ -46,7 +45,7 @@ public final class UtilsPanelGenerator {
      * This will open a tab for the provided panel, showing an existing tab if already opened
      * or showing a new tab if not already opened.
      */
-    public static void openPanelAsTab(WildLogApp inApp, String inName, PanelCanSetupHeader.TabTypes inTabType, JTabbedPane inTabPane, Location inLocationForVisit) {
+    public static void openPanelAsTab(final WildLogApp inApp, final String inName, final PanelCanSetupHeader.TabTypes inTabType, final JTabbedPane inTabPane, final Location inLocationForVisit) {
         if (inName != null && inTabType != null && inTabPane != null) {
             int foundAt = -1;
             for (int t = 0; t < inTabPane.getTabCount(); t++) {
@@ -90,7 +89,7 @@ public final class UtilsPanelGenerator {
     /**
      * This will open a new tab to use to add new locations, elements and visits from.
      */
-    public static void openNewPanelAsTab(WildLogApp inApp, PanelCanSetupHeader.TabTypes inTabType, JTabbedPane inTabPane, Location inLocationForVisit) {
+    public static void openNewPanelAsTab(final WildLogApp inApp, final PanelCanSetupHeader.TabTypes inTabType, final JTabbedPane inTabPane, final Location inLocationForVisit) {
         if (inTabType != null && inTabPane != null) {
             PanelCanSetupHeader panelCanSetupHeader = null;
             if (PanelCanSetupHeader.TabTypes.LOCATION.equals(inTabType)) {

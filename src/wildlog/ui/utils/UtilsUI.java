@@ -177,13 +177,13 @@ public final class UtilsUI {
     }
 
     public static void attachMouseScrollToTabs(final JTabbedPane inTabbedPane, final JPanel inHeaderPanel, final int inFixedIndex) {
-        class TabbedPaneMouseWheelScroller implements MouseWheelListener {
+        inHeaderPanel.addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent inEvent) {
                 int scrollCount = inEvent.getWheelRotation();
                 int currentIndex = inTabbedPane.getSelectedIndex();
                 int maxIndex = inTabbedPane.getTabCount()-1;
-                int newIndex = currentIndex - scrollCount;
+                int newIndex = currentIndex /*-*/+ scrollCount;
                 if (newIndex > maxIndex) {
                     newIndex = maxIndex;
                 }
@@ -193,19 +193,30 @@ public final class UtilsUI {
                 }
                 inTabbedPane.setSelectedIndex(newIndex);
             }
-        }
-        class TabSelectionMouseHandler extends MouseAdapter {
+        });
+        inHeaderPanel.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mousePressed(MouseEvent e) {
+//                // For this to work on Mac/Linux and Windows both presses and released must be used
+//                mouseReleased(e);
+//            }
             @Override
-            public void mouseClicked(MouseEvent inEvent) {
-                if(SwingUtilities.isRightMouseButton(inEvent)) {
-                    // Right clicked = show popup of all open tabs
-                    JPopupMenu menu = new JPopupMenu();
+            public void mouseReleased(MouseEvent inEvent) {
+                if (SwingUtilities.isMiddleMouseButton(inEvent)) {
+                    if (inEvent.getSource() instanceof PanelCanSetupHeader.HeaderPanel) {
+                        ((PanelCanSetupHeader) ((PanelCanSetupHeader.HeaderPanel) inEvent.getSource()).getParentPanel()).closeTab();
+                    }
+                }
+                else
+                // Use popup and rightclick check to be sure to catch the event on both Mac/Linux and Windows
+                if(inEvent.isPopupTrigger() || SwingUtilities.isRightMouseButton(inEvent)) {
+                    ScrollingMenu scrMenu = new ScrollingMenu();
                     int tabCount = inTabbedPane.getTabCount();
                     for(int i = 0; i < tabCount; i++) {
                         Object temp = inTabbedPane.getTabComponentAt(i);
                         if (temp instanceof PanelCanSetupHeader.HeaderPanel) {
                             final PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)temp;
-                            menu.add(new AbstractAction(headerPanel.getTitle(), headerPanel.getIcon()) {
+                            scrMenu.add(new AbstractAction(headerPanel.getTitle(), headerPanel.getIcon()) {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     inTabbedPane.setSelectedComponent(headerPanel.getParentPanel());
@@ -214,7 +225,7 @@ public final class UtilsUI {
                         }
                         else {
                             final int finalIndex = i;
-                            menu.add(new AbstractAction(inTabbedPane.getTitleAt(i), inTabbedPane.getIconAt(i)) {
+                            scrMenu.add(new AbstractAction(inTabbedPane.getTitleAt(i), inTabbedPane.getIconAt(i)) {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
                                     inTabbedPane.setSelectedIndex(finalIndex);
@@ -222,7 +233,9 @@ public final class UtilsUI {
                             });
                         }
                     }
-                    menu.show(inTabbedPane, inTabbedPane.getMousePosition().x, inTabbedPane.getMousePosition().y);
+                    if (inTabbedPane.getMousePosition() != null) {
+                        scrMenu.show(inTabbedPane, inTabbedPane.getMousePosition().x, inTabbedPane.getMousePosition().y);
+                    }
                 }
                 else {
                     // Left click = select tab
@@ -234,9 +247,7 @@ public final class UtilsUI {
                     }
                 }
             }
-        }
-        inHeaderPanel.addMouseWheelListener(new TabbedPaneMouseWheelScroller());
-        inHeaderPanel.addMouseListener(new TabSelectionMouseHandler());
+        });
     }
 
     public static Timer doAnimationForFlashingBorder(final Color inFromColor, final Color inToColor, final JComponent inComponent) {

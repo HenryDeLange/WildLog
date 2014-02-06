@@ -2,6 +2,7 @@ package wildlog.ui.panels;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -489,6 +490,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
+        jScrollPane1.setMinimumSize(new java.awt.Dimension(123, 23));
         jScrollPane1.setName("jScrollPane1"); // NOI18N
 
         lstAccommodationType.setModel(new DefaultComboBoxModel(AccommodationType.values()));
@@ -618,7 +620,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                             .addGroup(pnlInfoLayout.createSequentialGroup()
                                 .addGap(140, 140, 140)
                                 .addComponent(btnGPS)))
-                        .addGap(10, 10, 10)
+                        .addGap(15, 15, 15)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel42, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel41))
@@ -626,7 +628,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cmbGameRating, 0, 133, Short.MAX_VALUE)
                             .addComponent(cmbRating, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap(28, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlInfoLayout.createSequentialGroup()
@@ -654,7 +656,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                                             .addComponent(jLabel5))
                                         .addGap(9, 9, 9)
                                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
                                             .addComponent(txtWebsite, javax.swing.GroupLayout.Alignment.TRAILING)
                                             .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -663,8 +665,8 @@ public class PanelLocation extends PanelCanSetupHeader {
                                     .addComponent(jLabel6))
                                 .addGap(5, 5, 5)
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane2))))
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))
                         .addGap(5, 5, 5))))
         );
         pnlInfoLayout.setVerticalGroup(
@@ -674,9 +676,18 @@ public class PanelLocation extends PanelCanSetupHeader {
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtName)
                     .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlInfoLayout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(pnlInfoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cmbRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(pnlInfoLayout.createSequentialGroup()
@@ -685,14 +696,8 @@ public class PanelLocation extends PanelCanSetupHeader {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel42)
-                            .addComponent(cmbGameRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtLatitude, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGPS, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlInfoLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(txtLongitude, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(5, 5, 5)
+                            .addComponent(cmbGameRating, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(10, 10, 10)
                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlInfoLayout.createSequentialGroup()
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -722,7 +727,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addComponent(jScrollPane1)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGap(10, 10, 10))
                             .addGroup(pnlInfoLayout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -1296,10 +1301,14 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
         if (!isPopup) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             int[] selectedRows = tblElement.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
                 UtilsPanelGenerator.openPanelAsTab(app, (String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent(), null);
             }
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+            app.getMainFrame().getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnGoElementActionPerformed
 
@@ -1334,10 +1343,14 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
         if (!isPopup) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             int[] selectedRows = tblVisit.getSelectedRows();
             for (int t = 0; t < selectedRows.length; t++) {
                 UtilsPanelGenerator.openPanelAsTab(app, (String)tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent(), locationWL);
             }
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+            app.getMainFrame().getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnGoVisitActionPerformed
 

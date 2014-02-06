@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -95,11 +95,11 @@ public abstract class PanelCanSetupHeader extends JPanel {
         btnClose.setFocusable(false);
         btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.setPreferredSize(new Dimension(12, 12));
-        btnClose.setToolTipText("Close");
+        btnClose.setToolTipText("Close this tab.");
         btnClose.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/icons/Close.gif")));
-        btnClose.addActionListener(new ActionListener() {
+        btnClose.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void mouseReleased(MouseEvent e) {
                 closeTab();
             }
         });

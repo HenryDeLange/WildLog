@@ -657,6 +657,7 @@ public class ExportDialog extends JDialog {
 
     private void btnExportHTMLAdvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportHTMLAdvancedActionPerformed
         // TODO Add advanced HTML rendering here
+        
     }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed
 
 
