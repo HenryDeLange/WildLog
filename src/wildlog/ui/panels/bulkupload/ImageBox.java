@@ -11,6 +11,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -199,6 +200,7 @@ public class ImageBox extends JPanel {
         BulkUploadSightingWrapper newSightingWrapper = new BulkUploadSightingWrapper(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.MEDIUM_SMALL));
         BulkUploadDataLoader.setDefaultsForNewBulkUploadSightings(newSightingWrapper);
         newSightingWrapper.setDate(imageWrapper.getDate());
+        UtilsGps.copyGpsBetweenDOs(newSightingWrapper, UtilsImageProcessing.getExifGpsFromJpeg(imageWrapper.getFile()));
         BulkUploadImageListWrapper currentListWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
         currentListWrapper.getImageList().remove(imageWrapper);
         if (currentListWrapper.getImageList().isEmpty()) {

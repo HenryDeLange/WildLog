@@ -29,6 +29,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
@@ -44,6 +45,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
+import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
@@ -466,6 +468,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeAccuracy = new javax.swing.JComboBox();
         jLabel23 = new javax.swing.JLabel();
         cmbAge = new javax.swing.JComboBox();
+        btnGetGPSFromImage = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
@@ -604,7 +607,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel13.setText("Details:");
         jLabel13.setName("jLabel13"); // NOI18N
-        sightingIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, -1, 20));
+        sightingIncludes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 210, -1, 20));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jScrollPane2.setName("jScrollPane2"); // NOI18N
@@ -619,7 +622,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         txtDetails.setName("txtDetails"); // NOI18N
         jScrollPane2.setViewportView(txtDetails);
 
-        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 220, 260, 80));
+        sightingIncludes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 210, 140, 90));
 
         cmbWeather.setMaximumRowCount(9);
         cmbWeather.setModel(new DefaultComboBoxModel(Weather.values()));
@@ -873,7 +876,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateSunAndMoonActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 113, 110, -1));
+        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, 110, -1));
 
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
@@ -890,7 +893,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnGetDateFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 75, 110, -1));
+        sightingIncludes.add(btnGetDateFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 80, 110, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Time:");
@@ -1034,13 +1037,13 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         jLabel17.setText("Info  Tag:");
         jLabel17.setName("jLabel17"); // NOI18N
-        sightingIncludes.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 190, -1, 20));
+        sightingIncludes.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 185, -1, 20));
 
         txtTag.setText(sighting.getTag());
         txtTag.setToolTipText("This field can be used to \"tag\" the Observation. For instance using it for the individual animal's ID, or a sub-location name, etc.");
         txtTag.setEnabled(!disableEditing);
         txtTag.setName("txtTag"); // NOI18N
-        sightingIncludes.add(txtTag, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 190, 140, -1));
+        sightingIncludes.add(txtTag, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 185, 140, -1));
 
         jLabel19.setText("Duration:");
         jLabel19.setName("jLabel19"); // NOI18N
@@ -1082,7 +1085,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateDurationActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 166, 110, -1));
+        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 215, 110, -1));
 
         btnAddNewElement.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
@@ -1144,6 +1147,23 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbAge.setFocusable(false);
         cmbAge.setName("cmbAge"); // NOI18N
         sightingIncludes.add(cmbAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 140, -1));
+
+        btnGetGPSFromImage.setBackground(new java.awt.Color(208, 204, 181));
+        btnGetGPSFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnGetGPSFromImage.setText("<html>Load <b>GPS</b> from <b>Image </b>EXIF</html>");
+        btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
+        btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode);
+        btnGetGPSFromImage.setFocusPainted(false);
+        btnGetGPSFromImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGetGPSFromImage.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btnGetGPSFromImage.setName("btnGetGPSFromImage"); // NOI18N
+        btnGetGPSFromImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGetGPSFromImageActionPerformed(evt);
+            }
+        });
+        sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, -1));
 
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -1277,10 +1297,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void uploadImage(final List<File> inFiles) {
         if (inFiles != null && inFiles.size() > 0) {
-            // If the date hasn't been set yet, then try to load it from the first image
-            // Also update the Sun and Moon phase (if possible).
+            // If the date hasn't been set yet, then try to load it from the first image.
+            // Also try to find a file with GPS info (if no info has been set yet)
+            // and update the Sun and Moon phase (if possible and not set yet).
             setSightingDateFromUIFields();
-            if (sighting.getDate() == null && locationWL != null && element != null && visit != null) {
+            if (locationWL != null && element != null && visit != null) {
                 // Gebruik die compareTo om die sortering te doen
                 class ComparableFile implements Comparable<ComparableFile> {
                     public File originalFile;
@@ -1303,8 +1324,28 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     compareFileList.add(comparableFile);
                 }
                 Collections.sort(compareFileList);
-                loadDateFromFile(compareFileList.get(0).originalFile.toPath());
-                btnCalculateSunAndMoonActionPerformed(null);
+                // Setup date
+                if (sighting.getDate() == null) {
+                    loadDateFromFile(compareFileList.get(0).originalFile.toPath());
+                }
+                // Setup GPS
+                if (UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(sighting))
+                        && UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(sighting))) {
+                    for (ComparableFile comparableFile : compareFileList) {
+                        DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(comparableFile.originalFile.toPath().toAbsolutePath());
+                        if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
+                                && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
+                            UtilsGps.copyGpsBetweenDOs(sighting, temp);
+                            txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+                            txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+                            break;
+                        }
+                    }
+                }
+                // Setup Sun and Moon
+                if (sighting.getMoonPhase() < 0) {
+                    btnCalculateSunAndMoonActionPerformed(null);
+                }
             }
             // Try to save the sighting (to make sure all required fields are there and to get the SightingID)
             btnUpdateSightingActionPerformed(null);
@@ -1505,7 +1546,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             int minutes = (int)difference/60;
             double seconds = difference - minutes*60.0;
             spnDurationMinutes.setValue(minutes);
-            spnDurationSeconds.setValue((double)seconds);
+            spnDurationSeconds.setValue(seconds);
         }
         else {
             getGlassPane().setVisible(true);
@@ -1586,6 +1627,35 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_btnAddNewVisitActionPerformed
 
+    private void btnGetGPSFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetGPSFromImageActionPerformed
+        List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+        if (files != null && files.size() > 0) {
+            if (WildLogFileType.IMAGE.equals(files.get(imageIndex).getFileType())) {
+                DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(files.get(imageIndex).getAbsolutePath());
+                if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
+                        && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
+                    UtilsGps.copyGpsBetweenDOs(sighting, temp);
+                    txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+                    txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+                }
+                else {
+                    getGlassPane().setVisible(true);
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "No GPS information could be found for the selected file.",
+                            "No GPS Data Found.", JOptionPane.ERROR_MESSAGE);
+                    getGlassPane().setVisible(false);
+                }
+            }
+        }
+        else {
+            getGlassPane().setVisible(true);
+            JOptionPane.showMessageDialog(app.getMainFrame(),
+                    "Please upload some files and try again.",
+                    "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+            getGlassPane().setVisible(false);
+        }
+    }//GEN-LAST:event_btnGetGPSFromImageActionPerformed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (fotos.size() > 0) {
@@ -1639,6 +1709,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnGPS;
     private javax.swing.JButton btnGetDateFromImage;
+    private javax.swing.JButton btnGetGPSFromImage;
     private javax.swing.JButton btnNextImage;
     private javax.swing.JButton btnPreviousImage;
     private javax.swing.JButton btnSetMainImage;

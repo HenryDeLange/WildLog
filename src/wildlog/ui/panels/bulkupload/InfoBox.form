@@ -200,7 +200,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/ElementList.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Creature&lt;/u&gt;&lt;/html&gt;"/>
-        <Property name="toolTipText" type="java.lang.String" value="Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previous Creature."/>
+        <Property name="toolTipText" type="java.lang.String" value="Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -227,8 +227,8 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="GPS"/>
-        <Property name="toolTipText" type="java.lang.String" value="Select a GPS point for this Observation."/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;GPS&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="toolTipText" type="java.lang.String" value="Select a GPS point for this Observation. You can RIGHT-CLICK to select the previously saved GPS point or MIDDLE-CLICK to load the GPS point from the images (if present)."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -241,6 +241,7 @@
         <Property name="name" type="java.lang.String" value="btnGPS" noResource="true"/>
       </Properties>
       <Events>
+        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnGPSMouseReleased"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGPSActionPerformed"/>
       </Events>
       <Constraints>

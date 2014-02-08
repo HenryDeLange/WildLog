@@ -11,10 +11,13 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.panels.PanelSighting;
+import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
+import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -47,18 +50,8 @@ public class InfoBox extends JPanel {
             lblTime.setText(timeFormater.format(sightingWrapper.getDate()));
         }
         lblElementName.setText(sightingWrapper.getElementName());
-        lblLatitude.setText(Double.toString(
-                UtilsGps.getDecimalDegree(
-                    sightingWrapper.getLatitude(),
-                    sightingWrapper.getLatDegrees(),
-                    sightingWrapper.getLatMinutes(),
-                    sightingWrapper.getLatSeconds())));
-        lblLongitude.setText(Double.toString(
-                UtilsGps.getDecimalDegree(
-                    sightingWrapper.getLongitude(),
-                    sightingWrapper.getLonDegrees(),
-                    sightingWrapper.getLonMinutes(),
-                    sightingWrapper.getLonSeconds())));
+        lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
+        lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
         lblImage.setIcon(sightingWrapper.getIcon());
     }
 
@@ -157,7 +150,7 @@ public class InfoBox extends JPanel {
 
         btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.gif"))); // NOI18N
         btnChooseCreature.setText("<html><u>Creature</u></html>");
-        btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previous Creature.");
+        btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChooseCreature.setFocusPainted(false);
         btnChooseCreature.setFocusable(false);
@@ -177,14 +170,19 @@ public class InfoBox extends JPanel {
         add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 50));
 
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGPS.setText("GPS");
-        btnGPS.setToolTipText("Select a GPS point for this Observation.");
+        btnGPS.setText("<html><u>GPS</u></html>");
+        btnGPS.setToolTipText("Select a GPS point for this Observation. You can RIGHT-CLICK to select the previously saved GPS point or MIDDLE-CLICK to load the GPS point from the images (if present).");
         btnGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGPS.setFocusPainted(false);
         btnGPS.setFocusable(false);
         btnGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGPS.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnGPS.setName("btnGPS"); // NOI18N
+        btnGPS.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnGPSMouseReleased(evt);
+            }
+        });
         btnGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGPSActionPerformed(evt);
@@ -250,6 +248,7 @@ public class InfoBox extends JPanel {
         GPSDialog dialog = new GPSDialog(app, app.getMainFrame(), sightingWrapper);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
+            table.getCellEditor().stopCellEditing();
             lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
             lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
         }
@@ -267,6 +266,39 @@ public class InfoBox extends JPanel {
             }
         }
     }//GEN-LAST:event_btnChooseCreatureMouseReleased
+
+    private void btnGPSMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGPSMouseReleased
+        if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
+            table.getCellEditor().stopCellEditing();
+            DataObjectWithGPS temp = new DataObjectWithGPS() {};
+            temp.setLatitude(GPSDialog.getPrevLat());
+            temp.setLatDegrees(GPSDialog.getPrevLatDeg());
+            temp.setLatMinutes(GPSDialog.getPrevLatMin());
+            temp.setLatSeconds(GPSDialog.getPrevLatSec());
+            temp.setLongitude(GPSDialog.getPrevLon());
+            temp.setLonDegrees(GPSDialog.getPrevLonDeg());
+            temp.setLonMinutes(GPSDialog.getPrevLonMin());
+            temp.setLonSeconds(GPSDialog.getPrevLonSec());
+            temp.setGPSAccuracy(GPSDialog.getPrevAccuracy());
+            UtilsGps.copyGpsBetweenDOs(sightingWrapper, temp);
+            lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
+            lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
+        }
+        else
+        if (SwingUtilities.isMiddleMouseButton(evt)) {
+            BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)table.getModel().getValueAt(table.getEditingRow(), 1);
+            for (BulkUploadImageFileWrapper imageFileWrapper : listWrapper.getImageList()) {
+                DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(imageFileWrapper.getFile());
+                if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))
+                        && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))) {
+                    table.getCellEditor().stopCellEditing();
+                    UtilsGps.copyGpsBetweenDOs(sightingWrapper, temp);
+                    lblLatitude.setText(UtilsGps.getLatitudeString(sightingWrapper));
+                    lblLongitude.setText(UtilsGps.getLongitudeString(sightingWrapper));
+                }
+            }
+        }
+    }//GEN-LAST:event_btnGPSMouseReleased
 
     public void setRowBackground(Color inColor) {
         this.setBackground(inColor);

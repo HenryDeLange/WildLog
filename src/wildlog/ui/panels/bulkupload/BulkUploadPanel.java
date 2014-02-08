@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
@@ -196,7 +197,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         dtpEndDate = new org.jdesktop.swingx.JXDatePicker();
         btnUpdate = new javax.swing.JButton();
         txtVisitName = new javax.swing.JTextField();
-        chkShowInactiveTimes = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
         spnInactivityTime = new javax.swing.JSpinner();
         btnReload = new javax.swing.JButton();
@@ -265,12 +265,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         txtVisitName.setBackground(new java.awt.Color(204, 255, 204));
         txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()));
         txtVisitName.setName("txtVisitName"); // NOI18N
-
-        chkShowInactiveTimes.setBackground(new java.awt.Color(153, 180, 115));
-        chkShowInactiveTimes.setText("Show inactive periods between sightings");
-        chkShowInactiveTimes.setEnabled(false);
-        chkShowInactiveTimes.setFocusable(false);
-        chkShowInactiveTimes.setName("chkShowInactiveTimes"); // NOI18N
 
         jLabel6.setText("Start new Observations after");
         jLabel6.setName("jLabel6"); // NOI18N
@@ -441,9 +435,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     .addGroup(pnlTopLayout.createSequentialGroup()
                                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(chkIncludeSubfolders)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(chkShowInactiveTimes))
+                                        .addComponent(chkIncludeSubfolders))
                                     .addGroup(pnlTopLayout.createSequentialGroup()
                                         .addGap(70, 70, 70)
                                         .addComponent(jLabel6)
@@ -451,7 +443,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(5, 5, 5)
                                         .addComponent(jLabel7)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 106, Short.MAX_VALUE))))
                     .addGroup(pnlTopLayout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addComponent(jSeparator1)))
@@ -497,8 +489,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                         .addGap(5, 5, 5)
                         .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(chkIncludeSubfolders)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkShowInactiveTimes))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(3, 3, 3)
                         .addGroup(pnlTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(spnInactivityTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -620,6 +611,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
                         BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(rowCount, 0);
                         if (sightingWrapper.getElementName() == null || sightingWrapper.getElementName().isEmpty()) {
+                            final int finalRowCount = rowCount;
+                            SwingUtilities.invokeLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                }
+                            });
                             UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                                 @Override
                                 public int showDialog() {
@@ -649,6 +647,13 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 break;
                             }
                             else {
+                                final int finalRowCount = rowCount;
+                                SwingUtilities.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        tblBulkImport.scrollRectToVisible(tblBulkImport.getCellRect(finalRowCount, 1, true));
+                                    }
+                                });
                                 return null;
                             }
                         }
@@ -853,7 +858,6 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private javax.swing.JButton btnSelectLocation;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkIncludeSubfolders;
-    private javax.swing.JCheckBox chkShowInactiveTimes;
     private javax.swing.JComboBox cmbVisitType;
     private org.jdesktop.swingx.JXDatePicker dtpEndDate;
     private org.jdesktop.swingx.JXDatePicker dtpStartDate;

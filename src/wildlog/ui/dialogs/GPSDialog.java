@@ -234,6 +234,7 @@ public class GPSDialog extends JDialog {
         spnLonDecimal = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
         cmbAccuracy = new javax.swing.JComboBox();
+        btnRemoveGPS = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Configure GPS Point");
@@ -450,7 +451,17 @@ public class GPSDialog extends JDialog {
         cmbAccuracy.setModel(new DefaultComboBoxModel(GPSAccuracy.values()));
         cmbAccuracy.setSelectedItem(GPSAccuracy.AVERAGE);
         cmbAccuracy.setName("cmbAccuracy"); // NOI18N
-        getContentPane().add(cmbAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 390, -1));
+        getContentPane().add(cmbAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, 260, -1));
+
+        btnRemoveGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
+        btnRemoveGPS.setText("Remove GPS");
+        btnRemoveGPS.setName("btnRemoveGPS"); // NOI18N
+        btnRemoveGPS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveGPSActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRemoveGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 230, 120, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -630,6 +641,12 @@ public class GPSDialog extends JDialog {
         // TODO: GPS point from map - Ek sal die deel later moet uitfigure en doen...
     }//GEN-LAST:event_btnUseMapActionPerformed
 
+    private void btnRemoveGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveGPSActionPerformed
+        UtilsGps.copyGpsBetweenDOs(dataObjectWithGPS, new DataObjectWithGPS() {});
+        selectionMade = true;
+        dispose();
+    }//GEN-LAST:event_btnRemoveGPSActionPerformed
+
     private void doGpxInput(File inFile) {
         getGlassPane().setVisible(true);
         String gpxValue = JOptionPane.showInputDialog(this, "Please enter the GPX Waypoint's name:", "Load Coordinates From GPX", JOptionPane.INFORMATION_MESSAGE);
@@ -777,6 +794,7 @@ public class GPSDialog extends JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnRemoveGPS;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnUseGPX;
     private javax.swing.JButton btnUseImage;

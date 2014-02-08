@@ -106,8 +106,6 @@
                                           <Component id="jLabel8" min="-2" pref="65" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="chkIncludeSubfolders" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                          <Component id="chkShowInactiveTimes" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Group type="102" alignment="0" attributes="0">
                                           <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
@@ -118,7 +116,7 @@
                                           <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  <EmptySpace min="0" pref="106" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -179,7 +177,6 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="chkIncludeSubfolders" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel8" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
-                              <Component id="chkShowInactiveTimes" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -287,17 +284,6 @@
               <Connection code="&quot;Bulk Import - &quot; + new SimpleDateFormat(&quot;dd MMM yyyy (HH&apos;h&apos;mm)&quot;).format(Calendar.getInstance().getTime())" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="txtVisitName" noResource="true"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JCheckBox" name="chkShowInactiveTimes">
-          <Properties>
-            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="73" green="b4" red="99" type="rgb"/>
-            </Property>
-            <Property name="text" type="java.lang.String" value="Show inactive periods between sightings"/>
-            <Property name="enabled" type="boolean" value="false"/>
-            <Property name="focusable" type="boolean" value="false"/>
-            <Property name="name" type="java.lang.String" value="chkShowInactiveTimes" noResource="true"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
