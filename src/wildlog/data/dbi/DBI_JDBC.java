@@ -52,7 +52,7 @@ import wildlog.data.utils.UtilsData;
 
 
 public abstract class DBI_JDBC implements DBI {
-    Random randomGenerator = new Random(System.nanoTime());
+    protected final Random randomGenerator = new Random(System.nanoTime()); // ThreadLocalRandom is beter maar net in Java 7
     // Version
     protected static final int WILDLOG_DB_VERSION = 4;
     // Tables
