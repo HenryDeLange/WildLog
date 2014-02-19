@@ -48,7 +48,7 @@ public class SpinnerFixer {
                 JFormattedTextField editedText = (JFormattedTextField) inEvent.getSource();
                 if (inEvent.getKeyChar() == KeyEvent.VK_BACK_SPACE || inEvent.getKeyChar() == KeyEvent.VK_DELETE
                         || (inEvent.getKeyChar() >= '0' && inEvent.getKeyChar() <= '9')
-                        || (inEvent.getKeyChar() >= '.' && ((SpinnerNumberModel) inSpinner.getModel()).getMinimum() instanceof Double)) {
+                        || (inEvent.getKeyChar() == '.' && ((SpinnerNumberModel) inSpinner.getModel()).getMinimum() instanceof Double)) {
                     int number = -1;
                     try {
                         number = Integer.parseInt(editedText.getText());
@@ -56,7 +56,8 @@ public class SpinnerFixer {
                     catch (NumberFormatException ex) {
                         // Do nothing since these can be empty string or even characters at this point in time we don't know nor care :P
                     }
-// FIXME: Daar is 'n issue as mens twee keer na mekaar die hele text select en dan bv 23 op die spnHours tik, dan raak hy confused op die tweede een omdat die stelsel self daai extra 0 byvoeg vooraan... So vir eers haal ek die 00 af van die spinner dat dinge darm half werk
+                    // Daar is 'n issue as mens twee keer na mekaar die hele text select en dan bv 23 op die spnHours tik, dan raak hy confused op die tweede een omdat die stelsel self daai extra 0 byvoeg vooraan...
+                    // So vir eers haal ek die 00 af van die spinner dat dinge darm half werk
                     String textAfterEdit = editedText.getText().substring(0, editedText.getSelectionStart())
                             + inEvent.getKeyChar() + editedText.getText().substring(editedText.getSelectionEnd());
                     double minValue;

@@ -13,6 +13,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.astro.AstroCalculator;
@@ -378,9 +379,14 @@ public class SunMoonDialog extends JDialog {
         GPSDialog dialog = new GPSDialog(app, this, dataObjectWithGPS);
         dialog.setVisible(true);
         if (dialog.isSelectionMade()) {
-            txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));
-            txtLongitude.setText(UtilsGps.getLongitudeString(dataObjectWithGPS));
-            populateUI();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    txtLatitude.setText(UtilsGps.getLatitudeString(dataObjectWithGPS));
+                    txtLongitude.setText(UtilsGps.getLongitudeString(dataObjectWithGPS));
+                    populateUI();
+                }
+            });
         }
         btnRefresh.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed

@@ -1,5 +1,7 @@
 package wildlog.ui.dialogs;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -14,7 +16,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithGPS;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.mapping.gpx.GpxReader;
+import wildlog.mapping.gpx.UtilsGPX;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
@@ -125,6 +127,63 @@ public class GPSDialog extends JDialog {
         UtilsUI.attachClipboardPopup((JTextComponent)spnLonDeg.getEditor().getComponent(0));
         UtilsUI.attachClipboardPopup((JTextComponent)spnLonMin.getEditor().getComponent(0));
         UtilsUI.attachClipboardPopup((JTextComponent)spnLonSec.getEditor().getComponent(0));
+        // Set the toggle for the +/- buttons
+        ((JTextComponent)spnLatDecimal.getEditor().getComponent(0)).addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent inEvent) {
+                if (inEvent.getKeyChar() == '-') {
+                    tglSouth.setSelected(true);
+                    tglNorth.setSelected(false);
+                }
+                else
+                if (inEvent.getKeyChar() == '+') {
+                    tglSouth.setSelected(false);
+                    tglNorth.setSelected(true);
+                }
+            }
+        });
+        ((JTextComponent)spnLatDeg.getEditor().getComponent(0)).addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent inEvent) {
+                if (inEvent.getKeyChar() == '-') {
+                    tglSouth.setSelected(true);
+                    tglNorth.setSelected(false);
+                }
+                else
+                if (inEvent.getKeyChar() == '+') {
+                    tglSouth.setSelected(false);
+                    tglNorth.setSelected(true);
+                }
+            }
+        });
+        ((JTextComponent)spnLonDeg.getEditor().getComponent(0)).addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent inEvent) {
+                if (inEvent.getKeyChar() == '-') {
+                    tglEast.setSelected(false);
+                    tglWest.setSelected(true);
+                }
+                else
+                if (inEvent.getKeyChar() == '+') {
+                    tglEast.setSelected(true);
+                    tglWest.setSelected(false);
+                }
+            }
+        });
+        ((JTextComponent)spnLonDecimal.getEditor().getComponent(0)).addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent inEvent) {
+                if (inEvent.getKeyChar() == '-') {
+                    tglEast.setSelected(false);
+                    tglWest.setSelected(true);
+                }
+                else
+                if (inEvent.getKeyChar() == '+') {
+                    tglEast.setSelected(true);
+                    tglWest.setSelected(false);
+                }
+            }
+        });
         // Set focus
         btnSave.requestFocusInWindow();
     }
@@ -649,11 +708,14 @@ public class GPSDialog extends JDialog {
 
     private void doGpxInput(File inFile) {
         getGlassPane().setVisible(true);
-        String gpxValue = JOptionPane.showInputDialog(this, "Please enter the GPX Waypoint's name:", "Load Coordinates From GPX", JOptionPane.INFORMATION_MESSAGE);
+        String gpxValue = JOptionPane.showInputDialog(this,
+                "<html><b>Please enter the GPX Waypoint's name. </b>"
+                + "<br/> <i>(Use the full name, for example '001', including the 0's.)</i></html>",
+                "Load Coordinates From GPX", JOptionPane.INFORMATION_MESSAGE);
         getGlassPane().setVisible(false);
         if (gpxValue != null) {
             DataObjectWithGPS temp = new DataObjectWithGPS() {};
-            GpxReader.populateGPSFromGpxFile(inFile, gpxValue, temp);
+            UtilsGPX.populateGPSFromGpxFile(inFile, gpxValue, temp);
             loadUIValues(temp);
         }
     }

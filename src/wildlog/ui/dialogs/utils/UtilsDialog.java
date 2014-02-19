@@ -33,6 +33,7 @@ import javax.swing.KeyStroke;
 import javax.swing.RootPaneContainer;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.WildLogFileType;
 
 
 public final class UtilsDialog {
@@ -181,10 +182,23 @@ public final class UtilsDialog {
         }
     }
 
-    public static void showExifPopup(String inID, int inIndex, WildLogApp inApp) {
+    public static void showExifPopup(String inID, int inIndex, final WildLogApp inApp) {
         List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(inID));
         if (files.size() > 0) {
-            showExifPopup(inApp, files.get(inIndex).getAbsolutePath().toFile());
+            if (WildLogFileType.IMAGE.equals(files.get(inIndex).getFileType())) {
+                showExifPopup(inApp, files.get(inIndex).getAbsolutePath().toFile());
+            }
+            else {
+                UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(inApp.getMainFrame(),
+                                "Only image metadata can be shown.",
+                                "Not An Image", JOptionPane.INFORMATION_MESSAGE);
+                        return -1;
+                    }
+                });
+            }
         }
     }
 

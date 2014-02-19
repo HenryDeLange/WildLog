@@ -119,6 +119,11 @@ public class Element extends ElementCore implements DataObjectWithHTML {
         return htmlElement.toString();
     }
 
+//    @Override
+//    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+//
+//    }
+
     @Override
     public String getExportPrefix() {
         return WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toString();

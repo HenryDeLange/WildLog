@@ -101,7 +101,6 @@ public class ExportDialog extends JDialog {
         btnExportHTMLAdvanced.setText("Export as HTML (Advanced)");
         btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExportHTMLAdvanced.setEnabled(false);
         btnExportHTMLAdvanced.setFocusPainted(false);
         btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTMLAdvanced.setIconTextGap(10);
@@ -657,7 +656,15 @@ public class ExportDialog extends JDialog {
 
     private void btnExportHTMLAdvancedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportHTMLAdvancedActionPerformed
         // TODO Add advanced HTML rendering here
-        
+        if (element != null) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsFileProcessing.openFile(UtilsHTML.exportHTML(element, app, this));
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed
 
 
