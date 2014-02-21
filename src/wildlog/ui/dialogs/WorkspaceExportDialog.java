@@ -314,6 +314,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             final File destination = showFileChooser();
             // TODO: Toets dalk eendag dat die persoon nie 'n reeds bestaande Workspace probeer overwrite nie...
             if (destination != null) {
+                app.getMainFrame().getTabbedPane().setSelectedIndex(0);
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {

@@ -368,12 +368,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             spnHours.setValue(0);
             spnMinutes.setValue(0);
         }
-        if (!sighting.isTimeUnknown()) {
-            cmbTimeFormat.setSelectedItem(TimeFormat.H24);
-        }
-        else {
-            cmbTimeFormat.setSelectedItem(TimeFormat.UNKNOWN);
-        }
     }
 
     /** This method is called from within the constructor to
@@ -1229,12 +1223,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         // Set variables
         sighting.setDate(setSightingDateFromUIFields());
-        if (TimeFormat.NONE.equals(cmbTimeFormat.getSelectedItem()) || TimeFormat.UNKNOWN.equals(cmbTimeFormat.getSelectedItem())) {
-            sighting.setTimeUnknown(true);
-        }
-        else {
-            sighting.setTimeUnknown(false);
-        }
         sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
         sighting.setDetails(txtDetails.getText());
         sighting.setSightingEvidence((SightingEvidence)cmbEvidence.getSelectedItem());
@@ -1483,6 +1471,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             // Set the date
             if (fileDate != null) {
                 sighting.setDate(fileDate);
+                cmbTimeFormat.setSelectedItem(TimeFormat.H24);
                 setUIFieldsFromSightingDate();
             }
         }
@@ -1499,7 +1488,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (!bulkUploadMode) {
                 btnUpdateSightingActionPerformed(null);
             }
-            if (dtpSightingDate.getDate() != null && !sighting.isTimeUnknown()) {
+            if (dtpSightingDate.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
                 double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
                 double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 // Sun
@@ -1567,6 +1556,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void cmbTimeFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTimeFormatActionPerformed
         UtilsTime.modeChanged(spnHours, spnMinutes, cmbTimeFormat, prevTimeFormat);
         prevTimeFormat = (TimeFormat) cmbTimeFormat.getSelectedItem();
+        if (cmbTimeFormat.getSelectedItem() == null || TimeFormat.UNKNOWN.equals(cmbTimeFormat.getSelectedItem())
+                || TimeFormat.NONE.equals(cmbTimeFormat.getSelectedItem())) {
+            cmbTimeAccuracy.setSelectedItem(TimeAccuracy.UNKNOWN);
+            cmbTimeAccuracy.setEnabled(false);
+        }
+        else {
+            cmbTimeAccuracy.setSelectedItem(TimeAccuracy.GOOD);
+            cmbTimeAccuracy.setEnabled(true);
+        }
     }//GEN-LAST:event_cmbTimeFormatActionPerformed
 
     private void dtpSightingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtpSightingDateActionPerformed

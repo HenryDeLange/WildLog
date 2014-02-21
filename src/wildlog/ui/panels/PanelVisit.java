@@ -1271,8 +1271,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_tblSightingsMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        ExportDialog dialog = new ExportDialog(app, null, null, visit, null);
-        dialog.setVisible(true);
+        if (visit.getName() != null && !visit.getName().isEmpty()) {
+            ExportDialog dialog = new ExportDialog(app, null, null, visit, null);
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
@@ -1297,7 +1299,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnReportActionPerformed
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        app.getMainFrame().browseSelectedVisit(visit);
+        if (visit.getName() != null && !visit.getName().isEmpty()) {
+            app.getMainFrame().browseSelectedVisit(visit);
+        }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed

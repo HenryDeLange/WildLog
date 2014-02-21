@@ -717,7 +717,7 @@
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel53" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jScrollPane14" pref="23" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane14" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>

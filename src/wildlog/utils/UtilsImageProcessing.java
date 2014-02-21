@@ -351,8 +351,8 @@ public class UtilsImageProcessing {
                             return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
                         }
                         catch (ParseException ex) {
-                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
-                            ex.printStackTrace(System.err);
+                            System.out.println("Try1: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
+                            ex.printStackTrace(System.out);
                         }
                         // Try 2:
                         try {
@@ -360,8 +360,8 @@ public class UtilsImageProcessing {
                             return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
                         }
                         catch (ParseException ex) {
-                            System.err.println("[THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
-                            ex.printStackTrace(System.err);
+                            System.out.println("Try2: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
+                            ex.printStackTrace(System.out);
                         }
                     }
                 }

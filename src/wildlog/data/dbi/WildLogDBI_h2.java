@@ -23,6 +23,7 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import static wildlog.data.dbi.DBI_JDBC.WILDLOG_DB_VERSION;
+import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsImageProcessing;
@@ -491,8 +492,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTSLIDESHOWSIZE int DEFAULT 750");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN DEFAULTONLINEMAP smallint DEFAULT true");
             // Change the Visit type Enum values
-            state.execute("UPDATE VISITS SET VISITTYPE  = 'Camera Trap' WHERE VISITTYPE = 'Remote Camera'");
-            state.execute("UPDATE VISITS SET VISITTYPE  = 'Census, Atlas, etc.' WHERE VISITTYPE = 'Bird Atlassing'");
+            state.executeUpdate("UPDATE VISITS SET VISITTYPE  = 'Camera Trap' WHERE VISITTYPE = 'Remote Camera'");
+            state.executeUpdate("UPDATE VISITS SET VISITTYPE  = 'Census, Atlas, etc.' WHERE VISITTYPE = 'Bird Atlassing'");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=3");
         }
@@ -518,9 +519,26 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN GPSACCURACY varchar(50)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN TIMEACCURACY varchar(50)");
             state.execute("ALTER TABLE SIGHTINGS ADD COLUMN AGE varchar(50)");
+            // Migrate TimeAccuracy data
+            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 1");
+            while (results.next()) {
+                Sighting sighting = find(new Sighting(results.getLong("SIGHTINGCOUNTER")));
+                sighting.setTimeAccuracy(TimeAccuracy.UNKNOWN);
+                createOrUpdate(sighting, false);
+            }
+            results.close();
+            results = state.executeQuery("SELECT SIGHTINGCOUNTER FROM SIGHTINGS WHERE UNKNOWNTIME = 0");
+            while (results.next()) {
+                Sighting sighting = find(new Sighting(results.getLong("SIGHTINGCOUNTER")));
+                sighting.setTimeAccuracy(TimeAccuracy.GOOD);
+                createOrUpdate(sighting, false);
+            }
+            results.close();
+            state.execute("ALTER TABLE SIGHTINGS DROP COLUMN UNKNOWNTIME");
+            state.executeUpdate("UPDATE SIGHTINGS SET TIMEACCURACY = 'GOOD' WHERE TIMEACCURACY IS NULL OR TIMEACCURACY = ''");
             // Make changes to Files
             // NOTE: It is best to make sure that Clean Workspace in v3 has been run before upgrading
-            state.execute("UPDATE FILES SET ORIGINALPATH = replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/', '')");
+            state.executeUpdate("UPDATE FILES SET ORIGINALPATH = replace(regexp_replace(ORIGINALPATH, '\\\\','/'), '/WildLog/', '')");
             // Create indexes
             state.execute("CREATE UNIQUE INDEX IF NOT EXISTS ELEMENT_PRINAME ON ELEMENTS (PRIMARYNAME)");
             state.execute("CREATE INDEX IF NOT EXISTS ELEMENT_TYPE ON ELEMENTS (ELEMENTTYPE)");

@@ -104,7 +104,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appDescLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;WildNote is an independant software application developed by myself (Henry de Lange) for Android devices. Using WildNote you can easily capture animal Observations on the go and import the data into WildLog. &lt;br&gt;For more information please visit the website.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;WildNote is a seperate software application developed by myself (Henry de Lange) for Android devices. Using WildNote you can easily capture animal Observations on the go and import the data into WildLog. &lt;br&gt;For more information please visit the website.&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="appDescLabel" noResource="true"/>
       </Properties>
       <AuxValues>

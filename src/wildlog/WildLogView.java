@@ -46,6 +46,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
@@ -377,7 +378,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.1.beta");
+        jLabel12.setText("version 4.1");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
@@ -1249,8 +1250,8 @@ public final class WildLogView extends JFrame {
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
                         "<html>Please <b>backup your Workspace</b> before proceding. <br>"
-                        + "This will replace the Sun and Moon information for all your Observations with the auto generated values. <br/>"
-                        + "<b>NOTE:</b> It is recommended not to edit any Observations until the process is finished.</html>",
+                        + "This will <u>replace</u> the Sun and Moon Information for your Observations with "
+                        + "<u>auto generated values from the date, time and GPS information</u>.</html>",
                         "Calculate Sun and Moon Information",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
@@ -1265,16 +1266,16 @@ public final class WildLogView extends JFrame {
                     null,
                     new String[] {"All Observations", "Only Obervations without Sun and Moon information"},
                     null);
-            app.getMainFrame().getGlassPane().setVisible(false);
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
                 tabbedPanel.setSelectedIndex(0);
-                while (tabbedPanel.getTabCount() > 4) {
-                    tabbedPanel.remove(4);
-                }
+//                while (tabbedPanel.getTabCount() > 4) {
+//                    tabbedPanel.remove(4);
+//                }
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
+                        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                         if (choice == 0) {
                             // Update all Observations
                             setMessage("Starting the Sun and Moon Calculation");
@@ -1282,42 +1283,13 @@ public final class WildLogView extends JFrame {
                             List<Sighting> sightings = app.getDBI().list(new Sighting());
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
-                                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                                if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
-                                        && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())
-                                        && !sighting.isTimeUnknown()) {
-                                    double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                                    double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
-                                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
-                                    app.getDBI().createOrUpdate(sighting, false);
-                                }
-                                setProgress(0 + (int)((t/(double)sightings.size())*100));
-                                setMessage("Sun and Moon Calculation: " + getProgress() + "%");
-                            }
-                            setProgress(100);
-                            setMessage("Done with the Sun and Moon Calculation");
-                        }
-                        else
-                        if (choice == 0) {
-                            // Update only Observations without Sun and Moon phase
-                            setMessage("Starting the Sun and Moon Calculation");
-                            setProgress(0);
-                            List<Sighting> sightings = app.getDBI().list(new Sighting());
-                            for (int t = 0; t < sightings.size(); t++) {
-                                Sighting sighting = sightings.get(t);
-                                if (sighting.getMoonPhase() < 0) {
+                                if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
                                     sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                                }
-                                if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
-                                        && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())
-                                        && !sighting.isTimeUnknown()) {
-                                    double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                                    double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                                    if (sighting.getMoonlight() == null || Moonlight.NONE.equals(sighting.getMoonlight())) {
+                                    if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
+                                            && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
+                                        double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                        double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                                         sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
-                                    }
-                                    if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())) {
                                         sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
                                     }
                                     app.getDBI().createOrUpdate(sighting, false);
@@ -1328,9 +1300,45 @@ public final class WildLogView extends JFrame {
                             setProgress(100);
                             setMessage("Done with the Sun and Moon Calculation");
                         }
+                        else
+                        if (choice == 1) {
+                            // Update only Observations without Sun and Moon phase
+                            setMessage("Starting the Sun and Moon Calculation");
+                            setProgress(0);
+                            List<Sighting> sightings = app.getDBI().list(new Sighting());
+                            for (int t = 0; t < sightings.size(); t++) {
+                                Sighting sighting = sightings.get(t);
+                                if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
+                                    if (sighting.getMoonPhase() < 0) {
+                                        sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+                                    }
+                                    if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
+                                            && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
+                                        double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                        double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                                        if (sighting.getMoonlight() == null || Moonlight.NONE.equals(sighting.getMoonlight()) || Moonlight.UNKNOWN.equals(sighting.getMoonlight())) {
+                                            sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
+                                        }
+                                        if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())) {
+                                            sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
+                                        }
+                                    }
+                                    app.getDBI().createOrUpdate(sighting, false);
+                                }
+                                setProgress(0 + (int)((t/(double)sightings.size())*100));
+                                setMessage("Sun and Moon Calculation: " + getProgress() + "%");
+                            }
+                            setProgress(100);
+                            setMessage("Done with the Sun and Moon Calculation");
+                        }
+                        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+                        app.getMainFrame().getGlassPane().setVisible(false);
                         return null;
                     }
                 });
+            }
+            else {
+                app.getMainFrame().getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_mnuCalcSunMoonActionPerformed
@@ -1706,6 +1714,7 @@ public final class WildLogView extends JFrame {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
+                    long startTime = System.currentTimeMillis();
                     setProgress(0);
                     setMessage("Workspace Cleanup starting...");
                     // Setup the feedback file
@@ -1714,6 +1723,10 @@ public final class WildLogView extends JFrame {
                     // Start cleanup
                     try {
                         feedback = new PrintWriter(new FileWriter(feedbackFile.toFile()), true);
+                        feedback.println("------------------------------------------------");
+                        feedback.println("---------- STARTING WORKSPACE CLEANUP ----------");
+                        feedback.println("------------------------------------------------");
+                        feedback.println("");
                         // Create a final reference to the feedback writer for use in inner classes, etc.
                         final PrintWriter finalHandleFeedback = feedback;
                         // Setup helper classes (Op hierdie stadium wil ek al die code op een plek hou, ek kan dit later in Util methods in skuif of iets...)
@@ -2164,7 +2177,7 @@ public final class WildLogView extends JFrame {
 
                         finalHandleFeedback.println("** Finished Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
                         finalHandleFeedback.println("");
-                        finalHandleFeedback.println("----------SUMMARY----------");
+                        finalHandleFeedback.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
                         finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved.counter);
                         finalHandleFeedback.println("Database file record had no reference to a file on disk: " + filesWithoutPath);
                         finalHandleFeedback.println("Database file record had a reference to a file on disk, but the file was not found: " + filesNotOnDisk);
@@ -2175,6 +2188,12 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("Workspace file not found in the database: " + filesNotInDB.counter);
                         finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
                         finalHandleFeedback.println("");
+                        finalHandleFeedback.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
+                        long duration = System.currentTimeMillis() - startTime;
+                        int hours = (int) (((double) duration)/(1000.0*60.0*60.0));
+                        int minutes = (int) (((double) duration - (hours*60*60*1000))/(1000.0*60.0));
+                        int seconds = (int) (((double) duration - (hours*60*60*1000) - (minutes*60*1000))/(1000.0));
+                        feedback.println(hours + " hours, " + minutes + " minutes, " + seconds + " seconds");
                         setMessage("Finished Workspace Cleanup...");
                         setProgress(100);
                     }
@@ -2187,6 +2206,11 @@ public final class WildLogView extends JFrame {
                     }
                     finally {
                         if (feedback != null) {
+                            feedback.println("");
+                            feedback.println("------------------------------------------------");
+                            feedback.println("---------- FINISHED WORKSPACE CLEANUP ----------");
+                            feedback.println("------------------------------------------------");
+                            feedback.println("");
                             feedback.flush();
                             feedback.close();
                         }
@@ -2218,8 +2242,8 @@ public final class WildLogView extends JFrame {
             public int showDialog() {
                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
                         "<html>Please <b>backup your Workspace</b> before proceding. <br>"
-                        + "This will replace the Duration information for all your Observations. <br/>"
-                        + "<b>NOTE:</b> It is recommended not to edit any Observations until the process is finished.</html>",
+                        + "This will <u>replace</u> the Duration information for all Observations with "
+                        + "<u>auto generated values from the uploaded images</u>.</html>",
                         "Calculate Observation Duration",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             }
@@ -2234,16 +2258,16 @@ public final class WildLogView extends JFrame {
                     null,
                     new String[] {"All Observations", "Only Obervations without a Duration"},
                     null);
-            app.getMainFrame().getGlassPane().setVisible(false);
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
                 tabbedPanel.setSelectedIndex(0);
-                while (tabbedPanel.getTabCount() > 4) {
-                    tabbedPanel.remove(4);
-                }
+//                while (tabbedPanel.getTabCount() > 4) {
+//                    tabbedPanel.remove(4);
+//                }
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
                     protected Object doInBackground() throws Exception {
+                        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                         if (choice == 0) {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
@@ -2302,9 +2326,14 @@ public final class WildLogView extends JFrame {
                             setProgress(100);
                             setMessage("Done with the Duration Calculation");
                         }
+                        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+                        app.getMainFrame().getGlassPane().setVisible(false);
                         return null;
                     }
                 });
+            }
+            else {
+                app.getMainFrame().getGlassPane().setVisible(false);
             }
         }
     }//GEN-LAST:event_mnuCalcDurationActionPerformed
@@ -2504,6 +2533,7 @@ public final class WildLogView extends JFrame {
             }
         });
         if (result == JFileChooser.APPROVE_OPTION && fileChooser.getSelectedFile() != null) {
+            tabbedPanel.setSelectedIndex(0);
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
@@ -2679,6 +2709,10 @@ public final class WildLogView extends JFrame {
 
     public void refreshHomeTab() {
         tabHomeComponentShown(null);
+    }
+
+    public JTabbedPane getTabbedPane() {
+        return tabbedPanel;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

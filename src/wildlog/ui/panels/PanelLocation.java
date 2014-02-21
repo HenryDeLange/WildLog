@@ -1204,13 +1204,15 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_formComponentShown
 
     private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
-        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-            @Override
-            protected Object doInBackground() throws Exception {
-                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName()), (JTabbedPane)getParent());
-                return null;
-            }
-        });
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName()), (JTabbedPane)getParent());
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_btnBulkImportActionPerformed
 
     private void btnSlideshowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowActionPerformed
@@ -1237,13 +1239,17 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnGPSActionPerformed
 
     private void btnSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSunAndMoonActionPerformed
-        SunMoonDialog dialog = new SunMoonDialog(app, locationWL);
-        dialog.setVisible(true);
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            SunMoonDialog dialog = new SunMoonDialog(app, locationWL);
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnSunAndMoonActionPerformed
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        ExportDialog dialog = new ExportDialog(app, locationWL, null, null, null);
-        dialog.setVisible(true);
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            ExportDialog dialog = new ExportDialog(app, locationWL, null, null, null);
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
@@ -1476,7 +1482,9 @@ public class PanelLocation extends PanelCanSetupHeader {
     }//GEN-LAST:event_tblVisitMouseReleased
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        app.getMainFrame().browseSelectedLocation(locationWL);
+        if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+            app.getMainFrame().browseSelectedLocation(locationWL);
+        }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void setupNumberOfImages() {

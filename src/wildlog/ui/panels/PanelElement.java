@@ -1633,8 +1633,10 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_tblLocationMouseClicked
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
-        ExportDialog dialog = new ExportDialog(app, null, element, null, null);
-        dialog.setVisible(true);
+        if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
+            ExportDialog dialog = new ExportDialog(app, null, element, null, null);
+            dialog.setVisible(true);
+        }
     }//GEN-LAST:event_btnHTMLActionPerformed
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
@@ -1652,7 +1654,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     }//GEN-LAST:event_btnSlideshowActionPerformed
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        app.getMainFrame().browseSelectedElement(element);
+        if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
+            app.getMainFrame().browseSelectedElement(element);
+        }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
 
