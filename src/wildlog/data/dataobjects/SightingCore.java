@@ -20,7 +20,6 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
     public static final String WILDLOGFILE_ID_PREFIX = "SIGHTING-";
     protected long sightingCounter; // Used as index (ID)
     protected Date date; // must include time
-    protected boolean timeUnknown;
     protected ActiveTimeSpesific timeOfDay;
     protected Weather weather;
     protected ViewRating viewRating;
@@ -230,14 +229,6 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
 
     public void setUnitsTemperature(UnitsTemperature inUnitsTemperature) {
         unitsTemperature = inUnitsTemperature;
-    }
-
-    public boolean isTimeUnknown() {
-        return timeUnknown;
-    }
-
-    public void setTimeUnknown(boolean inTimeUnknown) {
-        timeUnknown = inTimeUnknown;
     }
 
     public int getDurationMinutes() {
