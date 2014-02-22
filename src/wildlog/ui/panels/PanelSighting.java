@@ -626,7 +626,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbWeather.setName("cmbWeather"); // NOI18N
         sightingIncludes.add(cmbWeather, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 210, -1));
 
-        cmbTimeOfDay.setMaximumRowCount(9);
+        cmbTimeOfDay.setMaximumRowCount(11);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbTimeOfDay.setEnabled(!disableEditing);
@@ -870,11 +870,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateSunAndMoonActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, 110, -1));
+        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 215, 110, -1));
 
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
-        btnGetDateFromImage.setText("<html>Load <b>Date</b> from <b>Image </b>EXIF</html>");
+        btnGetDateFromImage.setText("<html>Load <b>Date</b> from <b>Image </b>data</html>");
         btnGetDateFromImage.setToolTipText("Attempt to load the date and time from the image's EXIF data.");
         btnGetDateFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetDateFromImage.setEnabled(!disableEditing && !bulkUploadMode);
@@ -1067,7 +1067,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnCalculateDuration.setBackground(new java.awt.Color(208, 204, 181));
         btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
-        btnCalculateDuration.setText("<html>Calculate <b>Duration</b> from <b>Image</b> EXIF</html>");
+        btnCalculateDuration.setText("<html>Calculate <b>Duration</b> from <b>Image</b> data</html>");
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
         btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode);
         btnCalculateDuration.setFocusPainted(false);
@@ -1079,7 +1079,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateDurationActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 215, 110, -1));
+        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, -1));
 
         btnAddNewElement.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
@@ -1136,6 +1136,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel23.setName("jLabel23"); // NOI18N
         sightingIncludes.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 60, -1, -1));
 
+        cmbAge.setMaximumRowCount(10);
         cmbAge.setModel(new DefaultComboBoxModel(Age.values()));
         cmbAge.setSelectedItem(sighting.getAge());
         cmbAge.setFocusable(false);
@@ -1144,7 +1145,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnGetGPSFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetGPSFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnGetGPSFromImage.setText("<html>Load <b>GPS</b> from <b>Image </b>EXIF</html>");
+        btnGetGPSFromImage.setText("<html>Load <b>GPS</b> from <b>Image </b>data</html>");
         btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
         btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGetGPSFromImage.setEnabled(!disableEditing && !bulkUploadMode);
@@ -1157,7 +1158,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnGetGPSFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, -1));
+        sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 175, 110, -1));
 
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents

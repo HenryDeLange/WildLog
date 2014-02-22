@@ -28,8 +28,10 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
+import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
+import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.VisitType;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
@@ -692,23 +694,28 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // Continue processing the Sighting
                                 sightingWrapper.setLocationName(locationHandle.getName());
                                 sightingWrapper.setVisitName(visit.getName());
-                                // Make sure the default moonphase is set to -1 (for when the code below doesn't overwrite it)
-                                sightingWrapper.setMoonPhase(-1);
-                                // If the sighting's GPS point is set then try to calculate Sun and Moon
+                                // If the sighting's Date and GPS point is set then try to calculate Sun and Moon
                                 if (sightingWrapper.getDate() != null
                                         && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
                                         && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
+                                    double latitude = UtilsGps.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(),
+                                            sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
+                                    double longitude = UtilsGps.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(),
+                                            sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
                                     // Sun
-                                    double latitude = UtilsGps.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
-                                    double longitude = UtilsGps.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
-                                    sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
+                                    if (sightingWrapper.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sightingWrapper.getTimeOfDay())) {
+                                        sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
+                                    }
                                     // Moon
-                                    sightingWrapper.setMoonPhase(AstroCalculator.getMoonPhase(sightingWrapper.getDate()));
-                                    sightingWrapper.setMoonlight(AstroCalculator.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
+                                    if (sightingWrapper.getMoonPhase() < 0 || Moonlight.NONE.equals(sightingWrapper.getMoonlight())
+                                            || Moonlight.UNKNOWN.equals(sightingWrapper.getMoonlight())) {
+                                        sightingWrapper.setMoonPhase(AstroCalculator.getMoonPhase(sightingWrapper.getDate()));
+                                        sightingWrapper.setMoonlight(AstroCalculator.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
+                                    }
                                 }
                                 // Get a list of all the images
                                 BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(counter, 1);
-                                // Determine the duration and build up the a list of File objects (to save later)
+                                // Get a list of File objects from the BulkUploadImageFileWrapper and prepare for the duration calculations
                                 Date startDate = listWrapper.getImageList().get(0).getDate();
                                 Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
                                 List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
@@ -722,12 +729,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         endDate = imageWrapper.getDate();
                                     }
                                 }
-                                if (sightingWrapper.getDurationMinutes() == 0 && sightingWrapper.getDurationSeconds() == 0.0) {
-                                    double difference = (endDate.getTime() - startDate.getTime())/1000;
-                                    int minutes = (int)difference/60;
-                                    double seconds = difference - minutes*60.0;
-                                    sightingWrapper.setDurationMinutes(minutes);
-                                    sightingWrapper.setDurationSeconds(seconds);
+                                // Determine the duration and build up the a list of File objects (to save later), if it wasn't set by hand already
+                                if (sightingWrapper.getDurationMinutes() == 0 && sightingWrapper.getDurationSeconds() == 0) {
+                                    if (sightingWrapper.getDurationMinutes() == 0 && sightingWrapper.getDurationSeconds() == 0.0) {
+                                        double difference = (endDate.getTime() - startDate.getTime())/1000;
+                                        int minutes = (int)difference/60;
+                                        double seconds = difference - minutes*60.0;
+                                        sightingWrapper.setDurationMinutes(minutes);
+                                        sightingWrapper.setDurationSeconds(seconds);
+                                    }
                                 }
                                 // Save the sigting
                                 synchronized (saveSightingLock) {

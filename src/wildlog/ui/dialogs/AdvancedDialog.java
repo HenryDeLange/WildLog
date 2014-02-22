@@ -58,11 +58,12 @@ public class AdvancedDialog extends JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnCorrectTime = new javax.swing.JButton();
-        btnSetDuration = new javax.swing.JButton();
-        btnSetAllGPS = new javax.swing.JButton();
-        btnMoveVisit = new javax.swing.JButton();
+        btnChecklist = new javax.swing.JButton();
         btnDuplicateSightings = new javax.swing.JButton();
+        btnSetAllGPS = new javax.swing.JButton();
+        btnSetDuration = new javax.swing.JButton();
+        btnCorrectTime = new javax.swing.JButton();
+        btnMoveVisit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Advanced Options");
@@ -72,43 +73,43 @@ public class AdvancedDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        btnCorrectTime.setText("Adjust the Date and Time for all Observations");
-        btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
-        btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnCorrectTime.setFocusPainted(false);
-        btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCorrectTime.setIconTextGap(9);
-        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnCorrectTime.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnCorrectTime.setMinimumSize(new java.awt.Dimension(265, 35));
-        btnCorrectTime.setName("btnCorrectTime"); // NOI18N
-        btnCorrectTime.setPreferredSize(new java.awt.Dimension(265, 35));
-        btnCorrectTime.addActionListener(new java.awt.event.ActionListener() {
+        btnChecklist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CheckList.png"))); // NOI18N
+        btnChecklist.setText("Add Observations Using A Checklist");
+        btnChecklist.setToolTipText("Open a popup box to add Observations in a checklist format.");
+        btnChecklist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnChecklist.setFocusPainted(false);
+        btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnChecklist.setIconTextGap(9);
+        btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnChecklist.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnChecklist.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnChecklist.setName("btnChecklist"); // NOI18N
+        btnChecklist.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnChecklist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCorrectTimeActionPerformed(evt);
+                btnChecklistActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCorrectTime);
+        getContentPane().add(btnChecklist);
 
-        btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
-        btnSetDuration.setText("Recalculate the Duration for all Observations");
-        btnSetDuration.setToolTipText("Automatically calculate the duration of the Observations based on the dates of the uploaded files.");
-        btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSetDuration.setFocusPainted(false);
-        btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSetDuration.setIconTextGap(9);
-        btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnSetDuration.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnSetDuration.setMinimumSize(new java.awt.Dimension(265, 35));
-        btnSetDuration.setName("btnSetDuration"); // NOI18N
-        btnSetDuration.setPreferredSize(new java.awt.Dimension(265, 35));
-        btnSetDuration.addActionListener(new java.awt.event.ActionListener() {
+        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnDuplicateSightings.setText("Find Possible Duplicate Observations");
+        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
+        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDuplicateSightings.setFocusPainted(false);
+        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDuplicateSightings.setIconTextGap(9);
+        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
+        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSetDurationActionPerformed(evt);
+                btnDuplicateSightingsActionPerformed(evt);
             }
         });
-        getContentPane().add(btnSetDuration);
+        getContentPane().add(btnDuplicateSightings);
 
         btnSetAllGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnSetAllGPS.setText("Set ons GPS point for all Observations");
@@ -129,6 +130,44 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnSetAllGPS);
 
+        btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        btnSetDuration.setText("Recalculate the Duration for all Observations");
+        btnSetDuration.setToolTipText("Automatically calculate the duration of the Observations based on the dates of the uploaded files.");
+        btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetDuration.setFocusPainted(false);
+        btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSetDuration.setIconTextGap(9);
+        btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnSetDuration.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnSetDuration.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnSetDuration.setName("btnSetDuration"); // NOI18N
+        btnSetDuration.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnSetDuration.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetDurationActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSetDuration);
+
+        btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnCorrectTime.setText("Adjust the Date and Time for all Observations");
+        btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
+        btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCorrectTime.setFocusPainted(false);
+        btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCorrectTime.setIconTextGap(9);
+        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnCorrectTime.setMaximumSize(new java.awt.Dimension(285, 35));
+        btnCorrectTime.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnCorrectTime.setName("btnCorrectTime"); // NOI18N
+        btnCorrectTime.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnCorrectTime.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCorrectTimeActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnCorrectTime);
+
         btnMoveVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
         btnMoveVisit.setText("Move Period to Different Place");
         btnMoveVisit.setToolTipText("Move this Period to a different Place.");
@@ -147,25 +186,6 @@ public class AdvancedDialog extends JDialog {
             }
         });
         getContentPane().add(btnMoveVisit);
-
-        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
-        btnDuplicateSightings.setText("Find Possible Duplicate Observations");
-        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
-        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDuplicateSightings.setFocusPainted(false);
-        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnDuplicateSightings.setIconTextGap(9);
-        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(265, 35));
-        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
-        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(265, 35));
-        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDuplicateSightingsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnDuplicateSightings);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -193,8 +213,8 @@ public class AdvancedDialog extends JDialog {
                 app.getDBI().createOrUpdate(sighting, false);
             }
             panelVisit.doTheRefresh(null);
-            dispose();
         }
+        dispose();
     }//GEN-LAST:event_btnCorrectTimeActionPerformed
 
     private void btnMoveVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveVisitActionPerformed
@@ -245,8 +265,8 @@ public class AdvancedDialog extends JDialog {
                 app.getDBI().createOrUpdate(sighting, false);
             }
             panelVisit.doTheRefresh(null);
-            dispose();
         }
+        dispose();
     }//GEN-LAST:event_btnSetAllGPSActionPerformed
 
     private void btnSetDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDurationActionPerformed
@@ -345,8 +365,17 @@ public class AdvancedDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnDuplicateSightingsActionPerformed
 
+    private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed
+        ChecklistDialog dialog = new ChecklistDialog(app, this,
+                app.getDBI().find(new Location(panelVisit.getVisit().getLocationName())),
+                visit, panelVisit);
+        dialog.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnChecklistActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnCorrectTime;
     private javax.swing.JButton btnDuplicateSightings;
     private javax.swing.JButton btnMoveVisit;

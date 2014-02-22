@@ -20,6 +20,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.SightingEvidence;
+import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
@@ -112,6 +113,7 @@ public class BulkUploadDataLoader {
         inBulkUploadSightingWrapper.setCertainty(Certainty.SURE);
         inBulkUploadSightingWrapper.setSightingEvidence(SightingEvidence.SEEN);
         inBulkUploadSightingWrapper.setLifeStatus(LifeStatus.ALIVE);
+        inBulkUploadSightingWrapper.setTimeAccuracy(TimeAccuracy.GOOD);
     }
 
     private static void loadFileData(Path inFile, List<BulkUploadImageFileWrapper> inImageList) {

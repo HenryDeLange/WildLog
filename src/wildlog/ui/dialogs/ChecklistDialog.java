@@ -36,7 +36,7 @@ public class ChecklistDialog extends JDialog {
     private Visit visit;
 
     /** Creates new form PanelMoveVisit */
-    public ChecklistDialog(WildLogApp inApp, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
+    public ChecklistDialog(WildLogApp inApp, JDialog inParent, Location inLocation, Visit inVisit, PanelNeedsRefreshWhenDataChanges inPanelToRefresh) {
         app = inApp;
         initComponents();
         loadElementList();
@@ -51,9 +51,9 @@ public class ChecklistDialog extends JDialog {
         UtilsUI.attachClipboardPopup(txtSearch);
 
         // Setup the default behavior
-        UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
+        UtilsDialog.setDialogToCenter(inParent, this);
         ActionListener escListiner = UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
         // Hack to fix the wierd focus issue to get the ESC to work (related to the datepicker)
         this.setFocusable(true);
         dtpDate.getEditor().registerKeyboardAction(

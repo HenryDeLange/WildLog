@@ -392,10 +392,10 @@
                               <Component id="btnSlideshow" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="btnBrowse" min="-2" pref="110" max="-2" attributes="0"/>
-                          <Component id="btnChecklist" min="-2" pref="110" max="-2" attributes="0"/>
+                          <Component id="btnGoLocation" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="btnUpdate" min="-2" pref="110" max="-2" attributes="0"/>
                           <Component id="btnHTML" alignment="0" min="-2" pref="110" max="-2" attributes="1"/>
                       </Group>
@@ -412,7 +412,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="btnChecklist" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="btnGoLocation" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                           <Component id="btnMapSighting" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -453,15 +453,15 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUpdateActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnChecklist">
+            <Component class="javax.swing.JButton" name="btnGoLocation">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f0" green="e4" red="e6" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/CheckList.png"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Add Checklist"/>
+                <Property name="text" type="java.lang.String" value="View Place"/>
                 <Property name="toolTipText" type="java.lang.String" value="Open a popup box to add Observations in a checklist format."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
@@ -472,10 +472,10 @@
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 10, 2, 4]"/>
                 </Property>
-                <Property name="name" type="java.lang.String" value="btnChecklist" noResource="true"/>
+                <Property name="name" type="java.lang.String" value="btnGoLocation" noResource="true"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnChecklistActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnGoLocationActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnBrowse">
@@ -639,11 +639,11 @@
                               <Component id="jLabel53" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
-                                      <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                       <Component id="jScrollPane14" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="19" pref="19" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="txtName" alignment="1" max="32767" attributes="0"/>
                                           <Group type="102" alignment="0" attributes="0">

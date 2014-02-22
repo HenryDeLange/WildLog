@@ -24,7 +24,6 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.AdvancedDialog;
-import wildlog.ui.dialogs.ChecklistDialog;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
@@ -65,7 +64,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             btnAddSighting.setEnabled(false);
             btnAdvanced.setEnabled(false);
             btnBrowse.setEnabled(false);
-            btnChecklist.setEnabled(false);
+            btnGoLocation.setEnabled(false);
             btnDeleteImage.setEnabled(false);
             btnDeleteSighting.setEnabled(false);
             btnEditSighting.setEnabled(false);
@@ -267,7 +266,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnPreviousImage = new javax.swing.JButton();
         pnlButtons = new javax.swing.JPanel();
         btnUpdate = new javax.swing.JButton();
-        btnChecklist = new javax.swing.JButton();
+        btnGoLocation = new javax.swing.JButton();
         btnBrowse = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
         btnMapSighting = new javax.swing.JButton();
@@ -493,19 +492,19 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        btnChecklist.setBackground(new java.awt.Color(230, 228, 240));
-        btnChecklist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CheckList.png"))); // NOI18N
-        btnChecklist.setText("Add Checklist");
-        btnChecklist.setToolTipText("Open a popup box to add Observations in a checklist format.");
-        btnChecklist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnChecklist.setFocusPainted(false);
-        btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnChecklist.setIconTextGap(5);
-        btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 4));
-        btnChecklist.setName("btnChecklist"); // NOI18N
-        btnChecklist.addActionListener(new java.awt.event.ActionListener() {
+        btnGoLocation.setBackground(new java.awt.Color(230, 228, 240));
+        btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnGoLocation.setText("View Place");
+        btnGoLocation.setToolTipText("Open a popup box to add Observations in a checklist format.");
+        btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoLocation.setFocusPainted(false);
+        btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoLocation.setIconTextGap(5);
+        btnGoLocation.setMargin(new java.awt.Insets(2, 10, 2, 4));
+        btnGoLocation.setName("btnGoLocation"); // NOI18N
+        btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChecklistActionPerformed(evt);
+                btnGoLocationActionPerformed(evt);
             }
         });
 
@@ -608,10 +607,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(10, 10, 10)
+                .addGap(7, 7, 7)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnChecklist, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
@@ -624,7 +623,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addComponent(btnAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnChecklist, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -704,10 +703,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(jLabel53)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
+                                .addGap(12, 12, 12)
                                 .addComponent(jScrollPane14))
                             .addGroup(pnlInfoLayout.createSequentialGroup()
-                                .addGap(19, 19, 19)
+                                .addGap(12, 12, 12)
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(pnlInfoLayout.createSequentialGroup()
@@ -761,7 +760,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(5, 5, 5)
                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel53)
-                            .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE))))
+                            .addComponent(jScrollPane14))))
                 .addGap(5, 5, 5))
         );
 
@@ -1304,12 +1303,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 
-    private void btnChecklistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChecklistActionPerformed
-        if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ChecklistDialog dialog = new ChecklistDialog(app, locationForVisit, visit, this);
-            dialog.setVisible(true);
-        }
-    }//GEN-LAST:event_btnChecklistActionPerformed
+    private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
+        UtilsPanelGenerator.openPanelAsTab(app, locationForVisit.getName(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent(), null);
+    }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         if (UtilsData.checkCharacters(txtName.getText().trim())) {
@@ -1400,11 +1396,11 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnAdvanced;
     private javax.swing.JButton btnBrowse;
-    private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteSighting;
     private javax.swing.JButton btnEditSighting;
     private javax.swing.JButton btnGoElement;
+    private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnHTML;
     private javax.swing.JButton btnMapSighting;
     private javax.swing.JButton btnNextImage;
