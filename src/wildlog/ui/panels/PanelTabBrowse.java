@@ -245,8 +245,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        scrTextArea.setMaximumSize(new java.awt.Dimension(230, 32767));
-        scrTextArea.setMinimumSize(new java.awt.Dimension(130, 23));
+        scrTextArea.setMaximumSize(new java.awt.Dimension(250, 32767));
+        scrTextArea.setMinimumSize(new java.awt.Dimension(150, 23));
 
         txtBrowseInfo.setEditable(false);
         txtBrowseInfo.setContentType("text/html"); // NOI18N
@@ -339,7 +339,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         btnGoBrowseSelection.setBackground(new java.awt.Color(235, 233, 221));
         btnGoBrowseSelection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
-        btnGoBrowseSelection.setToolTipText("Open the selected tree node.");
+        btnGoBrowseSelection.setToolTipText("Open the selected tree node for editing.");
         btnGoBrowseSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoBrowseSelection.setFocusPainted(false);
         btnGoBrowseSelection.setFocusable(false);
@@ -443,7 +443,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3)
-                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 145, 340)
+                .addComponent(scrTextArea, javax.swing.GroupLayout.PREFERRED_SIZE, 145, 340)
                 .addGap(3, 3, 3)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -468,7 +468,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                 .addComponent(btnSetDefaultLocationImage)
                                 .addGap(3, 3, 3)
                                 .addComponent(btnSetDefaultVisitImage)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnViewImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnViewEXIF)))

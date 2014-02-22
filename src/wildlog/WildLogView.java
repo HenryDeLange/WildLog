@@ -309,9 +309,9 @@ public final class WildLogView extends JFrame {
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
         mnuMoveVisits = new javax.swing.JMenuItem();
         jSeparator8 = new javax.swing.JPopupMenu.Separator();
-        mnuMergeElements = new javax.swing.JMenuItem();
         mnuMergeLocations = new javax.swing.JMenuItem();
         mnuMergeVisit = new javax.swing.JMenuItem();
+        mnuMergeElements = new javax.swing.JMenuItem();
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
@@ -812,17 +812,6 @@ public final class WildLogView extends JFrame {
         jSeparator8.setName("jSeparator8"); // NOI18N
         advancedMenu.add(jSeparator8);
 
-        mnuMergeElements.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        mnuMergeElements.setText("Merge one Creature's Observations into another");
-        mnuMergeElements.setToolTipText("Move all Observations from one Creature to another Creature and then delete the initial Creature.");
-        mnuMergeElements.setName("mnuMergeElements"); // NOI18N
-        mnuMergeElements.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuMergeElementsActionPerformed(evt);
-            }
-        });
-        advancedMenu.add(mnuMergeElements);
-
         mnuMergeLocations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         mnuMergeLocations.setText("Merge one Place's Observations into another");
         mnuMergeLocations.setToolTipText("Move all Periods from one Place to another Place and then delete the initial Place.");
@@ -844,6 +833,17 @@ public final class WildLogView extends JFrame {
             }
         });
         advancedMenu.add(mnuMergeVisit);
+
+        mnuMergeElements.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        mnuMergeElements.setText("Merge one Creature's Observations into another");
+        mnuMergeElements.setToolTipText("Move all Observations from one Creature to another Creature and then delete the initial Creature.");
+        mnuMergeElements.setName("mnuMergeElements"); // NOI18N
+        mnuMergeElements.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuMergeElementsActionPerformed(evt);
+            }
+        });
+        advancedMenu.add(mnuMergeElements);
 
         menuBar.add(advancedMenu);
 
@@ -1499,6 +1499,7 @@ public final class WildLogView extends JFrame {
                 // Elements
                 List<Element> listElements = app.getDBI().list(new Element());
                 for (int t = 0; t < listElements.size(); t++) {
+                    // TODO: Sal vinniger gaan as ek die multithreaded kan doen, maar dan moet ek weer die progressbar sync issue probeer fix...
                     UtilsHTML.exportHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
                     setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
@@ -2414,6 +2415,7 @@ public final class WildLogView extends JFrame {
 //                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath()).toFile());
                 setProgress(100);
                 setMessage("Export WildNote Sync Done");
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath());
                 return null;
             }
         });

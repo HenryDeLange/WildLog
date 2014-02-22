@@ -84,7 +84,7 @@
                               <Component id="btnSetDefaultVisitImage" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="57" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnViewImage" max="32767" attributes="0"/>
                           <Component id="btnViewEXIF" min="-2" max="-2" attributes="0"/>
@@ -349,10 +349,10 @@
     <Container class="javax.swing.JScrollPane" name="scrTextArea">
       <Properties>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[230, 32767]"/>
+          <Dimension value="[250, 32767]"/>
         </Property>
         <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[130, 23]"/>
+          <Dimension value="[150, 23]"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -519,7 +519,7 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Go.gif"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Open the selected tree node."/>
+        <Property name="toolTipText" type="java.lang.String" value="Open the selected tree node for editing."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

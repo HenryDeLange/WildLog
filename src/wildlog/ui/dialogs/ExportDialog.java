@@ -546,10 +546,32 @@ public class ExportDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the CSV Export");
-                Path path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
+                Path path;
+                if (location != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath())
+                            .resolve(location.getDisplayName());
+                }
+                else
+                if (visit != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath())
+                            .resolve(visit.getDisplayName());
+                }
+                else
+                if (element != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath())
+                            .resolve(element.getDisplayName());
+                }
+                else
+                if (sighting != null) {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath())
+                            .resolve(sighting.getDisplayName());
+                }
+                else {
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
+                }
                 Files.createDirectories(path);
                 app.getDBI().doExportCSV(path, false, location, visit, element, sighting);
-                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath());
+                UtilsFileProcessing.openFile(path);
                 setMessage("Done with the CSV Export");
                 return null;
             }
