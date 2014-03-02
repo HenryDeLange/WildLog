@@ -1,0 +1,25 @@
+.accordionItem h2 {
+    margin: 0;
+    font-size: 1.1em;
+    padding: 0.4em;
+    color: rgba(237,251,212,1);
+    background-color: rgba(35,40,20,1);
+    border-bottom: 1px solid rgba(50,75,30,1);
+}
+.accordionItem h2:hover {
+    cursor: pointer;
+}
+.accordionItem div {
+    margin: 0;
+    padding: 1em 0.4em;
+    background-color: rgba(237,250,230,1);
+    border-bottom: 1px solid rgba(65,75,60,1);
+}
+.accordionItem.hide h2 {
+    color: #000;
+    color: rgba(37,51,12,1);
+    background-color: rgba(171,191,160,1);
+}
+.accordionItem.hide div {
+    display: none;
+}

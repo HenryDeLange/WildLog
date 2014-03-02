@@ -119,10 +119,49 @@ public class Element extends ElementCore implements DataObjectWithHTML {
         return htmlElement.toString();
     }
 
-//    @Override
-//    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
-//
-//    }
+    @Override
+    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+        String html = UtilsHTML.FANCY_HTML_TEMPLATE;
+        // Title
+        html = html.replace("___INSERT_TITLE___", primaryName);
+        // Background
+        html = html.replace("___INSERT_GRADIENT_CSS___", "gradient_elements");
+        inProgressbarTask.setTaskProgress(1);
+        inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                + " " + inProgressbarTask.getProgress() + "%");
+        // Map
+//        ___INSERT_SCRIPT_TO_LOAD_MAP_POINTS___
+        inProgressbarTask.setTaskProgress(10);
+        inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                + " " + inProgressbarTask.getProgress() + "%");
+        // Header
+        html = html.replace("___INSERT_TABLE_HEADER___", primaryName);
+        // Images
+        String images = "";
+        List<WildLogFile> listWildLogFiles = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        for (WildLogFile wildLogFile : listWildLogFiles) {
+            images = images + wildLogFile.toHTML(UtilsHTMLExportTypes.ForFancyHTML);
+        }
+        html = html.replace("___INSERT_IMAGES___", images);
+        inProgressbarTask.setTaskProgress(15);
+        inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                + " " + inProgressbarTask.getProgress() + "%");
+        // Details
+        html = html.replace("___INSERT_DETAILS___", toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask));
+        // Sightings
+        String sightings = "";
+        List<Sighting> listSightings = inApp.getDBI().list(new Sighting(primaryName, null, null));
+        int counter = 0;
+        for (Sighting temp : listSightings) {
+            sightings = sightings + "\n" + temp.toFancyHTML(inApp, null);
+            inProgressbarTask.setTaskProgress(15 + (int)(((double)counter/listSightings.size())*(84)));
+            inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                    + " " + inProgressbarTask.getProgress() + "%");
+            counter++;
+        }
+        html = html.replace("___INSERT_SIGHTINGS___", sightings);
+        return html;
+    }
 
     @Override
     public String getExportPrefix() {

@@ -79,6 +79,11 @@ public class Visit extends VisitCore implements DataObjectWithHTML {
     }
 
     @Override
+    public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
     public String getExportPrefix() {
         return WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toString();
     }

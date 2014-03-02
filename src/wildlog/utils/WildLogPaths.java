@@ -12,37 +12,40 @@ import java.nio.file.Paths;
  */
 public enum WildLogPaths {
     /** WARNING: Remember that the settings folder is not in the WildLog workspace. This is not necessarily the active settings folder.*/
-    DEFAUL_SETTINGS_FOLDER         (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
+    DEFAUL_SETTINGS_FOLDER                (Paths.get(System.getProperty("user.home"), "WildLogSettings")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-    OPEN_H2                        (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.3.174.jar")),
+    OPEN_H2                               (Paths.get(System.getProperty("user.dir"), "lib", "h2-1.3.174.jar")),
     /** WARNING: Remember that this folder is not in the WildLog workspace, but points to the installation directory.*/
-    OPEN_OPENMAP                   (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
+    OPEN_OPENMAP                          (Paths.get(System.getProperty("user.dir"), "lib", "openmap.jar")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the Workspace.
      * The workspacePrefix already has this value appended. */
-    DEFAULT_WORKSPACE_NAME         (Paths.get("WildLog")),
+    DEFAULT_WORKSPACE_NAME                (Paths.get("WildLog")),
     /** WARNING: Don't use this value in "normal" code. It is only used to store the name of the database name. */
-    DEFAULT_DATABASE_NAME          (Paths.get("wildlog")),
+    DEFAULT_DATABASE_NAME                 (Paths.get("wildlog")),
     // These are the values that can be reused.
-    WILDLOG_DATA                   (Paths.get("Data")),
-    WILDLOG_FILES                  (Paths.get("Files")),
-    WILDLOG_FILES_IMAGES           (Paths.get("Files", "Images")),
-    WILDLOG_FILES_MOVIES           (Paths.get("Files", "Movies")),
-    WILDLOG_FILES_OTHER            (Paths.get("Files", "Other")),
-    WILDLOG_THUMBNAILS             (Paths.get("Thumbnails")),
-    WILDLOG_MAPS                   (Paths.get("Maps")),
-    WILDLOG_BACKUPS                (Paths.get("Backup")),
-    WILDLOG_BACKUPS_MONTHLY        (Paths.get("Backup", "Auto")),
-    WILDLOG_TEMP                   (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp")),
-    WILDLOG_EXPORT                 (Paths.get("Export")),
-    WILDLOG_EXPORT_KML             (Paths.get("Export", "KML")),
-    WILDLOG_EXPORT_KML_THUMBNAILS  (Paths.get("Export", "KML", "Thumbnails")),
-    WILDLOG_EXPORT_CSV             (Paths.get("Export", "CSV")),
-    WILDLOG_EXPORT_HTML            (Paths.get("Export", "HTML")),
-    WILDLOG_EXPORT_HTML_THUMBNAILS (Paths.get("Export", "HTML", "Thumbnails")),
-    WILDLOG_EXPORT_WILDNOTE_SYNC   (Paths.get("Export", "WildNoteSync")),
-    WILDLOG_EXPORT_SLIDESHOW       (Paths.get("Export", "Slideshow")),
-    WILDLOG_EXPORT_FILES           (Paths.get("Export", "OriginalFiles")),
-    WILDLOG_EXPORT_WORKSPACE       (Paths.get("Export", "Workspace"));
+    WILDLOG_DATA                          (Paths.get("Data")),
+    WILDLOG_FILES                         (Paths.get("Files")),
+    WILDLOG_FILES_IMAGES                  (Paths.get("Files", "Images")),
+    WILDLOG_FILES_MOVIES                  (Paths.get("Files", "Movies")),
+    WILDLOG_FILES_OTHER                   (Paths.get("Files", "Other")),
+    WILDLOG_THUMBNAILS                    (Paths.get("Thumbnails")),
+    WILDLOG_MAPS                          (Paths.get("Maps")),
+    WILDLOG_BACKUPS                       (Paths.get("Backup")),
+    WILDLOG_BACKUPS_MONTHLY               (Paths.get("Backup", "Auto")),
+    WILDLOG_TEMP                          (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp")),
+    WILDLOG_EXPORT                        (Paths.get("Export")),
+    WILDLOG_EXPORT_KML                    (Paths.get("Export", "KML")),
+    WILDLOG_EXPORT_KML_THUMBNAILS         (Paths.get("Export", "KML", "Thumbnails")),
+    WILDLOG_EXPORT_CSV                    (Paths.get("Export", "CSV")),
+    WILDLOG_EXPORT_HTML                   (Paths.get("Export", "HTML")),
+    WILDLOG_EXPORT_HTML_THUMBNAILS        (Paths.get("Export", "HTML", "Thumbnails")),
+    WILDLOG_EXPORT_HTML_FANCY             (Paths.get("Export", "HTML(Advanced)")),
+    WILDLOG_EXPORT_HTML_FANCY_RESOURCES   (Paths.get("Export", "HTML(Advanced)", "Scripts")),
+    WILDLOG_EXPORT_HTML_FANCY_THUMBNAILS  (Paths.get("Export", "HTML(Advanced)", "Thumbnails")),
+    WILDLOG_EXPORT_WILDNOTE_SYNC          (Paths.get("Export", "WildNoteSync")),
+    WILDLOG_EXPORT_SLIDESHOW              (Paths.get("Export", "Slideshow")),
+    WILDLOG_EXPORT_FILES                  (Paths.get("Export", "OriginalFiles")),
+    WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace"));
 
     private static Path activeWorkspacePrefix;
     private Path path;

@@ -56,7 +56,16 @@ public class WildLogFile extends WildLogFileCore implements Comparable<WildLogFi
     public String toHTML(UtilsHTMLExportTypes inExportType) {
         String startTag = "<a href='../../../" + getRelativePath().toString().replace(File.separator, "/") + "' target='_blank'>";
         if (fileType.equals(WildLogFileType.IMAGE)) {
-            return startTag + UtilsHTML.generateHTMLImages(this, inExportType) + "</a>";
+            if (UtilsHTMLExportTypes.ForFancyHTML.equals(inExportType)) {
+                return UtilsHTML.generateHTMLImages(this, inExportType)
+                        + "<div class='SliderName_2Description'>"
+                        + startTag + "View Original" + "</a>   "
+                        + startTag.replace("target='_blank'", "rel='lightbox'") + "View Larger</a>"
+                        + "</div>";
+            }
+            else {
+                return startTag + UtilsHTML.generateHTMLImages(this, inExportType) + "</a>" + "<div class=\"SliderName_2Description\">" + getFilename() + "</div>";
+            }
         }
         else
         if (fileType.equals(WildLogFileType.MOVIE)) {
