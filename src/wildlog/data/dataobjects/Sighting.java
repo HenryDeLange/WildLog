@@ -73,7 +73,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>GPS Accuracy:</b><br/> ", gpsAccuracy, true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Date:</b><br/> ", UtilsHTML.formatDateAsString(date, true), true);
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time Accuracy:</b><br/> ", timeAccuracy, true);
-        if (durationMinutes >= 0 && durationSeconds > 0) {
+        if (durationMinutes > 0 || durationSeconds > 0) {
             UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Duration:</b><br/> ", durationMinutes + " minutes, " + durationSeconds + " seconds", true);
         }
         UtilsHTML.appendIfNotNullNorEmpty(htmlSighting, "<br/><b>Time of Day:</b><br/> ", timeOfDay, true);

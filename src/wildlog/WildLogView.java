@@ -378,7 +378,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.1");
+        jLabel12.setText("version 4.1.beta.testing");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N

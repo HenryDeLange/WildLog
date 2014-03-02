@@ -1700,9 +1700,10 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }
 
-     @Override
+    @Override
     public void doTheRefresh(Object inIndicator) {
-         formComponentShown(null);
+        formComponentHidden(null);
+        formComponentShown(null);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

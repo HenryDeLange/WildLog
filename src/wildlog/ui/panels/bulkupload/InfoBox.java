@@ -64,6 +64,7 @@ public class InfoBox extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator3 = new javax.swing.JSeparator();
         lblElementName = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
@@ -79,6 +80,10 @@ public class InfoBox extends JPanel {
         btnChooseCreature = new javax.swing.JButton();
         btnGPS = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
+        lblCount = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
 
         setBackground(new java.awt.Color(229, 241, 212));
         setMaximumSize(new java.awt.Dimension(250, 250));
@@ -88,10 +93,10 @@ public class InfoBox extends JPanel {
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblElementName.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblElementName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblElementName.setText("Creature Name");
         lblElementName.setName("lblElementName"); // NOI18N
-        add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 3, 230, 20));
+        add(lblElementName, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 3, 195, 20));
 
         jSeparator2.setName("jSeparator2"); // NOI18N
         add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 27, 230, 10));
@@ -205,6 +210,15 @@ public class InfoBox extends JPanel {
             }
         });
         add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 185, 80, 50));
+
+        lblCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCount.setText("#");
+        lblCount.setName("lblCount"); // NOI18N
+        add(lblCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 3, 30, 20));
+
+        jSeparator4.setOrientation(javax.swing.SwingConstants.VERTICAL);
+        jSeparator4.setName("jSeparator4"); // NOI18N
+        add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(35, 3, -1, 25));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -307,6 +321,10 @@ public class InfoBox extends JPanel {
         btnGPS.setBackground(inColor);
     }
 
+    public JLabel getLblCount() {
+        return lblCount;
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChooseCreature;
     private javax.swing.JButton btnEdit;
@@ -317,6 +335,9 @@ public class InfoBox extends JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblCount;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblElementName;
     private javax.swing.JLabel lblImage;
