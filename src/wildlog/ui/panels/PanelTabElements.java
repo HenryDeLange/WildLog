@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -79,11 +80,6 @@ public class PanelTabElements extends javax.swing.JPanel {
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblElementMouseReleased(evt);
-            }
-        });
-        tblElement.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                tblElementPropertyChange(evt);
             }
         });
         tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -183,6 +179,12 @@ public class PanelTabElements extends javax.swing.JPanel {
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("All Creatures:");
+
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -388,11 +390,16 @@ public class PanelTabElements extends javax.swing.JPanel {
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
     }//GEN-LAST:event_formComponentShown
 
-    private void tblElementPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tblElementPropertyChange
-        if (UtilsUI.TABLE_KEY_FILTER_CALLBACK_NAME.equals(evt.getPropertyName())) {
-            tblElementMouseReleased(null);
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    btnGoElementActionPerformed(null);
+                }
+            });
         }
-    }//GEN-LAST:event_tblElementPropertyChange
+    }//GEN-LAST:event_txtSearchKeyReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddElement;

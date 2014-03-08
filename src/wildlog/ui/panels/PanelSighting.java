@@ -58,13 +58,13 @@ import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 
 
 public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataChanges {
     private Location locationWL;
     private Visit visit;
-    //private Visit oldVisit;
     private Element element;
     private Sighting sighting;
     private Element searchElement;
@@ -512,6 +512,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         });
         tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblElementKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tblElementKeyReleased(evt);
             }
@@ -758,6 +761,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         });
         tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblLocationKeyPressed(evt);
+            }
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tblLocationKeyReleased(evt);
             }
@@ -777,6 +783,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 tblVisitMouseReleased(evt);
+            }
+        });
+        tblVisit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblVisitKeyPressed(evt);
             }
         });
         sclVisit.setViewportView(tblVisit);
@@ -1321,18 +1332,21 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 if (UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(sighting))
                         && UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(sighting))) {
                     for (ComparableFile comparableFile : compareFileList) {
-                        DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(comparableFile.originalFile.toPath().toAbsolutePath());
-                        if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
-                                && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
-                            UtilsGps.copyGpsBetweenDOs(sighting, temp);
-                            txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-                            txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
-                            break;
+                        if (WildLogFileExtentions.Images.isJPG(comparableFile.originalFile.toPath().toAbsolutePath())) {
+                            DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(comparableFile.originalFile.toPath().toAbsolutePath());
+                            if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
+                                    && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
+                                UtilsGps.copyGpsBetweenDOs(sighting, temp);
+                                txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+                                txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+                                break;
+                            }
                         }
                     }
                 }
                 // Setup Sun and Moon
-                if (sighting.getMoonPhase() < 0) {
+                if (ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay()) || sighting.getMoonPhase() < 0
+                        || Moonlight.NONE.equals(sighting.getMoonlight()) || Moonlight.UNKNOWN.equals(sighting.getMoonlight())) {
                     btnCalculateSunAndMoonActionPerformed(null);
                 }
             }
@@ -1453,16 +1467,20 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_tblElementKeyReleased
 
     private void btnGetDateFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetDateFromImageActionPerformed
+        boolean hasRelevantFiles = false;
         List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (files != null && files.size() > 0) {
+            hasRelevantFiles = true;
             loadDateFromFile(files.get(imageIndex).getAbsolutePath());
         }
-        else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
-                    "Please upload some files and try again.",
-                    "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
+        if (!hasRelevantFiles) {
+            if (evt != null) {
+                getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Please upload some files and try again.",
+                        "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+                getGlassPane().setVisible(false);
+            }
         }
     }//GEN-LAST:event_btnGetDateFromImageActionPerformed
 
@@ -1479,37 +1497,43 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }
 
     private void btnCalculateSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateSunAndMoonActionPerformed
-        boolean showError = true;
-        if (sighting.getDate() != null
-                && sighting.getLatitude() != null && sighting.getLongitude() != null
-                && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
-                && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
-                && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
+        if (sighting.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
             // Try to save the sighting (to make sure all required fields are there and to get the Sighting Time)
             if (!bulkUploadMode) {
                 btnUpdateSightingActionPerformed(null);
             }
-            if (dtpSightingDate.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
+            if (sighting.getLatitude() != null && sighting.getLongitude() != null
+                    && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
+                    && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
+                    && txtLongitude.getText() != null && !txtLongitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLongitude.getText())) {
                 double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
                 double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 // Sun
                 cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(setSightingDateFromUIFields(), latitude, longitude));
                 // Moon
-                spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
                 cmbMoonlight.setSelectedItem(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
-                showError = false;
             }
+            else {
+                // Only show the error if the user clicked the button
+                if (evt != null) {
+                    getGlassPane().setVisible(true);
+                    JOptionPane.showMessageDialog(app.getMainFrame(),
+                            "Please make sure to first provide an accurate values for the GPS point.",
+                            "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
+                    getGlassPane().setVisible(false);
+                }
+            }
+            spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
         }
-        // Only show the error if the user clicked the button
-        if (evt == null) {
-            showError = false;
-        }
-        if (showError) {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
-                    "Please make sure to first provide values for the Creature, Place, Period and GPS point.",
-                    "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
+        else {
+            // Only show the error if the user clicked the button
+            if (evt != null) {
+                getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Please make sure to first provide an accurate Date.",
+                        "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
+                getGlassPane().setVisible(false);
+            }
         }
     }//GEN-LAST:event_btnCalculateSunAndMoonActionPerformed
 
@@ -1524,11 +1548,21 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnGPSActionPerformed
 
     private void btnCalculateDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateDurationActionPerformed
+        boolean hasRelevantFiles = false;
         // Get all Image files for this sighting
         WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
 //        searchFile.setFileType(WildLogFileType.IMAGE);
-        List<WildLogFile> files = app.getDBI().list(searchFile);
-        if (files != null && !files.isEmpty()) {
+        List<WildLogFile> allFiles = app.getDBI().list(searchFile);
+        // Only use Images and Movies for the duration
+        List<WildLogFile> files = new ArrayList<WildLogFile>(allFiles.size());
+        for (WildLogFile wildLogFile : allFiles) {
+            if (WildLogFileExtentions.Images.isKnownExtention(wildLogFile.getAbsolutePath())
+                    || WildLogFileExtentions.Movies.isKnownExtention(wildLogFile.getAbsolutePath())) {
+                files.add(wildLogFile);
+            }
+        }
+        if (!files.isEmpty()) {
+            hasRelevantFiles = true;
             Collections.sort(files);
             Date startDate = UtilsImageProcessing.getDateFromFile(files.get(0).getAbsolutePath());
             Date endDate = UtilsImageProcessing.getDateFromFile(files.get(files.size()-1).getAbsolutePath());
@@ -1538,12 +1572,15 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             spnDurationMinutes.setValue(minutes);
             spnDurationSeconds.setValue(seconds);
         }
-        else {
-            getGlassPane().setVisible(true);
-            JOptionPane.showMessageDialog(app.getMainFrame(),
-                    "Please upload some files and try again.",
-                    "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
-            getGlassPane().setVisible(false);
+        if (!hasRelevantFiles) {
+            // Only show the error if the user clicked the button
+            if (evt != null) {
+                getGlassPane().setVisible(true);
+                JOptionPane.showMessageDialog(app.getMainFrame(),
+                        "Please upload some image or movie files and try again.",
+                        "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
+                getGlassPane().setVisible(false);
+            }
         }
     }//GEN-LAST:event_btnCalculateDurationActionPerformed
 
@@ -1627,9 +1664,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_btnAddNewVisitActionPerformed
 
     private void btnGetGPSFromImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetGPSFromImageActionPerformed
+        boolean hasRelevantFiles = false;
         List<WildLogFile> files = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (files != null && files.size() > 0) {
             if (WildLogFileType.IMAGE.equals(files.get(imageIndex).getFileType())) {
+                hasRelevantFiles = true;
                 DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(files.get(imageIndex).getAbsolutePath());
                 if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
                         && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
@@ -1646,14 +1685,32 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 }
             }
         }
-        else {
+        if (!hasRelevantFiles) {
             getGlassPane().setVisible(true);
             JOptionPane.showMessageDialog(app.getMainFrame(),
-                    "Please upload some files and try again.",
+                    "Please upload some image files and try again.",
                     "No Files Uploaded.", JOptionPane.WARNING_MESSAGE);
             getGlassPane().setVisible(false);
         }
     }//GEN-LAST:event_btnGetGPSFromImageActionPerformed
+
+    private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tblElementKeyPressed
+
+    private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tblLocationKeyPressed
+
+    private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tblVisitKeyPressed
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));

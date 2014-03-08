@@ -59,10 +59,11 @@ public class AdvancedDialog extends JDialog {
     private void initComponents() {
 
         btnChecklist = new javax.swing.JButton();
-        btnDuplicateSightings = new javax.swing.JButton();
         btnSetAllGPS = new javax.swing.JButton();
+        btnSetSunAndMoon = new javax.swing.JButton();
         btnSetDuration = new javax.swing.JButton();
         btnCorrectTime = new javax.swing.JButton();
+        btnDuplicateSightings = new javax.swing.JButton();
         btnMoveVisit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -74,17 +75,17 @@ public class AdvancedDialog extends JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         btnChecklist.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CheckList.png"))); // NOI18N
-        btnChecklist.setText("Add Observations Using A Checklist");
+        btnChecklist.setText("Add Observations using a Checklist");
         btnChecklist.setToolTipText("Open a popup box to add Observations in a checklist format.");
         btnChecklist.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnChecklist.setFocusPainted(false);
         btnChecklist.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnChecklist.setIconTextGap(9);
+        btnChecklist.setIconTextGap(8);
         btnChecklist.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnChecklist.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnChecklist.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnChecklist.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnChecklist.setMinimumSize(new java.awt.Dimension(375, 35));
         btnChecklist.setName("btnChecklist"); // NOI18N
-        btnChecklist.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnChecklist.setPreferredSize(new java.awt.Dimension(375, 35));
         btnChecklist.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChecklistActionPerformed(evt);
@@ -92,37 +93,18 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnChecklist);
 
-        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
-        btnDuplicateSightings.setText("Find Possible Duplicate Observations");
-        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
-        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDuplicateSightings.setFocusPainted(false);
-        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnDuplicateSightings.setIconTextGap(9);
-        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(265, 35));
-        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
-        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(265, 35));
-        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDuplicateSightingsActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnDuplicateSightings);
-
         btnSetAllGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
-        btnSetAllGPS.setText("Set ons GPS point for all Observations");
-        btnSetAllGPS.setToolTipText("All Observations for this Period will be assigned the specified GPS value.");
+        btnSetAllGPS.setText("Set one GPS for all Observations (also recalculates Sun and Moon)");
+        btnSetAllGPS.setToolTipText("All Observations for this Period will be assigned the specified GPS value. This will also update the Sun and Moon Phase.");
         btnSetAllGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetAllGPS.setFocusPainted(false);
         btnSetAllGPS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetAllGPS.setIconTextGap(6);
-        btnSetAllGPS.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnSetAllGPS.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnSetAllGPS.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnSetAllGPS.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnSetAllGPS.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnSetAllGPS.setMinimumSize(new java.awt.Dimension(375, 35));
         btnSetAllGPS.setName("btnSetAllGPS"); // NOI18N
-        btnSetAllGPS.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnSetAllGPS.setPreferredSize(new java.awt.Dimension(375, 35));
         btnSetAllGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetAllGPSActionPerformed(evt);
@@ -130,18 +112,37 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnSetAllGPS);
 
+        btnSetSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
+        btnSetSunAndMoon.setText("Recalculate the Sun (Time of Day) and Moon Phase");
+        btnSetSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon Pahse for all Observations based on the date and GPS position.");
+        btnSetSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSetSunAndMoon.setFocusPainted(false);
+        btnSetSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSetSunAndMoon.setIconTextGap(6);
+        btnSetSunAndMoon.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnSetSunAndMoon.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnSetSunAndMoon.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnSetSunAndMoon.setName("btnSetSunAndMoon"); // NOI18N
+        btnSetSunAndMoon.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnSetSunAndMoon.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetSunAndMoonActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSetSunAndMoon);
+
         btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
-        btnSetDuration.setText("Recalculate the Duration for all Observations");
-        btnSetDuration.setToolTipText("Automatically calculate the duration of the Observations based on the dates of the uploaded files.");
+        btnSetDuration.setText("Recalculate the Duration");
+        btnSetDuration.setToolTipText("Automatically calculate the duration for all Observations based on the dates of the uploaded files.");
         btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetDuration.setFocusPainted(false);
         btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSetDuration.setIconTextGap(9);
-        btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnSetDuration.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnSetDuration.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnSetDuration.setIconTextGap(8);
+        btnSetDuration.setMargin(new java.awt.Insets(2, 12, 2, 8));
+        btnSetDuration.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnSetDuration.setMinimumSize(new java.awt.Dimension(375, 35));
         btnSetDuration.setName("btnSetDuration"); // NOI18N
-        btnSetDuration.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnSetDuration.setPreferredSize(new java.awt.Dimension(375, 35));
         btnSetDuration.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSetDurationActionPerformed(evt);
@@ -155,12 +156,12 @@ public class AdvancedDialog extends JDialog {
         btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCorrectTime.setFocusPainted(false);
         btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnCorrectTime.setIconTextGap(9);
-        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
-        btnCorrectTime.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnCorrectTime.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnCorrectTime.setIconTextGap(8);
+        btnCorrectTime.setMargin(new java.awt.Insets(2, 12, 2, 8));
+        btnCorrectTime.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnCorrectTime.setMinimumSize(new java.awt.Dimension(375, 35));
         btnCorrectTime.setName("btnCorrectTime"); // NOI18N
-        btnCorrectTime.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnCorrectTime.setPreferredSize(new java.awt.Dimension(375, 35));
         btnCorrectTime.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCorrectTimeActionPerformed(evt);
@@ -168,18 +169,37 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnCorrectTime);
 
+        btnDuplicateSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
+        btnDuplicateSightings.setText("Find possible duplicate Observations");
+        btnDuplicateSightings.setToolTipText("Indentify possible duplicate Observations for for this Period.");
+        btnDuplicateSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDuplicateSightings.setFocusPainted(false);
+        btnDuplicateSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnDuplicateSightings.setIconTextGap(8);
+        btnDuplicateSightings.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnDuplicateSightings.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.setMinimumSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.setName("btnDuplicateSightings"); // NOI18N
+        btnDuplicateSightings.setPreferredSize(new java.awt.Dimension(375, 35));
+        btnDuplicateSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDuplicateSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnDuplicateSightings);
+
         btnMoveVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/LocationList.gif"))); // NOI18N
-        btnMoveVisit.setText("Move Period to Different Place");
+        btnMoveVisit.setText("Move this Period to a different Place");
         btnMoveVisit.setToolTipText("Move this Period to a different Place.");
         btnMoveVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMoveVisit.setFocusPainted(false);
         btnMoveVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnMoveVisit.setIconTextGap(6);
-        btnMoveVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnMoveVisit.setMaximumSize(new java.awt.Dimension(285, 35));
-        btnMoveVisit.setMinimumSize(new java.awt.Dimension(265, 35));
+        btnMoveVisit.setMargin(new java.awt.Insets(2, 10, 2, 8));
+        btnMoveVisit.setMaximumSize(new java.awt.Dimension(375, 35));
+        btnMoveVisit.setMinimumSize(new java.awt.Dimension(375, 35));
         btnMoveVisit.setName("btnMoveVisit"); // NOI18N
-        btnMoveVisit.setPreferredSize(new java.awt.Dimension(265, 35));
+        btnMoveVisit.setPreferredSize(new java.awt.Dimension(375, 35));
         btnMoveVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMoveVisitActionPerformed(evt);
@@ -373,6 +393,29 @@ public class AdvancedDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnChecklistActionPerformed
 
+    private void btnSetSunAndMoonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetSunAndMoonActionPerformed
+        List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+        for (Sighting sighting : listSightings) {
+            // Recalculate the Sun and Moon phase
+            if (sighting.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
+                if (sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
+                        && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
+                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                    // Sun
+                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                    // Moon Light
+                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                }
+                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+            }
+            // Save the changes
+            app.getDBI().createOrUpdate(sighting, false);
+        }
+        panelVisit.doTheRefresh(null);
+        dispose();
+    }//GEN-LAST:event_btnSetSunAndMoonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChecklist;
@@ -381,5 +424,6 @@ public class AdvancedDialog extends JDialog {
     private javax.swing.JButton btnMoveVisit;
     private javax.swing.JButton btnSetAllGPS;
     private javax.swing.JButton btnSetDuration;
+    private javax.swing.JButton btnSetSunAndMoon;
     // End of variables declaration//GEN-END:variables
 }

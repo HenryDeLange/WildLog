@@ -153,6 +153,7 @@ public class InfoBox extends JPanel {
         });
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 85, 150, 150));
 
+        btnChooseCreature.setBackground(new java.awt.Color(229, 241, 212));
         btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.gif"))); // NOI18N
         btnChooseCreature.setText("<html><u>Creature</u></html>");
         btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
@@ -174,6 +175,7 @@ public class InfoBox extends JPanel {
         });
         add(btnChooseCreature, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 85, 80, 50));
 
+        btnGPS.setBackground(new java.awt.Color(229, 241, 212));
         btnGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnGPS.setText("<html><u>GPS</u></html>");
         btnGPS.setToolTipText("Select a GPS point for this Observation. You can RIGHT-CLICK to select the previously saved GPS point or MIDDLE-CLICK to load the GPS point from the images (if present).");
@@ -195,6 +197,7 @@ public class InfoBox extends JPanel {
         });
         add(btnGPS, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 135, 80, 50));
 
+        btnEdit.setBackground(new java.awt.Color(229, 241, 212));
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting.gif"))); // NOI18N
         btnEdit.setText("Edit");
         btnEdit.setToolTipText("Edit this Observation's details.");

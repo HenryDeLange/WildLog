@@ -339,7 +339,7 @@ public final class WildLogView extends JFrame {
         mnuAboutWildNote = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("WildLog");
+        setTitle("WildLog v4.1");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
@@ -1284,14 +1284,14 @@ public final class WildLogView extends JFrame {
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
-                                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
                                     if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
                                             && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
                                         double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
                                         double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                                        sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
                                         sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
+                                        sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
                                     }
+                                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
                                     app.getDBI().createOrUpdate(sighting, false);
                                 }
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
@@ -1347,7 +1347,7 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null), tabbedPanel);
+                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null, null), tabbedPanel);
                 return null;
             }
         });
@@ -2277,6 +2277,7 @@ public final class WildLogView extends JFrame {
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
                                 WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
+                                // USing only images here since it is more reliable (and safer to automate) than movies
                                 searchFile.setFileType(WildLogFileType.IMAGE);
                                 List<WildLogFile> files = app.getDBI().list(searchFile);
                                 if (!files.isEmpty()) {

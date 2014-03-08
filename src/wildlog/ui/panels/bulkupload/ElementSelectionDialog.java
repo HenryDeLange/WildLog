@@ -128,6 +128,11 @@ public class ElementSelectionDialog extends JDialog {
                 txtSearchActionPerformed(evt);
             }
         });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
         jPanel1.add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 220, -1));
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -254,7 +259,7 @@ public class ElementSelectionDialog extends JDialog {
             public void run() {
                 // Select the previous element
                 for (int t = 0; t < tblElement.getModel().getRowCount(); t++) {
-                    if (tblElement.getModel().getValueAt(t, 1).equals(previousElement)) {
+                    if (tblElement.getValueAt(t, 1).equals(previousElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getModel().getRowCount()) - 1) {
@@ -318,6 +323,17 @@ public class ElementSelectionDialog extends JDialog {
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         tblElementMouseReleased(null);
     }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    btnSelectActionPerformed(null);
+                }
+            });
+        }
+    }//GEN-LAST:event_txtSearchKeyReleased
 
     public boolean isSelectionMade() {
         return selectionMade;

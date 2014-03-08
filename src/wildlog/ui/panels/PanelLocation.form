@@ -954,8 +954,8 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/Bulk Import.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Bulk Import"/>
-                <Property name="toolTipText" type="java.lang.String" value="Open a Bulk Import tab for this Place."/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Bulk Import&lt;/u&gt;&lt;/html&gt;"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open a Bulk Import tab for this Place. You can drag-and-drop a folder on the button to quickly start the Bulk Import process."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>

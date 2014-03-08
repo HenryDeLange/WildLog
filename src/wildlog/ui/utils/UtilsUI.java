@@ -37,7 +37,6 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public final class UtilsUI {
-    public final static String TABLE_KEY_FILTER_CALLBACK_NAME = "DO_WILDLOG_UPDATE";
 
     private UtilsUI() {
     }
@@ -109,7 +108,6 @@ public final class UtilsUI {
             @Override
             public void keyReleased(KeyEvent inEvent) {
                 inTable.getSelectionModel().clearSelection();
-                inTable.firePropertyChange(TABLE_KEY_FILTER_CALLBACK_NAME, 0, 1);
                 if (inEvent.getKeyChar() == KeyEvent.VK_ESCAPE) {
                    inTxtSearch.setText("");
                 }
@@ -123,6 +121,26 @@ public final class UtilsUI {
                 // Kan dit ook glo so doen:
                 //sorter.setRowFilter(RowFilter.regexFilter(Pattern.compile(txtSearchField.getText(), Pattern.CASE_INSENSITIVE).toString()));
                 inTable.setRowSorter(sorter);
+                // As daar net een ry is, select hom.
+                if (inTable.getRowCount() == 1) {
+                    inTable.getSelectionModel().setSelectionInterval(0, 0);
+                }
+                else {
+                    inTable.getSelectionModel().clearSelection();
+                }
+                int x;
+                int y;
+                if (inTable.getMousePosition() != null) {
+                    x = inTable.getMousePosition().x;
+                    y = inTable.getMousePosition().y;
+                }
+                else {
+                    x = inTable.getX();
+                    y = inTable.getY();
+                }
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+                        new MouseEvent(inTable, MouseEvent.MOUSE_RELEASED, new Date().getTime(),
+                                0, x, y, 1, false));
             }
         });
     }
@@ -150,9 +168,19 @@ public final class UtilsUI {
                         if (inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), 1).toString().toLowerCase().startsWith(currentWord.toLowerCase())) {
                             inTable.getSelectionModel().setSelectionInterval(t, t);
                             inTable.scrollRectToVisible(inTable.getCellRect(t, 0, true));
+                            int x;
+                            int y;
+                            if (inTable.getMousePosition() != null) {
+                                x = inTable.getMousePosition().x;
+                                y = inTable.getMousePosition().y;
+                            }
+                            else {
+                                x = inTable.getX();
+                                y = inTable.getY();
+                            }
                             Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
                                     new MouseEvent(inTable, MouseEvent.MOUSE_RELEASED, new Date().getTime(),
-                                            0, inTable.getMousePosition().x, inTable.getMousePosition().y, 1, false));
+                                            0, x, y, 1, false));
                             break;
                         }
                     }

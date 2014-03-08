@@ -687,7 +687,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             public int showDialog() {
                                 return JOptionPane.showConfirmDialog(app.getMainFrame(),
                                     "Currently WildLog can only rotate JPG images.",
-                                    "Not a JPG Image", JOptionPane.INFORMATION_MESSAGE);
+                                    "Not a JPG Image", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
                             }
                         });
                     }
@@ -1630,6 +1630,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     public void browseSelectedElement(final Element inElement) {
         if (inElement != null) {
             rdbBrowseElement.setSelected(true);
+            cmbElementTypesBrowseTab.setSelectedIndex(-1);
             tabbedPanel.setSelectedIndex(1);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override

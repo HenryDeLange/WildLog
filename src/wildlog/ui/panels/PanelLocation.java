@@ -6,6 +6,7 @@ import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListSelectionModel;
@@ -89,6 +90,30 @@ public class PanelLocation extends PanelCanSetupHeader {
         locationWL = inLocation;
         lastSavedLocation = locationWL.cloneShallow();
         setupUI();
+        // Setup the drag and drop on the butons
+        FileDrop.SetupFileDrop(btnBulkImport, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                if (inFiles != null && inFiles.size() == 1) {
+                    final Path importPath;
+                    if (inFiles.get(0).isDirectory()) {
+                        importPath = inFiles.get(0).toPath().toAbsolutePath();
+                    }
+                    else {
+                        importPath = inFiles.get(0).toPath().getParent().toAbsolutePath();
+                    }
+                    if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
+                        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName(), importPath), (JTabbedPane)getParent());
+                                return null;
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void setupUI() {
@@ -771,8 +796,8 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         btnBulkImport.setBackground(new java.awt.Color(233, 239, 244));
         btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
-        btnBulkImport.setText("Bulk Import");
-        btnBulkImport.setToolTipText("Open a Bulk Import tab for this Place.");
+        btnBulkImport.setText("<html><u>Bulk Import</u></html>");
+        btnBulkImport.setToolTipText("Open a Bulk Import tab for this Place. You can drag-and-drop a folder on the button to quickly start the Bulk Import process.");
         btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBulkImport.setFocusPainted(false);
         btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -1208,7 +1233,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName()), (JTabbedPane)getParent());
+                    UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, locationWL.getName(), null), (JTabbedPane)getParent());
                     return null;
                 }
             });

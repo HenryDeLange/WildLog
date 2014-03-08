@@ -331,7 +331,7 @@ public final class UtilsTableGenerator {
                         inTable.removeColumn(inTable.getColumnModel().getColumn(0));
                     }
                     // Setup default sorting
-                    setupRowSorter(inTable, 2, 3, 1, SortOrder.DESCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
+                    setupRowSorter(inTable, 2, 3, 1, SortOrder.DESCENDING, SortOrder.DESCENDING, SortOrder.DESCENDING);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));

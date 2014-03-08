@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -71,15 +72,18 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private String selectedLocationName;
 
 
-    public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, final String inLocationName) {
+    public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, final String inLocationName, Path inImportPath) {
         app = inApp;
         selectedLocationName = inLocationName;
+        if (inImportPath != null) {
+            importPath = inImportPath.toFile();
+        }
         // Init auto generated code
         initComponents();
         // Set table scroling to only one row at a time
         mouseWheel = new CustomMouseWheelScroller(scrTable);
         mouseWheel.install();
-        // "Hack" to make the buttons clickable when teh mouse scrolles over the cell (very performance intensive, but "better" now...) of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
+        // "Hack" to make the buttons clickable when the mouse scrolles over the cell (very performance intensive, but "better" now...) of as mens die model clear deur 'n nuwe browse besigheid oop te maak...
         final JTable tableHandle = tblBulkImport;
         tblBulkImport.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -666,16 +670,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     closeTab();
                     // Process the Location
                     Location location = app.getDBI().find(new Location(selectedLocationName));
-                    app.getDBI().createOrUpdate(location, null);
-                    // Process the Visit
-                    visit.setLocationName(location.getName());
-                    visit.setStartDate(dtpStartDate.getDate());
-                    visit.setEndDate(dtpEndDate.getDate());
-                    visit.setType((VisitType)cmbVisitType.getSelectedItem());
-                    app.getDBI().createOrUpdate(visit, null);
+//                    app.getDBI().createOrUpdate(location, null);
                     // Processs the sightings
                     final Location locationHandle = location;
-                    final Object saveElementLock = new Object();
+//                    final Object saveElementLock = new Object();
                     final Object saveSightingLock = new Object();
                     ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Save)"));
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
@@ -685,32 +683,32 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             @Override
                             public void run() {
                                 BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(counter, 0);
-                                // Check wether the Creature exists or not
-                                synchronized (saveElementLock) {
-                                    if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
-                                            app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
-                                    }
-                                }
+//                                // Check wether the Creature exists or not
+//                                synchronized (saveElementLock) {
+//                                    if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
+//                                            app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
+//                                    }
+//                                }
                                 // Continue processing the Sighting
                                 sightingWrapper.setLocationName(locationHandle.getName());
                                 sightingWrapper.setVisitName(visit.getName());
                                 // If the sighting's Date and GPS point is set then try to calculate Sun and Moon
-                                if (sightingWrapper.getDate() != null
-                                        && sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
-                                        && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
-                                    double latitude = UtilsGps.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(),
-                                            sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
-                                    double longitude = UtilsGps.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(),
-                                            sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
-                                    // Sun
-                                    if (sightingWrapper.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sightingWrapper.getTimeOfDay())) {
-                                        sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
+                                if (sightingWrapper.getDate() != null && sightingWrapper.getTimeAccuracy() != null && sightingWrapper.getTimeAccuracy().isUsableTime()) {
+                                    if (sightingWrapper.getLatitude() != null && !sightingWrapper.getLatitude().equals(Latitudes.NONE)
+                                            && sightingWrapper.getLongitude() != null && !sightingWrapper.getLongitude().equals(Longitudes.NONE)) {
+                                        double latitude = UtilsGps.getDecimalDegree(sightingWrapper.getLatitude(), sightingWrapper.getLatDegrees(), sightingWrapper.getLatMinutes(), sightingWrapper.getLatSeconds());
+                                        double longitude = UtilsGps.getDecimalDegree(sightingWrapper.getLongitude(), sightingWrapper.getLonDegrees(), sightingWrapper.getLonMinutes(), sightingWrapper.getLonSeconds());
+                                        // Sun
+                                        if (sightingWrapper.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sightingWrapper.getTimeOfDay())) {
+                                            sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
+                                        }
+                                        // Moon
+                                        if (Moonlight.NONE.equals(sightingWrapper.getMoonlight()) || Moonlight.UNKNOWN.equals(sightingWrapper.getMoonlight())) {
+                                            sightingWrapper.setMoonlight(AstroCalculator.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
+                                        }
                                     }
-                                    // Moon
-                                    if (sightingWrapper.getMoonPhase() < 0 || Moonlight.NONE.equals(sightingWrapper.getMoonlight())
-                                            || Moonlight.UNKNOWN.equals(sightingWrapper.getMoonlight())) {
+                                    if (sightingWrapper.getMoonPhase() < 0) {
                                         sightingWrapper.setMoonPhase(AstroCalculator.getMoonPhase(sightingWrapper.getDate()));
-                                        sightingWrapper.setMoonlight(AstroCalculator.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
                                     }
                                 }
                                 // Get a list of all the images
@@ -752,6 +750,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         app, false, null, true);
                                 // Update the progress
                                 try {
+                                    progressbarHandle.setMessage("Saving the Bulk Import: Busy...");
                                     progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());
                                 }
                                 catch (Exception e) {
@@ -771,6 +770,12 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                             }
                         });
                     }
+                    // Process the Visit (only after saving all of the sightings, otherwise the user can edit/delete it while the bulk import is busy)
+                    visit.setLocationName(location.getName());
+                    visit.setStartDate(dtpStartDate.getDate());
+                    visit.setEndDate(dtpEndDate.getDate());
+                    visit.setType((VisitType)cmbVisitType.getSelectedItem());
+                    app.getDBI().createOrUpdate(visit, null);
                     // Saving is done, now open the visits's tab
                     this.setMessage("Saving the Bulk Import: Finished");
                     this.setTaskProgress(100);
