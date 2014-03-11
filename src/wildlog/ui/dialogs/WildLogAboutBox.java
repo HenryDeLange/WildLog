@@ -37,6 +37,8 @@ public class WildLogAboutBox extends JDialog {
         javax.swing.JLabel emailAddressLabel = new javax.swing.JLabel();
         javax.swing.JLabel emailLabel1 = new javax.swing.JLabel();
         javax.swing.JLabel emailAddressLabel1 = new javax.swing.JLabel();
+        javax.swing.JLabel emailLabel2 = new javax.swing.JLabel();
+        javax.swing.JLabel emailAddressLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About WildLog");
@@ -87,8 +89,15 @@ public class WildLogAboutBox extends JDialog {
         emailLabel1.setText("Websites:");
         emailLabel1.setName("emailLabel1"); // NOI18N
 
-        emailAddressLabel1.setText("<html> http://cameratrap.mywild.co.za <br/> http://www.mywild.co.za </html>");
+        emailAddressLabel1.setText("<html> http://www.mywild.co.za </html>");
         emailAddressLabel1.setName("emailAddressLabel1"); // NOI18N
+
+        emailLabel2.setFont(emailLabel2.getFont().deriveFont(emailLabel2.getFont().getStyle() | java.awt.Font.BOLD));
+        emailLabel2.setText("Active Java Runtime:");
+        emailLabel2.setName("emailLabel2"); // NOI18N
+
+        emailAddressLabel2.setText(System.getProperty("java.home"));
+        emailAddressLabel2.setName("emailAddressLabel2"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,56 +108,66 @@ public class WildLogAboutBox extends JDialog {
                 .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(appDescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
-                    .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                    .addComponent(appDescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+                    .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(versionLabel)
-                            .addComponent(vendorLabel)
-                            .addComponent(emailLabel)
-                            .addComponent(developerLabel)
-                            .addComponent(emailLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(emailAddressLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(appVendorLabel)
-                            .addComponent(appVersionLabel)
-                            .addComponent(developerNameLabel)
-                            .addComponent(emailAddressLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(versionLabel)
+                                .addGap(41, 41, 41)
+                                .addComponent(appVersionLabel))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(vendorLabel)
+                                    .addComponent(emailLabel)
+                                    .addComponent(developerLabel)
+                                    .addComponent(emailLabel1)
+                                    .addComponent(emailLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(emailAddressLabel2)
+                                    .addComponent(appVendorLabel)
+                                    .addComponent(developerNameLabel)
+                                    .addComponent(emailAddressLabel)
+                                    .addComponent(emailAddressLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(10, 10, 10))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(appTitleLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
                         .addComponent(appDescLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(versionLabel)
                             .addComponent(appVersionLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(emailLabel2)
+                            .addComponent(emailAddressLabel2))
+                        .addGap(5, 5, 5)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(vendorLabel)
                             .addComponent(appVendorLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(developerNameLabel)
                             .addComponent(developerLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(emailLabel)
                             .addComponent(emailAddressLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(emailLabel1)
                             .addComponent(emailAddressLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(25, 25, 25))
+                .addGap(16, 16, 16))
         );
 
         pack();
