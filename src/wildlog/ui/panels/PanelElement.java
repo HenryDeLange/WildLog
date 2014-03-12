@@ -395,7 +395,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         btnUploadImage.setBackground(new java.awt.Color(227, 240, 227));
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
-        btnUploadImage.setText("Upload File");
+        btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Creature. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setFocusPainted(false);
@@ -481,7 +481,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                 .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPreviousImage, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(pnlFilesLayout.createSequentialGroup()
-                        .addComponent(btnUploadImage)
+                        .addComponent(btnUploadImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
                         .addGroup(pnlFilesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnSetMainImage)

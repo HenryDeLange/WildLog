@@ -34,19 +34,20 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="appDescLabel" alignment="0" pref="452" max="32767" attributes="0"/>
                   <Component id="appTitleLabel" alignment="0" pref="452" max="32767" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="emailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="developerLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="emailLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="developerLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="developerNameLabel1" min="-2" max="-2" attributes="0"/>
                           <Component id="emailAddressLabel1" min="-2" pref="194" max="-2" attributes="0"/>
                           <Component id="developerNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="emailAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
@@ -57,12 +58,17 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="imageLabel" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="imageLabel" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="appTitleLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="appDescLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="developerLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="developerNameLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="developerNameLabel" min="-2" max="-2" attributes="0"/>
@@ -80,7 +86,7 @@
                       </Group>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -104,7 +110,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appDescLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;WildNote is a seperate software application developed by myself (Henry de Lange) for Android devices. Using WildNote you can easily capture animal Observations on the go and import the data into WildLog. &lt;br&gt;For more information please visit the website.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;WildNote is a seperate software application developed by Henry de Lange (myself) for Android devices. Using WildNote you can easily capture Observations on the go and import the data into WildLog. &lt;br&gt;For more information please visit the website.&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="appDescLabel" noResource="true"/>
       </Properties>
       <AuxValues>
@@ -191,8 +197,33 @@
     </Component>
     <Component class="javax.swing.JLabel" name="emailAddressLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;http://www.mywild.co.za&lt;br&gt;  http://cameratrap.mywild.co.za&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;http://www.mywild.co.za&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="emailAddressLabel1" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="developerLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font bold="true" component="developerLabel1" property="font" relativeSize="true" size="0"/>
+          </FontInfo>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Product Version:"/>
+        <Property name="name" type="java.lang.String" value="developerLabel1" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="developerNameLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="1.0"/>
+        <Property name="name" type="java.lang.String" value="developerNameLabel1" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>

@@ -32,24 +32,22 @@
               <Component id="imageLabel" min="-2" pref="132" max="-2" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="appDescLabel" alignment="0" pref="581" max="32767" attributes="0"/>
-                  <Component id="appTitleLabel" alignment="0" pref="581" max="32767" attributes="0"/>
+                  <Component id="appDescLabel" alignment="0" pref="667" max="32767" attributes="0"/>
+                  <Component id="appTitleLabel" alignment="0" pref="667" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="versionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="vendorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="emailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="developerLabel" min="-2" max="-2" attributes="0"/>
+                          <Component id="emailLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="emailLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="versionLabel1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="versionLabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                              <Component id="appVersionLabel" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="vendorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="emailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="developerLabel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="emailLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="emailLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="emailAddressLabel2" max="-2" attributes="0"/>
                                   <Component id="appVendorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -58,6 +56,8 @@
                                   <Component id="emailAddressLabel1" max="-2" attributes="0"/>
                               </Group>
                           </Group>
+                          <Component id="appVersionLabel1" alignment="0" max="-2" attributes="0"/>
+                          <Component id="appVersionLabel" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -70,9 +70,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="imageLabel" alignment="0" min="-2" pref="180" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="imageLabel" min="-2" pref="180" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Component id="appTitleLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Component id="appDescLabel" min="-2" max="-2" attributes="0"/>
@@ -80,6 +80,11 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="versionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="appVersionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="versionLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="appVersionLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -184,7 +189,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appDescLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt; Use at own risk.&lt;br&gt;  WildLog was written in Java by Henry de Lange and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt; Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="appDescLabel" noResource="true"/>
       </Properties>
       <AuxValues>
@@ -300,6 +305,33 @@
           <Connection code="System.getProperty(&quot;java.home&quot;)" type="code"/>
         </Property>
         <Property name="name" type="java.lang.String" value="emailAddressLabel2" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="versionLabel1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font bold="true" component="versionLabel1" property="font" relativeSize="true" size="0"/>
+          </FontInfo>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Active Settings Folder:"/>
+        <Property name="name" type="java.lang.String" value="versionLabel1" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="appVersionLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().toAbsolutePath().toString()" type="code"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="appVersionLabel1" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>

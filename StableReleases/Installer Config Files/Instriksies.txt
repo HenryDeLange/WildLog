@@ -1,3 +1,6 @@
 Copy die WildLog folder wat in die installer moet kom in hierdie folder in.
 Bou die exe files deur Launch4j.
 Maak die .aip file oop en bou die nuwe installer.
+
+-------------------------------------------
+Om 'n LINUX .sh file glo double-clickable te maak kan mens seker die UI gebruik of die "chmod +x filename.sh" command gebruik.

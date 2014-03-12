@@ -272,7 +272,7 @@
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/wildlog/resources/icons/UploadImage.png"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Upload File"/>
+                <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Upload Files&lt;/u&gt;&lt;/html&gt;"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Upload a file for this Creature. &lt;br/&gt;You can also drag-and-drop files onto the above box to upload it. &lt;br/&gt;(Note: Drag-and-drop only works on supported platforms.)&lt;/html&gt;"/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>

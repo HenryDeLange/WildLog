@@ -554,7 +554,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnUploadImage.setBackground(new java.awt.Color(208, 204, 181));
         btnUploadImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/UploadImage.png"))); // NOI18N
-        btnUploadImage.setText("Upload File");
+        btnUploadImage.setText("<html><u>Upload Files</u></html>");
         btnUploadImage.setToolTipText("<html>Upload a file for this Observation. <br/>You can also drag-and-drop files onto the above box to upload it. <br/>(Note: Drag-and-drop only works on supported platforms.)</html>");
         btnUploadImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUploadImage.setEnabled(!disableEditing && !bulkUploadMode);

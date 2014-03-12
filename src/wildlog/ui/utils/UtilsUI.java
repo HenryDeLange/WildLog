@@ -17,6 +17,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.IOException;
 import java.util.Date;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -31,9 +32,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
-import wildlog.utils.UtilsImageProcessing;
 
 
 public final class UtilsUI {
@@ -68,8 +67,7 @@ public final class UtilsUI {
                 if ((inEvent.isPopupTrigger() || SwingUtilities.isRightMouseButton(inEvent))) {
                     JPopupMenu clipboardPopup = new JPopupMenu();
                     // Build the copy popup
-                    JMenuItem copyItem = new JMenuItem("Copy Selected Text",
-                            UtilsImageProcessing.getScaledIcon(WildLogApp.class.getResource("resources/icons/copy.png"), WildLogThumbnailSizes.TINY.getSize()));
+                    JMenuItem copyItem = new JMenuItem("Copy Selected Text", new ImageIcon(WildLogApp.class.getResource("resources/icons/copy.png")));
                     copyItem.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -79,8 +77,7 @@ public final class UtilsUI {
                     clipboardPopup.add(copyItem);
                     if (!inCopyOnly) {
                         // Build the paste popup
-                        JMenuItem pasteItem = new JMenuItem("Paste Selected Text",
-                                UtilsImageProcessing.getScaledIcon(WildLogApp.class.getResource("resources/icons/paste.png"), WildLogThumbnailSizes.TINY.getSize()));
+                        JMenuItem pasteItem = new JMenuItem("Paste Selected Text", new ImageIcon(WildLogApp.class.getResource("resources/icons/paste.png")));
                         pasteItem.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {

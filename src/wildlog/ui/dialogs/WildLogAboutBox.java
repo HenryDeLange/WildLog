@@ -39,6 +39,8 @@ public class WildLogAboutBox extends JDialog {
         javax.swing.JLabel emailAddressLabel1 = new javax.swing.JLabel();
         javax.swing.JLabel emailLabel2 = new javax.swing.JLabel();
         javax.swing.JLabel emailAddressLabel2 = new javax.swing.JLabel();
+        javax.swing.JLabel versionLabel1 = new javax.swing.JLabel();
+        javax.swing.JLabel appVersionLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("About WildLog");
@@ -65,7 +67,7 @@ public class WildLogAboutBox extends JDialog {
         appVendorLabel.setText("4.1");
         appVendorLabel.setName("appVendorLabel"); // NOI18N
 
-        appDescLabel.setText("<html> Use at own risk.<br>  WildLog was written in Java by Henry de Lange and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.</html>");
+        appDescLabel.setText("<html> Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.</html>");
         appDescLabel.setName("appDescLabel"); // NOI18N
 
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/About.gif"))); // NOI18N
@@ -99,6 +101,13 @@ public class WildLogAboutBox extends JDialog {
         emailAddressLabel2.setText(System.getProperty("java.home"));
         emailAddressLabel2.setName("emailAddressLabel2"); // NOI18N
 
+        versionLabel1.setFont(versionLabel1.getFont().deriveFont(versionLabel1.getFont().getStyle() | java.awt.Font.BOLD));
+        versionLabel1.setText("Active Settings Folder:");
+        versionLabel1.setName("versionLabel1"); // NOI18N
+
+        appVersionLabel1.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().toAbsolutePath().toString());
+        appVersionLabel1.setName("appVersionLabel1"); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,28 +117,29 @@ public class WildLogAboutBox extends JDialog {
                 .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(appDescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
-                    .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+                    .addComponent(appDescLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+                    .addComponent(appTitleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(versionLabel)
+                            .addComponent(vendorLabel)
+                            .addComponent(emailLabel)
+                            .addComponent(developerLabel)
+                            .addComponent(emailLabel1)
+                            .addComponent(emailLabel2)
+                            .addComponent(versionLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(versionLabel)
-                                .addGap(41, 41, 41)
-                                .addComponent(appVersionLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(vendorLabel)
-                                    .addComponent(emailLabel)
-                                    .addComponent(developerLabel)
-                                    .addComponent(emailLabel1)
-                                    .addComponent(emailLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(1, 1, 1)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(emailAddressLabel2)
                                     .addComponent(appVendorLabel)
                                     .addComponent(developerNameLabel)
                                     .addComponent(emailAddressLabel)
-                                    .addComponent(emailAddressLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(emailAddressLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(appVersionLabel1)
+                            .addComponent(appVersionLabel))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -137,7 +147,7 @@ public class WildLogAboutBox extends JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(appTitleLabel)
@@ -147,6 +157,10 @@ public class WildLogAboutBox extends JDialog {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(versionLabel)
                             .addComponent(appVersionLabel))
+                        .addGap(4, 4, 4)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(versionLabel1)
+                            .addComponent(appVersionLabel1))
                         .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(emailLabel2)

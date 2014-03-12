@@ -10,12 +10,9 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -43,7 +40,6 @@ public class UtilsImageProcessing {
     }
 
     public static ImageIcon getScaledIcon(Path inAbsolutePathToScale, int inSize) {
-        // TODO: verander al die JLabels om eerder JavaFx se ImageView te gebruik.  'n Vinnige toets wys dat dit heelwat vinniger mag wees... Die ImageIcon is baie stadig om die icon te maak vir die label, veral sekere nonstandard colour modes in jpg files.
         ImageReader imageReader = null;
         FileImageInputStream inputStream = null;
         try {
@@ -83,6 +79,7 @@ public class UtilsImageProcessing {
 //            System.out.println("---Loading took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
             Image img = getScaledImage(image, finalWidth, finalHeight);
 //            System.out.println("**Before new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
+            // TODO: verander al die JLabels om eerder JavaFx se ImageView te gebruik. 'n Vinnige toets wys dat dit dalk vinniger mag wees... Die ImageIcon is baie stadig om die icon te maak vir die label, veral sekere nonstandard colour modes in jpg files.
             ImageIcon temp = new ImageIcon(img);
 //            System.out.println("**After new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
 //            System.out.println("--Calculating scale " + inSize + "px took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
@@ -115,15 +112,16 @@ public class UtilsImageProcessing {
 //        return getScaledIcon(Paths.get(inPath).normalize().toAbsolutePath(), inSize);
 //    }
 
-    public static ImageIcon getScaledIcon(URL inURL, int inSize) {
-        try {
-            return getScaledIcon(Paths.get(inURL.toURI()), inSize);
-        }
-        catch (URISyntaxException ex) {
-            ex.printStackTrace(System.err);
-        }
-        return getScaledIcon(Paths.get(inURL.getPath()), inSize);
-    }
+    // Die URI's werk nie lekker met die nuwe Java 7 Path nie (NIO)
+//    public static ImageIcon getScaledIcon(URL inURL, int inSize) {
+//        try {
+//            return getScaledIcon(Paths.get(inURL.toURI()), inSize);
+//        }
+//        catch (URISyntaxException ex) {
+//            ex.printStackTrace(System.err);
+//        }
+//        return getScaledIcon(Paths.get(inURL.getPath()), inSize);
+//    }
 
     public static ImageIcon getScaledIconForNoFiles(WildLogThumbnailSizes inSize) {
         return getScaledIconForPlaceholder(WildLogSystemImages.NO_FILES.getWildLogFile(), inSize);
@@ -429,6 +427,7 @@ public class UtilsImageProcessing {
     /**
      * Creates a thumbnail for the provided original absolute path at the give absolute path.
      * @param inThumbnailAbsolutePath
+     * @param inOriginalAbsolutePath
      * @param inSize
      */
     public static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
