@@ -38,6 +38,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Moon Phase"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -65,6 +68,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Sun Phase"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -92,6 +98,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Type"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -119,6 +128,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Species Accumulation Curve"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -146,6 +158,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Moon Phase"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -173,6 +188,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Sun Phase"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -200,6 +218,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Sun Phase"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -227,6 +248,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Date and Place"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>
@@ -254,6 +278,9 @@
           <Image iconType="3" name="/wildlog/resources/icons/Report.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observations by Date and Creature"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="10"/>

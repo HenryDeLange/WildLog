@@ -462,7 +462,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="View Place"/>
-                <Property name="toolTipText" type="java.lang.String" value="Open a popup box to add Observations in a checklist format."/>
+                <Property name="toolTipText" type="java.lang.String" value="Open the tab of the the Place linked to this Period."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -487,6 +487,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Browse"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open the Browse tab and automatically select this Period in the tree."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -606,9 +607,11 @@
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Advanced"/>
+                <Property name="toolTipText" type="java.lang.String" value="View available advanced features."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
+                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="horizontalAlignment" type="int" value="2"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 8, 2, 8]"/>
@@ -993,7 +996,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="11" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Observations during this Period:"/>
+                <Property name="text" type="java.lang.String" value="List Observations during this Period:"/>
                 <Property name="name" type="java.lang.String" value="jLabel5" noResource="true"/>
               </Properties>
             </Component>

@@ -63,7 +63,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Check and Clean the Workspace"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Make sure the Workspace is in good order and remove nonessential files."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Make sure the Workspace is in good order and remove non-essential files."/>
                     <Property name="name" type="java.lang.String" value="mnuCleanWorkspace" noResource="true"/>
                   </Properties>
                   <Events>
@@ -83,7 +83,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Selected.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Exit WildLog"/>
-                <Property name="toolTipText" type="java.lang.String" value="Close the application. Any unsaved changes will be lost."/>
+                <Property name="toolTipText" type="java.lang.String" value="Close the application."/>
                 <Property name="name" type="java.lang.String" value="mnuExitApp" noResource="true"/>
               </Properties>
               <Events>
@@ -108,7 +108,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Data Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Backup Database"/>
-                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;This makes a backup of the database. &lt;br/&gt;&lt;b&gt;Note: This does not backup the files, only the database is backed up.&lt;/b&gt; &lt;br/&gt;To backup the data and files it is recommended to make a manual copy of the entire workspace.&lt;/html&gt;"/>
+                <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;This makes a backup of the database. &lt;br/&gt;&lt;b&gt;Note: This does not backup the files, only the database is backed up.&lt;/b&gt; &lt;br/&gt;To backup the data and files it is recommended to make a manual copy of the entire Workspace folder, or use the Workspace Backup feature.&lt;/html&gt;"/>
                 <Property name="name" type="java.lang.String" value="mnuBackupDatabase" noResource="true"/>
               </Properties>
               <Events>
@@ -121,7 +121,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Backup Workspace"/>
-                <Property name="toolTipText" type="java.lang.String" value="Backup the Workspace using the Workspace Export feature."/>
+                <Property name="toolTipText" type="java.lang.String" value="Makes a backup of the Workspace using the Workspace Export feature."/>
                 <Property name="name" type="java.lang.String" value="mnuBackupWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -154,7 +154,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/HTML Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to HTML"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export all data and linked files to HTML files. (Viewable in a web browser, etc.)"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)"/>
                 <Property name="name" type="java.lang.String" value="mnuExportHTML" noResource="true"/>
               </Properties>
               <Events>
@@ -167,7 +167,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Google Earth Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Export All to KML"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export all data and linked files to a KML file. (Open in Google Earth, etc.)"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)"/>
                 <Property name="name" type="java.lang.String" value="mnuExportKML" noResource="true"/>
               </Properties>
               <Events>
@@ -242,7 +242,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon.gif"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import from Another Workspace"/>
-                <Property name="toolTipText" type="java.lang.String" value="Import all the data in the specified WildLog Workspace."/>
+                <Property name="toolTipText" type="java.lang.String" value="Import data and files from another WildLog Workspace."/>
                 <Property name="name" type="java.lang.String" value="mnuImportWorkspace" noResource="true"/>
               </Properties>
               <Events>
@@ -260,6 +260,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/WildNoteIcon.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import WildNote Sync File"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import a sync file that was exported from WildNote."/>
                 <Property name="name" type="java.lang.String" value="mnuImportWildNote" noResource="true"/>
               </Properties>
               <Events>
@@ -277,7 +278,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Bulk Import.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Open a New Bulk Import Tab"/>
-                <Property name="toolTipText" type="java.lang.String" value="Import multiple files at once."/>
+                <Property name="toolTipText" type="java.lang.String" value="Import multiple files at once using the Bulk Import feature."/>
                 <Property name="name" type="java.lang.String" value="mnuBulkImport" noResource="true"/>
               </Properties>
               <Events>

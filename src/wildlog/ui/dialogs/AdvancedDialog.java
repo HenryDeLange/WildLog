@@ -114,7 +114,7 @@ public class AdvancedDialog extends JDialog {
 
         btnSetSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
         btnSetSunAndMoon.setText("Recalculate the Sun (Time of Day) and Moon Phase");
-        btnSetSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon Pahse for all Observations based on the date and GPS position.");
+        btnSetSunAndMoon.setToolTipText("Automatically calculate the Sun and Moon Phase for all Observations based on the date and GPS position.");
         btnSetSunAndMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetSunAndMoon.setFocusPainted(false);
         btnSetSunAndMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);

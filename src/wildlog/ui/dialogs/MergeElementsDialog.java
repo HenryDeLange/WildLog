@@ -71,7 +71,7 @@ public class MergeElementsDialog extends JDialog {
         jLabel4.setName("jLabel4"); // NOI18N
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnConfirm.setToolTipText("Merge the Creatures.");
+        btnConfirm.setToolTipText("Move the Observations from the selected Creature to the new Creature and then delete the initial Creature.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);
         btnConfirm.addActionListener(new java.awt.event.ActionListener() {

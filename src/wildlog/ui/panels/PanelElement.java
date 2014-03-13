@@ -575,6 +575,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         btnBrowse.setBackground(new java.awt.Color(227, 240, 227));
         btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
         btnBrowse.setText("Browse");
+        btnBrowse.setToolTipText("Open the Browse tab and automatically select this Creature in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 10, 2, 8));

@@ -1094,7 +1094,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnAddNewElement.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnAddNewElement.setToolTipText("Add new Creature");
+        btnAddNewElement.setToolTipText("Add new Creature.");
         btnAddNewElement.setEnabled(!disableEditing);
         btnAddNewElement.setFocusPainted(false);
         btnAddNewElement.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -1108,7 +1108,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnAddNewLocation.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnAddNewLocation.setToolTipText("Add new Place");
+        btnAddNewLocation.setToolTipText("Add new Place.");
         btnAddNewLocation.setEnabled(!disableEditing && !bulkUploadMode);
         btnAddNewLocation.setFocusPainted(false);
         btnAddNewLocation.setMargin(new java.awt.Insets(2, 4, 2, 4));
@@ -1122,7 +1122,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         btnAddNewVisit.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnAddNewVisit.setToolTipText("Add new Period");
+        btnAddNewVisit.setToolTipText("Add new Period.");
         btnAddNewVisit.setEnabled(!disableEditing && !bulkUploadMode);
         btnAddNewVisit.setFocusPainted(false);
         btnAddNewVisit.setMargin(new java.awt.Insets(2, 4, 2, 4));

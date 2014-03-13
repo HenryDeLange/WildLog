@@ -104,7 +104,7 @@ public class MergeVisitDialog extends JDialog {
         jScrollPane3.setViewportView(lstToLocation);
 
         btnConfirm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnConfirm.setToolTipText("Move the Observations from the selected Period to the new Period and then delete the inital Period.");
+        btnConfirm.setToolTipText("Move the Observations from the selected Period to the new Period and then delete the initial Period.");
         btnConfirm.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConfirm.setFocusPainted(false);
         btnConfirm.setName("btnConfirm"); // NOI18N

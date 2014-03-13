@@ -784,6 +784,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         btnBrowse.setBackground(new java.awt.Color(233, 239, 244));
         btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
         btnBrowse.setText("Browse");
+        btnBrowse.setToolTipText("Open the Browse tab and automatically select this Place in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -987,7 +988,7 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         });
 
-        jLabel45.setText("Periods at this Place:");
+        jLabel45.setText("List of Periods at this Place:");
         jLabel45.setName("jLabel45"); // NOI18N
 
         lblNumberOfVisits.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N

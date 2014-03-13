@@ -933,6 +933,7 @@
                   <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Browse"/>
+                <Property name="toolTipText" type="java.lang.String" value="Open the Browse tab and automatically select this Place in the tree."/>
                 <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                   <Color id="Hand Cursor"/>
                 </Property>
@@ -1240,7 +1241,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel45">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Periods at this Place:"/>
+                <Property name="text" type="java.lang.String" value="List of Periods at this Place:"/>
                 <Property name="name" type="java.lang.String" value="jLabel45" noResource="true"/>
               </Properties>
             </Component>

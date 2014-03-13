@@ -219,7 +219,7 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Update.png"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Move the Observations from the selected Period to the new Period and then delete the inital Period."/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the Observations from the selected Period to the new Period and then delete the initial Period."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

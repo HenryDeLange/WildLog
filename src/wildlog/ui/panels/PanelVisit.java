@@ -495,7 +495,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnGoLocation.setBackground(new java.awt.Color(230, 228, 240));
         btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         btnGoLocation.setText("View Place");
-        btnGoLocation.setToolTipText("Open a popup box to add Observations in a checklist format.");
+        btnGoLocation.setToolTipText("Open the tab of the the Place linked to this Period.");
         btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGoLocation.setFocusPainted(false);
         btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -511,6 +511,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnBrowse.setBackground(new java.awt.Color(230, 228, 240));
         btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
         btnBrowse.setText("Browse");
+        btnBrowse.setToolTipText("Open the Browse tab and automatically select this Period in the tree.");
         btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
@@ -585,7 +586,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnAdvanced.setBackground(new java.awt.Color(230, 228, 240));
         btnAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         btnAdvanced.setText("Advanced");
+        btnAdvanced.setToolTipText("View available advanced features.");
         btnAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAdvanced.setFocusPainted(false);
         btnAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
         btnAdvanced.setName("btnAdvanced"); // NOI18N
@@ -817,7 +820,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel5.setText("Observations during this Period:");
+        jLabel5.setText("List Observations during this Period:");
         jLabel5.setName("jLabel5"); // NOI18N
 
         btnAddSighting.setBackground(new java.awt.Color(228, 240, 237));

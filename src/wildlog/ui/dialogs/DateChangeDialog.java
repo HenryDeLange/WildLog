@@ -88,7 +88,8 @@ public class DateChangeDialog extends JDialog {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
-        btnSave.setToolTipText("Confirm the GPS value.");
+        btnSave.setToolTipText("Perform the date and time change on the Observations.");
+        btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.setFocusPainted(false);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -111,11 +112,13 @@ public class DateChangeDialog extends JDialog {
 
         buttonGroup1.add(rdbIncrease);
         rdbIncrease.setText("Increase");
+        rdbIncrease.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbIncrease.setName("rdbIncrease"); // NOI18N
         getContentPane().add(rdbIncrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 63, -1, -1));
 
         buttonGroup1.add(rdbDecrease);
         rdbDecrease.setText("Decrease");
+        rdbDecrease.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbDecrease.setName("rdbDecrease"); // NOI18N
         getContentPane().add(rdbDecrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 63, -1, -1));
 

@@ -103,6 +103,7 @@ public class ReportingDialog extends JDialog {
 
         btnLocationMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnLocationMoon.setText("Observations by Moon Phase");
+        btnLocationMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLocationMoon.setFocusPainted(false);
         btnLocationMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationMoon.setIconTextGap(10);
@@ -120,6 +121,7 @@ public class ReportingDialog extends JDialog {
 
         btnLocationSun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnLocationSun.setText("Observations by Sun Phase");
+        btnLocationSun.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLocationSun.setFocusPainted(false);
         btnLocationSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationSun.setIconTextGap(10);
@@ -137,6 +139,7 @@ public class ReportingDialog extends JDialog {
 
         btnLocationType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnLocationType.setText("Observations by Type");
+        btnLocationType.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLocationType.setFocusPainted(false);
         btnLocationType.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationType.setIconTextGap(10);
@@ -154,6 +157,7 @@ public class ReportingDialog extends JDialog {
 
         btnLocationSpeciesCurve.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnLocationSpeciesCurve.setText("Species Accumulation Curve");
+        btnLocationSpeciesCurve.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnLocationSpeciesCurve.setFocusPainted(false);
         btnLocationSpeciesCurve.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnLocationSpeciesCurve.setIconTextGap(10);
@@ -171,6 +175,7 @@ public class ReportingDialog extends JDialog {
 
         btnElementMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnElementMoon.setText("Observations by Moon Phase");
+        btnElementMoon.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnElementMoon.setFocusPainted(false);
         btnElementMoon.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnElementMoon.setIconTextGap(10);
@@ -188,6 +193,7 @@ public class ReportingDialog extends JDialog {
 
         btnElementSun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnElementSun.setText("Observations by Sun Phase");
+        btnElementSun.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnElementSun.setFocusPainted(false);
         btnElementSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnElementSun.setIconTextGap(10);
@@ -205,6 +211,7 @@ public class ReportingDialog extends JDialog {
 
         btnVisitSun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnVisitSun.setText("Observations by Sun Phase");
+        btnVisitSun.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnVisitSun.setFocusPainted(false);
         btnVisitSun.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnVisitSun.setIconTextGap(10);
@@ -222,6 +229,7 @@ public class ReportingDialog extends JDialog {
 
         btnSightingDateLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnSightingDateLocation.setText("Observations by Date and Place");
+        btnSightingDateLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSightingDateLocation.setFocusPainted(false);
         btnSightingDateLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSightingDateLocation.setIconTextGap(10);
@@ -239,6 +247,7 @@ public class ReportingDialog extends JDialog {
 
         btnSightingDateElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report.gif"))); // NOI18N
         btnSightingDateElement.setText("Observations by Date and Creature");
+        btnSightingDateElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSightingDateElement.setFocusPainted(false);
         btnSightingDateElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSightingDateElement.setIconTextGap(10);

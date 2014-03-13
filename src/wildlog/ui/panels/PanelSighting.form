@@ -1520,7 +1520,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add new Creature"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add new Creature."/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
@@ -1547,7 +1547,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add new Place"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add new Place."/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>
@@ -1574,7 +1574,7 @@
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
             </Property>
-            <Property name="toolTipText" type="java.lang.String" value="Add new Period"/>
+            <Property name="toolTipText" type="java.lang.String" value="Add new Period."/>
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing &amp;&amp; !bulkUploadMode" type="code"/>
             </Property>

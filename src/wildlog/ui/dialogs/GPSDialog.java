@@ -307,6 +307,7 @@ public class GPSDialog extends JDialog {
 
         btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnSave.setToolTipText("Confirm the GPS value.");
+        btnSave.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSave.setFocusPainted(false);
         btnSave.setName("btnSave"); // NOI18N
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -319,6 +320,7 @@ public class GPSDialog extends JDialog {
         btnUsePrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
         btnUsePrevious.setText("Use Previous GPS");
         btnUsePrevious.setToolTipText("Use the previously saved GPS point.");
+        btnUsePrevious.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUsePrevious.setFocusPainted(false);
         btnUsePrevious.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUsePrevious.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -332,7 +334,8 @@ public class GPSDialog extends JDialog {
 
         btnUseImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
         btnUseImage.setText("<html><u>Load from Image</u></html>");
-        btnUseImage.setToolTipText("Browse to an image with GPS data, or drag-and-drop the image on this button.");
+        btnUseImage.setToolTipText("Browse to an image with GPS data, or drag-and-drop the image onto this button.");
+        btnUseImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseImage.setFocusPainted(false);
         btnUseImage.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseImage.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -361,6 +364,7 @@ public class GPSDialog extends JDialog {
         btnUseGPX.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPX.png"))); // NOI18N
         btnUseGPX.setText("<html><u>Load From GPX</u></html>");
         btnUseGPX.setToolTipText("Browse to a GPX file, or drag-and-drop the file onto the button.");
+        btnUseGPX.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUseGPX.setFocusPainted(false);
         btnUseGPX.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnUseGPX.setMargin(new java.awt.Insets(2, 6, 2, 6));
@@ -381,6 +385,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
         tglNorth.setText(Latitudes.NORTH.getText());
+        tglNorth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglNorth.setFocusPainted(false);
         tglNorth.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglNorth.setName("tglNorth"); // NOI18N
@@ -392,6 +397,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(tglNorth, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 60, 30));
 
         tglSouth.setText(Latitudes.SOUTH.getText());
+        tglSouth.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglSouth.setFocusPainted(false);
         tglSouth.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglSouth.setName("tglSouth"); // NOI18N
@@ -408,6 +414,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, -1, -1));
 
         tglWest.setText(Longitudes.WEST.getText());
+        tglWest.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglWest.setFocusPainted(false);
         tglWest.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglWest.setName("tglWest"); // NOI18N
@@ -419,6 +426,7 @@ public class GPSDialog extends JDialog {
         getContentPane().add(tglWest, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 170, 60, 30));
 
         tglEast.setText(Longitudes.EAST.getText());
+        tglEast.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglEast.setFocusPainted(false);
         tglEast.setMargin(new java.awt.Insets(2, 2, 2, 2));
         tglEast.setName("tglEast"); // NOI18N
@@ -431,6 +439,7 @@ public class GPSDialog extends JDialog {
 
         tglDecimalDegrees.setText("DD");
         tglDecimalDegrees.setToolTipText("Decimal-Degrees");
+        tglDecimalDegrees.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglDecimalDegrees.setFocusPainted(false);
         tglDecimalDegrees.setName("tglDecimalDegrees"); // NOI18N
         tglDecimalDegrees.addActionListener(new java.awt.event.ActionListener() {
@@ -442,6 +451,7 @@ public class GPSDialog extends JDialog {
 
         tglDegMinSec.setText("DMS");
         tglDegMinSec.setToolTipText("Degrees, Minutes and Decimal-Seconds");
+        tglDegMinSec.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tglDegMinSec.setFocusPainted(false);
         tglDegMinSec.setName("tglDegMinSec"); // NOI18N
         tglDegMinSec.addActionListener(new java.awt.event.ActionListener() {
@@ -514,6 +524,8 @@ public class GPSDialog extends JDialog {
 
         btnRemoveGPS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemoveGPS.setText("Remove GPS");
+        btnRemoveGPS.setToolTipText("Remove the GPS value.");
+        btnRemoveGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemoveGPS.setName("btnRemoveGPS"); // NOI18N
         btnRemoveGPS.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -607,7 +607,7 @@ public final class WildLogView extends JFrame {
 
         mnuCleanWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuCleanWorkspace.setText("Check and Clean the Workspace");
-        mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove nonessential files.");
+        mnuCleanWorkspace.setToolTipText("Make sure the Workspace is in good order and remove non-essential files.");
         mnuCleanWorkspace.setName("mnuCleanWorkspace"); // NOI18N
         mnuCleanWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -623,7 +623,7 @@ public final class WildLogView extends JFrame {
 
         mnuExitApp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         mnuExitApp.setText("Exit WildLog");
-        mnuExitApp.setToolTipText("Close the application. Any unsaved changes will be lost.");
+        mnuExitApp.setToolTipText("Close the application.");
         mnuExitApp.setName("mnuExitApp"); // NOI18N
         mnuExitApp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -639,7 +639,7 @@ public final class WildLogView extends JFrame {
 
         mnuBackupDatabase.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Data Icon.gif"))); // NOI18N
         mnuBackupDatabase.setText("Backup Database");
-        mnuBackupDatabase.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire workspace.</html>");
+        mnuBackupDatabase.setToolTipText("<html>This makes a backup of the database. <br/><b>Note: This does not backup the files, only the database is backed up.</b> <br/>To backup the data and files it is recommended to make a manual copy of the entire Workspace folder, or use the Workspace Backup feature.</html>");
         mnuBackupDatabase.setName("mnuBackupDatabase"); // NOI18N
         mnuBackupDatabase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -650,7 +650,7 @@ public final class WildLogView extends JFrame {
 
         mnuBackupWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuBackupWorkspace.setText("Backup Workspace");
-        mnuBackupWorkspace.setToolTipText("Backup the Workspace using the Workspace Export feature.");
+        mnuBackupWorkspace.setToolTipText("Makes a backup of the Workspace using the Workspace Export feature.");
         mnuBackupWorkspace.setName("mnuBackupWorkspace"); // NOI18N
         mnuBackupWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -676,7 +676,7 @@ public final class WildLogView extends JFrame {
 
         mnuExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         mnuExportHTML.setText("Export All to HTML");
-        mnuExportHTML.setToolTipText("Export all data and linked files to HTML files. (Viewable in a web browser, etc.)");
+        mnuExportHTML.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
         mnuExportHTML.setName("mnuExportHTML"); // NOI18N
         mnuExportHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -687,7 +687,7 @@ public final class WildLogView extends JFrame {
 
         mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
         mnuExportKML.setText("Export All to KML");
-        mnuExportKML.setToolTipText("Export all data and linked files to a KML file. (Open in Google Earth, etc.)");
+        mnuExportKML.setToolTipText("Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)");
         mnuExportKML.setName("mnuExportKML"); // NOI18N
         mnuExportKML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -745,7 +745,7 @@ public final class WildLogView extends JFrame {
 
         mnuImportWorkspace.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuImportWorkspace.setText("Import from Another Workspace");
-        mnuImportWorkspace.setToolTipText("Import all the data in the specified WildLog Workspace.");
+        mnuImportWorkspace.setToolTipText("Import data and files from another WildLog Workspace.");
         mnuImportWorkspace.setName("mnuImportWorkspace"); // NOI18N
         mnuImportWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -759,6 +759,7 @@ public final class WildLogView extends JFrame {
 
         mnuImportWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
         mnuImportWildNote.setText("Import WildNote Sync File");
+        mnuImportWildNote.setToolTipText("Import a sync file that was exported from WildNote.");
         mnuImportWildNote.setName("mnuImportWildNote"); // NOI18N
         mnuImportWildNote.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -772,7 +773,7 @@ public final class WildLogView extends JFrame {
 
         mnuBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
         mnuBulkImport.setText("Open a New Bulk Import Tab");
-        mnuBulkImport.setToolTipText("Import multiple files at once.");
+        mnuBulkImport.setToolTipText("Import multiple files at once using the Bulk Import feature.");
         mnuBulkImport.setName("mnuBulkImport"); // NOI18N
         mnuBulkImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
