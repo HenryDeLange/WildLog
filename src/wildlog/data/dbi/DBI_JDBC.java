@@ -226,6 +226,12 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(sql);
                 state.setString(1, inElement.getPrimaryName());
             }
+            else
+            if (inElement.getScientificName() != null && inElement.getScientificName().length() > 0) {
+                sql = sql + " WHERE SCIENTIFICNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inElement.getScientificName()));
+            }
             else {
                 state = conn.prepareStatement(sql);
             }
@@ -714,21 +720,29 @@ public abstract class DBI_JDBC implements DBI {
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listElement;
-            if (inElement.getPrimaryName() != null && inElement.getType() == null) {
+            if (inElement.getPrimaryName() != null && !inElement.getPrimaryName().isEmpty() && inElement.getType() == null) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
             }
-            else if (inElement.getPrimaryName() == null && inElement.getType() != null) {
+            else
+            if ((inElement.getPrimaryName() == null || inElement.getPrimaryName().isEmpty()) && inElement.getType() != null) {
                 sql = sql + " WHERE ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, inElement.getType().toString());
             }
-            else if (inElement.getPrimaryName() != null && inElement.getType() != null) {
+            else
+            if (inElement.getPrimaryName() != null && !inElement.getPrimaryName().isEmpty() && inElement.getType() != null) {
                 sql = sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
                 state.setString(2, inElement.getType().toString());
+            }
+            else
+            if (inElement.getScientificName() != null && !inElement.getScientificName().isEmpty()) {
+                sql = sql + " WHERE SCIENTIFICNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inElement.getScientificName()));
             }
             else {
                 state = conn.prepareStatement(sql);
@@ -965,6 +979,7 @@ public abstract class DBI_JDBC implements DBI {
             if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
                 List<ElementCore> list = list(new ElementCore(UtilsData.sanitizeString(inElement.getPrimaryName())));
                 if (!list.isEmpty()) {
+                    System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + " | " + inOldName + ")");
                     return false;
                 }
             }

@@ -2,7 +2,7 @@ package wildlog.data.enums;
 
 
 public enum ElementType {
-    ANIMAL("Mammal"),
+    MAMMAL("Mammal"),
     BIRD("Bird"),
     REPTILE("Reptile"),
     AMPHIBIAN("Amphibian"),
@@ -29,7 +29,7 @@ public enum ElementType {
 
     public static ElementType getEnumFromText(String inText) {
         if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(ANIMAL.text)) return ANIMAL;
+        if (inText.equalsIgnoreCase(MAMMAL.text)) return MAMMAL;
         if (inText.equalsIgnoreCase(BIRD.text)) return BIRD;
         if (inText.equalsIgnoreCase(REPTILE.text)) return REPTILE;
         if (inText.equalsIgnoreCase(AMPHIBIAN.text)) return AMPHIBIAN;
