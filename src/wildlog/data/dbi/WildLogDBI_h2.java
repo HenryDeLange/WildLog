@@ -23,6 +23,8 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
 import static wildlog.data.dbi.DBI_JDBC.WILDLOG_DB_VERSION;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -279,6 +281,157 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             }
         }
         return success;
+    }
+
+    @Override
+    public boolean doImportIUCN(Path inPath, boolean inUpdatePrimaryName, boolean inAddNewElements, boolean inUpdateExistingElements) {
+        // TODO: Possibily use the rest as Other Name.
+        // TODO: Maybe also handle synonyms.
+        Statement state = null;
+        ResultSet results = null;
+        boolean success = true;
+        try {
+            state = conn.createStatement();
+            // Import Elements
+            results = state.executeQuery("SELECT "
+                    + "csv.\"Common names (Eng)\" EngName, "
+                    + "(concat(csv.genus,' ',csv.species)) SciName, "
+                    + "csv.Class ClassName, "
+                    + "csv.\"Red List status\" IUCNStatus, "
+                    + "csv.Synonyms SynName "
+                    + "FROM csvread('" + inPath.toAbsolutePath().toString() + "') AS csv");
+            while (results.next()) {
+                String engName = getFirstPrimaryName(results.getString("EngName"));
+                String sciName = results.getString("SciName").trim();
+                Element searchElement = new Element();
+                searchElement.setScientificName(sciName);
+                // Twee verskillende Elements kan dieselfde spesie naam het (soos Blesbok en Bontebok)
+                List<Element> lstElements = list(searchElement);
+                Element elementToSave = null;
+                boolean isExisting = false;
+                String oldName = null;
+                int counter = 0;
+                do {
+                    if (!lstElements.isEmpty()) {
+                        isExisting = true;
+                        elementToSave = lstElements.get(counter);
+                        // Mark it as an update by giving the old name
+                        oldName = elementToSave.getPrimaryName();
+                        // Need to update the name fields
+                        // IUCN has a comma sepperated list of common names. (For now I pick the first one.)
+                        if (inUpdatePrimaryName) {
+                            // Only update names if there are one Element with the same scientefic name
+                            if (lstElements.size() == 1) {
+                                // If primary name changed then the update will need to know the old name
+                                if (!elementToSave.getPrimaryName().equalsIgnoreCase(engName)) {
+                                    // Twee verskillende species kan dieselfde common name het. (Append die scientific name agter aan.)
+                                    if (count(elementToSave) > 0) {
+                                        elementToSave.setPrimaryName(elementToSave.getPrimaryName() + " (" + sciName + ")");
+                                        while (count(elementToSave) > 0) {
+                                            elementToSave.setPrimaryName(elementToSave.getPrimaryName() + "_wl");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            if (engName != null) {
+                                elementToSave.setOtherName(engName);
+                            }
+                        }
+                    }
+                    else {
+                        if (inAddNewElements) {
+                            elementToSave = new Element();
+                            elementToSave.setScientificName(sciName);
+                            if (!inUpdatePrimaryName) {
+                                elementToSave.setOtherName(engName);
+                            }
+                            // Since it's a new Element I MUST provide a Primary Name
+                            if (engName != null) {
+                                elementToSave.setPrimaryName(engName);
+                            }
+                            else {
+                                elementToSave.setPrimaryName(sciName);
+                            }
+                        }
+                    }
+                    if (elementToSave != null) {
+                        // Set IUCN status
+                        elementToSave.setEndangeredStatus(EndangeredStatus.getEnumFromText(results.getString("IUCNStatus")));
+                        // Also use the class to guess whether it is a mammal, bird, fish, etc.
+                        if ("MAMMALIA".equalsIgnoreCase(results.getString("ClassName"))) {
+                            elementToSave.setType(ElementType.MAMMAL);
+                        }
+                        else
+                        if ("AVES".equalsIgnoreCase(results.getString("ClassName"))) {
+                            elementToSave.setType(ElementType.BIRD);
+                        }
+                        else
+                        if ("AMPHIBIA".equalsIgnoreCase(results.getString("ClassName"))) {
+                            elementToSave.setType(ElementType.AMPHIBIAN);
+                        }
+                        else
+                        if ("REPTILIA".equalsIgnoreCase(results.getString("ClassName"))) {
+                            elementToSave.setType(ElementType.REPTILE);
+                        }
+                        if (!isExisting && inAddNewElements) {
+                            // Twee verskillende species kan dieselfde common name het. (Append die scientific name agter aan.)
+                            if (count(elementToSave) > 0) {
+                                elementToSave.setPrimaryName(elementToSave.getPrimaryName() + " (" + sciName + ")");
+                                while (count(elementToSave) > 0) {
+                                    elementToSave.setPrimaryName(elementToSave.getPrimaryName() + "_wl");
+                                }
+                            }
+                        }
+                        // Save the creature
+                        if ((isExisting && inUpdateExistingElements) || (!isExisting && inAddNewElements)) {
+                            success = success && createOrUpdate(elementToSave, oldName);
+                        }
+                    }
+                    counter++;
+                }
+                while(counter < lstElements.size());
+            }
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+            return false;
+        }
+        finally {
+            // ResultSet
+            try {
+                if (results != null) {
+                    results.close();
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+            // Statement
+            try {
+                if (state != null) {
+                    state.close();
+                }
+            }
+            catch (SQLException sqle) {
+                printSQLException(sqle);
+            }
+        }
+        return success;
+    }
+
+    private String getFirstPrimaryName(String inNames) throws SQLException {
+        if (inNames == null) {
+            return null;
+        }
+        String[] nameList = inNames.trim().split(",");
+        if (nameList.length > 0) {
+            return nameList[0].trim();
+        }
+        else {
+            return null;
+        }
     }
 
     @Override

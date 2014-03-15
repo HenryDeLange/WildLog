@@ -231,6 +231,24 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuImportCSVActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator13">
+              <Properties>
+                <Property name="name" type="java.lang.String" value="jSeparator13" noResource="true"/>
+              </Properties>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="btnImportIUCNList">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/IUCN.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Import IUCN Species List"/>
+                <Property name="toolTipText" type="java.lang.String" value="Import species names from a CSV file exported from the IUCN Red List site."/>
+                <Property name="name" type="java.lang.String" value="btnImportIUCNList" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnImportIUCNListActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator12">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator12" noResource="true"/>

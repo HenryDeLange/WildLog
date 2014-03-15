@@ -88,6 +88,7 @@ import wildlog.ui.dialogs.WorkspaceImportDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
+import wildlog.ui.helpers.filters.CsvFilter;
 import wildlog.ui.helpers.filters.WildNoteSyncFilter;
 import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
@@ -300,6 +301,8 @@ public final class WildLogView extends JFrame {
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
         importMenu = new javax.swing.JMenu();
         mnuImportCSV = new javax.swing.JMenuItem();
+        jSeparator13 = new javax.swing.JPopupMenu.Separator();
+        btnImportIUCNList = new javax.swing.JMenuItem();
         jSeparator12 = new javax.swing.JPopupMenu.Separator();
         mnuImportWorkspace = new javax.swing.JMenuItem();
         jSeparator11 = new javax.swing.JPopupMenu.Separator();
@@ -739,6 +742,20 @@ public final class WildLogView extends JFrame {
             }
         });
         importMenu.add(mnuImportCSV);
+
+        jSeparator13.setName("jSeparator13"); // NOI18N
+        importMenu.add(jSeparator13);
+
+        btnImportIUCNList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/IUCN.gif"))); // NOI18N
+        btnImportIUCNList.setText("Import IUCN Species List");
+        btnImportIUCNList.setToolTipText("Import species names from a CSV file exported from the IUCN Red List site.");
+        btnImportIUCNList.setName("btnImportIUCNList"); // NOI18N
+        btnImportIUCNList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImportIUCNListActionPerformed(evt);
+            }
+        });
+        importMenu.add(btnImportIUCNList);
 
         jSeparator12.setName("jSeparator12"); // NOI18N
         importMenu.add(jSeparator12);
@@ -2701,6 +2718,107 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_mnuCreateWorkspaceMenuItemActionPerformed
 
+    private void btnImportIUCNListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportIUCNListActionPerformed
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>This will <u>replace</u> the names and threat status for the Creatures in this Workspace."
+                        + "<br>Creatures are treated as <u>the same when their scientific name match</u>. "
+                        + "<br>New Creatures may be added where matches weren't found."
+                        + "<br>It is recommended to backup the Workspace's database before proceding."
+                        + "<br><b>Warning: If you continue all open tabs will be closed automatically.</b></html>",
+                        "Import IUCN Species Names",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        if (result == JOptionPane.OK_OPTION) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            final int choiceForReplacing = JOptionPane.showOptionDialog(app.getMainFrame(),
+                    "Please select what records should be modified:",
+                    "Import IUCN Species Names",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    new String[] {"Only Add New Creatures", "Only Update Existing Creatures", "Add New and Update Existing Creatures"},
+                    null);
+            app.getMainFrame().getGlassPane().setVisible(false);
+            if (choiceForReplacing != JOptionPane.CLOSED_OPTION) {
+                app.getMainFrame().getGlassPane().setVisible(true);
+                final int choiceForName = JOptionPane.showOptionDialog(app.getMainFrame(),
+                        "Please select what name should be modified:",
+                        "Import IUCN Species Names",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        new String[] {"Primary Names", "Other Names"},
+                        null);
+                app.getMainFrame().getGlassPane().setVisible(false);
+                if (choiceForName != JOptionPane.CLOSED_OPTION) {
+                    // Close all tabs and go to the home tab
+                    tabbedPanel.setSelectedIndex(0);
+                    while (tabbedPanel.getTabCount() > 4) {
+                        tabbedPanel.remove(4);
+                    }
+                    UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                        @Override
+                        protected Object doInBackground() throws Exception {
+                            setMessage("Starting the IUCN Import");
+                            final JFileChooser fileChooser = new JFileChooser();
+                            fileChooser.setDialogTitle("Select the CSV file to import from IUCN");
+                            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                            fileChooser.setFileFilter(new CsvFilter());
+                            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        return fileChooser.showOpenDialog(app.getMainFrame());
+                                    }
+                                });
+                            if (result == JFileChooser.APPROVE_OPTION) {
+                                tabbedPanel.setSelectedIndex(0);
+                                Path importFile = fileChooser.getSelectedFile().toPath();
+                                boolean hasErrors = false;
+                                try {
+                                    boolean updatePrimaryName = false;
+                                    if (choiceForName == 0) {
+                                        updatePrimaryName = true;
+                                    }
+                                    boolean addNewElements = false;
+                                    if (choiceForReplacing == 0 || choiceForReplacing == 2) {
+                                        addNewElements = true;
+                                    }
+                                    boolean updateExistingElements = false;
+                                    if (choiceForReplacing == 1 || choiceForReplacing == 2) {
+                                        updateExistingElements = true;
+                                    }
+                                    hasErrors = !app.getDBI().doImportIUCN(importFile, updatePrimaryName, addNewElements, updateExistingElements);
+                                }
+                                catch (Exception ex) {
+                                    ex.printStackTrace(System.err);
+                                    hasErrors = true;
+                                }
+                                if (hasErrors) {
+                                    UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                        @Override
+                                        public int showDialog() {
+                                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                                    "Not all of the data could be successfully imported.",
+                                                    "Error Importing IUCN Species Names!", JOptionPane.ERROR_MESSAGE);
+                                            return -1;
+                                        }
+                                    });
+                                }
+                            }
+                            setMessage("Done with the IUCN Import");
+                            tabHomeComponentShown(null);
+                            return null;
+                        }
+                    });
+                }
+            }
+        }
+    }//GEN-LAST:event_btnImportIUCNListActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -2734,6 +2852,7 @@ public final class WildLogView extends JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu advancedMenu;
     private javax.swing.JMenu backupMenu;
+    private javax.swing.JMenuItem btnImportIUCNList;
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;
@@ -2754,6 +2873,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator10;
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
+    private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;

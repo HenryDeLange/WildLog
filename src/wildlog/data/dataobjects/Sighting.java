@@ -136,7 +136,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
         entry.setDescription(toHTML(false, true, inApp, UtilsHTMLExportTypes.ForKML, null));
         Element element = inApp.getDBI().find(new Element(elementName));
         if (element.getType() != null) {
-            if (element.getType().equals(ElementType.ANIMAL)) {
+            if (element.getType().equals(ElementType.MAMMAL)) {
                 if (element.getFeedingClass() == null) {
                     entry.setStyle("animalOtherStyle");
                 }
