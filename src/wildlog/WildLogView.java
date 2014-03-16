@@ -2589,9 +2589,12 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(10);
                         setMessage("Import WildNote Sync " + getProgress() + "%");
                         // Setup the Visit
-                        if (app.getDBI().find(new Visit(WildLogConstants.WILDNOTE_VISIT_NAME, WildLogConstants.WILDNOTE_LOCATION_NAME)) == null) {
-                            app.getDBI().createOrUpdate(new Visit(WildLogConstants.WILDNOTE_VISIT_NAME, WildLogConstants.WILDNOTE_LOCATION_NAME), null);
+                        Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()),
+                                WildLogConstants.WILDNOTE_LOCATION_NAME);
+                        while (app.getDBI().count(tempVisit) > 0) {
+                            tempVisit = new Visit(tempVisit.getName() + "_wl", tempVisit.getLocationName());
                         }
+                        app.getDBI().createOrUpdate(tempVisit, null);
                         setTaskProgress(15);
                         setMessage("Import WildNote Sync " + getProgress() + "%");
                         // Import the Elements
@@ -2610,18 +2613,23 @@ public final class WildLogView extends JFrame {
                         List<Sighting> listSightings = syncDBI.list(new Sighting());
                         for (int t = 0; t < listSightings.size(); t++) {
                             Sighting sighting = listSightings.get(t);
+                            sighting.setVisitName(tempVisit.getName());
                             sighting.setSightingCounter(0);
                             // Calculate the "auto" fields (sun, moon, etc.)
-                            sighting.setCertainty(Certainty.SURE);
-                            if (sighting.getDate() != null && sighting.getLatitude() != null && sighting.getLongitude() != null
-                                    && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())) {
-                                double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                                double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                                // Sun
-                                sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
-                                // Moon
+                            if (sighting.getCertainty() == null || Certainty.NONE.equals(Certainty.getEnumFromText(sighting.getCertainty().toString()))) {
+                                sighting.setCertainty(Certainty.SURE);
+                            }
+                            if (sighting.getDate() != null) {
+                                if (sighting.getLatitude() != null && sighting.getLongitude() != null
+                                        && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())) {
+                                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                                    // Sun
+                                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                                    // Moon
+                                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                                }
                                 sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                                sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
                             }
                             app.getDBI().createOrUpdate(sighting, false);
                             setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));
@@ -2629,8 +2637,7 @@ public final class WildLogView extends JFrame {
                         }
                         setTaskProgress(95);
                         setMessage("Import WildNote Sync " + getProgress() + "%");
-                        UtilsPanelGenerator.openPanelAsTab(app, WildLogConstants.WILDNOTE_VISIT_NAME,
-                                PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, wildNoteLocation);
+                        UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, wildNoteLocation);
                         setTaskProgress(97);
                         setMessage("Import WildNote Sync " + getProgress() + "%");
                     }

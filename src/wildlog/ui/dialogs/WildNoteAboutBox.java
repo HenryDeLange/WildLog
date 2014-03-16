@@ -77,7 +77,7 @@ public class WildNoteAboutBox extends JDialog {
         developerLabel1.setText("Product Version:");
         developerLabel1.setName("developerLabel1"); // NOI18N
 
-        developerNameLabel1.setText("1.0");
+        developerNameLabel1.setText("1.1");
         developerNameLabel1.setName("developerNameLabel1"); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
