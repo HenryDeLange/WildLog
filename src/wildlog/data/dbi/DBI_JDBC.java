@@ -720,26 +720,26 @@ public abstract class DBI_JDBC implements DBI {
         List<T> tempList = new ArrayList<T>();
         try {
             String sql = listElement;
-            if (inElement.getPrimaryName() != null && !inElement.getPrimaryName().isEmpty() && inElement.getType() == null) {
+            if (inElement.getPrimaryName() != null && inElement.getPrimaryName().length() > 0 && inElement.getType() == null) {
                 sql = sql + " WHERE PRIMARYNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
             }
             else
-            if ((inElement.getPrimaryName() == null || inElement.getPrimaryName().isEmpty()) && inElement.getType() != null) {
+            if ((inElement.getPrimaryName() == null || inElement.getPrimaryName().length() == 0) && inElement.getType() != null) {
                 sql = sql + " WHERE ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, inElement.getType().toString());
             }
             else
-            if (inElement.getPrimaryName() != null && !inElement.getPrimaryName().isEmpty() && inElement.getType() != null) {
+            if (inElement.getPrimaryName() != null && inElement.getPrimaryName().length() > 0 && inElement.getType() != null) {
                 sql = sql + " WHERE PRIMARYNAME = ? AND ELEMENTTYPE = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElement.getPrimaryName()));
                 state.setString(2, inElement.getType().toString());
             }
             else
-            if (inElement.getScientificName() != null && !inElement.getScientificName().isEmpty()) {
+            if (inElement.getScientificName() != null && inElement.getScientificName().length() > 0) {
                 sql = sql + " WHERE SCIENTIFICNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inElement.getScientificName()));
@@ -977,8 +977,7 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inElement.getPrimaryName().equalsIgnoreCase(inOldName)) {
-                List<ElementCore> list = list(new ElementCore(UtilsData.sanitizeString(inElement.getPrimaryName())));
-                if (!list.isEmpty()) {
+                if (count(new ElementCore(UtilsData.sanitizeString(inElement.getPrimaryName()))) > 0) {
                     System.err.println("Trying to save an Element using a name that already exists.... (" + inElement.getPrimaryName() + " | " + inOldName + ")");
                     return false;
                 }
@@ -1059,8 +1058,8 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inLocation.getName().equalsIgnoreCase(inOldName)) {
-                List<LocationCore> list = list(new LocationCore(UtilsData.sanitizeString(inLocation.getName())));
-                if (!list.isEmpty()) {
+                if (count(new LocationCore(UtilsData.sanitizeString(inLocation.getName()))) > 0) {
+                    System.err.println("Trying to save an Location using a name that already exists.... (" + inLocation.getName() + " | " + inOldName + ")");
                     return false;
                 }
             }
@@ -1136,8 +1135,8 @@ public abstract class DBI_JDBC implements DBI {
         try {
             // Make sure the name isn't already used
             if (!inVisit.getName().equalsIgnoreCase(inOldName)) {
-                List<VisitCore> list = list(new VisitCore(UtilsData.sanitizeString(inVisit.getName())));
-                if (!list.isEmpty()) {
+                if (count(new VisitCore(UtilsData.sanitizeString(inVisit.getName()))) > 0) {
+                    System.err.println("Trying to save an Visit using a name that already exists.... (" + inVisit.getName() + " | " + inOldName + ")");
                     return false;
                 }
             }
