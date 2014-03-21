@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -104,7 +105,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Import Workspace");
+        setTitle("Import From An External Workspace");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(720, 650));
         setModal(true);
@@ -141,6 +142,8 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         grpFiles.add(rdbImportAllFiles);
         rdbImportAllFiles.setSelected(true);
         rdbImportAllFiles.setText("Import All Files");
+        rdbImportAllFiles.setToolTipText("Import all files into the current Workspace.");
+        rdbImportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportAllFiles.setFocusPainted(false);
         rdbImportAllFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,6 +153,8 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
 
         grpFiles.add(rdbImportImagesOnly);
         rdbImportImagesOnly.setText("Import Images Only");
+        rdbImportImagesOnly.setToolTipText("Import only image files into the current Workspace.");
+        rdbImportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportImagesOnly.setFocusPainted(false);
         rdbImportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,6 +164,8 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
 
         grpFiles.add(rdbImportNoFiles);
         rdbImportNoFiles.setText("Import No Files");
+        rdbImportNoFiles.setToolTipText("Don't import any files into the current Workspace.");
+        rdbImportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportNoFiles.setFocusPainted(false);
         rdbImportNoFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,12 +178,14 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         grpImages.add(rdbImportOriginalImages);
         rdbImportOriginalImages.setSelected(true);
         rdbImportOriginalImages.setText("Original Images");
-        rdbImportOriginalImages.setToolTipText("Import a copy of the original linked files into the current Workspace.");
+        rdbImportOriginalImages.setToolTipText("Import a copy of the original linked images into the current Workspace.");
+        rdbImportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportOriginalImages.setFocusPainted(false);
 
         grpImages.add(rdbImportThumbnails);
-        rdbImportThumbnails.setText("Thumbnails Only");
+        rdbImportThumbnails.setText("Thumbnail Images");
         rdbImportThumbnails.setToolTipText("The images that are imported will be reduced in size, the original images will not be imported.");
+        rdbImportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbImportThumbnails.setFocusPainted(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -185,7 +194,8 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         grpTreeOrder.add(rdbOrderByLocation);
         rdbOrderByLocation.setSelected(true);
         rdbOrderByLocation.setText("Order by Place");
-        rdbOrderByLocation.setToolTipText("Order the tree nodes by Place, Period and then Creature.");
+        rdbOrderByLocation.setToolTipText("Order the tree nodes by Places, then Periods and lastly Creatures.");
+        rdbOrderByLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbOrderByLocation.setFocusPainted(false);
         rdbOrderByLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -195,7 +205,8 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
 
         grpTreeOrder.add(rdbOrderByElement);
         rdbOrderByElement.setText("Order by Creature");
-        rdbOrderByElement.setToolTipText("Order the tree nodes by Creature, Place and then Period.");
+        rdbOrderByElement.setToolTipText("Order the tree nodes by Creatures, then Places and lastly Periods.");
+        rdbOrderByElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbOrderByElement.setFocusPainted(false);
         rdbOrderByElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -205,7 +216,8 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
 
         grpTreeOrder.add(rdbOrderByDate);
         rdbOrderByDate.setText("Order by Date");
-        rdbOrderByDate.setToolTipText("Order the tree nodes by Year, Month, Day and then Time.");
+        rdbOrderByDate.setToolTipText("Order the tree nodes by Year Month Day and then Time.");
+        rdbOrderByDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbOrderByDate.setEnabled(false);
         rdbOrderByDate.setFocusPainted(false);
 
@@ -222,10 +234,15 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         grpConflicts.add(rdbKeepWorkspace);
         rdbKeepWorkspace.setSelected(true);
         rdbKeepWorkspace.setText("Keep Active Workspace's Copy");
-        rdbKeepWorkspace.setToolTipText("When the active Workspace and the imported Workspace contains records with the same names, then the active Workspace's records will be kept and the imported Workspaces' record will be ignored.");
+        rdbKeepWorkspace.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same names, <br>then the active Workspace's records will be kept and the imported Workspaces' record will be ignored.</html>");
+        rdbKeepWorkspace.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbKeepWorkspace.setFocusPainted(false);
 
         grpConflicts.add(rdbKeepImport);
         rdbKeepImport.setText("Keep Imported Copy");
+        rdbKeepImport.setToolTipText("<html>When the active Workspace and the imported Workspace contains records with the same names, <br>then the imported Workspace's records will be kept and the active Workspaces' record will be overwritten.</html>");
+        rdbKeepImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbKeepImport.setFocusPainted(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -328,6 +345,20 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         // TODO: Improve error handeling and feedback
+        if (txtPrefix.getText() == null || txtPrefix.getText().isEmpty()) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(this, new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                    "<html>It is highly recommended to provide a unique prefix for the imported data, to help provent conflicts."
+                    + "<br/>Are you sure you want to continue?</html>",
+                    "WARNING: Importing Without Prefix", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+                }
+            });
+            if (result != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
         try {
             if (importWorkspace != null) {
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
@@ -396,6 +427,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
             if (dataWrapper.isSelected()) {
                 if (dataWrapper.getDataObject()instanceof Location) {
                     Location importLocation = importDBI.find((Location) dataWrapper.getDataObject());
+                    String originalWildLogFileID = importLocation.getWildLogFileID();
                     importLocation.setName(txtPrefix.getText() + importLocation.getName());
                     Location workspaceLocation = app.getDBI().find(importLocation);
                     if (workspaceLocation == null) {
@@ -407,13 +439,18 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
                         if (rdbKeepImport.isSelected()) {
                             app.getDBI().createOrUpdate(importLocation, importLocation.getName());
                         }
+                        // If the records matching the prefix already exists, then update FileID
+                        // (Because the same entry can be in the tree more than once.)
+                        originalWildLogFileID = importLocation.getWildLogFileID();
                     }
-                    saveFiles(importLocation.getWildLogFileID());
+                    saveFiles(originalWildLogFileID, importLocation.getWildLogFileID());
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Visit) {
                     Visit importVisit = importDBI.find((Visit) dataWrapper.getDataObject());
+                    String originalWildLogFileID = importVisit.getWildLogFileID();
                     importVisit.setName(txtPrefix.getText() + importVisit.getName());
+                    importVisit.setLocationName(txtPrefix.getText() + importVisit.getLocationName());
                     Visit workspaceVisit = app.getDBI().find(importVisit);
                     if (workspaceVisit == null) {
                         // New
@@ -424,12 +461,16 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
                         if (rdbKeepImport.isSelected()) {
                             app.getDBI().createOrUpdate(importVisit, importVisit.getName());
                         }
+                        // If the records matching the prefix already exists, then update FileID
+                        // (Because the same entry can be in the tree more than once.)
+                        originalWildLogFileID = importVisit.getWildLogFileID();
                     }
-                    saveFiles(importVisit.getWildLogFileID());
+                    saveFiles(originalWildLogFileID, importVisit.getWildLogFileID());
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof Element) {
                     Element importElement = importDBI.find((Element) dataWrapper.getDataObject());
+                    String originalWildLogFileID = importElement.getWildLogFileID();
                     importElement.setPrimaryName(txtPrefix.getText() + importElement.getPrimaryName());
                     Element workspaceElement = app.getDBI().find(importElement);
                     if (workspaceElement == null) {
@@ -441,19 +482,23 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
                         if (rdbKeepImport.isSelected()) {
                             app.getDBI().createOrUpdate(importElement, importElement.getPrimaryName());
                         }
+                        // If the records matching the prefix already exists, then update FileID
+                        // (Because the same entry can be in the tree more than once.)
+                        originalWildLogFileID = importElement.getWildLogFileID();
                     }
-                    saveFiles(importElement.getWildLogFileID());
+                    saveFiles(originalWildLogFileID, importElement.getWildLogFileID());
                 }
                 else
                 if (dataWrapper.getDataObject() instanceof SightingWrapper) {
                     Sighting importSighting = importDBI.find(((SightingWrapper) dataWrapper.getDataObject()).getSighting());
+                    String originalWildLogFileID = importSighting.getWildLogFileID();
                     importSighting.setLocationName(txtPrefix.getText() + importSighting.getLocationName());
                     importSighting.setVisitName(txtPrefix.getText() + importSighting.getVisitName());
                     importSighting.setElementName(txtPrefix.getText() + importSighting.getElementName());
                     Sighting workpaceSighting = app.getDBI().find(importSighting);
                     if (workpaceSighting == null) {
                         // New
-                        // Note: The sighting ID needs to be the same for the linked images to work...
+                        // Note: The sighting ID needs to be the same in the new workspace for the linked images to work...
                         app.getDBI().createOrUpdate(importSighting, true);
                     }
                     else {
@@ -461,8 +506,17 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
                         if (rdbKeepImport.isSelected()) {
                             app.getDBI().createOrUpdate(importSighting, false);
                         }
+                        else {
+                            // Make a new copy of the sighting with a new unique ID.
+                            // (Only when a prefix was given, else assume that it is the same sighting.)
+                            if (txtPrefix.getText() != null && !txtPrefix.getText().isEmpty()) {
+                                importSighting.setSightingCounter(0);
+                                app.getDBI().createOrUpdate(importSighting, false);
+                            }
+                            // No need to worry about the sighting being in the tree more than once...
+                        }
                     }
-                    saveFiles(importSighting.getWildLogFileID());
+                    saveFiles(originalWildLogFileID, importSighting.getWildLogFileID());
                 }
             }
             inProgressbarTask.setTaskProgress(2 + (int)(inCounter.counter/(double)inTotalNodes*97));
@@ -475,59 +529,90 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
         }
     }
 
-    private void saveFiles(String inImportWildLogFileID) {
+    private void saveFiles(String inExternalWildLogFileID, String inNewInternalWildLogFileID) {
+        // Die files se folders word nie rename met die prefix nie. Solank die file nie 'n ander een verkeerdelik overwrite nie maak
+        // dit nie saak waar dit op eindig nie. Mens kan die Check and Clean Workspace gebruik om dit na die regte plek skuif te skuif.
+        // Maak net seker die file naam is uniek, of overwrite net die bestaande een op die regte tye.
+        // Die WildLogFile wat gesave word se FileID en DB path en file naam moet ook dan reg wees.
+        // Note: Ek kan WildLogFile.getAbsolutePath() op die import file roep want dit sal relative tot die huidige active workspace wees.
         if (!rdbImportNoFiles.isSelected()) {
-            WildLogFile searchWildLogFile = new WildLogFile(inImportWildLogFileID);
+            WildLogFile searchExternalWildLogFile = new WildLogFile(inExternalWildLogFileID);
             if (rdbImportImagesOnly.isSelected()) {
-                searchWildLogFile.setFileType(WildLogFileType.IMAGE);
+                searchExternalWildLogFile.setFileType(WildLogFileType.IMAGE);
             }
-            List<WildLogFile> listImportFiles = importDBI.list(searchWildLogFile);
-            for (WildLogFile importWildLogFile : listImportFiles) {
-                // Need to compare on the "should be" path, not the actual path, since the files can be in a different folder structures...
-                List<WildLogFile> listWorkspaceFiles = app.getDBI().list(searchWildLogFile);
-                WildLogFile workspaceWildLogFile = null;
-                for (WildLogFile tempWorkspaceWildLogFile : listWorkspaceFiles) {
-                    // Since this method only deals with one (the same) Element, Location, Visit or Sightings at a time and both should
-                    // in theory map to the same folder, thus we only need to check the filenames...
-                    if (importWildLogFile.getRelativePath().getFileName().toString().equals(
-                            tempWorkspaceWildLogFile.getRelativePath().getFileName().toString())) {
-                        workspaceWildLogFile = tempWorkspaceWildLogFile;
-                        break;
+            List<WildLogFile> listExternalFiles = importDBI.list(searchExternalWildLogFile);
+            for (WildLogFile fileToImport : listExternalFiles) {
+                fileToImport.setId(inNewInternalWildLogFileID);
+                if (app.getDBI().count(fileToImport) == 0) {
+                    // Should be safe to copy the file to a similar folder and add the new WildLogFile using the new FileID in the database.
+                    // Copy file
+                    UtilsFileProcessing.copyFile(
+                            importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath(),
+                            fileToImport.getAbsolutePath(), false, true);
+                    // Save DB entry
+                    app.getDBI().createOrUpdate(fileToImport, false);
+                    // Create thumbnails
+                    if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
+                        fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                        fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                        fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                        fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
                     }
-                }
-                if (workspaceWildLogFile == null) {
-                    // New
-                    UtilsFileProcessing.copyFile(importWorkspace.resolve(importWildLogFile.getRelativePath()).toAbsolutePath(),
-                            importWildLogFile.getAbsolutePath(), false, true); // Note: Ek kan getAbsolutePath() op die import file roep want dit sal relative tot die active workspace wees
-                    if (WildLogFileType.IMAGE.equals(importWildLogFile.getFileType())) {
-                        importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                        importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                        importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                        importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
-                    }
-                    app.getDBI().createOrUpdate(importWildLogFile, false);
                 }
                 else {
-                    // Update, only if the option was selected to overwrite the active workspace's entry
-                    if (rdbKeepImport.isSelected()) {
-                        UtilsFileProcessing.copyFile(importWorkspace.resolve(importWildLogFile.getRelativePath()).toAbsolutePath(),
-                                workspaceWildLogFile.getAbsolutePath(), true, true);
+                    // There is already a file in the current workspace in the same folder as the file to be imported.
+                    // If the FileID's are the same and the paths are the same then overwrite it if the radio button was selected.
+                    if (rdbKeepImport.isSelected() && inExternalWildLogFileID.equalsIgnoreCase(inNewInternalWildLogFileID)) {
+                        UtilsFileProcessing.copyFile(
+                                importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath(),
+                                fileToImport.getAbsolutePath(), true, true);
                         // No database update needed, since the physical file has been replaced
-                        // Delete thumbnails
+                        // Delete old thumbnails
                         for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
                             try {
                                 // Note: Ek wil hier net die path kry, nie die thumbnail generate nie (so ek gebruik nie WildLogFile.getAbsoluteThumbnailPath() nie).
-                                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(workspaceWildLogFile, size));
+                                Files.deleteIfExists(UtilsImageProcessing.calculateAbsoluteThumbnailPath(fileToImport, size));
                             }
                             catch (IOException ex) {
                                 ex.printStackTrace(System.err);
                             }
                         }
-                        if (WildLogFileType.IMAGE.equals(importWildLogFile.getFileType())) {
-                            importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                            importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                            importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                            importWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                        // Create new thumbnails
+                        if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
+                            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                            fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                        }
+                    }
+                    else {
+                        // Don't overwrite the file, save a new file and DB record instead if the FileIDs are differnet.
+                        if (!inExternalWildLogFileID.equalsIgnoreCase(inNewInternalWildLogFileID)) {
+                            // Should be safe to import the file to a similar folder and only update the filename and ID in the database.
+                            // Get new filename
+                            Path destinationPath = fileToImport.getAbsolutePath();
+                            while (Files.exists(destinationPath)) {
+                                destinationPath = destinationPath.getParent().toAbsolutePath().resolve("wl_" + destinationPath.getFileName());
+                            }
+                            // Copy file
+                            UtilsFileProcessing.copyFile(
+                                    importWorkspace.resolve(fileToImport.getRelativePath()).toAbsolutePath(),
+                                    destinationPath, false, true);
+                            // Save DB entry
+                            fileToImport.setFilename(destinationPath.getFileName().toString());
+                            fileToImport.setDBFilePath(Paths.get(fileToImport.getDBFilePath()).getParent().resolve(destinationPath.getFileName()).toString());
+                            app.getDBI().createOrUpdate(fileToImport, false);
+                            // Create thumbnails
+                            if (WildLogFileType.IMAGE.equals(fileToImport.getFileType())) {
+                                fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                                fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                                fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                                fileToImport.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                            }
+                        }
+                        else {
+                            // If the IDs are the same and the path is the same and there was no prefix, then assume it's the same file.
+                            // Do nothing...
                         }
                     }
                 }
@@ -614,7 +699,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowClosed
 
     private void loadLocationTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Location> locations = new ArrayList<Location>(importDBI.list(new Location()));
         Map<String, DefaultMutableTreeNode> mapElements;
         Map<String, DefaultMutableTreeNode> mapVisits;
@@ -661,7 +746,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
     }
 
     private void loadElementTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Element> elements = new ArrayList<Element>(importDBI.list(new Element()));
         Map<String, DefaultMutableTreeNode> mapLocations;
         Map<String, DefaultMutableTreeNode> mapVisits;

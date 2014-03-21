@@ -441,6 +441,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        dispose();
     }//GEN-LAST:event_btnExportWorkspaceActionPerformed
 
     private void exportSightings(DataObjectBasicInfo inDataObjectBasicInfo, List<Sighting> inListSightings, Path inDestinationWorkspace, ProgressbarTask inProgressbarTask) throws Exception {

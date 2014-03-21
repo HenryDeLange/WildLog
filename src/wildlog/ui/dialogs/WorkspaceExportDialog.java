@@ -95,7 +95,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Export Workspace");
+        setTitle("Export To A New Workspace");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon Small.gif")).getImage());
         setMaximumSize(new java.awt.Dimension(720, 650));
         setMinimumSize(new java.awt.Dimension(720, 650));
@@ -128,6 +128,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         grpFiles.add(rdbExportAllFiles);
         rdbExportAllFiles.setSelected(true);
         rdbExportAllFiles.setText("Export All Files");
+        rdbExportAllFiles.setToolTipText("Include all files in the new Workspace.");
+        rdbExportAllFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportAllFiles.setFocusPainted(false);
         rdbExportAllFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,6 +139,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         grpFiles.add(rdbExportImagesOnly);
         rdbExportImagesOnly.setText("Export Images Only");
+        rdbExportImagesOnly.setToolTipText("Include only image files in the new Workspace.");
+        rdbExportImagesOnly.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportImagesOnly.setFocusPainted(false);
         rdbExportImagesOnly.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,6 +150,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         grpFiles.add(rdbExportNoFiles);
         rdbExportNoFiles.setText("Export No Files");
+        rdbExportNoFiles.setToolTipText("Don't include any files in the new Workspace.");
+        rdbExportNoFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportNoFiles.setFocusPainted(false);
         rdbExportNoFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,23 +165,29 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         rdbExportOriginalImages.setSelected(true);
         rdbExportOriginalImages.setText("Original Images");
         rdbExportOriginalImages.setToolTipText("The new Workspace will contain a copy of all the linked files.");
+        rdbExportOriginalImages.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportOriginalImages.setFocusPainted(false);
 
         grpImages.add(rdbExportThumbnails);
-        rdbExportThumbnails.setText("Thumbnails Only");
+        rdbExportThumbnails.setText("Thumbnail Images");
         rdbExportThumbnails.setToolTipText("The images in the new Workspace will be reduced in size, the originals images will not be exported.");
+        rdbExportThumbnails.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbExportThumbnails.setFocusPainted(false);
 
-        chkReduceGPS.setText("Reduced GPS Accuracy");
+        chkReduceGPS.setText("Reduce GPS Accuracy");
         chkReduceGPS.setToolTipText("If selected all GPS points accuracy will be reduced to degrees and minutes, no seconds.");
+        chkReduceGPS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkReduceGPS.setFocusPainted(false);
 
         chkRemoveDescriptions.setText("Remove Descriptions");
         chkRemoveDescriptions.setToolTipText("If selected the description fields won't be exported.");
+        chkRemoveDescriptions.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         chkRemoveDescriptions.setFocusPainted(false);
 
         chkRemoveTime.setText("Remove Time");
         chkRemoveTime.setToolTipText("If selected Observations' Time won't be exported, but the Sun and Moon Phase data will still be exported.");
+        chkRemoveTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkRemoveTime.setFocusPainted(false);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Sort Order:");
@@ -183,7 +195,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         grpTreeOrder.add(rdbOrderByLocation);
         rdbOrderByLocation.setSelected(true);
         rdbOrderByLocation.setText("Order by Place");
-        rdbOrderByLocation.setToolTipText("Order the tree nodes by Place, Period and then Creature.");
+        rdbOrderByLocation.setToolTipText("Order the tree nodes by Places, then Periods and then lastly Creatures.");
+        rdbOrderByLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbOrderByLocation.setFocusPainted(false);
         rdbOrderByLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,7 +206,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         grpTreeOrder.add(rdbOrderByElement);
         rdbOrderByElement.setText("Order by Creature");
-        rdbOrderByElement.setToolTipText("Order the tree nodes by Creature, Place and then Period.");
+        rdbOrderByElement.setToolTipText("Order the tree nodes by Creatures, then Places and lastly Periods.");
+        rdbOrderByElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbOrderByElement.setFocusPainted(false);
         rdbOrderByElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -203,7 +217,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         grpTreeOrder.add(rdbOrderByDate);
         rdbOrderByDate.setText("Order by Date");
-        rdbOrderByDate.setToolTipText("Order the tree nodes by Year, Month, Day and then Time.");
+        rdbOrderByDate.setToolTipText("Order the tree nodes by Year Month Day and then Time.");
+        rdbOrderByDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         rdbOrderByDate.setEnabled(false);
         rdbOrderByDate.setFocusPainted(false);
 
@@ -214,7 +229,9 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
         jCheckBox1.setText("Only First Observation At A Place");
         jCheckBox1.setToolTipText("Export only the first Observation of each Creature at a Place.");
+        jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jCheckBox1.setEnabled(false);
+        jCheckBox1.setFocusPainted(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -302,7 +319,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 .addGap(2, 2, 2)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
 
@@ -583,7 +600,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_rdbOrderByElementActionPerformed
 
     private void loadLocationTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
         Map<String, DefaultMutableTreeNode> mapElements;
         Map<String, DefaultMutableTreeNode> mapVisits;
@@ -630,7 +647,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     }
 
     private void loadElementTree() {
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
         List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
         Map<String, DefaultMutableTreeNode> mapLocations;
         Map<String, DefaultMutableTreeNode> mapVisits;
