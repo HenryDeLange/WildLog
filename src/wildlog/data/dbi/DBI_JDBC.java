@@ -380,10 +380,16 @@ public abstract class DBI_JDBC implements DBI {
         int count = 0;
         try {
             String sql = countFile;
-            if (inWildLogFile.getId() != null && inWildLogFile.getId().length() > 0) {
+            if (inWildLogFile.getDBFilePath() != null) {
+                sql = sql + " WHERE ORIGINALPATH = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getDBFilePath()));
+            }
+            else
+            if (inWildLogFile.getId() != null) {
                 sql = sql + " WHERE ID = ?";
                 state = conn.prepareStatement(sql);
-                state.setString(1, inWildLogFile.getId());
+                state.setString(1, UtilsData.sanitizeString(inWildLogFile.getId()));
             }
             else {
                 state = conn.prepareStatement(sql);

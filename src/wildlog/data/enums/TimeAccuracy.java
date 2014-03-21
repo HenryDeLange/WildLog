@@ -23,6 +23,7 @@ public enum TimeAccuracy {
         if (inText == null) inText = "";
         if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
         if (inText.equalsIgnoreCase(EDUCATED_GUESS.text)) return EDUCATED_GUESS;
+        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
         if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
         if (inText.equalsIgnoreCase(NONE.text)) return NONE;
         return NONE;
