@@ -96,7 +96,12 @@ public final class UtilsConcurency {
                     popup.add(new Label("  Busy processing. Please wait..."));
                     popup.setMinimumSize(new Dimension(250, 100));
                     popup.pack();
-                    UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), popup);
+                    if (inParent instanceof JDialog) {
+                        UtilsDialog.setDialogToCenter(inParent, popup);
+                    }
+                    else {
+                        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), popup);
+                    }
                     popup.setVisible(true);
                     // Continue trying to finish the work
                     final ResultWrapper resultWrapper = new ResultWrapper(true);

@@ -1358,7 +1358,8 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     }
                 }
                 // Setup Sun and Moon
-                if (ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay()) || sighting.getMoonPhase() < 0
+                if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())
+                        || sighting.getMoonPhase() < 0 || sighting.getMoonlight() == null
                         || Moonlight.NONE.equals(sighting.getMoonlight()) || Moonlight.UNKNOWN.equals(sighting.getMoonlight())) {
                     btnCalculateSunAndMoonActionPerformed(null);
                 }
