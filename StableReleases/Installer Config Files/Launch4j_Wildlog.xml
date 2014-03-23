@@ -17,8 +17,8 @@
     <path>jre7</path>
     <minVersion>1.7.0</minVersion>
     <maxVersion></maxVersion>
-    <jdkPreference>jdkOnly</jdkPreference>
-    <opt>-Xms128m</opt>
+    <jdkPreference>preferJre</jdkPreference>
+    <opt>-Xms256m -Xmx1024m</opt>
   </jre>
   <splash>
     <file>C:\Users\Henry\Documents\NetBeansProjects\WildLog\StableReleases\Installer Config Files\misc files\LaunchScreen.bmp</file>

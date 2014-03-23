@@ -703,7 +703,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                             sightingWrapper.setTimeOfDay(AstroCalculator.getSunCategory(sightingWrapper.getDate(), latitude, longitude));
                                         }
                                         // Moon
-                                        if (Moonlight.NONE.equals(sightingWrapper.getMoonlight()) || Moonlight.UNKNOWN.equals(sightingWrapper.getMoonlight())) {
+                                        if (sightingWrapper.getMoonlight() == null || Moonlight.NONE.equals(sightingWrapper.getMoonlight()) || Moonlight.UNKNOWN.equals(sightingWrapper.getMoonlight())) {
                                             sightingWrapper.setMoonlight(AstroCalculator.getMoonlight(sightingWrapper.getDate(), latitude, longitude));
                                         }
                                     }
