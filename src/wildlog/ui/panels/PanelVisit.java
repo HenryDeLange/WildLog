@@ -13,6 +13,8 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -41,8 +43,8 @@ import wildlog.utils.WildLogPaths;
 
 
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
+    private final WildLogApp app;
     private int imageIndex;
-    private WildLogApp app;
     private Visit visit;
     private Visit lastSavedVisit;
     private Location locationForVisit;
@@ -107,6 +109,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         //if (sighting.getFotos() != null && sighting.getFotos().size() > 0) setupFotos(0);
         // Setup the table
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
+        UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
 
         // setup the file dropping
         if (!isPopup) {
@@ -208,6 +211,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     @Override
     public void doTheRefresh(Object inIndicator) {
         formComponentShown(null);
+        // If no row is selected, try to select the saved row (most likely a new entry)
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (tblSightings.getSelectedRowCount() == 0) {
+                    UtilsTableGenerator.setupPreviousRowSelection(tblSightings, 
+                            new String[]{Long.toString(((PanelSighting)inIndicator).getSighting().getSightingCounter())}, 6);
+                }
+            }
+        });
     }
 
     private void refreshSightingInfo() {
@@ -1156,7 +1169,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void btnEditSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditSightingActionPerformed
         if (!isPopup) {
             if (sighting != null) {
-                tblSightings.clearSelection();
+//                tblSightings.clearSelection();
                 PanelSighting dialog = new PanelSighting(
                         app, app.getMainFrame(), "Edit an Existing Observation",
                         sighting, locationForVisit, visit, app.getDBI().find(new Element(sighting.getElementName())), this, false, false, false);
@@ -1249,6 +1262,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void tblSightingsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             evt.consume();
+        }
+        else
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            btnDeleteSightingActionPerformed(null);
         }
     }//GEN-LAST:event_tblSightingsKeyPressed
 

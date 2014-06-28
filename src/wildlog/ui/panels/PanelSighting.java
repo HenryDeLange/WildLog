@@ -1220,13 +1220,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 if (app.getWildLogOptions().isEnableSounds()) {
                     Toolkit.getDefaultToolkit().beep();
                 }
-                // (Evt is null if the Image Upload calls save method and the dialog shouldn't be closed)
-                // Premare to close dialog
-                if (panelToRefresh != null) {
-                    panelToRefresh.doTheRefresh(this);
-                }
                 // Close the dialog - (Evt is null if the Image Upload, etc. methods call this method, then we don't want to close.)
                 if (evt != null) {
+                    if (panelToRefresh != null) {
+                        panelToRefresh.doTheRefresh(this);
+                    }
                     closeThisDialog();
                 }
             }
@@ -1347,12 +1345,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                     for (ComparableFile comparableFile : compareFileList) {
                         if (WildLogFileExtentions.Images.isJPG(comparableFile.originalFile.toPath().toAbsolutePath())) {
                             DataObjectWithGPS temp = UtilsImageProcessing.getExifGpsFromJpeg(comparableFile.originalFile.toPath().toAbsolutePath());
-                            if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
-                                    && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
-                                UtilsGps.copyGpsBetweenDOs(sighting, temp);
-                                txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
-                                txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
-                                break;
+                            if (temp != null) {
+                                if (!UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(temp))
+                                        && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(temp))) {
+                                    UtilsGps.copyGpsBetweenDOs(sighting, temp);
+                                    txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
+                                    txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1784,7 +1784,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             }
         }
     }
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddNewElement;

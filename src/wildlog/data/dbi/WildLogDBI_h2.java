@@ -44,6 +44,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
      * WARNING: Only use this constructor if you want to connect to a second H2 DB instance. The default
      * workspace database should use a constructor that does NOT specify the connection URL.
      * @param inConnectionURL
+     * @param inCreateDefaultRecords
+     * @throws java.lang.Exception
      */
     public WildLogDBI_h2(String inConnectionURL, boolean inCreateDefaultRecords) throws Exception {
         super();
@@ -505,6 +507,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     }
                     else
                     if (results.getInt("VERSION") == 4) {
+                        doUpdate5();
+                    }
+                    else
+                    if (results.getInt("VERSION") == 5) {
                         fullyUpdated = true;
                         break;
                     }
@@ -739,6 +745,28 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             closeStatementAndResultset(state, results);
         }
         System.out.println("Finished update 4");
+    }
+    
+    private void doUpdate5() {
+        System.out.println("Starting update 5");
+        // This update adds new wildlog options
+        Statement state = null;
+        ResultSet results = null;
+        try {
+            state = conn.createStatement();
+            // Make changes to WildLog Options
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
+            // Update the version number
+            state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
+        }
+        catch (SQLException ex) {
+            printSQLException(ex);
+        }
+        finally {
+            closeStatementAndResultset(state, results);
+        }
+        System.out.println("Finished update 5");
     }
 
 }

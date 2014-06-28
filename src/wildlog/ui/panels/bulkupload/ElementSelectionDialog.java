@@ -26,7 +26,7 @@ import wildlog.utils.UtilsImageProcessing;
 
 public class ElementSelectionDialog extends JDialog {
     private static String previousElement = "";
-    private WildLogApp app;
+    private final WildLogApp app;
     private boolean selectionMade = false;
     private String selectedElementName;
     private Element searchElement;
@@ -38,8 +38,7 @@ public class ElementSelectionDialog extends JDialog {
         initComponents();
         // Setup the escape key
         final ElementSelectionDialog thisHandler = this;
-        thisHandler.getRootPane().registerKeyboardAction(
-                new ActionListener() {
+        thisHandler.getRootPane().registerKeyboardAction(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         thisHandler.setSelectionMade(false);

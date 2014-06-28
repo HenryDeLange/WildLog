@@ -1,5 +1,9 @@
 package wildlog.ui.helpers;
 
+import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -13,11 +17,14 @@ import java.util.concurrent.Executors;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -37,6 +44,7 @@ import wildlog.ui.helpers.cellrenderers.TextCellRenderer;
 import wildlog.ui.helpers.cellrenderers.WildLogDataModelWrapperCellRenderer;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModel;
 import wildlog.ui.helpers.cellrenderers.WildLogTableModelDataWrapper;
+import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -48,18 +56,27 @@ public final class UtilsTableGenerator {
     private UtilsTableGenerator() {
     }
 
-    public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+    public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final Element inElement, String inFilterText) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                String additionalNameColumn;
+                if (WildLogApp.getApplication().getWildLogOptions().isUseScientificNames()) {
+                    additionalNameColumn = "Scientific Name";
+                }
+                else {
+                    additionalNameColumn = "Other Name";
+                }
                 // Setup column names
                 String[] columnNames = {
                                         "",
                                         "Creature Name",
-                                        "Other Name",
+                                        additionalNameColumn,
                                         "Type",
                                         "Class",
                                         "Wish Rating",
@@ -80,7 +97,12 @@ public final class UtilsTableGenerator {
                                 Element tempElement = listElements.get(finalT);
                                 data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
                                 data[finalT][i++] = tempElement.getPrimaryName();
-                                data[finalT][i++] = tempElement.getOtherName();
+                                if (WildLogApp.getApplication().getWildLogOptions().isUseScientificNames()) {
+                                    data[finalT][i++] = tempElement.getScientificName();
+                                }
+                                else {
+                                    data[finalT][i++] = tempElement.getOtherName();
+                                }
                                 data[finalT][i++] = tempElement.getType();
                                 data[finalT][i++] = tempElement.getFeedingClass();
                                 data[finalT][i++] = tempElement.getWishListRating();
@@ -89,6 +111,7 @@ public final class UtilsTableGenerator {
                             }
                         });
                     }
+                    // Call the actions and wait for all to finish
                     try {
                         executorService.invokeAll(listCallables);
                     }
@@ -99,14 +122,21 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(220);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(240);
+                    inTable.getColumnModel().getColumn(2).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(170);
+                    inTable.getColumnModel().getColumn(2).setMaxWidth(320);
+                    inTable.getColumnModel().getColumn(3).setMinWidth(60);
                     inTable.getColumnModel().getColumn(3).setPreferredWidth(70);
                     inTable.getColumnModel().getColumn(3).setMaxWidth(80);
+                    inTable.getColumnModel().getColumn(4).setMinWidth(90);
                     inTable.getColumnModel().getColumn(4).setPreferredWidth(100);
                     inTable.getColumnModel().getColumn(4).setMaxWidth(110);
+                    inTable.getColumnModel().getColumn(5).setMinWidth(140);
                     inTable.getColumnModel().getColumn(5).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(5).setMaxWidth(155);
+                    inTable.getColumnModel().getColumn(6).setMinWidth(80);
                     inTable.getColumnModel().getColumn(6).setPreferredWidth(90);
                     inTable.getColumnModel().getColumn(6).setMaxWidth(95);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -114,6 +144,15 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
+                    String[] oldSelection = UtilsTableGenerator.getSelectedRowIDs(inTable, 1);
+                    TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>)inTable.getRowSorter();
+                    if (sorter == null) {
+                        sorter = new TableRowSorter<>(inTable.getModel());
+                    }
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + inFilterText, 1));
+                    inTable.setRowSorter(sorter);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -123,6 +162,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupElementTableSmall(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -165,7 +206,9 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(140);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(50);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(60);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(85);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -173,6 +216,8 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -182,6 +227,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupLocationTableLarge(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -232,13 +279,18 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(180);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(90);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(100);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(120);
+                    inTable.getColumnModel().getColumn(3).setMinWidth(90);
                     inTable.getColumnModel().getColumn(3).setPreferredWidth(100);
                     inTable.getColumnModel().getColumn(3).setMaxWidth(120);
+                    inTable.getColumnModel().getColumn(4).setMinWidth(100);
                     inTable.getColumnModel().getColumn(4).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(4).setMaxWidth(125);
+                    inTable.getColumnModel().getColumn(5).setMinWidth(100);
                     inTable.getColumnModel().getColumn(5).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(5).setMaxWidth(125);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -246,6 +298,8 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -255,6 +309,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupVisitTableLarge(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -316,15 +372,21 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(110);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(130);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(75);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(95);
+                    inTable.getColumnModel().getColumn(3).setMinWidth(75);
                     inTable.getColumnModel().getColumn(3).setPreferredWidth(85);
                     inTable.getColumnModel().getColumn(3).setMaxWidth(95);
+                    inTable.getColumnModel().getColumn(4).setMinWidth(70);
                     inTable.getColumnModel().getColumn(4).setPreferredWidth(80);
                     inTable.getColumnModel().getColumn(4).setMaxWidth(125);
+                    inTable.getColumnModel().getColumn(5).setMinWidth(65);
                     inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
                     inTable.getColumnModel().getColumn(5).setMaxWidth(85);
+                    inTable.getColumnModel().getColumn(6).setMinWidth(60);
                     inTable.getColumnModel().getColumn(6).setPreferredWidth(70);
                     inTable.getColumnModel().getColumn(6).setMaxWidth(80);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -332,6 +394,8 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 2, 3, 1, SortOrder.DESCENDING, SortOrder.DESCENDING, SortOrder.DESCENDING);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
@@ -341,6 +405,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupVisitTableSmallWithSightings(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -388,9 +454,12 @@ public final class UtilsTableGenerator {
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, false);
+                        inTable.getColumnModel().getColumn(1).setMinWidth(75);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(85);
+                        inTable.getColumnModel().getColumn(2).setMinWidth(80);
                         inTable.getColumnModel().getColumn(2).setPreferredWidth(90);
                         inTable.getColumnModel().getColumn(2).setMaxWidth(90);
+                        inTable.getColumnModel().getColumn(3).setMinWidth(35);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(45);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(85);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -398,6 +467,8 @@ public final class UtilsTableGenerator {
                         }
                         // Setup default sorting
                         setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                        // Setup row selection
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
@@ -411,6 +482,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupVisitTableSmallWithType(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -458,9 +531,12 @@ public final class UtilsTableGenerator {
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, false);
+                        inTable.getColumnModel().getColumn(1).setMinWidth(90);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+                        inTable.getColumnModel().getColumn(2).setMinWidth(75);
                         inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
                         inTable.getColumnModel().getColumn(2).setMaxWidth(90);
+                        inTable.getColumnModel().getColumn(3).setMinWidth(45);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(55);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(125);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -468,6 +544,8 @@ public final class UtilsTableGenerator {
                         }
                         // Setup default sorting
                         setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                        // Setup row selection
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Periods"}, 0));
@@ -481,6 +559,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupSightingTableLarge(final WildLogApp inApp, final JTable inTable, final Visit inVisit) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -545,25 +625,34 @@ public final class UtilsTableGenerator {
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
-                        setupRenderersAndThumbnailRows(inTable, false);
+                        setupRenderersAndThumbnailRows(inTable, true);
+                        inTable.getColumnModel().getColumn(1).setMinWidth(100);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
-                        inTable.getColumnModel().getColumn(2).setPreferredWidth(85);
-                        inTable.getColumnModel().getColumn(2).setMaxWidth(95);
-                        inTable.getColumnModel().getColumn(3).setPreferredWidth(85);
-                        inTable.getColumnModel().getColumn(3).setMaxWidth(125);
-                        inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
-                        inTable.getColumnModel().getColumn(4).setMaxWidth(125);
-                        inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(2).setMinWidth(100);
+                        inTable.getColumnModel().getColumn(2).setPreferredWidth(110);
+                        inTable.getColumnModel().getColumn(2).setMaxWidth(115);
+                        inTable.getColumnModel().getColumn(3).setMinWidth(50);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(60);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(105);
+                        inTable.getColumnModel().getColumn(4).setMinWidth(55);
+                        inTable.getColumnModel().getColumn(4).setPreferredWidth(65);
+                        inTable.getColumnModel().getColumn(4).setMaxWidth(115);
+                        inTable.getColumnModel().getColumn(5).setMinWidth(60);
+                        inTable.getColumnModel().getColumn(5).setPreferredWidth(70);
                         inTable.getColumnModel().getColumn(5).setMaxWidth(80);
-                        inTable.getColumnModel().getColumn(6).setPreferredWidth(45);
+                        inTable.getColumnModel().getColumn(6).setMinWidth(25);
+                        inTable.getColumnModel().getColumn(6).setPreferredWidth(35);
                         inTable.getColumnModel().getColumn(6).setMaxWidth(125);
-                        inTable.getColumnModel().getColumn(7).setPreferredWidth(35);
+                        inTable.getColumnModel().getColumn(7).setMinWidth(20);
+                        inTable.getColumnModel().getColumn(7).setPreferredWidth(30);
                         inTable.getColumnModel().getColumn(7).setMaxWidth(35);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
                             inTable.removeColumn(inTable.getColumnModel().getColumn(0));
                         }
                         // Setup default sorting
                         setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                        // Setup row selection
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 6);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
@@ -577,6 +666,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupElementsTableMediumForVisit(final WildLogApp inApp, final JTable inTable, final Visit inVisit) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -632,11 +723,15 @@ public final class UtilsTableGenerator {
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, false);
+                        inTable.getColumnModel().getColumn(1).setMinWidth(90);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                        inTable.getColumnModel().getColumn(2).setMinWidth(70);
                         inTable.getColumnModel().getColumn(2).setPreferredWidth(80);
                         inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+                        inTable.getColumnModel().getColumn(3).setMinWidth(70);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(80);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(105);
+                        inTable.getColumnModel().getColumn(4).setMinWidth(65);
                         inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
                         inTable.getColumnModel().getColumn(4).setMaxWidth(85);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -644,6 +739,8 @@ public final class UtilsTableGenerator {
                         }
                         // Setup default sorting
                         setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                        // Setup row selection
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -657,6 +754,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupElementsTableMediumForLocation(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -712,11 +811,15 @@ public final class UtilsTableGenerator {
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
                         setupRenderersAndThumbnailRows(inTable, false);
+                        inTable.getColumnModel().getColumn(1).setMinWidth(90);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                        inTable.getColumnModel().getColumn(2).setMinWidth(70);
                         inTable.getColumnModel().getColumn(2).setPreferredWidth(80);
                         inTable.getColumnModel().getColumn(2).setMaxWidth(85);
+                        inTable.getColumnModel().getColumn(3).setMinWidth(70);
                         inTable.getColumnModel().getColumn(3).setPreferredWidth(80);
                         inTable.getColumnModel().getColumn(3).setMaxWidth(105);
+                        inTable.getColumnModel().getColumn(4).setMinWidth(65);
                         inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
                         inTable.getColumnModel().getColumn(4).setMaxWidth(85);
                         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -724,6 +827,8 @@ public final class UtilsTableGenerator {
                         }
                         // Setup default sorting
                         setupRowSorter(inTable, 4, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                        // Setup row selection
+                        setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                     }
                     else {
                         inTable.setModel(new DefaultTableModel(new String[]{"No Creatures"}, 0));
@@ -737,6 +842,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupLocationsTableMedium(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -779,7 +886,9 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(105);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(65);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(75);
                     inTable.getColumnModel().getColumn(2).setMaxWidth(85);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -787,6 +896,8 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -796,6 +907,8 @@ public final class UtilsTableGenerator {
     }
 
     public static void setupLocationTableSmall(final WildLogApp inApp, final JTable inTable, final Location inLocation) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -836,12 +949,15 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(105);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
                         inTable.removeColumn(inTable.getColumnModel().getColumn(0));
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 1);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Places"}, 0));
@@ -851,6 +967,15 @@ public final class UtilsTableGenerator {
      }
 
     public static void setupSightingsTableSmall(final WildLogApp inApp, final JTable inTable, final Element inElement) {
+        // Deterimine the row IDs of the previously selected rows.
+        final String[] selectedRowIDs;
+        if (inTable.getModel().getColumnCount() < 4) {
+            // Note: If the location radio button was previously selected the passed in table will not have 4 columns.
+            selectedRowIDs = new String[0];
+        }
+        else {
+            selectedRowIDs = getSelectedRowIDs(inTable, 3);
+        }
         // Setup header
         setupLoadingHeader(inTable);
         // Load the table content
@@ -897,7 +1022,9 @@ public final class UtilsTableGenerator {
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(115);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(135);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(65);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(75);
                     // Hide the field from the view, but I need it for loading the Sighting
                     inTable.removeColumn(inTable.getColumnModel().getColumn(3));
@@ -906,6 +1033,8 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 2, 1, SortOrder.DESCENDING, SortOrder.ASCENDING);
+                    // Setup row selection
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 3);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
@@ -934,6 +1063,44 @@ public final class UtilsTableGenerator {
         tempList.add(new SortKey(inColumn2, inSortOrder2));
         tempList.add(new SortKey(inColumn3, inSortOrder3));
         inTable.getRowSorter().setSortKeys(tempList);
+    }
+    
+    public static void setupPreviousRowSelection(JTable inTable, String[] inSelectedRowIDs, int inCol) {
+        if (inSelectedRowIDs.length > 0) {
+            int found = 0;
+            for (int t = 0; t < inTable.getRowSorter().getViewRowCount(); t++) {
+                for (String selectedRowID : inSelectedRowIDs) {
+                    if (inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), inCol).toString().equals(selectedRowID)) {
+                        inTable.getSelectionModel().addSelectionInterval(t, t);
+                        inTable.scrollRectToVisible(inTable.getCellRect(t, 0, true));
+                        int x;
+                        int y;
+                        if (inTable.getMousePosition() != null) {
+                            x = inTable.getMousePosition().x;
+                            y = inTable.getMousePosition().y;
+                        }
+                        else {
+                            x = inTable.getX();
+                            y = inTable.getY();
+                        }
+                        if (inSelectedRowIDs.length == 1) {
+                            Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+                                    new UtilsUI.GeneratedMouseEvent(inTable, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, x, y, 1, false));
+                        }
+                        found++;
+                        break;
+                    }
+                }
+                if (found == inSelectedRowIDs.length) {
+                    break;
+                }
+            }
+            if (found == 0) {
+                // Need to clear the related tables
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+                        new UtilsUI.GeneratedMouseEvent(inTable, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, -1, -1, 1, false));
+            }
+        }
     }
 
     /**
@@ -1020,6 +1187,46 @@ public final class UtilsTableGenerator {
         ((DefaultTableCellRenderer) inTable.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
         // Setup loading message
         inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
+    }
+    
+    public static void setupColumnResizingListener(JTable inTable, int inCol) {
+        inTable.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (inTable.getColumnModel().getColumnCount() > inCol) {
+                            int otherColumnsMaxSize = 0;
+                            for (int t = 0; t < inTable.getColumnModel().getColumnCount(); t++) {
+                                if (t != inCol) {
+                                    otherColumnsMaxSize = otherColumnsMaxSize + inTable.getColumnModel().getColumn(t).getMaxWidth();
+                                }
+                            }
+                            if (inTable.getWidth() - otherColumnsMaxSize > inTable.getColumnModel().getColumn(inCol).getPreferredWidth()) {
+                                inTable.getColumnModel().getColumn(inCol).setMaxWidth(inTable.getWidth() - otherColumnsMaxSize);
+                            }
+                            else {
+                                inTable.getColumnModel().getColumn(inCol).setMaxWidth(inTable.getColumnModel().getColumn(inCol).getPreferredWidth() + inTable.getWidth()/4);
+                            }
+                            int[] selectedRows = inTable.getSelectedRows();
+                            ((DefaultTableModel) inTable.getModel()).fireTableDataChanged();
+                            for (int row : selectedRows) {
+                                inTable.getSelectionModel().addSelectionInterval(row, row);
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    public static String[] getSelectedRowIDs(JTable inTable, int inCol) {
+        String[] selectedRowIDs = new String[inTable.getSelectedRowCount()];
+        for (int t = 0; t < inTable.getSelectedRowCount(); t++) {
+            selectedRowIDs[t] = inTable.getModel().getValueAt(inTable.convertRowIndexToModel(inTable.getSelectedRows()[t]), inCol).toString();
+        }
+        return selectedRowIDs;
     }
 
 }

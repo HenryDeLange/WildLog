@@ -110,13 +110,13 @@ import wildlog.utils.WildLogSystemImages;
  * The application's main frame.
  */
 public final class WildLogView extends JFrame {
-    private WildLogApp app;
-    private PanelTabBrowse panelTabBrowse;
+    private final WildLogApp app;
     private final Timer messageTimer;
     private final Timer busyIconTimer;
     private final Icon idleIcon;
     private final Icon[] busyIcons = new Icon[15];
     private int busyIconIndex = 0;
+    private PanelTabBrowse panelTabBrowse;
 
     public WildLogView(WildLogApp inApp) {
         app = inApp;
@@ -269,9 +269,12 @@ public final class WildLogView extends JFrame {
         lblCreatures = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
-        lblWorkspace = new javax.swing.JLabel();
+        lblWorkspaceName = new javax.swing.JLabel();
+        lblWorkspacePath = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jLabel8 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
         tabBrowse = new javax.swing.JPanel();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
@@ -283,6 +286,8 @@ public final class WildLogView extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
+        mnuChangeWorkspaceName = new javax.swing.JMenuItem();
+        jSeparator14 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
         mnuCreateWorkspaceMenuItem = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
@@ -340,13 +345,14 @@ public final class WildLogView extends JFrame {
         chkMnuUseIconTables = new javax.swing.JCheckBoxMenuItem();
         chkMnuBrowseWithThumbnails = new javax.swing.JCheckBoxMenuItem();
         mnuOther = new javax.swing.JMenu();
+        chkMnuUseScienteficName = new javax.swing.JCheckBoxMenuItem();
         chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
         javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
         mnuAboutWildNote = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("WildLog v4.1");
+        setTitle(app.getWildLogOptions().getWorkspaceName() + " -  WildLog v4.1.1");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
@@ -385,7 +391,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.1");
+        jLabel12.setText("version 4.1.1");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
@@ -421,11 +427,17 @@ public final class WildLogView extends JFrame {
         jLabel5.setText("http://www.mywild.co.za");
         jLabel5.setName("jLabel5"); // NOI18N
 
-        lblWorkspace.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        lblWorkspace.setForeground(new java.awt.Color(74, 87, 60));
-        lblWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblWorkspace.setText("Active Workspace Folder: " + WildLogPaths.getFullWorkspacePrefix().toString());
-        lblWorkspace.setName("lblWorkspace"); // NOI18N
+        lblWorkspaceName.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        lblWorkspaceName.setForeground(new java.awt.Color(110, 135, 82));
+        lblWorkspaceName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblWorkspaceName.setText("...Workspace Name...");
+        lblWorkspaceName.setName("lblWorkspaceName"); // NOI18N
+
+        lblWorkspacePath.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        lblWorkspacePath.setForeground(new java.awt.Color(74, 87, 60));
+        lblWorkspacePath.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblWorkspacePath.setText(WildLogPaths.getFullWorkspacePrefix().toString());
+        lblWorkspacePath.setName("lblWorkspacePath"); // NOI18N
 
         jSeparator6.setBackground(new java.awt.Color(163, 175, 148));
         jSeparator6.setForeground(new java.awt.Color(216, 227, 201));
@@ -436,6 +448,18 @@ public final class WildLogView extends JFrame {
         jLabel8.setText("support@mywild.co.za");
         jLabel8.setName("jLabel8"); // NOI18N
 
+        jLabel22.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(103, 124, 79));
+        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel22.setText("<html><u>Active Workspace Name:</u></html>");
+        jLabel22.setName("jLabel22"); // NOI18N
+
+        jLabel21.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(74, 87, 60));
+        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel21.setText("<html><u>Active Workspace Folder:</u></html>");
+        jLabel21.setName("jLabel21"); // NOI18N
+
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
@@ -443,44 +467,49 @@ public final class WildLogView extends JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                 .addContainerGap(846, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+            .addGroup(tabHomeLayout.createSequentialGroup()
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(tabHomeLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addComponent(jLabel11)
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel12))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                        .addGap(134, 134, 134)
+                        .addComponent(lblLocations)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblVisits)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblCreatures)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblSightings))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblWorkspacePath, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(tabHomeLayout.createSequentialGroup()
+                                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel22)
+                                    .addComponent(jLabel21)
+                                    .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(160, 160, 160))
+            .addGroup(tabHomeLayout.createSequentialGroup()
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(tabHomeLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel8))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
-                        .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
-                                .addGap(110, 110, 110)
-                                .addComponent(jLabel11)
-                                .addGap(16, 16, 16)
-                                .addComponent(jLabel12))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
-                                .addGap(134, 134, 134)
-                                .addComponent(lblLocations)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblVisits)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblCreatures)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblSightings))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 455, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, tabHomeLayout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(lblWorkspace, javax.swing.GroupLayout.PREFERRED_SIZE, 870, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel8)))
                 .addContainerGap())
         );
         tabHomeLayout.setVerticalGroup(
@@ -510,10 +539,18 @@ public final class WildLogView extends JFrame {
                     .addComponent(lblCreatures))
                 .addGap(11, 11, 11)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(2, 2, 2)
-                .addComponent(lblWorkspace)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
+                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tabHomeLayout.createSequentialGroup()
+                        .addComponent(jLabel22)
+                        .addGap(5, 5, 5)
+                        .addComponent(lblWorkspaceName)
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel21)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblWorkspacePath)
+                        .addGap(40, 40, 40))))
         );
 
         tabbedPanel.addTab("Home", tabHome);
@@ -583,6 +620,20 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
+
+        mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuChangeWorkspaceName.setText("Change Active Workspace Name");
+        mnuChangeWorkspaceName.setToolTipText("Change the name associated with this Workspace.");
+        mnuChangeWorkspaceName.setName("mnuChangeWorkspaceName"); // NOI18N
+        mnuChangeWorkspaceName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuChangeWorkspaceNameActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuChangeWorkspaceName);
+
+        jSeparator14.setName("jSeparator14"); // NOI18N
+        workspaceMenu.add(jSeparator14);
 
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceMenuItem.setText("Switch Active Workspace");
@@ -1051,6 +1102,17 @@ public final class WildLogView extends JFrame {
         mnuOther.setText("Other Settings");
         mnuOther.setName("mnuOther"); // NOI18N
 
+        chkMnuUseScienteficName.setSelected(true);
+        chkMnuUseScienteficName.setText("Use Scientific Name On Tables");
+        chkMnuUseScienteficName.setToolTipText("Select this option to show the Scientific Name for Creatures in the tables instead of the Other Name.");
+        chkMnuUseScienteficName.setName("chkMnuUseScienteficName"); // NOI18N
+        chkMnuUseScienteficName.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                chkMnuUseScienteficNameItemStateChanged(evt);
+            }
+        });
+        mnuOther.add(chkMnuUseScienteficName);
+
         chkMnuEnableSounds.setSelected(app.getWildLogOptions().isEnableSounds());
         chkMnuEnableSounds.setText("Enable Beep Sounds");
         chkMnuEnableSounds.setToolTipText("Select this option to enable the application to play a beep sounds in response to user input.");
@@ -1101,12 +1163,13 @@ public final class WildLogView extends JFrame {
         lblVisits.setText("Periods: " + app.getDBI().count(new Visit()));
         lblSightings.setText("Observations: " + app.getDBI().count(new Sighting()));
         lblCreatures.setText("Creatures: " + app.getDBI().count(new Element()));
+        lblWorkspaceName.setText(app.getWildLogOptions().getWorkspaceName());
     }//GEN-LAST:event_tabHomeComponentShown
 
     private void chkMnuUseWMSItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseWMSItemStateChanged
         WildLogOptions options = app.getWildLogOptions();
         options.setIsOnlinemapTheDefault(chkMnuUseWMS.isSelected());
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_chkMnuUseWMSItemStateChanged
 
     private void mnuMapStartMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMapStartMenuItemActionPerformed
@@ -1137,7 +1200,7 @@ public final class WildLogView extends JFrame {
                 // Do Nothing
             }
         }
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_mnuMapStartMenuItemActionPerformed
 
     private void mnuExifMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExifMenuItemActionPerformed
@@ -1184,7 +1247,7 @@ public final class WildLogView extends JFrame {
                 // Do Nothing
             }
         }
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_mnuSetSlideshowSizeActionPerformed
 
     private void mnuSetSlideshowSpeedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSetSlideshowSpeedActionPerformed
@@ -1202,7 +1265,7 @@ public final class WildLogView extends JFrame {
                 // Do Nothing
             }
         }
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_mnuSetSlideshowSpeedActionPerformed
 
     private void mnuGPSInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuGPSInputActionPerformed
@@ -1233,7 +1296,7 @@ public final class WildLogView extends JFrame {
         if (lonOption != JOptionPane.CLOSED_OPTION) {
             options.setDefaultInputLongitude(Longitudes.values()[lonOption]);
         }
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_mnuGPSInputActionPerformed
 
     private void mnuMergeElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuMergeElementsActionPerformed
@@ -2734,21 +2797,21 @@ public final class WildLogView extends JFrame {
     private void chkMnuUseIconTablesItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseIconTablesItemStateChanged
         WildLogOptions options = app.getWildLogOptions();
         options.setUseThumbnailTables(chkMnuUseIconTables.isSelected());
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
         tabbedPanel.setSelectedIndex(0);
     }//GEN-LAST:event_chkMnuUseIconTablesItemStateChanged
 
     private void chkMnuBrowseWithThumbnailsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuBrowseWithThumbnailsItemStateChanged
         WildLogOptions options = app.getWildLogOptions();
         options.setUseThumnailBrowsing(chkMnuBrowseWithThumbnails.isSelected());
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
         tabbedPanel.setSelectedIndex(0);
     }//GEN-LAST:event_chkMnuBrowseWithThumbnailsItemStateChanged
 
     private void chkMnuEnableSoundsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuEnableSoundsItemStateChanged
         WildLogOptions options = app.getWildLogOptions();
         options.setEnableSounds(chkMnuEnableSounds.isSelected());
-        app.setWildLogOptions(options);
+        app.setWildLogOptionsAndSave(options);
     }//GEN-LAST:event_chkMnuEnableSoundsItemStateChanged
 
     private void mnuAboutWildNoteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuAboutWildNoteActionPerformed
@@ -2895,6 +2958,35 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_btnImportIUCNListActionPerformed
 
+    private void chkMnuUseScienteficNameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_chkMnuUseScienteficNameItemStateChanged
+        WildLogOptions options = app.getWildLogOptions();
+        options.setUseScientificNames(chkMnuUseScienteficName.isSelected());
+        app.setWildLogOptionsAndSave(options);
+        tabbedPanel.setSelectedIndex(0);
+    }//GEN-LAST:event_chkMnuUseScienteficNameItemStateChanged
+
+    private void mnuChangeWorkspaceNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuChangeWorkspaceNameActionPerformed
+        WildLogOptions options = app.getWildLogOptions();
+        String oldName = options.getWorkspaceName();
+        app.getMainFrame().getGlassPane().setVisible(true);
+        String userInput = JOptionPane.showInputDialog(app.getMainFrame(),
+                "Please specify the new Workspace name:",
+                options.getWorkspaceName());
+        app.getMainFrame().getGlassPane().setVisible(false);
+        if (userInput != null && !userInput.trim().isEmpty()) {
+            options.setWorkspaceName(userInput.trim());
+            if (options.getWorkspaceName().length() > 50) {
+                options.setWorkspaceName(userInput.substring(0, 47) + "...");
+            }
+        }
+        app.setWildLogOptionsAndSave(options);
+        // Refresh the UI
+        if (tabbedPanel.getSelectedIndex() == 0) {
+            tabHomeComponentShown(null);
+        }
+        app.getMainFrame().setTitle(app.getMainFrame().getTitle().replace(oldName, options.getWorkspaceName()));
+    }//GEN-LAST:event_mnuChangeWorkspaceNameActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -2932,6 +3024,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JCheckBoxMenuItem chkMnuBrowseWithThumbnails;
     private javax.swing.JCheckBoxMenuItem chkMnuEnableSounds;
     private javax.swing.JCheckBoxMenuItem chkMnuUseIconTables;
+    private javax.swing.JCheckBoxMenuItem chkMnuUseScienteficName;
     private javax.swing.JCheckBoxMenuItem chkMnuUseWMS;
     private javax.swing.JMenu exportMenu;
     private javax.swing.JMenu externalMenu;
@@ -2941,6 +3034,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel8;
@@ -2950,6 +3045,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator11;
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
+    private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -2962,7 +3058,8 @@ public final class WildLogView extends JFrame {
     private javax.swing.JLabel lblLocations;
     private javax.swing.JLabel lblSightings;
     private javax.swing.JLabel lblVisits;
-    private javax.swing.JLabel lblWorkspace;
+    private javax.swing.JLabel lblWorkspaceName;
+    private javax.swing.JLabel lblWorkspacePath;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenu mappingMenu;
     private javax.swing.JMenuBar menuBar;
@@ -2973,6 +3070,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuCalcDuration;
     private javax.swing.JMenuItem mnuCalcSunMoon;
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
+    private javax.swing.JMenuItem mnuChangeWorkspaceName;
     private javax.swing.JMenuItem mnuCleanWorkspace;
     private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuCreateWorkspaceMenuItem;

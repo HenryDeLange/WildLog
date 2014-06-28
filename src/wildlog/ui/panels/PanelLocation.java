@@ -49,8 +49,8 @@ import wildlog.utils.WildLogPaths;
 
 
 public class PanelLocation extends PanelCanSetupHeader {
+    private final WildLogApp app;
     private int imageIndex;
-    private WildLogApp app;
     private Location locationWL; // Note: "location" is already used in this component... Have problem with getLocation()...
     private Location lastSavedLocation;
     private boolean isPopup = false;
@@ -131,6 +131,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         // Setup the tables
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
+        UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
 
         // setup the file dropping
         if (!isPopup) {
@@ -1200,12 +1201,14 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         txtLatitude.setText(UtilsGps.getLatitudeString(locationWL));
         txtLongitude.setText(UtilsGps.getLongitudeString(locationWL));
-        rdbLocation.setSelected(true);
         if (locationWL.getName() != null) {
             lblNumberOfSightings.setText(Integer.toString(app.getDBI().count(new Sighting(null, locationWL.getName(), null))));
             lblNumberOfVisits.setText(Integer.toString(app.getDBI().count(new Visit(null, locationWL.getName()))));
+            if (rdbLocation.isSelected()) {
+                UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
+            }
+            // Note: If the visit radio button was selected, then setting up the visit table below will create the mouse event
             UtilsTableGenerator.setupVisitTableLarge(app, tblVisit, locationWL);
-            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
         }
         else {
             lblNumberOfSightings.setText("0");
@@ -1288,6 +1291,9 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void rdbLocationItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbLocationItemStateChanged
         lblNumberOfElements.setText("0");
         if (locationWL.getName() != null) {
+            if (evt != null) {
+                tblElement.clearSelection();
+            }
             if (rdbLocation.isSelected()) {
                 UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, locationWL);
             }
@@ -1503,6 +1509,9 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void tblVisitMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseReleased
         if (rdbVisit.isSelected()) {
+            if (!(evt instanceof UtilsUI.GeneratedMouseEvent)) {
+                tblElement.clearSelection();
+            }
             rdbLocationItemStateChanged(null);
         }
     }//GEN-LAST:event_tblVisitMouseReleased

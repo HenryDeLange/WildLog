@@ -1,6 +1,7 @@
 package wildlog.ui.utils;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -15,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
-import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -136,13 +137,14 @@ public final class UtilsUI {
                     y = inTable.getY();
                 }
                 Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-                        new MouseEvent(inTable, MouseEvent.MOUSE_RELEASED, new Date().getTime(),
-                                0, x, y, 1, false));
+                        new GeneratedMouseEvent(inTable, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, x, y, 1, false));
             }
         });
     }
 
     public static void attachKeyListernerToSelectKeyedRows(final JTable inTable) {
+        inTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_HOME, 0), "selectFirstRow");
+        inTable.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(KeyEvent.VK_END, 0), "selectLastRow");
         inTable.addKeyListener(new KeyAdapter() {
             private long lastEvent = 0;
             private String currentWord;
@@ -176,8 +178,7 @@ public final class UtilsUI {
                                 y = inTable.getY();
                             }
                             Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-                                    new MouseEvent(inTable, MouseEvent.MOUSE_RELEASED, new Date().getTime(),
-                                            0, x, y, 1, false));
+                                    new GeneratedMouseEvent(inTable, MouseEvent.MOUSE_RELEASED, System.currentTimeMillis(), 0, x, y, 1, false));
                             break;
                         }
                     }
@@ -313,4 +314,24 @@ public final class UtilsUI {
         return timer;
     }
 
+    /**
+     * This class is used to mark the mouse event that are generated to "fake" the click on the tables (to re-use code that loads the images, etc.)
+     * @see MouseEvent
+     */
+    public static class GeneratedMouseEvent extends MouseEvent {
+
+        public GeneratedMouseEvent(Component source, int id, long when, int modifiers, int x, int y, int clickCount, boolean popupTrigger, int button) {
+            super(source, id, when, modifiers, x, y, clickCount, popupTrigger, button);
+        }
+
+        public GeneratedMouseEvent(Component source, int id, long when, int modifiers, int x, int y, int clickCount, boolean popupTrigger) {
+            super(source, id, when, modifiers, x, y, clickCount, popupTrigger);
+        }
+
+        public GeneratedMouseEvent(Component source, int id, long when, int modifiers, int x, int y, int xAbs, int yAbs, int clickCount, boolean popupTrigger, int button) {
+            super(source, id, when, modifiers, x, y, xAbs, yAbs, clickCount, popupTrigger, button);
+        }
+
+    }
+    
 }

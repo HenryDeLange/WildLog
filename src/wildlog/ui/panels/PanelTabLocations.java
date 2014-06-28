@@ -22,9 +22,9 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class PanelTabLocations extends javax.swing.JPanel {
-    private WildLogApp app;
-    private JTabbedPane tabbedPanel;
-    private Location searchLocation;
+    private final WildLogApp app;
+    private final JTabbedPane tabbedPanel;
+    private final Location searchLocation;
 
     public PanelTabLocations(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
@@ -35,6 +35,10 @@ public class PanelTabLocations extends javax.swing.JPanel {
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
+        // Add listner to auto resize columns.
+        UtilsTableGenerator.setupColumnResizingListener(tblLocation, 1);
+        UtilsTableGenerator.setupColumnResizingListener(tblElement, 1);
+        UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
     }
 
     /**
@@ -267,6 +271,10 @@ public class PanelTabLocations extends javax.swing.JPanel {
 
     private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
         if (tblLocation.getSelectedRowCount() == 1) {
+            if (!(evt instanceof UtilsUI.GeneratedMouseEvent)) {
+                tblVisit.clearSelection();
+                tblElement.clearSelection();
+            }
             // Get Image
             final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
@@ -297,6 +305,10 @@ public class PanelTabLocations extends javax.swing.JPanel {
     private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoLocation_LocTabActionPerformed(null);
+        }
+        else
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            btnDeleteLocationActionPerformed(null);
         }
     }//GEN-LAST:event_tblLocationKeyPressed
 
@@ -429,7 +441,6 @@ public class PanelTabLocations extends javax.swing.JPanel {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, searchLocation);
-        tblLocationMouseReleased(null);
     }//GEN-LAST:event_formComponentShown
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

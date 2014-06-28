@@ -615,15 +615,15 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel57" min="-2" pref="72" max="-2" attributes="0"/>
                           <Component id="jLabel55" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel56" alignment="0" min="-2" pref="80" max="-2" attributes="0"/>
+                          <Component id="jLabel57" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtOtherName" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="txtScienceName" max="32767" attributes="0"/>
+                              <Component id="txtScienceName" pref="196" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -704,7 +704,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel57">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Scientific:"/>
+                <Property name="text" type="java.lang.String" value="Scientific Name:"/>
                 <Property name="name" type="java.lang.String" value="jLabel57" noResource="true"/>
               </Properties>
             </Component>

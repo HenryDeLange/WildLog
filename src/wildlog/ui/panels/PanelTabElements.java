@@ -1,13 +1,21 @@
 package wildlog.ui.panels;
 
 import java.awt.Cursor;
+import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
@@ -23,8 +31,8 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public class PanelTabElements extends javax.swing.JPanel {
-    private WildLogApp app;
-    private JTabbedPane tabbedPanel;
+    private final WildLogApp app;
+    private final JTabbedPane tabbedPanel;
     private Element searchElement;
 
     public PanelTabElements(WildLogApp inApp, JTabbedPane inTabbedPanel) {
@@ -35,6 +43,9 @@ public class PanelTabElements extends javax.swing.JPanel {
         // Add key listeners to table to allow the selection of rows based on key events.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
+        // Add listner to auto resize columns.
+        UtilsTableGenerator.setupColumnResizingListener(tblLocation, 1);
+        UtilsTableGenerator.setupColumnResizingListener(tblElement, 1);
         // Add key listener for textfields to auto search the tables
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
         // Attach clipboard
@@ -144,6 +155,7 @@ public class PanelTabElements extends javax.swing.JPanel {
 
         cmbType.setMaximumRowCount(9);
         cmbType.setModel(new DefaultComboBoxModel(wildlog.data.enums.ElementType.values()));
+        cmbType.setSelectedItem(ElementType.NONE);
         cmbType.setFocusable(false);
         cmbType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -267,6 +279,9 @@ public class PanelTabElements extends javax.swing.JPanel {
 
     private void tblElementMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseReleased
         if (tblElement.getSelectedRowCount() == 1) {
+            if (!(evt instanceof UtilsUI.GeneratedMouseEvent)) {
+                tblLocation.clearSelection();
+            }
             // Get Image
             Element tempElement = app.getDBI().find(new Element((String)tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempElement.getWildLogFileID()));
@@ -294,6 +309,10 @@ public class PanelTabElements extends javax.swing.JPanel {
     private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnGoElementActionPerformed(null);
+        }
+        else
+        if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
+            btnDeleteElementActionPerformed(null);
         }
     }//GEN-LAST:event_tblElementKeyPressed
 
@@ -358,7 +377,7 @@ public class PanelTabElements extends javax.swing.JPanel {
         if (!ElementType.NONE.equals(type)) {
             searchElement.setType(type);
         }
-        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement);
+        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
         txtSearch.setText("");
         tblElementMouseReleased(null);
     }//GEN-LAST:event_cmbTypeActionPerformed
@@ -383,10 +402,7 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        txtSearch.setText("");
-        cmbType.setSelectedItem(ElementType.NONE);
-        // Don't need to load the table again here, since the selecting the combobox (above line) does it already.
-        //UtilTableGenerator.setupElementTableLarge(app, tblElement, searchElement);
+        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
     }//GEN-LAST:event_formComponentShown
 

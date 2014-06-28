@@ -508,7 +508,7 @@ public class WildLogApp extends Application {
         return wildLogOptions;
     }
 
-    public void setWildLogOptions(WildLogOptions inWildLogOptions) {
+    public void setWildLogOptionsAndSave(WildLogOptions inWildLogOptions) {
         wildLogOptions = inWildLogOptions;
         dbi.createOrUpdate(wildLogOptions);
     }

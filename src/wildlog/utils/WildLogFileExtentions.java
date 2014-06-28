@@ -6,7 +6,7 @@ import java.nio.file.Path;
 public class WildLogFileExtentions {
     public static enum Images {
         JPG("jpg"),
-        JPEG("jepg"),
+        JPEG("jpeg"),
         GIF("gif"),
         TIF("tif"),
         TIFF("tiff"),

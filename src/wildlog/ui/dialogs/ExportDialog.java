@@ -2,6 +2,8 @@ package wildlog.ui.dialogs;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -11,6 +13,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dataobjects.interfaces.DataObjectBasicInfo;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.WildLogDBI;
@@ -451,6 +454,10 @@ public class ExportDialog extends JDialog {
             newDBI = new WildLogDBI_h2("jdbc:h2:"
                 + (inDestinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
+            // Set the new workspace name
+            WildLogOptions options = newDBI.find(new WildLogOptions());
+            options.setWorkspaceName("Exported Workspace (" + new SimpleDateFormat("dd MMM yyyy").format(new Date()) + ")");
+            newDBI.createOrUpdate(options);
             inProgressbarTask.setTaskProgress(1);
             inProgressbarTask.setMessage("Exporting Workspace for '" + inDataObjectBasicInfo.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
             // Export Sightings (with linked locations, visits, element)

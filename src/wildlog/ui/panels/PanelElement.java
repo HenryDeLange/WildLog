@@ -52,8 +52,8 @@ import wildlog.utils.WildLogPaths;
 
 
 public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
+    private final WildLogApp app;
     private int imageIndex;
-    private WildLogApp app;
     private Element element;
     private Element lastSavedElement;
     private boolean isPopup = false;
@@ -661,7 +661,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         jLabel2.setText("Reference ID:");
         jLabel2.setName("jLabel2"); // NOI18N
 
-        jLabel57.setText("Scientific:");
+        jLabel57.setText("Scientific Name:");
         jLabel57.setName("jLabel57"); // NOI18N
 
         jLabel55.setText("Primary Name:");
@@ -677,14 +677,14 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             .addGroup(pnlNamesLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel55)
-                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel57))
                 .addGap(10, 10, 10)
                 .addGroup(pnlNamesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtOtherName)
                     .addGroup(pnlNamesLayout.createSequentialGroup()
-                        .addComponent(txtScienceName)
+                        .addComponent(txtScienceName, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -1557,9 +1557,13 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
         }
         setupNumberOfImages();
-        UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
+        if (rdbLocations.isSelected()) {
+            UtilsTableGenerator.setupLocationsTableMedium(app, tblLocation, element);
+        }
+        else {
+            UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element);
+        }
         tblLocation.setSelectionBackground(new Color(67,97,113));
-        rdbLocations.setSelected(true);
         // Wait for the table to finish loading
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -1607,6 +1611,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void rdbSightingsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rdbSightingsItemStateChanged
         lblNumberOfLocations.setText("0");
+        if (evt != null) {
+            tblLocation.clearSelection();
+        }
         if (rdbSightings.isSelected()) {
             if (element.getPrimaryName() != null) {
                 UtilsTableGenerator.setupSightingsTableSmall(app, tblLocation, element);
