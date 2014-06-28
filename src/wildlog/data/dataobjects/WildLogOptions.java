@@ -16,6 +16,8 @@ public class WildLogOptions {
     private boolean useThumbnailTables;
     private boolean useThumnailBrowsing;
     private boolean enableSounds;
+    private boolean useScientificNames;
+    private String workspaceName;
 
 
     public int getDatabaseVersion() {
@@ -104,6 +106,22 @@ public class WildLogOptions {
 
     public void setEnableSounds(boolean inEnableSounds) {
         enableSounds = inEnableSounds;
+    }
+
+    public boolean isUseScientificNames() {
+        return useScientificNames;
+    }
+
+    public void setUseScientificNames(boolean inUseScientificNames) {
+        useScientificNames = inUseScientificNames;
+    }
+
+    public String getWorkspaceName() {
+        return workspaceName;
+    }
+
+    public void setWorkspaceName(String inWorkspaceName) {
+        workspaceName = inWorkspaceName;
     }
 
 }
