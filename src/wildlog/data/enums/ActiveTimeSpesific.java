@@ -2,42 +2,53 @@ package wildlog.data.enums;
 
 
 public enum ActiveTimeSpesific {
-    EARLY_MORNING("Early Morning - Before the sun"),
-    MORNING("Morning - Just after the sun"),
-    MID_MORNING("Mid Morning - Before mid day"),
-    MIDDAY("Mid Day - Heat of the day"),
-    MID_AFTERNOON("Mid Afternoon - After mid day"),
-    AFTERNOON("Afternoon - Before sunset"),
-    LATE_AFTERNOON("Late Afternoon - Just after sunset"),
-    EARLY_NIGHT("Early Night - Afternoon Twilight"),
-    DEEP_NIGHT("Night - Darkness of night"),
-    LATE_NIGHT("Late Night - Morning Twilight"),
-    NONE("");
+    MORNING_TWILIGHT(   "Morning Twilight",     "After dark night and before good light."),
+    MORNING_SUNRISE(    "Morning Sunrise",      "From good light to when sunrise ends."),
+    MORNING_EARLY(      "Early Morning",        "When sunrise ends and before mid morning starts."),
+    MORNING_MID(        "Mid Morning",          "Before mid day."),
+    DAY_MID(            "Mid Day",              "Middel of the day."),
+    AFTERNOON_MID(      "Mid Afternoon",        "After mid day."),
+    AFTERNOON_LATE(     "Late Afternoon",       "After mid afternoon ends and when sunset starts."),
+    AFTERNOON_SUNSET(   "Afternoon Sunset",     "From sunset starts to when good light ends."),
+    AFTERNOON_TWILIGHT( "Afternoon Twilight",   "After good light and before dark night."),
+    NIGHT_EARLY(        "Early Night",          "After distinguishable horizon and before mid night starts."),
+    NIGHT_MID(          "Mid Night",            "Middel of the night."),
+    NIGHT_LATE(         "Late Night",           "After mid night ends and before distinguishable horizon."),
+WEIRD(               "weird",                     "werid"),
+    NONE(               "",                     "Unknown");
 
-    private String text;
+    private final String text;
+    private final String description;
 
-    ActiveTimeSpesific(String inText) {
+    ActiveTimeSpesific(String inText, String inDescription) {
         text = inText;
+        description = inDescription;
     }
 
     @Override
     public String toString() {
+        return text + " (" + description + ")";
+    }
+
+    public String getText() {
         return text;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    // TODO: maak hierdie 'n generic inherited method
     public static ActiveTimeSpesific getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(EARLY_MORNING.text)) return EARLY_MORNING;
-        if (inText.equalsIgnoreCase(MORNING.text)) return MORNING;
-        if (inText.equalsIgnoreCase(MID_MORNING.text)) return MID_MORNING;
-        if (inText.equalsIgnoreCase(MIDDAY.text)) return MIDDAY;
-        if (inText.equalsIgnoreCase(MID_AFTERNOON.text)) return MID_AFTERNOON;
-        if (inText.equalsIgnoreCase(AFTERNOON.text)) return AFTERNOON;
-        if (inText.equalsIgnoreCase(LATE_AFTERNOON.text)) return LATE_AFTERNOON;
-        if (inText.equalsIgnoreCase(EARLY_NIGHT.text)) return EARLY_NIGHT;
-        if (inText.equalsIgnoreCase(DEEP_NIGHT.text)) return DEEP_NIGHT;
-        if (inText.equalsIgnoreCase(LATE_NIGHT.text)) return LATE_NIGHT;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            inText = "";
+        }
+        for (ActiveTimeSpesific activeTimeSpesific : ActiveTimeSpesific.values()) {
+            if (inText.equalsIgnoreCase(activeTimeSpesific.text) 
+                    || inText.equalsIgnoreCase(activeTimeSpesific.description)) {
+                return activeTimeSpesific;
+            }
+        }
         return NONE;
     }
 
