@@ -14,6 +14,10 @@ public class UtilsTime {
     }
 
     public static void modeChanged(JSpinner inSpnHours, JSpinner inSpnMinutes, JComboBox<TimeFormat> inCmbTimeFormat, TimeFormat inPrevTimeFormat) {
+        // NOTE: The 12 o'clock times are inclusive going forwards, because at by at 12:00 we are already a few (mili)seconds into PM.
+        //       For example time is calculated like this:
+        //         day time morning -> 11:59am -> 12:00pm -> 12:01pm -> day time afternoon
+        //         night time evening -> 11:59pm -> 12:00am -> 12:01am -> night time morning
         if (!TimeFormat.AM.equals(inCmbTimeFormat.getSelectedItem())
                 && !TimeFormat.PM.equals(inCmbTimeFormat.getSelectedItem())
                 && !TimeFormat.H24.equals(inCmbTimeFormat.getSelectedItem())) {

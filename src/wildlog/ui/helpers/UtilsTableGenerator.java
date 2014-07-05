@@ -14,6 +14,7 @@ import java.util.Vector;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -144,12 +145,13 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
+                    // FIXME: The code below is copied from UtilsUI.attachKeyListernerToFilterTableRows(). This is not ideal.
                     String[] oldSelection = UtilsTableGenerator.getSelectedRowIDs(inTable, 1);
                     TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>)inTable.getRowSorter();
                     if (sorter == null) {
                         sorter = new TableRowSorter<>(inTable.getModel());
                     }
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + inFilterText, 1));
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inFilterText), 1));
                     inTable.setRowSorter(sorter);
                     // Setup row selection
                     setupPreviousRowSelection(inTable, selectedRowIDs, 1);

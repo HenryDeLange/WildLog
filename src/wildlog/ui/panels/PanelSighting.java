@@ -1439,12 +1439,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void cmbElementTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbElementTypeActionPerformed
         if (sighting != null) {
             searchElement = new Element();
+            txtSearch.setText("");
             ElementType type = (ElementType)cmbElementType.getSelectedItem();
             if (!ElementType.NONE.equals(type)) {
                 searchElement.setType(type);
             }
             UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
-            txtSearch.setText("");
             // Clear Images
             lblElementImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.SMALL));
         }
@@ -1777,10 +1777,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             else
             if (inIndicator instanceof PanelLocation) {
                 UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, searchLocation);
+                txtSearchLocation.setText("");
             }
             else
             if (inIndicator instanceof PanelElement) {
                 UtilsTableGenerator.setupElementTableSmall(app, tblElement, searchElement);
+                txtSearch.setText("");
             }
         }
     }

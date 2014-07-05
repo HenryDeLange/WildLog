@@ -286,10 +286,10 @@ public final class WildLogView extends JFrame {
         menuBar = new javax.swing.JMenuBar();
         javax.swing.JMenu fileMenu = new javax.swing.JMenu();
         workspaceMenu = new javax.swing.JMenu();
-        mnuChangeWorkspaceName = new javax.swing.JMenuItem();
-        jSeparator14 = new javax.swing.JPopupMenu.Separator();
         mnuChangeWorkspaceMenuItem = new javax.swing.JMenuItem();
         mnuCreateWorkspaceMenuItem = new javax.swing.JMenuItem();
+        jSeparator14 = new javax.swing.JPopupMenu.Separator();
+        mnuChangeWorkspaceName = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
         mnuCleanWorkspace = new javax.swing.JMenuItem();
         jSeparator2 = new javax.swing.JPopupMenu.Separator();
@@ -621,20 +621,6 @@ public final class WildLogView extends JFrame {
         workspaceMenu.setText("Workspace");
         workspaceMenu.setName("workspaceMenu"); // NOI18N
 
-        mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
-        mnuChangeWorkspaceName.setText("Change Active Workspace Name");
-        mnuChangeWorkspaceName.setToolTipText("Change the name associated with this Workspace.");
-        mnuChangeWorkspaceName.setName("mnuChangeWorkspaceName"); // NOI18N
-        mnuChangeWorkspaceName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuChangeWorkspaceNameActionPerformed(evt);
-            }
-        });
-        workspaceMenu.add(mnuChangeWorkspaceName);
-
-        jSeparator14.setName("jSeparator14"); // NOI18N
-        workspaceMenu.add(jSeparator14);
-
         mnuChangeWorkspaceMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuChangeWorkspaceMenuItem.setText("Switch Active Workspace");
         mnuChangeWorkspaceMenuItem.setToolTipText("Select another Workspace to use.");
@@ -656,6 +642,20 @@ public final class WildLogView extends JFrame {
             }
         });
         workspaceMenu.add(mnuCreateWorkspaceMenuItem);
+
+        jSeparator14.setName("jSeparator14"); // NOI18N
+        workspaceMenu.add(jSeparator14);
+
+        mnuChangeWorkspaceName.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        mnuChangeWorkspaceName.setText("Rename Active Workspace");
+        mnuChangeWorkspaceName.setToolTipText("Change the name associated with this Workspace.");
+        mnuChangeWorkspaceName.setName("mnuChangeWorkspaceName"); // NOI18N
+        mnuChangeWorkspaceName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuChangeWorkspaceNameActionPerformed(evt);
+            }
+        });
+        workspaceMenu.add(mnuChangeWorkspaceName);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
         workspaceMenu.add(jSeparator1);

@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.io.IOException;
+import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -115,7 +116,7 @@ public final class UtilsUI {
                 }
                 // Note: The regexFilter method seems to be able to take optional parameters...
                 // The (?i) makes the matching ignore case...
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + inTxtSearch.getText(), 1));
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inTxtSearch.getText()), 1));
                 // Kan dit ook glo so doen:
                 //sorter.setRowFilter(RowFilter.regexFilter(Pattern.compile(txtSearchField.getText(), Pattern.CASE_INSENSITIVE).toString()));
                 inTable.setRowSorter(sorter);

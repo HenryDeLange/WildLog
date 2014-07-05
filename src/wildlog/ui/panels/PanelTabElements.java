@@ -1,21 +1,13 @@
 package wildlog.ui.panels;
 
 import java.awt.Cursor;
-import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
-import javax.swing.RowFilter;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
-import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
@@ -373,12 +365,12 @@ public class PanelTabElements extends javax.swing.JPanel {
 
     private void cmbTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTypeActionPerformed
         searchElement = new Element();
+        txtSearch.setText("");
         ElementType type = (ElementType)cmbType.getSelectedItem();
         if (!ElementType.NONE.equals(type)) {
             searchElement.setType(type);
         }
         UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
-        txtSearch.setText("");
         tblElementMouseReleased(null);
     }//GEN-LAST:event_cmbTypeActionPerformed
 
