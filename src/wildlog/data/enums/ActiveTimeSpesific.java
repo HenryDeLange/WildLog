@@ -14,7 +14,6 @@ public enum ActiveTimeSpesific {
     NIGHT_EARLY(        "Early Night",          "After distinguishable horizon and before mid night starts."),
     NIGHT_MID(          "Mid Night",            "Middel of the night."),
     NIGHT_LATE(         "Late Night",           "After mid night ends and before distinguishable horizon."),
-WEIRD(               "weird",                     "werid"),
     NONE(               "",                     "Unknown");
 
     private final String text;
@@ -27,7 +26,7 @@ WEIRD(               "weird",                     "werid"),
 
     @Override
     public String toString() {
-        return text + " (" + description + ")";
+        return text;
     }
 
     public String getText() {
@@ -38,10 +37,10 @@ WEIRD(               "weird",                     "werid"),
         return description;
     }
 
-    // TODO: maak hierdie 'n generic inherited method
+// TODO: Maak hierdie 'n generic inherited method
     public static ActiveTimeSpesific getEnumFromText(String inText) {
         if (inText == null) {
-            inText = "";
+            return NONE;
         }
         for (ActiveTimeSpesific activeTimeSpesific : ActiveTimeSpesific.values()) {
             if (inText.equalsIgnoreCase(activeTimeSpesific.text) 
@@ -52,4 +51,15 @@ WEIRD(               "weird",                     "werid"),
         return NONE;
     }
 
+    public static String getCompleteDescription() {
+        String description = "<html>";
+        for (ActiveTimeSpesific activeTimeSpesific : ActiveTimeSpesific.values()) {
+            if (activeTimeSpesific != NONE) {
+                description = description + "<b>" + activeTimeSpesific.text + ":</b> " + activeTimeSpesific.description + "<br/>";
+            }
+        }
+        description = description + "</html>";
+        return description;
+    }
+    
 }

@@ -70,8 +70,11 @@ public final class UtilsData {
         if (inObject1 == null && inObject2 == null) {
             return true;
         }
-        if ((inObject1 == null && inObject2 != null) || (inObject1 != null && inObject2 == null)) {
-            return false;
+        if ((inObject1 == null && inObject2 != null)) {
+            return inObject2.toString().isEmpty();
+        }
+        if (inObject1 != null && inObject2 == null) {
+            return inObject1.toString().isEmpty();
         }
         if (inObject1 != null && inObject2 != null) {
             if (inObject1 instanceof Date && inObject2 instanceof Date) {
