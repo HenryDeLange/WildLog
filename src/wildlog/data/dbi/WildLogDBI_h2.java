@@ -111,12 +111,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
 
     @Override
-    public void doBackup(WildLogPaths inFolder) {
+    public void doBackup(Path inFolder) {
         Statement state = null;
         try {
             state = conn.createStatement();
             // Backup
-            File dirs = inFolder.getAbsoluteFullPath().resolve("Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")").toFile();
+            File dirs = inFolder.resolve("Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")").toFile();
             dirs.mkdirs();
             // Create a database file backup
             state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");
@@ -491,22 +491,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                 results = state.executeQuery("SELECT VERSION FROM WILDLOG");
                 if (results.next()) {
                     if (results.getInt("VERSION") == 0) {
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("0"));
                         doUpdate1();
                     }
                     else
                     if (results.getInt("VERSION") == 1) {
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("1"));
                         doUpdate2();
                     }
                     else
                     if (results.getInt("VERSION") == 2) {
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("2"));
                         doUpdate3();
                     }
                     else
                     if (results.getInt("VERSION") == 3) {
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("3"));
                         doUpdate4();
                     }
                     else
                     if (results.getInt("VERSION") == 4) {
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("4"));
                         doUpdate5();
                     }
                     else

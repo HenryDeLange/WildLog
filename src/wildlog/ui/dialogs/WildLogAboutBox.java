@@ -64,7 +64,7 @@ public class WildLogAboutBox extends JDialog {
         vendorLabel.setText("Product Version:");
         vendorLabel.setName("vendorLabel"); // NOI18N
 
-        appVendorLabel.setText("4.1.1");
+        appVendorLabel.setText("4.2");
         appVendorLabel.setName("appVendorLabel"); // NOI18N
 
         appDescLabel.setText("<html> Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.</html>");

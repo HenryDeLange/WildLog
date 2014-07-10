@@ -3,12 +3,12 @@ package wildlog.ui.reports.helpers;
 import java.awt.Color;
 import java.util.Date;
 import javax.swing.JLabel;
+import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.astro.AstroCalculator;
 
 
 public class MoonReportHelper {
@@ -42,7 +42,9 @@ public class MoonReportHelper {
 
     private static Color getColor(Sighting inSighting, JLabel[] inLables) {
         if (inSighting.getTimeOfDay() != null) {
-            if (inSighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+            if (inSighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
+                    || inSighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
+                    || inSighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
                 if (inSighting.getMoonlight() != null) {
                     if (inSighting.getMoonlight().equals(Moonlight.MOON_SHINING))
                         return inLables[0].getForeground();

@@ -30,9 +30,9 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
 import wildlog.ui.reports.chart.BarChartEntity;
-import wildlog.ui.dialogs.utils.UtilsDialog;
 
 
 public class ReportLocationSpeciesCurve extends JFrame {
@@ -336,7 +336,9 @@ public class ReportLocationSpeciesCurve extends JFrame {
                             sighting.getElementName()));
 
                     if (sighting.getTimeOfDay() != null) {
-                        if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+                        if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
+                            || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
+                            || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
                             numNightSightings++;
                         }
                         else

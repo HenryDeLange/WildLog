@@ -752,9 +752,11 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         txtbreedingDuration.setText(element.getBreedingDuration());
         txtbreedingDuration.setName("txtbreedingDuration"); // NOI18N
+        txtbreedingDuration.setPreferredSize(new java.awt.Dimension(70, 20));
 
         txtBreedingNumber.setText(element.getBreedingNumber());
         txtBreedingNumber.setName("txtBreedingNumber"); // NOI18N
+        txtBreedingNumber.setPreferredSize(new java.awt.Dimension(70, 20));
 
         cmbWaterDependance.setModel(new DefaultComboBoxModel(wildlog.data.enums.WaterDependancy.values()));
         cmbWaterDependance.setSelectedItem(element.getWaterDependance());
@@ -778,6 +780,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
         txtLifespan.setText(element.getLifespan());
         txtLifespan.setName("txtLifespan"); // NOI18N
+        txtLifespan.setPreferredSize(new java.awt.Dimension(70, 20));
 
         jLabel76.setText("Breeding:");
         jLabel76.setName("jLabel76"); // NOI18N
@@ -835,9 +838,9 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
                             .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(3, 3, 3)
                         .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLifespan)
-                            .addComponent(txtbreedingDuration)
-                            .addComponent(txtBreedingNumber)
+                            .addComponent(txtLifespan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtbreedingDuration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtBreedingNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlInfo1Layout.createSequentialGroup()
                                 .addGroup(pnlInfo1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cmbFeedingClass, 0, 185, Short.MAX_VALUE)

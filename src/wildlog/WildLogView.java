@@ -352,7 +352,7 @@ public final class WildLogView extends JFrame {
         mnuAboutWildNote = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(app.getWildLogOptions().getWorkspaceName() + " -  WildLog v4.1.1");
+        setTitle(app.getWildLogOptions().getWorkspaceName() + " -  WildLog v4.2");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
@@ -391,7 +391,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.1.1");
+        jLabel12.setText("version 4.2");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
@@ -1228,7 +1228,7 @@ public final class WildLogView extends JFrame {
                 }
             });
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            UtilsDialog.showExifPopup(app, fileChooser.getSelectedFile());
+            UtilsDialog.showExifPopup(app, fileChooser.getSelectedFile().toPath());
         }
     }//GEN-LAST:event_mnuExifMenuItemActionPerformed
 
@@ -1697,7 +1697,7 @@ public final class WildLogView extends JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Database Backup");
-                app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS);
+                app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath());
                 setMessage("Done with the Database Backup");
                 UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override

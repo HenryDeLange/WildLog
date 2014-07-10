@@ -207,7 +207,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }
 
     @Override
-    public void doTheRefresh(Object inIndicator) {
+    public void doTheRefresh(final Object inIndicator) {
         formComponentShown(null);
         // If no row is selected, try to select the saved row (most likely a new entry)
         SwingUtilities.invokeLater(new Runnable() {

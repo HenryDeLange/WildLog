@@ -466,6 +466,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel23 = new javax.swing.JLabel();
         cmbAge = new javax.swing.JComboBox();
         btnGetGPSFromImage = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
@@ -638,7 +639,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setFocusable(false);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
-        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 143, 210, -1));
+        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 143, 150, -1));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -1184,6 +1185,19 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
         sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 175, 110, -1));
 
+        jLabel24.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel24.setText("More Info...");
+        jLabel24.setToolTipText("Click here to see the definitions for each category.");
+        jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jLabel24.setName("jLabel24"); // NOI18N
+        jLabel24.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel24MousePressed(evt);
+            }
+        });
+        sightingIncludes.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(243, 143, -1, 20));
+
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1245,7 +1259,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sighting.setVisitName(visit.getName());
 
         // Set variables
-        sighting.setDate(setSightingDateFromUIFields());
+        setupSightingDateFromUIFields();
         sighting.setCertainty((Certainty)cmbCertainty.getSelectedItem());
         sighting.setDetails(txtDetails.getText());
         sighting.setSightingEvidence((SightingEvidence)cmbEvidence.getSelectedItem());
@@ -1311,7 +1325,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             // If the date hasn't been set yet, then try to load it from the first image.
             // Also try to find a file with GPS info (if no info has been set yet)
             // and update the Sun and Moon phase (if possible and not set yet).
-            setSightingDateFromUIFields();
+            setupSightingDateFromUIFields();
             if (locationWL != null && element != null && visit != null) {
                 // Gebruik die compareTo om die sortering te doen
                 class ComparableFile implements Comparable<ComparableFile> {
@@ -1518,6 +1532,9 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
             if (!bulkUploadMode) {
                 btnUpdateSightingActionPerformed(null);
             }
+            // Load the date into the sighting object from the fields
+            setupSightingDateFromUIFields();
+            // Process the fields that require a GPS
             if (sighting.getLatitude() != null && sighting.getLongitude() != null
                     && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())
                     && txtLatitude.getText() != null && !txtLatitude.getText().isEmpty() && !UtilsGps.NO_GPS_POINT.equals(txtLatitude.getText())
@@ -1525,18 +1542,40 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
                 double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
                 // Sun
-                cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(setSightingDateFromUIFields(), latitude, longitude));
+                cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
                 // Moon
                 cmbMoonlight.setSelectedItem(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
             }
             else {
-                // Only show the error if the user clicked the button
+                // Handle it if there isn't a GPS to use
+                // Only show the messages if the user clicked the button
                 if (evt != null) {
-                    getGlassPane().setVisible(true);
-                    JOptionPane.showMessageDialog(app.getMainFrame(),
-                            "Please make sure to first provide an accurate values for the GPS point.",
-                            "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
-                    getGlassPane().setVisible(false);
+                    // If the location has a GPS point, as whether it should be used for the calculation.
+                    if (locationWL.getLatitude() != null && locationWL.getLongitude() != null
+                            && !Latitudes.NONE.equals(locationWL.getLatitude()) && !Longitudes.NONE.equals(locationWL.getLongitude())
+                            && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLatitudeString(locationWL))
+                            && !UtilsGps.NO_GPS_POINT.equals(UtilsGps.getLongitudeString(locationWL))) {
+                        getGlassPane().setVisible(true);
+                        int result = JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "This Observation does not have a GPS point. Would you like to use the GPS point associated with the Place for the calculation?",
+                                "Use The GPS Point From The Place?", JOptionPane.YES_NO_OPTION);
+                        getGlassPane().setVisible(false);
+                        if (result == JOptionPane.YES_OPTION) {
+                            double latitude = UtilsGps.getDecimalDegree(locationWL.getLatitude(), locationWL.getLatDegrees(), locationWL.getLatMinutes(), locationWL.getLatSeconds());
+                            double longitude = UtilsGps.getDecimalDegree(locationWL.getLongitude(), locationWL.getLonDegrees(), locationWL.getLonMinutes(), locationWL.getLonSeconds());
+                            // Sun
+                            cmbTimeOfDay.setSelectedItem(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                            // Moon
+                            cmbMoonlight.setSelectedItem(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+                        }
+                    }
+                    else {
+                        getGlassPane().setVisible(true);
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Please make sure to first provide an accurate values for the GPS point.",
+                                "Could not calculate the Sun and Moon information.", JOptionPane.WARNING_MESSAGE);
+                        getGlassPane().setVisible(false);
+                    }
                 }
             }
             spnMoonPhase.setValue(AstroCalculator.getMoonPhase(sighting.getDate()));
@@ -1559,6 +1598,12 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         if (dialog.isSelectionMade()) {
             txtLatitude.setText(UtilsGps.getLatitudeString(sighting));
             txtLongitude.setText(UtilsGps.getLongitudeString(sighting));
+        }
+        // Setup Sun and Moon
+        if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())
+                || sighting.getMoonPhase() < 0 || sighting.getMoonlight() == null
+                || Moonlight.NONE.equals(sighting.getMoonlight()) || Moonlight.UNKNOWN.equals(sighting.getMoonlight())) {
+            btnCalculateSunAndMoonActionPerformed(null);
         }
         btnUpdateSighting.requestFocus();
     }//GEN-LAST:event_btnGPSActionPerformed
@@ -1622,7 +1667,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     }//GEN-LAST:event_cmbTimeFormatActionPerformed
 
     private void dtpSightingDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dtpSightingDateActionPerformed
-        setSightingDateFromUIFields();
+        setupSightingDateFromUIFields();
     }//GEN-LAST:event_dtpSightingDateActionPerformed
 
     private void btnAddNewLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewLocationActionPerformed
@@ -1742,6 +1787,14 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_spnMinutesStateChanged
 
+    private void jLabel24MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MousePressed
+        getGlassPane().setVisible(true);
+        JOptionPane.showMessageDialog(app.getMainFrame(),
+                ActiveTimeSpesific.getCompleteDescription(),
+                "Time of Day Definitions.", JOptionPane.INFORMATION_MESSAGE);
+        getGlassPane().setVisible(false);
+    }//GEN-LAST:event_jLabel24MousePressed
+
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
         if (fotos.size() > 0) {
@@ -1752,7 +1805,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }
 
-    private Date setSightingDateFromUIFields() {
+    private void setupSightingDateFromUIFields() {
         // Get the date from the datepicker
         Date date = dtpSightingDate.getDate();
         if (date != null) {
@@ -1761,7 +1814,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         else {
             sighting.setDate(null);
         }
-        return sighting.getDate();
     }
 
     public Sighting getSighting() {
@@ -1833,6 +1885,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

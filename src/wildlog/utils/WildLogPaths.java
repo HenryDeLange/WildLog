@@ -32,6 +32,7 @@ public enum WildLogPaths {
     WILDLOG_MAPS                          (Paths.get("Maps")),
     WILDLOG_BACKUPS                       (Paths.get("Backup")),
     WILDLOG_BACKUPS_MONTHLY               (Paths.get("Backup", "Auto")),
+    WILDLOG_BACKUPS_UPGRADE               (Paths.get("Backup", "Upgrade")),
     WILDLOG_TEMP                          (Paths.get(System.getProperty("user.home"), "WildLogSettings", "Temp")),
     WILDLOG_EXPORT                        (Paths.get("Export")),
     WILDLOG_EXPORT_KML                    (Paths.get("Export", "KML")),

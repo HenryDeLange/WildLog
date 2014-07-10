@@ -121,7 +121,7 @@ public class WildLogApp extends Application {
         // Check to do monthly backup
         File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
         if (!dirs.exists()) {
-            dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY);
+            dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath());
         }
         // Load the WildLogOptions
         wildLogOptions = dbi.find(new WildLogOptions());

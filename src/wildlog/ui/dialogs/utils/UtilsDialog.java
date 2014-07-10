@@ -16,8 +16,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -97,17 +98,17 @@ public final class UtilsDialog {
         return escListiner;
     }
 
-    public static void showExifPopup(final WildLogApp inApp, File inFile) {
+    public static void showExifPopup(final WildLogApp inApp, Path inFile) {
         if (inFile != null) {
-            if (inFile.exists()) {
-                final JFrame frame = new JFrame("EXIF Meta Data: " + inFile.getPath());
+            if (Files.exists(inFile)) {
+                final JFrame frame = new JFrame("EXIF Meta Data: " + inFile);
                 frame.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/EXIF.png")).getImage());
                 JTextPane txtPane = new JTextPane();
                 txtPane.setContentType("text/html");
                 txtPane.setEditable(false);
                 String temp = "";
                 try {
-                    Metadata meta = JpegMetadataReader.readMetadata(inFile);
+                    Metadata meta = JpegMetadataReader.readMetadata(inFile.toFile());
                     Iterator<Directory> directories = meta.getDirectories().iterator();
                     breakAllWhiles: while (directories.hasNext()) {
                         Directory directory = directories.next();
@@ -186,7 +187,7 @@ public final class UtilsDialog {
         List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(inID));
         if (files.size() > 0) {
             if (WildLogFileType.IMAGE.equals(files.get(inIndex).getFileType())) {
-                showExifPopup(inApp, files.get(inIndex).getAbsolutePath().toFile());
+                showExifPopup(inApp, files.get(inIndex).getAbsolutePath());
             }
             else {
                 UtilsDialog.showDialogBackgroundWrapper(inApp.getMainFrame(), new UtilsDialog.DialogWrapper() {

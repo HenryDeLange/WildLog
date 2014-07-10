@@ -360,7 +360,9 @@ public class ReportLocationSightingsByType extends JFrame {
                 }
                 // Time
                 if (sighting.getTimeOfDay() != null) {
-                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
+                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
+                        || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
+                        || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
                         // Night
                         numNightSightings++;
                     }

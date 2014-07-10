@@ -608,7 +608,13 @@
                 <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="locationWL.getWebsite()" type="code"/>
                 </Property>
+                <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[80, 2147483647]"/>
+                </Property>
                 <Property name="name" type="java.lang.String" value="txtWebsite" noResource="true"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[70, 20]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel3">
@@ -686,6 +692,9 @@
                   <Connection code="locationWL.getEmail()" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="txtEmail" noResource="true"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[70, 20]"/>
+                </Property>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane10">
@@ -801,6 +810,9 @@
                   <Connection code="locationWL.getContactNumbers()" type="code"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="txtContactNumber" noResource="true"/>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[70, 20]"/>
+                </Property>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtName">

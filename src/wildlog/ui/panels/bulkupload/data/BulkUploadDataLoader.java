@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.swing.ImageIcon;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
@@ -31,32 +33,33 @@ import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
+import wildlog.utils.WildLogSystemImages;
 
 
 public class BulkUploadDataLoader {
-
+    
     public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, WildLogApp inApp) {
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>(files.size());
         // First load all the images and sort them according to date
-        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Load)"));
+        final ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Load)"));
+        final AtomicInteger counter = new AtomicInteger();
         for (int t = 0; t < files.size(); t++) {
             final File tempFile = files.get(t);
-            final int counter = t;
             executorService.execute(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadFileData(tempFile.toPath(), imageList);
-                            try {
-                                inProgressbarTask.setTaskProgress(counter, 0, files.size());
-                            }
-                            catch (Exception e) {
-                                e.printStackTrace(System.err);
-                            }
-                        }
-                    });
+                @Override
+                public void run() {
+                    loadFileData(tempFile.toPath(), imageList);
+                    try {
+                        inProgressbarTask.setTaskProgress(counter.getAndIncrement(), 0, files.size());
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace(System.err);
+                    }
+                }
+            });
         }
         if (!UtilsConcurency.waitForExecutorToShutdown(executorService)) {
             return null;
@@ -120,9 +123,12 @@ public class BulkUploadDataLoader {
         // Note: Ek load die file meer as een keer (HDD+OS cache), maar dis steeds redelik vinnig, en ek kry "out of memory" issues as ek dit alles in 'n inputstream in lees en traai hergebruik...
         Metadata metadata = null;
         try {
-            metadata = JpegMetadataReader.readMetadata(inFile.toFile());
+            if (WildLogFileExtentions.Images.isJPG(inFile)) {
+                metadata = JpegMetadataReader.readMetadata(inFile.toFile());
+            }
         }
         catch (JpegProcessingException ex) {
+            System.err.println("Error reading EXIF data for: " + inFile);
             ex.printStackTrace(System.err);
         }
         catch (IOException ex) {
@@ -130,8 +136,23 @@ public class BulkUploadDataLoader {
         }
         Date date = UtilsImageProcessing.getDateFromImage(metadata, inFile);
         if (date != null) {
+            ImageIcon imageIcon;
+            if (WildLogFileExtentions.Images.isKnownExtention(inFile)) {
+                imageIcon = UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize());
+            }
+            else 
+            if (WildLogFileExtentions.Movies.isKnownExtention(inFile)) {
+                imageIcon = UtilsImageProcessing.getScaledIcon(
+                        WildLogSystemImages.MOVIES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
+                        WildLogThumbnailSizes.MEDIUM.getSize());
+            }
+            else {
+                imageIcon = UtilsImageProcessing.getScaledIcon(
+                        WildLogSystemImages.OTHER_FILES.getWildLogFile().getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM),
+                        WildLogThumbnailSizes.MEDIUM.getSize());
+            }
             BulkUploadImageFileWrapper wrapper = new BulkUploadImageFileWrapper(
-                    inFile, UtilsImageProcessing.getScaledIcon(inFile, WildLogThumbnailSizes.MEDIUM.getSize()), date);
+                    inFile, imageIcon, date);
             wrapper.setDataObjectWithGPS(UtilsImageProcessing.getExifGpsFromJpeg(metadata));
             inImageList.add(wrapper);
         }
@@ -166,7 +187,8 @@ public class BulkUploadDataLoader {
                     list.addAll(getListOfFilesToImport(tempFile, inIncludeFolders));
                 }
                 else {
-                    if (WildLogFileExtentions.Images.isJPG(tempFile.toPath())) {
+                    if (WildLogFileExtentions.Images.isKnownExtention(tempFile.toPath()) 
+                            || WildLogFileExtentions.Movies.isKnownExtention(tempFile.toPath())) {
                         list.add(tempFile);
                     }
                 }

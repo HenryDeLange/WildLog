@@ -256,7 +256,8 @@ public class UtilsImageProcessing {
             }
         }
         catch (JpegProcessingException | IOException ex) {
-            System.err.println("Could not read Meta data from file. The file extention might be wrong...");
+            System.err.println("Error showing EXIF data for: " + inPath);
+            System.err.println("The file extention might be wrong...");
             ex.printStackTrace(System.err);
         }
         return getDateFromImage(metadata, inPath);
@@ -370,44 +371,46 @@ public class UtilsImageProcessing {
 
     public static DataObjectWithGPS getExifGpsFromJpeg(Metadata inMeta) {
         DataObjectWithGPS tempDataObjectWithGPS = new DataObjectWithGPS() {};
-        Iterator<Directory> directories = inMeta.getDirectories().iterator();
-        while (directories.hasNext()) {
-            Directory directory = directories.next();
-            Collection<Tag> tags = directory.getTags();
-            for (Tag tag : tags) {
-                try {
-                    if (tag.getTagName().equalsIgnoreCase("GPS Latitude Ref")) {
-                        // Voorbeeld S
-                        tempDataObjectWithGPS.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
-                    }
-                    else
-                    if (tag.getTagName().equalsIgnoreCase("GPS Longitude Ref")) {
-                        // Voorbeeld E
-                        tempDataObjectWithGPS.setLongitude(Longitudes.getEnumFromText(tag.getDescription()));
-                    }
-                    else
-                    if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
-                        // Voorbeeld -33°44'57.0"
-                        String temp = tag.getDescription();
-                        if (temp != null) {
-                            tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
-                            tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
-                            tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
+        if (inMeta != null) {
+            Iterator<Directory> directories = inMeta.getDirectories().iterator();
+            while (directories.hasNext()) {
+                Directory directory = directories.next();
+                Collection<Tag> tags = directory.getTags();
+                for (Tag tag : tags) {
+                    try {
+                        if (tag.getTagName().equalsIgnoreCase("GPS Latitude Ref")) {
+                            // Voorbeeld S
+                            tempDataObjectWithGPS.setLatitude(Latitudes.getEnumFromText(tag.getDescription()));
+                        }
+                        else
+                        if (tag.getTagName().equalsIgnoreCase("GPS Longitude Ref")) {
+                            // Voorbeeld E
+                            tempDataObjectWithGPS.setLongitude(Longitudes.getEnumFromText(tag.getDescription()));
+                        }
+                        else
+                        if (tag.getTagName().equalsIgnoreCase("GPS Latitude")) {
+                            // Voorbeeld -33°44'57.0"
+                            String temp = tag.getDescription();
+                            if (temp != null) {
+                                tempDataObjectWithGPS.setLatDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
+                                tempDataObjectWithGPS.setLatMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
+                                tempDataObjectWithGPS.setLatSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
+                            }
+                        }
+                        else
+                        if (tag.getTagName().equalsIgnoreCase("GPS Longitude")) {
+                            // Voorbeeld 26°28'7.0"
+                            String temp = tag.getDescription();
+                            if (temp != null) {
+                                tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
+                                tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
+                                tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
+                            }
                         }
                     }
-                    else
-                    if (tag.getTagName().equalsIgnoreCase("GPS Longitude")) {
-                        // Voorbeeld 26°28'7.0"
-                        String temp = tag.getDescription();
-                        if (temp != null) {
-                            tempDataObjectWithGPS.setLonDegrees((int)Math.abs(Double.parseDouble(temp.substring(0, temp.indexOf('°')).trim())));
-                            tempDataObjectWithGPS.setLonMinutes((int)Math.abs(Double.parseDouble(temp.substring(temp.indexOf('°')+1, temp.indexOf('\'')).trim())));
-                            tempDataObjectWithGPS.setLonSeconds(Math.abs(Double.parseDouble(temp.substring(temp.indexOf('\'')+1, temp.indexOf('"')).trim())));
-                        }
+                    catch (NumberFormatException ex) {
+                        System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
                     }
-                }
-                catch (NumberFormatException ex) {
-                    System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
                 }
             }
         }
@@ -418,7 +421,11 @@ public class UtilsImageProcessing {
         try {
             return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inPath.toFile()));
         }
-        catch (IOException | JpegProcessingException ex) {
+        catch (JpegProcessingException ex) {
+            System.err.println("Error reading EXIF data for: " + inPath);
+            ex.printStackTrace(System.err);
+        }
+        catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
         return null;

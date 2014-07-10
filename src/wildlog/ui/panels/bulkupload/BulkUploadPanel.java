@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -65,9 +66,9 @@ import wildlog.utils.WildLogPaths;
 public class BulkUploadPanel extends PanelCanSetupHeader {
     public final static Color tableBackgroundColor1 = new Color(235, 246, 220);
     public final static Color tableBackgroundColor2 = new Color(195, 205, 180);
+    private final WildLogApp app;
+    private final CustomMouseWheelScroller mouseWheel;
     private static String lastFilePath = "";
-    private WildLogApp app;
-    private CustomMouseWheelScroller mouseWheel;
     private File importPath = null;
     private String selectedLocationName;
 
@@ -676,19 +677,14 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
 //                    final Object saveElementLock = new Object();
                     final Object saveSightingLock = new Object();
                     ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Save)"));
+                    final AtomicInteger counter = new AtomicInteger();
                     for (int rowCount = 0; rowCount < model.getRowCount(); rowCount++) {
-                        final int counter = rowCount;
+                        final int row = rowCount;
                         final ProgressbarTask progressbarHandle = this;
                         executorService.execute(new Runnable() {
                             @Override
                             public void run() {
-                                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(counter, 0);
-//                                // Check wether the Creature exists or not
-//                                synchronized (saveElementLock) {
-//                                    if (app.getDBI().find(new Element(sightingWrapper.getElementName())) == null) {
-//                                            app.getDBI().createOrUpdate(new Element(sightingWrapper.getElementName()), null);
-//                                    }
-//                                }
+                                BulkUploadSightingWrapper sightingWrapper = (BulkUploadSightingWrapper)model.getValueAt(row, 0);
                                 // Continue processing the Sighting
                                 sightingWrapper.setLocationName(locationHandle.getName());
                                 sightingWrapper.setVisitName(visit.getName());
@@ -712,7 +708,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     }
                                 }
                                 // Get a list of all the images
-                                BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(counter, 1);
+                                BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, 1);
                                 // Get a list of File objects from the BulkUploadImageFileWrapper and prepare for the duration calculations
                                 Date startDate = listWrapper.getImageList().get(0).getDate();
                                 Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
@@ -751,7 +747,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // Update the progress
                                 try {
                                     progressbarHandle.setMessage("Saving the Bulk Import: Busy...");
-                                    progressbarHandle.setTaskProgress(counter, 0, model.getRowCount());
+                                    progressbarHandle.setTaskProgress(counter.getAndIncrement(), 0, model.getRowCount());
                                 }
                                 catch (Exception e) {
                                     e.printStackTrace(System.out);

@@ -529,7 +529,9 @@ public class PanelLocation extends PanelCanSetupHeader {
         jScrollPane1.setViewportView(lstAccommodationType);
 
         txtWebsite.setText(locationWL.getWebsite());
+        txtWebsite.setMaximumSize(new java.awt.Dimension(80, 2147483647));
         txtWebsite.setName("txtWebsite"); // NOI18N
+        txtWebsite.setPreferredSize(new java.awt.Dimension(70, 20));
 
         jLabel3.setText("Phone No.:");
         jLabel3.setName("jLabel3"); // NOI18N
@@ -564,6 +566,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         txtEmail.setText(locationWL.getEmail());
         txtEmail.setName("txtEmail"); // NOI18N
+        txtEmail.setPreferredSize(new java.awt.Dimension(70, 20));
 
         jScrollPane10.setName("jScrollPane10"); // NOI18N
 
@@ -611,6 +614,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
         txtContactNumber.setText(locationWL.getContactNumbers());
         txtContactNumber.setName("txtContactNumber"); // NOI18N
+        txtContactNumber.setPreferredSize(new java.awt.Dimension(70, 20));
 
         txtName.setBackground(new java.awt.Color(204, 255, 204));
         txtName.setText(locationWL.getName());
@@ -673,8 +677,8 @@ public class PanelLocation extends PanelCanSetupHeader {
                                             .addComponent(jLabel3))
                                         .addGap(5, 5, 5)
                                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtContactNumber)
-                                            .addComponent(txtEmail)))
+                                            .addComponent(txtContactNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlInfoLayout.createSequentialGroup()
                                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel36)
@@ -683,7 +687,7 @@ public class PanelLocation extends PanelCanSetupHeader {
                                         .addGap(9, 9, 9)
                                         .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
-                                            .addComponent(txtWebsite, javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(txtWebsite, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(jScrollPane10))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(pnlInfoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

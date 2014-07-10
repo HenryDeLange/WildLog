@@ -472,39 +472,41 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
             }
             // Time
             if (sighting.getTimeOfDay() != null) {
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.DEEP_NIGHT)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
-                    numNightSightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.EARLY_MORNING)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblDawn.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MORNING)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MIDDAY) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_MORNING)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.AFTERNOON)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.LATE_AFTERNOON)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblDusk.getForeground()));
-                    numDaySightings++;
-                }
-                else
-                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
-                }
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
+//                    || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
+//                    || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
+//                    numNightSightings++;
+//                }
+//                else
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.EARLY_MORNING)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblDawn.getForeground()));
+//                    numDaySightings++;
+//                }
+//                else
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MORNING)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
+//                    numDaySightings++;
+//                }
+//                else
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MIDDAY) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_MORNING)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
+//                    numDaySightings++;
+//                }
+//                else
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.AFTERNOON)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
+//                    numDaySightings++;
+//                }
+//                else
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.LATE_AFTERNOON)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblDusk.getForeground()));
+//                    numDaySightings++;
+//                }
+//                else
+//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
+//                }
             }
             else
                 chartTime.addBar(new BarChartEntity(sighting.getLocationName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));

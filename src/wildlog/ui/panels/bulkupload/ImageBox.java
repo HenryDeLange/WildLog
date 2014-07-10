@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -19,6 +20,7 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
+import wildlog.utils.WildLogFileExtentions;
 
 
 public class ImageBox extends JPanel {
@@ -255,16 +257,29 @@ public class ImageBox extends JPanel {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnZoomMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZoomMousePressed
-        JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom", true);
-        JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
-        dialog.add(lblZoomImage);
-        dialog.pack();
-//        dialog.setLocationRelativeTo(this);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        UtilsDialog.addEscapeKeyListener(dialog);
-        UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), dialog);
-        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), dialog);
-        dialog.setVisible(true);
+        if (WildLogFileExtentions.Images.isKnownExtention(imageWrapper.getFile())) {
+            JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom", true);
+            JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
+            dialog.add(lblZoomImage);
+            dialog.pack();
+//            dialog.setLocationRelativeTo(this);
+            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            UtilsDialog.addEscapeKeyListener(dialog);
+            UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), dialog);
+            UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), dialog);
+            dialog.setVisible(true);
+        }
+        else {
+            UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
+                            "Only images can be zoomed. To view the file, click on the black box to open the file in the system's default viewer.", 
+                            "Can't Open Zoom!", JOptionPane.INFORMATION_MESSAGE);
+                    return 0;
+                }
+            });
+        }
     }//GEN-LAST:event_btnZoomMousePressed
 
     private void moveImageToNewRow(int inDelta) {
@@ -300,6 +315,7 @@ public class ImageBox extends JPanel {
         btnNewSighting.setBackground(inColor);
         btnRemove.setBackground(inColor);
         btnUp.setBackground(inColor);
+        btnZoom.setBackground(inColor);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -57,7 +57,7 @@ public final class UtilsTableGenerator {
     private UtilsTableGenerator() {
     }
 
-    public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final Element inElement, String inFilterText) {
+    public static void setupElementTableLarge(final WildLogApp inApp, final JTable inTable, final Element inElement, final String inFilterText) {
         // Deterimine the row IDs of the previously selected rows.
         final String[] selectedRowIDs = getSelectedRowIDs(inTable, 1);
         // Setup header
@@ -1191,25 +1191,29 @@ public final class UtilsTableGenerator {
         inTable.setModel(new DefaultTableModel(new String[]{"Loading..."}, 0));
     }
     
-    public static void setupColumnResizingListener(JTable inTable, int inCol) {
+    public static void setupColumnResizingListener(final JTable inTable, final int inCol) {
         inTable.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (inTable.getColumnModel().getColumnCount() > inCol) {
+                        int colToUse = inCol;
+                        if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                            colToUse = colToUse - 1;
+                        }
+                        if (inTable.getColumnModel().getColumnCount() > colToUse) {
                             int otherColumnsMaxSize = 0;
                             for (int t = 0; t < inTable.getColumnModel().getColumnCount(); t++) {
-                                if (t != inCol) {
+                                if (t != colToUse) {
                                     otherColumnsMaxSize = otherColumnsMaxSize + inTable.getColumnModel().getColumn(t).getMaxWidth();
                                 }
                             }
-                            if (inTable.getWidth() - otherColumnsMaxSize > inTable.getColumnModel().getColumn(inCol).getPreferredWidth()) {
-                                inTable.getColumnModel().getColumn(inCol).setMaxWidth(inTable.getWidth() - otherColumnsMaxSize);
+                            if (inTable.getWidth() - otherColumnsMaxSize > inTable.getColumnModel().getColumn(colToUse).getPreferredWidth()) {
+                                inTable.getColumnModel().getColumn(colToUse).setMaxWidth(inTable.getWidth() - otherColumnsMaxSize);
                             }
                             else {
-                                inTable.getColumnModel().getColumn(inCol).setMaxWidth(inTable.getColumnModel().getColumn(inCol).getPreferredWidth() + inTable.getWidth()/4);
+                                inTable.getColumnModel().getColumn(colToUse).setMaxWidth(inTable.getColumnModel().getColumn(colToUse).getPreferredWidth() + inTable.getWidth()/4);
                             }
                             int[] selectedRows = inTable.getSelectedRows();
                             ((DefaultTableModel) inTable.getModel()).fireTableDataChanged();
