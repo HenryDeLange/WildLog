@@ -71,6 +71,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private static String lastFilePath = "";
     private File importPath = null;
     private String selectedLocationName;
+    private boolean showAsTab = false;
 
 
     public BulkUploadPanel(WildLogApp inApp, ProgressbarTask inProgressbarTask, final String inLocationName, Path inImportPath) {
@@ -141,17 +142,35 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         if (importPath == null) {
             importPath = showFileChooser();
         }
-        // Setup the datamodel
-        DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
-        model.getDataVector().clear();
-        model.fireTableDataChanged();
-        BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(
-                importPath, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), inProgressbarTask, app);
-        model.getDataVector().addAll(UtilsTableGenerator.convertToVector(wrapper.getData()));
-        model.fireTableDataChanged();
-        // Setup the dates
-        dtpStartDate.setDate(wrapper.getStartDate());
-        dtpEndDate.setDate(wrapper.getEndDate());
+        if (importPath != null) {
+            // Setup the datamodel
+            final DefaultTableModel model = ((DefaultTableModel)tblBulkImport.getModel());
+            model.getDataVector().clear();
+            model.fireTableDataChanged();
+            BulkUploadDataWrapper wrapper = BulkUploadDataLoader.genenrateTableData(
+                    importPath, chkIncludeSubfolders.isSelected(), (Integer)spnInactivityTime.getValue(), inProgressbarTask, app);
+            if (wrapper != null) {
+                model.getDataVector().addAll(UtilsTableGenerator.convertToVector(wrapper.getData()));
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        model.fireTableDataChanged();
+                    }
+                });
+                // Setup the dates
+                dtpStartDate.setDate(wrapper.getStartDate());
+                dtpEndDate.setDate(wrapper.getEndDate());
+                // Setup the recursive folder checkbox
+                chkIncludeSubfolders.setSelected(wrapper.isRecursive());
+                showAsTab = true;
+            }
+            else {
+                showAsTab = false;
+            }
+        }
+        else {
+            showAsTab = false;
+        }
     }
 
     private File showFileChooser() {
@@ -532,7 +551,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                 {null, null}
             },
             new String [] {
-                "Observations", "Images"
+                "Observations", "Files"
             }
         ));
         tblBulkImport.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_LAST_COLUMN);
@@ -671,10 +690,8 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     closeTab();
                     // Process the Location
                     Location location = app.getDBI().find(new Location(selectedLocationName));
-//                    app.getDBI().createOrUpdate(location, null);
                     // Processs the sightings
                     final Location locationHandle = location;
-//                    final Object saveElementLock = new Object();
                     final Object saveSightingLock = new Object();
                     ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_BulkImport(Save)"));
                     final AtomicInteger counter = new AtomicInteger();
@@ -713,8 +730,9 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 Date startDate = listWrapper.getImageList().get(0).getDate();
                                 Date endDate = listWrapper.getImageList().get(listWrapper.getImageList().size()-1).getDate();
                                 List<File> files = new ArrayList<File>(listWrapper.getImageList().size());
+                                boolean uploadListContainsDuplicates = false;
                                 for (BulkUploadImageFileWrapper imageWrapper : listWrapper.getImageList()) {
-                                    files.add(imageWrapper.getFile().toFile());
+                                    // Confirm the correct start and end times
                                     if (imageWrapper.getDate().getTime() < startDate.getTime()) {
                                         startDate = imageWrapper.getDate();
                                     }
@@ -722,6 +740,15 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                     if (imageWrapper.getDate().getTime() > endDate.getTime()) {
                                         endDate = imageWrapper.getDate();
                                     }
+                                    if (!uploadListContainsDuplicates) {
+                                        for (File testDuplicateFiles : files) {
+                                            if (testDuplicateFiles.equals(imageWrapper.getFile().toFile())) {
+                                                uploadListContainsDuplicates = true;
+                                            }
+                                        }
+                                    }
+                                    // Prepare file uploadlist
+                                    files.add(imageWrapper.getFile().toFile());
                                 }
                                 // Determine the duration and build up the a list of File objects (to save later), if it wasn't set by hand already
                                 if (sightingWrapper.getDurationMinutes() == 0 && sightingWrapper.getDurationSeconds() == 0) {
@@ -743,7 +770,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                         WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath().resolve(sightingWrapper.toPath()),
                                         files.toArray(new File[files.size()]),
                                         null, WildLogThumbnailSizes.NORMAL,
-                                        app, false, null, true);
+                                        app, false, null, true, uploadListContainsDuplicates);
                                 // Update the progress
                                 try {
                                     progressbarHandle.setMessage("Saving the Bulk Import: Busy...");
@@ -862,6 +889,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     private void lblLocationMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblLocationMousePressed
         btnSelectLocationActionPerformed(null);
     }//GEN-LAST:event_lblLocationMousePressed
+
+    public boolean isShowAsTab() {
+        return showAsTab;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGPSForAll;

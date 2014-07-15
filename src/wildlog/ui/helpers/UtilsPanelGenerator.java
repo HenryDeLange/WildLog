@@ -134,9 +134,14 @@ public final class UtilsPanelGenerator {
      */
     public static void openBulkUploadTab(BulkUploadPanel inBulkUploadPanel, JTabbedPane inTabPane) {
         if (inBulkUploadPanel != null) {
-            inTabPane.add(inBulkUploadPanel);
-            inBulkUploadPanel.setupTabHeader(PanelCanSetupHeader.TabTypes.BULK_UPLOAD);
-            inTabPane.setSelectedComponent(inBulkUploadPanel);
+            if (inBulkUploadPanel.isShowAsTab()) {
+                inTabPane.add(inBulkUploadPanel);
+                inBulkUploadPanel.setupTabHeader(PanelCanSetupHeader.TabTypes.BULK_UPLOAD);
+                inTabPane.setSelectedComponent(inBulkUploadPanel);
+            }
+            else {
+                inBulkUploadPanel.setVisible(false);
+            }
         }
     }
 

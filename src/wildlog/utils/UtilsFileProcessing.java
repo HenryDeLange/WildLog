@@ -11,8 +11,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.swing.JDialog;
@@ -27,6 +30,8 @@ import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
 
 public final class UtilsFileProcessing {
+    private static final ExecutorService executorService = 
+            Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_FileUpload"));
     private static Path lastFilePath = null;
 
     private UtilsFileProcessing() {
@@ -82,41 +87,54 @@ public final class UtilsFileProcessing {
         return Arrays.asList(fileChooser.getFiles());
     }
 
-    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, final boolean inCreateThumbnails) {
+    public static void performFileUpload(final String inID, final Path inPrefixFolder, final File[] inFiles, final JLabel inImageLabel, 
+            final WildLogThumbnailSizes inSize, final WildLogApp inApp, boolean inWithSlowProcessPopup, JDialog inParent, 
+            final boolean inCreateThumbnails, final boolean inHandleSyncIssuesForPossibleDuplicatesInList) {
+        final Object theLock;
+        if (inHandleSyncIssuesForPossibleDuplicatesInList) {
+            theLock = new Object();
+        }
+        else {
+            theLock = null;
+        }
         // Submit the work to the executor
-        ExecutorService executorService = Executors.newFixedThreadPool(inApp.getThreadCount(), new NamedThreadFactory("WL_FileUpload"));
-        for (int t = 0; t < inFiles.length; t++) {
-            if (inFiles[t] != null) {
-                final File fromFile = inFiles[t];
-                executorService.submit(new Runnable() {
+        Collection<Callable<Object>> listCallables = new ArrayList<>(inFiles.length);
+        for (File inFile : inFiles) {
+            if (inFile != null) {
+                final File fromFile = inFile;
+                listCallables.add(new Callable<Object>() {
                     @Override
-                    public void run() {
+                    public Object call() throws Exception {
                         Path fromPath = fromFile.toPath();
                         if (Files.isRegularFile(fromPath)) {
                             lastFilePath = fromPath;
                             // Is an image
                             if (WildLogFileExtentions.Images.isKnownExtention(fromPath)) {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, inApp, inID, inCreateThumbnails);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_IMAGES, WildLogFileType.IMAGE, inPrefixFolder, fromPath, inApp, inID, 
+                                        inCreateThumbnails, theLock);
                             }
                             else
                             // Is a movie
                             if (WildLogFileExtentions.Movies.isKnownExtention(fromPath)) {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, inApp, inID, inCreateThumbnails);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_MOVIES, WildLogFileType.MOVIE, inPrefixFolder, fromPath, inApp, inID, 
+                                        inCreateThumbnails, theLock);
                             }
                             else {
-                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, inApp, inID, inCreateThumbnails);
+                                saveOriginalFile(WildLogPaths.WILDLOG_FILES_OTHER, WildLogFileType.OTHER, inPrefixFolder, fromPath, inApp, inID, 
+                                        inCreateThumbnails, theLock);
                             }
                         }
+                        return null;
                     }
                 });
             }
         }
         if (inWithSlowProcessPopup) {
             // Wait to finish the work
-            UtilsConcurency.waitForExecutorToShutdownWithPopup(executorService, inParent);
+            UtilsConcurency.waitForExecutorToRunTasksWithPopup(executorService, listCallables, inParent);
         }
         else {
-            UtilsConcurency.waitForExecutorToShutdown(executorService);
+            UtilsConcurency.waitForExecutorToRunTasks(executorService, listCallables);
         }
         // Update the image that is displayed
         SwingUtilities.invokeLater(new Runnable() {
@@ -127,7 +145,8 @@ public final class UtilsFileProcessing {
         });
     }
 
-    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, WildLogApp inApp, String inID, boolean inCreateThumbnails) {
+    private static void saveOriginalFile(WildLogPaths inWorkspacePath, WildLogFileType inFileType, Path inPrefixFolder, Path inFromFile, 
+            WildLogApp inApp, String inID, boolean inCreateThumbnails, Object inTheLock) {
         // Make the folder
         Path toFolder = inWorkspacePath.getAbsoluteFullPath().resolve(inPrefixFolder).normalize().toAbsolutePath();
         try {
@@ -136,21 +155,15 @@ public final class UtilsFileProcessing {
         catch (IOException ex) {
             ex.printStackTrace(System.err);
         }
-        // Setup the output files
-        Path toFile = toFolder.resolve(inFromFile.getFileName());
-        // Check that the filename is unique
-        while (Files.exists(toFile)) {
-            toFile = toFolder.resolve("wl_" + toFile.getFileName());
+        WildLogFile wildLogFile;
+        if (inTheLock != null) {
+            synchronized (inTheLock) {
+                wildLogFile = doTheFileSave(toFolder, inFromFile, inID, inFileType, inApp);
+            }
         }
-        // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
-        copyFile(inFromFile, toFile, false, false);
-        // Save the database entry
-        WildLogFile wildLogFile = new WildLogFile(
-                        inID,
-                        toFile.getFileName().toString(),
-                        WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
-                        inFileType);
-        inApp.getDBI().createOrUpdate(wildLogFile, false);
+        else {
+            wildLogFile = doTheFileSave(toFolder, inFromFile, inID, inFileType, inApp);
+        }
         // Create the default thumbnails if it is an image
         // (Dit sal dan hopelik 'n beter user experience gee as die thumbnails klaar daar is teen die tyd dat mens dit in die app view...)
         if (inCreateThumbnails) {
@@ -162,6 +175,25 @@ public final class UtilsFileProcessing {
                 wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
             }
         }
+    }
+
+    private static WildLogFile doTheFileSave(Path toFolder, Path inFromFile, String inID, WildLogFileType inFileType, WildLogApp inApp) {
+        // Setup the output files
+        Path toFile = toFolder.resolve(inFromFile.getFileName());
+        // Check that the filename is unique
+        while (Files.exists(toFile)) {
+            toFile = toFolder.resolve("wl_" + toFile.getFileName());
+        }
+        // Copy the original file into WildLog's folders. (Don't overwrite other files, and give an error if it already exists.)
+        copyFile(inFromFile, toFile, false, false);
+        // Save the database entry
+        WildLogFile wildLogFile = new WildLogFile(
+                inID,
+                toFile.getFileName().toString(),
+                WildLogPaths.getFullWorkspacePrefix().relativize(toFile).toString(),
+                inFileType);
+        inApp.getDBI().createOrUpdate(wildLogFile, false);
+        return wildLogFile;
     }
 
     public static void openFile(String inID, int inIndex, WildLogApp inApp) {

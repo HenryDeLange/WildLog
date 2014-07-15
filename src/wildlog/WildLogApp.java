@@ -425,14 +425,14 @@ public class WildLogApp extends Application {
         if (mapOffline == null) {
             mapOffline = new MapFrameOffline("WildLog Map - Offline", getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude()/*, useOnlineMap*/);
             // Setup the escape key
-            final JFrame thisHandler = (JFrame)mapOffline.getFrameForImageDrawing();
+            final JFrame mapHandler = (JFrame)mapOffline.getFrameForImageDrawing();
             ActionListener escListiner = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            thisHandler.setVisible(false);
+                            mapHandler.setVisible(false);
                         }
                     };
-            thisHandler.getRootPane().registerKeyboardAction(
+            mapHandler.getRootPane().registerKeyboardAction(
                     escListiner,
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                     JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -485,14 +485,14 @@ public class WildLogApp extends Application {
             mapOnlineFrame.pack();
             mapOnlineFrame.setResizable(false);
             // Setup the escape key
-            final JFrame thisHandler = (JFrame)mapOnlineFrame;
+            final JFrame mapHandler = (JFrame)mapOnlineFrame;
             ActionListener escListiner = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            thisHandler.setVisible(false);
+                            mapHandler.setVisible(false);
                         }
                     };
-            thisHandler.getRootPane().registerKeyboardAction(
+            mapHandler.getRootPane().registerKeyboardAction(
                     escListiner,
                     KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                     JComponent.WHEN_IN_FOCUSED_WINDOW);

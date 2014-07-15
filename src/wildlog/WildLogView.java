@@ -352,7 +352,7 @@ public final class WildLogView extends JFrame {
         mnuAboutWildNote = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(app.getWildLogOptions().getWorkspaceName() + " -  WildLog v4.2");
+        setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v4.2");
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
@@ -1756,9 +1756,9 @@ public final class WildLogView extends JFrame {
                     return -1;
                 }
             });
-            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
-            this.setVisible(false);
-            app.quit(null);
+//            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
+//            this.setVisible(false);
+            app.quit(evt);
         }
     }//GEN-LAST:event_mnuChangeWorkspaceMenuItemActionPerformed
 
@@ -1840,7 +1840,7 @@ public final class WildLogView extends JFrame {
                                             inWildLogFile.getId(),
                                             inExpectedPrefix,
                                             new File[]{inWildLogFile.getAbsolutePath().toFile()},
-                                            null, WildLogThumbnailSizes.NORMAL, app, false, null, false);
+                                            null, WildLogThumbnailSizes.NORMAL, app, false, null, false, false);
                                     // Delete the wrong entry
                                     app.getDBI().delete(inWildLogFile);
                                     fileCount.counter++;
@@ -2762,7 +2762,7 @@ public final class WildLogView extends JFrame {
                                         lstFiles.toArray(new File[lstFiles.size()]),
                                         null,
                                         WildLogThumbnailSizes.NORMAL,
-                                        app, false, null, true);
+                                        app, false, null, true, false);
                             }
                             setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));
                             setMessage("Import WildNote Sync " + getProgress() + "%");
@@ -2851,9 +2851,9 @@ public final class WildLogView extends JFrame {
                     return -1;
                 }
             });
-            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
-            this.setVisible(false);
-            app.quit(null);
+//            // Making the frame not visible (or calling dispose on it) hopefully prevents this error: java.lang.InterruptedException at java.lang.Object.wait(Native Method)
+//            this.setVisible(false);
+            app.quit(evt);
         }
     }//GEN-LAST:event_mnuCreateWorkspaceMenuItemActionPerformed
 

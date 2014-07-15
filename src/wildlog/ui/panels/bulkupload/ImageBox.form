@@ -61,7 +61,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/up.png"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Move the image UP to the Observation above."/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the file UP to the Observation above."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -89,7 +89,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/down.png"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Move the image DOWN to the Observation below."/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the file DOWN to the Observation below."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -121,7 +121,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Delete_Small.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Remove"/>
-        <Property name="toolTipText" type="java.lang.String" value="Remove the image from this Observation."/>
+        <Property name="toolTipText" type="java.lang.String" value="Remove the file from this Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -154,7 +154,7 @@
           <Image iconType="3" name="/wildlog/resources/icons/Sighting Small.gif"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Observation"/>
-        <Property name="toolTipText" type="java.lang.String" value="Move the image into its own NEW Observation."/>
+        <Property name="toolTipText" type="java.lang.String" value="Move the file into its own NEW Observation."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -186,8 +186,8 @@
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Duplicate"/>
-        <Property name="toolTipText" type="java.lang.String" value="Duplicate the image for this Observation."/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Duplicate&lt;/u&gt;&lt;/html&gt;"/>
+        <Property name="toolTipText" type="java.lang.String" value="Duplicate the file for this Observation. You can RIGHT-CLICK to duplicate and move the file."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
@@ -200,6 +200,7 @@
         <Property name="name" type="java.lang.String" value="btnClone" noResource="true"/>
       </Properties>
       <Events>
+        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnCloneMouseReleased"/>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCloneActionPerformed"/>
       </Events>
       <Constraints>
@@ -216,7 +217,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Search.gif"/>
         </Property>
-        <Property name="toolTipText" type="java.lang.String" value="Show zoom popup."/>
+        <Property name="toolTipText" type="java.lang.String" value="Show zoom popup for the image."/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>

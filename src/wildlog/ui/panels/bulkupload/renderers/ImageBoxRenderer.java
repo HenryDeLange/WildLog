@@ -13,7 +13,9 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 
 
 public class ImageBoxRenderer implements TableCellRenderer {
-
+    private static final int imageBoxSizeWidth = 235;
+    private static final int imageBoxSizeHeight = 240;
+    
     @Override
     public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
         return drawImageBoxes(inValue, inTable, inRow, inColumn);
@@ -23,12 +25,13 @@ public class ImageBoxRenderer implements TableCellRenderer {
         // Note: Java already only calls this method for visible rows, so no need to check that
         BulkUploadImageListWrapper imageListWrapper = (BulkUploadImageListWrapper)inValue;
         JPanel panel = new JPanel(new AbsoluteLayout());
-        if (inRow % 2 == 0)
+        if (inRow % 2 == 0) {
             panel.setBackground(BulkUploadPanel.tableBackgroundColor1);
-        else
+        } 
+        else {
             panel.setBackground(BulkUploadPanel.tableBackgroundColor2);
-        final int imageBoxSize = 240;
-        final int imagesPerRow = (int)((inTable.getColumnModel().getColumn(inColumn).getWidth()) / imageBoxSize);
+        }
+        final int imagesPerRow = (int)((inTable.getColumnModel().getColumn(inColumn).getWidth()) / imageBoxSizeWidth);
         int posX = 0;
         int posY = -1;
         for (BulkUploadImageFileWrapper imageWrapper : imageListWrapper.getImageList()) {
@@ -37,13 +40,13 @@ public class ImageBoxRenderer implements TableCellRenderer {
             }
             ImageBox imageBox = new ImageBox(imageWrapper, inTable);
             imageBox.setRowBackground(panel.getBackground());
-            panel.add(imageBox, new AbsoluteConstraints(imageBoxSize*posX++, imageBoxSize*posY, imageBoxSize, imageBoxSize));
+            panel.add(imageBox, new AbsoluteConstraints(imageBoxSizeWidth*posX++, imageBoxSizeHeight*posY, imageBoxSizeWidth, imageBoxSizeHeight));
             if (posX == imagesPerRow) {
                 posX = 0;
             }
         }
-        if (inTable.getRowHeight(inRow) != imageBoxSize*(posY+1)) {
-            inTable.setRowHeight(inRow, imageBoxSize*(posY+1));
+        if (inTable.getRowHeight(inRow) != imageBoxSizeHeight*(posY+1)) {
+            inTable.setRowHeight(inRow, imageBoxSizeHeight*(posY+1));
         }
         return panel;
     }

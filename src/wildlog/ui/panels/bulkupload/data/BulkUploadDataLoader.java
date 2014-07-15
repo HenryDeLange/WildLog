@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
 import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
@@ -25,6 +26,7 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
@@ -41,6 +43,23 @@ public class BulkUploadDataLoader {
     public static BulkUploadDataWrapper genenrateTableData(File inFolderPath, boolean inIsRecuresive, int inSightingDurationInSeconds, final ProgressbarTask inProgressbarTask, WildLogApp inApp) {
         inProgressbarTask.setMessage("Bulk Import Preparation: Loading files...");
         final List<File> files = getListOfFilesToImport(inFolderPath, inIsRecuresive);
+        if (files.isEmpty() && !inIsRecuresive) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                            "No supported files were found in the specified folder. Would you like to search in the subfolders as well?", 
+                            "Include subfolders?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
+                inIsRecuresive = true;
+                files.addAll(getListOfFilesToImport(inFolderPath, inIsRecuresive));
+            }
+            else {
+                return null;
+            }
+        }
         // Read all of the files at this stage: EXIF data and make the thumbnail in memory
         final List<BulkUploadImageFileWrapper> imageList = new ArrayList<BulkUploadImageFileWrapper>(files.size());
         // First load all the images and sort them according to date
@@ -109,6 +128,7 @@ public class BulkUploadDataLoader {
             wrapper.setEndDate(imageList.get(imageList.size()-1).getDate());
         }
         wrapper.setData(getArrayFromHash(finalMap));
+        wrapper.setRecursive(inIsRecuresive);
         return wrapper;
     }
 

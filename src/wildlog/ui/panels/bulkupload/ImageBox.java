@@ -1,14 +1,20 @@
 package wildlog.ui.panels.bulkupload;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
@@ -83,7 +89,7 @@ public class ImageBox extends JPanel {
 
         btnUp.setBackground(new java.awt.Color(235, 246, 220));
         btnUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/up.png"))); // NOI18N
-        btnUp.setToolTipText("Move the image UP to the Observation above.");
+        btnUp.setToolTipText("Move the file UP to the Observation above.");
         btnUp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnUp.setFocusPainted(false);
         btnUp.setFocusable(false);
@@ -98,7 +104,7 @@ public class ImageBox extends JPanel {
 
         btnDown.setBackground(new java.awt.Color(235, 246, 220));
         btnDown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/down.png"))); // NOI18N
-        btnDown.setToolTipText("Move the image DOWN to the Observation below.");
+        btnDown.setToolTipText("Move the file DOWN to the Observation below.");
         btnDown.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDown.setFocusPainted(false);
         btnDown.setFocusable(false);
@@ -115,7 +121,7 @@ public class ImageBox extends JPanel {
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnRemove.setText("Remove");
-        btnRemove.setToolTipText("Remove the image from this Observation.");
+        btnRemove.setToolTipText("Remove the file from this Observation.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
         btnRemove.setFocusable(false);
@@ -133,7 +139,7 @@ public class ImageBox extends JPanel {
         btnNewSighting.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnNewSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
         btnNewSighting.setText("Observation");
-        btnNewSighting.setToolTipText("Move the image into its own NEW Observation.");
+        btnNewSighting.setToolTipText("Move the file into its own NEW Observation.");
         btnNewSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNewSighting.setFocusPainted(false);
         btnNewSighting.setFocusable(false);
@@ -150,14 +156,19 @@ public class ImageBox extends JPanel {
         btnClone.setBackground(new java.awt.Color(235, 246, 220));
         btnClone.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnClone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
-        btnClone.setText("Duplicate");
-        btnClone.setToolTipText("Duplicate the image for this Observation.");
+        btnClone.setText("<html><u>Duplicate</u></html>");
+        btnClone.setToolTipText("Duplicate the file for this Observation. You can RIGHT-CLICK to duplicate and move the file.");
         btnClone.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClone.setFocusPainted(false);
         btnClone.setFocusable(false);
         btnClone.setIconTextGap(2);
         btnClone.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnClone.setName("btnClone"); // NOI18N
+        btnClone.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnCloneMouseReleased(evt);
+            }
+        });
         btnClone.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloneActionPerformed(evt);
@@ -167,7 +178,7 @@ public class ImageBox extends JPanel {
 
         btnZoom.setBackground(new java.awt.Color(235, 246, 220));
         btnZoom.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Search.gif"))); // NOI18N
-        btnZoom.setToolTipText("Show zoom popup.");
+        btnZoom.setToolTipText("Show zoom popup for the image.");
         btnZoom.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnZoom.setFocusPainted(false);
         btnZoom.setFocusable(false);
@@ -258,11 +269,53 @@ public class ImageBox extends JPanel {
 
     private void btnZoomMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZoomMousePressed
         if (WildLogFileExtentions.Images.isKnownExtention(imageWrapper.getFile())) {
-            JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom", true);
+            final JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom Popup - " + imageWrapper.getFile(), true);
+            dialog.setLayout(new BorderLayout(0, 0));
             JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
-            dialog.add(lblZoomImage);
+            dialog.add(lblZoomImage, BorderLayout.CENTER);
+            JButton btnPrev = new JButton();
+            btnPrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif")));
+            btnPrev.setBackground(Color.BLACK);
+            btnPrev.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+            btnPrev.setFocusable(false);
+            btnPrev.setToolTipText("Load the previous image in this zoom popup.");
+            btnPrev.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int row = table.getEditingRow();
+                    int col = table.getEditingColumn();
+                    DefaultTableModel model = ((DefaultTableModel)table.getModel());
+                    BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+                    int index = listWrapper.getImageList().indexOf(imageWrapper);
+                    if (listWrapper.getImageList().size() > 1 && index > 0) {
+                        dialog.dispose();
+                        listWrapper.getImageList().get(index - 1).getImageBox().btnZoomMousePressed(null);
+                    }
+                }
+            });
+            dialog.add(btnPrev, BorderLayout.WEST);
+            JButton btnNext = new JButton();
+            btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
+            btnNext.setBackground(Color.BLACK);
+            btnNext.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+            btnNext.setFocusable(false);
+            btnNext.setToolTipText("Load the next image in this zoom popup.");
+            btnNext.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int row = table.getEditingRow();
+                    int col = table.getEditingColumn();
+                    DefaultTableModel model = ((DefaultTableModel)table.getModel());
+                    BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+                    int index = listWrapper.getImageList().indexOf(imageWrapper);
+                    if (listWrapper.getImageList().size() > 1 && index < (listWrapper.getImageList().size() - 1)) {
+                        dialog.dispose();
+                        listWrapper.getImageList().get(index + 1).getImageBox().btnZoomMousePressed(null);
+                    }
+                }
+            });
+            dialog.add(btnNext, BorderLayout.EAST);
             dialog.pack();
-//            dialog.setLocationRelativeTo(this);
             dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             UtilsDialog.addEscapeKeyListener(dialog);
             UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), dialog);
@@ -281,6 +334,54 @@ public class ImageBox extends JPanel {
             });
         }
     }//GEN-LAST:event_btnZoomMousePressed
+
+    private void btnCloneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloneMouseReleased
+        if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
+            int option = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showOptionDialog(WildLogApp.getApplication().getMainFrame(), 
+                            "Choose where the file should be moved.", 
+                            "Duplicate And Move", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[]{"Same Observation", "Move Up", "Move Down"}, null);
+                }
+            });
+            if (option != JOptionPane.CLOSED_OPTION) {
+                if (option == 0) {
+                    btnCloneActionPerformed(null);
+                }
+                else
+                if (option == 1) {
+                    // Make sure to call stop editing after getting the row and col
+                    int row = table.getEditingRow();
+                    if (row > 0) {
+                        int col = table.getEditingColumn();
+                        table.getCellEditor().stopCellEditing();
+                        // Perform the add and remember to let the model know
+                        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+                        BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row-1, col);
+                        listWrapper.getImageList().add(imageWrapper.getClone());
+                        model.fireTableCellUpdated(row-1, col);
+                    }
+                }
+                else 
+                if (option == 2) {
+                    // Make sure to call stop editing after getting the row and col
+                    int row = table.getEditingRow();
+                    if (row < (table.getRowCount()-1)) {
+                        int col = table.getEditingColumn();
+                        table.getCellEditor().stopCellEditing();
+                        // Perform the add and remember to let the model know
+                        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+                        BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row+1, col);
+                        listWrapper.getImageList().add(imageWrapper.getClone());
+                        model.fireTableCellUpdated(row+1, col);
+                    }
+                }
+            }
+            evt.consume();
+        }
+    }//GEN-LAST:event_btnCloneMouseReleased
 
     private void moveImageToNewRow(int inDelta) {
         // Make sure to call stop editing after getting the row and col
@@ -317,7 +418,7 @@ public class ImageBox extends JPanel {
         btnUp.setBackground(inColor);
         btnZoom.setBackground(inColor);
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClone;
     private javax.swing.JButton btnDown;
