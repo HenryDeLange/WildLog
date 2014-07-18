@@ -158,7 +158,7 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="25" pref="25" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cmbElementTypesBrowseTab" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
+                                  <Component id="cmbElementTypesBrowseTab" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                                   <Component id="dtpStartDate" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace pref="365" max="32767" attributes="0"/>
