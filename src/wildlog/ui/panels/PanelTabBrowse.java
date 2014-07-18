@@ -55,6 +55,7 @@ import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.LazyTreeNode;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.cellrenderers.WildLogTreeCellRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
@@ -368,12 +369,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 treBrowsePhotoMouseReleased(evt);
             }
         });
-        treBrowsePhoto.addTreeExpansionListener(new javax.swing.event.TreeExpansionListener() {
-            public void treeCollapsed(javax.swing.event.TreeExpansionEvent evt) {
-                treBrowsePhotoTreeCollapsed(evt);
+        treBrowsePhoto.addTreeWillExpandListener(new javax.swing.event.TreeWillExpandListener() {
+            public void treeWillCollapse(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
             }
-            public void treeExpanded(javax.swing.event.TreeExpansionEvent evt) {
-                treBrowsePhotoTreeExpanded(evt);
+            public void treeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {
+                treBrowsePhotoTreeWillExpand(evt);
             }
         });
         treBrowsePhoto.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
@@ -1010,6 +1010,11 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                             break;
                                         }
                                     }
+                                    else {
+                                        // Root node is parent
+                                        treBrowsePhoto.setSelectionPath(tempTreePath);
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -1160,24 +1165,6 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_treBrowsePhotoMouseReleased
 
-    private void treBrowsePhotoTreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treBrowsePhotoTreeExpanded
-        // Hierdie werk nie lekker met die browse button op die panels nie want die expand baie nodes op 'n slag...
-//        // Re-setup the file to load the catch again for the new rows
-//        List<WildLogFile> fotos = app.getDBI().list(
-//            new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
-//                .getWildLogFileID()));
-//        setupFile(fotos);
-    }//GEN-LAST:event_treBrowsePhotoTreeExpanded
-
-    private void treBrowsePhotoTreeCollapsed(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_treBrowsePhotoTreeCollapsed
-        // Hierdie werk nie lekker met die browse button op die panels nie want die expand baie nodes op 'n slag...
-//        // Re-setup the file to load the catch again for the new rows
-//        List<WildLogFile> fotos = app.getDBI().list(
-//            new WildLogFile(((DataObjectWithWildLogFile)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject())
-//                .getWildLogFileID()));
-//        setupFile(fotos);
-    }//GEN-LAST:event_treBrowsePhotoTreeCollapsed
-
     private void btnSetDefaultElementImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetDefaultElementImageActionPerformed
         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
@@ -1310,85 +1297,106 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_btnSetDefaultVisitImageActionPerformed
 
-    private void browseByLocation() {
-// TODO: Verander die storie om die nodes te lazy load, een level op 'n slag, inplaas van die hele DB soos nou.
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
-        // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-        List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
-        Collections.sort(locations);
-        for (Location tempLocation : locations) {
-            DefaultMutableTreeNode tempLocationNode = new DefaultMutableTreeNode(tempLocation);
-            root.add(tempLocationNode);
-            Visit temp = new Visit();
-            temp.setLocationName(tempLocation.getName());
-            List<Visit> visits = app.getDBI().list(temp);
-            Collections.sort(visits);
-            for (Visit tempVisit : visits) {
-                DefaultMutableTreeNode tempVisitNode = new DefaultMutableTreeNode(tempVisit);
-                tempLocationNode.add(tempVisitNode);
-                Sighting tempSi = new Sighting();
-                tempSi.setVisitName(tempVisit.getName());
-                List<Sighting> sightings = app.getDBI().list(tempSi);
-                Collections.sort(sightings);
-                for (Sighting tempSighting : sightings) {
-                    DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, true));
-                    tempVisitNode.add(tempSightingNode);
-                    tempSightingNode.add(new DefaultMutableTreeNode(app.getDBI().find(new Element(tempSighting.getElementName()))));
+    private void treBrowsePhotoTreeWillExpand(javax.swing.event.TreeExpansionEvent evt)throws javax.swing.tree.ExpandVetoException {//GEN-FIRST:event_treBrowsePhotoTreeWillExpand
+        DefaultMutableTreeNode treeNode = ((DefaultMutableTreeNode) evt.getPath().getLastPathComponent());
+        if (treeNode.getUserObject() instanceof Location) {
+            if (rdbBrowseLocation.isSelected()) {
+                List<Visit> visits = app.getDBI().list(new Visit(null, ((Location) treeNode.getUserObject()).getName()));
+                Collections.sort(visits);
+                for (Visit tempVisit : visits) {
+                    LazyTreeNode lazyNode = new LazyTreeNode(tempVisit, (app.getDBI().count(new Sighting(null, tempVisit.getLocationName(), tempVisit.getName())) == 0));
+                    treeNode.add(lazyNode);
                 }
             }
+        }
+        else
+        if (treeNode.getUserObject() instanceof Visit) {
+            if (rdbBrowseLocation.isSelected()) {
+                List<Sighting> sightings = app.getDBI().list(new Sighting(null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName()));
+                Collections.sort(sightings);
+                for (Sighting tempSighting : sightings) {
+                    LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, true), false);
+                    treeNode.add(lazyNode);
+                }
+            }
+        }
+        else
+        if (treeNode.getUserObject() instanceof Element) {
+            if (rdbBrowseElement.isSelected()) {
+                List<Sighting> sightings = app.getDBI().list(new Sighting(((Element) treeNode.getUserObject()).getPrimaryName(), null, null));
+                Collections.sort(sightings);
+                for (Sighting tempSighting : sightings) {
+                    LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, false), false);
+                    treeNode.add(lazyNode);
+                }
+            }
+        }
+        else
+        if (treeNode.getUserObject() instanceof SightingWrapper) {
+            if (rdbBrowseLocation.isSelected()) {
+                treeNode.add(new LazyTreeNode(app.getDBI().find(new Element(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementName())), true));
+            }
+            else
+            if (rdbBrowseElement.isSelected()) {
+                treeNode.add(new LazyTreeNode(app.getDBI().find(new Location(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationName())), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().find(new Visit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitName())), true));
+            }
+            else
+            if (rdbBrowseDate.isSelected()) {
+                treeNode.add(new LazyTreeNode(app.getDBI().find(new Location(((SightingWrapper) treeNode.getUserObject()).getSighting().getLocationName())), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().find(new Visit(((SightingWrapper) treeNode.getUserObject()).getSighting().getVisitName())), true));
+                treeNode.add(new LazyTreeNode(app.getDBI().find(new Element(((SightingWrapper) treeNode.getUserObject()).getSighting().getElementName())), true));
+            }
+        }
+    }//GEN-LAST:event_treBrowsePhotoTreeWillExpand
+
+    private void browseByLocation() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
+        List<Location> locations = app.getDBI().list(new Location());
+        Collections.sort(locations);
+        for (Location tempLocation : locations) {
+            LazyTreeNode lazyNode = new LazyTreeNode(tempLocation, (app.getDBI().count(new Visit(null, tempLocation.getName())) == 0));
+            root.add(lazyNode);
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
 
     private void browseByElement() {
-// TODO: Verander die storie om die nodes te lazy load, een level op 'n slag, inplaas van die hele DB soos nou.
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (searchElementBrowseTab == null) {
             searchElementBrowseTab = new Element();
         }
-        // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
         if (ElementType.NONE.equals(searchElementBrowseTab.getType())) {
             searchElementBrowseTab.setType(null);
         }
-        List<Element> elements = new ArrayList<Element>(app.getDBI().list(searchElementBrowseTab));
+        List<Element> elements = app.getDBI().list(searchElementBrowseTab);
         Collections.sort(elements);
         for (Element tempElement : elements) {
-            DefaultMutableTreeNode tempElementNode = new DefaultMutableTreeNode(tempElement);
-            root.add(tempElementNode);
-            Sighting templateSighting = new Sighting();
-            templateSighting.setElementName(tempElement.getPrimaryName());
-            // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-            List<Sighting> sightings = new ArrayList<Sighting>(app.getDBI().list(templateSighting));
-            Collections.sort(sightings);
-            for (Sighting tempSighting : sightings) {
-                DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, false));
-                tempElementNode.add(tempSightingNode);
-                // Add Location and Element under the sighting node
-                tempSightingNode.add(new DefaultMutableTreeNode(app.getDBI().find(new Location(tempSighting.getLocationName()))));
-                tempSightingNode.add(new DefaultMutableTreeNode(app.getDBI().find(new Visit(tempSighting.getVisitName()))));
-            }
+            LazyTreeNode lazyNode = new LazyTreeNode(tempElement, (app.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, null)) == 0));
+            root.add(lazyNode);
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
 
     private void browseByDate() {
-// TODO: Verander die storie om die nodes te lazy load, een level op 'n slag, inplaas van die hele DB soos nou.
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-            // Need to wrap in ArrayList because of java.lang.UnsupportedOperationException
-            List<Sighting> sightings = new ArrayList<Sighting>(app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class));
-            Collections.sort(sightings);
-            for (Sighting tempSighting : sightings) {
-                DefaultMutableTreeNode tempSightingNode = new DefaultMutableTreeNode(new SightingWrapper(tempSighting, true));
-                root.add(tempSightingNode);
-                DefaultMutableTreeNode tempLocationNode = new DefaultMutableTreeNode(app.getDBI().find(new Location(tempSighting.getLocationName())));
-                tempSightingNode.add(tempLocationNode);
-                DefaultMutableTreeNode tempElementNode = new DefaultMutableTreeNode(app.getDBI().find(new Element(tempSighting.getElementName())));
-                tempSightingNode.add(tempElementNode);
+            List<Sighting> sightings = app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class);
+            if (sightings.isEmpty()) {
+                DefaultMutableTreeNode lazyNode = new DefaultMutableTreeNode("No Observations found.");
+                root.add(lazyNode);
+            }
+            else {
+                Collections.sort(sightings);
+                for (Sighting tempSighting : sightings) {
+                    LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, true), false);
+                    root.add(lazyNode);
+                }
             }
         }
         else {
-            root.add(new DefaultMutableTreeNode("Please select dates first"));
+            root = new DefaultMutableTreeNode("Select a start and end date.");
+            root.add(new DefaultMutableTreeNode("Then press the Refresh button."));
         }
         treBrowsePhoto.setModel(new DefaultTreeModel(root));
     }
@@ -1508,7 +1516,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                 }
             }
         }
-        List<String> tasksToRemove = new ArrayList<>(submittedTasks.size());
+        List<String> tasksToRemove = new ArrayList<String>(submittedTasks.size());
         for (String taskKey : submittedTasks.keySet()) {
             Future future = submittedTasks.get(taskKey);
             if (future.isDone()) {
@@ -1536,7 +1544,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     // Load die image in altwee maps sodat al die verskillende "contains" reg werk...
                     inNewPreloadedImages.put(tempKey, tempImage);
                     preloadedImages.put(tempKey, tempImage);
-                    callbackToDoTheImageLoad(tempImage, inNode, inIndex);
+                    callbackReadyToLoadTheImage(tempImage, inNode, inIndex);
                 }
                 else {
                     if (!submittedTasks.containsKey(tempKey)) {
@@ -1553,7 +1561,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                                         // Load die image in altwee maps sodat al die verskillende "contains" reg werk...
                                         inNewPreloadedImages.put(tempKey, tempConcImage);
                                         preloadedImages.put(tempKey, tempConcImage);
-                                        callbackToDoTheImageLoad(tempConcImage, inNode, inIndex);
+                                        callbackReadyToLoadTheImage(tempConcImage, inNode, inIndex);
                                     }
                                 })
                             );
@@ -1618,7 +1626,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         }
     }
 
-    private void callbackToDoTheImageLoad(Image inImage, Object inSelectedNode, int inImageIndex) {
+    private void callbackReadyToLoadTheImage(Image inImage, Object inSelectedNode, int inImageIndex) {
         // Only display the image if it is the current active node.
         // (This is to prevent old node's files that finished after the active node from overwriting the displayed image.)
         if (inImageIndex == imageIndex && treBrowsePhoto.getLastSelectedPathComponent() == inSelectedNode) {
