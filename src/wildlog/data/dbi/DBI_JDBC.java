@@ -869,6 +869,14 @@ public abstract class DBI_JDBC implements DBI {
                 state.setLong(1, inSighting.getSightingCounter());
             }
             else
+            if (inSighting.getElementName() != null && inSighting.getLocationName() != null && inSighting.getVisitName() != null) {
+                sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ? AND VISITNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(2, UtilsData.sanitizeString(inSighting.getLocationName()));
+                state.setString(3, UtilsData.sanitizeString(inSighting.getVisitName()));
+            }
+            else
             if (inSighting.getElementName() != null && inSighting.getLocationName() != null) {
                 sql = sql + " WHERE ELEMENTNAME = ? AND LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
@@ -880,6 +888,13 @@ public abstract class DBI_JDBC implements DBI {
                 sql = sql + " WHERE ELEMENTNAME = ? AND VISITNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inSighting.getElementName()));
+                state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
+            }
+            else
+            if (inSighting.getLocationName() != null && inSighting.getVisitName() != null) {
+                sql = sql + " WHERE LOCATIONNAME = ? AND VISITNAME = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, UtilsData.sanitizeString(inSighting.getLocationName()));
                 state.setString(2, UtilsData.sanitizeString(inSighting.getVisitName()));
             }
             else
