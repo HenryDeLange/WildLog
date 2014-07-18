@@ -5,8 +5,6 @@ import astro.MoonTimes;
 import astro.SunTimes;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 
@@ -189,105 +187,105 @@ public class AstroCalculator {
         return Moonlight.NO_MOON;
     }
     
-    /**
-     * Used for testing.
-     * @param args 
-     */
-    public static void main(String[] args) {
-        System.out.println("-------------------------------------------WINTER-------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  01*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 6-1, 25, hours, mins), -33.9, 18.6);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------SOMER--------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  01*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 12-1, 25, hours, mins), -33.9, 18.6);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------ALLES--------------------------------------------");
-        Map<ActiveTimeSpesific, Integer> count = new HashMap<>(24*60);
-        for (int t = 0; t < 24; t++) {
-            int hours = t;
-            for (int i = 0; i < 60; i++) {
-                int mins = i;
-                ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 4-1, 25, hours, mins), -33.9, 18.6);
-                String hrs = ""+hours;
-                if (hours < 10) {
-                    hrs = "0" + hrs;
-                }
-                String mns = ""+mins;
-                if (mins < 10) {
-                    mns = "0" + mns;
-                }
-                System.out.println(hrs + ":" + mns + "  -> " + activeTimeSpesific);
-                if (count.containsKey(activeTimeSpesific)) {
-                    count.put(activeTimeSpesific, count.get(activeTimeSpesific) + 1);
-                }
-                else {
-                    count.put(activeTimeSpesific, 1);
-                }
-            }
-        }
-        System.out.println("...........................................");
-        System.out.println(ActiveTimeSpesific.MORNING_TWILIGHT.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_TWILIGHT));
-        System.out.println(ActiveTimeSpesific.MORNING_SUNRISE.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_SUNRISE));
-        System.out.println(ActiveTimeSpesific.MORNING_EARLY.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_EARLY));
-        System.out.println(ActiveTimeSpesific.MORNING_MID.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_MID));
-        System.out.println(ActiveTimeSpesific.DAY_MID.getText() + " = " + count.get(ActiveTimeSpesific.DAY_MID));
-        System.out.println(ActiveTimeSpesific.AFTERNOON_MID.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_MID));
-        System.out.println(ActiveTimeSpesific.AFTERNOON_LATE.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_LATE));
-        System.out.println(ActiveTimeSpesific.AFTERNOON_SUNSET.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_SUNSET));
-        System.out.println(ActiveTimeSpesific.AFTERNOON_TWILIGHT.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_TWILIGHT));
-        System.out.println(ActiveTimeSpesific.NIGHT_EARLY.getText() + " = " + count.get(ActiveTimeSpesific.NIGHT_EARLY));
-        System.out.println(ActiveTimeSpesific.NIGHT_MID.getText() + " = " + count.get(ActiveTimeSpesific.NIGHT_MID));
-        System.out.println(ActiveTimeSpesific.NIGHT_LATE.getText() + " = " + count.get(ActiveTimeSpesific.NIGHT_LATE));
-        System.out.println(ActiveTimeSpesific.NONE.getText() + " = " + count.get(ActiveTimeSpesific.NONE));
-        System.out.println("-------------------------------------------POLE SOMER--------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  01*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 6-1, 25, hours, mins), 81.9, 45.6);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------POLE WINTER--------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  1*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 12-1, 25, hours, mins), 81.9, 45.6);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------POLE LENTE---------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  1*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 4-1, 14, hours, mins), 79.7481, 41.9856);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------POLE HERFS---------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  1*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 11-1, 21, hours, mins), 79.2942, 43.3919);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------POLE ANDER1---------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  1*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 9-1, 21, hours, mins), 79.2942, -43.3919);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-        System.out.println("-------------------------------------------POLE ANDER2---------------------------------------------");
-        for (int t = 0; t < 24; t++) {
-            int hours =  1*t;
-            int mins = 30;
-            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 12-1, 25, hours, mins), 68.2942, -143.3919);
-            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
-        }
-    }
+//    /**
+//     * Used for testing.
+//     * @param args 
+//     */
+//    public static void main(String[] args) {
+//        System.out.println("-------------------------------------------WINTER-------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  01*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 6-1, 25, hours, mins), -33.9, 18.6);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------SOMER--------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  01*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 12-1, 25, hours, mins), -33.9, 18.6);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------ALLES--------------------------------------------");
+//        Map<ActiveTimeSpesific, Integer> count = new HashMap<>(24*60);
+//        for (int t = 0; t < 24; t++) {
+//            int hours = t;
+//            for (int i = 0; i < 60; i++) {
+//                int mins = i;
+//                ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 4-1, 25, hours, mins), -33.9, 18.6);
+//                String hrs = ""+hours;
+//                if (hours < 10) {
+//                    hrs = "0" + hrs;
+//                }
+//                String mns = ""+mins;
+//                if (mins < 10) {
+//                    mns = "0" + mns;
+//                }
+//                System.out.println(hrs + ":" + mns + "  -> " + activeTimeSpesific);
+//                if (count.containsKey(activeTimeSpesific)) {
+//                    count.put(activeTimeSpesific, count.get(activeTimeSpesific) + 1);
+//                }
+//                else {
+//                    count.put(activeTimeSpesific, 1);
+//                }
+//            }
+//        }
+//        System.out.println("...........................................");
+//        System.out.println(ActiveTimeSpesific.MORNING_TWILIGHT.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_TWILIGHT));
+//        System.out.println(ActiveTimeSpesific.MORNING_SUNRISE.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_SUNRISE));
+//        System.out.println(ActiveTimeSpesific.MORNING_EARLY.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_EARLY));
+//        System.out.println(ActiveTimeSpesific.MORNING_MID.getText() + " = " + count.get(ActiveTimeSpesific.MORNING_MID));
+//        System.out.println(ActiveTimeSpesific.DAY_MID.getText() + " = " + count.get(ActiveTimeSpesific.DAY_MID));
+//        System.out.println(ActiveTimeSpesific.AFTERNOON_MID.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_MID));
+//        System.out.println(ActiveTimeSpesific.AFTERNOON_LATE.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_LATE));
+//        System.out.println(ActiveTimeSpesific.AFTERNOON_SUNSET.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_SUNSET));
+//        System.out.println(ActiveTimeSpesific.AFTERNOON_TWILIGHT.getText() + " = " + count.get(ActiveTimeSpesific.AFTERNOON_TWILIGHT));
+//        System.out.println(ActiveTimeSpesific.NIGHT_EARLY.getText() + " = " + count.get(ActiveTimeSpesific.NIGHT_EARLY));
+//        System.out.println(ActiveTimeSpesific.NIGHT_MID.getText() + " = " + count.get(ActiveTimeSpesific.NIGHT_MID));
+//        System.out.println(ActiveTimeSpesific.NIGHT_LATE.getText() + " = " + count.get(ActiveTimeSpesific.NIGHT_LATE));
+//        System.out.println(ActiveTimeSpesific.NONE.getText() + " = " + count.get(ActiveTimeSpesific.NONE));
+//        System.out.println("-------------------------------------------POLE SOMER--------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  01*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 6-1, 25, hours, mins), 81.9, 45.6);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------POLE WINTER--------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  1*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 12-1, 25, hours, mins), 81.9, 45.6);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------POLE LENTE---------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  1*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 4-1, 14, hours, mins), 79.7481, 41.9856);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------POLE HERFS---------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  1*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 11-1, 21, hours, mins), 79.2942, 43.3919);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------POLE ANDER1---------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  1*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 9-1, 21, hours, mins), 79.2942, -43.3919);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//        System.out.println("-------------------------------------------POLE ANDER2---------------------------------------------");
+//        for (int t = 0; t < 24; t++) {
+//            int hours =  1*t;
+//            int mins = 30;
+//            ActiveTimeSpesific activeTimeSpesific = getSunCategory(new Date(2014, 12-1, 25, hours, mins), 68.2942, -143.3919);
+//            System.out.println(hours + ":" + mins + "  -> " + activeTimeSpesific);
+//        }
+//    }
 
 }

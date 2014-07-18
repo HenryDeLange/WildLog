@@ -1,15 +1,12 @@
 package wildlog.ui.panels.bulkupload;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import javax.swing.JButton;
-import javax.swing.JDialog;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
 import wildlog.data.enums.utils.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.ZoomDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.bulkupload.data.BulkUploadDataLoader;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
@@ -26,7 +24,6 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogFileExtentions;
 
 
 public class ImageBox extends JPanel {
@@ -120,14 +117,19 @@ public class ImageBox extends JPanel {
         btnRemove.setBackground(new java.awt.Color(235, 246, 220));
         btnRemove.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         btnRemove.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
-        btnRemove.setText("Remove");
-        btnRemove.setToolTipText("Remove the file from this Observation.");
+        btnRemove.setText("<html><u>Remove</u></html>");
+        btnRemove.setToolTipText("Remove the file from this Observation. Right-click to remove the file from the Observation, but move it to the Period.");
         btnRemove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnRemove.setFocusPainted(false);
         btnRemove.setFocusable(false);
         btnRemove.setIconTextGap(2);
         btnRemove.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btnRemove.setName("btnRemove"); // NOI18N
+        btnRemove.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnRemoveMouseReleased(evt);
+            }
+        });
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -184,9 +186,9 @@ public class ImageBox extends JPanel {
         btnZoom.setFocusable(false);
         btnZoom.setMargin(new java.awt.Insets(2, 4, 2, 4));
         btnZoom.setName("btnZoom"); // NOI18N
-        btnZoom.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                btnZoomMousePressed(evt);
+        btnZoom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnZoomActionPerformed(evt);
             }
         });
         add(btnZoom, new org.netbeans.lib.awtextra.AbsoluteConstraints(205, 125, 30, 80));
@@ -267,74 +269,6 @@ public class ImageBox extends JPanel {
         }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
-    private void btnZoomMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnZoomMousePressed
-        if (WildLogFileExtentions.Images.isKnownExtention(imageWrapper.getFile())) {
-            final JDialog dialog = new JDialog(WildLogApp.getApplication().getMainFrame(), "Zoom Popup - " + imageWrapper.getFile(), true);
-            dialog.setLayout(new BorderLayout(0, 0));
-            JLabel lblZoomImage = new JLabel(UtilsImageProcessing.getScaledIcon(imageWrapper.getFile(), WildLogThumbnailSizes.VERY_LARGE.getSize()));
-            dialog.add(lblZoomImage, BorderLayout.CENTER);
-            JButton btnPrev = new JButton();
-            btnPrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif")));
-            btnPrev.setBackground(Color.BLACK);
-            btnPrev.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-            btnPrev.setFocusable(false);
-            btnPrev.setToolTipText("Load the previous image in this zoom popup.");
-            btnPrev.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int row = table.getEditingRow();
-                    int col = table.getEditingColumn();
-                    DefaultTableModel model = ((DefaultTableModel)table.getModel());
-                    BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
-                    int index = listWrapper.getImageList().indexOf(imageWrapper);
-                    if (listWrapper.getImageList().size() > 1 && index > 0) {
-                        dialog.dispose();
-                        listWrapper.getImageList().get(index - 1).getImageBox().btnZoomMousePressed(null);
-                    }
-                }
-            });
-            dialog.add(btnPrev, BorderLayout.WEST);
-            JButton btnNext = new JButton();
-            btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
-            btnNext.setBackground(Color.BLACK);
-            btnNext.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-            btnNext.setFocusable(false);
-            btnNext.setToolTipText("Load the next image in this zoom popup.");
-            btnNext.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int row = table.getEditingRow();
-                    int col = table.getEditingColumn();
-                    DefaultTableModel model = ((DefaultTableModel)table.getModel());
-                    BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
-                    int index = listWrapper.getImageList().indexOf(imageWrapper);
-                    if (listWrapper.getImageList().size() > 1 && index < (listWrapper.getImageList().size() - 1)) {
-                        dialog.dispose();
-                        listWrapper.getImageList().get(index + 1).getImageBox().btnZoomMousePressed(null);
-                    }
-                }
-            });
-            dialog.add(btnNext, BorderLayout.EAST);
-            dialog.pack();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            UtilsDialog.addEscapeKeyListener(dialog);
-            UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), dialog);
-            UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), dialog);
-            dialog.setVisible(true);
-        }
-        else {
-            UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    JOptionPane.showMessageDialog(WildLogApp.getApplication().getMainFrame(), 
-                            "Only images can be zoomed. To view the file, click on the black box to open the file in the system's default viewer.", 
-                            "Can't Open Zoom!", JOptionPane.INFORMATION_MESSAGE);
-                    return 0;
-                }
-            });
-        }
-    }//GEN-LAST:event_btnZoomMousePressed
-
     private void btnCloneMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCloneMouseReleased
         if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
             int option = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
@@ -382,6 +316,42 @@ public class ImageBox extends JPanel {
             evt.consume();
         }
     }//GEN-LAST:event_btnCloneMouseReleased
+
+    private void btnZoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnZoomActionPerformed
+        int row = table.getEditingRow();
+        int col = table.getEditingColumn();
+        DefaultTableModel model = ((DefaultTableModel)table.getModel());
+        BulkUploadImageListWrapper listWrapper = (BulkUploadImageListWrapper)model.getValueAt(row, col);
+        int index = 0;
+        List<Path> filePaths = new ArrayList<Path>(listWrapper.getImageList().size());
+        for (int t = 0; t < listWrapper.getImageList().size(); t++) {
+            BulkUploadImageFileWrapper wrapper = listWrapper.getImageList().get(t);
+            filePaths.add(wrapper.getFile());
+            if (wrapper.equals(imageWrapper)) {
+                index = t;
+            }
+        }
+        ZoomDialog dialog = new ZoomDialog(WildLogApp.getApplication().getMainFrame(), filePaths, index);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btnZoomActionPerformed
+
+    private void btnRemoveMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRemoveMouseReleased
+        if (evt.isPopupTrigger() || SwingUtilities.isRightMouseButton(evt)) {
+            int result = UtilsDialog.showDialogBackgroundWrapper(WildLogApp.getApplication().getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(WildLogApp.getApplication().getMainFrame(), 
+                            "Are you sure you want to remove the file from the Observation and add it to the Period?", 
+                            "Move File To Period?", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
+            });
+            if (result == JOptionPane.YES_OPTION) {
+                BulkUploadPanel bulkUploadPanel = (BulkUploadPanel) getParent().getParent().getParent().getParent().getParent();
+                bulkUploadPanel.addVisitFile(imageWrapper.getFile());
+                btnRemoveActionPerformed(null);
+            }
+        }
+    }//GEN-LAST:event_btnRemoveMouseReleased
 
     private void moveImageToNewRow(int inDelta) {
         // Make sure to call stop editing after getting the row and col

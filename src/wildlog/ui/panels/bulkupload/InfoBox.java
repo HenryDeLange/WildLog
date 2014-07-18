@@ -247,7 +247,7 @@ public class InfoBox extends JPanel {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnChooseCreatureActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseCreatureActionPerformed
-        ElementSelectionDialog dialog = new ElementSelectionDialog(app.getMainFrame(), true, app, sightingWrapper.getElementName());
+        ElementSelectionDialog dialog = new ElementSelectionDialog(app.getMainFrame(), app, sightingWrapper.getElementName());
         dialog.setVisible(true);
         // Set the label to the selected text
         table.getCellEditor().stopCellEditing();
