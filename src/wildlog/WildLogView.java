@@ -96,6 +96,7 @@ import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsCompression;
@@ -1391,17 +1392,8 @@ public final class WildLogView extends JFrame {
                             List<Sighting> sightings = app.getDBI().list(new Sighting());
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
-                                if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
-                                    if (sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
-                                            && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
-                                        double lat = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                                        double lon = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                                        sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), lat, lon));
-                                        sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), lat, lon));
-                                    }
-                                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                                    app.getDBI().createOrUpdate(sighting, false);
-                                }
+                                UtilsTime.calculateSunAndMoon(sighting);
+                                app.getDBI().createOrUpdate(sighting, false);
                                 setProgress(0 + (int)((t/(double)sightings.size())*100));
                                 setMessage("Sun and Moon Calculation: " + getProgress() + "%");
                             }
@@ -2281,6 +2273,18 @@ public final class WildLogView extends JFrame {
                         setProgress(99);
 
                         // ---------------------?---------------------
+                        // Recreate the database (to optimise file size and indexes)
+                        // TODO: Recreate the database. See http://www.h2database.com/html/features.html#compacting
+//                        public static void compact(String dir, String dbName,
+//        String user, String password) throws Exception {
+//    String url = "jdbc:h2:" + dir + "/" + dbName;
+//    String file = "data/test.sql";
+//    Script.execute(url, user, password, file);
+//    DeleteDbFiles.execute(dir, dbName, true);
+//    RunScript.execute(url, user, password, file, null, false);
+//}
+                        
+                        // ---------------------?---------------------
                         // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
                         // TODO: Maybe delete all non-wildlog files during cleanup
 
@@ -2753,18 +2757,7 @@ public final class WildLogView extends JFrame {
                             if (sighting.getCertainty() == null || Certainty.NONE.equals(Certainty.getEnumFromText(sighting.getCertainty().toString()))) {
                                 sighting.setCertainty(Certainty.SURE);
                             }
-                            if (sighting.getDate() != null) {
-                                if (sighting.getLatitude() != null && sighting.getLongitude() != null
-                                        && !Latitudes.NONE.equals(sighting.getLatitude()) && !Longitudes.NONE.equals(sighting.getLongitude())) {
-                                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                                    // Sun
-                                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
-                                    // Moon
-                                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
-                                }
-                                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                            }
+                            UtilsTime.calculateSunAndMoon(sighting);
                             app.getDBI().createOrUpdate(sighting, false);
                             // Check if there are any images to link
                             // TODO: Ek kan ook in die toekoms die "HasFoto" checkbox op WildNote gebruik om die linking meer akkuraat te maak...

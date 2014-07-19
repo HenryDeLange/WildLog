@@ -213,9 +213,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if (tblSightings.getSelectedRowCount() == 0) {
+                if (tblSightings.getSelectedRowCount() == 0 && inIndicator != null) {
                     UtilsTableGenerator.setupPreviousRowSelection(tblSightings, 
-                            new String[]{Long.toString(((PanelSighting)inIndicator).getSighting().getSightingCounter())}, 6);
+                            new String[]{Long.toString(((PanelSighting) inIndicator).getSighting().getSightingCounter())}, 6);
                 }
             }
         });

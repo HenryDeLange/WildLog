@@ -71,8 +71,6 @@ public class WildLogApp extends Application {
     // The WildLogDBI is initialized in startup() and closed in shutdown()
     private WildLogDBI dbi;
     private WildLogView view;
-    // TODO: Ek dink nie ek gebruik hierdie executor huidiglik nie... Dis half vir future use...
-//    private ExecutorService sharedExecutor;
 
 
     @Override

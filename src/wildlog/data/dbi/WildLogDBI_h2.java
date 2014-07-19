@@ -34,6 +34,10 @@ import wildlog.utils.WildLogPaths;
 
 public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
+    /**
+     * Use this constructor to connect to the default Workspace database.
+     * @throws Exception 
+     */
     public WildLogDBI_h2() throws Exception {
         this("jdbc:h2:"
                 + WildLogPaths.WILDLOG_DATA.getAbsoluteFullPath().resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())
@@ -287,8 +291,6 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
     @Override
     public boolean doImportIUCN(Path inPath, boolean inUpdatePrimaryName, boolean inAddNewElements, boolean inUpdateExistingElements) {
-        // TODO: Possibily use the rest as Other Name.
-        // TODO: Maybe also handle synonyms.
         Statement state = null;
         ResultSet results = null;
         boolean success = true;
@@ -762,6 +764,11 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Make changes to WildLog Options
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
+            
+// TODO: Update the sun and moon phase (recalculate it)
+            
+            // Increase the cache size slightly (doubled)
+            state.execute("SET CACHE_SIZE 32768");
             // Update the version number
             state.executeUpdate("UPDATE WILDLOG SET VERSION=5");
         }

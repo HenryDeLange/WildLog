@@ -1,22 +1,29 @@
 package wildlog.ui.dialogs;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.SpinnerFixer;
+import wildlog.ui.utils.UtilsTime;
 
 
 public class DateChangeDialog extends JDialog {
     private WildLogApp app;
-    private boolean selectionMade = false;
-    private long timeAdjustment = 0L;
+    private Visit visit;
 
-
-    public DateChangeDialog(WildLogApp inApp, JFrame inParent) {
+    
+    public DateChangeDialog(WildLogApp inApp, JFrame inParent, Visit inVisit) {
         super(inParent);
+        visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);
         // Setup the default behavior (this is for JFrames)
@@ -24,8 +31,9 @@ public class DateChangeDialog extends JDialog {
         UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
-    public DateChangeDialog(WildLogApp inApp, JDialog inParent) {
+    public DateChangeDialog(WildLogApp inApp, JDialog inParent, Visit inVisit) {
         super(inParent);
+        visit = inVisit;
         // Do the setup (this is where the shared setup happens)
         doSetup(inApp);
         // Setup the default behavior (this is for JDialogs)
@@ -113,12 +121,14 @@ public class DateChangeDialog extends JDialog {
         buttonGroup1.add(rdbIncrease);
         rdbIncrease.setText("Increase");
         rdbIncrease.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbIncrease.setFocusPainted(false);
         rdbIncrease.setName("rdbIncrease"); // NOI18N
         getContentPane().add(rdbIncrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 63, -1, -1));
 
         buttonGroup1.add(rdbDecrease);
         rdbDecrease.setText("Decrease");
         rdbDecrease.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        rdbDecrease.setFocusPainted(false);
         rdbDecrease.setName("rdbDecrease"); // NOI18N
         getContentPane().add(rdbDecrease, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 63, -1, -1));
 
@@ -126,7 +136,7 @@ public class DateChangeDialog extends JDialog {
         jLabel2.setName("jLabel2"); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 95, -1, 20));
 
-        spnDays.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spnDays.setModel(new javax.swing.SpinnerNumberModel(0, 0, 365000, 1));
         spnDays.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         spnDays.setEditor(new javax.swing.JSpinner.NumberEditor(spnDays, "0"));
         spnDays.setName("spnDays"); // NOI18N
@@ -174,26 +184,38 @@ public class DateChangeDialog extends JDialog {
             getGlassPane().setVisible(false);
         }
         else {
-            timeAdjustment = ((int) spnDays.getValue())    *24*60*60*1000
-                           + ((int) spnHours.getValue())   *60*60*1000
-                           + ((int) spnMinutes.getValue()) *60*1000
-                           + ((int) spnSeconds.getValue()) *1000;
-            if (rdbDecrease.isSelected()) {
-                timeAdjustment = -1*timeAdjustment;
+            // Update the Sightings
+            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+            for (Sighting sighting : listSightings) {
+                LocalDateTime currentSightingTime = LocalDateTime.ofInstant(sighting.getDate().toInstant(), ZoneId.systemDefault());
+                if (rdbIncrease.isSelected()) {
+                    // Plus time
+                    LocalDateTime newTime = currentSightingTime
+                            .plusDays((int) spnDays.getValue())
+                            .plusHours((int) spnHours.getValue())
+                            .plusMinutes((int) spnMinutes.getValue())
+                            .plusSeconds((int) spnSeconds.getValue());
+                    sighting.setDate(Date.from(newTime.atZone(ZoneId.systemDefault()).toInstant()));
+                }
+                else {
+                    // Minus time
+                    LocalDateTime newTime = currentSightingTime
+                            .minusDays((int) spnDays.getValue())
+                            .minusHours((int) spnHours.getValue())
+                            .minusMinutes((int) spnMinutes.getValue())
+                            .minusSeconds((int) spnSeconds.getValue());
+                    sighting.setDate(Date.from(newTime.atZone(ZoneId.systemDefault()).toInstant()));
+                }
+                // Because the sighting's date changed I need to recalculate the Sun and Moon phase
+                UtilsTime.calculateSunAndMoon(sighting);
+                // Save the changes
+                app.getDBI().createOrUpdate(sighting, false);
             }
-            selectionMade = true;
+            
             // We are done, dispose this dialog
             dispose();
         }
     }//GEN-LAST:event_btnSaveActionPerformed
-
-    public boolean isSelectionMade() {
-        return selectionMade;
-    }
-
-    public long getTimeAdjustment() {
-        return timeAdjustment;
-    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

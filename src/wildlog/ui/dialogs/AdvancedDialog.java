@@ -11,16 +11,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import wildlog.WildLogApp;
-import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.enums.Latitudes;
-import wildlog.data.enums.Longitudes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.panels.PanelVisit;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -211,29 +209,9 @@ public class AdvancedDialog extends JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCorrectTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCorrectTimeActionPerformed
-        DateChangeDialog dialog = new DateChangeDialog(app, this);
+        DateChangeDialog dialog = new DateChangeDialog(app, this, visit);
         dialog.setVisible(true);
-        if (dialog.isSelectionMade()) {
-            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
-            for (Sighting sighting : listSightings) {
-                sighting.setDate(new Date(sighting.getDate().getTime() + dialog.getTimeAdjustment()));
-                // Because the sighting's date changed I need to recalculate the Sun and Moon phase
-                if (sighting.getDate() != null
-                        && sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
-                        && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                    // Sun
-                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
-                    // Moon
-                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
-                }
-                // Save the changes
-                app.getDBI().createOrUpdate(sighting, false);
-            }
-            panelVisit.doTheRefresh(null);
-        }
+        panelVisit.doTheRefresh(null);
         dispose();
     }//GEN-LAST:event_btnCorrectTimeActionPerformed
 
@@ -270,17 +248,7 @@ public class AdvancedDialog extends JDialog {
                 sighting.setLonMinutes(tempSighting.getLonMinutes());
                 sighting.setLonSeconds(tempSighting.getLonSeconds());
                 // Because the sighting's GPS point changed I need to recalculate the Sun and Moon phase
-                if (sighting.getDate() != null
-                        && sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
-                        && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                    // Sun
-                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
-                    // Moon
-                    sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
-                }
+                UtilsTime.calculateSunAndMoon(sighting);
                 // Save the changes
                 app.getDBI().createOrUpdate(sighting, false);
             }
@@ -397,26 +365,14 @@ public class AdvancedDialog extends JDialog {
         List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
         for (Sighting sighting : listSightings) {
             // Recalculate the Sun and Moon phase
-            if (sighting.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
-                if (sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
-                        && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
-                    double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
-                    double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
-                    // Sun
-                    sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
-                    // Moon Light
-                    sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
-                }
-                sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
-            }
-            // Save the changes
+            UtilsTime.calculateSunAndMoon(sighting);
             app.getDBI().createOrUpdate(sighting, false);
         }
         panelVisit.doTheRefresh(null);
         dispose();
     }//GEN-LAST:event_btnSetSunAndMoonActionPerformed
 
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChecklist;
     private javax.swing.JButton btnCorrectTime;

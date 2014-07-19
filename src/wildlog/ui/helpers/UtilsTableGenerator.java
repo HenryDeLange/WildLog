@@ -53,6 +53,8 @@ import wildlog.utils.UtilsImageProcessing;
 public final class UtilsTableGenerator {
     private static final ExecutorService executorService =
             Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_TableGenerator"));
+    // NOTE: Ek kan dalk eendag 'n ConnectionPool gebruik vir elke table thread want hulle almal gebruik tans die een connection.
+    //       Maar ek het 'n toets gedoen met 'n ConnectionPool en dit maak nog nie juis 'n groot verskil nie, so vir eenvoud hou ek dit soos dit nou is.
 
     private UtilsTableGenerator() {
     }

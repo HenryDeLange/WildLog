@@ -5,7 +5,12 @@ import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import wildlog.astro.AstroCalculator;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.enums.Latitudes;
+import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.TimeFormat;
+import wildlog.mapping.utils.UtilsGps;
 
 
 public class UtilsTime {
@@ -89,6 +94,24 @@ public class UtilsTime {
             inCmbTimeFormat.setSelectedItem(TimeFormat.NONE);
         }
         return calendar.getTime();
+    }
+    
+    public static void calculateSunAndMoon(Sighting sighting) {
+        // Check if time is usable
+        if (sighting.getDate() != null && sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
+            // Moon phase
+            sighting.setMoonPhase(AstroCalculator.getMoonPhase(sighting.getDate()));
+            // Check if GPS is usable
+            if (sighting.getLatitude() != null && !sighting.getLatitude().equals(Latitudes.NONE)
+                    && sighting.getLongitude() != null && !sighting.getLongitude().equals(Longitudes.NONE)) {
+                double latitude = UtilsGps.getDecimalDegree(sighting.getLatitude(), sighting.getLatDegrees(), sighting.getLatMinutes(), sighting.getLatSeconds());
+                double longitude = UtilsGps.getDecimalDegree(sighting.getLongitude(), sighting.getLonDegrees(), sighting.getLonMinutes(), sighting.getLonSeconds());
+                // Sun Light
+                sighting.setTimeOfDay(AstroCalculator.getSunCategory(sighting.getDate(), latitude, longitude));
+                // Moon Light
+                sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
+            }
+        }
     }
 
 }

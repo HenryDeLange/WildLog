@@ -3,6 +3,7 @@ package wildlog.ui.dialogs;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -102,7 +103,7 @@ public class GPSDialog extends JDialog {
             @Override
             public void filesDropped(List<File> inFiles) {
                 if (inFiles != null && inFiles.size() == 1) {
-                    doGpxInput(inFiles.get(0));
+                    doGpxInput(inFiles.get(0).toPath());
                 }
             }
         });
@@ -252,6 +253,8 @@ public class GPSDialog extends JDialog {
                 tglEast.setSelected(false);
                 tglWest.setSelected(false);
             }
+            // Setup the accuracy
+            cmbAccuracy.setSelectedItem(inDataObjectWithGPS.getGPSAccuracy());
             // Populate the initial values into the spinners
             tglDecimalDegrees.setSelected(true);
             tglDecimalDegrees.requestFocus();
@@ -663,8 +666,8 @@ public class GPSDialog extends JDialog {
         int result = fileChooser.showOpenDialog(this);
         getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            File file = fileChooser.getSelectedFile();
-            lastFilePath = file.getAbsolutePath();
+            Path file = fileChooser.getSelectedFile().toPath();
+            lastFilePath = file.toAbsolutePath().toString();
             doGpxInput(file);
         }
     }//GEN-LAST:event_btnUseGPXActionPerformed
@@ -702,9 +705,9 @@ public class GPSDialog extends JDialog {
         int result = fileChooser.showOpenDialog(this);
         getGlassPane().setVisible(false);
         if ((result != JFileChooser.ERROR_OPTION) && (result == JFileChooser.APPROVE_OPTION)) {
-            File file = fileChooser.getSelectedFile();
-            lastFilePath = file.getAbsolutePath();
-            loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(file.toPath()));
+            Path file = fileChooser.getSelectedFile().toPath();
+            lastFilePath = file.toAbsolutePath().toString();
+            loadUIValues(UtilsImageProcessing.getExifGpsFromJpeg(file));
         }
     }//GEN-LAST:event_btnUseImageActionPerformed
 
@@ -718,7 +721,7 @@ public class GPSDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnRemoveGPSActionPerformed
 
-    private void doGpxInput(File inFile) {
+    private void doGpxInput(Path inFile) {
         getGlassPane().setVisible(true);
         String gpxValue = JOptionPane.showInputDialog(this,
                 "<html><b>Please enter the GPX Waypoint's name. </b>"

@@ -1,6 +1,8 @@
 package wildlog.ui.reports.helpers;
 
 import java.awt.Color;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.swing.JLabel;
 import wildlog.astro.AstroCalculator;
@@ -23,8 +25,8 @@ public class MoonReportHelper {
             else
                 // IF the moon is 50% then base it on wether the moon is growing or shrinking.
             if (inSighting.getMoonPhase() == 50) {
-                Date testDate = new Date(inSighting.getDate().getTime() + 1000*60*60*24*2);
-                int testMoonphase = AstroCalculator.getMoonPhase(testDate);
+                LocalDateTime futureTime = LocalDateTime.ofInstant(inSighting.getDate().toInstant(), ZoneId.systemDefault()).plusDays(2);
+                int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
                 if (testMoonphase >= 0 && testMoonphase < 50)
                     inChart.addBar(new BarChartEntity(getPrefix(inSighting) + "0-50%", "First Half", 1, getColor(inSighting, inLabels)));
                 else
