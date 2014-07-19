@@ -188,6 +188,19 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.createStatement();
                 state.execute(tableWildLogOptions);
                 closeStatement(state);
+                // Since this is the first time the database is being created, also update the cache size for H2 (might fail on other DBs)
+                try {
+                    state = conn.createStatement();
+                    state.execute("SET CACHE_SIZE 32768");
+                    closeStatement(state);
+                }
+                catch (SQLException sqle) {
+                    // Don't worry too much if this failed
+                    System.out.println("WARNING: Could not change database cache size... " + sqle.getMessage());
+                }
+                finally {
+                    closeStatement(state);
+                }
             }
         }
         catch (SQLException sqle) {
