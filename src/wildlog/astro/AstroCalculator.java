@@ -31,6 +31,7 @@ public class AstroCalculator {
         //       the start time will actually be earlier than the algorith time.
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(inDate);
+// FIXME: Gebruik LocalTime
         double time = (double)(calendar.get(Calendar.HOUR_OF_DAY) + (((double)calendar.get(Calendar.MINUTE)) / 60.0));
         if (day[SunTimes.START] == SunTimes.BELOW_HORIZON || day[SunTimes.END] == SunTimes.BELOW_HORIZON
                 || day[SunTimes.START] == SunTimes.ABOVE_HORIZON || day[SunTimes.END] == SunTimes.ABOVE_HORIZON

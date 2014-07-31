@@ -730,7 +730,7 @@ public class GPSDialog extends JDialog {
         getGlassPane().setVisible(false);
         if (gpxValue != null) {
             DataObjectWithGPS temp = new DataObjectWithGPS() {};
-            UtilsGPX.populateGPSFromGpxFile(inFile, gpxValue, temp);
+            UtilsGPX.populateGPSFromGpxFile(inFile, gpxValue, temp, this);
             loadUIValues(temp);
         }
     }

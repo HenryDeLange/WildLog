@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.List;
 import javax.swing.JFrame;
 import wildlog.WildLogApp;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;

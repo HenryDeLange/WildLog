@@ -12,7 +12,7 @@ import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.ElementType;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;

@@ -38,6 +38,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_KML                    (Paths.get("Export", "KML")),
     WILDLOG_EXPORT_KML_THUMBNAILS         (Paths.get("Export", "KML", "Thumbnails")),
     WILDLOG_EXPORT_CSV                    (Paths.get("Export", "CSV")),
+    WILDLOG_EXPORT_PDF                    (Paths.get("Export", "PDF")),
     WILDLOG_EXPORT_HTML                   (Paths.get("Export", "HTML")),
     WILDLOG_EXPORT_HTML_THUMBNAILS        (Paths.get("Export", "HTML", "Thumbnails")),
     WILDLOG_EXPORT_HTML_FANCY             (Paths.get("Export", "HTML(Advanced)")),

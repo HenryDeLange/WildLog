@@ -49,7 +49,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dataobjects.wrappers.SightingWrapper;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;

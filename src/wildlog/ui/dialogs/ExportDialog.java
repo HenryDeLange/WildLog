@@ -68,6 +68,7 @@ public class ExportDialog extends JDialog {
         btnExportHTML = new javax.swing.JButton();
         btnExportHTMLAdvanced = new javax.swing.JButton();
         btnExportKML = new javax.swing.JButton();
+        btnExportCSVBasic = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
         btnExportFiles = new javax.swing.JButton();
         btnExportFilesObservations = new javax.swing.JButton();
@@ -139,8 +140,28 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportKML);
 
+        btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        btnExportCSVBasic.setText("Export as CSV (Basic)");
+        btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
+        btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportCSVBasic.setEnabled(false);
+        btnExportCSVBasic.setFocusPainted(false);
+        btnExportCSVBasic.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportCSVBasic.setIconTextGap(10);
+        btnExportCSVBasic.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportCSVBasic.setMaximumSize(new java.awt.Dimension(230, 35));
+        btnExportCSVBasic.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportCSVBasic.setName("btnExportCSVBasic"); // NOI18N
+        btnExportCSVBasic.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportCSVBasic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportCSVBasicActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportCSVBasic);
+
         btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
-        btnExportCSV.setText("Export as CSV");
+        btnExportCSV.setText("Export as CSV (Complete)");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSV.setFocusPainted(false);
@@ -699,9 +720,14 @@ public class ExportDialog extends JDialog {
         dispose();
     }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed
 
+    private void btnExportCSVBasicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportCSVBasicActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExportCSVBasicActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
+    private javax.swing.JButton btnExportCSVBasic;
     private javax.swing.JButton btnExportFiles;
     private javax.swing.JButton btnExportFilesObservations;
     private javax.swing.JButton btnExportHTML;

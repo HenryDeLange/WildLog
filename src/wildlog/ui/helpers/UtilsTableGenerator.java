@@ -36,7 +36,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.cellrenderers.DateCellRenderer;
 import wildlog.ui.helpers.cellrenderers.DateTimeCellRenderer;

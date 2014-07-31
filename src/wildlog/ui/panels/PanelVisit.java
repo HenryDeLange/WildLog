@@ -21,7 +21,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.GameWatchIntensity;
 import wildlog.data.enums.VisitType;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.AdvancedDialog;
 import wildlog.ui.dialogs.ExportDialog;

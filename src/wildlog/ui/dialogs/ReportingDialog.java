@@ -1,12 +1,14 @@
 package wildlog.ui.dialogs;
 
 import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.ReportElementSightingsByMoon;
@@ -18,6 +20,7 @@ import wildlog.ui.reports.ReportLocationSpeciesCurve;
 import wildlog.ui.reports.ReportSightingByElement;
 import wildlog.ui.reports.ReportSightingByLocation;
 import wildlog.ui.reports.ReportVisitSightingsBySun;
+import wildlog.ui.reports.ReportsBaseDialog;
 
 
 public class ReportingDialog extends JDialog {
@@ -92,6 +95,7 @@ public class ReportingDialog extends JDialog {
         btnVisitSun = new javax.swing.JButton();
         btnSightingDateLocation = new javax.swing.JButton();
         btnSightingDateElement = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Reports");
@@ -263,6 +267,18 @@ public class ReportingDialog extends JDialog {
         });
         getContentPane().add(btnSightingDateElement);
 
+        jButton1.setText("NEW REPORTS");
+        jButton1.setMaximumSize(new java.awt.Dimension(250, 35));
+        jButton1.setMinimumSize(new java.awt.Dimension(250, 35));
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.setPreferredSize(new java.awt.Dimension(250, 35));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -329,6 +345,13 @@ public class ReportingDialog extends JDialog {
         report.toFront();
     }//GEN-LAST:event_btnSightingDateElementActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2014-1900, 02, 0), new Date(), Sighting.class);
+        dispose();
+        ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnElementMoon;
@@ -340,5 +363,6 @@ public class ReportingDialog extends JDialog {
     private javax.swing.JButton btnSightingDateElement;
     private javax.swing.JButton btnSightingDateLocation;
     private javax.swing.JButton btnVisitSun;
+    private javax.swing.JButton jButton1;
     // End of variables declaration//GEN-END:variables
 }

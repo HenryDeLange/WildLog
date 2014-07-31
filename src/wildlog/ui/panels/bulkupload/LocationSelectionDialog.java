@@ -14,7 +14,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Location;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.utils.UtilsUI;

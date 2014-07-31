@@ -22,11 +22,10 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogFileCore;
 import wildlog.data.dataobjects.WildLogOptions;
-import static wildlog.data.dbi.DBI_JDBC.WILDLOG_DB_VERSION;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
@@ -492,6 +491,13 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             for (int t = 0; t <= WILDLOG_DB_VERSION; t++) {
                 results = state.executeQuery("SELECT VERSION FROM WILDLOG");
                 if (results.next()) {
+                    if (results.getInt("VERSION") > WILDLOG_DB_VERSION) {
+                        // The application codebase is older than the database version, need to update the application first
+                        fullyUpdated = false;
+                        break;
+                    }
+                    else
+                    // Procede with teh expected updates
                     if (results.getInt("VERSION") == 0) {
                         doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("0"));
                         doUpdate1();
@@ -517,6 +523,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                         doUpdate5();
                     }
                     else
+                    // The database and application versions are in sync
                     if (results.getInt("VERSION") == 5) {
                         fullyUpdated = true;
                         break;

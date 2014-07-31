@@ -23,7 +23,7 @@ public final class UtilsMovies {
     }
 
     /**
-     * Kry 'n lys van paths wat ooreenstem met die WildLogFile ID.
+     * Kry 'n lys van paths wat ooreenstem met die WildLogFile ID. (Slegs JPGs word gekies.)
      * @param inApp
      * @param inWildLogFile
      * @return List<String> - Sal nie null wees nie.

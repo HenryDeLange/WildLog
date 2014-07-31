@@ -24,7 +24,7 @@ import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogFileType;
-import wildlog.data.enums.utils.WildLogThumbnailSizes;
+import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.filters.ImageFilter;
 import wildlog.ui.helpers.filters.MovieFilter;
@@ -67,7 +67,7 @@ public final class UtilsFileProcessing {
 //        fileChooser.setFileFilter(new MovieFilter());
 //        fileChooser.setFileFilter(new ImageFilter());
 //        fileChooser.setAccessory(new ImagePreview(fileChooser));
-        // TODO: Ek nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FIleChooser :D
+        // TODO: Ek nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FIleChooser eendag :D
         fileChooser.setFilenameFilter(new MovieFilter());
 //        fileChooser.setFile("*.jpg");
         fileChooser.setFilenameFilter(new ImageFilter());

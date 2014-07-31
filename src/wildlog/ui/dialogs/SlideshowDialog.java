@@ -1,8 +1,17 @@
 package wildlog.ui.dialogs;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import wildlog.WildLogApp;
@@ -11,10 +20,14 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
+import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -72,6 +85,7 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowLocationSightings = new javax.swing.JButton();
         btnSlideshowElement = new javax.swing.JButton();
         btnSlideshowElementSightings = new javax.swing.JButton();
+        btnGIFElementSightings = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Available Slideshows");
@@ -188,6 +202,23 @@ public class SlideshowDialog extends JDialog {
             }
         });
         getContentPane().add(btnSlideshowElementSightings);
+
+        btnGIFElementSightings.setText("GIF of the Observations' Images");
+        btnGIFElementSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGIFElementSightings.setFocusPainted(false);
+        btnGIFElementSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGIFElementSightings.setIconTextGap(10);
+        btnGIFElementSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        btnGIFElementSightings.setMaximumSize(new java.awt.Dimension(240, 35));
+        btnGIFElementSightings.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnGIFElementSightings.setName("btnGIFElementSightings"); // NOI18N
+        btnGIFElementSightings.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnGIFElementSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGIFElementSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGIFElementSightings);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -312,8 +343,96 @@ public class SlideshowDialog extends JDialog {
         this.dispose();
     }//GEN-LAST:event_btnSlideshowElementSightingsActionPerformed
 
+    private void btnGIFElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFElementSightingsActionPerformed
+        // TODO: Warning if there are many files
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "'");
+                Sighting temp = new Sighting();
+                temp.setElementName(element.getPrimaryName());
+                List<Sighting> sightingList = app.getDBI().list(temp);
+                if (!sightingList.isEmpty()) {
+                    Collections.sort(sightingList);
+                    setProgress(1);
+                    setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");
+                    List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
+                    for (Sighting tempSighting : sightingList) {
+                        slideshowList.addAll(UtilsMovies.getFilePaths(app, new WildLogFile(tempSighting.getWildLogFileID())));
+                    }
+                    // Now create the GIF
+                    if (!slideshowList.isEmpty()) {
+                        Path outputPath = WildLogPaths.WILDLOG_EXPORT_SLIDESHOW.getAbsoluteFullPath().resolve(element.getPrimaryName() + "_Observations.gif");
+                        Files.createDirectories(outputPath.getParent());
+                        ImageOutputStream output = null;
+                        try {
+                            output = new FileImageOutputStream(outputPath.toFile());
+                            int thumbnailSize = WildLogThumbnailSizes.LARGE.getSize();
+                            // FIXME: Wys 'n ander bter prentjie hier, maar dit lyk my dis belangrik dat die eerste image die hele area vol is naders sukkel die res van die images om reg te wys...
+                            ImageIcon image = UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.LARGE);
+                            BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                            Graphics2D graphics2D = bufferedImage.createGraphics();
+                            // TODO: Skuif die gedeelte kode in 'n util method in
+                            graphics2D.drawImage(image.getImage(), 
+                                        (thumbnailSize - image.getIconWidth())/2, 
+                                        (thumbnailSize - image.getIconHeight())/2, 
+                                        image.getIconWidth(), 
+                                        image.getIconHeight(), 
+                                        Color.BLACK, null);
+                            AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), 1000, true);
+                            gifWriter.writeToGIF(bufferedImage);
+                            setProgress(2);
+                            setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");
+                            for (int t = 0; t < slideshowList.size(); t++) {
+                                image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize);
+                                bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
+                                graphics2D = bufferedImage.createGraphics();
+                                // TODO: centre the images and give it black background
+                                graphics2D.drawImage(image.getImage(), 
+                                        (thumbnailSize - image.getIconWidth())/2, 
+                                        (thumbnailSize - image.getIconHeight())/2, 
+                                        image.getIconWidth(), 
+                                        image.getIconHeight(), 
+                                        Color.BLACK, null);
+                                gifWriter.writeToGIF(bufferedImage);
+                                setProgress(2 + (int)((((double)t)/((double)slideshowList.size()))*98));
+                                setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");
+                            }
+                            gifWriter.finishGIF();
+                        }
+                        catch (IOException ex) {
+                            ex.printStackTrace(System.err);
+                        }
+                        finally {
+                            if (output != null) {
+                                try {
+                                    output.flush();
+                                }
+                                catch (IOException ex) {
+                                    ex.printStackTrace(System.err);
+                                }
+                                try {
+                                    output.close();
+                                }
+                                catch (IOException ex) {
+                                    ex.printStackTrace(System.err);
+                                }
+                            }
+                        }
+                        UtilsFileProcessing.openFile(outputPath.getParent());
+                    }
+                }
+                setProgress(100);
+                setMessage("Done with the Animated GIF for '" + element.getPrimaryName() + "'");
+                return null;
+            }
+        });
+        this.dispose();
+    }//GEN-LAST:event_btnGIFElementSightingsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGIFElementSightings;
     private javax.swing.JButton btnSlideshowElement;
     private javax.swing.JButton btnSlideshowElementSightings;
     private javax.swing.JButton btnSlideshowLocation;
