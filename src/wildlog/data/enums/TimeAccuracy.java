@@ -8,7 +8,7 @@ public enum TimeAccuracy {
     UNKNOWN       ("Unknown"),
     NONE          ("");
 
-    private String text;
+    private final String text;
 
     TimeAccuracy(String inText) {
         text = inText;
@@ -20,12 +20,14 @@ public enum TimeAccuracy {
     }
 
     public static TimeAccuracy getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
-        if (inText.equalsIgnoreCase(EDUCATED_GUESS.text)) return EDUCATED_GUESS;
-        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (TimeAccuracy theEnum : TimeAccuracy.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

@@ -11,7 +11,7 @@ public enum AccommodationType {
     UNKNOWN("Unknown"),
     NONE("None");
 
-    private String text;
+    private final String text;
 
     AccommodationType(String inText) {
         text = inText;
@@ -27,13 +27,15 @@ public enum AccommodationType {
     }
 
     public static List<AccommodationType> getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        List<AccommodationType> tempList = new ArrayList<AccommodationType>(4);
-        if (inText.contains(CAMPING.text)) tempList.add(CAMPING);
-        if (inText.contains(SMALL_UNIT.text)) tempList.add(SMALL_UNIT);
-        if (inText.contains(BIG_UNIT.text)) tempList.add(BIG_UNIT);
-        if (inText.contains(UNKNOWN.text)) tempList.add(UNKNOWN);
-        if (inText.contains(NONE.text)) tempList.add(NONE);
+        List<AccommodationType> tempList = new ArrayList<AccommodationType>(AccommodationType.values().length);
+        if (inText == null) {
+            tempList.add(NONE);
+        }
+        for (AccommodationType theEnum : AccommodationType.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                tempList.add(theEnum);
+            }
+        }
         return tempList;
     }
 

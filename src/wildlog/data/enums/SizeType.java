@@ -8,7 +8,7 @@ public enum SizeType {
     TOTAL_HEIGHT("Total Height"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     SizeType(String inText) {
         text = inText;
@@ -20,12 +20,14 @@ public enum SizeType {
     }
 
     public static SizeType getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(BODY.text)) return BODY;
-        if (inText.equalsIgnoreCase(SHOULDER.text)) return SHOULDER;
-        if (inText.equalsIgnoreCase(TOTAL_LENGTH.text)) return TOTAL_LENGTH;
-        if (inText.equalsIgnoreCase(TOTAL_HEIGHT.text)) return TOTAL_HEIGHT;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (SizeType theEnum : SizeType.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 }

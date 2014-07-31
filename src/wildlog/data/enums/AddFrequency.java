@@ -8,8 +8,8 @@ public enum AddFrequency {
     VERY_LOW("0 - 40%", "Very seldomly added. (Might be so common that it is not realy recorded)"),
     NONE("", "");
 
-    private String text;
-    private String description;
+    private final String text;
+    private final String description;
 
     public String getText() {
         return text;
@@ -30,12 +30,14 @@ public enum AddFrequency {
     }
 
     public static AddFrequency getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
-        if (inText.equalsIgnoreCase(MEDIUM.text)) return MEDIUM;
-        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
-        if (inText.equalsIgnoreCase(VERY_LOW.text)) return VERY_LOW;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (AddFrequency theEnum : AddFrequency.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText) || theEnum.description.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

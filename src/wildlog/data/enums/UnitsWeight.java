@@ -7,7 +7,7 @@ public enum UnitsWeight {
     POUNDS("pd"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     UnitsWeight(String inText) {
         text = inText;
@@ -23,12 +23,14 @@ public enum UnitsWeight {
     }
 
     public static UnitsWeight getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(KILOGRAM.text)) return KILOGRAM;
-        if (inText.equalsIgnoreCase(GRAM.text)) return GRAM;
-        if (inText.equalsIgnoreCase(OUNCES.text)) return OUNCES;
-        if (inText.equalsIgnoreCase(POUNDS.text)) return POUNDS;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (UnitsWeight theEnum : UnitsWeight.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

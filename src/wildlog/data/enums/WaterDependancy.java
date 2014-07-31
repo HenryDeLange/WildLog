@@ -9,7 +9,7 @@ public enum WaterDependancy {
     UNKNOWN("Unknown"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     WaterDependancy(String inText) {
         text = inText;
@@ -21,13 +21,14 @@ public enum WaterDependancy {
     }
 
     public static WaterDependancy getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(VERY_HIGH.text)) return VERY_HIGH;
-        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
-        if (inText.equalsIgnoreCase(OPPORTUNISTIC.text)) return OPPORTUNISTIC;
-        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (WaterDependancy theEnum : WaterDependancy.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

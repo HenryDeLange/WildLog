@@ -1,4 +1,4 @@
-package wildlog.data.enums.utils;
+package wildlog.data.enums;
 
 public enum WildLogThumbnailSizes {
     /** 20px - For Icons */
@@ -22,7 +22,7 @@ public enum WildLogThumbnailSizes {
     /** 700px - For Photos (Browse, Export) */
     VERY_LARGE(700);
 
-    private int size;
+    private final int size;
 
     private WildLogThumbnailSizes(int inSize) {
         size = inSize;

@@ -8,7 +8,7 @@ public enum TimeFormat {
     UNKNOWN("Unknown"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     TimeFormat(String inText) {
         text = inText;
@@ -20,12 +20,14 @@ public enum TimeFormat {
     }
 
     public static TimeFormat getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(H24.text)) return H24;
-        if (inText.equalsIgnoreCase(AM.text)) return AM;
-        if (inText.equalsIgnoreCase(PM.text)) return PM;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (TimeFormat theEnum : TimeFormat.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

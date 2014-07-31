@@ -9,7 +9,7 @@ public enum WishRating {
     LOW("Low - Commonly seen"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     WishRating(String inText) {
         text = inText;
@@ -21,13 +21,14 @@ public enum WishRating {
     }
 
     public static WishRating getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(EXCEPTIONAL.text)) return EXCEPTIONAL;
-        if (inText.equalsIgnoreCase(NEED_GOOD_SIGHTING.text)) return NEED_GOOD_SIGHTING;
-        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
-        if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;
-        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (WishRating theEnum : WishRating.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

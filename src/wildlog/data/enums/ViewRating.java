@@ -9,7 +9,7 @@ public enum ViewRating {
     VERY_BAD("Very bad"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     ViewRating(String inText) {
         text = inText;
@@ -21,13 +21,14 @@ public enum ViewRating {
     }
 
     public static ViewRating getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(VERY_GOOD.text)) return VERY_GOOD;
-        if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
-        if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;
-        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
-        if (inText.equalsIgnoreCase(VERY_BAD.text)) return VERY_BAD;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (ViewRating theEnum : ViewRating.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

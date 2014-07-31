@@ -7,7 +7,7 @@ public enum GameViewRating {
     BAD("Bad"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     GameViewRating(String inText) {
         text = inText;
@@ -19,11 +19,14 @@ public enum GameViewRating {
     }
 
     public static GameViewRating getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
-        if (inText.equalsIgnoreCase(MEDIUM.text)) return MEDIUM;
-        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (GameViewRating theEnum : GameViewRating.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

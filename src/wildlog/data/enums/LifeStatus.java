@@ -7,7 +7,7 @@ public enum LifeStatus {
     UNKNOWN("Unknown"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     LifeStatus(String inText) {
         text = inText;
@@ -19,11 +19,14 @@ public enum LifeStatus {
     }
 
     public static LifeStatus getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(ALIVE.text)) return ALIVE;
-        if (inText.equalsIgnoreCase(DEAD.text)) return DEAD;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (LifeStatus theEnum : LifeStatus.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 }

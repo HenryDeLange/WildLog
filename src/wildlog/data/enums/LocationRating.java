@@ -8,7 +8,7 @@ public enum LocationRating {
     LOW("Bad"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     LocationRating(String inText) {
         text = inText;
@@ -20,12 +20,14 @@ public enum LocationRating {
     }
 
     public static LocationRating getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(HIGH.text)) return HIGH;
-        if (inText.equalsIgnoreCase(NORMAL.text)) return NORMAL;
-        if (inText.equalsIgnoreCase(DECENT.text)) return DECENT;
-        if (inText.equalsIgnoreCase(LOW.text)) return LOW;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (LocationRating theEnum : LocationRating.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

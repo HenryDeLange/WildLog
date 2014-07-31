@@ -10,7 +10,7 @@ public enum VisitType {
     OTHER("Other"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     VisitType(String inText) {
         text = inText;
@@ -22,14 +22,14 @@ public enum VisitType {
     }
 
     public static VisitType getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(VACATION.text)) return VACATION;
-        if (inText.equalsIgnoreCase(REMOTE_CAMERA.text)) return REMOTE_CAMERA;
-        if (inText.equalsIgnoreCase(BIRD_ATLASSING.text)) return BIRD_ATLASSING;
-        if (inText.equalsIgnoreCase(DAY_VISIT.text)) return DAY_VISIT;
-        if (inText.equalsIgnoreCase(INCIDENTAL.text)) return INCIDENTAL;
-        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (VisitType theEnum : VisitType.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

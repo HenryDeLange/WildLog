@@ -7,7 +7,7 @@ public enum WildLogFileType {
     OTHER("Other"),
     NONE("None");
 
-    private String text;
+    private final String text;
 
     WildLogFileType(String inText) {
         text = inText;
@@ -19,11 +19,14 @@ public enum WildLogFileType {
     }
 
     public static WildLogFileType getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(IMAGE.text)) return IMAGE;
-        if (inText.equalsIgnoreCase(MOVIE.text)) return MOVIE;
-        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (WildLogFileType theEnum : WildLogFileType.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

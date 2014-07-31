@@ -4,19 +4,21 @@ public enum Longitudes {
     /**
      * For (+) coordinates.
      */
-    EAST("E", "East (+)"),
+    EAST("E", "East (+)", "+"),
     /**
      * For (-) coordinates.
      */
-    WEST("W", "West (-)"),
-    NONE("", "None");
+    WEST("W", "West (-)", "-"),
+    NONE("", "None", "");
 
-    private String key;
-    private String text;
+    private final String key;
+    private final String text;
+    private final String sign;
 
-    Longitudes(String inKey, String inText) {
+    Longitudes(String inKey, String inText, String inSign) {
         key = inKey;
         text = inText;
+        sign = inSign;
     }
 
     public String getKey() {
@@ -26,6 +28,10 @@ public enum Longitudes {
     public String getText() {
         return text;
     }
+    
+    public String getSign() {
+        return sign;
+    }
 
     @Override
     public String toString() {
@@ -33,13 +39,14 @@ public enum Longitudes {
     }
 
     public static Longitudes getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(EAST.text)) return EAST;
-        if (inText.equalsIgnoreCase(EAST.key)) return EAST;
-        if (inText.equalsIgnoreCase(WEST.text)) return WEST;
-        if (inText.equalsIgnoreCase(WEST.key)) return WEST;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
-        if (inText.equalsIgnoreCase(NONE.key)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (Longitudes theEnum : Longitudes.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText) || theEnum.key.equalsIgnoreCase(inText) || theEnum.sign.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 }

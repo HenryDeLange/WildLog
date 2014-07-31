@@ -17,7 +17,7 @@ public enum GPSAccuracy {
     UNKNOWN       ("Unknown"),
     NONE          ("");
 
-    private String text;
+    private final String text;
 
     GPSAccuracy(String inText) {
         text = inText;
@@ -29,15 +29,14 @@ public enum GPSAccuracy {
     }
 
     public static GPSAccuracy getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(VERY_GOOD.text)) return VERY_GOOD;
-        if (inText.equalsIgnoreCase(GOOD.text)) return GOOD;
-        if (inText.equalsIgnoreCase(AVERAGE.text)) return AVERAGE;
-        if (inText.equalsIgnoreCase(BAD.text)) return BAD;
-        if (inText.equalsIgnoreCase(TERRIBLE.text)) return TERRIBLE;
-        if (inText.equalsIgnoreCase(EDUCATED_GUESS.text)) return EDUCATED_GUESS;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (GPSAccuracy theEnum : GPSAccuracy.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 }

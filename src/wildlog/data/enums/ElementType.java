@@ -12,7 +12,7 @@ public enum ElementType {
     OTHER("Other"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     ElementType(String inText) {
         text = inText;
@@ -23,21 +23,15 @@ public enum ElementType {
         return text;
     }
 
-    public void fix(String inText) {
-        text = inText;
-    }
-
     public static ElementType getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(MAMMAL.text)) return MAMMAL;
-        if (inText.equalsIgnoreCase(BIRD.text)) return BIRD;
-        if (inText.equalsIgnoreCase(REPTILE.text)) return REPTILE;
-        if (inText.equalsIgnoreCase(AMPHIBIAN.text)) return AMPHIBIAN;
-        if (inText.equalsIgnoreCase(FISH.text)) return FISH;
-        if (inText.equalsIgnoreCase(INSECT.text)) return INSECT;
-        if (inText.equalsIgnoreCase(PLANT.text)) return PLANT;
-        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (ElementType theEnum : ElementType.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

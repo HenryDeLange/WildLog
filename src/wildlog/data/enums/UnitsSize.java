@@ -7,7 +7,7 @@ public enum UnitsSize {
     INCHES("in"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     UnitsSize(String inText) {
         text = inText;
@@ -23,12 +23,14 @@ public enum UnitsSize {
     }
 
     public static UnitsSize getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(METER.text)) return METER;
-        if (inText.equalsIgnoreCase(CENTI_METER.text)) return CENTI_METER;
-        if (inText.equalsIgnoreCase(FEET.text)) return FEET;
-        if (inText.equalsIgnoreCase(INCHES.text)) return INCHES;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (UnitsSize theEnum : UnitsSize.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

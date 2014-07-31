@@ -21,7 +21,7 @@ public enum FeedingClass {
     UNKNOWN("Unknown"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     FeedingClass(String inText) {
         text = inText;
@@ -33,15 +33,14 @@ public enum FeedingClass {
     }
 
     public static FeedingClass getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(CARNIVORE.text)) return CARNIVORE;
-        if (inText.equalsIgnoreCase(HERBIVORE.text)) return HERBIVORE;
-        if (inText.equalsIgnoreCase(OMNIVORE.text)) return OMNIVORE;
-        if (inText.equalsIgnoreCase(PHOTOSYNTHESYS.text)) return PHOTOSYNTHESYS;
-        if (inText.equalsIgnoreCase(PARASITE.text)) return PARASITE;
-        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (FeedingClass theEnum : FeedingClass.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

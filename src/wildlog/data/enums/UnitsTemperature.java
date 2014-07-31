@@ -5,8 +5,8 @@ public enum UnitsTemperature {
     FAHRENHEIT("F", "Fahrenheit"),
     NONE("", "");
 
-    private String key;
-    private String text;
+    private final String key;
+    private final String text;
 
     UnitsTemperature(String inKey, String inText) {
         key = inKey;
@@ -27,12 +27,14 @@ public enum UnitsTemperature {
     }
 
     public static UnitsTemperature getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(CELSIUS.text)) return CELSIUS;
-        if (inText.equalsIgnoreCase(CELSIUS.key)) return CELSIUS;
-        if (inText.equalsIgnoreCase(FAHRENHEIT.text)) return FAHRENHEIT;
-        if (inText.equalsIgnoreCase(FAHRENHEIT.key)) return FAHRENHEIT;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (UnitsTemperature theEnum : UnitsTemperature.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText) || theEnum.key.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

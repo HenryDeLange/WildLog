@@ -12,7 +12,7 @@ public enum Weather {
     UNKNOWN("Unknown"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     Weather(String inText) {
         text = inText;
@@ -24,16 +24,14 @@ public enum Weather {
     }
 
     public static Weather getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(SUNNY.text)) return SUNNY;
-        if (inText.equalsIgnoreCase(LIGHT_OVERCAST.text)) return LIGHT_OVERCAST;
-        if (inText.equalsIgnoreCase(HEAVY_OVERCAST.text)) return HEAVY_OVERCAST;
-        if (inText.equalsIgnoreCase(MIST.text)) return MIST;
-        if (inText.equalsIgnoreCase(LIGHT_RAIN.text)) return LIGHT_RAIN;
-        if (inText.equalsIgnoreCase(HEAVY_RAIN.text)) return HEAVY_RAIN;
-        if (inText.equalsIgnoreCase(OTHER.text)) return OTHER;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (Weather theEnum : Weather.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 

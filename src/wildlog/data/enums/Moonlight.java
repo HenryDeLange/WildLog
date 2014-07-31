@@ -7,7 +7,7 @@ public enum Moonlight {
     UNKNOWN("Unknown"),
     NONE("");
 
-    private String text;
+    private final String text;
 
     Moonlight(String inText) {
         text = inText;
@@ -19,11 +19,14 @@ public enum Moonlight {
     }
 
     public static Moonlight getEnumFromText(String inText) {
-        if (inText == null) inText = "";
-        if (inText.equalsIgnoreCase(MOON_SHINING.text)) return MOON_SHINING;
-        if (inText.equalsIgnoreCase(NO_MOON.text)) return NO_MOON;
-        if (inText.equalsIgnoreCase(UNKNOWN.text)) return UNKNOWN;
-        if (inText.equalsIgnoreCase(NONE.text)) return NONE;
+        if (inText == null) {
+            return NONE;
+        }
+        for (Moonlight theEnum : Moonlight.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText)) {
+                return theEnum;
+            }
+        }
         return NONE;
     }
 }

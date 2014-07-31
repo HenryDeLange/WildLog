@@ -1,5 +1,8 @@
 package wildlog.data.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public enum ActiveTimeSpesific {
     MORNING_TWILIGHT(   "Morning Twilight",     "After dark night and before good light."),
@@ -37,15 +40,13 @@ public enum ActiveTimeSpesific {
         return description;
     }
 
-// TODO: Maak hierdie 'n generic inherited method
     public static ActiveTimeSpesific getEnumFromText(String inText) {
         if (inText == null) {
             return NONE;
         }
-        for (ActiveTimeSpesific activeTimeSpesific : ActiveTimeSpesific.values()) {
-            if (inText.equalsIgnoreCase(activeTimeSpesific.text) 
-                    || inText.equalsIgnoreCase(activeTimeSpesific.description)) {
-                return activeTimeSpesific;
+        for (ActiveTimeSpesific theEnum : ActiveTimeSpesific.values()) {
+            if (theEnum.text.equalsIgnoreCase(inText) || theEnum.description.equalsIgnoreCase(inText)) {
+                return theEnum;
             }
         }
         return NONE;
@@ -60,6 +61,19 @@ public enum ActiveTimeSpesific {
         }
         description = description + "</html>";
         return description;
+    }
+    
+    public static List<String> getEnumListAsString() {
+        List<String> tempList = new ArrayList<String>(ActiveTimeSpesific.values().length);
+        for (ActiveTimeSpesific theEnum : ActiveTimeSpesific.values()) {
+            if (!theEnum.equals(NONE)) {
+                tempList.add(theEnum.text);
+            }
+            else {
+                tempList.add(theEnum.description);
+            }
+        }
+        return tempList;
     }
     
 }
