@@ -839,10 +839,17 @@ public abstract class DBI_JDBC implements DBI {
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inVisit.getName()));
             }
-            else if (inVisit.getLocationName() != null) {
+            else 
+            if (inVisit.getLocationName() != null) {
                 sql = sql + " WHERE LOCATIONNAME = ?";
                 state = conn.prepareStatement(sql);
                 state.setString(1, UtilsData.sanitizeString(inVisit.getLocationName()));
+            }
+            else 
+            if (inVisit.getType() != null) {
+                sql = sql + " WHERE VISITTYPE = ?";
+                state = conn.prepareStatement(sql);
+                state.setString(1, inVisit.getType().toString());
             }
             else {
                 state = conn.prepareStatement(sql);

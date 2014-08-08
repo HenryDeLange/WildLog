@@ -10,8 +10,9 @@ import wildlog.data.enums.LocationRating;
 import wildlog.data.utils.UtilsData;
 
 
-public class LocationCore extends DataObjectWithGPS implements Comparable<LocationCore>, DataObjectWithWildLogFile {
+public class LocationCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
     public static final String WILDLOGFILE_ID_PREFIX = "LOCATION-";
+    public static final String WILDLOG_FOLDER_PREFIX = "Places";
     protected String name; // Used as index (ID)
     protected String description;
     protected LocationRating rating;
@@ -39,10 +40,12 @@ public class LocationCore extends DataObjectWithGPS implements Comparable<Locati
     }
 
     @Override
-    public int compareTo(LocationCore inLocation) {
+    public int compareTo(Object inLocation) {
         if (inLocation != null) {
-            if (name != null && inLocation.getName() != null) {
-                return(name.compareToIgnoreCase(inLocation.getName()));
+            // Ek los die instanceof check uit vir eers want ek glo nie ek sal ooit lyste sort met verskillende data objects in nie...
+            LocationCore compareLocation = (LocationCore) inLocation;
+            if (name != null && compareLocation.getName() != null) {
+                return(name.compareToIgnoreCase(compareLocation.getName()));
             }
         }
         return 0;
@@ -52,7 +55,22 @@ public class LocationCore extends DataObjectWithGPS implements Comparable<Locati
     public String getWildLogFileID() {
         return WILDLOGFILE_ID_PREFIX + name;
     }
+    
+    @Override
+    public String getExportPrefix() {
+        return WILDLOG_FOLDER_PREFIX;
+    }
 
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+
+    @Override
+    public String getIDField() {
+        return name;
+    }
+    
     public boolean hasTheSameContent(LocationCore inLocation) {
         if (inLocation == null) {
             return false;

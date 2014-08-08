@@ -14,8 +14,9 @@ import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
 
 
-public class ElementCore implements Comparable<ElementCore>, DataObjectWithWildLogFile {
+public class ElementCore implements DataObjectWithWildLogFile {
     public static final String WILDLOGFILE_ID_PREFIX = "ELEMENT-";
+    public static final String WILDLOG_FOLDER_PREFIX = "Creatures";
     protected String primaryName; // Used for indexing (ID)
     protected String otherName;
     protected String scientificName;
@@ -66,10 +67,12 @@ public class ElementCore implements Comparable<ElementCore>, DataObjectWithWildL
     }
 
     @Override
-    public int compareTo(ElementCore inElement) {
+    public int compareTo(Object inElement) {
         if (inElement != null) {
-            if (primaryName != null && inElement.getPrimaryName() != null) {
-                return(primaryName.compareToIgnoreCase(inElement.getPrimaryName()));
+            // Ek los die instanceof check uit vir eers want ek glo nie ek sal ooit lyste sort met verskillende data objects in nie...
+            ElementCore compareElement = (ElementCore) inElement;
+            if (primaryName != null && compareElement.getPrimaryName() != null) {
+                return(primaryName.compareToIgnoreCase(compareElement.getPrimaryName()));
             }
         }
         return 0;
@@ -78,6 +81,21 @@ public class ElementCore implements Comparable<ElementCore>, DataObjectWithWildL
     @Override
     public String getWildLogFileID() {
         return WILDLOGFILE_ID_PREFIX + primaryName;
+    }
+    
+    @Override
+    public String getDisplayName() {
+        return primaryName;
+    }
+    
+    @Override
+    public String getExportPrefix() {
+        return WILDLOG_FOLDER_PREFIX;
+    }
+
+    @Override
+    public String getIDField() {
+        return primaryName;
     }
 
     public boolean hasTheSameContent(ElementCore inElement) {

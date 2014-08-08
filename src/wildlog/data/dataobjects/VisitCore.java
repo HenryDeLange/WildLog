@@ -7,8 +7,9 @@ import wildlog.data.enums.VisitType;
 import wildlog.data.utils.UtilsData;
 
 
-public class VisitCore implements Comparable<VisitCore>, DataObjectWithWildLogFile {
+public class VisitCore implements DataObjectWithWildLogFile {
     public static final String WILDLOGFILE_ID_PREFIX = "VISIT-";
+    public static final String WILDLOG_FOLDER_PREFIX = "Periods";
     protected String name; // Used as index (ID)
     protected Date startDate;
     protected Date endDate;
@@ -37,10 +38,12 @@ public class VisitCore implements Comparable<VisitCore>, DataObjectWithWildLogFi
     }
 
     @Override
-    public int compareTo(VisitCore inVisit) {
+    public int compareTo(Object inVisit) {
         if (inVisit != null) {
-            if (name != null && inVisit.getName() != null) {
-                return(name.compareToIgnoreCase(inVisit.getName()));
+            // Ek los die instanceof check uit vir eers want ek glo nie ek sal ooit lyste sort met verskillende data objects in nie...
+            VisitCore compareVisit = (VisitCore) inVisit;
+            if (name != null && compareVisit.getName() != null) {
+                return(name.compareToIgnoreCase(compareVisit.getName()));
             }
         }
         return 0;
@@ -49,6 +52,21 @@ public class VisitCore implements Comparable<VisitCore>, DataObjectWithWildLogFi
     @Override
     public String getWildLogFileID() {
         return WILDLOGFILE_ID_PREFIX + name;
+    }
+    
+    @Override
+    public String getExportPrefix() {
+        return WILDLOG_FOLDER_PREFIX;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+    
+    @Override
+    public String getIDField() {
+        return name;
     }
 
     public boolean hasTheSameContent(VisitCore inVisit) {

@@ -16,8 +16,9 @@ import wildlog.data.enums.ViewRating;
 import wildlog.data.enums.Weather;
 
 
-public class SightingCore extends DataObjectWithGPS implements Comparable<SightingCore>, DataObjectWithWildLogFile {
+public class SightingCore extends DataObjectWithGPS implements DataObjectWithWildLogFile {
     public static final String WILDLOGFILE_ID_PREFIX = "SIGHTING-";
+    public static final String WILDLOG_FOLDER_PREFIX = "Observations";
     protected long sightingCounter; // Used as index (ID)
     protected Date date; // must include time
     protected ActiveTimeSpesific timeOfDay;
@@ -62,10 +63,12 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
     }
 
     @Override
-    public int compareTo(SightingCore inSighting) {
+    public int compareTo(Object inSighting) {
         if (inSighting != null) {
-            if (date != null && inSighting.getDate() != null) {
-                return(date.compareTo(inSighting.getDate()));
+            // Ek los die instanceof check uit vir eers want ek glo nie ek sal ooit lyste sort met verskillende data objects in nie...
+            SightingCore compareSighting = (SightingCore) inSighting;
+            if (date != null && compareSighting.getDate() != null) {
+                return(date.compareTo(compareSighting.getDate()));
             }
         }
         return 0;
@@ -74,6 +77,21 @@ public class SightingCore extends DataObjectWithGPS implements Comparable<Sighti
     @Override
     public String getWildLogFileID() {
         return WILDLOGFILE_ID_PREFIX + sightingCounter;
+    }
+    
+    @Override
+    public String getExportPrefix() {
+        return WILDLOG_FOLDER_PREFIX;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return toString();
+    }
+    
+    @Override
+    public String getIDField() {
+        return Long.toString(sightingCounter);
     }
 
     public Date getDate() {
