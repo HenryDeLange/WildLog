@@ -172,6 +172,7 @@ public class MoveVisitDialog extends JDialog {
                     app.getDBI().createOrUpdate(tempSighting, false);
                 }
             }
+            setVisible(false);
             dispose();
         }
         else {

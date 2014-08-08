@@ -68,6 +68,7 @@ public class GPSDialog extends JDialog {
         app = inApp;
         dataObjectWithGPS = inDataObjectWithGPS;
         if (dataObjectWithGPS == null) {
+            setVisible(false);
             dispose();
         }
         // Need to set a few settings on the content pane before continuing (for example size, background color, etc.)
@@ -588,6 +589,7 @@ public class GPSDialog extends JDialog {
         setPrevLonSec(dataObjectWithGPS.getLonSeconds());
         setPrevAccuracy(dataObjectWithGPS.getGPSAccuracy());
         // We are done, dispose this dialog
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -718,6 +720,7 @@ public class GPSDialog extends JDialog {
     private void btnRemoveGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveGPSActionPerformed
         UtilsGps.copyGpsBetweenDOs(dataObjectWithGPS, new DataObjectWithGPS() {});
         selectionMade = true;
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnRemoveGPSActionPerformed
 

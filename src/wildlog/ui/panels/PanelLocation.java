@@ -7,9 +7,9 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -34,6 +34,7 @@ import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.helpers.CtrlClickSelectionModel;
 import wildlog.ui.helpers.FileDrop;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
@@ -45,7 +46,6 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogPaths;
 
 
 public class PanelLocation extends PanelCanSetupHeader {
@@ -147,17 +147,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         }
 
         // Make accomodation list behave like Ctrl+Click
-        lstAccommodationType.setSelectionModel(new DefaultListSelectionModel() {
-            @Override
-            public void setSelectionInterval(int index0, int index1) {
-                if(lstAccommodationType.isSelectedIndex(index0)) {
-                    lstAccommodationType.removeSelectionInterval(index0, index1);
-                }
-                else {
-                    lstAccommodationType.addSelectionInterval(index0, index1);
-                }
-            }
-        });
+        lstAccommodationType.setSelectionModel(new CtrlClickSelectionModel());
         lstAccommodationType.setSelectedIndices(selectedAccommodationTypes());
 
         // Attach clipboard
@@ -177,7 +167,7 @@ public class PanelLocation extends PanelCanSetupHeader {
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(
                 locationWL.getWildLogFileID(),
-                WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(locationWL.getName()),
+                Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(locationWL.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,
@@ -248,8 +238,8 @@ public class PanelLocation extends PanelCanSetupHeader {
         int i = 0;
         for (int t = 0; t < AccommodationType.values().length; t++) {
             AccommodationType tempType = AccommodationType.values()[t];
-            for (AccommodationType baaa : locationWL.getAccommodationType()) {
-                if (baaa.test().equals(tempType.test())) {
+            for (AccommodationType accommodationType : locationWL.getAccommodationType()) {
+                if (accommodationType.test().equals(tempType.test())) {
                     index[i++] = t;
                 }
             }

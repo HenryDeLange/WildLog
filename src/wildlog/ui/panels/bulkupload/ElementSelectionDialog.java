@@ -33,7 +33,7 @@ public class ElementSelectionDialog extends JDialog {
 
 
     public ElementSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedElement) {
-        super(inParent, true);
+        super(inParent);
         app = inApp;
         initComponents();
         // Setup the escape key
@@ -42,6 +42,7 @@ public class ElementSelectionDialog extends JDialog {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         thisHandler.setSelectionMade(false);
+                        thisHandler.setVisible(false);
                         thisHandler.dispose();
                     }
                 },
@@ -50,7 +51,7 @@ public class ElementSelectionDialog extends JDialog {
         // Position the dialog
         UtilsDialog.setDialogToCenter(inParent, this);
         UtilsDialog.addModalBackgroundPanel(inParent, this);
-        // Atach listeners etc.
+        // Attach listeners etc.
         UtilsUI.attachClipboardPopup(txtSearch);
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblElement);
@@ -70,6 +71,7 @@ public class ElementSelectionDialog extends JDialog {
             @Override
             public void run() {
                 for (int t = 0; t < tblElement.getRowCount(); t++) {
+                    // FIXME: As ek die getModel hier gebruik en dan die table.convertrowstuff roep, is dit nie beter as die if hier bo nie?
                     if (tblElement.getValueAt(t, columnToUse).equals(inSelectedElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
@@ -243,6 +245,7 @@ public class ElementSelectionDialog extends JDialog {
             selectedElementName = tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(tblElement.getSelectedRow()), 1).toString();
             previousElement = selectedElementName;
             tblElement.setBorder(null);
+            setVisible(false);
             dispose();
         }
         else {

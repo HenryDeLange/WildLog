@@ -1,13 +1,9 @@
 package wildlog;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -33,7 +29,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -173,14 +168,7 @@ public class WildLogApp extends Application {
         });
         view.setLocationRelativeTo(null);
         view.setVisible(true);
-        // Setup the glassPane for modal popups
-        JPanel glassPane = (JPanel)view.getGlassPane();
-        glassPane.setLayout(new BorderLayout());
-        JPanel background = new JPanel();
-        background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
-        glassPane.add(background, BorderLayout.CENTER);
-        glassPane.addMouseListener(new MouseAdapter() {});
-        glassPane.addKeyListener(new KeyAdapter() {});
+        UtilsDialog.setupGlassPaneOnMainFrame(view);
         addExitListener(new ExitListener() {
             @Override
             public boolean canExit(EventObject event) {

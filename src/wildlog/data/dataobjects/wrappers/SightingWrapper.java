@@ -13,8 +13,8 @@ import wildlog.ui.helpers.ProgressbarTask;
  */
 public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWithHTML {
     // Variables
-    private Sighting sighting;
-    private boolean isForLocation;
+    private final Sighting sighting;
+    private final boolean isForLocation;
 
     // Contructor
     public SightingWrapper(Sighting inSighting, boolean inIsForLocation) {
@@ -63,6 +63,16 @@ public class SightingWrapper implements DataObjectWithWildLogFile, DataObjectWit
     @Override
     public String getDisplayName() {
         return sighting.getDisplayName();
+    }
+
+    @Override
+    public int compareTo(Object inSighting) {
+        return sighting.compareTo(inSighting);
+    }
+    
+    @Override
+    public String getIDField() {
+        return sighting.getIDField();
     }
 
 }

@@ -6,7 +6,6 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.utils.WildLogPaths;
 
 
 public class Visit extends VisitCore implements DataObjectWithHTML {
@@ -81,16 +80,6 @@ public class Visit extends VisitCore implements DataObjectWithHTML {
     @Override
     public String toFancyHTML(WildLogApp inApp, ProgressbarTask inProgressbarTask) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public String getExportPrefix() {
-        return WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toString();
-    }
-
-    @Override
-    public String getDisplayName() {
-        return name;
     }
 
 }

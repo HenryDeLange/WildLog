@@ -211,8 +211,8 @@ public class DateChangeDialog extends JDialog {
                 // Save the changes
                 app.getDBI().createOrUpdate(sighting, false);
             }
-            
             // We are done, dispose this dialog
+            setVisible(false);
             dispose();
         }
     }//GEN-LAST:event_btnSaveActionPerformed

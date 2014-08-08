@@ -1,7 +1,6 @@
 package wildlog.ui.panels.bulkupload;
 
 import java.awt.Color;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -9,6 +8,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.border.LineBorder;
@@ -28,8 +28,8 @@ public class LocationSelectionDialog extends JDialog {
     private String selectedLocationName;
 
 
-    public LocationSelectionDialog(Frame inParent, boolean inIsModal, WildLogApp inApp, final String inSelectedLocation) {
-        super(inParent, inIsModal);
+    public LocationSelectionDialog(JFrame inParent, WildLogApp inApp, final String inSelectedLocation) {
+        super(inParent);
         app = inApp;
         initComponents();
         // Setup the escape key
@@ -39,6 +39,7 @@ public class LocationSelectionDialog extends JDialog {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         thisHandler.setSelectionMade(false);
+                        thisHandler.setVisible(false);
                         thisHandler.dispose();
                     }
                 },
@@ -47,7 +48,7 @@ public class LocationSelectionDialog extends JDialog {
         // Position the dialog
         UtilsDialog.setDialogToCenter(app.getMainFrame(), thisHandler);
         UtilsDialog.addModalBackgroundPanel(app.getMainFrame(), thisHandler);
-        // Atach listeners etc.
+        // Attach listeners etc.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
         // Setup the table
         UtilsTableGenerator.setupLocationTableSmall(app, tblLocation, new Location());
@@ -193,6 +194,7 @@ public class LocationSelectionDialog extends JDialog {
             selectionMade = true;
             selectedLocationName = tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1).toString();
             tblLocation.setBorder(null);
+            setVisible(false);
             dispose();
         }
         else {

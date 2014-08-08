@@ -83,17 +83,17 @@ public class ExportDialog extends JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         btnExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTML.setText("Export as HTML (Basic)");
+        btnExportHTML.setText("Export as Offline Webpage (Basic)");
         btnExportHTML.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTML.setFocusPainted(false);
         btnExportHTML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTML.setIconTextGap(10);
         btnExportHTML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportHTML.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportHTML.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportHTML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportHTML.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportHTML.setName("btnExportHTML"); // NOI18N
-        btnExportHTML.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportHTML.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportHTML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportHTMLActionPerformed(evt);
@@ -102,7 +102,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportHTML);
 
         btnExportHTMLAdvanced.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
-        btnExportHTMLAdvanced.setText("Export as HTML (Advanced)");
+        btnExportHTMLAdvanced.setText("Export as Offline Webpage (Advanced)");
         btnExportHTMLAdvanced.setToolTipText("Create a HTML web page for all relevant Observations and linked records. Can be viewed in a web browser.");
         btnExportHTMLAdvanced.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportHTMLAdvanced.setEnabled(false);
@@ -110,10 +110,10 @@ public class ExportDialog extends JDialog {
         btnExportHTMLAdvanced.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportHTMLAdvanced.setIconTextGap(10);
         btnExportHTMLAdvanced.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportHTMLAdvanced.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportHTMLAdvanced.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportHTMLAdvanced.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportHTMLAdvanced.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportHTMLAdvanced.setName("btnExportHTMLAdvanced"); // NOI18N
-        btnExportHTMLAdvanced.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportHTMLAdvanced.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportHTMLAdvanced.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportHTMLAdvancedActionPerformed(evt);
@@ -129,10 +129,10 @@ public class ExportDialog extends JDialog {
         btnExportKML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportKML.setIconTextGap(11);
         btnExportKML.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportKML.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportKML.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportKML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportKML.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportKML.setName("btnExportKML"); // NOI18N
-        btnExportKML.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportKML.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportKML.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportKMLActionPerformed(evt);
@@ -141,7 +141,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportKML);
 
         btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
-        btnExportCSVBasic.setText("Export as CSV (Basic)");
+        btnExportCSVBasic.setText("Export as Spreadsheet (Basic)");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSVBasic.setEnabled(false);
@@ -149,10 +149,10 @@ public class ExportDialog extends JDialog {
         btnExportCSVBasic.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSVBasic.setIconTextGap(10);
         btnExportCSVBasic.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportCSVBasic.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportCSVBasic.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportCSVBasic.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportCSVBasic.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportCSVBasic.setName("btnExportCSVBasic"); // NOI18N
-        btnExportCSVBasic.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportCSVBasic.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportCSVBasic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportCSVBasicActionPerformed(evt);
@@ -161,17 +161,17 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportCSVBasic);
 
         btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
-        btnExportCSV.setText("Export as CSV (Complete)");
+        btnExportCSV.setText("Export as Spreadsheet (Complete)");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportCSV.setFocusPainted(false);
         btnExportCSV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportCSV.setIconTextGap(10);
         btnExportCSV.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportCSV.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportCSV.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportCSV.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportCSV.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportCSV.setName("btnExportCSV"); // NOI18N
-        btnExportCSV.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportCSV.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportCSV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportCSVActionPerformed(evt);
@@ -187,10 +187,10 @@ public class ExportDialog extends JDialog {
         btnExportFiles.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportFiles.setIconTextGap(10);
         btnExportFiles.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportFiles.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportFiles.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportFiles.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportFiles.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportFiles.setName("btnExportFiles"); // NOI18N
-        btnExportFiles.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportFiles.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportFiles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportFilesActionPerformed(evt);
@@ -206,10 +206,10 @@ public class ExportDialog extends JDialog {
         btnExportFilesObservations.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportFilesObservations.setIconTextGap(10);
         btnExportFilesObservations.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportFilesObservations.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportFilesObservations.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportFilesObservations.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportFilesObservations.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportFilesObservations.setName("btnExportFilesObservations"); // NOI18N
-        btnExportFilesObservations.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportFilesObservations.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportFilesObservations.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportFilesObservationsActionPerformed(evt);
@@ -225,10 +225,10 @@ public class ExportDialog extends JDialog {
         btnExportWorkspace.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnExportWorkspace.setIconTextGap(10);
         btnExportWorkspace.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnExportWorkspace.setMaximumSize(new java.awt.Dimension(230, 35));
-        btnExportWorkspace.setMinimumSize(new java.awt.Dimension(230, 35));
+        btnExportWorkspace.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportWorkspace.setMinimumSize(new java.awt.Dimension(260, 35));
         btnExportWorkspace.setName("btnExportWorkspace"); // NOI18N
-        btnExportWorkspace.setPreferredSize(new java.awt.Dimension(230, 35));
+        btnExportWorkspace.setPreferredSize(new java.awt.Dimension(260, 35));
         btnExportWorkspace.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportWorkspaceActionPerformed(evt);
@@ -276,6 +276,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportHTMLActionPerformed
 
@@ -289,7 +290,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Files for '" + location.getName() + "'");
                     List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(location.getWildLogFileID()));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath())
+                            .resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getName());
                     Files.createDirectories(destination);
                     setProgress(1);
@@ -316,7 +317,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Files for '" + element.getPrimaryName() + "'");
                     List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(element.getWildLogFileID()));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath())
+                            .resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getPrimaryName());
                     Files.createDirectories(destination);
                     setProgress(1);
@@ -343,7 +344,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Files for '" + visit.getName() + "'");
                     List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(visit.getWildLogFileID()));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath())
+                            .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getName());
                     Files.createDirectories(destination);
                     setProgress(1);
@@ -370,7 +371,7 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Files for '" + sighting.getDisplayName() + "'");
                     List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath())
+                            .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                             .resolve(sighting.getDisplayName());
                     Files.createDirectories(destination);
                     setProgress(1);
@@ -389,6 +390,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportFilesActionPerformed
 
@@ -400,7 +402,7 @@ public class ExportDialog extends JDialog {
                     setProgress(0);
                     setMessage("Exporting Workspace for '" + element.getDisplayName() + "'");
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath())
+                            .resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getDisplayName());
                     List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null));
                     exportSightings(element, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
@@ -418,7 +420,7 @@ public class ExportDialog extends JDialog {
                     setProgress(0);
                     setMessage("Exporting Workspace for '" + location.getDisplayName() + "'");
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath())
+                            .resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getDisplayName());
                     List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null));
                     exportSightings(location, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
@@ -436,7 +438,7 @@ public class ExportDialog extends JDialog {
                     setProgress(0);
                     setMessage("Exporting Workspace for '" + visit.getDisplayName() + "'");
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath())
+                            .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getDisplayName());
                     List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
                     exportSightings(visit, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
@@ -454,7 +456,7 @@ public class ExportDialog extends JDialog {
                     setProgress(0);
                     setMessage("Exporting Workspace for '" + sighting.getDisplayName() + "'");
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath())
+                            .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                             .resolve(sighting.getDisplayName());
                     List<Sighting> listSightings = app.getDBI().list(sighting);
                     exportSightings(sighting, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
@@ -465,6 +467,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportWorkspaceActionPerformed
 
@@ -514,12 +517,14 @@ public class ExportDialog extends JDialog {
             throw ex;
         }
         finally {
+            setVisible(false);
             dispose();
             if (newDBI != null) {
                 newDBI.close();
             }
         }
     }
+    
     private void saveFiles(WildLogDBI inNewDBI, Path inDestinationWorkspace, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
         WildLogFile tempWildLogFile = new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID());
         List<WildLogFile> listFiles = app.getDBI().list(tempWildLogFile);
@@ -568,6 +573,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportKMLActionPerformed
 
@@ -578,22 +584,22 @@ public class ExportDialog extends JDialog {
                 setMessage("Starting the CSV Export");
                 Path path;
                 if (location != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath())
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getDisplayName());
                 }
                 else
                 if (visit != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath())
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getDisplayName());
                 }
                 else
                 if (element != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath())
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getDisplayName());
                 }
                 else
                 if (sighting != null) {
-                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath())
+                    path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath().resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                             .resolve(sighting.getDisplayName());
                 }
                 else {
@@ -606,6 +612,7 @@ public class ExportDialog extends JDialog {
                 return null;
             }
         });
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportCSVActionPerformed
 
@@ -618,8 +625,8 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Observation Files for '" + element.getDisplayName() + "'");
                     List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath())
-                            .resolve(element.getDisplayName()).resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath());
+                            .resolve(Element.WILDLOG_FOLDER_PREFIX)
+                            .resolve(element.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
                     setProgress(1);
                     setMessage("Exporting Observation Files for '" + element.getDisplayName() + "' " + getProgress() + "%");
                     int counter = 0;
@@ -649,8 +656,8 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Observation Files for '" + location.getDisplayName() + "'");
                     List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath())
-                            .resolve(location.getDisplayName()).resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath());
+                            .resolve(Location.WILDLOG_FOLDER_PREFIX)
+                            .resolve(location.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
                     setProgress(1);
                     setMessage("Exporting Observation Files for '" + location.getDisplayName() + "' " + getProgress() + "%");
                     int counter = 0;
@@ -680,8 +687,8 @@ public class ExportDialog extends JDialog {
                     setMessage("Exporting Observation Files for '" + visit.getDisplayName() + "'");
                     List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
-                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath())
-                            .resolve(visit.getDisplayName()).resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath());
+                            .resolve(Visit.WILDLOG_FOLDER_PREFIX)
+                            .resolve(visit.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
                     setProgress(1);
                     setMessage("Exporting Observation Files for '" + visit.getDisplayName() + "' " + getProgress() + "%");
                     int counter = 0;
@@ -703,6 +710,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportFilesObservationsActionPerformed
 
@@ -717,6 +725,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed
 

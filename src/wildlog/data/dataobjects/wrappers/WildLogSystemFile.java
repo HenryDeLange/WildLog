@@ -14,13 +14,14 @@ import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public class WildLogSystemFile extends WildLogFile{
-    private Path originalPath;
+public class WildLogSystemFile extends WildLogFile {
+    public static final String WILDLOG_FOLDER_PREFIX  = "WildLogSystem";
+    private final Path originalPath;
 
     public WildLogSystemFile(String inID, String inFilename, String inFilePath, WildLogFileType inFileType) {
         super(inID, inFilename, inFilePath, inFileType);
         originalPath = WildLogPaths.WILDLOG_THUMBNAILS.getAbsoluteFullPath()
-                .resolve(WildLogPaths.WildLogPathPrefixes.WILDLOG_SYSTEM_DUMP.toString())
+                .resolve(WILDLOG_FOLDER_PREFIX)
                 .resolve(inFilename).normalize().toAbsolutePath();
         // Make sure the file original file has been copied out of the JAR and is in the thumbnails folder.
         copyOriginalFileToThumbnails();

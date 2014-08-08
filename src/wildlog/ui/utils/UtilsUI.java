@@ -1,5 +1,6 @@
 package wildlog.ui.utils;
 
+import wildlog.ui.helpers.ScrollingMenu;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;

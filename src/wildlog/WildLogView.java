@@ -62,6 +62,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
+import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -1660,7 +1661,7 @@ public final class WildLogView extends JFrame {
                 setProgress(0);
                 setMessage("Creating the KML Export for All Records " + getProgress() + "%");
                 // Make sure icons and folders exist
-                Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.WILDLOG_SYSTEM_DUMP.toPath());
+                Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogSystemFile.WILDLOG_FOLDER_PREFIX);
                 Files.createDirectories(iconPath);
                 UtilsKML.copyKmlIcons(iconPath);
                 Path finalPath = WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath().resolve("AllRecords").resolve("WildLog.kml");
@@ -1994,7 +1995,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        Paths.get(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toString(), temp.getPrimaryName()),
+                                        Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()),
                                         filesMoved);
                             }
                             else if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
@@ -2011,7 +2012,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        Paths.get(WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toString(), temp.getLocationName(), temp.getName()),
+                                        Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getLocationName(), temp.getName()),
                                         filesMoved);
                             }
                             else if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
@@ -2028,7 +2029,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        Paths.get(WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toString(), temp.getName()),
+                                        Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()),
                                         filesMoved);
                             }
                             else if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
@@ -2052,7 +2053,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure the file path is correct
                                 cleanupHelper.moveFilesToCorrectFolders(
                                         wildLogFile,
-                                        Paths.get(WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toString()).resolve(temp.toPath()),
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(temp.toPath()),
                                         filesMoved);
                             }
                             else {
@@ -2495,7 +2496,7 @@ public final class WildLogView extends JFrame {
                         if (wildLogFile != null) {
                             // Android kan nie die zip handle as die folders of files snaakse name het met - of _ in nie...
                             wildLogFile.setFilename(UtilsFileProcessing.getAlphaNumericVersion(element.getPrimaryName() + ".jpg"));
-                            Path targetFile = syncDatabase.getParent().resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath()).resolve(wildLogFile.getFilename());
+                            Path targetFile = syncDatabase.getParent().resolve(Element.WILDLOG_FOLDER_PREFIX).resolve(wildLogFile.getFilename());
 //                            UtilsFileProcessing.copyFile(wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SYNC_EXPORT),
 //                                    targetFile, false, false);
                             // Need to create a new image that have power of two dimentions
@@ -2779,7 +2780,7 @@ public final class WildLogView extends JFrame {
                                 List<File> lstFiles = mapFilesToLink.get(sighting.getDate().getTime()/IMAGE_LINK_INTERVAL);
                                 UtilsFileProcessing.performFileUpload(
                                         sighting.getWildLogFileID(),
-                                        WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath().resolve(sighting.toPath()),
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                                         lstFiles.toArray(new File[lstFiles.size()]),
                                         null,
                                         WildLogThumbnailSizes.NORMAL,

@@ -236,7 +236,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSlideshowVisitActionPerformed
 
     private void btnSlideshowVisitSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowVisitSightingsActionPerformed
@@ -260,7 +261,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSlideshowVisitSightingsActionPerformed
 
     private void btnSlideshowLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowLocationActionPerformed
@@ -276,7 +278,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSlideshowLocationActionPerformed
 
     private void btnSlideshowLocationSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowLocationSightingsActionPerformed
@@ -300,7 +303,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSlideshowLocationSightingsActionPerformed
 
     private void btnSlideshowElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowElementActionPerformed
@@ -316,7 +320,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSlideshowElementActionPerformed
 
     private void btnSlideshowElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSlideshowElementSightingsActionPerformed
@@ -340,7 +345,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnSlideshowElementSightingsActionPerformed
 
     private void btnGIFElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFElementSightingsActionPerformed
@@ -427,7 +433,8 @@ public class SlideshowDialog extends JDialog {
                 return null;
             }
         });
-        this.dispose();
+        setVisible(false);
+        dispose();
     }//GEN-LAST:event_btnGIFElementSightingsActionPerformed
 
 

@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,7 +62,6 @@ import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogPaths;
 
 
 public class BulkUploadPanel extends PanelCanSetupHeader {
@@ -815,7 +815,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                                 // Save the corresponding images
                                 UtilsFileProcessing.performFileUpload(
                                         sightingWrapper.getWildLogFileID(),
-                                        WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath().resolve(sightingWrapper.toPath()),
+                                        Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.toPath()),
                                         files.toArray(new File[files.size()]),
                                         null, WildLogThumbnailSizes.NORMAL,
                                         app, false, null, true, uploadListContainsDuplicates);
@@ -854,7 +854,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
                     }
                     UtilsFileProcessing.performFileUpload(
                             visit.getWildLogFileID(),
-                            WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath().resolve(visit.getName()),
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(visit.getName()),
                             visitFiles,
                             null, WildLogThumbnailSizes.NORMAL,
                             app, false, null, true, false);
@@ -930,7 +930,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
     }//GEN-LAST:event_btnGPSForAllActionPerformed
 
     private void btnSelectLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectLocationActionPerformed
-        LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), true, app, lblLocation.getText());
+        LocationSelectionDialog dialog = new LocationSelectionDialog(app.getMainFrame(), app, lblLocation.getText());
         dialog.setVisible(true);
         if (dialog.isSelectionMade() && dialog.getLocationName() != null && dialog.getLocationName().length() > 0) {
             selectedLocationName = dialog.getLocationName();

@@ -9,7 +9,6 @@ import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.utils.WildLogPaths;
 
 
 public class Location extends LocationCore implements DataObjectWithHTML, DataObjectWithKML {
@@ -110,16 +109,6 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         entry.setLatitude(UtilsGps.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
         entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         return entry;
-    }
-
-    @Override
-    public String getExportPrefix() {
-        return WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toString();
-    }
-
-    @Override
-    public String getDisplayName() {
-        return name;
     }
 
 }

@@ -365,6 +365,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             throw ex;
                         }
                         finally {
+                            setVisible(false);
                             dispose();
                             if (newDBI != null) {
                                 newDBI.close();

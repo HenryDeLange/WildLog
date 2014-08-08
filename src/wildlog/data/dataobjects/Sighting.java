@@ -17,7 +17,6 @@ import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.utils.WildLogPaths;
 
 
 public class Sighting extends SightingCore implements DataObjectWithHTML, DataObjectWithKML {
@@ -307,16 +306,6 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         }
         return entry;
-    }
-
-    @Override
-    public String getExportPrefix() {
-        return WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toString();
-    }
-
-    @Override
-    public String getDisplayName() {
-        return toString();
     }
 
 }

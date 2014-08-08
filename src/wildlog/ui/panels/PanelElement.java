@@ -8,6 +8,7 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
@@ -48,7 +49,6 @@ import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogPaths;
 
 
 public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
@@ -159,7 +159,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(
                 element.getWildLogFileID(),
-                WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath().resolve(element.getPrimaryName()),
+                Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(element.getPrimaryName()),
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,

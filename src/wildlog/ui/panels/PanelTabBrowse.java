@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1180,7 +1181,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         UtilsFileProcessing.performFileUpload(
                             Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(),
-                            WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath().resolve(sightingWrapper.getSighting().getElementName()),
+                            Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null,
                             WildLogThumbnailSizes.NORMAL,
@@ -1188,7 +1189,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Element.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getElementName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath().resolve(sightingWrapper.getSighting().getElementName())
+                                    Paths.get(Element.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getElementName())
                                     .resolve(wildLogFile.getFilename())).toString(),
                                 WildLogFileType.IMAGE));
                         newWildLogFile.setDefaultFile(true);
@@ -1214,7 +1215,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         UtilsFileProcessing.performFileUpload(
                             Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(),
-                            WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(sightingWrapper.getSighting().getLocationName()),
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null,
                             WildLogThumbnailSizes.NORMAL,
@@ -1222,7 +1223,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getLocationName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(sightingWrapper.getSighting().getLocationName())
+                                    Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getLocationName())
                                     .resolve(wildLogFile.getFilename())).toString(),
                                 WildLogFileType.IMAGE));
                         newWildLogFile.setDefaultFile(true);
@@ -1244,7 +1245,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         UtilsFileProcessing.performFileUpload(
                             Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(),
-                            WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(visit.getLocationName()),
+                            Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null,
                             WildLogThumbnailSizes.NORMAL,
@@ -1252,7 +1253,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Location.WILDLOGFILE_ID_PREFIX + visit.getLocationName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    WildLogPaths.WildLogPathPrefixes.PREFIX_LOCATION.toPath().resolve(visit.getLocationName())
+                                    Paths.get(Location.WILDLOG_FOLDER_PREFIX).resolve(visit.getLocationName())
                                     .resolve(wildLogFile.getFilename())).toString(),
                                 WildLogFileType.IMAGE));
                         newWildLogFile.setDefaultFile(true);
@@ -1278,7 +1279,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         }
                         UtilsFileProcessing.performFileUpload(
                             Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(),
-                            WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath().resolve(sightingWrapper.getSighting().getVisitName()),
+                            Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName()),
                             new File[] {wildLogFile.getAbsolutePath().toFile()},
                             null,
                             WildLogThumbnailSizes.NORMAL,
@@ -1286,7 +1287,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         WildLogFile newWildLogFile = app.getDBI().find(new WildLogFile(
                                 Visit.WILDLOGFILE_ID_PREFIX + sightingWrapper.getSighting().getVisitName(), wildLogFile.getFilename(),
                                 WildLogPaths.WILDLOG_FILES_IMAGES.getRelativePath().resolve(
-                                    WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath().resolve(sightingWrapper.getSighting().getVisitName())
+                                    Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(sightingWrapper.getSighting().getVisitName())
                                     .resolve(wildLogFile.getFilename())).toString(),
                                 WildLogFileType.IMAGE));
                         newWildLogFile.setDefaultFile(true);

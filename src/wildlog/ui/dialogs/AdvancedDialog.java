@@ -212,6 +212,7 @@ public class AdvancedDialog extends JDialog {
         DateChangeDialog dialog = new DateChangeDialog(app, this, visit);
         dialog.setVisible(true);
         panelVisit.doTheRefresh(null);
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnCorrectTimeActionPerformed
 
@@ -229,6 +230,7 @@ public class AdvancedDialog extends JDialog {
         panelVisit.setLocationForVisit(app.getDBI().find(new Location(panelVisit.getVisit().getLocationName())));
         panelVisit.doTheRefresh(null);
         getGlassPane().setVisible(false);
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnMoveVisitActionPerformed
 
@@ -254,6 +256,7 @@ public class AdvancedDialog extends JDialog {
             }
             panelVisit.doTheRefresh(null);
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSetAllGPSActionPerformed
 
@@ -275,6 +278,7 @@ public class AdvancedDialog extends JDialog {
             app.getDBI().createOrUpdate(sighting, false);
         }
         panelVisit.doTheRefresh(null);
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSetDurationActionPerformed
 
@@ -350,6 +354,7 @@ public class AdvancedDialog extends JDialog {
             // Open the summary document
             UtilsFileProcessing.openFile(feedbackFile);
         }
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnDuplicateSightingsActionPerformed
 
@@ -358,6 +363,7 @@ public class AdvancedDialog extends JDialog {
                 app.getDBI().find(new Location(panelVisit.getVisit().getLocationName())),
                 visit, panelVisit);
         dialog.setVisible(true);
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnChecklistActionPerformed
 
@@ -369,6 +375,7 @@ public class AdvancedDialog extends JDialog {
             app.getDBI().createOrUpdate(sighting, false);
         }
         panelVisit.doTheRefresh(null);
+        setVisible(false);
         dispose();
     }//GEN-LAST:event_btnSetSunAndMoonActionPerformed
 

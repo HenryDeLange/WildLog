@@ -157,6 +157,7 @@ public class MergeLocationDialog extends JDialog {
                 app.getDBI().createOrUpdate(sighting, false);
             }
             app.getDBI().delete(tempFromLocation);
+            setVisible(false);
             dispose();
         }
         else {

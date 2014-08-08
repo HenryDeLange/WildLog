@@ -17,6 +17,7 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.interfaces.DataObjectBasicInfo;
+import wildlog.data.dataobjects.wrappers.WildLogSystemFile;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -195,7 +196,7 @@ public final class UtilsKML {
         inProgressbarTask.setMessage("Creating the KML Export for '" + inDataObject.getDisplayName() + "'");
         inProgressbarTask.setTaskProgress(0);
         // Make sure all folders, thumbnails and icons exist
-        Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogPaths.WildLogPathPrefixes.WILDLOG_SYSTEM_DUMP.toPath());
+        Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogSystemFile.WILDLOG_FOLDER_PREFIX);
         Files.createDirectories(iconPath);
         UtilsKML.copyKmlIcons(iconPath);
         Path finalPath = WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".kml");

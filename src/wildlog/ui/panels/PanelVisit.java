@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,6 @@ import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
-import wildlog.utils.WildLogPaths;
 
 
 public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefreshWhenDataChanges {
@@ -137,7 +137,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(
                 visit.getWildLogFileID(),
-                WildLogPaths.WildLogPathPrefixes.PREFIX_VISIT.toPath().resolve(locationForVisit.getName()).resolve(visit.getName()),
+                Paths.get(Visit.WILDLOG_FOLDER_PREFIX).resolve(locationForVisit.getName()).resolve(visit.getName()),
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,

@@ -24,8 +24,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,10 +42,16 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.image.WritableImage;
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -51,7 +59,12 @@ import wildlog.utils.WildLogPaths;
 
 public class ReportsBaseDialog extends JFrame {
     private final JFXPanel jfxPanel;
-    private final List<Sighting> lstSightings;
+    private final List<Sighting> lstOriginalData;
+    private List<Sighting> lstFilteredData;
+    private List<Element> lstFilteredElements;
+    private List<Location> lstFilteredLocations;
+    private List<Visit> lstFilteredVisits;
+    private List<Sighting> lstFilteredSightings;
     
 
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
@@ -59,8 +72,10 @@ public class ReportsBaseDialog extends JFrame {
         initComponents();
         jfxPanel = new JFXPanel();
         pnlChartArea.add(jfxPanel, BorderLayout.CENTER);
-        lstSightings = inSightings;
+        lstOriginalData = inSightings;
+        lstFilteredData = lstOriginalData;
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
+        UtilsDialog.setupGlassPaneOnMainFrame(this);
         Platform.setImplicitExit(false);
     }
 
@@ -84,35 +99,38 @@ public class ReportsBaseDialog extends JFrame {
         jToggleButton6 = new javax.swing.JToggleButton();
         jToggleButton7 = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        btnResetFilters = new javax.swing.JButton();
+        btnFilterProperties = new javax.swing.JButton();
+        btnFilterElement = new javax.swing.JButton();
+        btnFilterLocation = new javax.swing.JButton();
+        btnFilterVisit = new javax.swing.JButton();
+        btnFilterSightings = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        lblTotalRecords = new javax.swing.JLabel();
+        lblFilteredRecords = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         pnlChartArea = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("WildLog Reports");
+        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Report.gif")).getImage());
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         jButton1.setText("Export Report");
         jButton1.setToolTipText("Export the report to PDF or PNG.");
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.setFocusPainted(false);
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         btnGroupForReportTypes.add(jToggleButton1);
         jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
@@ -158,12 +176,17 @@ public class ReportsBaseDialog extends JFrame {
 
         btnGroupForReportTypes.add(jToggleButton4);
         jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jToggleButton4.setText("jToggleButton4");
+        jToggleButton4.setText("Test Chart 4");
         jToggleButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jToggleButton4.setFocusPainted(false);
         jToggleButton4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jToggleButton4.setIconTextGap(8);
         jToggleButton4.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        jToggleButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton4ActionPerformed(evt);
+            }
+        });
 
         btnGroupForReportTypes.add(jToggleButton5);
         jToggleButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
@@ -225,98 +248,142 @@ public class ReportsBaseDialog extends JFrame {
                 .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Options"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        jCheckBox1.setText("Alive");
+        btnResetFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        btnResetFilters.setText("Reset Active Data Filters");
+        btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnResetFilters.setFocusPainted(false);
+        btnResetFilters.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        jCheckBox2.setText("Dead");
+        btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
+        btnFilterProperties.setText("Filter on Properties");
+        btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterProperties.setFocusPainted(false);
+        btnFilterProperties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterPropertiesActionPerformed(evt);
+            }
+        });
 
-        jCheckBox3.setText("Unknown");
+        btnFilterElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnFilterElement.setText("Filter by Creature");
+        btnFilterElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterElement.setFocusPainted(false);
+        btnFilterElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterElement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterElementActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setText("Life Status:");
+        btnFilterLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnFilterLocation.setText("Filter by Place");
+        btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterLocation.setFocusPainted(false);
+        btnFilterLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterLocationActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("GPS Accuracy: (At least)");
+        btnFilterVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnFilterVisit.setText("Filter by Period");
+        btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterVisit.setFocusPainted(false);
+        btnFilterVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterVisitActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        btnFilterSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
+        btnFilterSightings.setText("Filter by Observation");
+        btnFilterSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterSightings.setFocusPainted(false);
+        btnFilterSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterSightingsActionPerformed(evt);
+            }
+        });
 
-        jLabel3.setText("Certainty: (At least)");
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setText("Filtered Records:");
 
-        jLabel4.setText("Period Type:");
+        lblTotalRecords.setText("#total#");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        lblFilteredRecords.setText("#filtered#");
 
-        jLabel5.setText("Places:");
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel8.setText("Total Records:");
 
-        jLabel6.setText("Creatures:");
-
-        jLabel7.setText("Dates:");
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTotalRecords)
+                    .addComponent(lblFilteredRecords))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(lblTotalRecords))
+                .addGap(5, 5, 5)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFilteredRecords)
+                    .addComponent(jLabel10))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jCheckBox1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox3)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap())
+            .addComponent(btnResetFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFilterLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFilterVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFilterElement, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFilterSightings, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+            .addComponent(btnFilterProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2)
-                    .addComponent(jCheckBox3))
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(btnFilterProperties)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
+                .addComponent(btnFilterElement)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnFilterLocation)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnFilterVisit)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnFilterSightings)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5)
-                .addGap(28, 28, 28)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addComponent(btnResetFilters)
+                .addGap(5, 5, 5))
         );
 
         javax.swing.GroupLayout pnlReportOptionsLayout = new javax.swing.GroupLayout(pnlReportOptions);
@@ -334,12 +401,12 @@ public class ReportsBaseDialog extends JFrame {
         pnlReportOptionsLayout.setVerticalGroup(
             pnlReportOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlReportOptionsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(2, 2, 2)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
 
@@ -347,18 +414,15 @@ public class ReportsBaseDialog extends JFrame {
 
         pnlChartArea.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Options"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Chart Display Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        org.jdesktop.swingx.HorizontalLayout horizontalLayout1 = new org.jdesktop.swingx.HorizontalLayout();
+        horizontalLayout1.setGap(5);
+        jPanel3.setLayout(horizontalLayout1);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 729, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jButton2.setText("Change Chart Colors");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setFocusPainted(false);
+        jPanel3.add(jButton2);
 
         pnlChartArea.add(jPanel3, java.awt.BorderLayout.PAGE_END);
 
@@ -368,7 +432,7 @@ public class ReportsBaseDialog extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -382,7 +446,7 @@ public class ReportsBaseDialog extends JFrame {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Chart chart = createBarChart1(lstSightings);
+                Chart chart = createBarChart1(lstOriginalData);
                 jfxPanel.setScene(new Scene(chart));
             }
         });
@@ -392,7 +456,7 @@ public class ReportsBaseDialog extends JFrame {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Chart chart = createBarChart2(lstSightings);
+                Chart chart = createBarChart2(lstOriginalData);
                 jfxPanel.setScene(new Scene(chart));
             }
         });
@@ -402,7 +466,7 @@ public class ReportsBaseDialog extends JFrame {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Chart chart = createBarChart3(lstSightings);
+                Chart chart = createBarChart3(lstOriginalData);
                 jfxPanel.setScene(new Scene(chart));
             }
         });
@@ -458,6 +522,101 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
+        Visit searchVisit = new Visit();
+        searchVisit.setType(VisitType.REMOTE_CAMERA);
+        List<Visit> lstVisits = WildLogApp.getApplication().getDBI().list(searchVisit);
+        List<Sighting> lstSightings = new ArrayList<>(lstVisits.size() * 5);
+        for (Visit visit : lstVisits) {
+            lstSightings.addAll(WildLogApp.getApplication().getDBI().list(new Sighting(null, visit.getLocationName(), visit.getName())));
+        }
+        Set<String> setElementCount = new HashSet<>();
+        for (Sighting sighting : lstSightings) {
+            if (ElementType.MAMMAL.equals(WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName())).getType())) {
+                if (!setElementCount.contains(sighting.getElementName())) {
+                    System.out.println(sighting.getElementName());
+                }
+                setElementCount.add(sighting.getElementName());
+            }
+        }
+        System.out.println("Total camera trap mammals: " + setElementCount.size());
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Chart chart = createBarChart4(lstSightings);
+                jfxPanel.setScene(new Scene(chart));
+            }
+        });
+    }//GEN-LAST:event_jToggleButton4ActionPerformed
+
+    private void btnFilterElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementActionPerformed
+        Set<String> setOriginalData = new HashSet<>();
+        for (Sighting sighting : lstOriginalData) {
+            setOriginalData.add(sighting.getElementName());
+        }
+        List<Element> lstFilterData = new ArrayList<>(setOriginalData.size());
+        for (String temp : setOriginalData) {
+            lstFilterData.add(new Element(temp));
+        }
+        FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(this, lstFilterData, lstFilteredElements, Element.class);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredElements = dialog.getSelectedData();
+            // TODO: Filter the original results using the provided values
+            doBigAssFilter();
+        }
+    }//GEN-LAST:event_btnFilterElementActionPerformed
+
+    private void btnFilterLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterLocationActionPerformed
+        Set<String> setOriginalData = new HashSet<>();
+        for (Sighting sighting : lstOriginalData) {
+            setOriginalData.add(sighting.getLocationName());
+        }
+        List<Location> lstFilterData = new ArrayList<>(setOriginalData.size());
+        for (String temp : setOriginalData) {
+            lstFilterData.add(new Location(temp));
+        }
+        FilterDataListDialog<Location> dialog = new FilterDataListDialog<Location>(this, lstFilterData, lstFilteredLocations, Location.class);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredLocations = dialog.getSelectedData();
+            // TODO: Filter the original results using the provided values
+            doBigAssFilter();
+        }
+    }//GEN-LAST:event_btnFilterLocationActionPerformed
+
+    private void btnFilterVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterVisitActionPerformed
+        Set<String> setOriginalData = new HashSet<>();
+        for (Sighting sighting : lstOriginalData) {
+            setOriginalData.add(sighting.getVisitName());
+        }
+        List<Visit> lstFilterData = new ArrayList<>(setOriginalData.size());
+        for (String temp : setOriginalData) {
+            lstFilterData.add(new Visit(temp));
+        }
+        FilterDataListDialog<Visit> dialog = new FilterDataListDialog<Visit>(this, lstFilterData, lstFilteredVisits, Visit.class);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredVisits = dialog.getSelectedData();
+            // TODO: Filter the original results using the provided values
+            doBigAssFilter();
+        }
+    }//GEN-LAST:event_btnFilterVisitActionPerformed
+
+    private void btnFilterSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSightingsActionPerformed
+        FilterDataListDialog<Sighting> dialog = new FilterDataListDialog<Sighting>(this, lstOriginalData, lstFilteredSightings, Sighting.class);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredSightings = dialog.getSelectedData();
+            // TODO: Filter the original results using the provided values
+            doBigAssFilter();
+        }
+    }//GEN-LAST:event_btnFilterSightingsActionPerformed
+
+    private void btnFilterPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterPropertiesActionPerformed
+        
+    }//GEN-LAST:event_btnFilterPropertiesActionPerformed
 
     private Chart createBarChart1(List<Sighting> inSightings) {
         // TODO: options -> series per species/location/visit + more generic times (aand, dag, skemer)
@@ -571,26 +730,53 @@ public class ReportsBaseDialog extends JFrame {
         }
         return hours + ":" + mins;
     }
+    
+    private Chart createBarChart4(List<Sighting> inSightings) {
+        NumberAxis axisY = new NumberAxis();
+        axisY.setLabel("Number of Camera Trap Observations");
+        axisY.setAutoRanging(true);
+        CategoryAxis axisX = new CategoryAxis();
+        axisX.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
+        axisX.setTickLabelRotation(-90);
+        ObservableList<BarChart.Series> chartData = FXCollections.observableArrayList();
+        Map<String, ObservableList> groupedData = new HashMap<>();
+        for (Sighting sighting : inSightings) {
+            ObservableList allSightings = groupedData.get(sighting.getElementName());
+            if (allSightings == null) {
+                allSightings = FXCollections.observableArrayList();
+                groupedData.put(sighting.getElementName(), allSightings);
+            }
+            allSightings.add(new BarChart.Data(sighting.getTimeOfDay().toString(), 1));
+        }
+        for (String key : groupedData.keySet()) {
+            BarChart.Series series = new BarChart.Series(key + " (" + groupedData.get(key).size() + ")", groupedData.get(key));
+            chartData.add(series);
+        }
+        StackedBarChart chart = new StackedBarChart(axisX, axisY, chartData);
+        return chart;
+    }
+    
+    private void doBigAssFilter() {
+        // All filters need to be taken into account all the time, even if only one was changed the results must still fullfill the other filters...
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnFilterElement;
+    private javax.swing.JButton btnFilterLocation;
+    private javax.swing.JButton btnFilterProperties;
+    private javax.swing.JButton btnFilterSightings;
+    private javax.swing.JButton btnFilterVisit;
     private javax.swing.ButtonGroup btnGroupForReportTypes;
+    private javax.swing.JButton btnResetFilters;
     private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
@@ -599,6 +785,8 @@ public class ReportsBaseDialog extends JFrame {
     private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JToggleButton jToggleButton6;
     private javax.swing.JToggleButton jToggleButton7;
+    private javax.swing.JLabel lblFilteredRecords;
+    private javax.swing.JLabel lblTotalRecords;
     private javax.swing.JPanel pnlChartArea;
     private javax.swing.JPanel pnlReportOptions;
     // End of variables declaration//GEN-END:variables

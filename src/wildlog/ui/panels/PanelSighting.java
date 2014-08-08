@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,7 +60,6 @@ import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
-import wildlog.utils.WildLogPaths;
 
 
 public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataChanges {
@@ -304,7 +304,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private void uploadFiles(List<File> inFiles) {
         UtilsFileProcessing.performFileUpload(
                 sighting.getWildLogFileID(),
-                WildLogPaths.WildLogPathPrefixes.PREFIX_SIGHTING.toPath().resolve(sighting.toPath()),
+                Paths.get(Sighting.WILDLOG_FOLDER_PREFIX).resolve(sighting.toPath()),
                 inFiles.toArray(new File[inFiles.size()]),
                 lblImage,
                 WildLogThumbnailSizes.NORMAL,

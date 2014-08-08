@@ -1,4 +1,4 @@
-package wildlog.ui.utils;
+package wildlog.ui.helpers;
 
 import java.awt.Component;
 import java.awt.Container;

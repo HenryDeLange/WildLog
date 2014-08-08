@@ -108,29 +108,4 @@ public enum WildLogPaths {
         return getRelativePath().toString();
     }
 
-    // Related enums
-    public enum WildLogPathPrefixes {
-        PREFIX_ELEMENT ("Creatures"),
-        PREFIX_LOCATION ("Places"),
-        PREFIX_VISIT ("Periods"),
-        PREFIX_SIGHTING ("Observations"),
-        WILDLOG_SYSTEM_DUMP ("WildLogSystem");
-
-        private String value;
-
-        WildLogPathPrefixes (String inString) {
-            value = inString;
-        }
-
-        @Override
-        public String toString() {
-            return value;
-        }
-
-        public Path toPath() {
-            return Paths.get(value);
-        }
-
-    }
-
 }

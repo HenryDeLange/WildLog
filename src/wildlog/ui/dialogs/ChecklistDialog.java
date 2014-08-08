@@ -209,6 +209,7 @@ public class ChecklistDialog extends JDialog {
             }
             // Close the dialog - (Evt is null if the Image Upload calls save method...)
             if (evt != null) {
+                setVisible(false);
                 dispose();
             }
         }

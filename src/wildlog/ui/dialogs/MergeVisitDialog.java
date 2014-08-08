@@ -217,6 +217,7 @@ public class MergeVisitDialog extends JDialog {
                 }
                 app.getDBI().delete(tempFromVisit);
             }
+            setVisible(false);
             dispose();
         }
         else {

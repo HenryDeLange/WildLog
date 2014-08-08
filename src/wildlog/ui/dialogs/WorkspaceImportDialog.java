@@ -381,6 +381,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
                         }
                         finally {
                             app.getMainFrame().refreshHomeTab();
+                            setVisible(false);
                             dispose();
                             if (importDBI != null) {
                                 importDBI.close();

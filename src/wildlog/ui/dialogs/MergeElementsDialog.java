@@ -153,7 +153,8 @@ public class MergeElementsDialog extends JDialog {
             }
             app.getDBI().delete(replaceElement);
             // Close the window
-            this.dispose();
+            setVisible(false);
+            dispose();
         }
         else {
             getGlassPane().setVisible(true);

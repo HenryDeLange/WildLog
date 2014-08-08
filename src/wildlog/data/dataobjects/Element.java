@@ -9,7 +9,6 @@ import wildlog.data.enums.UnitsWeight;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
-import wildlog.utils.WildLogPaths;
 
 
 public class Element extends ElementCore implements DataObjectWithHTML {
@@ -161,16 +160,6 @@ public class Element extends ElementCore implements DataObjectWithHTML {
         }
         html = html.replace("___INSERT_SIGHTINGS___", sightings);
         return html;
-    }
-
-    @Override
-    public String getExportPrefix() {
-        return WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toString();
-    }
-
-    @Override
-    public String getDisplayName() {
-        return primaryName;
     }
 
 }

@@ -6,6 +6,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +84,7 @@ public final class UtilsTableGenerator {
                                         "Type",
                                         "Class",
                                         "Wish Rating",
-                                        "Add Frequency"
+                                        "Observations"
                                         };
                 // Load data from DB
                 final List<Element> listElements = inApp.getDBI().list(inElement);
@@ -96,20 +97,19 @@ public final class UtilsTableGenerator {
                         listCallables.add(new Callable<Object>() {
                             @Override
                             public Object call() throws Exception {
-                                int i = 0;
                                 Element tempElement = listElements.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
-                                data[finalT][i++] = tempElement.getPrimaryName();
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                data[finalT][1] = tempElement.getPrimaryName();
                                 if (WildLogApp.getApplication().getWildLogOptions().isUseScientificNames()) {
-                                    data[finalT][i++] = tempElement.getScientificName();
+                                    data[finalT][2] = tempElement.getScientificName();
                                 }
                                 else {
-                                    data[finalT][i++] = tempElement.getOtherName();
+                                    data[finalT][2] = tempElement.getOtherName();
                                 }
-                                data[finalT][i++] = tempElement.getType();
-                                data[finalT][i++] = tempElement.getFeedingClass();
-                                data[finalT][i++] = tempElement.getWishListRating();
-                                data[finalT][i++] = tempElement.getAddFrequency();
+                                data[finalT][3] = tempElement.getType();
+                                data[finalT][4] = tempElement.getFeedingClass();
+                                data[finalT][5] = tempElement.getWishListRating();
+                                data[finalT][6] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, null));
                                 return null;
                             }
                         });
@@ -148,7 +148,7 @@ public final class UtilsTableGenerator {
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
                     // FIXME: The code below is copied from UtilsUI.attachKeyListernerToFilterTableRows(). This is not ideal.
-                    String[] oldSelection = UtilsTableGenerator.getSelectedRowIDs(inTable, 1);
+//                    String[] oldSelection = UtilsTableGenerator.getSelectedRowIDs(inTable, 1);
                     TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>)inTable.getRowSorter();
                     if (sorter == null) {
                         sorter = new TableRowSorter<>(inTable.getModel());
@@ -193,9 +193,9 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 int i = 0;
                                 Element tempElement = listElements.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
-                                data[finalT][i++] = tempElement.getPrimaryName();
-                                data[finalT][i++] = tempElement.getType();
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                data[finalT][1] = tempElement.getPrimaryName();
+                                data[finalT][2] = tempElement.getType();
                                 return null;
                             }
                         });
@@ -246,7 +246,8 @@ public final class UtilsTableGenerator {
                                         "Rating",
                                         "Wildlife Rating",
                                         "Latitude",
-                                        "Longitude"
+                                        "Longitude",
+                                        "Observations"
                                         };
                 // Load data from DB
                 final List<Location> listLocations = inApp.getDBI().list(inLocation);
@@ -261,14 +262,17 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 int i = 0;
                                 Location tempLocation = listLocations.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
-                                data[finalT][i++] = tempLocation.getName();
-                                data[finalT][i++] = tempLocation.getRating();
-                                data[finalT][i++] = tempLocation.getGameViewingRating();
-                                data[finalT][i++] = new WildLogTableModelDataWrapper(
-                                        UtilsGps.getLatitudeString(tempLocation), UtilsGps.getLatDecimalDegree(tempLocation));
-                                data[finalT][i++] = new WildLogTableModelDataWrapper(
-                                        UtilsGps.getLongitudeString(tempLocation), UtilsGps.getLonDecimalDegree(tempLocation));
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation);
+                                data[finalT][1] = tempLocation.getName();
+                                data[finalT][2] = tempLocation.getRating();
+                                data[finalT][3] = tempLocation.getGameViewingRating();
+                                data[finalT][4] = new WildLogTableModelDataWrapper(
+                                        UtilsGps.getLatitudeString(tempLocation), 
+                                        UtilsGps.getLatDecimalDegree(tempLocation));
+                                data[finalT][5] = new WildLogTableModelDataWrapper(
+                                        UtilsGps.getLongitudeString(tempLocation), 
+                                        UtilsGps.getLonDecimalDegree(tempLocation));
+                                data[finalT][6] = inApp.getDBI().count(new Sighting(null, tempLocation.getName(), null));
                                 return null;
                             }
                         });
@@ -297,6 +301,9 @@ public final class UtilsTableGenerator {
                     inTable.getColumnModel().getColumn(5).setMinWidth(100);
                     inTable.getColumnModel().getColumn(5).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(5).setMaxWidth(125);
+                    inTable.getColumnModel().getColumn(6).setMinWidth(80);
+                    inTable.getColumnModel().getColumn(6).setPreferredWidth(90);
+                    inTable.getColumnModel().getColumn(6).setMaxWidth(95);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
                         inTable.removeColumn(inTable.getColumnModel().getColumn(0));
                     }
@@ -346,22 +353,22 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 int i = 0;
                                 Visit tempVisit = listVisits.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
-                                data[finalT][i++] = tempVisit.getName();
-                                data[finalT][i++] = tempVisit.getStartDate();
-                                data[finalT][i++] = tempVisit.getEndDate();
-                                data[finalT][i++] = tempVisit.getType();
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
+                                data[finalT][1] = tempVisit.getName();
+                                data[finalT][2] = tempVisit.getStartDate();
+                                data[finalT][3] = tempVisit.getEndDate();
+                                data[finalT][4] = tempVisit.getType();
                                 Sighting tempSighting = new Sighting();
                                 tempSighting.setVisitName(tempVisit.getName());
                                 List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
-                                data[finalT][i++] = listSightings.size();
+                                data[finalT][5] = listSightings.size();
                                 Set<String> countElements = new HashSet<String>(listSightings.size()/2);
                                 for (Sighting sighting : listSightings) {
                                     if (!countElements.contains(sighting.getElementName())) {
                                         countElements.add(sighting.getElementName());
                                     }
                                 }
-                                data[finalT][i++] = countElements.size();
+                                data[finalT][6] = countElements.size();
                                 return null;
                             }
                         });
@@ -440,10 +447,10 @@ public final class UtilsTableGenerator {
                                 public Object call() throws Exception {
                                     int i = 0;
                                     Visit tempVisit = listVisits.get(finalT);
-                                    data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
-                                    data[finalT][i++] = tempVisit.getName();
-                                    data[finalT][i++] = tempVisit.getStartDate();
-                                    data[finalT][i++] = inApp.getDBI().count(new Sighting(null, null, tempVisit.getName()));
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
+                                    data[finalT][1] = tempVisit.getName();
+                                    data[finalT][2] = tempVisit.getStartDate();
+                                    data[finalT][3] = inApp.getDBI().count(new Sighting(null, null, tempVisit.getName()));
                                     return null;
                                 }
                             });
@@ -517,10 +524,10 @@ public final class UtilsTableGenerator {
                                 public Object call() throws Exception {
                                     int i = 0;
                                     Visit tempVisit = listVisits.get(finalT);
-                                    data[finalT][i++] = setupThumbnailIcon(inApp, tempVisit);
-                                    data[finalT][i++] = tempVisit.getName();
-                                    data[finalT][i++] = tempVisit.getStartDate();
-                                    data[finalT][i++] = tempVisit.getType();
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempVisit);
+                                    data[finalT][1] = tempVisit.getName();
+                                    data[finalT][2] = tempVisit.getStartDate();
+                                    data[finalT][3] = tempVisit.getType();
                                     return null;
                                 }
                             });
@@ -598,23 +605,23 @@ public final class UtilsTableGenerator {
                                 public Object call() throws Exception {
                                     int i = 0;
                                     Sighting tempSighting = listSightings.get(finalT);
-                                    data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
-                                    data[finalT][i++] = tempSighting.getElementName();
-                                    data[finalT][i++] = tempSighting.getDate();
-                                    data[finalT][i++] = tempSighting.getSightingEvidence();
-                                    data[finalT][i++] = tempSighting.getCertainty();
-                                    data[finalT][i++] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
-                                    data[finalT][i++] = tempSighting.getSightingCounter();
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempSighting);
+                                    data[finalT][1] = tempSighting.getElementName();
+                                    data[finalT][2] = tempSighting.getDate();
+                                    data[finalT][3] = tempSighting.getSightingEvidence();
+                                    data[finalT][4] = tempSighting.getCertainty();
+                                    data[finalT][5] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
+                                    data[finalT][6] = tempSighting.getSightingCounter();
                                     if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
                                         if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
-                                            data[finalT][i++] = "GPS";
+                                            data[finalT][7] = "GPS";
                                         }
                                         else {
-                                            data[finalT][i++] = "";
+                                            data[finalT][7] = "";
                                         }
                                     }
                                     else {
-                                        data[finalT][i++] = "";
+                                        data[finalT][7] = "";
                                     }
                                     return null;
                                 }
@@ -708,11 +715,11 @@ public final class UtilsTableGenerator {
                                 public Object call() throws Exception {
                                     int i = 0;
                                     Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
-                                    data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
-                                    data[finalT][i++] = tempElement.getPrimaryName();
-                                    data[finalT][i++] = tempElement.getType();
-                                    data[finalT][i++] = tempElement.getFeedingClass();
-                                    data[finalT][i++] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, inVisit.getName()));
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                    data[finalT][1] = tempElement.getPrimaryName();
+                                    data[finalT][2] = tempElement.getType();
+                                    data[finalT][3] = tempElement.getFeedingClass();
+                                    data[finalT][4] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), null, inVisit.getName()));
                                     return null;
                                 }
                             });
@@ -795,10 +802,10 @@ public final class UtilsTableGenerator {
                                 public Object call() throws Exception {
                                     int i = 0;
                                     Element tempElement = inApp.getDBI().find(new Element(listElements.get(finalT)));
-                                    data[finalT][i++] = setupThumbnailIcon(inApp, tempElement);
-                                    data[finalT][i++] = tempElement.getPrimaryName();
-                                    data[finalT][i++] = tempElement.getType();
-                                    data[finalT][i++] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), inLocation.getName(), null));
+                                    data[finalT][0] = setupThumbnailIcon(inApp, tempElement);
+                                    data[finalT][1] = tempElement.getPrimaryName();
+                                    data[finalT][2] = tempElement.getType();
+                                    data[finalT][3] = inApp.getDBI().count(new Sighting(tempElement.getPrimaryName(), inLocation.getName(), null));
                                     return null;
                                 }
                             });
@@ -868,9 +875,9 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 int i = 0;
                                 Location tempLocation = inApp.getDBI().find(new Location(listLocationCounts.get(finalT).getLocationName()));
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
-                                data[finalT][i++] = tempLocation.getName();
-                                data[finalT][i++] = listLocationCounts.get(finalT).getCount();
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation);
+                                data[finalT][1] = tempLocation.getName();
+                                data[finalT][2] = listLocationCounts.get(finalT).getCount();
                                 return null;
                             }
                         });
@@ -932,8 +939,8 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 int i = 0;
                                 Location tempLocation = listLocations.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempLocation);
-                                data[finalT][i++] = tempLocation.getName();
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempLocation);
+                                data[finalT][1] = tempLocation.getName();
                                 return null;
                             }
                         });
@@ -1003,10 +1010,10 @@ public final class UtilsTableGenerator {
                             public Object call() throws Exception {
                                 int i = 0;
                                 Sighting tempSighting = listSightings.get(finalT);
-                                data[finalT][i++] = setupThumbnailIcon(inApp, tempSighting);
-                                data[finalT][i++] = tempSighting.getLocationName();
-                                data[finalT][i++] = tempSighting.getDate();
-                                data[finalT][i++] = tempSighting.getSightingCounter();
+                                data[finalT][0] = setupThumbnailIcon(inApp, tempSighting);
+                                data[finalT][1] = tempSighting.getLocationName();
+                                data[finalT][2] = tempSighting.getDate();
+                                data[finalT][3] = tempSighting.getSightingCounter();
                                 return null;
                             }
                         });
@@ -1231,5 +1238,125 @@ public final class UtilsTableGenerator {
         }
         return selectedRowIDs;
     }
+    
+    public static <T extends DataObjectWithWildLogFile> void setupFilterTable(final WildLogApp inApp, final JTable inTable, final List<T> inList) {
+        // Setup header
+        setupLoadingHeader(inTable);
+        // Load the table content
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (!inList.isEmpty()) {
+                    // Setup column names
+                    String[] columnNames;
+                    if (inList.get(0) instanceof Element) {
+                        columnNames = new String[] {
+                                                    "",
+                                                    "Creature Name",
+                                                    "Creature Type"
+                                                    };
+                    }
+                    else
+                    if (inList.get(0) instanceof Location) {
+                        columnNames = new String[] {
+                                                    "",
+                                                    "Place Name"
+                                                    };
+                    }
+                    else
+                    if (inList.get(0) instanceof Visit) {
+                        columnNames = new String[] {
+                                                    "",
+                                                    "Period Name",
+                                                    "Place Name",
+                                                    "Start Date",
+                                                    "Period Type"
+                                                    };
+                    }
+                    else
+                    if (inList.get(0) instanceof Sighting) {
+                        columnNames = new String[] {
+                                                    "",
+                                                    "Creature Name",
+                                                    "Place Name",
+                                                    "Date",
+                                                    "Period Name",
+                                                    "Certainty",
+                                                    "ID"
+                                                    };
+                    }
+                    else {
+                        columnNames = new String[] {
+                                                    "",
+                                                    "Unknown Data"
+                                                    };
+                    }
+                    Collection<Callable<Object>> listCallables = new ArrayList<>(inList.size());
+                    Collections.sort(inList);
+                    // Setup new table data
+                    final Object[][] data = new Object[inList.size()][columnNames.length];
+                    for (int t = 0; t < inList.size(); t++) {
+                        final int finalT = t;
+                        listCallables.add(new Callable<Object>() {
+                            @Override
+                            public Object call() throws Exception {
+                                DataObjectWithWildLogFile dataObject = inList.get(finalT);
+                                data[finalT][0] = setupThumbnailIcon(inApp, dataObject);
+                                data[finalT][1] = dataObject.getDisplayName();
+                                if (dataObject instanceof Element) {
+                                    data[finalT][2] = inApp.getDBI().find((Element)dataObject).getType();
+                                }
+                                else
+                                if (dataObject instanceof Location) {
+                                    // Nothing extra needs loading...
+                                }
+                                else
+                                if (dataObject instanceof Visit) {
+                                    Visit visit = inApp.getDBI().find((Visit)dataObject);
+                                    data[finalT][2] = visit.getLocationName();
+                                    data[finalT][3] = visit.getStartDate();
+                                    data[finalT][4] = visit.getType();
+                                }
+                                else
+                                if (dataObject instanceof Sighting) {
+                                    Sighting sighting = inApp.getDBI().find((Sighting)dataObject);
+                                    data[finalT][1] = sighting.getElementName();
+                                    data[finalT][2] = sighting.getLocationName();
+                                    data[finalT][3] = sighting.getDate();
+                                    data[finalT][4] = sighting.getVisitName();
+                                    data[finalT][5] = sighting.getCertainty();
+                                    data[finalT][6] = sighting.getSightingCounter();
+                                }
+                                return null;
+                            }
+                        });
+                    }
+                    try {
+                        executorService.invokeAll(listCallables);
+                    }
+                    catch (InterruptedException ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                    // Create the new model
+                    setupTableModel(inTable, data, columnNames);
+                    // Setup the column and row sizes etc.
+                    setupRenderersAndThumbnailRows(inTable, false);
+                    inTable.getColumnModel().getColumn(1).setMinWidth(105);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
+                    
+                    // TODO: set sizes
+                    
+                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                    }
+                    // Setup default sorting
+                    setupRowSorter(inTable, 1);
+                }
+                else {
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Data"}, 0));
+                }
+            }
+        });
+     }
 
 }

@@ -13,7 +13,9 @@ import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -40,6 +42,17 @@ import wildlog.data.enums.WildLogFileType;
 public final class UtilsDialog {
 
     private UtilsDialog() {
+    }
+    
+    public static void setupGlassPaneOnMainFrame(JFrame inFrame) {
+        // Setup the glassPane for modal popups
+        JPanel glassPane = (JPanel)inFrame.getGlassPane();
+        glassPane.setLayout(new BorderLayout());
+        JPanel background = new JPanel();
+        background.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
+        glassPane.add(background, BorderLayout.CENTER);
+        glassPane.addMouseListener(new MouseAdapter() {});
+        glassPane.addKeyListener(new KeyAdapter() {});
     }
 
     public static void addModalBackgroundPanel(RootPaneContainer inParentContainer, Window inPopupWindow) {
@@ -88,6 +101,7 @@ public final class UtilsDialog {
         ActionListener escListiner = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        inDialog.setVisible(false);
                         inDialog.dispose();
                     }
                 };
@@ -102,6 +116,7 @@ public final class UtilsDialog {
         if (inFile != null) {
             if (Files.exists(inFile)) {
                 final JFrame frame = new JFrame("EXIF Meta Data: " + inFile);
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 frame.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/EXIF.png")).getImage());
                 JTextPane txtPane = new JTextPane();
                 txtPane.setContentType("text/html");
@@ -129,6 +144,7 @@ public final class UtilsDialog {
                     ActionListener escListiner = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
+                            frame.setVisible(false);
                             frame.dispose();
                         }
                     };
