@@ -1,5 +1,9 @@
 package wildlog.ui.utils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JComboBox;
@@ -112,6 +116,50 @@ public class UtilsTime {
                 sighting.setMoonlight(AstroCalculator.getMoonlight(sighting.getDate(), latitude, longitude));
             }
         }
+    }
+    
+    // TODO: Vind eendag 'n manier om seker te maak alle datums in WildLog is onafhankklik van timezone en daylight savings.
+    
+    public static Date getDateFromLocalDateTime(LocalDateTime inLocalDateTime) {
+        if (inLocalDateTime != null) {
+            return Date.from(inLocalDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+    
+    public static Date getDateFromLocalDate(LocalDate inLocalDate) {
+        if (inLocalDate != null) {
+            return Date.from(inLocalDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+    
+    public static Date getDateFromLocalTime(LocalTime inLocalTime) {
+        if (inLocalTime != null) {
+            return Date.from(inLocalTime.atDate(LocalDate.now()).atZone(ZoneId.systemDefault()).toInstant());
+        }
+        return null;
+    }
+    
+    public static LocalDateTime getLocalDateTimeFromDate(Date inDate) {
+        if (inDate != null) {
+            return LocalDateTime.ofInstant(inDate.toInstant(), ZoneId.systemDefault());
+        }
+        return null;
+    }
+    
+    public static LocalDate getLocalDateFromDate(Date inDate) {
+        if (inDate != null) {
+            return getLocalDateTimeFromDate(inDate).toLocalDate();
+        }
+        return null;
+    }
+    
+    public static LocalTime getLocalTimeFromDate(Date inDate) {
+        if (inDate != null) {
+            return getLocalDateTimeFromDate(inDate).toLocalTime();
+        }
+        return null;
     }
 
 }

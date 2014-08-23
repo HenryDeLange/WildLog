@@ -1,4 +1,4 @@
-package wildlog.ui.reports;
+package wildlog.ui.reports.implementations;
 
 import java.awt.Color;
 import java.awt.Dimension;

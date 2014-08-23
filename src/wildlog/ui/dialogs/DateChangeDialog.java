@@ -1,8 +1,6 @@
 package wildlog.ui.dialogs;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -187,7 +185,7 @@ public class DateChangeDialog extends JDialog {
             // Update the Sightings
             List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
             for (Sighting sighting : listSightings) {
-                LocalDateTime currentSightingTime = LocalDateTime.ofInstant(sighting.getDate().toInstant(), ZoneId.systemDefault());
+                LocalDateTime currentSightingTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
                 if (rdbIncrease.isSelected()) {
                     // Plus time
                     LocalDateTime newTime = currentSightingTime
@@ -195,7 +193,7 @@ public class DateChangeDialog extends JDialog {
                             .plusHours((int) spnHours.getValue())
                             .plusMinutes((int) spnMinutes.getValue())
                             .plusSeconds((int) spnSeconds.getValue());
-                    sighting.setDate(Date.from(newTime.atZone(ZoneId.systemDefault()).toInstant()));
+                    sighting.setDate(UtilsTime.getDateFromLocalDateTime(newTime));
                 }
                 else {
                     // Minus time
@@ -204,7 +202,7 @@ public class DateChangeDialog extends JDialog {
                             .minusHours((int) spnHours.getValue())
                             .minusMinutes((int) spnMinutes.getValue())
                             .minusSeconds((int) spnSeconds.getValue());
-                    sighting.setDate(Date.from(newTime.atZone(ZoneId.systemDefault()).toInstant()));
+                    sighting.setDate(UtilsTime.getDateFromLocalDateTime(newTime));
                 }
                 // Because the sighting's date changed I need to recalculate the Sun and Moon phase
                 UtilsTime.calculateSunAndMoon(sighting);

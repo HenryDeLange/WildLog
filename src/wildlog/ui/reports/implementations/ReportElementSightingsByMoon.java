@@ -1,4 +1,4 @@
-package wildlog.ui.reports;
+package wildlog.ui.reports.implementations;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
@@ -26,17 +27,17 @@ import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.ViewRating;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
-import wildlog.ui.reports.chart.BarChartEntity;
+import wildlog.ui.reports.helpers.MoonReportHelper;
 
 
-public class ReportElementSightingsBySun extends javax.swing.JFrame {
+public class ReportElementSightingsByMoon extends javax.swing.JFrame {
     private boolean usePrimaryName = true;
     private Element element;
     private BarChart chartTime;
     private WildLogApp app;
 
-    /** Creates new form ReportElementSightingsBySun */
-    public ReportElementSightingsBySun(Element inElement, WildLogApp inApp) {
+    /** Creates new form ReportElement */
+    public ReportElementSightingsByMoon(Element inElement, WildLogApp inApp) {
         element = inElement;
         app = inApp;
 
@@ -71,15 +72,6 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
     private void initComponents() {
 
         lblName = new javax.swing.JLabel();
-        lblNight = new javax.swing.JLabel();
-        lblMidDay = new javax.swing.JLabel();
-        lblMorning = new javax.swing.JLabel();
-        lblAfternoon = new javax.swing.JLabel();
-        lblOther = new javax.swing.JLabel();
-        lblDusk = new javax.swing.JLabel();
-        scrReport = new javax.swing.JScrollPane();
-        pnlScrollPane = new javax.swing.JPanel();
-        lblDawn = new javax.swing.JLabel();
         lblNumberOfSightings = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblAddFrequency = new javax.swing.JLabel();
@@ -102,6 +94,7 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         lblBad = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
         lblVeryBad = new javax.swing.JLabel();
+        lblOther = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         lblDaySightings = new javax.swing.JLabel();
@@ -110,8 +103,14 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         lblFirstLocation = new javax.swing.JLabel();
         lblLastLocation = new javax.swing.JLabel();
+        scrReport = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         lblTotalVisits = new javax.swing.JLabel();
+        lblMoonlightDay = new javax.swing.JLabel();
+        lblNoMoonDay = new javax.swing.JLabel();
+        lblMoonlightNight = new javax.swing.JLabel();
+        lblNoMoonNight = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
@@ -119,7 +118,7 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         mnuName = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Creature Time of Day Report: " + element.getPrimaryName());
+        setTitle("Creature Moon Phase Report: " + element.getPrimaryName());
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
@@ -133,58 +132,6 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         lblName.setText("...");
         lblName.setName("lblName"); // NOI18N
         getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
-
-        lblNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblNight.setForeground(new java.awt.Color(86, 86, 86));
-        lblNight.setText("NIGHT");
-        lblNight.setName("lblNight"); // NOI18N
-        getContentPane().add(lblNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 705, 60, -1));
-
-        lblMidDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblMidDay.setForeground(new java.awt.Color(167, 43, 14));
-        lblMidDay.setText("MID DAY");
-        lblMidDay.setName("lblMidDay"); // NOI18N
-        getContentPane().add(lblMidDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 705, 70, -1));
-
-        lblMorning.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblMorning.setForeground(new java.awt.Color(208, 188, 53));
-        lblMorning.setText("MORNING");
-        lblMorning.setName("lblMorning"); // NOI18N
-        getContentPane().add(lblMorning, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 705, 80, -1));
-
-        lblAfternoon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblAfternoon.setForeground(new java.awt.Color(193, 121, 56));
-        lblAfternoon.setText("AFTERNOON");
-        lblAfternoon.setName("lblAfternoon"); // NOI18N
-        getContentPane().add(lblAfternoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 705, 90, -1));
-
-        lblOther.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblOther.setForeground(new java.awt.Color(183, 187, 199));
-        lblOther.setText("OTHER");
-        lblOther.setName("lblOther"); // NOI18N
-        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 705, 60, -1));
-
-        lblDusk.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDusk.setForeground(new java.awt.Color(141, 68, 160));
-        lblDusk.setText("DUSK");
-        lblDusk.setName("lblDusk"); // NOI18N
-        getContentPane().add(lblDusk, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 705, 50, -1));
-
-        scrReport.setBorder(null);
-        scrReport.setName("scrReport"); // NOI18N
-
-        pnlScrollPane.setBackground(new java.awt.Color(255, 255, 255));
-        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
-        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-        scrReport.setViewportView(pnlScrollPane);
-
-        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 600, 550));
-
-        lblDawn.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lblDawn.setForeground(new java.awt.Color(111, 113, 201));
-        lblDawn.setText("DAWN");
-        lblDawn.setName("lblDawn"); // NOI18N
-        getContentPane().add(lblDawn, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 705, 60, -1));
 
         lblNumberOfSightings.setText("Unknown");
         lblNumberOfSightings.setName("lblNumberOfSightings"); // NOI18N
@@ -274,7 +221,7 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
 
         lblBad.setText("Unknown");
         lblBad.setName("lblBad"); // NOI18N
-        getContentPane().add(lblBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 70, -1));
+        getContentPane().add(lblBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 60, -1));
 
         jLabel31.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel31.setText("Very Bad Observations:");
@@ -284,6 +231,12 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         lblVeryBad.setText("Unknown");
         lblVeryBad.setName("lblVeryBad"); // NOI18N
         getContentPane().add(lblVeryBad, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 70, -1));
+
+        lblOther.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblOther.setForeground(new java.awt.Color(183, 187, 199));
+        lblOther.setText("OTHER");
+        lblOther.setName("lblOther"); // NOI18N
+        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(545, 705, 50, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Day Observations:");
@@ -321,6 +274,16 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         lblLastLocation.setName("lblLastLocation"); // NOI18N
         getContentPane().add(lblLastLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(284, 50, 110, -1));
 
+        scrReport.setBorder(null);
+        scrReport.setName("scrReport"); // NOI18N
+
+        pnlScrollPane.setBackground(new java.awt.Color(255, 255, 255));
+        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        scrReport.setViewportView(pnlScrollPane);
+
+        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 600, 550));
+
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel14.setText("Total Number of Periods:");
         jLabel14.setName("jLabel14"); // NOI18N
@@ -330,11 +293,36 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
         lblTotalVisits.setName("lblTotalVisits"); // NOI18N
         getContentPane().add(lblTotalVisits, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, 50, -1));
 
+        lblMoonlightDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMoonlightDay.setForeground(new java.awt.Color(231, 181, 72));
+        lblMoonlightDay.setText("MOONLIGHT (DAY)");
+        lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
+        getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 705, 140, -1));
+
+        lblNoMoonDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNoMoonDay.setForeground(new java.awt.Color(113, 89, 36));
+        lblNoMoonDay.setText("NO MOON (DAY)");
+        lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
+        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 705, 100, -1));
+
+        lblMoonlightNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMoonlightNight.setForeground(new java.awt.Color(100, 160, 219));
+        lblMoonlightNight.setText("MOONLIGHT (NIGHT)");
+        lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
+        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 705, 130, -1));
+
+        lblNoMoonNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNoMoonNight.setForeground(new java.awt.Color(46, 58, 87));
+        lblNoMoonNight.setText("NO MOON (NIGHT)");
+        lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
+        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 705, 120, -1));
+
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
         mnuPrint.setText("Print");
         mnuPrint.setName("mnuPrint"); // NOI18N
 
+        mnuPrintReport.setText("Print this Report");
         mnuPrintReport.setName("mnuPrintReport"); // NOI18N
         mnuPrintReport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -472,44 +460,23 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
             }
             // Time
             if (sighting.getTimeOfDay() != null) {
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
-//                    || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
-//                    || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1, lblNight.getForeground()));
-//                    numNightSightings++;
-//                }
-//                else
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.EARLY_MORNING)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblDawn.getForeground()));
-//                    numDaySightings++;
-//                }
-//                else
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MORNING)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMorning.getForeground()));
-//                    numDaySightings++;
-//                }
-//                else
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.MIDDAY) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_AFTERNOON) || sighting.getTimeOfDay().equals(ActiveTimeSpesific.MID_MORNING)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblMidDay.getForeground()));
-//                    numDaySightings++;
-//                }
-//                else
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.AFTERNOON)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblAfternoon.getForeground()));
-//                    numDaySightings++;
-//                }
-//                else
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.LATE_AFTERNOON)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblDusk.getForeground()));
-//                    numDaySightings++;
-//                }
-//                else
-//                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-//                    chartTime.addBar(new BarChartEntity(sighting.getLocationName(), sighting.getTimeOfDay().name(), 1,  lblOther.getForeground()));
-//                }
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
+                    || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
+                    || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
+                    // Night
+                    numNightSightings++;
+                }
+                else
+                if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+                    // Do nothing
+                }
+                else {
+                    // Day
+                    numDaySightings++;
+                }
             }
-            else
-                chartTime.addBar(new BarChartEntity(sighting.getLocationName(), ActiveTimeSpesific.NONE.name(), 1, lblOther.getForeground()));
+            // Moon
+            MoonReportHelper.addMoonInfoToChart(chartTime, sighting, new JLabel[]{lblMoonlightNight, lblNoMoonNight, lblMoonlightDay, lblNoMoonDay, lblOther});
             // Rating
             if (sighting.getViewRating().equals(ViewRating.VERY_GOOD))
                 verygood++;
@@ -572,21 +539,19 @@ public class ReportElementSightingsBySun extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JLabel lblAddFrequency;
-    private javax.swing.JLabel lblAfternoon;
     private javax.swing.JLabel lblBad;
-    private javax.swing.JLabel lblDawn;
     private javax.swing.JLabel lblDaySightings;
-    private javax.swing.JLabel lblDusk;
     private javax.swing.JLabel lblFirstDate;
     private javax.swing.JLabel lblFirstLocation;
     private javax.swing.JLabel lblGood;
     private javax.swing.JLabel lblLastDate;
     private javax.swing.JLabel lblLastLocation;
-    private javax.swing.JLabel lblMidDay;
-    private javax.swing.JLabel lblMorning;
+    private javax.swing.JLabel lblMoonlightDay;
+    private javax.swing.JLabel lblMoonlightNight;
     private javax.swing.JLabel lblName;
-    private javax.swing.JLabel lblNight;
     private javax.swing.JLabel lblNightSightings;
+    private javax.swing.JLabel lblNoMoonDay;
+    private javax.swing.JLabel lblNoMoonNight;
     private javax.swing.JLabel lblNormal;
     private javax.swing.JLabel lblNumberOfLocations;
     private javax.swing.JLabel lblNumberOfSightings;

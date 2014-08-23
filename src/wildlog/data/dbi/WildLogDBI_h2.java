@@ -499,27 +499,27 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
                     else
                     // Procede with teh expected updates
                     if (results.getInt("VERSION") == 0) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("0"));
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v0 (before upgrade to 1)"));
                         doUpdate1();
                     }
                     else
                     if (results.getInt("VERSION") == 1) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("1"));
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v1 (before upgrade to 2)"));
                         doUpdate2();
                     }
                     else
                     if (results.getInt("VERSION") == 2) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("2"));
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v2 (before upgrade to 3)"));
                         doUpdate3();
                     }
                     else
                     if (results.getInt("VERSION") == 3) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("3"));
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v3 (before upgrade to 4)"));
                         doUpdate4();
                     }
                     else
                     if (results.getInt("VERSION") == 4) {
-                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("4"));
+                        doBackup(WildLogPaths.WILDLOG_BACKUPS_UPGRADE.getAbsoluteFullPath().resolve("v4  (before upgrade to 5)"));
                         doUpdate5();
                     }
                     else

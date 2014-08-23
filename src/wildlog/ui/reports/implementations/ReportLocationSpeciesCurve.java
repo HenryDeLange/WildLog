@@ -1,4 +1,4 @@
-package wildlog.ui.reports;
+package wildlog.ui.reports.implementations;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -114,7 +114,7 @@ public class ReportLocationSpeciesCurve extends JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblName.setFont(new java.awt.Font("Tahoma", 1, 16));
+        lblName.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblName.setText("...");
         lblName.setName("lblName"); // NOI18N

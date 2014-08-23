@@ -11,16 +11,16 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.reports.ReportElementSightingsByMoon;
-import wildlog.ui.reports.ReportElementSightingsBySun;
-import wildlog.ui.reports.ReportLocationSightingsByMoon;
-import wildlog.ui.reports.ReportLocationSightingsBySun;
-import wildlog.ui.reports.ReportLocationSightingsByType;
-import wildlog.ui.reports.ReportLocationSpeciesCurve;
-import wildlog.ui.reports.ReportSightingByElement;
-import wildlog.ui.reports.ReportSightingByLocation;
-import wildlog.ui.reports.ReportVisitSightingsBySun;
 import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.reports.implementations.ReportElementSightingsByMoon;
+import wildlog.ui.reports.implementations.ReportElementSightingsBySun;
+import wildlog.ui.reports.implementations.ReportLocationSightingsByMoon;
+import wildlog.ui.reports.implementations.ReportLocationSightingsBySun;
+import wildlog.ui.reports.implementations.ReportLocationSightingsByType;
+import wildlog.ui.reports.implementations.ReportLocationSpeciesCurve;
+import wildlog.ui.reports.implementations.ReportSightingByElement;
+import wildlog.ui.reports.implementations.ReportSightingByLocation;
+import wildlog.ui.reports.implementations.ReportVisitSightingsBySun;
 
 
 public class ReportingDialog extends JDialog {

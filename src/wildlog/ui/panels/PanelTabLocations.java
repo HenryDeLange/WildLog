@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
@@ -21,7 +22,7 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class PanelTabLocations extends javax.swing.JPanel {
+public class PanelTabLocations extends JPanel {
     private final WildLogApp app;
     private final JTabbedPane tabbedPanel;
     private final Location searchLocation;

@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -30,7 +32,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private List<T> lstSelectedValues;
 
     
-    public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
+    public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);
         initComponents();
         try {
@@ -58,7 +60,45 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         // Attach listeners etc.
         UtilsUI.attachKeyListernerToSelectKeyedRows(tblData);
         // Load table content
-        UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOriginalData);
+        if (typeInstance instanceof Element) {
+            Set<String> setOriginalData = new HashSet<>();
+            for (Sighting sighting : inLstOriginalData) {
+                setOriginalData.add(sighting.getElementName());
+            }
+            List<Element> originalData = new ArrayList<>(setOriginalData.size());
+            for (String temp : setOriginalData) {
+                originalData.add(new Element(temp));
+            }
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+        }
+        else
+        if (typeInstance instanceof Location) {
+            Set<String> setOriginalData = new HashSet<>();
+            for (Sighting sighting : inLstOriginalData) {
+                setOriginalData.add(sighting.getLocationName());
+            }
+            List<Location> originalData = new ArrayList<>(setOriginalData.size());
+            for (String temp : setOriginalData) {
+                originalData.add(new Location(temp));
+            }
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+        }
+        else
+        if (typeInstance instanceof Visit) {
+            Set<String> setOriginalData = new HashSet<>();
+            for (Sighting sighting : inLstOriginalData) {
+                setOriginalData.add(sighting.getVisitName());
+            }
+            List<Visit> originalData = new ArrayList<>(setOriginalData.size());
+            for (String temp : setOriginalData) {
+                originalData.add(new Visit(temp));
+            }
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+        }
+//        else
+//        if (typeInstance instanceof Sighting) {
+//            
+//        }
         // Make the table selection model behave like CTRL+Click
         tblData.setSelectionModel(new CtrlClickSelectionModel());
         tblData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -72,25 +112,35 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         final int indexOfID;
         if (typeInstance instanceof Sighting) {
             indexOfID = 6;
+            // FIXME: tydelik disable die button terwyl ek dink hoe ek die wil handle...
+            btnSelect.setEnabled(false);
         }
         else {
             indexOfID = 1;
         }
-        if (inLstOldSelectedData != null) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if (inLstOldSelectedData != null) {
                     for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
                         for (DataObjectWithWildLogFile dataObject : inLstOldSelectedData) {
                             if (tblData.getModel().getValueAt(tblData.convertRowIndexToModel(t), indexOfID).toString().equals(dataObject.getIDField())) {
-                                tblData.getSelectionModel().setSelectionInterval(t, t);
+                                tblData.getSelectionModel().addSelectionInterval(t, t);
                                 break;
                             }
                         }
                     }
+                    
                 }
-            });
-        }
+                else {
+                    for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
+                        tblData.getSelectionModel().setSelectionInterval(t, t);
+                    }
+                }
+                lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
+                lblTotalOriginal.setText("Total Records: " + tblData.getRowCount());
+            }
+        });
     }
 
     /**
@@ -104,7 +154,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblData = new javax.swing.JTable();
+        lblTotalOriginal = new javax.swing.JLabel();
         lblTotalSelected = new javax.swing.JLabel();
+        btnSelectAll = new javax.swing.JButton();
+        btnClearAll = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Filter Data Selection");
@@ -127,8 +180,29 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         tblData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tblData);
 
+        lblTotalOriginal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTotalOriginal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
         lblTotalSelected.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalSelected.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        btnSelectAll.setText("Select All");
+        btnSelectAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSelectAll.setFocusPainted(false);
+        btnSelectAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectAllActionPerformed(evt);
+            }
+        });
+
+        btnClearAll.setText("Clear All");
+        btnClearAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClearAll.setFocusPainted(false);
+        btnClearAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearAllActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,12 +214,15 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(lblTotalSelected, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(10, 10, 10))
+                    .addComponent(lblTotalOriginal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblTotalSelected, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                    .addComponent(btnSelectAll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnClearAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -158,8 +235,14 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblTotalOriginal, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblTotalSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -211,6 +294,16 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         dispose();
     }//GEN-LAST:event_btnSelectActionPerformed
 
+    private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
+        for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
+            tblData.getSelectionModel().addSelectionInterval(t, t);
+        }
+    }//GEN-LAST:event_btnSelectAllActionPerformed
+
+    private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
+        tblData.clearSelection();
+    }//GEN-LAST:event_btnClearAllActionPerformed
+
     public boolean isSelectionMade() {
         return selectionMade;
     }
@@ -224,9 +317,12 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClearAll;
     private javax.swing.JButton btnSelect;
+    private javax.swing.JButton btnSelectAll;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblTotalOriginal;
     private javax.swing.JLabel lblTotalSelected;
     private javax.swing.JTable tblData;
     // End of variables declaration//GEN-END:variables

@@ -239,7 +239,7 @@ public class WildLogApp extends Application {
      */
     public static void main(String[] args) {
         // Set default startup settings
-        ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath();
+        ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().normalize().toAbsolutePath();
         boolean logToFile = false;
         useNimbusLF = true;
         // Load the startup settings from the properties file
@@ -262,7 +262,7 @@ public class WildLogApp extends Application {
             logToFile = Boolean.parseBoolean(props.getProperty("logToFile"));
             useNimbusLF = Boolean.parseBoolean(props.getProperty("useNimbus"));
             if (props.getProperty("settingsFolderLocation") != null && !props.getProperty("settingsFolderLocation").trim().isEmpty()) {
-                ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).toAbsolutePath();
+                ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).normalize().toAbsolutePath();
             }
         }
         catch (IOException | URISyntaxException ex) {

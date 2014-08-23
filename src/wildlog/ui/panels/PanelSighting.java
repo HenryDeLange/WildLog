@@ -1789,7 +1789,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
     private void jLabel24MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MousePressed
         getGlassPane().setVisible(true);
-        JOptionPane.showMessageDialog(app.getMainFrame(),
+        JOptionPane.showMessageDialog(this,
                 ActiveTimeSpesific.getCompleteDescription(),
                 "Time of Day Definitions", JOptionPane.INFORMATION_MESSAGE);
         getGlassPane().setVisible(false);

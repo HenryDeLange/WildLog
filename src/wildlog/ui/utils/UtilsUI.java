@@ -1,6 +1,5 @@
 package wildlog.ui.utils;
 
-import wildlog.ui.helpers.ScrollingMenu;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Toolkit;
@@ -35,6 +34,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
 import wildlog.WildLogApp;
+import wildlog.ui.helpers.ScrollingMenu;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 
 
