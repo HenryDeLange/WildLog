@@ -5,6 +5,7 @@ public enum SightingEvidence {
     SEEN("Seen"),
     HEARD("Heard"),
     OTHER_EVIDENCE("Other Evidence"),
+    UNKNOWN("Unknown"),
     NONE("");
 
 

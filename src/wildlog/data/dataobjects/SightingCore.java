@@ -93,6 +93,52 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     public String getIDField() {
         return Long.toString(sightingCounter);
     }
+    
+    public <T extends SightingCore> T cloneShallow() {
+        try {
+            T sighting = (T) this.getClass().newInstance();
+            sighting.setAge(age);
+            sighting.setCertainty(certainty);
+            sighting.setDate(date);
+            sighting.setDetails(details);
+            sighting.setDurationMinutes(durationMinutes);
+            sighting.setDurationSeconds(durationSeconds);
+            sighting.setElementName(elementName);
+            sighting.setGPSAccuracy(gpsAccuracy);
+            sighting.setLatDegrees(latDegrees);
+            sighting.setLatMinutes(latMinutes);
+            sighting.setLatSeconds(latSeconds);
+            sighting.setLatitude(latitude);
+            sighting.setLifeStatus(lifeStatus);
+            sighting.setLocationName(locationName);
+            sighting.setLonDegrees(lonDegrees);
+            sighting.setLonMinutes(lonMinutes);
+            sighting.setLonSeconds(lonSeconds);
+            sighting.setLongitude(longitude);
+            sighting.setMoonPhase(moonPhase);
+            sighting.setMoonlight(moonlight);
+            sighting.setNumberOfElements(numberOfElements);
+            sighting.setSex(sex);
+            sighting.setSightingCounter(sightingCounter);
+            sighting.setSightingEvidence(sightingEvidence);
+            sighting.setTag(tag);
+            sighting.setTemperature(temperature);
+            sighting.setTimeAccuracy(timeAccuracy);
+            sighting.setTimeOfDay(timeOfDay);
+            sighting.setUnitsTemperature(unitsTemperature);
+            sighting.setViewRating(viewRating);
+            sighting.setVisitName(visitName);
+            sighting.setWeather(weather);
+            return sighting;
+        }
+        catch (InstantiationException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (IllegalAccessException ex) {
+            ex.printStackTrace(System.err);
+        }
+        return null;
+    }
 
     public Date getDate() {
         return date;

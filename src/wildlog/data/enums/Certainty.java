@@ -6,6 +6,7 @@ public enum Certainty {
     GOOD    ("90 - 99% (Good)"),
     BAD     ("70 - 90% (Bad)"),
     VERY_BAD(" 0 - 70% (Unsure)"),
+    UNKNOWN("Unknown"),
     NONE("");
 
     private final String text;

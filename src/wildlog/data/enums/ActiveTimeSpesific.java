@@ -17,7 +17,8 @@ public enum ActiveTimeSpesific {
     NIGHT_EARLY(        "Early Night",          "After distinguishable horizon and before mid night starts."),
     NIGHT_MID(          "Mid Night",            "Middel of the night."),
     NIGHT_LATE(         "Late Night",           "After mid night ends and before distinguishable horizon."),
-    NONE(               "",                     "Unknown");
+    UNKNOWN(            "Unknown",              "The time category is unknown."),
+    NONE(               "",                     "None Selected.");
 
     private final String text;
     private final String description;
