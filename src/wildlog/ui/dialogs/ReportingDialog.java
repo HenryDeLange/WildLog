@@ -1,5 +1,6 @@
 package wildlog.ui.dialogs;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ImageIcon;
@@ -21,6 +22,8 @@ import wildlog.ui.reports.implementations.ReportLocationSpeciesCurve;
 import wildlog.ui.reports.implementations.ReportSightingByElement;
 import wildlog.ui.reports.implementations.ReportSightingByLocation;
 import wildlog.ui.reports.implementations.ReportVisitSightingsBySun;
+import wildlog.ui.reports.implementations.TimeOfDayAllChart;
+import wildlog.ui.reports.implementations.helpers.AbstractReport;
 
 
 public class ReportingDialog extends JDialog {
@@ -348,7 +351,9 @@ public class ReportingDialog extends JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2014-1900, 02, 0), new Date(), Sighting.class);
         dispose();
-        ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings);
+        List<AbstractReport> reports = new ArrayList<>(1);
+        reports.add(new TimeOfDayAllChart());
+        ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

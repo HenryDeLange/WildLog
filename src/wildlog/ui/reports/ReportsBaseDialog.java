@@ -11,6 +11,8 @@ import com.pdfjet.PDF;
 import com.pdfjet.Page;
 import com.pdfjet.TextLine;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -22,6 +24,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -41,8 +44,10 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.image.WritableImage;
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JToggleButton;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -61,6 +66,7 @@ import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
@@ -73,19 +79,44 @@ public class ReportsBaseDialog extends JFrame {
     private List<Element> lstFilteredElements;
     private List<Location> lstFilteredLocations;
     private List<Visit> lstFilteredVisits;
-    private List<Sighting> lstFilteredSightings;
+//    private List<Sighting> lstFilteredSightings;
     private FilterProperties filterProperties = null;
 
-    public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
+    public ReportsBaseDialog(String inTitle, List<Sighting> inSightings, List<AbstractReport> inLstReports) {
         super(inTitle);
         lstOriginalData = inSightings;
         lstFilteredData = getCopiedList(lstOriginalData);
         initComponents();
+        Platform.setImplicitExit(false);
         jfxPanel = new JFXPanel();
         pnlChartArea.add(jfxPanel, BorderLayout.CENTER);
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.setupGlassPaneOnMainFrame(this);
-        Platform.setImplicitExit(false);
+        for (final AbstractReport<Sighting> report : inLstReports) {
+            report.setChartOptionsPanel(pnlChartOptions);
+            JToggleButton reportButton = new JToggleButton(report.getReportButtonName(), 
+                    new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif")), false);
+            reportButton.setFocusPainted(false);
+            reportButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            reportButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            reportButton.setIconTextGap(8);
+            reportButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+            reportButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    report.setDataList(lstFilteredData);
+                    report.setupChartOptionsPanel();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            jfxPanel.setScene(new Scene(report.createChart()));
+                        }
+                    });
+                }
+            });
+            btnGroupForReportTypes.add(reportButton);
+            pnlAvailableReports.add(reportButton);
+        }
     }
 
     /**
@@ -97,16 +128,15 @@ public class ReportsBaseDialog extends JFrame {
 
         btnGroupForReportTypes = new javax.swing.ButtonGroup();
         jSplitPane1 = new javax.swing.JSplitPane();
-        pnlReportOptions = new javax.swing.JPanel();
+        pnlReportsAndFilters = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
-        jToggleButton3 = new javax.swing.JToggleButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        pnlAvailableReports = new javax.swing.JPanel();
         jToggleButton4 = new javax.swing.JToggleButton();
         jToggleButton5 = new javax.swing.JToggleButton();
-        jToggleButton6 = new javax.swing.JToggleButton();
-        jToggleButton7 = new javax.swing.JToggleButton();
+        jToggleButton3 = new javax.swing.JToggleButton();
+        jToggleButton2 = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         btnFilterProperties = new javax.swing.JButton();
         btnFilterElement = new javax.swing.JButton();
@@ -120,7 +150,7 @@ public class ReportsBaseDialog extends JFrame {
         lblFilteredRecords = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         pnlChartArea = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        pnlChartOptions = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -141,47 +171,9 @@ public class ReportsBaseDialog extends JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        btnGroupForReportTypes.add(jToggleButton1);
-        jToggleButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jToggleButton1.setText("Test Chart 1");
-        jToggleButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jToggleButton1.setFocusPainted(false);
-        jToggleButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jToggleButton1.setIconTextGap(8);
-        jToggleButton1.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
-            }
-        });
+        jScrollPane1.setBorder(null);
 
-        btnGroupForReportTypes.add(jToggleButton2);
-        jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jToggleButton2.setText("Test Chart 2");
-        jToggleButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jToggleButton2.setFocusPainted(false);
-        jToggleButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jToggleButton2.setIconTextGap(8);
-        jToggleButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton2ActionPerformed(evt);
-            }
-        });
-
-        btnGroupForReportTypes.add(jToggleButton3);
-        jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jToggleButton3.setText("Test Chart 3");
-        jToggleButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jToggleButton3.setFocusPainted(false);
-        jToggleButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jToggleButton3.setIconTextGap(8);
-        jToggleButton3.setMargin(new java.awt.Insets(2, 4, 2, 4));
-        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton3ActionPerformed(evt);
-            }
-        });
+        pnlAvailableReports.setLayout(new org.jdesktop.swingx.VerticalLayout());
 
         btnGroupForReportTypes.add(jToggleButton4);
         jToggleButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
@@ -196,6 +188,7 @@ public class ReportsBaseDialog extends JFrame {
                 jToggleButton4ActionPerformed(evt);
             }
         });
+        pnlAvailableReports.add(jToggleButton4);
 
         btnGroupForReportTypes.add(jToggleButton5);
         jToggleButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
@@ -205,59 +198,54 @@ public class ReportsBaseDialog extends JFrame {
         jToggleButton5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jToggleButton5.setIconTextGap(8);
         jToggleButton5.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        pnlAvailableReports.add(jToggleButton5);
 
-        btnGroupForReportTypes.add(jToggleButton6);
-        jToggleButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jToggleButton6.setText("jToggleButton6");
-        jToggleButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jToggleButton6.setFocusPainted(false);
-        jToggleButton6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jToggleButton6.setIconTextGap(8);
-        jToggleButton6.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnGroupForReportTypes.add(jToggleButton3);
+        jToggleButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        jToggleButton3.setText("Test Chart 3");
+        jToggleButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton3.setFocusPainted(false);
+        jToggleButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jToggleButton3.setIconTextGap(8);
+        jToggleButton3.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton3ActionPerformed(evt);
+            }
+        });
+        pnlAvailableReports.add(jToggleButton3);
 
-        btnGroupForReportTypes.add(jToggleButton7);
-        jToggleButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jToggleButton7.setText("jToggleButton7");
-        jToggleButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jToggleButton7.setFocusPainted(false);
-        jToggleButton7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jToggleButton7.setIconTextGap(8);
-        jToggleButton7.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnGroupForReportTypes.add(jToggleButton2);
+        jToggleButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        jToggleButton2.setText("Test Chart 2");
+        jToggleButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jToggleButton2.setFocusPainted(false);
+        jToggleButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jToggleButton2.setIconTextGap(8);
+        jToggleButton2.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        jToggleButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton2ActionPerformed(evt);
+            }
+        });
+        pnlAvailableReports.add(jToggleButton2);
+
+        jScrollPane1.setViewportView(pnlAvailableReports);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jToggleButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(5, 5, 5))
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane1)
+                .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(5, 5, 5)
-                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addComponent(jScrollPane1)
+                .addGap(0, 0, 0))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -307,9 +295,8 @@ public class ReportsBaseDialog extends JFrame {
         });
 
         btnFilterSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
-        btnFilterSightings.setText("Filter by Observation");
+        btnFilterSightings.setText("View Filtered Observations");
         btnFilterSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterSightings.setEnabled(false);
         btnFilterSightings.setFocusPainted(false);
         btnFilterSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnFilterSightings.addActionListener(new java.awt.event.ActionListener() {
@@ -394,28 +381,28 @@ public class ReportsBaseDialog extends JFrame {
                 .addComponent(btnFilterLocation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnFilterVisit)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(10, 10, 10)
                 .addComponent(btnFilterSightings)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(10, 10, 10)
                 .addComponent(btnResetFilters)
                 .addGap(5, 5, 5))
         );
 
-        javax.swing.GroupLayout pnlReportOptionsLayout = new javax.swing.GroupLayout(pnlReportOptions);
-        pnlReportOptions.setLayout(pnlReportOptionsLayout);
-        pnlReportOptionsLayout.setHorizontalGroup(
-            pnlReportOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlReportOptionsLayout.createSequentialGroup()
+        javax.swing.GroupLayout pnlReportsAndFiltersLayout = new javax.swing.GroupLayout(pnlReportsAndFilters);
+        pnlReportsAndFilters.setLayout(pnlReportsAndFiltersLayout);
+        pnlReportsAndFiltersLayout.setHorizontalGroup(
+            pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlReportsAndFiltersLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlReportOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
-        pnlReportOptionsLayout.setVerticalGroup(
-            pnlReportOptionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlReportOptionsLayout.createSequentialGroup()
+        pnlReportsAndFiltersLayout.setVerticalGroup(
+            pnlReportsAndFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlReportsAndFiltersLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -425,21 +412,22 @@ public class ReportsBaseDialog extends JFrame {
                 .addGap(5, 5, 5))
         );
 
-        jSplitPane1.setLeftComponent(pnlReportOptions);
+        jSplitPane1.setLeftComponent(pnlReportsAndFilters);
 
         pnlChartArea.setLayout(new java.awt.BorderLayout());
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Display Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlChartOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Display Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlChartOptions.setPreferredSize(new java.awt.Dimension(144, 50));
         org.jdesktop.swingx.HorizontalLayout horizontalLayout1 = new org.jdesktop.swingx.HorizontalLayout();
         horizontalLayout1.setGap(5);
-        jPanel3.setLayout(horizontalLayout1);
+        pnlChartOptions.setLayout(horizontalLayout1);
 
         jButton2.setText("Change Chart Colors");
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setFocusPainted(false);
-        jPanel3.add(jButton2);
+        pnlChartOptions.add(jButton2);
 
-        pnlChartArea.add(jPanel3, java.awt.BorderLayout.PAGE_END);
+        pnlChartArea.add(pnlChartOptions, java.awt.BorderLayout.PAGE_END);
 
         jSplitPane1.setRightComponent(pnlChartArea);
 
@@ -447,34 +435,18 @@ public class ReportsBaseDialog extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 957, Short.MAX_VALUE)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Chart chart = createBarChart1(lstFilteredData);
-                jfxPanel.setScene(new Scene(chart));
-            }
-        });
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
-
     private void jToggleButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton2ActionPerformed
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Chart chart = createBarChart2(lstFilteredData);
-                jfxPanel.setScene(new Scene(chart));
-            }
-        });
+
     }//GEN-LAST:event_jToggleButton2ActionPerformed
 
     private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
@@ -596,13 +568,13 @@ public class ReportsBaseDialog extends JFrame {
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
     private void btnFilterSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSightingsActionPerformed
-        FilterDataListDialog<Sighting> dialog = new FilterDataListDialog<Sighting>(this, lstOriginalData, lstFilteredSightings, Sighting.class);
+        FilterDataListDialog<Sighting> dialog = new FilterDataListDialog<Sighting>(this, lstOriginalData, lstFilteredData, Sighting.class);
         dialog.setVisible(true);
-        if (dialog.isSelectionMade()) {
-            lstFilteredSightings = dialog.getSelectedData();
-            // Filter the original results using the provided values
-            doFiltering();
-        }
+//        if (dialog.isSelectionMade()) {
+//            lstFilteredSightings = dialog.getSelectedData();
+//            // Filter the original results using the provided values
+//            doFiltering();
+//        }
     }//GEN-LAST:event_btnFilterSightingsActionPerformed
 
     private void btnFilterPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterPropertiesActionPerformed
@@ -620,49 +592,6 @@ public class ReportsBaseDialog extends JFrame {
         lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
     }//GEN-LAST:event_btnResetFiltersActionPerformed
 
-    private Chart createBarChart1(List<Sighting> inSightings) {
-        // TODO: options -> series per species/location/visit + more generic times (aand, dag, skemer)
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-        axisX.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
-        axisX.setTickLabelRotation(-90);
-        ObservableList<BarChart.Series> chartData = FXCollections.observableArrayList();
-        ObservableList allSightings = FXCollections.observableArrayList();
-        for (Sighting sighting : inSightings) {
-            allSightings.add(new BarChart.Data(sighting.getTimeOfDay().toString(), 1));
-        }
-        chartData.add(new BarChart.Series("Observations (" + allSightings.size() + ")", allSightings));
-        StackedBarChart chart = new StackedBarChart(axisX, axisY, chartData);
-        return chart;
-    }
-    
-    private Chart createBarChart2(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-        axisX.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
-        axisX.setTickLabelRotation(-90);
-        ObservableList<BarChart.Series> chartData = FXCollections.observableArrayList();
-        Map<String, ObservableList> groupedData = new HashMap<>();
-        for (Sighting sighting : inSightings) {
-            ObservableList allSightings = groupedData.get(sighting.getElementName());
-            if (allSightings == null) {
-                allSightings = FXCollections.observableArrayList();
-                groupedData.put(sighting.getElementName(), allSightings);
-            }
-            allSightings.add(new BarChart.Data(sighting.getTimeOfDay().toString(), 1));
-        }
-        for (String key : groupedData.keySet()) {
-            BarChart.Series series = new BarChart.Series(key + " (" + groupedData.get(key).size() + ")", groupedData.get(key));
-            chartData.add(series);
-        }
-        StackedBarChart chart = new StackedBarChart(axisX, axisY, chartData);
-        return chart;
-    }
-    
     private Chart createBarChart3(List<Sighting> inSightings) {
         // TODO: mak die opsie om hierdie per spesie te sien of almal saam
         NumberAxis axisY = new NumberAxis();
@@ -691,7 +620,7 @@ public class ReportsBaseDialog extends JFrame {
         }
         axisX.setCategories(timeCategories);
         axisX.setTickLabelRotation(-90);
-        ObservableList<BarChart.Series> chartData = FXCollections.observableArrayList();
+        ObservableList<LineChart.Series> chartData = FXCollections.observableArrayList();
         ObservableList allSightings = FXCollections.observableArrayList();
         Map<String, Integer> mapCounter = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -705,9 +634,9 @@ public class ReportsBaseDialog extends JFrame {
         List<String> keys = new ArrayList<>(mapCounter.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            allSightings.add(new BarChart.Data(key, mapCounter.get(key)));
+            allSightings.add(new LineChart.Data(key, mapCounter.get(key)));
         }
-        chartData.add(new BarChart.Series("Observations (" + inSightings.size() + ")", allSightings));
+        chartData.add(new LineChart.Series("Observations (" + inSightings.size() + ")", allSightings));
         LineChart chart = new LineChart(axisX, axisY, chartData);
         return chart;
     }
@@ -802,7 +731,7 @@ public class ReportsBaseDialog extends JFrame {
                 }
             }
             // Check filtered Sightings
-            // FIXME: mmm dit gaan dalk tricky wees...
+            // TODO: mmm dit gaan dalk tricky wees...
             
             // Check filtered Properties
             if (filterProperties != null) {
@@ -1083,6 +1012,13 @@ public class ReportsBaseDialog extends JFrame {
             lstFilteredData.add(sighting.cloneShallow());
         }
         lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
+        // Redraw the chart
+        for (Enumeration<AbstractButton> buttons = btnGroupForReportTypes.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            if (button.isSelected()) {
+                button.doClick();
+            }
+        }
     }
     
     private List<Sighting> getCopiedList(List<Sighting> inList) {
@@ -1107,19 +1043,18 @@ public class ReportsBaseDialog extends JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JToggleButton jToggleButton4;
     private javax.swing.JToggleButton jToggleButton5;
-    private javax.swing.JToggleButton jToggleButton6;
-    private javax.swing.JToggleButton jToggleButton7;
     private javax.swing.JLabel lblFilteredRecords;
     private javax.swing.JLabel lblTotalRecords;
+    private javax.swing.JPanel pnlAvailableReports;
     private javax.swing.JPanel pnlChartArea;
-    private javax.swing.JPanel pnlReportOptions;
+    private javax.swing.JPanel pnlChartOptions;
+    private javax.swing.JPanel pnlReportsAndFilters;
     // End of variables declaration//GEN-END:variables
 }

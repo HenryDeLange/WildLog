@@ -7,15 +7,25 @@ import javax.swing.DefaultListSelectionModel;
  * In other words, rows will stay selected until re-clicked.
  */
 public class CtrlClickSelectionModel extends DefaultListSelectionModel {
-    
+    private boolean gestureStarted = false;
+
     @Override
-    public void setSelectionInterval(int index0, int index1) {
-        if(isSelectedIndex(index0)) {
-            removeSelectionInterval(index0, index1);
+    public void setSelectionInterval(int inIndex0, int inIndex1) {
+        if(!gestureStarted){
+            if (isSelectedIndex(inIndex0)) {
+                super.removeSelectionInterval(inIndex0, inIndex1);
+            } else {
+                super.addSelectionInterval(inIndex0, inIndex1);
+            }
         }
-        else {
-            addSelectionInterval(index0, index1);
+        gestureStarted = true;
+    }
+
+    @Override
+    public void setValueIsAdjusting(boolean isAdjusting) {
+        if (isAdjusting == false) {
+            gestureStarted = false;
         }
     }
-    
+
 }

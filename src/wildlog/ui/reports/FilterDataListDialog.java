@@ -93,14 +93,12 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             for (String temp : setOriginalData) {
                 originalData.add(new Visit(temp));
             }
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOldSelectedData);
         }
-//        else
-//        if (typeInstance instanceof Sighting) {
-//            
-//        }
-        // Make the table selection model behave like CTRL+Click
-        tblData.setSelectionModel(new CtrlClickSelectionModel());
+        else
+        if (typeInstance instanceof Sighting) {
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOriginalData);
+        }
         tblData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
@@ -112,8 +110,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         final int indexOfID;
         if (typeInstance instanceof Sighting) {
             indexOfID = 6;
-            // FIXME: tydelik disable die button terwyl ek dink hoe ek die wil handle...
             btnSelect.setEnabled(false);
+            btnClearAll.setEnabled(false);
+            btnSelectAll.setEnabled(false);
+            tblData.setEnabled(false);
         }
         else {
             indexOfID = 1;
@@ -134,7 +134,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                 }
                 else {
                     for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
-                        tblData.getSelectionModel().setSelectionInterval(t, t);
+                        tblData.getSelectionModel().addSelectionInterval(t, t);
                     }
                 }
                 lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
@@ -176,8 +176,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         jLabel1.setText("Select the data records that should be included:");
 
         tblData.setAutoCreateRowSorter(true);
-        tblData.setSelectionBackground(new java.awt.Color(82, 115, 79));
-        tblData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblData.setBackground(new java.awt.Color(149, 156, 137));
+        tblData.setForeground(new java.awt.Color(51, 51, 51));
+        tblData.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        tblData.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane2.setViewportView(tblData);
 
         lblTotalOriginal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

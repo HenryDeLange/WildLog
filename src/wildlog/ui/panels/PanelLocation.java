@@ -90,7 +90,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         locationWL = inLocation;
         lastSavedLocation = locationWL.cloneShallow();
         setupUI();
-        // Setup the drag and drop on the butons
+        // Setup the drag and drop on the buttons
         FileDrop.SetupFileDrop(btnBulkImport, false, new FileDrop.Listener() {
             @Override
             public void filesDropped(List<File> inFiles) {
@@ -145,10 +145,18 @@ public class PanelLocation extends PanelCanSetupHeader {
                 }
             });
         }
-
-        // Make accomodation list behave like Ctrl+Click
-        lstAccommodationType.setSelectionModel(new CtrlClickSelectionModel());
-        lstAccommodationType.setSelectedIndices(selectedAccommodationTypes());
+        
+        // Select the values for the AccommodationType
+        lstAccommodationType.clearSelection();
+        if (locationWL.getAccommodationType() != null && !locationWL.getAccommodationType().isEmpty()) {
+            for (int t = 0; t < lstAccommodationType.getModel().getSize(); t++) {
+                for (AccommodationType accommodationType : locationWL.getAccommodationType()) {
+                    if (lstAccommodationType.getModel().getElementAt(t).equals(accommodationType)) {
+                        lstAccommodationType.getSelectionModel().addSelectionInterval(t, t);
+                    }
+                }
+            }
+        }
 
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtName);
@@ -226,25 +234,6 @@ public class PanelLocation extends PanelCanSetupHeader {
             }
         }
          return false;
-    }
-
-    // Need to look again later at listbox and how I use it...
-    // Esspecially how I set the selected values...
-    private int[] selectedAccommodationTypes() {
-        if (locationWL.getAccommodationType() == null) {
-            return new int[0];
-        }
-        int[] index = new int[locationWL.getAccommodationType().size()];
-        int i = 0;
-        for (int t = 0; t < AccommodationType.values().length; t++) {
-            AccommodationType tempType = AccommodationType.values()[t];
-            for (AccommodationType accommodationType : locationWL.getAccommodationType()) {
-                if (accommodationType.test().equals(tempType.test())) {
-                    index[i++] = t;
-                }
-            }
-        }
-        return index;
     }
 
 
@@ -515,6 +504,7 @@ public class PanelLocation extends PanelCanSetupHeader {
         lstAccommodationType.setName("lstAccommodationType"); // NOI18N
         lstAccommodationType.setSelectionBackground(new java.awt.Color(195, 223, 223));
         lstAccommodationType.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        lstAccommodationType.setSelectionModel(new CtrlClickSelectionModel());
         lstAccommodationType.setVisibleRowCount(4);
         jScrollPane1.setViewportView(lstAccommodationType);
 

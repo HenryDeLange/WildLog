@@ -98,6 +98,9 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.reports.implementations.TimeOfDayAllChart;
+import wildlog.ui.reports.implementations.TimeOfDayPerCreatureChart;
+import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -3011,7 +3014,10 @@ public final class WildLogView extends JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2014-1900, 02, 0), new Date(), Sighting.class);
-        ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings);
+        List<AbstractReport> reports = new ArrayList<>(5);
+        reports.add(new TimeOfDayAllChart());
+        reports.add(new TimeOfDayPerCreatureChart());
+        ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
