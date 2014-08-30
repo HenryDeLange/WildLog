@@ -32,7 +32,7 @@ public enum AccommodationType {
             tempList.add(NONE);
         }
         for (AccommodationType theEnum : AccommodationType.values()) {
-            if (theEnum.text.equalsIgnoreCase(inText)) {
+            if (inText.contains(theEnum.text)) {
                 tempList.add(theEnum);
             }
         }
