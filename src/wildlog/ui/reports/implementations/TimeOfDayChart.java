@@ -1,5 +1,7 @@
 package wildlog.ui.reports.implementations;
 
+import java.awt.Cursor;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -11,7 +13,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.AreaChart;
-import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
@@ -20,20 +21,23 @@ import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 
 
-public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
-    private enum ChartType {LINE_CHART, STACKED_BAR_CHART};
+public class TimeOfDayChart extends AbstractReport<Sighting> {
+    private enum ChartType {LINE_CHART, STACKED_BAR_CHART, BAR_CHART};
     private ChartType chartType = ChartType.LINE_CHART;
     private Chart displayedChart;
     
-    public TimeOfDayPerCreatureChart() {
-        super("Day Categories (Per Creature)");
-        lstCustomButtons = new ArrayList<JButton>(2);
-        JButton btnLineChart = new JButton("Display As Line Chart");
+    public TimeOfDayChart() {
+        super("Sun Phase", "<html>This collection of charts use the time of the Observations. "
+                + "The Time of Day category charts are better at seeing trends in data that spreads over longer times (seasons) or large geographic areas.</html>");
+        lstCustomButtons = new ArrayList<>(3);
+        // Area/Line Chart
+        JButton btnLineChart = new JButton("Line Chart");
         btnLineChart.setFocusPainted(false);
-        btnLineChart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLineChart.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnLineChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLineChart.setMargin(new Insets(2, 4, 2, 4));
         btnLineChart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,10 +53,11 @@ public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnLineChart);
-        JButton btnStackedBarChart = new JButton("Display As Stacked Bar Chart");
+        // Stacked Bar Chart
+        JButton btnStackedBarChart = new JButton("Stacked Bar Chart");
         btnStackedBarChart.setFocusPainted(false);
-        btnStackedBarChart.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStackedBarChart.setMargin(new java.awt.Insets(2, 4, 2, 4));
+        btnStackedBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnStackedBarChart.setMargin(new Insets(2, 4, 2, 4));
         btnStackedBarChart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,18 +73,43 @@ public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
+        // Bar Chart
+        JButton btnBarChart = new JButton("Bar Chart");
+        btnBarChart.setFocusPainted(false);
+        btnBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBarChart.setMargin(new Insets(2, 4, 2, 4));
+        btnBarChart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chartType = ChartType.BAR_CHART;
+                if (displayedChart != null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayedChart.getScene().setRoot(createChart());
+                        }
+                    });
+                }
+            }
+        });
+        lstCustomButtons.add(btnBarChart);
     }
 
     @Override
     public Chart createChart() {
+        displayedChart = null;
         if (chartType.equals(ChartType.LINE_CHART)) {
-            return createLineChart(lstData);
+            displayedChart = createLineChart(lstData);
         }
         else
         if (chartType.equals(ChartType.STACKED_BAR_CHART)) {
-            return createStackedBarChart(lstData);
+            displayedChart = createStackedBarChart(lstData);
         }
-        return null;
+        else
+        if (chartType.equals(ChartType.BAR_CHART)) {
+            displayedChart = createBarChart(lstData);
+        }
+        return displayedChart;
     }
     
     private Chart createStackedBarChart(List<Sighting> inSightings) {
@@ -89,24 +119,23 @@ public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
         CategoryAxis axisX = new CategoryAxis();
         axisX.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
         axisX.setTickLabelRotation(-90);
-        ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-        Map<String, ObservableList<BarChart.Data<String, Number>>> groupedData = new HashMap<>();
+        ObservableList<StackedBarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
+        Map<String, ObservableList<StackedBarChart.Data<String, Number>>> groupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ObservableList<BarChart.Data<String, Number>> allElementSightings = groupedData.get(sighting.getElementName());
+            ObservableList<StackedBarChart.Data<String, Number>> allElementSightings = groupedData.get(sighting.getElementName());
             if (allElementSightings == null) {
                 allElementSightings = FXCollections.observableArrayList();
                 groupedData.put(sighting.getElementName(), allElementSightings);
             }
-            allElementSightings.add(new BarChart.Data<String, Number>(sighting.getTimeOfDay().toString(), 1));
+            allElementSightings.add(new StackedBarChart.Data<String, Number>(sighting.getTimeOfDay().toString(), 1));
         }
         for (String key : groupedData.keySet()) {
-            BarChart.Series<String, Number> series = new BarChart.Series<String, Number>(
+            StackedBarChart.Series<String, Number> series = new StackedBarChart.Series<String, Number>(
                     key + " (" + groupedData.get(key).size() + ")", 
                     groupedData.get(key));
             chartData.add(series);
         }
         StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, chartData);
-        displayedChart = chart;
         return chart;
     }
     
@@ -119,18 +148,18 @@ public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
         axisX.setCategories(FXCollections.<String>observableArrayList(lstActiveTimeSpesific));
         axisX.setTickLabelRotation(-90);
         // Get the data in the correct structure
-        Map<String, DataWrapper> mapInitialCountedData = new HashMap<>();
+        Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            DataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + sighting.getTimeOfDay());
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + sighting.getTimeOfDay());
             if (dataWrapper == null) {
-                dataWrapper = new DataWrapper();
-                dataWrapper.elementName = sighting.getElementName();
+                dataWrapper = new ReportDataWrapper();
+                dataWrapper.key = sighting.getElementName();
                 if (sighting.getTimeOfDay() != null) {
-                    dataWrapper.timeOfDay = sighting.getTimeOfDay().toString();
+                    dataWrapper.value = sighting.getTimeOfDay().toString();
                 }
                 else {
-                    dataWrapper.timeOfDay = ActiveTimeSpesific.UNKNOWN.toString();
+                    dataWrapper.value = ActiveTimeSpesific.UNKNOWN.toString();
                 }
                 dataWrapper.count = 0;
                 mapTotalElements.put(sighting.getElementName(), 0);
@@ -148,13 +177,12 @@ public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
             }
         }
         // Set the DataWrapper values in an ObservableList
-        for (String key : mapInitialCountedData.keySet()) {
-            DataWrapper dataWrapper = mapInitialCountedData.get(key);
-            ObservableList<AreaChart.Data<String, Number>> lstElementData = mapDataPerElement.get(dataWrapper.elementName);
+        for (ReportDataWrapper dataWrapper : mapInitialCountedData.values()) {
+            ObservableList<AreaChart.Data<String, Number>> lstElementData = mapDataPerElement.get(dataWrapper.key);
             for (AreaChart.Data<String, Number> data : lstElementData) {
-                if (data.getXValue().equals(dataWrapper.timeOfDay)) {
+                if (data.getXValue().equals(dataWrapper.value)) {
                     data.setYValue(dataWrapper.count);
-                    mapTotalElements.put(dataWrapper.elementName, mapTotalElements.get(dataWrapper.elementName) + dataWrapper.count);
+                    mapTotalElements.put(dataWrapper.key, mapTotalElements.get(dataWrapper.key) + dataWrapper.count);
                     break;
                 }
             }
@@ -170,14 +198,24 @@ public class TimeOfDayPerCreatureChart extends AbstractReport<Sighting> {
             chartData.add(series);
         }
         AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, axisY, chartData);
-        displayedChart = chart;
         return chart;
     }
-    
-    private class DataWrapper {
-        public String elementName;
-        public String timeOfDay;
-        public int count;
+
+    private Chart createBarChart(List<Sighting> inSightings) {
+        NumberAxis axisY = new NumberAxis();
+        axisY.setLabel("Number of Observations");
+        axisY.setAutoRanging(true);
+        CategoryAxis axisX = new CategoryAxis();
+        axisX.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
+        axisX.setTickLabelRotation(-90);
+        ObservableList<StackedBarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
+        ObservableList<StackedBarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
+        for (Sighting sighting : inSightings) {
+            allSightings.add(new StackedBarChart.Data<String, Number>(sighting.getTimeOfDay().toString(), 1));
+        }
+        chartData.add(new StackedBarChart.Series<String, Number>("Observations (" + allSightings.size() + ")", allSightings));
+        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, chartData);
+        return chart;
     }
     
 }

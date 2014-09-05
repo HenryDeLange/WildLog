@@ -1,4 +1,4 @@
-package wildlog.ui.reports.implementations;
+package wildlog.ui.reports.implementations.oldDeleteLater;
 
 import java.awt.Color;
 import java.awt.Dimension;

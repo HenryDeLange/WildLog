@@ -6,6 +6,7 @@ import java.util.List;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
 import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Moonlight;
@@ -38,6 +39,7 @@ public class FilterProperties {
     private boolean numberOfElementsIsMore;
     private List<String> tags;
     private boolean includeEmptyTags;
+    private List<ElementType> elementTypes;
 
     public FilterProperties() {
     }
@@ -216,6 +218,14 @@ public class FilterProperties {
 
     public void setIncludeEmptyTags(boolean inIncludeEmptyTags) {
         includeEmptyTags = inIncludeEmptyTags;
+    }
+
+    public List<ElementType> getElementTypes() {
+        return elementTypes;
+    }
+
+    public void setElementTypes(List<ElementType> inElementTypes) {
+        elementTypes = inElementTypes;
     }
 
 }

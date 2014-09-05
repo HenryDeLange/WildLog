@@ -13,16 +13,16 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.ReportsBaseDialog;
-import wildlog.ui.reports.implementations.ReportElementSightingsByMoon;
-import wildlog.ui.reports.implementations.ReportElementSightingsBySun;
-import wildlog.ui.reports.implementations.ReportLocationSightingsByMoon;
-import wildlog.ui.reports.implementations.ReportLocationSightingsBySun;
-import wildlog.ui.reports.implementations.ReportLocationSightingsByType;
-import wildlog.ui.reports.implementations.ReportLocationSpeciesCurve;
-import wildlog.ui.reports.implementations.ReportSightingByElement;
-import wildlog.ui.reports.implementations.ReportSightingByLocation;
-import wildlog.ui.reports.implementations.ReportVisitSightingsBySun;
-import wildlog.ui.reports.implementations.TimeOfDayAllChart;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportElementSightingsByMoon;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportElementSightingsBySun;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportLocationSightingsByMoon;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportLocationSightingsBySun;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportLocationSightingsByType;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportLocationSpeciesCurve;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportSightingByElement;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportSightingByLocation;
+import wildlog.ui.reports.implementations.oldDeleteLater.ReportVisitSightingsBySun;
+import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 
 
@@ -352,7 +352,7 @@ public class ReportingDialog extends JDialog {
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2014-1900, 02, 0), new Date(), Sighting.class);
         dispose();
         List<AbstractReport> reports = new ArrayList<>(1);
-        reports.add(new TimeOfDayAllChart());
+        reports.add(new TimelineChart());
         ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -404,7 +404,7 @@
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="90" y="143" width="150" height="-1"/>
+              <AbsoluteConstraints x="90" y="143" width="140" height="-1"/>
             </Constraint>
           </Constraints>
         </Component>
@@ -1697,6 +1697,11 @@
             </Property>
             <Property name="text" type="java.lang.String" value="More Info..."/>
             <Property name="toolTipText" type="java.lang.String" value="Click here to see the definitions for each category."/>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="org.netbeans.modules.form.compat2.border.BevelBorderInfo">
+                <BevelBorder/>
+              </Border>
+            </Property>
             <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
               <Color id="Hand Cursor"/>
             </Property>
@@ -1707,7 +1712,7 @@
           </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
-              <AbsoluteConstraints x="243" y="143" width="-1" height="20"/>
+              <AbsoluteConstraints x="235" y="145" width="-1" height="20"/>
             </Constraint>
           </Constraints>
         </Component>

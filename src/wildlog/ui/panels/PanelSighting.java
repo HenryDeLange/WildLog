@@ -639,7 +639,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeOfDay.setEnabled(!disableEditing);
         cmbTimeOfDay.setFocusable(false);
         cmbTimeOfDay.setName("cmbTimeOfDay"); // NOI18N
-        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 143, 150, -1));
+        sightingIncludes.add(cmbTimeOfDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 143, 140, -1));
 
         cmbViewRating.setModel(new DefaultComboBoxModel(ViewRating.values()));
         cmbViewRating.setSelectedItem(sighting.getViewRating());
@@ -1189,6 +1189,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel24.setForeground(new java.awt.Color(102, 102, 102));
         jLabel24.setText("More Info...");
         jLabel24.setToolTipText("Click here to see the definitions for each category.");
+        jLabel24.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel24.setName("jLabel24"); // NOI18N
         jLabel24.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1196,7 +1197,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 jLabel24MousePressed(evt);
             }
         });
-        sightingIncludes.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(243, 143, -1, 20));
+        sightingIncludes.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 145, -1, 20));
 
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents

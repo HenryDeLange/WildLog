@@ -1,4 +1,4 @@
-package wildlog.ui.reports.implementations;
+package wildlog.ui.reports.implementations.oldDeleteLater;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,45 +11,43 @@ import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.KeyStroke;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.chart.BarChart;
-import wildlog.ui.reports.chart.BarChartEntity;
+import wildlog.ui.reports.helpers.MoonReportHelper;
 
 
-public class ReportLocationSpeciesCurve extends JFrame {
+// TODO: Inheritance might be used to specialise the reports... or maybe better to just have unique ones...
+public class ReportLocationSightingsByMoon extends JFrame {
     private boolean usePrimaryName = true;
     private Location location;
-    private BarChart chartSpecies;
+    private BarChart chartTime;
     private List<Visit> visits;
     private WildLogApp app;
 
 
-    /** Creates new form ReportLocation */
-    public ReportLocationSpeciesCurve(Location inLocation, WildLogApp inApp) {
+    /** Creates new form ReportLocationSightingsByMoon */
+    public ReportLocationSightingsByMoon(Location inLocation, WildLogApp inApp) {
         app = inApp;
         location = inLocation;
 
         initComponents();
 
+        // TODO: Hierdie escape key en dialogtocenter code herhaal baie, maak dalk een util method wat altwee doen...
         // Setup the escape key
         final JFrame thisHandler = (JFrame)this;
         ActionListener escListiner = new ActionListener() {
@@ -82,8 +80,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
     private void initComponents() {
 
         lblName = new javax.swing.JLabel();
-        scrReport = new javax.swing.JScrollPane();
-        pnlScrollPane = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         lblNumberOfVisits = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -100,12 +96,19 @@ public class ReportLocationSpeciesCurve extends JFrame {
         lblLastVisit = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lblActiveDays = new javax.swing.JLabel();
+        scrReport = new javax.swing.JScrollPane();
+        pnlScrollPane = new javax.swing.JPanel();
+        lblMoonlightDay = new javax.swing.JLabel();
+        lblNoMoonDay = new javax.swing.JLabel();
+        lblMoonlightNight = new javax.swing.JLabel();
+        lblNoMoonNight = new javax.swing.JLabel();
+        lblOther = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         mnuPrint = new javax.swing.JMenu();
         mnuPrintReport = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Place Species Curve Report: " + location.getName());
+        setTitle("Place Moon Phase Report: " + location.getName());
         setBackground(new java.awt.Color(255, 255, 255));
         setForeground(new java.awt.Color(255, 255, 255));
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/Report Icon.gif")).getImage());
@@ -119,16 +122,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
         lblName.setText("...");
         lblName.setName("lblName"); // NOI18N
         getContentPane().add(lblName, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 20));
-
-        scrReport.setBorder(null);
-        scrReport.setName("scrReport"); // NOI18N
-
-        pnlScrollPane.setBackground(new java.awt.Color(255, 255, 255));
-        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
-        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
-        scrReport.setViewportView(pnlScrollPane);
-
-        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 600, 630));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Number of Periods:");
@@ -202,6 +195,46 @@ public class ReportLocationSpeciesCurve extends JFrame {
         lblActiveDays.setName("lblActiveDays"); // NOI18N
         getContentPane().add(lblActiveDays, new org.netbeans.lib.awtextra.AbsoluteConstraints(505, 50, 90, -1));
 
+        scrReport.setBorder(null);
+        scrReport.setName("scrReport"); // NOI18N
+
+        pnlScrollPane.setBackground(new java.awt.Color(255, 255, 255));
+        pnlScrollPane.setName("pnlScrollPane"); // NOI18N
+        pnlScrollPane.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 0));
+        scrReport.setViewportView(pnlScrollPane);
+
+        getContentPane().add(scrReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 600, 630));
+
+        lblMoonlightDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMoonlightDay.setForeground(new java.awt.Color(231, 181, 72));
+        lblMoonlightDay.setText("MOONLIGHT (DAY)");
+        lblMoonlightDay.setName("lblMoonlightDay"); // NOI18N
+        getContentPane().add(lblMoonlightDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 725, 140, -1));
+
+        lblNoMoonDay.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNoMoonDay.setForeground(new java.awt.Color(113, 89, 36));
+        lblNoMoonDay.setText("NO MOON (DAY)");
+        lblNoMoonDay.setName("lblNoMoonDay"); // NOI18N
+        getContentPane().add(lblNoMoonDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 725, 100, -1));
+
+        lblMoonlightNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblMoonlightNight.setForeground(new java.awt.Color(100, 160, 219));
+        lblMoonlightNight.setText("MOONLIGHT (NIGHT)");
+        lblMoonlightNight.setName("lblMoonlightNight"); // NOI18N
+        getContentPane().add(lblMoonlightNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 725, 130, -1));
+
+        lblNoMoonNight.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblNoMoonNight.setForeground(new java.awt.Color(46, 58, 87));
+        lblNoMoonNight.setText("NO MOON (NIGHT)");
+        lblNoMoonNight.setName("lblNoMoonNight"); // NOI18N
+        getContentPane().add(lblNoMoonNight, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 725, 120, -1));
+
+        lblOther.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lblOther.setForeground(new java.awt.Color(183, 187, 199));
+        lblOther.setText("OTHER");
+        lblOther.setName("lblOther"); // NOI18N
+        getContentPane().add(lblOther, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 725, 50, -1));
+
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
         mnuPrint.setText("Print");
@@ -253,23 +286,6 @@ public class ReportLocationSpeciesCurve extends JFrame {
     }//GEN-LAST:event_mnuPrintReportActionPerformed
 
     private void doReport() {
-        class ReportData implements Comparable<ReportData> {
-            public Date dateAsDay;
-            public int creatureCount;
-            public String name;
-
-            public ReportData(Date inDateAsDay, int inCreatureCount, String inName) {
-                dateAsDay = inDateAsDay;
-                creatureCount = inCreatureCount;
-                name = inName;
-            }
-
-            @Override
-            public int compareTo(ReportData inReportData) {
-                return this.dateAsDay.compareTo(inReportData.dateAsDay);
-            }
-        }
-
         // Init report fields
         lblName.setText(location.getName());
         lblNumberOfVisits.setText(Integer.toString(visits.size()));
@@ -282,123 +298,70 @@ public class ReportLocationSpeciesCurve extends JFrame {
         int activeDays = 0;
 
         // Add Charts
-        if (chartSpecies != null)
-            pnlScrollPane.remove(chartSpecies);
-        chartSpecies = new BarChart(580, 630);
-        // Get a sorted list of all visits with dates
-        List<Visit> sortedVisits = new ArrayList<Visit>(visits.size());
+        if (chartTime != null)
+            pnlScrollPane.remove(chartTime);
+        chartTime = new BarChart(580, 630);
         for (Visit visit : visits) {
+            if (visit.getStartDate() != null) {
+                if (firstDate == null)
+                    firstDate = visit.getStartDate();
+                else
+                if (visit.getStartDate().before(firstDate))
+                    firstDate = visit.getStartDate();
+            }
+            if (visit.getEndDate() != null) {
+                if (lastDate == null)
+                    lastDate = visit.getEndDate();
+                else
+                if (visit.getEndDate().after(lastDate))
+                    lastDate = visit.getEndDate();
+            }
             if (visit.getStartDate() != null && visit.getEndDate() != null) {
                 if (visit.getStartDate().before(visit.getEndDate()) || visit.getStartDate().equals(visit.getEndDate())) {
-                    if (sortedVisits.isEmpty()) {
-                        sortedVisits.add(visit);
-                    }
-                    else {
-                        boolean added = false;
-                        for (int i = 0; i < sortedVisits.size(); i++) {
-                            if (visit.getStartDate().before(sortedVisits.get(i).getStartDate())) {
-                                sortedVisits.add(i, visit);
-                                added = true;
-                                break;
-                            }
-                        }
-                        if (added == false) {
-                            sortedVisits.add(visit);
-                        }
-                    }
                     long diff = visit.getEndDate().getTime() - visit.getStartDate().getTime();
                     activeDays = activeDays + (int)Math.ceil((double)diff/60/60/24/1000) + 1;
                 }
             }
-        }
-        if (!sortedVisits.isEmpty()) {
-            firstDate = sortedVisits.get(0).getStartDate();
-            lastDate = sortedVisits.get(sortedVisits.size()-1).getEndDate();
-
-            List<ReportData> tempData = new ArrayList<ReportData>();
-            for (Visit visit : visits) {
-                Sighting tempSighting = new Sighting();
-                tempSighting.setVisitName(visit.getName());
-                List<Sighting> sightings = app.getDBI().list(tempSighting);
-                Collections.sort(sightings);
-                for (Sighting sighting : sightings) {
-                    numOfSightings++;
-                    numOfElements.add(sighting.getElementName());
-                    //if (!numOfElements.contains(sighting.getElement().getPrimaryName()))
-                    //    chartSpecies.addBar(new BarChartEntity(sighting.getElement().getPrimaryName() + "-" + sighting.getDate(), visit.getName(), (numOfElements.size()), Color.yellow));
-                    // Get a Date object containing only the day part, not the time.
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(sighting.getDate());
-                    Calendar dayCalendar = new GregorianCalendar(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                    tempData.add(new ReportData(
-                            dayCalendar.getTime(),
-                            numOfElements.size(),
-                            sighting.getElementName()));
-
-                    if (sighting.getTimeOfDay() != null) {
-                        if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
-                            || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
-                            || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
-                            numNightSightings++;
-                        }
-                        else
-                        if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
-                            // Do nothing
-                        }
-                        else {
-                            numDaySightings++;
-                        }
+            Sighting tempSighting = new Sighting();
+            tempSighting.setVisitName(visit.getName());
+            List<Sighting> sightings = app.getDBI().list(tempSighting);
+            for (Sighting sighting : sightings) {
+                numOfSightings++;
+                numOfElements.add(sighting.getElementName());
+                String nameToUse = "";
+                if (usePrimaryName)
+                    nameToUse = sighting.getElementName();
+                else {
+                    Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
+                    if (tempElement.getOtherName() != null)
+                        nameToUse = tempElement.getOtherName();
+                }
+                // Time
+                if (sighting.getTimeOfDay() != null) {
+                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_EARLY)
+                        || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_MID)
+                        || sighting.getTimeOfDay().equals(ActiveTimeSpesific.NIGHT_LATE)) {
+                        // Night
+                        numNightSightings++;
+                    }
+                    else
+                    if (sighting.getTimeOfDay().equals(ActiveTimeSpesific.NONE)) {
+                        // Do nothing
+                    }
+                    else {
+                        // Day
+                        numDaySightings++;
                     }
                 }
+                // Moon
+                MoonReportHelper.addMoonInfoToChart(chartTime, sighting, new JLabel[]{lblMoonlightNight, lblNoMoonNight, lblMoonlightDay, lblNoMoonDay, lblOther});
             }
-
-            List<ReportData> tempDataCore = new ArrayList<ReportData>(numOfElements.size());
-            Collections.sort(tempData);
-            Set<String> tempSet = new HashSet<String>(numOfElements.size());
-            for (ReportData temp : tempData) {
-                if (!tempSet.contains(temp.name)) {
-                    tempSet.add(temp.name);
-                    tempDataCore.add(new ReportData(temp.dateAsDay, tempSet.size(), ""));
-                }
-            }
-
-            final double ROWS = 25.0;
-            int interval = 1;
-            int days = (int)((lastDate.getTime() - firstDate.getTime())/60/60/24/1000);
-            if (days > ROWS)
-                interval = (int)Math.ceil(days/ROWS);
-            int count = 0;
-            Map<Date, Integer> finalChartData = new HashMap<Date, Integer>((int)ROWS);
-            int maxCreatures = 0;
-            for (int t = 0; t <= days; t++) {
-                for (ReportData data : tempDataCore) {
-                    if (data.dateAsDay.equals(new Date(firstDate.getTime() + (long)t*60*60*24*1000))) {
-                        maxCreatures = data.creatureCount;
-                    }
-                }
-                if (count >= interval) {
-                    finalChartData.put(new Date(firstDate.getTime() + (long)t*60*60*24*1000), maxCreatures);
-                    count = 0;
-                }
-                count++;
-            }
-            if (count < interval && count > 0) {
-                finalChartData.put(lastDate, maxCreatures);
-            }
-
-            for (Date temp : finalChartData.keySet()) {
-                chartSpecies.addBar(new BarChartEntity(temp, "", finalChartData.get(temp), new Color(125, 198, 48)));
-            }
-
-        }
-        else {
-            firstDate = null;
-            lastDate = null;
         }
 
-        pnlScrollPane.add(chartSpecies);
-        chartSpecies.paintComponent(pnlScrollPane.getGraphics());
-        pnlScrollPane.setPreferredSize(new Dimension(580, chartSpecies.getChartHeight()));
+        pnlScrollPane.add(chartTime);
+        chartTime.paintComponent(pnlScrollPane.getGraphics());
+//        pnlScrollPane.setPreferredSize(new Dimension(chartTime.getChartWidth(), chartTime.getChartHeight()));
+        pnlScrollPane.setPreferredSize(new Dimension(580, chartTime.getChartHeight()));
 
         // Wrap up report fields
         lblNumberOfSightings.setText(Integer.toString(numOfSightings));
@@ -433,11 +396,16 @@ public class ReportLocationSpeciesCurve extends JFrame {
     private javax.swing.JLabel lblDaySightings;
     private javax.swing.JLabel lblFirstVisit;
     private javax.swing.JLabel lblLastVisit;
+    private javax.swing.JLabel lblMoonlightDay;
+    private javax.swing.JLabel lblMoonlightNight;
     private javax.swing.JLabel lblName;
     private javax.swing.JLabel lblNightSightings;
+    private javax.swing.JLabel lblNoMoonDay;
+    private javax.swing.JLabel lblNoMoonNight;
     private javax.swing.JLabel lblNumberOfElements;
     private javax.swing.JLabel lblNumberOfSightings;
     private javax.swing.JLabel lblNumberOfVisits;
+    private javax.swing.JLabel lblOther;
     private javax.swing.JMenu mnuPrint;
     private javax.swing.JMenuItem mnuPrintReport;
     private javax.swing.JPanel pnlScrollPane;
