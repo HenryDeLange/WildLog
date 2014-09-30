@@ -215,7 +215,6 @@ public class InfoBox extends JPanel {
         add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 185, 80, 50));
 
         lblCount.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCount.setText("#");
         lblCount.setName("lblCount"); // NOI18N
         add(lblCount, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 3, 30, 20));
 

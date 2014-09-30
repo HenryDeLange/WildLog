@@ -296,7 +296,6 @@
     <Component class="javax.swing.JLabel" name="lblCount">
       <Properties>
         <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="#"/>
         <Property name="name" type="java.lang.String" value="lblCount" noResource="true"/>
       </Properties>
       <Constraints>

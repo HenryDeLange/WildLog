@@ -325,7 +325,9 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalsForSeries = new HashMap<>();
         for (Sighting sighting : inSightings) {
+            
 // TODO: Merge met die ander chart want dis baises identies ek hardcode net die "spesie naam" hier na "All Observations"
+            
             ReportDataWrapper dataWrapper = mapInitialCountedData.get("All Observations" + getDetailsString(sighting) 
                     + "-" + getMoonIntervalPercentage(sighting.getMoonPhase()));
             if (dataWrapper == null) {

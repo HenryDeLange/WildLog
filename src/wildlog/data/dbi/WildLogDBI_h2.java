@@ -484,6 +484,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
             if (!results.next()) {
+// FIXME: Error when opining a WildNote v1.1 export with WildLog v4.2: "Column count does not match"
                 createOrUpdate(new WildLogOptions());
             }
             // Read the row

@@ -99,6 +99,7 @@ import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.implementations.MoonphaseChart;
+import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
 import wildlog.ui.reports.implementations.TimeOfDayChart;
 import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -3019,6 +3020,7 @@ public final class WildLogView extends JFrame {
         reports.add(new TimelineChart());
         reports.add(new TimeOfDayChart());
         reports.add(new MoonphaseChart());
+        reports.add(new SpeciesAccumulationChart());
         ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed

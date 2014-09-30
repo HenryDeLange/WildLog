@@ -41,7 +41,7 @@ public class InfoBoxRenderer implements TableCellRenderer {
         } else {
             infoBox.setRowBackground(BulkUploadPanel.tableBackgroundColor2);
         }
-        infoBox.getLblCount().setText(Integer.toString(inRow));
+        infoBox.getLblCount().setText(Integer.toString(inRow) + 1);
         return infoBox;
     }
 
