@@ -31,9 +31,11 @@ public enum AccommodationType {
         if (inText == null) {
             tempList.add(NONE);
         }
-        for (AccommodationType theEnum : AccommodationType.values()) {
-            if (inText.contains(theEnum.text)) {
-                tempList.add(theEnum);
+        else {
+            for (AccommodationType theEnum : AccommodationType.values()) {
+                if (inText.contains(theEnum.text)) {
+                    tempList.add(theEnum);
+                }
             }
         }
         return tempList;

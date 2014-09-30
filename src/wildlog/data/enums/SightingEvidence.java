@@ -4,6 +4,7 @@ package wildlog.data.enums;
 public enum SightingEvidence {
     SEEN("Seen"),
     HEARD("Heard"),
+    TRACK("Tracks"),
     OTHER_EVIDENCE("Other Evidence"),
     UNKNOWN("Unknown"),
     NONE("");
