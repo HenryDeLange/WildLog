@@ -1,10 +1,15 @@
 package wildlog.ui.reports.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 
-public class UtilsReports {
+public final class UtilsReports {
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
 
+    private UtilsReports() {
+    }
+    
     /**
      * Remove the empty entries from the Enums, to not display then in the Report Filter.
      * @param inList

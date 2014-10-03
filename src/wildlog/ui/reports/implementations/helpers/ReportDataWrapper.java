@@ -39,4 +39,8 @@ public class ReportDataWrapper {
     public void setCount(int count) {
         this.count = count;
     }
+    
+    public void increaseCount() {
+        count++;
+    }
 }

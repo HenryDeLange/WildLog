@@ -5,7 +5,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +21,7 @@ import javafx.util.StringConverter;
 import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -83,23 +83,26 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         long endTime = 0;
         for (String elementName : mapAccumulation.keySet()) {
             endTime = UtilsTime.getDateFromLocalDateTime(mapAccumulation.get(elementName)).getTime();
-            lstChartData.add(new AreaChart.Data<>(endTime, counter++, elementName));
             if (startTime == 0) {
                 startTime = endTime;
+                // Add an entry to the front (and back) to make the first (and last) entry more visible
+                lstChartData.add(new AreaChart.Data<>(startTime, 0, ""));
             }
+            lstChartData.add(new AreaChart.Data<>(endTime, counter++, elementName));
         }
         ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
         chartData.add(new AreaChart.Series<>("All Creatures", lstChartData));
-        NumberAxis axisX = new NumberAxis(startTime, endTime, (endTime - startTime)/7);
+        double tick = (endTime - startTime)/7;
+        NumberAxis axisX = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
         axisX.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return new SimpleDateFormat("dd MMM yyyy").format(object);
+                return UtilsReports.dateFormat.format(object);
             }
             @Override
             public Number fromString(String string) {
                 try {
-                    return new SimpleDateFormat("dd MMM yyyy").parse(string).getTime();
+                    return UtilsReports.dateFormat.parse(string).getTime();
                 }
                 catch (ParseException ex) {
                     ex.printStackTrace(System.err);
@@ -107,6 +110,9 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 return 0;
             }
         });
+        // Add an entry to the front and back to make the first and last entry more visible
+        lstChartData.get(0).setXValue((startTime - tick/3));
+        lstChartData.add(new AreaChart.Data<>(endTime + tick/3, counter - 1, ""));
         AreaChart<Number, Number> chart = new AreaChart<Number, Number>(axisX, axisY, chartData);
         return chart;
     }

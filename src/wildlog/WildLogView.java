@@ -98,6 +98,9 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.reports.implementations.DayAndNightChart;
+import wildlog.ui.reports.implementations.ElementsChart;
+import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
 import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
 import wildlog.ui.reports.implementations.TimeOfDayChart;
@@ -3015,12 +3018,15 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceNameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2014-1900, 02, 0), new Date(), Sighting.class);
-        List<AbstractReport> reports = new ArrayList<>(5);
+        List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2013-1900, 02, 0), new Date(), Sighting.class);
+        List<AbstractReport> reports = new ArrayList<>(10);
         reports.add(new TimelineChart());
         reports.add(new TimeOfDayChart());
         reports.add(new MoonphaseChart());
         reports.add(new SpeciesAccumulationChart());
+        reports.add(new DayAndNightChart());
+        reports.add(new ElementsChart());
+        reports.add(new LocationChart());
         ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
