@@ -165,6 +165,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(chkShowMoonlight);
+        // TODO: Sit 'n pie chart by
     }
 
     @Override

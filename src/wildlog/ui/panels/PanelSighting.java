@@ -1054,7 +1054,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbLifeStatus.setName("cmbLifeStatus"); // NOI18N
         sightingIncludes.add(cmbLifeStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 85, 140, -1));
 
-        jLabel17.setText("Info  Tag:");
+        jLabel17.setText("Info Tag:");
         jLabel17.setName("jLabel17"); // NOI18N
         sightingIncludes.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 185, -1, 20));
 

@@ -1386,7 +1386,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel17">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Info  Tag:"/>
+            <Property name="text" type="java.lang.String" value="Info Tag:"/>
             <Property name="name" type="java.lang.String" value="jLabel17" noResource="true"/>
           </Properties>
           <Constraints>

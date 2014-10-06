@@ -93,6 +93,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChart);
+        // TODO: Sit 'n Pie chart by
     }
 
     @Override
