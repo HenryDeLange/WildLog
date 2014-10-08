@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.layout.Background;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -27,8 +28,8 @@ public class ElementsChart extends AbstractReport<Sighting> {
     private enum ChartType {PIE_CHART};
     private ChartType chartType = ChartType.PIE_CHART;
     private Chart displayedChart;
-    private JComboBox<String> cmbCategories;
-    private String[] options = new String[] {"Creature Name", "Number Observed", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag"};
+    private final JComboBox<String> cmbCategories;
+    private final String[] options = new String[] {"Creature Name", "Number Observed", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag"};
 
     
     public ElementsChart() {
@@ -84,6 +85,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         if (chartType.equals(ChartType.PIE_CHART)) {
             displayedChart = createPieChart(lstData);
         }
+        displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
     

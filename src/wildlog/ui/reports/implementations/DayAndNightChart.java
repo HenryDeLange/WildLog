@@ -20,6 +20,7 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedAreaChart;
+import javafx.scene.layout.Background;
 import javafx.util.StringConverter;
 import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
@@ -137,6 +138,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
 //        if (chartType.equals(ChartType.STACKED_LINE_100_PERCENT_CHART)) {
 //            displayedChart = create100PercentStackedChartForAll(lstData);
 //        }
+        displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
     

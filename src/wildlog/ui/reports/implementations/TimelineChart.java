@@ -19,6 +19,7 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.layout.Background;
 import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -30,7 +31,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
     private Chart displayedChart;
-    private int INTERVALS_PER_HOUR = 1;
+    private final int INTERVALS_PER_HOUR = 1;
 
     public TimelineChart() {
         super("Timeline", "<html>This collection of charts use the time of the Observations. "
@@ -88,6 +89,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
         if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
             displayedChart = createTimelinePerElementChart(lstData);
         }
+        displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
 

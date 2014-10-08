@@ -19,12 +19,15 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.layout.Background;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
+import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -32,17 +35,17 @@ import wildlog.ui.utils.UtilsTime;
 
 
 public class MoonphaseChart extends AbstractReport<Sighting> {
-    private enum ChartType {BAR_CHART_ALL, BAR_CHART_ELEMENTS, LINE_CHART_ALL, LINE_CHART_ELEMENTS};
+    private enum ChartType {BAR_CHART_ALL, BAR_CHART_ELEMENTS, LINE_CHART_ALL, LINE_CHART_ELEMENTS, PIE_CHART};
     private ChartType chartType = ChartType.BAR_CHART_ALL;
     private Chart displayedChart;
     private boolean showDayOrNight = false;
     private boolean showMoonShiningOrNot = false;
-    private int PERCENTAGES_PER_INTERVAL = 10;
+    private final int PERCENTAGES_PER_INTERVAL = 10;
     
     public MoonphaseChart() {
         super("Moon Phase", "<html>This collection of charts focus on the moon phase that was present at the time of the Observation. "
                 + "The phase and visibilaty of the moon isn't tied to the phase of sun and can be visible during the day or night.</html>");
-        lstCustomButtons = new ArrayList<>(5);
+        lstCustomButtons = new ArrayList<>(6);
         // Area/Line Chart
         JButton btnLineChart = new JButton("Bar Chart All");
         btnLineChart.setFocusPainted(false);
@@ -123,6 +126,26 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChart2);
+        // Pie chart
+        JButton btnPieChart = new JButton("Pie Chart");
+        btnPieChart.setFocusPainted(false);
+        btnPieChart.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnPieChart.setMargin(new Insets(2, 4, 2, 4));
+        btnPieChart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chartType = ChartType.PIE_CHART;
+                if (displayedChart != null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayedChart.getScene().setRoot(createChart());
+                        }
+                    });
+                }
+            }
+        });
+        lstCustomButtons.add(btnPieChart);
         // Show day, night, twilight
         JCheckBox chkShowDetails = new JCheckBox("Show day/night");
         chkShowDetails.setFocusPainted(false);
@@ -165,7 +188,6 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(chkShowMoonlight);
-        // TODO: Sit 'n pie chart by
     }
 
     @Override
@@ -186,6 +208,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
             displayedChart = createLineChartForElements(lstData);
         }
+        else
+        if (chartType.equals(ChartType.PIE_CHART)) {
+            displayedChart = createPieChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
     
@@ -247,6 +274,62 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         }
         // Create the chart
         StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, lstChartSeries);
+        return chart;
+    }
+    
+    private Chart createPieChart(List<Sighting> inSightings) {
+        Map<String, ReportDataWrapper> mapChartData = new HashMap<>(4);
+        for (Sighting sighting : inSightings) {
+            String key = "";
+            if (sighting.getMoonPhase() >= 0) {
+                if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
+                    key = "Moon 0-50% Full" + getDetailsString(sighting);
+                } 
+                else
+                if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
+                    key = "Moon 50-100% Full" + getDetailsString(sighting);
+                } 
+                else
+                // If the moon is 50% then base it on whether the moon is growing or shrinking.
+                if (sighting.getMoonPhase() == 50) {
+                    LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
+                    int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
+                    if (testMoonphase >= 0 && testMoonphase < 50) {
+                        key = "Moon 0-50% Full" + getDetailsString(sighting);
+                    } 
+                    else
+                    if (testMoonphase > 50 && testMoonphase <= 100) {
+                        key = "Moon 50-100% Full" + getDetailsString(sighting);
+                    } 
+                    else {
+                        key = "Unknown";
+                    }
+                }
+                else {
+                    key = "Unknown";
+                }
+            }
+            else {
+                key = "Unknown";
+            }
+            ReportDataWrapper dataWrapper = mapChartData.get(key);
+            if (dataWrapper == null) {
+                dataWrapper = new ReportDataWrapper(null, null, 0);
+                mapChartData.put(key, dataWrapper);
+            }
+            dataWrapper.increaseCount();
+        }
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        List<String> keys = new ArrayList<>(mapChartData.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            String text = key;
+            if (text.isEmpty()) {
+                text = ActiveTimeSpesific.NONE.getDescription();
+            }
+            chartData.add(new PieChart.Data(text + " (" + mapChartData.get(key).getCount() + ")", mapChartData.get(key).getCount()));
+        }
+        PieChart chart = new PieChart(chartData);
         return chart;
     }
     

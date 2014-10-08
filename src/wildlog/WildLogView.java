@@ -102,6 +102,7 @@ import wildlog.ui.reports.implementations.DayAndNightChart;
 import wildlog.ui.reports.implementations.ElementsChart;
 import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
+import wildlog.ui.reports.implementations.SightingStatsChart;
 import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
 import wildlog.ui.reports.implementations.TimeOfDayChart;
 import wildlog.ui.reports.implementations.TimelineChart;
@@ -3019,7 +3020,7 @@ public final class WildLogView extends JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2013-1900, 02, 0), new Date(), Sighting.class);
-        List<AbstractReport> reports = new ArrayList<>(10);
+        List<AbstractReport<Sighting>> reports = new ArrayList<>(10);
         reports.add(new TimelineChart());
         reports.add(new TimeOfDayChart());
         reports.add(new MoonphaseChart());
@@ -3027,6 +3028,7 @@ public final class WildLogView extends JFrame {
         reports.add(new DayAndNightChart());
         reports.add(new ElementsChart());
         reports.add(new LocationChart());
+        reports.add(new SightingStatsChart());
         ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed

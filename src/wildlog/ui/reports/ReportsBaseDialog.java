@@ -11,6 +11,8 @@ import com.pdfjet.PDF;
 import com.pdfjet.Page;
 import com.pdfjet.TextLine;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -66,13 +68,14 @@ public class ReportsBaseDialog extends JFrame {
 //    private List<Sighting> lstFilteredSightings;
     private FilterProperties filterProperties = null;
 
-    public ReportsBaseDialog(String inTitle, List<Sighting> inSightings, List<AbstractReport> inLstReports) {
+    public ReportsBaseDialog(String inTitle, List<Sighting> inSightings, List<AbstractReport<Sighting>> inLstReports) {
         super(inTitle);
         lstOriginalData = inSightings;
         lstFilteredData = getCopiedList(lstOriginalData);
         initComponents();
         Platform.setImplicitExit(false);
         jfxPanel = new JFXPanel();
+        jfxPanel.setBackground(pnlChartArea.getBackground());
         pnlChartArea.add(jfxPanel, BorderLayout.CENTER);
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.setupGlassPaneOnMainFrame(this);
@@ -81,10 +84,10 @@ public class ReportsBaseDialog extends JFrame {
             JToggleButton reportButton = new JToggleButton(report.getReportButtonName(), 
                     new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif")), false);
             reportButton.setFocusPainted(false);
-            reportButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+            reportButton.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
             reportButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
             reportButton.setIconTextGap(8);
-            reportButton.setMargin(new java.awt.Insets(2, 4, 2, 4));
+            reportButton.setMargin(new Insets(2, 4, 2, 4));
             reportButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -142,6 +145,7 @@ public class ReportsBaseDialog extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("WildLog Reports");
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Report.gif")).getImage());
+        setMinimumSize(new java.awt.Dimension(920, 600));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -161,7 +165,7 @@ public class ReportsBaseDialog extends JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Export Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -360,9 +364,10 @@ public class ReportsBaseDialog extends JFrame {
 
         jSplitPane1.setLeftComponent(pnlReportsAndFilters);
 
+        pnlChartArea.setBackground(new java.awt.Color(255, 255, 255));
         pnlChartArea.setLayout(new java.awt.BorderLayout());
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 2, 5));
+        jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel5.setLayout(new java.awt.BorderLayout(0, 2));
 
         pnlChartOptions.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Display Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -389,7 +394,7 @@ public class ReportsBaseDialog extends JFrame {
             pnlChartDescriptionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlChartDescriptionLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addComponent(lblReportDescription, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addComponent(lblReportDescription, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(5, 5, 5))
         );
         pnlChartDescriptionLayout.setVerticalGroup(
@@ -409,11 +414,13 @@ public class ReportsBaseDialog extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 858, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 940, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 580, Short.MAX_VALUE)
+            .addComponent(jSplitPane1)
         );
 
         pack();

@@ -16,7 +16,9 @@ import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.layout.Background;
 import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
@@ -25,14 +27,14 @@ import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 
 
 public class TimeOfDayChart extends AbstractReport<Sighting> {
-    private enum ChartType {LINE_CHART, STACKED_BAR_CHART, BAR_CHART};
+    private enum ChartType {LINE_CHART, STACKED_BAR_CHART, BAR_CHART, PIE_CHART};
     private ChartType chartType = ChartType.LINE_CHART;
     private Chart displayedChart;
     
     public TimeOfDayChart() {
         super("Sun Phase", "<html>This collection of charts use the time of the Observations. "
                 + "The Time of Day category charts are better at seeing trends in data that spreads over longer times (seasons) or large geographic areas.</html>");
-        lstCustomButtons = new ArrayList<>(3);
+        lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
         JButton btnLineChart = new JButton("Line Chart");
         btnLineChart.setFocusPainted(false);
@@ -93,7 +95,26 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChart);
-        // TODO: Sit 'n Pie chart by
+        // Pie chart
+        JButton btnPieChart = new JButton("Pie Chart");
+        btnPieChart.setFocusPainted(false);
+        btnPieChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPieChart.setMargin(new Insets(2, 4, 2, 4));
+        btnPieChart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chartType = ChartType.PIE_CHART;
+                if (displayedChart != null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayedChart.getScene().setRoot(createChart());
+                        }
+                    });
+                }
+            }
+        });
+        lstCustomButtons.add(btnPieChart);
     }
 
     @Override
@@ -110,6 +131,11 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         if (chartType.equals(ChartType.BAR_CHART)) {
             displayedChart = createBarChart(lstData);
         }
+        else
+        if (chartType.equals(ChartType.PIE_CHART)) {
+            displayedChart = createPieChart(lstData);
+        }
+        displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
     
@@ -216,6 +242,31 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         }
         chartData.add(new StackedBarChart.Series<String, Number>("Observations (" + allSightings.size() + ")", allSightings));
         StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, chartData);
+        return chart;
+    }
+    
+    private Chart createPieChart(List<Sighting> inSightings) {
+        Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
+        for (Sighting sighting : inSightings) {
+            ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getTimeOfDay().toString());
+            if (dataWrapper == null) {
+                mapGroupedData.put(sighting.getTimeOfDay().toString(), new ReportDataWrapper("", "", 1));
+            }
+            else {
+                dataWrapper.increaseCount();
+            }
+        }
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            String text = key;
+            if (text.isEmpty()) {
+                text = ActiveTimeSpesific.NONE.getDescription();
+            }
+            chartData.add(new PieChart.Data(text + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
+        }
+        PieChart chart = new PieChart(chartData);
         return chart;
     }
     

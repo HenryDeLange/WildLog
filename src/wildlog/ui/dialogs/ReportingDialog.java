@@ -13,6 +13,8 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.reports.implementations.TimelineChart;
+import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.oldDeleteLater.ReportElementSightingsByMoon;
 import wildlog.ui.reports.implementations.oldDeleteLater.ReportElementSightingsBySun;
 import wildlog.ui.reports.implementations.oldDeleteLater.ReportLocationSightingsByMoon;
@@ -22,8 +24,6 @@ import wildlog.ui.reports.implementations.oldDeleteLater.ReportLocationSpeciesCu
 import wildlog.ui.reports.implementations.oldDeleteLater.ReportSightingByElement;
 import wildlog.ui.reports.implementations.oldDeleteLater.ReportSightingByLocation;
 import wildlog.ui.reports.implementations.oldDeleteLater.ReportVisitSightingsBySun;
-import wildlog.ui.reports.implementations.TimelineChart;
-import wildlog.ui.reports.implementations.helpers.AbstractReport;
 
 
 public class ReportingDialog extends JDialog {
@@ -351,7 +351,7 @@ public class ReportingDialog extends JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2014-1900, 02, 0), new Date(), Sighting.class);
         dispose();
-        List<AbstractReport> reports = new ArrayList<>(1);
+        List<AbstractReport<Sighting>> reports = new ArrayList<>(1);
         reports.add(new TimelineChart());
         ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
         dialog.setVisible(true);

@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.layout.Background;
 import javafx.util.StringConverter;
 import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
@@ -62,6 +63,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         if (chartType.equals(ChartType.LINE_CHART)) {
             displayedChart = createChart(lstData);
         }
+        displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
     
