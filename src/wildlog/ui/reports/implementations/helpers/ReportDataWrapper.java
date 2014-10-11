@@ -10,34 +10,34 @@ public class ReportDataWrapper {
     public ReportDataWrapper() {
     }
 
-    public ReportDataWrapper(String key, String value, int count) {
-        this.key = key;
-        this.value = value;
-        this.count = count;
+    public ReportDataWrapper(String inKey, String inValue, int inCount) {
+        key = inKey;
+        value = inValue;
+        count = inCount;
     }
 
     public String getKey() {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setKey(String inKey) {
+        key = inKey;
     }
 
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(String inValue) {
+        value = inValue;
     }
 
     public int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setCount(int inCount) {
+        count = inCount;
     }
     
     public void increaseCount() {

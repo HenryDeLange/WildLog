@@ -13,6 +13,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.AreaChart;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
@@ -235,13 +236,13 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         CategoryAxis axisX = new CategoryAxis();
         axisX.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
         axisX.setTickLabelRotation(-90);
-        ObservableList<StackedBarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-        ObservableList<StackedBarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
+        ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
+        ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
         for (Sighting sighting : inSightings) {
-            allSightings.add(new StackedBarChart.Data<String, Number>(sighting.getTimeOfDay().toString(), 1));
+            allSightings.add(new BarChart.Data<String, Number>(sighting.getTimeOfDay().toString(), 1));
         }
-        chartData.add(new StackedBarChart.Series<String, Number>("Observations (" + allSightings.size() + ")", allSightings));
-        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, chartData);
+        chartData.add(new BarChart.Series<String, Number>("Observations (" + allSightings.size() + ")", allSightings));
+        BarChart<String, Number> chart = new BarChart<String, Number>(axisX, axisY, chartData);
         return chart;
     }
     

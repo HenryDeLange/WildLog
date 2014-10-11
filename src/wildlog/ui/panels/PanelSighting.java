@@ -885,7 +885,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateSunAndMoonActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 215, 110, -1));
+        sightingIncludes.add(btnCalculateSunAndMoon, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 160, 110, -1));
 
         btnGetDateFromImage.setBackground(new java.awt.Color(208, 204, 181));
         btnGetDateFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF_small.png"))); // NOI18N
@@ -1104,7 +1104,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnCalculateDurationActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, -1));
+        sightingIncludes.add(btnCalculateDuration, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 215, 110, -1));
 
         btnAddNewElement.setBackground(new java.awt.Color(208, 204, 181));
         btnAddNewElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
@@ -1183,7 +1183,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 btnGetGPSFromImageActionPerformed(evt);
             }
         });
-        sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 175, 110, -1));
+        sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, -1));
 
         jLabel24.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(102, 102, 102));
