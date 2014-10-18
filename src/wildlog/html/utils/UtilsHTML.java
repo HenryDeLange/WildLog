@@ -17,8 +17,8 @@ import wildlog.utils.WildLogPaths;
 
 
 public final class UtilsHTML {
-    private static SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)");
-    private static SimpleDateFormat simpleDateFormatWithoutTime = new SimpleDateFormat("E, dd MMM yyyy");
+    private static final SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)");
+    private static final SimpleDateFormat simpleDateFormatWithoutTime = new SimpleDateFormat("E, dd MMM yyyy");
 
     private UtilsHTML() {
     }

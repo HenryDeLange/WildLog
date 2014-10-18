@@ -50,7 +50,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -70,7 +70,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -80,7 +80,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
     }
     
     @Override
-    public Chart createChart() {
+    public Chart createReport() {
         displayedChart = null;
         if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
             displayedChart = createTimelineForAllChart(lstData);

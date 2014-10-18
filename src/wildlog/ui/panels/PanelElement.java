@@ -33,12 +33,11 @@ import wildlog.data.enums.SizeType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.data.enums.WaterDependancy;
-import wildlog.data.enums.WishRating;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.data.enums.WishRating;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
-import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
@@ -46,6 +45,7 @@ import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -1654,7 +1654,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app, null, element, null, null, null);
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + element.getPrimaryName(), app.getDBI().list(new Sighting(element.getPrimaryName(), null, null)));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

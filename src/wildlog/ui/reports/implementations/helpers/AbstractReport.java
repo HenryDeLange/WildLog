@@ -1,7 +1,7 @@
 package wildlog.ui.reports.implementations.helpers;
 
 import java.util.List;
-import javafx.scene.chart.Chart;
+import javafx.scene.Parent;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,52 +13,52 @@ public abstract class AbstractReport<T> {
     private final String reportDescription;
     protected List<T> lstData;
     protected List<JComponent> lstCustomButtons;
-    protected JPanel pnlChartOptions;
-    protected JLabel lblChartDescription;
+    protected JPanel pnlReportOptions;
+    protected JLabel lblReportDescription;
 
     public AbstractReport(String inReportButtonName, String inReportDescription) {
         reportButtonName = inReportButtonName;
         reportDescription = inReportDescription;
     }
     
-    public abstract Chart createChart();
+    public abstract Parent createReport();
 
     public void setChartOptionsPanel(JPanel inChartOptionsPanel) {
-        pnlChartOptions = inChartOptionsPanel;
+        pnlReportOptions = inChartOptionsPanel;
     }
     
-    public void setupChartOptionsPanel() {
-        if (pnlChartOptions != null) {
+    public void setupReportOptionsPanel() {
+        if (pnlReportOptions != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
                     // Remove the old buttons
-                    for (int t = (pnlChartOptions.getComponentCount() - 1 - 1); t >= 0; t--) {
-                        pnlChartOptions.remove(t);
+                    for (int t = (pnlReportOptions.getComponentCount() - 1 - 1); t >= 0; t--) {
+                        pnlReportOptions.remove(t);
                     }
                     // Add the new buttons
                     if (lstCustomButtons != null) {
                         for (JComponent button : lstCustomButtons) {
-                            pnlChartOptions.add(button, pnlChartOptions.getComponentCount() - 1);
+                            pnlReportOptions.add(button, pnlReportOptions.getComponentCount() - 1);
                         }
                     }
-                    pnlChartOptions.validate();
-                    pnlChartOptions.repaint();
+                    pnlReportOptions.validate();
+                    pnlReportOptions.repaint();
                 }
             });
         }
     }
     
     public void setChartDescriptionLabel(JLabel inChartDescLabel) {
-        lblChartDescription = inChartDescLabel;
+        lblReportDescription = inChartDescLabel;
     }
     
     public void setupChartDescriptionLabel() {
-        if (lblChartDescription != null) {
+        if (lblReportDescription != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    lblChartDescription.setText(reportDescription);
+                    lblReportDescription.setText(reportDescription);
                 }
             });
         }

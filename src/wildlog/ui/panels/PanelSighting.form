@@ -262,7 +262,7 @@
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="formats" type="[Ljava.text.DateFormat;" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new SimpleDateFormat(&quot;dd MMM yyyy&quot;)" type="code"/>
+              <Connection code="UtilsTime.WL_DATE_FORMATTER" type="code"/>
             </Property>
             <Property name="name" type="java.lang.String" value="dtpSightingDate" noResource="true"/>
           </Properties>

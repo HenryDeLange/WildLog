@@ -4,7 +4,6 @@ import astro.MoonTimes;
 import astro.SunTimes;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
@@ -171,7 +170,7 @@ public class SunMoonDialog extends JDialog {
         jLabel3.setName("jLabel3"); // NOI18N
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 20));
 
-        dtpDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
         dtpDate.setName("dtpDate"); // NOI18N
         dtpDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

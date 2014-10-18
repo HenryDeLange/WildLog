@@ -22,7 +22,6 @@ import javafx.util.StringConverter;
 import javax.swing.JButton;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
-import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -48,7 +47,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -58,16 +57,16 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     }
 
     @Override
-    public Chart createChart() {
+    public Chart createReport() {
         displayedChart = null;
         if (chartType.equals(ChartType.LINE_CHART)) {
-            displayedChart = createChart(lstData);
+            displayedChart = createReport(lstData);
         }
         displayedChart.setBackground(Background.EMPTY);
         return displayedChart;
     }
     
-    private Chart createChart(List<Sighting> inSightings) {
+    private Chart createReport(List<Sighting> inSightings) {
         NumberAxis axisY = new NumberAxis();
         axisY.setLabel("Number of Creatures");
         axisY.setAutoRanging(true);
@@ -99,12 +98,12 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         axisX.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return UtilsReports.dateFormat.format(object);
+                return UtilsTime.WL_DATE_FORMATTER.format(object);
             }
             @Override
             public Number fromString(String string) {
                 try {
-                    return UtilsReports.dateFormat.parse(string).getTime();
+                    return UtilsTime.WL_DATE_FORMATTER.parse(string).getTime();
                 }
                 catch (ParseException ex) {
                     ex.printStackTrace(System.err);

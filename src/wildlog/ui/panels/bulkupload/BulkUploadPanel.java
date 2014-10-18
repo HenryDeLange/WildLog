@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,6 +56,7 @@ import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
 import wildlog.ui.panels.bulkupload.renderers.ImageBoxRenderer;
 import wildlog.ui.panels.bulkupload.renderers.InfoBoxRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsConcurency;
@@ -273,7 +273,7 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         jLabel4.setText("End Date:");
         jLabel4.setName("jLabel4"); // NOI18N
 
-        dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpEndDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
         dtpEndDate.setName("dtpEndDate"); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -286,10 +286,10 @@ public class BulkUploadPanel extends PanelCanSetupHeader {
         cmbVisitType.setName("cmbVisitType"); // NOI18N
 
         txtVisitName.setBackground(new java.awt.Color(204, 255, 204));
-        txtVisitName.setText("Bulk Import - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()));
+        txtVisitName.setText("Bulk Import - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(Calendar.getInstance().getTime()));
         txtVisitName.setName("txtVisitName"); // NOI18N
 
-        dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpStartDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
         dtpStartDate.setName("dtpStartDate"); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N

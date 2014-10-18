@@ -35,6 +35,8 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 
 
 public class UtilsImageProcessing {
+    private static final SimpleDateFormat dateFormatter1 = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+    private static final SimpleDateFormat dateFormatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
 
     private UtilsImageProcessing() {
     }
@@ -347,7 +349,7 @@ public class UtilsImageProcessing {
                         // Try 1:
                         try {
                             // This seems to be by far the most used format
-                            return new SimpleDateFormat("yyyy:MM:dd HH:mm:ss").parse(tag.getDescription());
+                            return dateFormatter1.parse(tag.getDescription());
                         }
                         catch (ParseException ex) {
                             System.out.println("Try1: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
@@ -356,7 +358,7 @@ public class UtilsImageProcessing {
                         // Try 2:
                         try {
                             // Wierd format used by Samsung Galaxy Gio (Android)
-                            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ").parse(tag.getDescription());
+                            return dateFormatter2.parse(tag.getDescription());
                         }
                         catch (ParseException ex) {
                             System.out.println("Try2: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");

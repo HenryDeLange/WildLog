@@ -52,6 +52,15 @@ import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.ui.reports.implementations.DayAndNightChart;
+import wildlog.ui.reports.implementations.ElementsChart;
+import wildlog.ui.reports.implementations.LocationChart;
+import wildlog.ui.reports.implementations.MoonphaseChart;
+import wildlog.ui.reports.implementations.SightingStatsChart;
+import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
+import wildlog.ui.reports.implementations.TextReports;
+import wildlog.ui.reports.implementations.TimeOfDayChart;
+import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
@@ -68,13 +77,36 @@ public class ReportsBaseDialog extends JFrame {
 //    private List<Sighting> lstFilteredSightings;
     private FilterProperties filterProperties = null;
 
+    public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
+        super(inTitle);
+        Platform.setImplicitExit(false);
+        jfxPanel = new JFXPanel();
+        lstOriginalData = inSightings;
+        // Setup the default reports
+        List<AbstractReport<Sighting>> reports = new ArrayList<>(10);
+        reports.add(new TimelineChart());
+        reports.add(new TimeOfDayChart());
+        reports.add(new MoonphaseChart());
+        reports.add(new SpeciesAccumulationChart());
+        reports.add(new DayAndNightChart());
+        reports.add(new ElementsChart());
+        reports.add(new LocationChart());
+        reports.add(new SightingStatsChart());
+        reports.add(new TextReports());
+        init(reports);
+    }
+    
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings, List<AbstractReport<Sighting>> inLstReports) {
         super(inTitle);
         lstOriginalData = inSightings;
-        lstFilteredData = getCopiedList(lstOriginalData);
-        initComponents();
         Platform.setImplicitExit(false);
         jfxPanel = new JFXPanel();
+        init(inLstReports);
+    }
+
+    private void init(List<AbstractReport<Sighting>> inLstReports) {
+        lstFilteredData = getCopiedList(lstOriginalData);
+        initComponents();
         jfxPanel.setBackground(pnlChartArea.getBackground());
         pnlChartArea.add(jfxPanel, BorderLayout.CENTER);
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
@@ -82,7 +114,7 @@ public class ReportsBaseDialog extends JFrame {
         for (final AbstractReport<Sighting> report : inLstReports) {
             report.setChartOptionsPanel(pnlChartOptions);
             JToggleButton reportButton = new JToggleButton(report.getReportButtonName(), 
-                    new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif")), false);
+                    new ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif")), false);
             reportButton.setFocusPainted(false);
             reportButton.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
             reportButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -92,13 +124,13 @@ public class ReportsBaseDialog extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     report.setDataList(lstFilteredData);
-                    report.setupChartOptionsPanel();
+                    report.setupReportOptionsPanel();
                     report.setChartDescriptionLabel(lblReportDescription);
                     report.setupChartDescriptionLabel();
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            jfxPanel.setScene(new Scene(report.createChart()));
+                            jfxPanel.setScene(new Scene(report.createReport()));
                         }
                     });
                 }
@@ -143,7 +175,6 @@ public class ReportsBaseDialog extends JFrame {
         lblReportDescription = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("WildLog Reports");
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Report.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(920, 600));
 
@@ -165,7 +196,7 @@ public class ReportsBaseDialog extends JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 229, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 259, Short.MAX_VALUE)
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Export Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -415,7 +446,7 @@ public class ReportsBaseDialog extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 940, Short.MAX_VALUE)
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         layout.setVerticalGroup(

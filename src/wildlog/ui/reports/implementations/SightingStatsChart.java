@@ -56,7 +56,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -76,7 +76,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -96,35 +96,13 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
             }
         });
         lstCustomButtons.add(btnSightingChanceBarChart);
-        // Maximum
-        JRadioButton chkMax = new JRadioButton("Maximum");
-        chkMax.setFocusPainted(false);
-        chkMax.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        chkMax.setMargin(new Insets(2, 4, 2, 4));
-        chkMax.setSelected(false);
-        chkMax.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                maximum = true;
-                average = false;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createChart());
-                        }
-                    });
-                }
-            }
-        });
-        lstCustomButtons.add(chkMax);
         // Average
         JRadioButton chkAve = new JRadioButton("Average");
         chkAve.setFocusPainted(false);
@@ -140,25 +118,47 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
             }
         });
         lstCustomButtons.add(chkAve);
+        // Maximum
+        JRadioButton chkMax = new JRadioButton("Maximum");
+        chkMax.setFocusPainted(false);
+        chkMax.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        chkMax.setMargin(new Insets(2, 4, 2, 4));
+        chkMax.setSelected(false);
+        chkMax.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                maximum = true;
+                average = false;
+                if (displayedChart != null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            displayedChart.getScene().setRoot(createReport());
+                        }
+                    });
+                }
+            }
+        });
+        lstCustomButtons.add(chkMax);
 // TODO: Sit dalk nog 'n "mode" (nee dis nie regtig mode waarvoor ek soek nie) ook by, dit sal dalk resultate gee wat meer sin maak vir goed soos buffels wat normaalweg net 1-5 is, maar soms 200+
 // TODO: SO verander die radiobuttons dalk in 'n combobox met opsies Max, Average (Mean), Most Frequent Value (Mode) en Significt Frequency Distribution (The more time a value is present the more relevant it becomes)
         // Max and ave radio button group
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(chkMax);
         buttonGroup.add(chkAve);
-        chkMax.setSelected(true);
-        maximum = true;
+        chkAve.setSelected(true);
+        average = true;
     }
 
     @Override
-    public Chart createChart() {
+    public Chart createReport() {
         displayedChart = null;
         if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
             displayedChart = createNumOfElementsPerSightingBarChart(lstData);

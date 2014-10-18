@@ -1246,7 +1246,7 @@ public final class UtilsTableGenerator {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                if (!inList.isEmpty()) {
+                if (inList != null && !inList.isEmpty()) {
                     // Setup column names
                     String[] columnNames;
                     if (inList.get(0) instanceof Element) {

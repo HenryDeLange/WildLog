@@ -59,7 +59,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -79,7 +79,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -99,7 +99,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -119,7 +119,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -139,7 +139,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -160,7 +160,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -181,7 +181,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -191,7 +191,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     }
 
     @Override
-    public Chart createChart() {
+    public Chart createReport() {
         displayedChart = null;
         if (chartType.equals(ChartType.BAR_CHART_ALL)) {
             displayedChart = createBarChartForAll(lstData);

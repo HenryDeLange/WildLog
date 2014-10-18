@@ -3,7 +3,6 @@ package wildlog.data.dataobjects;
 import KmlGenerator.objects.KmlEntry;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
@@ -17,11 +16,10 @@ import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.utils.UtilsTime;
 
 
 public class Sighting extends SightingCore implements DataObjectWithHTML, DataObjectWithKML {
-    private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
 
     public Sighting() {
         super();
@@ -43,7 +41,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
      * @return
      */
     public Path toPath() {
-        return Paths.get(elementName, locationName, dateFormatter.format(date) + "-Observation[" + sightingCounter + "]");
+        return Paths.get(elementName, locationName, UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(date) + "-Observation[" + sightingCounter + "]");
     }
 
     @Override

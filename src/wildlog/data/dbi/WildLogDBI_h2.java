@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
@@ -27,6 +26,7 @@ import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
@@ -119,7 +119,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
         try {
             state = conn.createStatement();
             // Backup
-            File dirs = inFolder.resolve("Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")").toFile();
+            File dirs = inFolder.resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(Calendar.getInstance().getTime()) + ")").toFile();
             dirs.mkdirs();
             // Create a database file backup
             state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");

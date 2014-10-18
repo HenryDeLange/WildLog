@@ -1,11 +1,9 @@
 package wildlog.ui.reports.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 
 public final class UtilsReports {
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy");
 
     private UtilsReports() {
     }

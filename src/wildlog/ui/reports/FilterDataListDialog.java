@@ -93,7 +93,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             for (String temp : setOriginalData) {
                 originalData.add(new Visit(temp));
             }
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOldSelectedData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
         }
         else
         if (typeInstance instanceof Sighting) {

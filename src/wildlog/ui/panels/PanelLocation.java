@@ -30,7 +30,6 @@ import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.GPSDialog;
 import wildlog.ui.dialogs.MappingDialog;
-import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.SunMoonDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -42,6 +41,7 @@ import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
@@ -1267,7 +1267,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app, locationWL, null, null, null, null);
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + locationWL.getName(), app.getDBI().list(new Sighting(null, locationWL.getName(), null)));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

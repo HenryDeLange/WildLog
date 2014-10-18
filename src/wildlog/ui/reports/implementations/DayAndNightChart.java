@@ -5,7 +5,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.utils.UtilsTime;
 
 
 public class DayAndNightChart extends AbstractReport<Sighting> {
@@ -51,7 +51,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -71,7 +71,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -91,7 +91,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -121,7 +121,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     }
 
     @Override
-    public Chart createChart() {
+    public Chart createReport() {
         displayedChart = null;
         if (chartType.equals(ChartType.PIE_CHART)) {
             displayedChart = createPieChart(lstData);
@@ -217,12 +217,12 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         axisX.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return new SimpleDateFormat("dd MMM yyyy").format(object);
+                return UtilsTime.WL_DATE_FORMATTER.format(object);
             }
             @Override
             public Number fromString(String string) {
                 try {
-                    return new SimpleDateFormat("dd MMM yyyy").parse(string).getTime();
+                    return UtilsTime.WL_DATE_FORMATTER.parse(string).getTime();
                 }
                 catch (ParseException ex) {
                     ex.printStackTrace(System.err);
@@ -289,12 +289,12 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         axisX.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return new SimpleDateFormat("dd MMM yyyy").format(object);
+                return UtilsTime.WL_DATE_FORMATTER.format(object);
             }
             @Override
             public Number fromString(String string) {
                 try {
-                    return new SimpleDateFormat("dd MMM yyyy").parse(string).getTime();
+                    return UtilsTime.WL_DATE_FORMATTER.parse(string).getTime();
                 }
                 catch (ParseException ex) {
                     ex.printStackTrace(System.err);

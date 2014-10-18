@@ -50,7 +50,7 @@ public class LocationChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -71,7 +71,7 @@ public class LocationChart extends AbstractReport<Sighting> {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            displayedChart.getScene().setRoot(createChart());
+                            displayedChart.getScene().setRoot(createReport());
                         }
                     });
                 }
@@ -79,10 +79,11 @@ public class LocationChart extends AbstractReport<Sighting> {
         });
         lstCustomButtons.add(new JLabel("  Per Category:"));
         lstCustomButtons.add(cmbCategories);
+        // TODO: Add 'n barchart met die aantal species (of ook observations) per location
     }
 
     @Override
-    public Chart createChart() {
+    public Chart createReport() {
         displayedChart = null;
         if (chartType.equals(ChartType.PIE_CHART)) {
             displayedChart = createPieChart(lstData);

@@ -18,7 +18,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.EventObject;
 import java.util.Properties;
@@ -46,6 +45,7 @@ import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -112,7 +112,7 @@ public class WildLogApp extends Application {
         }
         while (openedWorkspace == false);
         // Check to do monthly backup
-        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup (" + new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()) + ")");
+        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(Calendar.getInstance().getTime()) + ")");
         if (!dirs.exists()) {
             dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath());
         }
@@ -345,7 +345,7 @@ public class WildLogApp extends Application {
             }
         }
         System.out.println("STARTING UP WildLog - "
-                + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+                + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
         System.out.println("WildLog Setting Folder: " + ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
@@ -398,7 +398,7 @@ public class WildLogApp extends Application {
     @Override
     protected void shutdown() {
         super.shutdown();
-        System.out.println("SHUTTING DOWN WildLog - " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+        System.out.println("SHUTTING DOWN WildLog - " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
         System.out.println();
     }
 

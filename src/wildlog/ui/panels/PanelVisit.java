@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -27,7 +26,6 @@ import wildlog.data.utils.UtilsData;
 import wildlog.ui.dialogs.AdvancedDialog;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
-import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
@@ -35,6 +33,8 @@ import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
@@ -677,7 +677,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel4.setName("jLabel4"); // NOI18N
 
         dtpStartDate.setDate(visit.getStartDate());
-        dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpStartDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
         dtpStartDate.setName("dtpStartDate"); // NOI18N
 
         jLabel54.setText("Period Type:");
@@ -697,7 +697,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel53.setName("jLabel53"); // NOI18N
 
         dtpEndDate.setDate(visit.getEndDate());
-        dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpEndDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
         dtpEndDate.setName("dtpEndDate"); // NOI18N
 
         jLabel1.setText("Start Date:");
@@ -1306,7 +1306,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ReportingDialog dialog = new ReportingDialog(app, null, null, visit, null, null);
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + visit.getName(), app.getDBI().list(new Sighting(null, null, visit.getName())));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

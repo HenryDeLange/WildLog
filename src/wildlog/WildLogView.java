@@ -25,7 +25,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -98,15 +97,6 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.reports.ReportsBaseDialog;
-import wildlog.ui.reports.implementations.DayAndNightChart;
-import wildlog.ui.reports.implementations.ElementsChart;
-import wildlog.ui.reports.implementations.LocationChart;
-import wildlog.ui.reports.implementations.MoonphaseChart;
-import wildlog.ui.reports.implementations.SightingStatsChart;
-import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
-import wildlog.ui.reports.implementations.TimeOfDayChart;
-import wildlog.ui.reports.implementations.TimelineChart;
-import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -1936,7 +1926,7 @@ public final class WildLogView extends JFrame {
                         // First check database files
                         // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
                         setMessage("Cleanup Step 1: Validate database references to the files in the Workspace... " + getProgress() + "%");
-                        finalHandleFeedback.println("** Starting Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+                        finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
                         finalHandleFeedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
                         List<WildLogFile> allFiles = app.getDBI().list(new WildLogFile());
                         int filesWithoutID = 0;
@@ -2312,7 +2302,7 @@ public final class WildLogView extends JFrame {
                         // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
                         // TODO: Maybe delete all non-wildlog files during cleanup
 
-                        finalHandleFeedback.println("** Finished Workspace Cleanup: " + new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)").format(Calendar.getInstance().getTime()));
+                        finalHandleFeedback.println("** Finished Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
                         finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved.counter);
@@ -2750,7 +2740,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(13);
                         setMessage("Import WildNote Sync " + getProgress() + "%");
                         // Setup the Visit
-                        Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + new SimpleDateFormat("dd MMM yyyy (HH'h'mm)").format(Calendar.getInstance().getTime()),
+                        Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(Calendar.getInstance().getTime()),
                                 WildLogConstants.WILDNOTE_LOCATION_NAME);
                         while (app.getDBI().count(tempVisit) > 0) {
                             tempVisit = new Visit(tempVisit.getName() + "_wl", tempVisit.getLocationName());
@@ -3020,16 +3010,7 @@ public final class WildLogView extends JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2013-1900, 02, 0), new Date(), Sighting.class);
-        List<AbstractReport<Sighting>> reports = new ArrayList<>(10);
-        reports.add(new TimelineChart());
-        reports.add(new TimeOfDayChart());
-        reports.add(new MoonphaseChart());
-        reports.add(new SpeciesAccumulationChart());
-        reports.add(new DayAndNightChart());
-        reports.add(new ElementsChart());
-        reports.add(new LocationChart());
-        reports.add(new SightingStatsChart());
-        ReportsBaseDialog dialog = new ReportsBaseDialog("Nuwe Charts", sightings, reports);
+        ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - TOETS", sightings);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 

@@ -7,7 +7,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -581,7 +580,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         dtpSightingDate.setDate(sighting.getDate());
         dtpSightingDate.setEnabled(!disableEditing);
         dtpSightingDate.setFocusable(false);
-        dtpSightingDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpSightingDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
         dtpSightingDate.setName("dtpSightingDate"); // NOI18N
         dtpSightingDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

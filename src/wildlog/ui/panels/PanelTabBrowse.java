@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -54,13 +53,14 @@ import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.MappingDialog;
-import wildlog.ui.dialogs.ReportingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.LazyTreeNode;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.cellrenderers.WildLogTreeCellRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.reports.ReportsBaseDialog;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsFileProcessing;
@@ -198,7 +198,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        dtpStartDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpStartDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
 
         rdbBrowseDate.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbBrowseDate);
@@ -348,7 +348,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        dtpEndDate.setFormats(new SimpleDateFormat("dd MMM yyyy"));
+        dtpEndDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
 
         btnGoBrowseSelection.setBackground(new java.awt.Color(235, 233, 221));
         btnGoBrowseSelection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
@@ -1087,27 +1087,28 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportingDialog dialog = new ReportingDialog(app, tempLocation, null, null, null, null);
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempLocation.getName(), app.getDBI().list(new Sighting(null, tempLocation.getName(), null)));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportingDialog dialog = new ReportingDialog(app, null, tempElement, null, null, null);
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempElement.getPrimaryName(), app.getDBI().list(new Sighting(tempElement.getPrimaryName(), null, null)));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportingDialog dialog = new ReportingDialog(app, null, null, tempVisit, null, null);
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempVisit.getName(), app.getDBI().list(new Sighting(null, null, tempVisit.getName())));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
                         }
                         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-                            ReportingDialog dialog = new ReportingDialog(app, null, null, null, dtpStartDate.getDate(), dtpEndDate.getDate());
+                            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(dtpStartDate.getDate()) + " to " + UtilsTime.WL_DATE_FORMATTER.format(dtpEndDate.getDate()), 
+                                    app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class));
                             dialog.setVisible(true);
                             somethingToReportOn = true;
                         }

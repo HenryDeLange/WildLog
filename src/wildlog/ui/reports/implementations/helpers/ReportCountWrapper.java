@@ -49,6 +49,5 @@ public class ReportCountWrapper {
     public void setCount(double inCount) {
         count = inCount;
     }
-
     
 }

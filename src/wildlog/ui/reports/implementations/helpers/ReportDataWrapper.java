@@ -3,8 +3,8 @@ package wildlog.ui.reports.implementations.helpers;
 
 public class ReportDataWrapper {
     // Making variables public to make it a little easier (less code) to use this data wrapper
-    public String key;
-    public String value;
+    public String key = "";
+    public String value = "";
     public int count;
 
     public ReportDataWrapper() {

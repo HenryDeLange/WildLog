@@ -19,12 +19,12 @@ import wildlog.ui.panels.PanelSighting;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageFileWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadImageListWrapper;
 import wildlog.ui.panels.bulkupload.helpers.BulkUploadSightingWrapper;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
 public class InfoBox extends JPanel {
-    private static final SimpleDateFormat dateFormater = new SimpleDateFormat("dd MMM yyyy");
     private static final SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
     private final WildLogApp app;
     private final BulkUploadSightingWrapper sightingWrapper;
@@ -46,7 +46,7 @@ public class InfoBox extends JPanel {
 
     public final void populateUI() {
         if (sightingWrapper.getDate() != null) {
-            lblDate.setText(dateFormater.format(sightingWrapper.getDate()));
+            lblDate.setText(UtilsTime.WL_DATE_FORMATTER.format(sightingWrapper.getDate()));
             lblTime.setText(timeFormater.format(sightingWrapper.getDate()));
         }
         lblElementName.setText(sightingWrapper.getElementName());

@@ -1,5 +1,6 @@
 package wildlog.ui.utils;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -18,6 +19,11 @@ import wildlog.mapping.utils.UtilsGps;
 
 
 public class UtilsTime {
+    public static final SimpleDateFormat WL_DATE_FORMATTER = new SimpleDateFormat("dd MMM yyyy");
+    public static final SimpleDateFormat WL_DATE_FORMATTER_WITH_HHMM = new SimpleDateFormat("dd MMM yyyy (HH:mm)");
+    public static final SimpleDateFormat WL_DATE_FORMATTER_WITH_HHMMSS = new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)");
+    public static final SimpleDateFormat WL_DATE_FORMATTER_FOR_VISIT_NAME = new SimpleDateFormat("dd MMM yyyy (HH'h'mm)");
+    public static final SimpleDateFormat WL_DATE_FORMATTER_FOR_FILES = new SimpleDateFormat("yyyy-MM-dd");
 
     private UtilsTime() {
     }
