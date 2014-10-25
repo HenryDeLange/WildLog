@@ -1,9 +1,5 @@
 package wildlog.ui.reports.implementations;
 
-import java.awt.Cursor;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,12 +10,17 @@ import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.util.StringConverter;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
@@ -31,39 +32,35 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
 
     
-    public SpeciesAccumulationChart() {
-        super("Creature Accumulation", "<html>This collection of charts focus on the rate at wich new Creatures were recorded.</html>");
+    public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
+        super("Creature Accumulation", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(1);
-        // Area/Line Chart
-        JButton btnLineChart = new JButton("Line Chart All");
-        btnLineChart.setFocusPainted(false);
-        btnLineChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLineChart.setMargin(new Insets(2, 4, 2, 4));
-        btnLineChart.addActionListener(new ActionListener() {
+        // Species accumulation chart
+        Button btnLineChart = new Button("Line Chart (For All)");
+        btnLineChart.setCursor(Cursor.HAND);
+        btnLineChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                setupChartDescriptionLabel("<html>This chart illustrates on the rate at which new Creatures were recorded over time.</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
     }
 
     @Override
-    public Chart createReport() {
-        displayedChart = null;
-        if (chartType.equals(ChartType.LINE_CHART)) {
-            displayedChart = createReport(lstData);
-        }
-        displayedChart.setBackground(Background.EMPTY);
-        return displayedChart;
+    public void createReport(Scene inScene) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayedChart = null;
+                if (chartType.equals(ChartType.LINE_CHART)) {
+                    displayedChart = createReport(lstData);
+                }
+                displayedChart.setBackground(Background.EMPTY);
+                inScene.setRoot(displayedChart);
+            }
+        });
     }
     
     private Chart createReport(List<Sighting> inSightings) {

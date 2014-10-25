@@ -1,9 +1,5 @@
 package wildlog.ui.reports.implementations;
 
-import java.awt.Cursor;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -15,15 +11,21 @@ import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedBarChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import wildlog.astro.AstroCalculator;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
@@ -42,178 +44,117 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     private boolean showMoonShiningOrNot = false;
     private final int PERCENTAGES_PER_INTERVAL = 10;
     
-    public MoonphaseChart() {
-        super("Moon Phase", "<html>This collection of charts focus on the moon phase that was present at the time of the Observation. "
-                + "The phase and visibilaty of the moon isn't tied to the phase of sun and can be visible during the day or night.</html>");
-        lstCustomButtons = new ArrayList<>(6);
-        // Area/Line Chart
-        JButton btnLineChart = new JButton("Bar Chart All");
-        btnLineChart.setFocusPainted(false);
-        btnLineChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLineChart.setMargin(new Insets(2, 4, 2, 4));
-        btnLineChart.addActionListener(new ActionListener() {
+    public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
+        super("Moon Phase", inLstData, inChartDescLabel);
+//        "<html>This collection of charts focus on the moon phase that was present at the time of the Observation. "
+//                + "The phase and visibilaty of the moon isn't tied to the phase of sun and can be visible during the day or night.</html>"
+        lstCustomButtons = new ArrayList<>(9);
+        // Moonphase charts
+        Button btnLineChart = new Button("Bar Chart (For All)");
+        btnLineChart.setCursor(Cursor.HAND);
+        btnLineChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ALL;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnLineChart);
-        // Stacked Bar Chart
-        JButton btnStackedBarChart = new JButton("Bar Chart Creatures");
-        btnStackedBarChart.setFocusPainted(false);
-        btnStackedBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStackedBarChart.setMargin(new Insets(2, 4, 2, 4));
-        btnStackedBarChart.addActionListener(new ActionListener() {
+        Button btnBarChart = new Button("Line Chart (For All)");
+        btnBarChart.setCursor(Cursor.HAND);
+        btnBarChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                chartType = ChartType.BAR_CHART_ELEMENTS;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
-            }
-        });
-        lstCustomButtons.add(btnStackedBarChart);
-        // Bar Chart
-        JButton btnBarChart = new JButton("Line Chart All");
-        btnBarChart.setFocusPainted(false);
-        btnBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBarChart.setMargin(new Insets(2, 4, 2, 4));
-        btnBarChart.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.LINE_CHART_ALL;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnBarChart);
-        // Bar Chart
-        JButton btnBarChart2 = new JButton("Line Chart Creatures");
-        btnBarChart2.setFocusPainted(false);
-        btnBarChart2.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBarChart2.setMargin(new Insets(2, 4, 2, 4));
-        btnBarChart2.addActionListener(new ActionListener() {
+        Button btnPieChart = new Button("Pie Chart (For All)");
+        btnPieChart.setCursor(Cursor.HAND);
+        btnPieChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                chartType = ChartType.LINE_CHART_ELEMENTS;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
-            }
-        });
-        lstCustomButtons.add(btnBarChart2);
-        // Pie chart
-        JButton btnPieChart = new JButton("Pie Chart");
-        btnPieChart.setFocusPainted(false);
-        btnPieChart.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnPieChart.setMargin(new Insets(2, 4, 2, 4));
-        btnPieChart.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnPieChart);
-        // Show day, night, twilight
-        JCheckBox chkShowDetails = new JCheckBox("Show day/night");
-        chkShowDetails.setFocusPainted(false);
-        chkShowDetails.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkShowDetails.setMargin(new Insets(2, 4, 2, 4));
-        chkShowDetails.setSelected(false);
-        chkShowDetails.addActionListener(new ActionListener() {
+        Button btnStackedBarChart = new Button("Bar Chart (Per Creature)");
+        btnStackedBarChart.setCursor(Cursor.HAND);
+        btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
+                chartType = ChartType.BAR_CHART_ELEMENTS;
+                
+            }
+        });
+        lstCustomButtons.add(btnStackedBarChart);
+        Button btnBarChart2 = new Button("Line Chart (Per Creature)");
+        btnBarChart2.setCursor(Cursor.HAND);
+        btnBarChart2.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.LINE_CHART_ELEMENTS;
+                
+            }
+        });
+        lstCustomButtons.add(btnBarChart2);
+        // Chart options
+        lstCustomButtons.add(new Label("Chart Options:"));
+        CheckBox chkShowDetails = new CheckBox("Show Day/Night/Twilight");
+        chkShowDetails.setCursor(Cursor.HAND);
+        chkShowDetails.setSelected(false);
+        chkShowDetails.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
                 showDayOrNight = chkShowDetails.isSelected();
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(chkShowDetails);
-        // Show moon shining or not
-        JCheckBox chkShowMoonlight = new JCheckBox("Show Moonlight");
-        chkShowMoonlight.setFocusPainted(false);
-        chkShowMoonlight.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        chkShowMoonlight.setMargin(new Insets(2, 4, 2, 4));
+        CheckBox chkShowMoonlight = new CheckBox("Show Moonlight");
+        chkShowMoonlight.setCursor(Cursor.HAND);
         chkShowMoonlight.setSelected(false);
-        chkShowMoonlight.addActionListener(new ActionListener() {
+        chkShowMoonlight.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 showMoonShiningOrNot = chkShowMoonlight.isSelected();
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(chkShowMoonlight);
     }
 
     @Override
-    public Chart createReport() {
-        displayedChart = null;
-        if (chartType.equals(ChartType.BAR_CHART_ALL)) {
-            displayedChart = createBarChartForAll(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
-            displayedChart = createBarChartForElements(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.LINE_CHART_ALL)) {
-            displayedChart = createLineChartForAll(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
-            displayedChart = createLineChartForElements(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.PIE_CHART)) {
-            displayedChart = createPieChart(lstData);
-        }
-        displayedChart.setBackground(Background.EMPTY);
-        return displayedChart;
+    public void createReport(Scene inScene) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayedChart = null;
+                if (chartType.equals(ChartType.BAR_CHART_ALL)) {
+                    displayedChart = createBarChartForAll(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
+                    displayedChart = createBarChartForElements(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.LINE_CHART_ALL)) {
+                    displayedChart = createLineChartForAll(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.LINE_CHART_ELEMENTS)) {
+                    displayedChart = createLineChartForElements(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.PIE_CHART)) {
+                    displayedChart = createPieChart(lstData);
+                }
+                displayedChart.setBackground(Background.EMPTY);
+                inScene.setRoot(displayedChart);
+            }
+        });
     }
     
     private Chart createBarChartForAll(List<Sighting> inSightings) {

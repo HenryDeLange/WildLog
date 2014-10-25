@@ -1,9 +1,5 @@
 package wildlog.ui.reports.implementations;
 
-import java.awt.Cursor;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,14 +10,19 @@ import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedAreaChart;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.util.StringConverter;
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -35,69 +36,44 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
 
     
-    public DayAndNightChart() {
-        super("Day and Night Cycles", "<html>This collection of charts focus on day and night cycle of Observations.</html>");
+    public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
+        super("Day and Night Cycles", inLstData, inChartDescLabel);
+//        "<html>This collection of charts focus on day and night cycle of Observations.</html>"
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
-        JButton btnPieChart = new JButton("Pie Chart");
-        btnPieChart.setFocusPainted(false);
-        btnPieChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnPieChart.setMargin(new Insets(2, 4, 2, 4));
-        btnPieChart.addActionListener(new ActionListener() {
+        Button btnPieChart = new Button("Pie Chart");
+        btnPieChart.setCursor(Cursor.HAND);
+        btnPieChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnPieChart);
         // Area/Line Chart
-        JButton btnLineAllChart = new JButton("Line Chart");
-        btnLineAllChart.setFocusPainted(false);
-        btnLineAllChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLineAllChart.setMargin(new Insets(2, 4, 2, 4));
-        btnLineAllChart.addActionListener(new ActionListener() {
+        Button btnLineAllChart = new Button("Line Chart");
+        btnLineAllChart.setCursor(Cursor.HAND);
+        btnLineAllChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnLineAllChart);
         // Area/Line Chart
-        JButton btnLineCreatureChart = new JButton("Stacked Line Chart");
-        btnLineCreatureChart.setFocusPainted(false);
-        btnLineCreatureChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLineCreatureChart.setMargin(new Insets(2, 4, 2, 4));
-        btnLineCreatureChart.addActionListener(new ActionListener() {
+        Button btnLineCreatureChart = new Button("Stacked Line Chart");
+        btnLineCreatureChart.setCursor(Cursor.HAND);
+        btnLineCreatureChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.STACKED_LINE_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnLineCreatureChart);
+// FIXME: Vir eers gebruik ek nie die chart nie, want hy is nog nie "lekker" nie...
 //        // Area/Line Chart
 //        JButton btnLine100CreatureChart = new JButton("100% Stacked Line Chart");
 //        btnLine100CreatureChart.setFocusPainted(false);
@@ -111,7 +87,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
 //                    Platform.runLater(new Runnable() {
 //                        @Override
 //                        public void run() {
-//                            displayedChart.getScene().setRoot(createChart());
+//                            scene.setRoot(createChart());
 //                        }
 //                    });
 //                }
@@ -121,25 +97,30 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     }
 
     @Override
-    public Chart createReport() {
-        displayedChart = null;
-        if (chartType.equals(ChartType.PIE_CHART)) {
-            displayedChart = createPieChart(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.LINE_CHART)) {
-            displayedChart = createLineChartForAll(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.STACKED_LINE_CHART)) {
-            displayedChart = createStackedChartForAll(lstData);
-        }
-//        else
-//        if (chartType.equals(ChartType.STACKED_LINE_100_PERCENT_CHART)) {
-//            displayedChart = create100PercentStackedChartForAll(lstData);
-//        }
-        displayedChart.setBackground(Background.EMPTY);
-        return displayedChart;
+    public void createReport(Scene inScene) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayedChart = null;
+                if (chartType.equals(ChartType.PIE_CHART)) {
+                    displayedChart = createPieChart(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.LINE_CHART)) {
+                    displayedChart = createLineChartForAll(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.STACKED_LINE_CHART)) {
+                    displayedChart = createStackedChartForAll(lstData);
+                }
+//                else
+//                if (chartType.equals(ChartType.STACKED_LINE_100_PERCENT_CHART)) {
+//                    displayedChart = create100PercentStackedChartForAll(lstData);
+//                }
+                displayedChart.setBackground(Background.EMPTY);
+                inScene.setRoot(displayedChart);
+            }
+        });
     }
     
     private Chart createPieChart(List<Sighting> inSightings) {

@@ -1,64 +1,41 @@
 package wildlog.ui.reports.implementations.helpers;
 
 import java.util.List;
-import javafx.scene.Parent;
-import javax.swing.JComponent;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
 public abstract class AbstractReport<T> {
     private final String reportButtonName;
-    private final String reportDescription;
     protected List<T> lstData;
-    protected List<JComponent> lstCustomButtons;
-    protected JPanel pnlReportOptions;
+    protected List<Node> lstCustomButtons;
     protected JLabel lblReportDescription;
 
-    public AbstractReport(String inReportButtonName, String inReportDescription) {
+    
+    // TODO: Maak 'n opsie om te kies omdie totale bo op die bars te sien of nie
+    // TODO: Maak opsie om te kies watse taal om te gebruik vir spesies
+    // TODO: Maak opsie om te kies of die charts moet sorteer volgens alfabet of totale
+    // TODO: Wanneer die chart te veel categories (creatures) is daar eintlik net twee opsies: 
+    //          of laat die shart scroll, of wys niks (mens kan die font kleiner maak tot op 'n punt),
+    //          want dit raak net stupid as die labels begin uitgelaat word.
+    
+    
+    public AbstractReport(String inReportButtonName, List<T> inList, JLabel inChartDescLabel) {
         reportButtonName = inReportButtonName;
-        reportDescription = inReportDescription;
-    }
-    
-    public abstract Parent createReport();
-
-    public void setChartOptionsPanel(JPanel inChartOptionsPanel) {
-        pnlReportOptions = inChartOptionsPanel;
-    }
-    
-    public void setupReportOptionsPanel() {
-        if (pnlReportOptions != null) {
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
-                    // Remove the old buttons
-                    for (int t = (pnlReportOptions.getComponentCount() - 1 - 1); t >= 0; t--) {
-                        pnlReportOptions.remove(t);
-                    }
-                    // Add the new buttons
-                    if (lstCustomButtons != null) {
-                        for (JComponent button : lstCustomButtons) {
-                            pnlReportOptions.add(button, pnlReportOptions.getComponentCount() - 1);
-                        }
-                    }
-                    pnlReportOptions.validate();
-                    pnlReportOptions.repaint();
-                }
-            });
-        }
-    }
-    
-    public void setChartDescriptionLabel(JLabel inChartDescLabel) {
+        lstData = inList;
         lblReportDescription = inChartDescLabel;
     }
     
-    public void setupChartDescriptionLabel() {
+    public abstract void createReport(Scene inScene);
+
+    public void setupChartDescriptionLabel(String inText) {
         if (lblReportDescription != null) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    lblReportDescription.setText(reportDescription);
+                    lblReportDescription.setText(inText);
                 }
             });
         }
@@ -70,6 +47,10 @@ public abstract class AbstractReport<T> {
     
     public void setDataList(List<T> inList) {
         lstData = inList;
+    }
+
+    public List<Node> getLstCustomButtons() {
+        return lstCustomButtons;
     }
     
 }

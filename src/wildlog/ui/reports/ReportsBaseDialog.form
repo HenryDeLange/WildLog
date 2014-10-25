@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
-  <NonVisualComponents>
-    <Component class="javax.swing.ButtonGroup" name="btnGroupForReportTypes">
-    </Component>
-  </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
     <Property name="iconImage" type="java.awt.Image" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -41,7 +37,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jSplitPane1" alignment="0" max="32767" attributes="0"/>
+          <Component id="jSplitPane1" alignment="0" pref="650" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -51,6 +47,14 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout"/>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="pnlReportsAndFilters">
+          <Properties>
+            <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[200, 500]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[240, 500]"/>
+            </Property>
+          </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JSplitPaneSupportLayout$JSplitPaneConstraintsDescription">
               <JSplitPaneConstraints position="left"/>
@@ -63,9 +67,9 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="jPanel3" max="32767" attributes="0"/>
-                          <Component id="jPanel2" max="32767" attributes="0"/>
-                          <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="pnlExport" max="32767" attributes="0"/>
+                          <Component id="pnlFilters" max="32767" attributes="0"/>
+                          <Component id="pnlReports" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
@@ -74,18 +78,18 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jPanel1" max="32767" attributes="0"/>
+                      <Component id="pnlReports" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnlExport" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
-                      <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnlFilters" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Container class="javax.swing.JPanel" name="jPanel1">
+            <Container class="javax.swing.JPanel" name="pnlReports">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -98,63 +102,9 @@
                 </Property>
               </Properties>
 
-              <Layout>
-                <DimensionLayout dim="0">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" attributes="0">
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" max="32767" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      </Group>
-                  </Group>
-                </DimensionLayout>
-                <DimensionLayout dim="1">
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jScrollPane1" pref="259" max="32767" attributes="0"/>
-                  </Group>
-                </DimensionLayout>
-              </Layout>
-              <SubComponents>
-                <Container class="javax.swing.JScrollPane" name="jScrollPane1">
-                  <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="null"/>
-                    </Property>
-                  </Properties>
-
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-                  <SubComponents>
-                    <Container class="javax.swing.JPanel" name="pnlAvailableReports">
-                      <LayoutCode>
-                        <CodeStatement>
-                          <CodeExpression id="1_pnlAvailableReports">
-                            <CodeVariable name="pnlAvailableReports" type="8194" declaredType="javax.swing.JPanel"/>
-                            <ExpressionOrigin>
-                              <ExpressionProvider type="ComponentRef">
-                                <ComponentRef name="pnlAvailableReports"/>
-                              </ExpressionProvider>
-                            </ExpressionOrigin>
-                          </CodeExpression>
-                          <StatementProvider type="CodeMethod">
-                            <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
-                          </StatementProvider>
-                          <Parameters>
-                            <CodeExpression id="2">
-                              <ExpressionOrigin>
-                                <ExpressionProvider type="CodeConstructor">
-                                  <CodeConstructor class="org.jdesktop.swingx.VerticalLayout" parameterTypes=""/>
-                                </ExpressionProvider>
-                              </ExpressionOrigin>
-                            </CodeExpression>
-                          </Parameters>
-                        </CodeStatement>
-                      </LayoutCode>
-                    </Container>
-                  </SubComponents>
-                </Container>
-              </SubComponents>
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
             </Container>
-            <Container class="javax.swing.JPanel" name="jPanel3">
+            <Container class="javax.swing.JPanel" name="pnlExport">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -207,7 +157,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="jPanel2">
+            <Container class="javax.swing.JPanel" name="pnlFilters">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
@@ -456,7 +406,7 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                  <BorderConstraints direction="North"/>
+                  <BorderConstraints direction="South"/>
                 </Constraint>
               </Constraints>
 
@@ -464,98 +414,6 @@
                 <Property name="verticalGap" type="int" value="2"/>
               </Layout>
               <SubComponents>
-                <Container class="javax.swing.JPanel" name="pnlChartOptions">
-                  <Properties>
-                    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-                      <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                        <TitledBorder justification="2" title="Report Display Options">
-                          <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
-                            <EtchetBorder/>
-                          </Border>
-                        </TitledBorder>
-                      </Border>
-                    </Property>
-                    <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-                      <Dimension value="[144, 50]"/>
-                    </Property>
-                  </Properties>
-                  <Constraints>
-                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
-                      <BorderConstraints direction="North"/>
-                    </Constraint>
-                  </Constraints>
-                  <SubComponents>
-                    <Component class="javax.swing.JButton" name="jButton2">
-                      <Properties>
-                        <Property name="text" type="java.lang.String" value="Colors"/>
-                        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                          <Color id="Hand Cursor"/>
-                        </Property>
-                        <Property name="focusPainted" type="boolean" value="false"/>
-                      </Properties>
-                    </Component>
-                  </SubComponents>
-                  <LayoutCode>
-                    <CodeStatement>
-                      <CodeExpression id="3_horizontalLayout1">
-                        <CodeVariable name="horizontalLayout1" type="4096" declaredType="org.jdesktop.swingx.HorizontalLayout"/>
-                        <ExpressionOrigin>
-                          <ExpressionProvider type="CodeConstructor">
-                            <CodeConstructor class="org.jdesktop.swingx.HorizontalLayout" parameterTypes=""/>
-                          </ExpressionProvider>
-                        </ExpressionOrigin>
-                      </CodeExpression>
-                      <StatementProvider type="CodeExpression">
-                        <CodeExpression id="3_horizontalLayout1"/>
-                      </StatementProvider>
-                    </CodeStatement>
-                    <CodeStatement>
-                      <CodeExpression id="3_horizontalLayout1"/>
-                      <StatementProvider type="CodeMethod">
-                        <CodeMethod name="setGap" class="org.jdesktop.swingx.HorizontalLayout" parameterTypes="int"/>
-                      </StatementProvider>
-                      <Parameters>
-                        <CodeExpression id="4">
-                          <ExpressionOrigin>
-                            <Value type="int" value="5"/>
-                          </ExpressionOrigin>
-                        </CodeExpression>
-                      </Parameters>
-                    </CodeStatement>
-                    <CodeStatement>
-                      <CodeExpression id="5_pnlChartOptions">
-                        <CodeVariable name="pnlChartOptions" type="8194" declaredType="javax.swing.JPanel"/>
-                        <ExpressionOrigin>
-                          <ExpressionProvider type="ComponentRef">
-                            <ComponentRef name="pnlChartOptions"/>
-                          </ExpressionProvider>
-                        </ExpressionOrigin>
-                      </CodeExpression>
-                      <StatementProvider type="CodeMethod">
-                        <CodeMethod name="setLayout" class="java.awt.Container" parameterTypes="java.awt.LayoutManager"/>
-                      </StatementProvider>
-                      <Parameters>
-                        <CodeExpression id="3_horizontalLayout1"/>
-                      </Parameters>
-                    </CodeStatement>
-                    <CodeStatement>
-                      <CodeExpression id="5_pnlChartOptions"/>
-                      <StatementProvider type="CodeMethod">
-                        <CodeMethod name="add" class="java.awt.Container" parameterTypes="java.awt.Component"/>
-                      </StatementProvider>
-                      <Parameters>
-                        <CodeExpression id="6_jButton2">
-                          <CodeVariable name="jButton2" type="8194" declaredType="javax.swing.JButton"/>
-                          <ExpressionOrigin>
-                            <ExpressionProvider type="ComponentRef">
-                              <ComponentRef name="jButton2"/>
-                            </ExpressionProvider>
-                          </ExpressionOrigin>
-                        </CodeExpression>
-                      </Parameters>
-                    </CodeStatement>
-                  </LayoutCode>
-                </Container>
                 <Container class="javax.swing.JPanel" name="pnlChartDescription">
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">

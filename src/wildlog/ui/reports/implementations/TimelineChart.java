@@ -1,26 +1,31 @@
 package wildlog.ui.reports.implementations;
 
-import java.awt.Cursor;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
-import javax.swing.JButton;
+import javafx.scene.text.Font;
+import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -31,184 +36,138 @@ public class TimelineChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
     private Chart displayedChart;
-    private final int INTERVALS_PER_HOUR = 1;
+    private ComboBox<String> cmbIntervalSize;
+    private final String[] options = new String[] {"5 minute", "15 minute", "30 minute", "1 hour", "2 hour", "4 hour", "6 hour"};
 
-    public TimelineChart() {
-        super("Timeline", "<html>This collection of charts use the time of the Observations. "
-                + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
-        lstCustomButtons = new ArrayList<>(3);
+    
+    public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
+        super("Timeline", inLstData, inChartDescLabel);
+        lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
-        JButton btnLineChart = new JButton("Timeline for All");
-        btnLineChart.setFocusPainted(false);
-        btnLineChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnLineChart.setMargin(new Insets(2, 4, 2, 4));
-        btnLineChart.addActionListener(new ActionListener() {
+        Button btnLineChart = new Button("Timeline for All");
+        btnLineChart.setCursor(Cursor.HAND);
+        btnLineChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.TIMELINE_FOR_ALL;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
+                    + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
         // Timeline per element
-        JButton btnStackedBarChart = new JButton("Timeline per Creature");
-        btnStackedBarChart.setFocusPainted(false);
-        btnStackedBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnStackedBarChart.setMargin(new Insets(2, 4, 2, 4));
-        btnStackedBarChart.addActionListener(new ActionListener() {
+        Button btnStackedBarChart = new Button("Timeline per Creature");
+        btnStackedBarChart.setCursor(Cursor.HAND);
+        btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.TIMELINE_PER_ELEMENT;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                setupChartDescriptionLabel("<html>This chart shows the number of all Observations per Creature during a specific time period. "
+                    + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
+        // Time interval size
+        lstCustomButtons.add(new Label("Timeline interval size:"));
+        cmbIntervalSize = new ComboBox<>(FXCollections.observableArrayList(options));
+        cmbIntervalSize.setCursor(Cursor.HAND);
+        cmbIntervalSize.getSelectionModel().clearSelection();
+        cmbIntervalSize.getSelectionModel().select(3);
+        cmbIntervalSize.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                if (!cmbIntervalSize.getSelectionModel().isEmpty()) {
+                    if (chartType == ChartType.TIMELINE_FOR_ALL) {
+                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
+                            + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
+                    }
+                    else
+                    if (chartType == ChartType.TIMELINE_PER_ELEMENT) {
+                        setupChartDescriptionLabel("<html>This chart shows the number of all Observations during a specific time period. "
+                            + "The real time intervals are good for comparing related data from the same location during a shorter time period (a few weeks).</html>");
+                    }
+                }
+            }
+        });
+        lstCustomButtons.add(cmbIntervalSize);
     }
     
     @Override
-    public Chart createReport() {
-        displayedChart = null;
-        if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
-            displayedChart = createTimelineForAllChart(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
-            displayedChart = createTimelinePerElementChart(lstData);
-        }
-        displayedChart.setBackground(Background.EMPTY);
-        return displayedChart;
+    public void createReport(Scene inScene) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayedChart = null;
+                if (chartType.equals(ChartType.TIMELINE_FOR_ALL)) {
+                    displayedChart = createTimelineForAllChart(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.TIMELINE_PER_ELEMENT)) {
+                    displayedChart = createTimelinePerElementChart(lstData);
+                }
+                displayedChart.setBackground(Background.EMPTY);
+                inScene.setRoot(displayedChart);
+            }
+        });
     }
 
     private Chart createTimelineForAllChart(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-        ObservableList<String> timeCategories = FXCollections.observableArrayList();
+        // Get the data in the correct structure
         ObservableList<AreaChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
-        for (int h = 0; h < 24; h++) {
-            for (int m = 0; m < INTERVALS_PER_HOUR; m++) {
-                String hours;
-                if (h < 10) {
-                    hours = "0" + h;
-                }
-                else {
-                    hours = ""+h;
-                }
-                String mins;
-                if (m == 0) {
-                    mins = "00";
-                }
-                else {
-                    mins = ""+(m*(60/INTERVALS_PER_HOUR));
-                }
-                timeCategories.add(hours + ":" + mins);
-                allSightings.add(new AreaChart.Data<String, Number>(hours + ":" + mins, 0));
-            }
-        }
-        axisX.setCategories(timeCategories);
-        axisX.setTickLabelRotation(-90);
+        setupEmtyIntervals(allSightings);
         ObservableList<AreaChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
-        Map<String, Integer> mapCounter = new HashMap<>();
+        Map<String, ReportDataWrapper> mapCounter = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            Integer currentValue = mapCounter.get(getTimeAsString(sighting.getDate()));
-            if (currentValue == null) {
-                currentValue = 0;
+            ReportDataWrapper dataWrapper = mapCounter.get(getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()));
+            if (dataWrapper == null) {
+                dataWrapper = new ReportDataWrapper(null, null, 0);
+                mapCounter.put(getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()), dataWrapper);
             }
-            currentValue = currentValue + 1;
-            mapCounter.put(getTimeAsString(sighting.getDate()), currentValue);
+            dataWrapper.increaseCount();
         }
         for (AreaChart.Data<String, Number> data : allSightings) {
-            Integer value = mapCounter.get(data.getXValue());
-            if (value != null) {
-                data.setYValue(value);
+            ReportDataWrapper dataWrapper = mapCounter.get(data.getXValue());
+            if (dataWrapper != null) {
+                data.setYValue(dataWrapper.count);
             }
         }
         chartData.add(new AreaChart.Series<String, Number>("Observations (" + lstData.size() + ")", allSightings));
-        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, axisY, chartData);
+        // Setup chart
+        NumberAxis numAxis = new NumberAxis();
+        numAxis.setLabel("Number of Observations");
+        numAxis.setTickLabelFont(Font.font(20));
+        numAxis.setAutoRanging(true);
+        CategoryAxis catAxis = new CategoryAxis();
+        catAxis.setCategories(getAllTimesAsList());
+//        catAxis.setTickLabelRotation(-90);
+        catAxis.setTickLabelFont(Font.font(15));
+        AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
+        chart.setLegendVisible(false);
         return chart;
     }
     
     private Chart createTimelinePerElementChart(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-        ObservableList<String> timeCategories = FXCollections.observableArrayList();
-        for (int h = 0; h < 24; h++) {
-            for (int m = 0; m < INTERVALS_PER_HOUR; m++) {
-                String hours;
-                if (h < 10) {
-                    hours = "0" + h;
-                }
-                else {
-                    hours = ""+h;
-                }
-                String mins;
-                if (m == 0) {
-                    mins = "00";
-                }
-                else {
-                    mins = ""+(m*(60/INTERVALS_PER_HOUR));
-                }
-                timeCategories.add(hours + ":" + mins);
-            }
-        }
-        axisX.setCategories(timeCategories);
-        axisX.setTickLabelRotation(-90);
         // Get the data in the correct structure
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalElements = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + getTimeAsString(sighting.getDate()));
+            ReportDataWrapper dataWrapper = mapInitialCountedData.get(sighting.getElementName() + "-" + getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()));
             if (dataWrapper == null) {
                 dataWrapper = new ReportDataWrapper();
                 dataWrapper.key = sighting.getElementName();
-                dataWrapper.value = getTimeAsString(sighting.getDate());
+                dataWrapper.value = getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime());
                 dataWrapper.count = 0;
                 mapTotalElements.put(sighting.getElementName(), 0);
             }
             dataWrapper.count++;
-            mapInitialCountedData.put(sighting.getElementName() + "-" + getTimeAsString(sighting.getDate()), dataWrapper);
+            mapInitialCountedData.put(sighting.getElementName() + "-" + getTimeAsString(UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).toLocalTime()), dataWrapper);
         }
         // Add all the points on the chart in the correct order. This also adds the 0 values for the data gaps.
         Map<String, ObservableList<AreaChart.Data<String, Number>>> mapDataPerElement = new HashMap<>(mapInitialCountedData.size());
         for (String elementName : mapTotalElements.keySet()) {
             ObservableList<AreaChart.Data<String, Number>> lstElementData = FXCollections.observableArrayList();
             mapDataPerElement.put(elementName, lstElementData);
-            for (int h = 0; h < 24; h++) {
-                for (int m = 0; m < INTERVALS_PER_HOUR; m++) {
-                    String hours;
-                    if (h < 10) {
-                        hours = "0" + h;
-                    }
-                    else {
-                        hours = ""+h;
-                    }
-                    String mins;
-                    if (m == 0) {
-                        mins = "00";
-                    }
-                    else {
-                        mins = ""+(m*(60/INTERVALS_PER_HOUR));
-                    }
-                    lstElementData.add(new AreaChart.Data<String, Number>(hours + ":" + mins, 0));
-                }
-            }
+            setupEmtyIntervals(lstElementData);
         }
         // Set the DataWrapper values in an ObservableList
         for (ReportDataWrapper dataWrapper : mapInitialCountedData.values()) {
@@ -231,27 +190,101 @@ public class TimelineChart extends AbstractReport<Sighting> {
                     mapDataPerElement.get(key));
             chartData.add(series);
         }
-        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, axisY, chartData);
+        // Setup chart
+        NumberAxis numAxis = new NumberAxis();
+        numAxis.setLabel("Number of Observations");
+        numAxis.setTickLabelFont(Font.font(20));
+        numAxis.setAutoRanging(true);
+        CategoryAxis catAxis = new CategoryAxis();
+        catAxis.setCategories(getAllTimesAsList());
+        catAxis.setTickLabelFont(Font.font(15));
+        catAxis.setTickLabelRotation(-90);
+        AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
+        chart.setLegendVisible(false);
         return chart;
     }
     
-    private String getTimeAsString(Date inDate) {
-        // TODO: Maak die interfal verstelbaar (5min,10min,15min,30min,1uur,2ure)
-        LocalDateTime currentSightingTime = UtilsTime.getLocalDateTimeFromDate(inDate);
-        LocalTime time = currentSightingTime.toLocalTime();
+    private ObservableList<String> getAllTimesAsList() {
+        Set<String> timeCategories = new LinkedHashSet<>();
+        for (int h = 0; h < 24; h++) {
+            for (int m = 0; m < 60; m++) {
+                timeCategories.add(getTimeAsString(LocalTime.of(h, m)));
+            }
+        }
+        return FXCollections.observableList(new ArrayList<String>(timeCategories));
+    }
+
+    private void setupEmtyIntervals(ObservableList<XYChart.Data<String, Number>> lstElementData) {
+        List<String> lstTimes = getAllTimesAsList();
+        for (String time : lstTimes) {
+            lstElementData.add(new AreaChart.Data<String, Number>(time, 0));
+        }
+    }
+    
+    private String getTimeAsString(LocalTime inTime) {
+// FIXME: Die data punte is eintlik vir bv 00:00-00:59, en dan 01:00-01:59, ens. So op die grafiek is daar nie 'n 24:00 nie, maar net 'n 23:00... Kry 'n manier om dit meer verstaanbaar te maak sonder om te veel plek te gebruik op die chart...
+        int minsDevider = 60;
+        int hoursDevider = 24;
+        if (cmbIntervalSize.getSelectionModel().isSelected(0)) {
+            // 5 mins
+            minsDevider = 12;
+            hoursDevider = 24;
+        }
+        else
+        if (cmbIntervalSize.getSelectionModel().isSelected(1)) {
+            // 15 mins
+            minsDevider = 4;
+            hoursDevider = 24;
+        }
+        else
+        if (cmbIntervalSize.getSelectionModel().isSelected(2)) {
+            // 30 mins
+            minsDevider = 2;
+            hoursDevider = 24;
+        }
+        else
+        if (cmbIntervalSize.getSelectionModel().isSelected(3)) {
+            // 1 hours
+            minsDevider = 1;
+            hoursDevider = 24;
+        }
+        else
+        if (cmbIntervalSize.getSelectionModel().isSelected(4)) {
+            // 2 hours
+            minsDevider = 1;
+            hoursDevider = 12;
+        }
+        else
+        if (cmbIntervalSize.getSelectionModel().isSelected(5)) {
+            // 4 hours
+            minsDevider = 1;
+            hoursDevider = 6;
+        }
+        else
+        if (cmbIntervalSize.getSelectionModel().isSelected(6)) {
+            // 6 hours
+            minsDevider = 1;
+            hoursDevider = 4;
+        }
         String hours;
-        if (time.getHour() < 10) {
-            hours = "0" + time.getHour();
+        if (inTime.getHour() < (24 / hoursDevider)) {
+            hours = "00";
         }
         else {
-            hours = ""+time.getHour();
+            hours = "" + (inTime.getHour()/ (24 / hoursDevider)) * (24 / hoursDevider);
+        }
+        if (hours.length() < 2) {
+            hours = "0" + hours;
         }
         String mins;
-        if (time.getMinute() < (60/INTERVALS_PER_HOUR)) {
+        if (inTime.getMinute() < (60 / minsDevider)) {
             mins = "00";
         }
         else {
-            mins = ""+(time.getMinute()/(60/INTERVALS_PER_HOUR))*(60/INTERVALS_PER_HOUR);
+            mins = "" + (inTime.getMinute() / (60 / minsDevider)) * (60 / minsDevider);
+        }
+        if (mins.length() < 2) {
+            mins = "0" + mins;
         }
         return hours + ":" + mins;
     }

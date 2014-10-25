@@ -1,9 +1,5 @@
 package wildlog.ui.reports.implementations;
 
-import java.awt.Cursor;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,15 +11,21 @@ import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Background;
 import javafx.util.StringConverter;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JRadioButton;
+import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -35,144 +37,87 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
     private enum ChartType {NUMBER_PER_SIGHTING_CHART, SUBSEQUENT_CHART, SIGHTINGS_PER_DAY_CHART};
     private ChartType chartType = ChartType.NUMBER_PER_SIGHTING_CHART;
     private Chart displayedChart;
-    private boolean maximum;
-    private boolean average;
-    
+    private RadioButton chkAve;
+    private RadioButton chkMax;
       
     
-    public SightingStatsChart() {
-        super("Observation Statistics", "<html>This collection of charts focus on statistics of the Observations.</html>");
+    public SightingStatsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
+        super("Observation Statistics", inLstData, inChartDescLabel);
+//        "<html>This collection of charts focus on statistics of the Observations.</html>"
         lstCustomButtons = new ArrayList<>(6);
         // Bar chart
-        JButton btnElementPerSightingBarChart = new JButton("Number of Individuals");
-        btnElementPerSightingBarChart.setFocusPainted(false);
-        btnElementPerSightingBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnElementPerSightingBarChart.setMargin(new Insets(2, 4, 2, 4));
-        btnElementPerSightingBarChart.addActionListener(new ActionListener() {
+        Button btnElementPerSightingBarChart = new Button("Number of Individuals");
+        btnElementPerSightingBarChart.setCursor(Cursor.HAND);
+        btnElementPerSightingBarChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.NUMBER_PER_SIGHTING_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnElementPerSightingBarChart);
         // Bar chart
-        JButton btnSightingsPerDayBarChart = new JButton("Observations per Day");
-        btnSightingsPerDayBarChart.setFocusPainted(false);
-        btnSightingsPerDayBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSightingsPerDayBarChart.setMargin(new Insets(2, 4, 2, 4));
-        btnSightingsPerDayBarChart.addActionListener(new ActionListener() {
+        Button btnSightingsPerDayBarChart = new Button("Observations per Day");
+        btnSightingsPerDayBarChart.setCursor(Cursor.HAND);
+        btnSightingsPerDayBarChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.SIGHTINGS_PER_DAY_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnSightingsPerDayBarChart);
         // Bar chart
-        JButton btnSightingChanceBarChart = new JButton("Subsequent Observations");
-        btnSightingChanceBarChart.setFocusPainted(false);
-        btnSightingChanceBarChart.setCursor(new Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSightingChanceBarChart.setMargin(new Insets(2, 4, 2, 4));
-        btnSightingChanceBarChart.addActionListener(new ActionListener() {
+        Button btnSightingChanceBarChart = new Button("Subsequent Observations");
+        btnSightingChanceBarChart.setCursor(Cursor.HAND);
+        btnSightingChanceBarChart.setOnAction(new EventHandler() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void handle(Event event) {
                 chartType = ChartType.SUBSEQUENT_CHART;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
+                
             }
         });
         lstCustomButtons.add(btnSightingChanceBarChart);
-        // Average
-        JRadioButton chkAve = new JRadioButton("Average");
-        chkAve.setFocusPainted(false);
-        chkAve.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        chkAve.setMargin(new Insets(2, 4, 2, 4));
-        chkAve.setSelected(false);
-        chkAve.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                maximum = false;
-                average = true;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
-            }
-        });
+        // Chart options
+        lstCustomButtons.add(new Label("Chart Options:"));
+        ToggleGroup toggleGroup = new ToggleGroup();
+        chkAve = new RadioButton("Average");
+        chkAve.setToggleGroup(toggleGroup);
+        chkAve.setCursor(Cursor.HAND);
+        chkAve.setSelected(true);
         lstCustomButtons.add(chkAve);
         // Maximum
-        JRadioButton chkMax = new JRadioButton("Maximum");
-        chkMax.setFocusPainted(false);
-        chkMax.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        chkMax.setMargin(new Insets(2, 4, 2, 4));
+        chkMax = new RadioButton("Maximum");
+        chkMax.setToggleGroup(toggleGroup);
+        chkMax.setCursor(Cursor.HAND);
         chkMax.setSelected(false);
-        chkMax.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                maximum = true;
-                average = false;
-                if (displayedChart != null) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            displayedChart.getScene().setRoot(createReport());
-                        }
-                    });
-                }
-            }
-        });
         lstCustomButtons.add(chkMax);
 // TODO: Sit dalk nog 'n "mode" (nee dis nie regtig mode waarvoor ek soek nie) ook by, dit sal dalk resultate gee wat meer sin maak vir goed soos buffels wat normaalweg net 1-5 is, maar soms 200+
 // TODO: SO verander die radiobuttons dalk in 'n combobox met opsies Max, Average (Mean), Most Frequent Value (Mode) en Significt Frequency Distribution (The more time a value is present the more relevant it becomes)
-        // Max and ave radio button group
-        ButtonGroup buttonGroup = new ButtonGroup();
-        buttonGroup.add(chkMax);
-        buttonGroup.add(chkAve);
-        chkAve.setSelected(true);
-        average = true;
+
     }
 
     @Override
-    public Chart createReport() {
-        displayedChart = null;
-        if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
-            displayedChart = createNumOfElementsPerSightingBarChart(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.SUBSEQUENT_CHART)) {
-            displayedChart = createSubsequentSightingBarChart(lstData);
-        }
-        else
-        if (chartType.equals(ChartType.SIGHTINGS_PER_DAY_CHART)) {
-            displayedChart = createSightingPerDayBarChart(lstData);
-        }
-        displayedChart.setBackground(Background.EMPTY);
-        return displayedChart;
+    public void createReport(Scene inScene) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                displayedChart = null;
+                if (chartType.equals(ChartType.NUMBER_PER_SIGHTING_CHART)) {
+                    displayedChart = createNumOfElementsPerSightingBarChart(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.SUBSEQUENT_CHART)) {
+                    displayedChart = createSubsequentSightingBarChart(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.SIGHTINGS_PER_DAY_CHART)) {
+                    displayedChart = createSightingPerDayBarChart(lstData);
+                }
+                displayedChart.setBackground(Background.EMPTY);
+                inScene.setRoot(displayedChart);
+            }
+        });
     }
     
     private Chart createNumOfElementsPerSightingBarChart(List<Sighting> inSightings) {
@@ -198,11 +143,11 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         List<String> keys = new ArrayList<>(mapElemNum.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            if (maximum) {
+            if (chkMax.isSelected()) {
                 lstCountForElements.add(new BarChart.Data<Number, String>(mapElemNum.get(key).max, key));
             }
             else
-            if (average) {
+            if (chkAve.isSelected()) {
                 lstCountForElements.add(new BarChart.Data<Number, String>(
                         Math.round((mapElemNum.get(key).count/mapElemNum.get(key).total)*100.0)/100.0, key));
             }
@@ -213,11 +158,11 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         // Setup the axis and chart
         NumberAxis xAxis = new NumberAxis();
         String indicator = "";
-        if (maximum) {
+        if (chkMax.isSelected()) {
             indicator = "Maximum ";
         }
         else
-        if (average) {
+        if (chkAve.isSelected()) {
             indicator = "Average ";
         }
         xAxis.setLabel(indicator + "number of individual Creatures seen per Observation");
@@ -290,11 +235,11 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 totalNumberOfDaysSighted++;
             }
             
-            if (maximum) {
+            if (chkMax.isSelected()) {
                 lstCountForElements.add(new BarChart.Data<Number, String>(maxSightingsPerDay, key));
             }
             else
-            if (average) {
+            if (chkAve.isSelected()) {
                 lstCountForElements.add(new BarChart.Data<Number, String>(
                         Math.round((totalNumberOfSightings/totalNumberOfDaysSighted)*100.0)/100.0, key));
             }
@@ -305,11 +250,11 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         // Setup the axis and chart
         NumberAxis xAxis = new NumberAxis();
         String indicator = "";
-        if (maximum) {
+        if (chkMax.isSelected()) {
             indicator = "Maximum ";
         }
         else
-        if (average) {
+        if (chkAve.isSelected()) {
             indicator = "Average ";
         }
         xAxis.setLabel(indicator + "number of Observations per day-night cycle");
