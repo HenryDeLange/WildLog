@@ -30,6 +30,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportCountWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -42,7 +43,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
       
     
     public SightingStatsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Observation Statistics", inLstData, inChartDescLabel);
+        super("Observation Statistics Reports", inLstData, inChartDescLabel);
 //        "<html>This collection of charts focus on statistics of the Observations.</html>"
         lstCustomButtons = new ArrayList<>(6);
         // Bar chart
@@ -156,7 +157,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 "Creatures (" + keys.size() + ") Observations (" + inSightings.size() + ")", 
                 lstCountForElements));
         // Setup the axis and chart
-        NumberAxis xAxis = new NumberAxis();
+        NumberAxis numAxis = new NumberAxis();
         String indicator = "";
         if (chkMax.isSelected()) {
             indicator = "Maximum ";
@@ -165,10 +166,9 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         if (chkAve.isSelected()) {
             indicator = "Average ";
         }
-        xAxis.setLabel(indicator + "number of individual Creatures seen per Observation");
-        xAxis.setAutoRanging(true);
+        UtilsReports.setupNumberAxis(numAxis, indicator + "number of individual Creatures seen per Observation");
         CategoryAxis yAxis = new CategoryAxis();
-        BarChart<Number, String> chart = new BarChart<Number, String>(xAxis, yAxis, lstFinalChartDataSeries);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, yAxis, lstFinalChartDataSeries);
         return chart;
     }
     
@@ -248,7 +248,7 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 "Creatures (" + keys.size() + ") Observations (" + inSightings.size() + ")", 
                 lstCountForElements));
         // Setup the axis and chart
-        NumberAxis xAxis = new NumberAxis();
+        NumberAxis numAxis = new NumberAxis();
         String indicator = "";
         if (chkMax.isSelected()) {
             indicator = "Maximum ";
@@ -257,10 +257,9 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         if (chkAve.isSelected()) {
             indicator = "Average ";
         }
-        xAxis.setLabel(indicator + "number of Observations per day-night cycle");
-        xAxis.setAutoRanging(true);
+        UtilsReports.setupNumberAxis(numAxis, indicator + "number of Observations per day-night cycle");
         CategoryAxis yAxis = new CategoryAxis();
-        BarChart<Number, String> chart = new BarChart<Number, String>(xAxis, yAxis, lstFinalChartDataSeries);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, yAxis, lstFinalChartDataSeries);
         return chart;
     }
     
@@ -335,9 +334,9 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 "Creatures (" + keys.size() + ") Observations (" + inSightings.size() + ")", 
                 lstCountForElements));
         // Setup the axis and chart
-        NumberAxis xAxis = new NumberAxis(0, 100, 10);
+        NumberAxis numAxis = new NumberAxis(0, 100, 10);
         String indicator = "";
-        xAxis.setTickLabelFormatter(new StringConverter<Number>() {
+        numAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return Integer.toString(((Double)object).intValue()) + "%";
@@ -347,9 +346,9 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 return Integer.parseInt(string.substring(0, string.length() - 1));
             }
         });
-        xAxis.setLabel(indicator + "Chance of subsequent Observations per day-night cycle");
+        UtilsReports.setupNumberAxis(numAxis, indicator + "Chance of subsequent Observations per day-night cycle");
         CategoryAxis yAxis = new CategoryAxis();
-        BarChart<Number, String> chart = new BarChart<Number, String>(xAxis, yAxis, lstFinalChartDataSeries);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, yAxis, lstFinalChartDataSeries);
         return chart;
     }
 

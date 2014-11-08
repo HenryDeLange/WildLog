@@ -1,2 +1,94 @@
+// STYLE: wl-bar-single-color
+// Bar Chart using one series and one bar color
+.wl-bar-single-color .chart-bar {
+    -fx-background-color: linear-gradient(to bottom, #82B45E, #648A54);
+    -fx-background-radius: 3 3 0 0;
+}
+.wl-bar-single-color .chart-plot-background {
+    -fx-background-color: transparent;
+}
+.wl-bar-single-color .chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.wl-bar-single-color .chart-vertical-grid-lines {
+    visibility: hidden;
+}
+.wl-bar-single-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-bar-single-color .axis {
+    -fx-minor-tick-visible: false;
+}
+.wl-bar-single-color .axis-label {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.2em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-bar-single-color .chart-legend {
+    -fx-background-color: transparent;
+}
+
+// STYLE: wl-pie-30-color
+// Pie Chart using up to 30 colors
+.wl-pie-30-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-pie-30-color .chart-legend {
+    -fx-background-color: transparent;
+}
+// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
+// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+.default-color0.chart-pie  { -fx-pie-color: #5E8325; }
+.default-color1.chart-pie  { -fx-pie-color: #1D643E; }
+.default-color2.chart-pie  { -fx-pie-color: #22355F; }
+.default-color3.chart-pie  { -fx-pie-color: #481F5F; }
+.default-color4.chart-pie  { -fx-pie-color: #772249; }
+.default-color5.chart-pie  { -fx-pie-color: #8E3428; }
+.default-color6.chart-pie  { -fx-pie-color: #E28E44; }
+.default-color7.chart-pie  { -fx-pie-color: #8E8428; }
+// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+.data0.chart-pie  { -fx-pie-color: #5E8325; }
+.data1.chart-pie  { -fx-pie-color: #1D643E; }
+.data2.chart-pie  { -fx-pie-color: #22355F; }
+.data3.chart-pie  { -fx-pie-color: #481F5F; }
+.data4.chart-pie  { -fx-pie-color: #772249; }
+.data5.chart-pie  { -fx-pie-color: #8E3428; }
+.data6.chart-pie  { -fx-pie-color: #E28E44; }
+.data7.chart-pie  { -fx-pie-color: #8E8428; }
+.data8.chart-pie  { -fx-pie-color: #A1D059; }
+.data9.chart-pie  { -fx-pie-color: #44A06F; }
+.data10.chart-pie { -fx-pie-color: #4A6197; }
+.data11.chart-pie { -fx-pie-color: #7A4597; }
+.data12.chart-pie { -fx-pie-color: #BE5183; }
+.data13.chart-pie { -fx-pie-color: #E26F60; }
+.data14.chart-pie { -fx-pie-color: #E2BB60; }
+.data15.chart-pie { -fx-pie-color: #E2D560; }
+.data16.chart-pie { -fx-pie-color: #B8DE63; }
+.data17.chart-pie { -fx-pie-color: #7EB9C3; }
+.data18.chart-pie { -fx-pie-color: #709DC6; }
+.data19.chart-pie { -fx-pie-color: #9E81D3; }
+.data20.chart-pie { -fx-pie-color: #E8A0C1; }
+.data21.chart-pie { -fx-pie-color: #FFBAB1; }
+.data22.chart-pie { -fx-pie-color: #FFE8B1; }
+.data23.chart-pie { -fx-pie-color: #FFF7B1; }
+.data24.chart-pie { -fx-pie-color: #BEDA41; }
+.data25.chart-pie { -fx-pie-color: #89C786; }
+.data26.chart-pie { -fx-pie-color: #8E93CF; }
+.data27.chart-pie { -fx-pie-color: #4C3E69; }
+.data28.chart-pie { -fx-pie-color: #625B15; }
+.data29.chart-pie { -fx-pie-color: #B94F41; }
+
+
+
+
 
 

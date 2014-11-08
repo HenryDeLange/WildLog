@@ -20,57 +20,43 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
-import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Sighting;
-import wildlog.data.dataobjects.Visit;
-import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class LocationChart extends AbstractReport<Sighting> {
-    private enum ChartType {PIE_CHART, BAR_CHART_SIGHITNGS, BAR_CHART_ELEMENTS};
-    private ChartType chartType = ChartType.PIE_CHART;
+    private enum ChartType {PIE_CHART_SIGHITNGS, BAR_CHART_SIGHITNGS, BAR_CHART_ELEMENTS};
+    private ChartType chartType;
     private Chart displayedChart;
-    private final ComboBox<String> cmbCategories;
-    private final String[] options = new String[] {"Place Name", "Period Name", "Period Type"};
 
     
     public LocationChart(List<Sighting> inLstData,JLabel inChartDescLabel) {
-        super("Places and Periods", inLstData, inChartDescLabel);
-//        "<html>This collection of charts focus on ratio of observations at Places.</html>"
-        lstCustomButtons = new ArrayList<>(6);
+        super("Place Reports", inLstData, inChartDescLabel);
+        lstCustomButtons = new ArrayList<>(3);
         // Pie charts
-        lstCustomButtons.add(new Label("Pie Chart Per Category:"));
-        cmbCategories = new ComboBox<>(FXCollections.observableArrayList(options));
-        cmbCategories.setCursor(Cursor.HAND);
-        cmbCategories.getSelectionModel().clearSelection();
-        cmbCategories.setOnAction(new EventHandler() {
+        Button btnPieChartSightings = new Button("Observations per Place (Pie)");
+        btnPieChartSightings.setCursor(Cursor.HAND);
+        btnPieChartSightings.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                if (!cmbCategories.getSelectionModel().isEmpty()) {
-                    chartType = ChartType.PIE_CHART;
-                    setupChartDescriptionLabel("<html>This collection of charts focuses on the ratio of Observations for the selected category.</html>");
-                }
+                chartType = ChartType.PIE_CHART_SIGHITNGS;
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Place.</html>");
             }
         });
-        lstCustomButtons.add(cmbCategories);
-//        // New line for spacing
-//        lstCustomButtons.add(new Label(""));
+        lstCustomButtons.add(btnPieChartSightings);
         // Bar charts
-        lstCustomButtons.add(new Label("Bar Chart Per Place:"));
-        Button btnBarChartSightings = new Button("Observations per Place");
+        Button btnBarChartSightings = new Button("Observations per Place (Bar)");
         btnBarChartSightings.setCursor(Cursor.HAND);
         btnBarChartSightings.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_SIGHITNGS;
                 setupChartDescriptionLabel("<html>This chart shows the number of Observations per Place.</html>");
-                cmbCategories.getSelectionModel().clearSelection();
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
@@ -81,7 +67,6 @@ public class LocationChart extends AbstractReport<Sighting> {
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ELEMENTS;
                 setupChartDescriptionLabel("<html>This chart shows the number of Creatures per Place.</html>");
-                cmbCategories.getSelectionModel().clearSelection();
             }
         });
         lstCustomButtons.add(btnBarChartElements);
@@ -93,8 +78,8 @@ public class LocationChart extends AbstractReport<Sighting> {
             @Override
             public void run() {
                 displayedChart = null;
-                if (chartType.equals(ChartType.PIE_CHART)) {
-                    displayedChart = createPieChart(lstData);
+                if (chartType.equals(ChartType.PIE_CHART_SIGHITNGS)) {
+                    displayedChart = createPieChartSightings(lstData);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_SIGHITNGS)) {
@@ -110,43 +95,6 @@ public class LocationChart extends AbstractReport<Sighting> {
         });
     }
     
-    private Chart createPieChart(List<Sighting> inSightings) {
-        Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
-        for (Sighting sighting : inSightings) {
-            String category = null;
-            if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[0])) {
-                category = sighting.getLocationName();
-            }
-            else
-            if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[1])) {
-                category = sighting.getVisitName();
-            }
-            else
-            if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[2])) {
-                Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
-                category = UtilsData.stringFromObject(visit.getType());
-            }
-            if (category == null || category.isEmpty()) {
-                category = "Unknown";
-            }
-            ReportDataWrapper dataWrapper = mapGroupedData.get(category);
-            if (dataWrapper == null) {
-                mapGroupedData.put(category, new ReportDataWrapper("", "", 1));
-            }
-            else {
-                dataWrapper.increaseCount();
-            }
-        }
-        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
-        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
-        Collections.sort(keys);
-        for (String key : keys) {
-            chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
-        }
-        PieChart chart = new PieChart(chartData);
-        return chart;
-    }
-    
     private Chart createBarChartSightings(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapData = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -157,20 +105,25 @@ public class LocationChart extends AbstractReport<Sighting> {
             }
             dataWrapper.increaseCount();
         }
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-//        axisX.setTickLabelRotation(-90);
         ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
         ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapData.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            allSightings.add(new BarChart.Data<String, Number>(key, mapData.get(key).count));
+            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
+            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_1));
+            allSightings.add(data);
         }
         chartData.add(new BarChart.Series<String, Number>("Places (" + mapData.keySet().size() + ")", allSightings));
-        BarChart<String, Number> chart = new BarChart<String, Number>(axisX, axisY, chartData);
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size());
+        BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.setLegendVisible(false);
+        chart.setTitle("Number of Observations for each Place");
+        chart.getStyleClass().add("wl-bar-single-color");
         return chart;
     }
     
@@ -184,20 +137,48 @@ public class LocationChart extends AbstractReport<Sighting> {
             }
             set.add(sighting.getElementName());
         }
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Creatures");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-//        axisX.setTickLabelRotation(-90);
         ObservableList<BarChart.Series<String, Number>> chartData = FXCollections.observableArrayList();
         ObservableList<BarChart.Data<String, Number>> allSightings = FXCollections.observableArrayList();
         List<String> keys = new ArrayList<>(mapData.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            allSightings.add(new BarChart.Data<String, Number>(key, mapData.get(key).size()));
+            BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).size());
+            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_1));
+            allSightings.add(data);
         }
         chartData.add(new BarChart.Series<String, Number>("Places (" + mapData.keySet().size() + ")", allSightings));
-        BarChart<String, Number> chart = new BarChart<String, Number>(axisX, axisY, chartData);
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Creatures");
+        CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size());
+        BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.setLegendVisible(false);
+        chart.setTitle("Number of Creatures observed at each Place");
+        chart.getStyleClass().add("wl-bar-single-color");
+        return chart;
+    }
+    
+    private Chart createPieChartSightings(List<Sighting> inSightings) {
+         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
+        for (Sighting sighting : inSightings) {
+             ReportDataWrapper dataWrapper = mapGroupedData.get(sighting.getLocationName());
+            if (dataWrapper == null) {
+                mapGroupedData.put(sighting.getLocationName(), new ReportDataWrapper("", "", 1));
+            }
+            else {
+                dataWrapper.increaseCount();
+            }
+        }
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
+        }
+        PieChart chart = new PieChart(chartData);
+//        chart.setLegendVisible(false);
+        chart.setTitle("Number of Observations for each Place");
         return chart;
     }
 

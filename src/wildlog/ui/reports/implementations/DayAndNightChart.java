@@ -21,12 +21,15 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
+import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.PieChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -37,7 +40,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
 
     
     public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Day and Night Cycles", inLstData, inChartDescLabel);
+        super("Day and Night Cycles Reports", inLstData, inChartDescLabel);
 //        "<html>This collection of charts focus on day and night cycle of Observations.</html>"
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
@@ -138,16 +141,19 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         List<String> keys = new ArrayList<>(mapGroupedData.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
+            PieChart.Data data = new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
+            data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_DAY_NIGHT_TWILIGHT));
+            chartData.add(data);
         }
         PieChart chart = new PieChart(chartData);
+        chart.setLegendVisible(false);
+        chart.setTitle("Number of Observations per Day, Night and Twilight");
         return chart;
     }
     
     private Chart createLineChartForAll(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         // Sort sightings (by date)
         Collections.sort(inSightings);
         // Get the data in the correct structure
@@ -194,8 +200,8 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         }
         // Setup the axis
         double tick = (endTime - startTime)/7;
-        NumberAxis axisX = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
-        axisX.setTickLabelFormatter(new StringConverter<Number>() {
+        NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
+        dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return UtilsTime.WL_DATE_FORMATTER.format(object);
@@ -211,15 +217,15 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                 return 0;
             }
         });
+        dateAxis.setTickLabelFont(Font.font(12));
         // Add an entry to the front and back to make the first and last entry more visible
-        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(axisX, axisY, chartData);
+        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
         return chart;
     }
     
     private Chart createStackedChartForAll(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         // Sort sightings (by date)
         Collections.sort(inSightings);
         // Get the data in the correct structure
@@ -266,8 +272,8 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         }
         // Setup the axis
         double tick = (endTime - startTime)/7;
-        NumberAxis axisX = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
-        axisX.setTickLabelFormatter(new StringConverter<Number>() {
+        NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
+        dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return UtilsTime.WL_DATE_FORMATTER.format(object);
@@ -283,8 +289,9 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                 return 0;
             }
         });
+        dateAxis.setTickLabelFont(Font.font(12));
         // Add an entry to the front and back to make the first and last entry more visible
-        StackedAreaChart<Number, Number> chart = new StackedAreaChart<Number, Number>(axisX, axisY, chartData);
+        StackedAreaChart<Number, Number> chart = new StackedAreaChart<Number, Number>(dateAxis, numAxis, chartData);
         return chart;
     }
     

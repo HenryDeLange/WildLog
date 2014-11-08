@@ -58,11 +58,13 @@ import wildlog.ui.reports.implementations.DayAndNightChart;
 import wildlog.ui.reports.implementations.ElementsChart;
 import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
+import wildlog.ui.reports.implementations.SightingPropertiesChart;
 import wildlog.ui.reports.implementations.SightingStatsChart;
 import wildlog.ui.reports.implementations.SpeciesAccumulationChart;
 import wildlog.ui.reports.implementations.TextReports;
 import wildlog.ui.reports.implementations.TimeOfDayChart;
 import wildlog.ui.reports.implementations.TimelineChart;
+import wildlog.ui.reports.implementations.VisitChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
@@ -110,8 +112,8 @@ public class ReportsBaseDialog extends JFrame {
     private void setupReportList() {
         pnlReports.add(jfxReportListPanel, BorderLayout.CENTER);
         AnchorPane anchorPane = new AnchorPane();
-        Scene scene = new Scene(anchorPane);
-        jfxReportListPanel.setScene(scene);
+        Scene sceneReportList = new Scene(anchorPane);
+        jfxReportListPanel.setScene(sceneReportList);
         Accordion accordion = new Accordion();
         ScrollPane scrollPane = new ScrollPane(accordion);
         scrollPane.setFitToWidth(true);
@@ -120,17 +122,21 @@ public class ReportsBaseDialog extends JFrame {
         AnchorPane.setLeftAnchor(scrollPane, 0.0);
         AnchorPane.setRightAnchor(scrollPane, 0.0);
         anchorPane.getChildren().add(scrollPane);
-        jfxReportChartPanel.setScene(new Scene(new Pane()));
+        Scene sceneCharts = new Scene(new Pane());
+        sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
+        jfxReportChartPanel.setScene(sceneCharts);
         // Setup the default reports
-        List<AbstractReport<Sighting>> reports = new ArrayList<>(10);
-        reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
-        reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription));
-        reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription));
-        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription));
-        reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription));
+        List<AbstractReport<Sighting>> reports = new ArrayList<>(12);
         reports.add(new ElementsChart(lstFilteredData, lblReportDescription));
         reports.add(new LocationChart(lstFilteredData, lblReportDescription));
+        reports.add(new VisitChart(lstFilteredData, lblReportDescription));
+        reports.add(new SightingPropertiesChart(lstFilteredData, lblReportDescription));
         reports.add(new SightingStatsChart(lstFilteredData, lblReportDescription));
+        reports.add(new SpeciesAccumulationChart(lstFilteredData, lblReportDescription));
+        reports.add(new DayAndNightChart(lstFilteredData, lblReportDescription));
+        reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription));
+        reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription));
+        reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
         reports.add(new TextReports(lstFilteredData, lblReportDescription));
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {

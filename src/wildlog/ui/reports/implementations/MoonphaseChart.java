@@ -33,6 +33,7 @@ import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -45,7 +46,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     private final int PERCENTAGES_PER_INTERVAL = 10;
     
     public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Moon Phase", inLstData, inChartDescLabel);
+        super("Moon Phase Reports", inLstData, inChartDescLabel);
 //        "<html>This collection of charts focus on the moon phase that was present at the time of the Observation. "
 //                + "The phase and visibilaty of the moon isn't tied to the phase of sun and can be visible during the day or night.</html>"
         lstCustomButtons = new ArrayList<>(9);
@@ -158,11 +159,6 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     }
     
     private Chart createBarChartForAll(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-        axisX.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
         // Build the data map that will be displayed
         Map<String, ObservableList<StackedBarChart.Data<String, Number>>> mapChartDataGroupedForSeries = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -213,8 +209,12 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     mapChartDataGroupedForSeries.get(key));
             lstChartSeries.add(series);
         }
-        // Create the chart
-        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, lstChartSeries);
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        CategoryAxis axisX = new CategoryAxis();
+        axisX.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
+        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, numAxis, lstChartSeries);
         return chart;
     }
     
@@ -271,15 +271,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             chartData.add(new PieChart.Data(text + " (" + mapChartData.get(key).getCount() + ")", mapChartData.get(key).getCount()));
         }
         PieChart chart = new PieChart(chartData);
+        chart.setLegendVisible(false);
         return chart;
     }
     
     private Chart createBarChartForElements(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
-        axisX.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
         // Build the data map that will be displayed
         Map<String, ObservableList<StackedBarChart.Data<String, Number>>> mapChartDataGroupedForSeries = new HashMap<>();
         for (Sighting sighting : inSightings) {
@@ -330,22 +326,21 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     mapChartDataGroupedForSeries.get(key));
             lstChartSeries.add(series);
         }
-        // Create the chart
-        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, axisY, lstChartSeries);
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        CategoryAxis axisX = new CategoryAxis();
+        axisX.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
+        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, numAxis, lstChartSeries);
         return chart;
     }
     
     private Chart createLineChartForAll(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
         ObservableList<String> lstXCategories = FXCollections.<String>observableArrayList();
         for (int percentage = 0; percentage < 100/PERCENTAGES_PER_INTERVAL; percentage++) {
             lstXCategories.add(getMoonIntervalPercentage(percentage*PERCENTAGES_PER_INTERVAL));
         }
         lstXCategories.add(Moonlight.UNKNOWN.toString());
-        axisX.setCategories(lstXCategories);
         // Get the data in the correct structure
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalsForSeries = new HashMap<>();
@@ -401,21 +396,21 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     mapDataPerElement.get(key));
             chartData.add(series);
         }
-        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, axisY, chartData);
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        CategoryAxis axisX = new CategoryAxis();
+        axisX.setCategories(lstXCategories);
+        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, numAxis, chartData);
         return chart;
     }
     
     private Chart createLineChartForElements(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
-        CategoryAxis axisX = new CategoryAxis();
         ObservableList<String> lstXCategories = FXCollections.<String>observableArrayList();
         for (int percentage = 0; percentage < 100/PERCENTAGES_PER_INTERVAL; percentage++) {
             lstXCategories.add(getMoonIntervalPercentage(percentage*PERCENTAGES_PER_INTERVAL));
         }
         lstXCategories.add(Moonlight.UNKNOWN.toString());
-        axisX.setCategories(lstXCategories);
         // Get the data in the correct structure
         Map<String, ReportDataWrapper> mapInitialCountedData = new HashMap<>();
         Map<String, Integer> mapTotalsForSeries = new HashMap<>();
@@ -468,7 +463,12 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     mapDataPerElement.get(key));
             chartData.add(series);
         }
-        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, axisY, chartData);
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        CategoryAxis axisX = new CategoryAxis();
+        axisX.setCategories(lstXCategories);
+        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, numAxis, chartData);
         return chart;
     }
 

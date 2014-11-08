@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -41,7 +42,7 @@ public class TimelineChart extends AbstractReport<Sighting> {
 
     
     public TimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Timeline", inLstData, inChartDescLabel);
+        super("Timeline Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all
         Button btnLineChart = new Button("Timeline for All");
@@ -134,13 +135,11 @@ public class TimelineChart extends AbstractReport<Sighting> {
         chartData.add(new AreaChart.Series<String, Number>("Observations (" + lstData.size() + ")", allSightings));
         // Setup chart
         NumberAxis numAxis = new NumberAxis();
-        numAxis.setLabel("Number of Observations");
-        numAxis.setTickLabelFont(Font.font(20));
-        numAxis.setAutoRanging(true);
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList());
 //        catAxis.setTickLabelRotation(-90);
-        catAxis.setTickLabelFont(Font.font(15));
+        catAxis.setTickLabelFont(Font.font(12));
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.setLegendVisible(false);
         return chart;
@@ -192,13 +191,11 @@ public class TimelineChart extends AbstractReport<Sighting> {
         }
         // Setup chart
         NumberAxis numAxis = new NumberAxis();
-        numAxis.setLabel("Number of Observations");
-        numAxis.setTickLabelFont(Font.font(20));
-        numAxis.setAutoRanging(true);
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList());
-        catAxis.setTickLabelFont(Font.font(15));
-        catAxis.setTickLabelRotation(-90);
+        catAxis.setTickLabelFont(Font.font(12));
+//        catAxis.setTickLabelRotation(-90);
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.setLegendVisible(false);
         return chart;
@@ -222,7 +219,6 @@ public class TimelineChart extends AbstractReport<Sighting> {
     }
     
     private String getTimeAsString(LocalTime inTime) {
-// FIXME: Die data punte is eintlik vir bv 00:00-00:59, en dan 01:00-01:59, ens. So op die grafiek is daar nie 'n 24:00 nie, maar net 'n 23:00... Kry 'n manier om dit meer verstaanbaar te maak sonder om te veel plek te gebruik op die chart...
         int minsDevider = 60;
         int hoursDevider = 24;
         if (cmbIntervalSize.getSelectionModel().isSelected(0)) {
@@ -266,12 +262,13 @@ public class TimelineChart extends AbstractReport<Sighting> {
             minsDevider = 1;
             hoursDevider = 4;
         }
+        // Get start time
         String hours;
         if (inTime.getHour() < (24 / hoursDevider)) {
             hours = "00";
         }
         else {
-            hours = "" + (inTime.getHour()/ (24 / hoursDevider)) * (24 / hoursDevider);
+            hours = "" + (inTime.getHour() / (24 / hoursDevider)) * (24 / hoursDevider);
         }
         if (hours.length() < 2) {
             hours = "0" + hours;
@@ -286,7 +283,17 @@ public class TimelineChart extends AbstractReport<Sighting> {
         if (mins.length() < 2) {
             mins = "0" + mins;
         }
-        return hours + ":" + mins;
+        // Get end time
+        String endHours = "" + (((inTime.getHour() + (24 / hoursDevider)) / (24 / hoursDevider)) * (24 / hoursDevider) -1);
+        if (endHours.length() < 2) {
+            endHours = "0" + endHours;
+        }
+        String endMinutes = "" + (((inTime.getMinute() + (60 / minsDevider)) / (60 / minsDevider)) * (60 / minsDevider) - 1);
+        if (endMinutes.length() < 2) {
+            endMinutes = "0" + endMinutes;
+        }
+        // Return result
+        return hours + ":" + mins + /*"\n  to  \n"*/"\n" + endHours + ":" + endMinutes;
     }
     
 }

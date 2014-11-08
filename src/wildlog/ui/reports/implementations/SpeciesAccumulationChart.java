@@ -19,10 +19,12 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
+import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
@@ -33,10 +35,10 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
 
     
     public SpeciesAccumulationChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Creature Accumulation", inLstData, inChartDescLabel);
+        super("Accumulation Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(1);
         // Species accumulation chart
-        Button btnLineChart = new Button("Line Chart (For All)");
+        Button btnLineChart = new Button("Creature Accumulation");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
@@ -64,9 +66,6 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
     }
     
     private Chart createReport(List<Sighting> inSightings) {
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Creatures");
-        axisY.setAutoRanging(true);
         // Get the data in the correct structure
         // Get sorted (by date) Sightings list
         Collections.sort(inSightings);
@@ -90,9 +89,18 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         }
         ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
         chartData.add(new AreaChart.Series<>("All Creatures", lstChartData));
-        double tick = (endTime - startTime)/7;
-        NumberAxis axisX = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
-        axisX.setTickLabelFormatter(new StringConverter<Number>() {
+        // Add an entry to the front and back to make the first and last entry more visible
+//        double tick = (endTime - startTime)/7;
+//        lstChartData.get(0).setXValue((startTime - tick/3));
+//        lstChartData.add(new AreaChart.Data<>(endTime + tick/3, counter - 1, ""));
+        // Setup axis and chart
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Creatures");
+//        NumberAxis dateAxis = new NumberAxis(startTime - tick/10, endTime + tick/10, tick);
+        NumberAxis dateAxis = new NumberAxis();
+        dateAxis.setAutoRanging(true);
+        dateAxis.setForceZeroInRange(false);
+        dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
                 return UtilsTime.WL_DATE_FORMATTER.format(object);
@@ -108,10 +116,9 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
                 return 0;
             }
         });
-        // Add an entry to the front and back to make the first and last entry more visible
-        lstChartData.get(0).setXValue((startTime - tick/3));
-        lstChartData.add(new AreaChart.Data<>(endTime + tick/3, counter - 1, ""));
-        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(axisX, axisY, chartData);
+        dateAxis.setTickLabelFont(Font.font(12));
+        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
+        chart.setLegendVisible(false);
         return chart;
     }
    

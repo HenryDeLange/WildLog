@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.BarChart;
@@ -30,6 +27,8 @@ import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
+import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
+import wildlog.ui.reports.implementations.helpers.PieChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
 
@@ -40,7 +39,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     private Chart displayedChart;
     
     public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
-        super("Sun Phase", inLstData, inChartDescLabel);
+        super("Time of Day Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(7);
         // All Observations
         lstCustomButtons.add(new Label("Time of Day for All Observations:"));
@@ -64,8 +63,6 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnBarChart);
-//        // Blank line
-//        lstCustomButtons.add(new Label(""));
         // Per Creature
         lstCustomButtons.add(new Label("Time of Day per Creature:"));
         Button btnLineChart = new Button("Line Chart (Per Creature)");
@@ -151,10 +148,9 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                     lstSeriesData);
             chartData.add(series);
         }
+        // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        numAxis.setLabel("Number of Observations");
-        numAxis.setTickLabelFont(Font.font(20));
-        numAxis.setAutoRanging(true);
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
         catAxis.setTickLabelRotation(-90);
@@ -165,9 +161,8 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     
     private Chart createLineChart(List<Sighting> inSightings) {
         List<String> lstActiveTimeSpesific = ActiveTimeSpesific.getEnumListAsString();
-        NumberAxis axisY = new NumberAxis();
-        axisY.setLabel("Number of Observations");
-        axisY.setAutoRanging(true);
+        NumberAxis numAxis = new NumberAxis();
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         CategoryAxis axisX = new CategoryAxis();
         axisX.setCategories(FXCollections.<String>observableArrayList(lstActiveTimeSpesific));
         axisX.setTickLabelRotation(-90);
@@ -221,7 +216,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                     mapDataPerElement.get(key));
             chartData.add(series);
         }
-        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, axisY, chartData);
+        AreaChart<String, Number> chart = new AreaChart<String, Number>(axisX, numAxis, chartData);
         return chart;
     }
 
@@ -242,31 +237,19 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         int maxCount = 0;
         for (String key : keys) {
             BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
-            data.nodeProperty().addListener(new ChangeListener<Node>() {
-                @Override
-                public void changed(ObservableValue<? extends Node> ov, Node oldNode, Node newNode) {
-                    if (newNode != null) {
-                        // Set the bar colour
-                        newNode.setStyle("-fx-bar-fill: " + UtilsReports.COLOURS_TIME_OF_DAY.get(key));
-                        // Add the total at the top
-                        if (mapData.size() < 30) {
-                            UtilsReports.displayLabelForDataOnTop(data);
-                        }
-                    }
-                }
-            });
+            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_30));
             allSightings.add(data);
             if (mapData.get(key).count > maxCount) {
                 maxCount = mapData.get(key).count;
             }
         }
+        // Setup axis and chart
         NumberAxis numAxis = new NumberAxis(0, (int)(maxCount*1.2), maxCount/10);
-        numAxis.setLabel("Number of Observations");
-        numAxis.setTickLabelFont(Font.font(15));
-//        numAxis.setAutoRanging(true);
+// FIXME: Autoranging kap soms die boonste getalletjie af...??
+        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(FXCollections.<String>observableArrayList(ActiveTimeSpesific.getEnumListAsString()));
-        catAxis.setTickLabelFont(Font.font(15));
+        catAxis.setTickLabelFont(Font.font(14));
         catAxis.setTickLabelRotation(-90);
         chartData.add(new BarChart.Series<String, Number>("Observations (" + allSightings.size() + ")", allSightings));
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
@@ -294,20 +277,12 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
                     text = ActiveTimeSpesific.NONE.getDescription();
                 }
                 PieChart.Data data = new PieChart.Data(text + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
-                data.nodeProperty().addListener(new ChangeListener<Node>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Node> ov, Node oldNode, Node newNode) {
-                        if (newNode != null) {
-                            // Set the pie colour
-                            newNode.setStyle("-fx-pie-color: " + UtilsReports.COLOURS_TIME_OF_DAY.get(key));
-                        }
-                    }
-                });
+                data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_TIME_OF_DAY));
                 chartData.add(data);
             }
         }
         PieChart chart = new PieChart(chartData);
-        chart.setLegendVisible(false);
+//        chart.setLegendVisible(false);
         return chart;
     }
     
