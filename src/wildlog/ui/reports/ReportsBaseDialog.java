@@ -1,22 +1,7 @@
 package wildlog.ui.reports;
 
-import com.pdfjet.A4;
-import com.pdfjet.Box;
-import com.pdfjet.Color;
-import com.pdfjet.CoreFont;
-import com.pdfjet.Font;
-import com.pdfjet.Image;
-import com.pdfjet.ImageType;
-import com.pdfjet.PDF;
-import com.pdfjet.Page;
-import com.pdfjet.TextLine;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
@@ -27,15 +12,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
@@ -55,6 +40,7 @@ import wildlog.data.enums.VisitType;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.reports.implementations.DayAndNightChart;
+import wildlog.ui.reports.implementations.DurationChart;
 import wildlog.ui.reports.implementations.ElementsChart;
 import wildlog.ui.reports.implementations.LocationChart;
 import wildlog.ui.reports.implementations.MoonphaseChart;
@@ -67,8 +53,6 @@ import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.VisitChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.utils.UtilsTime;
-import wildlog.utils.UtilsFileProcessing;
-import wildlog.utils.WildLogPaths;
 
 
 public class ReportsBaseDialog extends JFrame {
@@ -83,6 +67,8 @@ public class ReportsBaseDialog extends JFrame {
     private FilterProperties filterProperties = null;
     private AbstractReport activeReport = null;
 
+    
+// TODO: Add option to switch between Primary and Other names that get displayed for the creatures
     
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
         super(inTitle);
@@ -110,19 +96,25 @@ public class ReportsBaseDialog extends JFrame {
     }
     
     private void setupReportList() {
+        // Setup the report buttons
         pnlReports.add(jfxReportListPanel, BorderLayout.CENTER);
-        AnchorPane anchorPane = new AnchorPane();
-        Scene sceneReportList = new Scene(anchorPane);
+        AnchorPane anchorPaneForButtons = new AnchorPane();
+        Scene sceneReportList = new Scene(anchorPaneForButtons);
         jfxReportListPanel.setScene(sceneReportList);
         Accordion accordion = new Accordion();
-        ScrollPane scrollPane = new ScrollPane(accordion);
-        scrollPane.setFitToWidth(true);
-        AnchorPane.setTopAnchor(scrollPane, 0.0);
-        AnchorPane.setBottomAnchor(scrollPane, 0.0);
-        AnchorPane.setLeftAnchor(scrollPane, 0.0);
-        AnchorPane.setRightAnchor(scrollPane, 0.0);
-        anchorPane.getChildren().add(scrollPane);
-        Scene sceneCharts = new Scene(new Pane());
+        ScrollPane scrollPaneForButtons = new ScrollPane(accordion);
+        scrollPaneForButtons.setFitToWidth(true);
+        AnchorPane.setTopAnchor(scrollPaneForButtons, 0.0);
+        AnchorPane.setBottomAnchor(scrollPaneForButtons, 0.0);
+        AnchorPane.setLeftAnchor(scrollPaneForButtons, 0.0);
+        AnchorPane.setRightAnchor(scrollPaneForButtons, 0.0);
+        anchorPaneForButtons.getChildren().add(scrollPaneForButtons);
+        // Setup the report panel (om een of ander rede mot die een tweede wees)
+        VBox vbox = new VBox();
+        // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
+        Label lblInfo = new Label("Please select the report you would like to view from the list at the top left of this screen.");
+        vbox.getChildren().add(lblInfo);
+        Scene sceneCharts = new Scene(vbox);
         sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
         jfxReportChartPanel.setScene(sceneCharts);
         // Setup the default reports
@@ -137,7 +129,9 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new TimeOfDayChart(lstFilteredData, lblReportDescription));
         reports.add(new MoonphaseChart(lstFilteredData, lblReportDescription));
         reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
+        reports.add(new DurationChart(lstFilteredData, lblReportDescription));
         reports.add(new TextReports(lstFilteredData, lblReportDescription));
+        // TODO: Maak 'n paar charts wat die duration van sightings wys. Dalk handigste om min/ave/max van 'n spesie te sien. (Barchart met 3 series per spesie om x-axis).
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
@@ -168,7 +162,7 @@ public class ReportsBaseDialog extends JFrame {
         pnlReportsAndFilters = new javax.swing.JPanel();
         pnlReports = new javax.swing.JPanel();
         pnlExport = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        bntExport = new javax.swing.JButton();
         pnlFilters = new javax.swing.JPanel();
         btnFilterProperties = new javax.swing.JButton();
         btnFilterElement = new javax.swing.JButton();
@@ -198,15 +192,15 @@ public class ReportsBaseDialog extends JFrame {
 
         pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Export Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        jButton1.setText("Export Report");
-        jButton1.setToolTipText("Export the report to PDF or PNG.");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setFocusPainted(false);
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        bntExport.setText("Export Report");
+        bntExport.setToolTipText("Export the report to PDF or PNG.");
+        bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bntExport.setFocusPainted(false);
+        bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        bntExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bntExportActionPerformed(evt);
             }
         });
 
@@ -216,14 +210,14 @@ public class ReportsBaseDialog extends JFrame {
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(bntExport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
         pnlExportLayout.setVerticalGroup(
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bntExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
 
@@ -441,58 +435,30 @@ public class ReportsBaseDialog extends JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO: PDF, PNG en actual Print. Dalk ook sommer HTML.
-        // TODO: Export ook die X en Y asse se data na CSV sodat mens maklik die data in Excel kan in trek en ander charts maak
+    private void bntExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportActionPerformed
+        // The snapshot needs to be loaded from a JavaFX thread
+// FIXME: Die export wys oor die main app en nieoor die report popup nie...?
+        final JFrame parent = this;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Files.createDirectories(WildLogPaths.WILDLOG_EXPORT_PDF.getAbsoluteFullPath());
-                    PDF pdf = new PDF(new BufferedOutputStream(new FileOutputStream(WildLogPaths.WILDLOG_EXPORT_PDF.getAbsoluteFullPath().resolve("ReportToets.pdf").toFile())));
-                    Page page = new Page(pdf, A4.LANDSCAPE);
-                    Font font = new Font(pdf, CoreFont.HELVETICA);
-                    // The snapshot needs to be loaded from a JavaFX thread
                     WritableImage writableImage = jfxReportChartPanel.getScene().snapshot(null);
                     BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
-                    ByteArrayOutputStream output = new ByteArrayOutputStream() {
-                            @Override
-                            public synchronized byte[] toByteArray() {
-                                // Return the original array, not a copy (for performance benifits)
-                                return this.buf;
-                            }
-                        };
-//                    ImageIO.write(bufferedImage, "png", WildLogPaths.WILDLOG_EXPORT_PDF.getAbsoluteFullPath().resolve("ReportToets.png").toFile());
-                    ImageIO.write(bufferedImage, "png", output);
-                    ByteArrayInputStream inputStream = new ByteArrayInputStream(output.toByteArray(), 0, output.size());
-                    Image embeddedImage = new Image(pdf, inputStream, ImageType.PNG);
-                    TextLine text = new TextLine(font, "Report XXX");
-                    text.setLocation(90f, 30f);
-                    text.drawOn(page);
-                    embeddedImage.setLocation(90f, 40f);
-                    // Convert the pixels (image) to points (page).
-                    // Basically 1 point is 1/72 inch and we are assuming the default dpi is still 96 (72/96 = 0.75).
-                    // Then scale it to the total page size wich is in points.
-                    embeddedImage.scaleBy((bufferedImage.getWidth()*0.75)/page.getWidth());
-                    
-                    Box box = new Box();
-                    box.setSize(bufferedImage.getWidth(), bufferedImage.getHeight());
-                    box.setColor(Color.black);
-                    box.drawOn(page);
-                    
-                    embeddedImage.drawOn(page);
-                    pdf.close();
-                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_PDF.getAbsoluteFullPath());
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage);
+                            dialog.setVisible(true);
+                        }
+                    });
                 }
                 catch (Exception ex) {
                     ex.printStackTrace(System.err);
                 }
-                finally {
-                    // TODO: close, flush, etc.
-                }
             }
         });
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_bntExportActionPerformed
 
     private void btnFilterElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementActionPerformed
         FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(this, lstOriginalData, lstFilteredElements, Element.class);
@@ -915,13 +881,13 @@ public class ReportsBaseDialog extends JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bntExport;
     private javax.swing.JButton btnFilterElement;
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterProperties;
     private javax.swing.JButton btnFilterSightings;
     private javax.swing.JButton btnFilterVisit;
     private javax.swing.JButton btnResetFilters;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel4;

@@ -1,7 +1,7 @@
-// STYLE: wl-bar-single-color
+// ------ STYLE: wl-bar-single-color ------
 // Bar Chart using one series and one bar color
 .wl-bar-single-color .chart-bar {
-    -fx-background-color: linear-gradient(to bottom, #82B45E, #648A54);
+    -fx-background-color: linear-gradient(to bottom, #4B7E21, #365A18);
     -fx-background-radius: 3 3 0 0;
 }
 .wl-bar-single-color .chart-plot-background {
@@ -35,7 +35,43 @@
 }
 
 
-// STYLE: wl-pie-30-color
+// ------ STYLE: wl-bar-custom-color ------
+// Bar Chart using one series and a custom bar color defined dynamically in the code
+.wl-bar-custom-color .chart-bar {
+    -fx-background-radius: 3 3 0 0;
+}
+.wl-bar-custom-color .chart-plot-background {
+    -fx-background-color: transparent;
+}
+.wl-bar-custom-color .chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.wl-bar-custom-color .chart-vertical-grid-lines {
+    visibility: hidden;
+}
+.wl-bar-custom-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-bar-custom-color .axis {
+    -fx-minor-tick-visible: false;
+}
+.wl-bar-custom-color .axis-label {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.2em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-bar-custom-color .chart-legend {
+    -fx-background-color: transparent;
+}
+
+
+// ------ STYLE: wl-pie-30-color ------
 // Pie Chart using up to 30 colors
 .wl-pie-30-color .chart-title {
     -fx-text-fill: #656863;
@@ -89,7 +125,7 @@
 .data29.chart-pie { -fx-pie-color: #B94F41; }
 
 
-// STYLE: wl-pie-30-color
+// ------ STYLE: wl-line-30-color -------
 // Area Chart using up to 30 colors
 .wl-line-30-color .chart-plot-background {
     -fx-background-color: transparent;
@@ -237,6 +273,4 @@
 .chart-series-area-fill.series27 { -fx-fill: #4C3E6922; }
 .chart-series-area-fill.series28 { -fx-fill: #625B1522; }
 .chart-series-area-fill.series29 { -fx-fill: #B94F4122; }
-
-
 

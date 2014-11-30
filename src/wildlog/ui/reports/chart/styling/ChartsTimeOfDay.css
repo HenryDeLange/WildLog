@@ -1,0 +1,28 @@
+// STYLE: wl-pie-time-of-day-color
+// Pie Chart using specific colors for the time of day
+.wl-pie-time-of-day-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-pie-time-of-day-color .chart-legend {
+    -fx-background-color: transparent;
+}
+// These are "fixed" colors, thus I don't need to define any defaults.
+// (no defaults needed))
+// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+.data0.chart-pie  { -fx-pie-color: #8B2E5F; }
+.data1.chart-pie  { -fx-pie-color: #E7B153; }
+.data2.chart-pie  { -fx-pie-color: #E7A263; }
+.data3.chart-pie  { -fx-pie-color: #FFA284; }
+.data4.chart-pie  { -fx-pie-color: #E7473F; }
+.data5.chart-pie  { -fx-pie-color: #E78263; }
+.data6.chart-pie  { -fx-pie-color: #AA6F39; }
+.data7.chart-pie  { -fx-pie-color: #AA8039; }
+.data8.chart-pie  { -fx-pie-color: #5A0F37; }
+.data9.chart-pie  { -fx-pie-color: #26144E; }
+.data10.chart-pie { -fx-pie-color: #0F0427; }
+.data11.chart-pie { -fx-pie-color: #452F74; }
+.data12.chart-pie { -fx-pie-color: #052114; }
+.data13.chart-pie { -fx-pie-color: #052114; }

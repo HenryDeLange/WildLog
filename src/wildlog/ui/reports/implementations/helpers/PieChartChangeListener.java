@@ -30,13 +30,13 @@ public class PieChartChangeListener<T extends Node> implements ChangeListener<No
     @Override
     public void changed(ObservableValue<? extends Node> ov, Node oldNode, Node newNode) {
         if (newNode != null) {
-            if (mapChartColours != null) {
-                newNode.setStyle("-fx-pie-color: " + mapChartColours.get(categoryString));
-            }
-            else
-            if (lstChartColours != null) {
-                newNode.setStyle("-fx-pie-color: " + lstChartColours.get(categoryInt % lstChartColours.size()));
-            }
+//            if (mapChartColours != null) {
+                newNode.setOpacity(0);
+//            }
+//            else
+//            if (lstChartColours != null) {
+//                newNode.setStyle("-fx-pie-color: " + lstChartColours.get(categoryInt % lstChartColours.size()));
+//            }
         }
     }
 }

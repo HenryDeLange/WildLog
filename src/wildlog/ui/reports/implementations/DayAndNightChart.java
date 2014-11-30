@@ -126,6 +126,10 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         });
     }
     
+    
+    // FIXME: Verander die om die regte custom kleure te gebruik...
+    
+    
     private Chart createPieChart(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>(4);
         for (Sighting sighting : inSightings) {
@@ -145,9 +149,10 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_DAY_NIGHT_TWILIGHT));
             chartData.add(data);
         }
+        // Setup chart
         PieChart chart = new PieChart(chartData);
-        chart.setLegendVisible(false);
-        chart.setTitle("Number of Observations per Day, Night and Twilight");
+        chart.getStyleClass().add("wl-pie-30-color");
+        chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;
     }
     
@@ -198,7 +203,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             lstChartData.add(new AreaChart.Data<>(endTime, mapCategoryCounter.get(key).count, null));
             chartData.add(new AreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
         }
-        // Setup the axis
+        // Setup the axis and chart
         double tick = (endTime - startTime)/7;
         NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
         dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
@@ -218,8 +223,10 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         });
         dateAxis.setTickLabelFont(Font.font(12));
-        // Add an entry to the front and back to make the first and last entry more visible
         AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-line-30-color");
+        chart.setLegendVisible(true);
+        chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;
     }
     
@@ -290,8 +297,10 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         });
         dateAxis.setTickLabelFont(Font.font(12));
-        // Add an entry to the front and back to make the first and last entry more visible
         StackedAreaChart<Number, Number> chart = new StackedAreaChart<Number, Number>(dateAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-line-30-color");
+        chart.setLegendVisible(true);
+        chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;
     }
     

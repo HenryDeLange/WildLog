@@ -111,7 +111,7 @@ public class LocationChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
-            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_1));
+            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
         chartData.add(new BarChart.Series<String, Number>("Places (" + mapData.keySet().size() + ")", allSightings));
@@ -121,9 +121,9 @@ public class LocationChart extends AbstractReport<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         UtilsReports.setupCategoryAxis(catAxis, mapData.size());
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations for each Place");
-        chart.getStyleClass().add("wl-bar-single-color");
         return chart;
     }
     
@@ -143,7 +143,7 @@ public class LocationChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).size());
-            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_1));
+            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
         chartData.add(new BarChart.Series<String, Number>("Places (" + mapData.keySet().size() + ")", allSightings));
@@ -153,9 +153,9 @@ public class LocationChart extends AbstractReport<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         UtilsReports.setupCategoryAxis(catAxis, mapData.size());
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Creatures observed at each Place");
-        chart.getStyleClass().add("wl-bar-single-color");
         return chart;
     }
     
@@ -176,8 +176,8 @@ public class LocationChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
         }
-        PieChart chart = new PieChart(chartData);
-//        chart.setLegendVisible(false);
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Place");
         return chart;
     }

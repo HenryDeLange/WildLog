@@ -67,7 +67,7 @@ public class WildLogAboutBox extends JDialog {
         appVendorLabel.setText("4.2");
         appVendorLabel.setName("appVendorLabel"); // NOI18N
 
-        appDescLabel.setText("<html> Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.</html>");
+        appDescLabel.setText("<html> Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.</html>");
         appDescLabel.setName("appDescLabel"); // NOI18N
 
         imageLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/About.gif"))); // NOI18N

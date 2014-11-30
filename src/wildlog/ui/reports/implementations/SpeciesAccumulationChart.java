@@ -44,7 +44,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart illustrates on the rate at which new Creatures were recorded over time.</html>");
+                setupChartDescriptionLabel("<html>This chart illustrates the rate at which new Creatures were recorded over time.</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
@@ -118,7 +118,9 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
         });
         dateAxis.setTickLabelFont(Font.font(12));
         AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-line-30-color");
         chart.setLegendVisible(false);
+        chart.setTitle("Number of new Creatures observed over Time");
         return chart;
     }
    

@@ -21,6 +21,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
+import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
@@ -32,7 +34,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private ChartType chartType;
     private Chart displayedChart;
     private final ComboBox<String> cmbCategories;
-    private final String[] options = new String[] {"Number Observed", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag"};
+    private final String[] options = new String[] {"Number Observed", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type"};
     private Scene scene = null;
     
     
@@ -88,57 +90,64 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         String title = "";
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>();
         for (Sighting sighting : inSightings) {
-            String category = null;
+            String categoryValue = null;
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[0])) {
-                category = Integer.toString(sighting.getNumberOfElements()) + " Observations";
+                categoryValue = Integer.toString(sighting.getNumberOfElements()) + " Observations";
                 title = "Number of Observations with the specified Number of Individuals";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[1])) {
-                category = UtilsData.stringFromObject(sighting.getSex());
+                categoryValue = UtilsData.stringFromObject(sighting.getSex());
                 title = "Number of Observations with the specified Sex";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[2])) {
-                category = UtilsData.stringFromObject(sighting.getAge());
+                categoryValue = UtilsData.stringFromObject(sighting.getAge());
                 title = "Number of Observations with the specified Age";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[3])) {
-                category = UtilsData.stringFromObject(sighting.getLifeStatus());
+                categoryValue = UtilsData.stringFromObject(sighting.getLifeStatus());
                 title = "Number of Observations with the specified Life Status";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[4])) {
-                category = UtilsData.stringFromObject(sighting.getSightingEvidence());
+                categoryValue = UtilsData.stringFromObject(sighting.getSightingEvidence());
                 title = "Number of Observations with the specified Evidence";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[5])) {
-                category = UtilsData.stringFromObject(sighting.getCertainty());
+                categoryValue = UtilsData.stringFromObject(sighting.getCertainty());
                 title = "Number of Observations with the specified Certainty";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[6])) {
-                category = UtilsData.stringFromObject(sighting.getViewRating());
+                categoryValue = UtilsData.stringFromObject(sighting.getViewRating());
                 title = "Number of Observations with the specified Rating";
             }
             else
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[7])) {
-                category = UtilsData.stringFromObject(sighting.getTag());
+                categoryValue = UtilsData.stringFromObject(sighting.getTag());
                 title = "Number of Observations with the specified Tag";
             }
-            if (category == null || category.isEmpty()) {
+            else
+            if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[8])) {
+                Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
+                categoryValue = UtilsData.stringFromObject(element.getType());
+                title = "Number of Observations per Creature Type";
+            }
+            // Group records with unknown category values
+            if (categoryValue == null || categoryValue.isEmpty()) {
                 if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[7])) {
-                    category = "None";
+                    categoryValue = "None";
                 }
                 else {
-                    category = "Unknown";
+                    categoryValue = "Unknown";
                 }
             }
-            ReportDataWrapper dataWrapper = mapGroupedData.get(category);
+            ReportDataWrapper dataWrapper = mapGroupedData.get(categoryValue);
             if (dataWrapper == null) {
-                mapGroupedData.put(category, new ReportDataWrapper("", "", 1));
+                mapGroupedData.put(categoryValue, new ReportDataWrapper("", "", 1));
             }
             else {
                 dataWrapper.increaseCount();
@@ -157,8 +166,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         chart.getStylesheets().add("/wildlog/ui/reports/chart/styling/Charts.css");
         // FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
         // andersins begin dit die default kleure gebruik nadat ek 'n paar keer 'n ander chart select het...
-// TODO: Die CSS stel die spesifieke data kleure, maar moet ek nie dalk eerder die default kleure stel nie, 
-//      en dan sal die code hier onder dalk nie meer nodig wees nie??
+// TODO: Die CSS stel die spesifieke data kleure, maar moet ek nie dalk eerder die default kleure stel nie, en dan sal die code hier onder dalk nie meer nodig wees nie??
         try {
             Class<PieChart> cls = PieChart.class;
             Field f = cls.getDeclaredField("uniqueId");
@@ -168,25 +176,8 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
         chart.setData(chartData);
-//        chart.setLegendVisible(false);
         chart.setTitle(title);
-        
-// FIXME: Die online foorbeeld werk nie, die idee is om die text op die slice te wys as mens click
-//        final Label caption = new Label("123");
-//        caption.setTextFill(Color.DARKORANGE);
-//        caption.setStyle("-fx-font: 24 arial;");
-//        for (int t = 0; t < chartData.size(); t++) {
-//            PieChart.Data data = chartData.get(t);
-//            data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-//                    @Override public void handle(MouseEvent e) {
-//                        caption.setTranslateX(e.getSceneX());
-//                        caption.setTranslateY(e.getSceneY());
-//                        caption.setText(String.valueOf(data.getPieValue()) + "%");
-//                     }
-//                });
-//        }
         return chart;
     }
     

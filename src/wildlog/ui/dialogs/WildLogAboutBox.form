@@ -189,7 +189,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="appDescLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt; Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor and MediaUtil. See the application folder for license details.&lt;/html&gt;"/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt; Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.&lt;/html&gt;"/>
         <Property name="name" type="java.lang.String" value="appDescLabel" noResource="true"/>
       </Properties>
       <AuxValues>

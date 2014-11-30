@@ -320,6 +320,8 @@ public final class WildLogView extends JFrame {
         jSeparator7 = new javax.swing.JPopupMenu.Separator();
         mnuBulkImport = new javax.swing.JMenuItem();
         advancedMenu = new javax.swing.JMenu();
+        mnuSwitchElementNames = new javax.swing.JMenuItem();
+        jSeparator15 = new javax.swing.JPopupMenu.Separator();
         mnuCalcSunMoon = new javax.swing.JMenuItem();
         mnuCalcDuration = new javax.swing.JMenuItem();
         jSeparator4 = new javax.swing.JPopupMenu.Separator();
@@ -883,6 +885,20 @@ public final class WildLogView extends JFrame {
         menuBar.add(importMenu);
 
         advancedMenu.setText("Advanced");
+
+        mnuSwitchElementNames.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        mnuSwitchElementNames.setText("Switch Primary, Other and Scientific names of Creatures");
+        mnuSwitchElementNames.setToolTipText("Switch Primary, Other and Scientific names of all Creatures in the Workspace.");
+        mnuSwitchElementNames.setName("mnuSwitchElementNames"); // NOI18N
+        mnuSwitchElementNames.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSwitchElementNamesActionPerformed(evt);
+            }
+        });
+        advancedMenu.add(mnuSwitchElementNames);
+
+        jSeparator15.setName("jSeparator15"); // NOI18N
+        advancedMenu.add(jSeparator15);
 
         mnuCalcSunMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon.gif"))); // NOI18N
         mnuCalcSunMoon.setText("Calculate Sun and Moon information for all Observations");
@@ -3009,10 +3025,57 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceNameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2013-1900, 02, 0), new Date(), Sighting.class);
+        List<Sighting> sightings = app.getDBI().searchSightingOnDate(new Date(2000-1900, 02, 01), new Date(), Sighting.class);
         ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - TOETS", sightings);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void mnuSwitchElementNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSwitchElementNamesActionPerformed
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+            @Override
+            public int showDialog() {
+                return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                        "<html>It is strongly recommended that you backup your WildLog Database before continuing. <br>Do you want to continue now?</html>",
+                        "Warning!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            }
+        });
+        if (result == JOptionPane.OK_OPTION) {
+            tabbedPanel.setSelectedIndex(0);
+            while (tabbedPanel.getTabCount() > 4) {
+                tabbedPanel.remove(4);
+            }
+            // Display dialog to select which names should be switched
+            int option = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showOptionDialog(app.getMainFrame(), 
+                            "<html>Select the name field that should be switched with the Primary Name field.</html>", "Which name do you want to use?", 
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, 
+                            null, new String[] {"Other Name", "Scientific Name"}, null);
+                }
+            });
+            if (option != JOptionPane.CLOSED_OPTION) {
+                List<Element> lstElements = app.getDBI().list(new Element());
+                for (Element element : lstElements) {
+                    String oldName = element.getPrimaryName();
+                    if (option == 0) {
+                        if (element.getOtherName() != null && !element.getOtherName().isEmpty()) {
+                            element.setPrimaryName(element.getOtherName());
+                            element.setOtherName(oldName);
+                        }
+                    }
+                    else
+                    if (option == 1) {
+                        if (element.getScientificName()!= null && !element.getScientificName().isEmpty()) {
+                            element.setPrimaryName(element.getScientificName());
+                            element.setScientificName(oldName);
+                        }
+                    }
+                    app.getDBI().createOrUpdate(element, oldName);
+                }
+            }
+        }
+    }//GEN-LAST:event_mnuSwitchElementNamesActionPerformed
 
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
@@ -3074,6 +3137,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator12;
     private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator14;
+    private javax.swing.JPopupMenu.Separator jSeparator15;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;
@@ -3125,6 +3189,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuSetSlideshowSize;
     private javax.swing.JMenuItem mnuSetSlideshowSpeed;
     private javax.swing.JMenuItem mnuSunAndMoon;
+    private javax.swing.JMenuItem mnuSwitchElementNames;
     private javax.swing.JMenu otherMenu;
     private javax.swing.JProgressBar progressBar;
     private javax.swing.JMenu settingsMenu;

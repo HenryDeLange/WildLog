@@ -23,6 +23,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class VisitChart extends AbstractReport<Sighting> {
@@ -93,8 +94,8 @@ public class VisitChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
         }
-        PieChart chart = new PieChart(chartData);
-//        chart.setLegendVisible(false);
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Period");
         return chart;
     }
@@ -121,8 +122,8 @@ public class VisitChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
         }
-        PieChart chart = new PieChart(chartData);
-//        chart.setLegendVisible(false);
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Period Type");
         return chart;
     }

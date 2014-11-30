@@ -1,18 +1,19 @@
 package wildlog.ui.reports.utils;
 
-import java.util.ArrayList;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -22,16 +23,6 @@ import wildlog.ui.reports.implementations.helpers.IntegerTickLabelFormatter;
 
 
 public final class UtilsReports {
-    public final static List<String> COLOURS_1 = new ArrayList<>(1);
-    static {
-        COLOURS_1.add("#799E35");
-    }
-    public final static List<String> COLOURS_3 = new ArrayList<>(3);
-    static {
-        COLOURS_3.add("#ADEB65");
-        COLOURS_3.add("#D59299");
-        COLOURS_3.add("#8884CA");
-    }
     public final static Map<String, String> COLOURS_DAY_NIGHT_TWILIGHT = new HashMap<>(6);
     static {
         COLOURS_DAY_NIGHT_TWILIGHT.put(ActiveTime.DAY.toString(), "#E7473F");
@@ -58,40 +49,7 @@ public final class UtilsReports {
         COLOURS_TIME_OF_DAY.put(ActiveTimeSpesific.UNKNOWN.getText(),            "#052114");
         COLOURS_TIME_OF_DAY.put(ActiveTimeSpesific.NONE.getText(),               "#052114");
     }
-    public final static List<String> COLOURS_30 = new ArrayList<>(30);
-    static {
-        COLOURS_30.add("#ADEB65");
-        COLOURS_30.add("#D59299");
-        COLOURS_30.add("#8884CA");
-        COLOURS_30.add("#8EC74C");
-        COLOURS_30.add("#BD6069");
-        COLOURS_30.add("#59559D");
-        COLOURS_30.add("#6B9A33");
-        COLOURS_30.add("#A43741");
-        COLOURS_30.add("#363377");
-        COLOURS_30.add("#496D1F");
-        COLOURS_30.add("#1C1950");
-        COLOURS_30.add("#29400F");
-        COLOURS_30.add("#73000B");
-        COLOURS_30.add("#0A0829");
-        COLOURS_30.add("#993366");
-        COLOURS_30.add("#F3FC97");
-        COLOURS_30.add("#FFC66E");
-        COLOURS_30.add("#618D84");
-        COLOURS_30.add("#D4DE67");
-        COLOURS_30.add("#DCA654");
-        COLOURS_30.add("#407D71");
-        COLOURS_30.add("#9EA738");
-        COLOURS_30.add("#AA7D39");
-        COLOURS_30.add("#246D5E");
-        COLOURS_30.add("#697017");
-        COLOURS_30.add("#785622");
-        COLOURS_30.add("#0F5C4D");
-        COLOURS_30.add("#353A04");
-        COLOURS_30.add("#463111");
-        COLOURS_30.add("#004C3D");
-    }
-
+    
     
     private UtilsReports() {
     }
@@ -178,4 +136,21 @@ public final class UtilsReports {
         }
     }
     
+    public static PieChart createPieChartWithStyleIndexReset(ObservableList<PieChart.Data> inLstData) {
+        // FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
+        // andersins begin dit die default kleure gebruik nadat ek 'n paar keer 'n pie chart laai...
+        PieChart chart = new PieChart();
+        try {
+            Class<PieChart> cls = PieChart.class;
+            Field f = cls.getDeclaredField("uniqueId");
+            f.setAccessible(true);
+            f.setInt(chart, 0);
+        } 
+        catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        chart.setData(inLstData);
+        return chart;
+    }
+
 }

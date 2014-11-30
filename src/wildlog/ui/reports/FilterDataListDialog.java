@@ -31,6 +31,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private DataObjectWithWildLogFile typeInstance;
     private List<T> lstSelectedValues;
 
+// TODO: Sal dit nie beter wees as hierdie lyste net die opsies wys wat actully in die sighting lys teenwoordig is nadat die properties filter apply was nie? Of andersins sit 'n toggle op om dit te doen?
     
     public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);

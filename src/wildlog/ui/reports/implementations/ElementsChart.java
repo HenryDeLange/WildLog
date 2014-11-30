@@ -22,7 +22,10 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
+import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Sighting;
+import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.BarChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
@@ -30,42 +33,52 @@ import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class ElementsChart extends AbstractReport<Sighting> {
-    private enum ChartType {PIE_CHART_SIGHITNGS, BAR_CHART_SIGHITNGS, BAR_CHART_PLACES};
+    private enum ChartType {PIE_CHART_SIGHTINGS, PIE_CHART_ELEMENT_TYPES, BAR_CHART_SIGHTINGS, BAR_CHART_LOCATIONS};
     private ChartType chartType;
     private Chart displayedChart;
     
     
     public ElementsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Creature Reports", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(3);
+        lstCustomButtons = new ArrayList<>(4);
         // Pie charts
         Button btnPieChartSightings = new Button("Observations per Creature (Pie)");
         btnPieChartSightings.setCursor(Cursor.HAND);
         btnPieChartSightings.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                chartType = ChartType.PIE_CHART_SIGHITNGS;
+                chartType = ChartType.PIE_CHART_SIGHTINGS;
                 setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature.</html>");
             }
         });
         lstCustomButtons.add(btnPieChartSightings);
+        Button btnPieChartElementTypes = new Button("Creatures per Creature Type (Pie)");
+        btnPieChartElementTypes.setCursor(Cursor.HAND);
+        btnPieChartElementTypes.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.PIE_CHART_ELEMENT_TYPES;
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature Type.</html>");
+            }
+        });
+        lstCustomButtons.add(btnPieChartElementTypes);
         // Bar charts
         Button btnBarChartSightings = new Button("Observations per Creature (Bar)");
         btnBarChartSightings.setCursor(Cursor.HAND);
         btnBarChartSightings.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                chartType = ChartType.BAR_CHART_SIGHITNGS;
+                chartType = ChartType.BAR_CHART_SIGHTINGS;
                 setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
-        Button btnBarChartElements = new Button("Places per Creature");
+        Button btnBarChartElements = new Button("Places per Creature (Bar)");
         btnBarChartElements.setCursor(Cursor.HAND);
         btnBarChartElements.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
-                chartType = ChartType.BAR_CHART_PLACES;
+                chartType = ChartType.BAR_CHART_LOCATIONS;
                 setupChartDescriptionLabel("<html>This chart shows the number of Places per Creature.</html>");
             }
         });
@@ -78,15 +91,19 @@ public class ElementsChart extends AbstractReport<Sighting> {
             @Override
             public void run() {
                 displayedChart = null;
-                if (chartType.equals(ChartType.PIE_CHART_SIGHITNGS)) {
+                if (chartType.equals(ChartType.PIE_CHART_SIGHTINGS)) {
                     displayedChart = createPieChartSightings(lstData);
                 }
                 else
-                if (chartType.equals(ChartType.BAR_CHART_SIGHITNGS)) {
+                if (chartType.equals(ChartType.PIE_CHART_ELEMENT_TYPES)) {
+                    displayedChart = createPieChartElementType(lstData);
+                }
+                else
+                if (chartType.equals(ChartType.BAR_CHART_SIGHTINGS)) {
                     displayedChart = createBarChartSightings(lstData);
                 }
                 else
-                if (chartType.equals(ChartType.BAR_CHART_PLACES)) {
+                if (chartType.equals(ChartType.BAR_CHART_LOCATIONS)) {
                     displayedChart = createBarChartElements(lstData);
                 }
                 displayedChart.setBackground(Background.EMPTY);
@@ -111,7 +128,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
-            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_1));
+            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
         chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
@@ -121,9 +138,9 @@ public class ElementsChart extends AbstractReport<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         UtilsReports.setupCategoryAxis(catAxis, mapData.size());
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Observations for each Creature");
-        chart.getStyleClass().add("wl-bar-single-color");
         return chart;
     }
     
@@ -143,7 +160,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).size());
-            data.nodeProperty().addListener(new BarChartChangeListener<>(allSightings.size(), mapData.size(), data, UtilsReports.COLOURS_1));
+            data.nodeProperty().addListener(new BarChartChangeListener<>(mapData.size(), data));
             allSightings.add(data);
         }
         chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
@@ -153,9 +170,9 @@ public class ElementsChart extends AbstractReport<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         UtilsReports.setupCategoryAxis(catAxis, mapData.size());
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
+        chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
         chart.setTitle("Number of Places where each Creature has been observed.");
-        chart.getStyleClass().add("wl-bar-single-color");
         return chart;
     }
     
@@ -176,10 +193,35 @@ public class ElementsChart extends AbstractReport<Sighting> {
         for (String key : keys) {
             chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
         }
-        PieChart chart = new PieChart(chartData);
-//        chart.setLegendVisible(false);
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Creature");
         return chart;
     }
 
+    private Chart createPieChartElementType(List<Sighting> inSightings) {
+        Map<String, Set<String>> mapGroupedData = new HashMap<>();
+        for (Sighting sighting : inSightings) {
+            Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
+            Set<String> setElements = mapGroupedData.get(UtilsData.stringFromObject(element.getType()));
+            if (setElements == null) {
+                mapGroupedData.put(UtilsData.stringFromObject(element.getType()), new HashSet<>());
+            }
+            else {
+                setElements.add(sighting.getElementName());
+            }
+        }
+        ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
+        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
+        Collections.sort(keys);
+        for (String key : keys) {
+            Set<String> setElements = mapGroupedData.get(key);
+            chartData.add(new PieChart.Data(key + " (" + setElements.size() + ")", setElements.size()));
+        }
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        chart.getStyleClass().add("wl-pie-30-color");
+        chart.setTitle("Number of Creatures for each Creature Type");
+        return chart;
+    }
+    
 }
