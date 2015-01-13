@@ -209,16 +209,23 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     @Override
     public void doTheRefresh(final Object inIndicator) {
         formComponentShown(null);
-        // If no row is selected, try to select the saved row (most likely a new entry)
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                if (tblSightings.getSelectedRowCount() == 0 && inIndicator != null) {
-                    UtilsTableGenerator.setupPreviousRowSelection(tblSightings, 
-                            new String[]{Long.toString(((PanelSighting) inIndicator).getSighting().getSightingCounter())}, 6);
+        if (inIndicator instanceof PanelSighting) {
+            // If no row is selected, try to select the saved row (most likely a new entry)
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if (tblSightings.getSelectedRowCount() == 0 && inIndicator != null) {
+                        UtilsTableGenerator.setupPreviousRowSelection(tblSightings, 
+                                new String[]{Long.toString(((PanelSighting) inIndicator).getSighting().getSightingCounter())}, 6);
+                    }
                 }
-            }
-        });
+            });
+        }
+        else 
+        if (inIndicator instanceof PanelVisit) {
+            // Most likly the delete button was pressed.
+            // Don't select anything.
+        }
     }
 
     private void refreshSightingInfo() {
@@ -794,7 +801,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         tblSightings.setAutoCreateRowSorter(true);
         tblSightings.setName("tblSightings"); // NOI18N
         tblSightings.setSelectionBackground(new java.awt.Color(125, 120, 93));
-        tblSightings.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblSightings.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblSightingsMouseClicked(evt);
@@ -1138,8 +1144,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     }
            });
             if (result == JOptionPane.YES_OPTION) {
-                sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6)));
-                app.getDBI().delete(sighting);
+                for (int row : tblSightings.getSelectedRows())  {
+                    sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(row), 6)));
+                    app.getDBI().delete(sighting);
+                }
                 sighting = null;
                 refreshSightingInfo();
                 doTheRefresh(this);
@@ -1176,6 +1184,17 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 sighting = null;
                 refreshSightingInfo();
             }
+            else {
+                UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                        @Override
+                        public int showDialog() {
+                            JOptionPane.showMessageDialog(app.getMainFrame(),
+                                    "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
+                                    "Select One Observation", JOptionPane.WARNING_MESSAGE);
+                            return 0;
+                        }
+               });
+            }
         }
 }//GEN-LAST:event_btnEditSightingActionPerformed
 
@@ -1193,8 +1212,10 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_btnPreviousImageActionPerformed
 
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
-        if (tblSightings.getSelectedRow() >= 0) {
-            sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6)));
+        if (tblSightings.getSelectedRowCount() == 1) {
+            sighting = app.getDBI().find(new Sighting(
+                    (Long)tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 6)));
         }
         else {
             sighting = null;
@@ -1278,7 +1299,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     }//GEN-LAST:event_tblSightingsKeyReleased
 
     private void tblSightingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseClicked
-        if (evt.getClickCount() == 2) {
+        if (evt.getClickCount() == 2 && tblSightings.getSelectedRowCount() == 1) {
             btnEditSightingActionPerformed(null);
         }
     }//GEN-LAST:event_tblSightingsMouseClicked
@@ -1299,8 +1320,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting);
-            dialog.setVisible(true);
+            if (sighting != null) {
+                // Only one row is selected
+                MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting);
+                dialog.setVisible(true);
+            }
+            else {
+                // TODO: As ek die mapping oor doen moet ek maak dat mens 'n array van sightings kan stuur...
+                MappingDialog dialog = new MappingDialog(app, null, null, visit, null);
+                dialog.setVisible(true);
+            }
         }
     }//GEN-LAST:event_btnMapSightingActionPerformed
 

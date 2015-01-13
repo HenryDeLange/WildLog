@@ -465,7 +465,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         jLabel23 = new javax.swing.JLabel();
         cmbAge = new javax.swing.JComboBox();
         btnGetGPSFromImage = new javax.swing.JButton();
-        jLabel24 = new javax.swing.JLabel();
+        lblTimeOfDayInfo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Observation");
@@ -475,6 +475,11 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         setModal(true);
         setName("Form"); // NOI18N
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         sightingIncludes.setBackground(new java.awt.Color(208, 204, 181));
@@ -1184,19 +1189,19 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         });
         sightingIncludes.add(btnGetGPSFromImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 120, 110, -1));
 
-        jLabel24.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel24.setText("More Info...");
-        jLabel24.setToolTipText("Click here to see the definitions for each category.");
-        jLabel24.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        jLabel24.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jLabel24.setName("jLabel24"); // NOI18N
-        jLabel24.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblTimeOfDayInfo.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        lblTimeOfDayInfo.setForeground(new java.awt.Color(102, 102, 102));
+        lblTimeOfDayInfo.setText("More Info...");
+        lblTimeOfDayInfo.setToolTipText("Click here to see the definitions for each category.");
+        lblTimeOfDayInfo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        lblTimeOfDayInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblTimeOfDayInfo.setName("lblTimeOfDayInfo"); // NOI18N
+        lblTimeOfDayInfo.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jLabel24MousePressed(evt);
+                lblTimeOfDayInfoMousePressed(evt);
             }
         });
-        sightingIncludes.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 145, -1, 20));
+        sightingIncludes.add(lblTimeOfDayInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 145, -1, 20));
 
         getContentPane().add(sightingIncludes, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
@@ -1236,9 +1241,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
                 }
                 // Close the dialog - (Evt is null if the Image Upload, etc. methods call this method, then we don't want to close.)
                 if (evt != null) {
-                    if (panelToRefresh != null) {
-                        panelToRefresh.doTheRefresh(this);
-                    }
                     closeThisDialog();
                 }
             }
@@ -1787,13 +1789,19 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         }
     }//GEN-LAST:event_spnMinutesStateChanged
 
-    private void jLabel24MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel24MousePressed
+    private void lblTimeOfDayInfoMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimeOfDayInfoMousePressed
         getGlassPane().setVisible(true);
         JOptionPane.showMessageDialog(this,
                 ActiveTimeSpesific.getCompleteDescription(),
                 "Time of Day Definitions", JOptionPane.INFORMATION_MESSAGE);
         getGlassPane().setVisible(false);
-    }//GEN-LAST:event_jLabel24MousePressed
+    }//GEN-LAST:event_lblTimeOfDayInfoMousePressed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        if (panelToRefresh != null) {
+            panelToRefresh.doTheRefresh(this);
+        }
+    }//GEN-LAST:event_formWindowClosed
 
     private void setupNumberOfImages() {
         List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
@@ -1885,7 +1893,6 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1906,6 +1913,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
     private javax.swing.JLabel lblLocationImage;
     private javax.swing.JLabel lblNumberOfImages;
     private javax.swing.JLabel lblSightingID;
+    private javax.swing.JLabel lblTimeOfDayInfo;
     private javax.swing.JLabel lblVisit;
     private javax.swing.JScrollPane sclElement;
     private javax.swing.JScrollPane sclLocation;

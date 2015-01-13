@@ -70,6 +70,7 @@ public class ExportDialog extends JDialog {
         btnExportKML = new javax.swing.JButton();
         btnExportCSVBasic = new javax.swing.JButton();
         btnExportCSV = new javax.swing.JButton();
+        btnExportXML = new javax.swing.JButton();
         btnExportFiles = new javax.swing.JButton();
         btnExportFilesObservations = new javax.swing.JButton();
         btnExportWorkspace = new javax.swing.JButton();
@@ -178,6 +179,25 @@ public class ExportDialog extends JDialog {
             }
         });
         getContentPane().add(btnExportCSV);
+
+        btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.gif"))); // NOI18N
+        btnExportXML.setText("Export as Spreadsheet (Complete)");
+        btnExportXML.setToolTipText("Export a XML file for all relevant Observations and linked records.");
+        btnExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExportXML.setFocusPainted(false);
+        btnExportXML.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnExportXML.setIconTextGap(10);
+        btnExportXML.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnExportXML.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnExportXML.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnExportXML.setName("btnExportXML"); // NOI18N
+        btnExportXML.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnExportXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportXMLActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnExportXML);
 
         btnExportFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
         btnExportFiles.setText("Export Files");
@@ -733,6 +753,10 @@ public class ExportDialog extends JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnExportCSVBasicActionPerformed
 
+    private void btnExportXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportXMLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExportXMLActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExportCSV;
@@ -743,5 +767,6 @@ public class ExportDialog extends JDialog {
     private javax.swing.JButton btnExportHTMLAdvanced;
     private javax.swing.JButton btnExportKML;
     private javax.swing.JButton btnExportWorkspace;
+    private javax.swing.JButton btnExportXML;
     // End of variables declaration//GEN-END:variables
 }

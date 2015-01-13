@@ -1,15 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package wildlog.ui.dialogs;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.nio.file.Path;
 import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 import wildlog.WildLogApp;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -22,6 +21,7 @@ public class ZoomDialog extends javax.swing.JDialog {
     private final List<Path> filesToView;
     private int fileIndex;
 
+    
     public ZoomDialog(JFrame inParent, List<Path> inFilesToView, int inStartIndex) {
         super(inParent, true);
         filesToView = inFilesToView;
@@ -29,7 +29,27 @@ public class ZoomDialog extends javax.swing.JDialog {
         initComponents();
         // Setup modal background
         UtilsDialog.addModalBackgroundPanel(inParent, this);
+        // Add escape listener
         UtilsDialog.addEscapeKeyListener(this);
+        // Setup listeners for navigating with arrow keys
+        getRootPane().registerKeyboardAction(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        btnPrevActionPerformed(null);
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+        getRootPane().registerKeyboardAction(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        btnNextActionPerformed(null);
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
         // Setup the first image
         if (filesToView == null || filesToView.isEmpty() || fileIndex >= filesToView.size() || fileIndex < 0) {
             // No files to display
@@ -59,7 +79,6 @@ public class ZoomDialog extends javax.swing.JDialog {
 
         btnPrev.setBackground(new java.awt.Color(0, 0, 0));
         btnPrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
-        btnPrev.setToolTipText("Show the previous file.");
         btnPrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPrev.setFocusPainted(false);
         btnPrev.addActionListener(new java.awt.event.ActionListener() {
@@ -71,7 +90,6 @@ public class ZoomDialog extends javax.swing.JDialog {
 
         btnNext.setBackground(new java.awt.Color(0, 0, 0));
         btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
-        btnNext.setToolTipText("Show the next file.");
         btnNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnNext.setFocusPainted(false);
         btnNext.addActionListener(new java.awt.event.ActionListener() {
@@ -140,7 +158,8 @@ public class ZoomDialog extends javax.swing.JDialog {
         else {
             lblZoomedFile.setIcon(UtilsImageProcessing.getScaledIconForOtherFiles(WildLogThumbnailSizes.NORMAL));
         }
-        lblZoomedFile.setToolTipText(inPath.getFileName().toString());
+        // Don't set the tooltip. If it is set then sometimes the tooltip uses the initial ESC press.
+//        lblZoomedFile.setToolTipText(inPath.getFileName().toString());
         // Resize and recenter
         pack();
         UtilsDialog.setDialogToCenter(getParent(), this);
