@@ -3,6 +3,7 @@ package wildlog.ui.reports;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -164,9 +165,9 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Dates"));
 
-        dtpStartDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
-        dtpEndDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         jLabel1.setText("Start Date:");
 

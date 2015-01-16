@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import wildlog.WildLogApp;
@@ -12,13 +12,14 @@ import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
 public final class UtilsHTML {
-    private static final SimpleDateFormat simpleDateFormatWithTime = new SimpleDateFormat("E, dd MMM yyyy (hh:mm a)");
-    private static final SimpleDateFormat simpleDateFormatWithoutTime = new SimpleDateFormat("E, dd MMM yyyy");
+    private static final DateTimeFormatter dateFormatWithTime = DateTimeFormatter.ofPattern("E, dd MMM yyyy (hh:mm a)");
+    private static final DateTimeFormatter dateFormatWithoutTime = DateTimeFormatter.ofPattern("E, dd MMM yyyy");
 
     private UtilsHTML() {
     }
@@ -124,10 +125,10 @@ public final class UtilsHTML {
     public static String formatDateAsString(Date inDate, boolean inShowTime) {
         if (inDate != null) {
             if (inShowTime) {
-                return simpleDateFormatWithTime.format(inDate);
+                return dateFormatWithTime.format(UtilsTime.getLocalDateTimeFromDate(inDate));
             }
             else {
-                return simpleDateFormatWithoutTime.format(inDate);
+                return dateFormatWithoutTime.format(UtilsTime.getLocalDateFromDate(inDate));
             }
         }
         else {

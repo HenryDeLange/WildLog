@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -198,7 +199,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        dtpStartDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         rdbBrowseDate.setBackground(new java.awt.Color(235, 233, 221));
         buttonGroup1.add(rdbBrowseDate);
@@ -348,7 +349,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        dtpEndDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
         btnGoBrowseSelection.setBackground(new java.awt.Color(235, 233, 221));
         btnGoBrowseSelection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
@@ -1107,7 +1108,8 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                             }
                         }
                         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-                            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(dtpStartDate.getDate()) + " to " + UtilsTime.WL_DATE_FORMATTER.format(dtpEndDate.getDate()), 
+                            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
+                                    + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
                                     app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class));
                             dialog.setVisible(true);
                             somethingToReportOn = true;

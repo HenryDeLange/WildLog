@@ -1,10 +1,10 @@
 package wildlog.ui.utils;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JComboBox;
@@ -19,11 +19,16 @@ import wildlog.mapping.utils.UtilsGps;
 
 
 public class UtilsTime {
-    public static final SimpleDateFormat WL_DATE_FORMATTER = new SimpleDateFormat("dd MMM yyyy");
-    public static final SimpleDateFormat WL_DATE_FORMATTER_WITH_HHMM = new SimpleDateFormat("dd MMM yyyy (HH:mm)");
-    public static final SimpleDateFormat WL_DATE_FORMATTER_WITH_HHMMSS = new SimpleDateFormat("dd MMM yyyy (HH:mm:ss)");
-    public static final SimpleDateFormat WL_DATE_FORMATTER_FOR_VISIT_NAME = new SimpleDateFormat("dd MMM yyyy (HH'h'mm)");
-    public static final SimpleDateFormat WL_DATE_FORMATTER_FOR_FILES = new SimpleDateFormat("yyyy-MM-dd");
+    // The default pattern used in WildLog to display dates. 
+    // This pattern is used by the SimpleDateFormat instances used by the JXDatePicker's
+    // TODO: Vervang eendag al die SwingX date pickers met iets beter, dalk JavaFX, en raak dan ontslae van SimpleDateFormat.
+    public static final String DEFAULT_WL_DATE_FORMAT_PATTERN = "dd MMM yyyy";
+    // Preffer to use DateTimeFormatter because it is threadsafe and SimpleDateFormat is not.
+    public static final DateTimeFormatter WL_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_WL_DATE_FORMAT_PATTERN);
+    public static final DateTimeFormatter WL_DATE_FORMATTER_WITH_HHMM = DateTimeFormatter.ofPattern("dd MMM yyyy (HH:mm)");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_WITH_HHMMSS = DateTimeFormatter.ofPattern("dd MMM yyyy (HH:mm:ss)");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_VISIT_NAME = DateTimeFormatter.ofPattern("dd MMM yyyy (HH'h'mm)");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private UtilsTime() {
     }

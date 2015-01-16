@@ -41,7 +41,7 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
      * @return
      */
     public Path toPath() {
-        return Paths.get(elementName, locationName, UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(date) + "-Observation[" + sightingCounter + "]");
+        return Paths.get(elementName, locationName, UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(UtilsTime.getLocalDateTimeFromDate(date)) + "-Observation[" + sightingCounter + "]");
     }
 
     @Override

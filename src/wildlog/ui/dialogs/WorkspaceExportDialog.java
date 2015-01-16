@@ -3,11 +3,11 @@ package wildlog.ui.dialogs;
 import java.awt.Cursor;
 import java.io.File;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -352,7 +352,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             setMessage("Workspace Export: " + getProgress() + "%");
                             // Save settings to the new workspace
                             WildLogOptions options = app.getDBI().find(new WildLogOptions());
-                            options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(new Date()) + ")");
+                            options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
                             newDBI.createOrUpdate(options);
                             setProgress(3);
                             setMessage("Workspace Export: " + getProgress() + "%");

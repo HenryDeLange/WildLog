@@ -18,8 +18,8 @@ public class DateCellRenderer extends DefaultTableCellRenderer {
         setVerticalAlignment(SwingConstants.CENTER);
         setHorizontalAlignment(SwingConstants.CENTER);
         if (inValue != null) {
-            // Use SimpleDateFormat class to get a formatted String from Date object.
-            String strDate = UtilsTime.WL_DATE_FORMATTER.format((Date) inValue);
+            // Use DateTimeFormatter class to get a formatted String from Date object.
+            String strDate = UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate((Date) inValue));
             // Sorting algorithm will work with model value. So you dont need to worry
             // about the renderer's display value.
             setText(strDate);

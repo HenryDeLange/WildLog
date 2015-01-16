@@ -46,7 +46,7 @@ public class InfoBox extends JPanel {
 
     public final void populateUI() {
         if (sightingWrapper.getDate() != null) {
-            lblDate.setText(UtilsTime.WL_DATE_FORMATTER.format(sightingWrapper.getDate()));
+            lblDate.setText(UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(sightingWrapper.getDate())));
             lblTime.setText(timeFormater.format(sightingWrapper.getDate()));
         }
         lblElementName.setText(sightingWrapper.getElementName());

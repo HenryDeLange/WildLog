@@ -65,7 +65,7 @@
                           <Component id="lblElementName" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Component id="jLabel65" min="-2" pref="82" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+                          <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                           <Component id="lblNumberOfSightings" min="-2" pref="30" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -102,7 +102,7 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblElementName" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblElementName" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
                               <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                                   <Component id="jLabel65" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
                                   <Component id="lblNumberOfSightings" alignment="0" min="-2" pref="20" max="-2" attributes="0"/>
@@ -217,7 +217,7 @@
                           </Group>
                           <Component id="btnNextImage" min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Component id="jSeparator1" min="-2" pref="1" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                   </Group>
@@ -1657,7 +1657,7 @@
                           <Component id="jLabel58" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="15" pref="15" max="-2" attributes="0"/>
-                              <Component id="jScrollPane15" pref="168" max="32767" attributes="0"/>
+                              <Component id="jScrollPane15" pref="169" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>

@@ -69,8 +69,8 @@ public class TextReports extends AbstractReport<Sighting> {
                 // Dates
                 if (!lstData.isEmpty()) {
                     Collections.sort(lstData);
-                    mapDataTwos.put("First Observation: ", UtilsTime.WL_DATE_FORMATTER.format(lstData.get(0).getDate()));
-                    mapDataTwos.put("Last Observation: ", UtilsTime.WL_DATE_FORMATTER.format(lstData.get(lstData.size() - 1).getDate()));
+                    mapDataTwos.put("First Observation: ", UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(lstData.get(0).getDate())));
+                    mapDataTwos.put("Last Observation: ", UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(lstData.get(lstData.size() - 1).getDate())));
                     mapDataTwos.put("First Place: ", lstData.get(0).getLocationName());
                     mapDataTwos.put("Last Place: ", lstData.get(lstData.size() - 1).getLocationName());
                     mapDataTwos.put("First Creature: ", lstData.get(0).getElementName());

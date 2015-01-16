@@ -1,8 +1,9 @@
 package wildlog.ui.reports.implementations;
 
-import java.text.ParseException;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -209,17 +210,11 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return UtilsTime.WL_DATE_FORMATTER.format(object);
+                return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
             }
             @Override
             public Number fromString(String string) {
-                try {
-                    return UtilsTime.WL_DATE_FORMATTER.parse(string).getTime();
-                }
-                catch (ParseException ex) {
-                    ex.printStackTrace(System.err);
-                }
-                return 0;
+                return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
             }
         });
         dateAxis.setTickLabelFont(Font.font(12));
@@ -283,17 +278,11 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
-                return UtilsTime.WL_DATE_FORMATTER.format(object);
+                return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
             }
             @Override
             public Number fromString(String string) {
-                try {
-                    return UtilsTime.WL_DATE_FORMATTER.parse(string).getTime();
-                }
-                catch (ParseException ex) {
-                    ex.printStackTrace(System.err);
-                }
-                return 0;
+                return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
             }
         });
         dateAxis.setTickLabelFont(Font.font(12));

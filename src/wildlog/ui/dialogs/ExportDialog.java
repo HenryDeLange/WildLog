@@ -2,7 +2,7 @@ package wildlog.ui.dialogs;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -500,7 +500,7 @@ public class ExportDialog extends JDialog {
                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
             // Set the new workspace name
             WildLogOptions options = newDBI.find(new WildLogOptions());
-            options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(new Date()) + ")");
+            options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
             newDBI.createOrUpdate(options);
             inProgressbarTask.setTaskProgress(1);
             inProgressbarTask.setMessage("Exporting Workspace for '" + inDataObjectBasicInfo.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");

@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.EventObject;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -112,7 +112,8 @@ public class WildLogApp extends Application {
         }
         while (openedWorkspace == false);
         // Check to do monthly backup
-        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(Calendar.getInstance().getTime()) + ")");
+        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup ("
+                + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(LocalDateTime.now()) + ")");
         if (!dirs.exists()) {
             dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath());
         }
@@ -345,7 +346,7 @@ public class WildLogApp extends Application {
             }
         }
         System.out.println("STARTING UP WildLog - "
-                + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
+                + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         System.out.println("WildLog Setting Folder: " + ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
@@ -398,7 +399,7 @@ public class WildLogApp extends Application {
     @Override
     protected void shutdown() {
         super.shutdown();
-        System.out.println("SHUTTING DOWN WildLog - " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
+        System.out.println("SHUTTING DOWN WildLog - " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         System.out.println();
     }
 

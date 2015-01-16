@@ -3,6 +3,7 @@ package wildlog.ui.dialogs;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -181,7 +182,7 @@ public class ChecklistDialog extends JDialog {
         getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 210, -1));
 
         dtpDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 51)));
-        dtpDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpDate.setName("dtpDate"); // NOI18N
         getContentPane().add(dtpDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 110, 140, -1));
 

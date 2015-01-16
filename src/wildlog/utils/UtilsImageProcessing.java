@@ -13,8 +13,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -32,11 +33,12 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogFileType;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.ui.utils.UtilsTime;
 
 
 public class UtilsImageProcessing {
-    private static final SimpleDateFormat dateFormatter1 = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
-    private static final SimpleDateFormat dateFormatter2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+    private static final DateTimeFormatter dateFormatter1 = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss");
+    private static final DateTimeFormatter dateFormatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private UtilsImageProcessing() {
     }
@@ -279,6 +281,7 @@ public class UtilsImageProcessing {
                 date = new Date(inPath.toFile().lastModified());
             }
             catch (Exception ex) {
+                System.err.println("Error reading EXIF data for: " + inPath);
                 ex.printStackTrace(System.err);
             }
         }
@@ -344,26 +347,34 @@ public class UtilsImageProcessing {
                 Directory directory = directories.next();
                 Collection<Tag> tags = directory.getTags();
                 for (Tag tag : tags) {
-                    if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
-                        // Not all files store the date in the same format, so I have to try a few known formats...
-                        // Try 1:
-                        try {
-                            // This seems to be by far the most used format
-                            return dateFormatter1.parse(tag.getDescription());
+                    try {
+                        if (tag.getTagName().equalsIgnoreCase("Date/Time Original")) {
+                            // Not all files store the date in the same format, so I have to try a few known formats...
+                            // Try 1:
+                            try {
+                                // This seems to be by far the most used format
+                                LocalDateTime localDateTime = LocalDateTime.parse(tag.getDescription().trim(), dateFormatter1);
+                                return UtilsTime.getDateFromLocalDateTime(localDateTime);
+                            }
+                            catch (DateTimeParseException ex) {
+                                System.out.println("Try1: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
+                                ex.printStackTrace(System.out);
+                            }
+                            // Try 2:
+                            try {
+                                // Wierd format used by Samsung Galaxy Gio (Android)
+                                LocalDateTime localDateTime = LocalDateTime.parse(tag.getDescription().trim(), dateFormatter2);
+                                return UtilsTime.getDateFromLocalDateTime(localDateTime);
+                            }
+                            catch (DateTimeParseException ex) {
+                                System.out.println("Try2: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
+                                ex.printStackTrace(System.out);
+                            }
                         }
-                        catch (ParseException ex) {
-                            System.out.println("Try1: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy:MM:dd HH:mm:ss']");
-                            ex.printStackTrace(System.out);
-                        }
-                        // Try 2:
-                        try {
-                            // Wierd format used by Samsung Galaxy Gio (Android)
-                            return dateFormatter2.parse(tag.getDescription());
-                        }
-                        catch (ParseException ex) {
-                            System.out.println("Try2: [THIS DATE (" + tag.getDescription() + ") COULD NOT BE PARSED USING 'yyyy-MM-dd HH:mm:ss ']");
-                            ex.printStackTrace(System.out);
-                        }
+                    }
+                    catch (NumberFormatException ex) {
+                        System.err.println("Could not parse Date info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
+                        ex.printStackTrace(System.err);
                     }
                 }
             }
@@ -412,6 +423,7 @@ public class UtilsImageProcessing {
                     }
                     catch (NumberFormatException ex) {
                         System.err.println("Could not parse GPS info from image EXIF data: " + tag.getTagName() + " = " + tag.getDescription());
+                        ex.printStackTrace(System.err);
                     }
                 }
             }
@@ -424,10 +436,14 @@ public class UtilsImageProcessing {
             return getExifGpsFromJpeg(JpegMetadataReader.readMetadata(inPath.toFile()));
         }
         catch (JpegProcessingException ex) {
-            System.err.println("Error reading EXIF data for: " + inPath);
+            System.err.println("Error reading EXIF data for non-JPG file: " + inPath);
             ex.printStackTrace(System.err);
         }
         catch (IOException ex) {
+            ex.printStackTrace(System.err);
+        }
+        catch (Exception ex) {
+            System.err.println("Error reading GPS EXIF data for: " + inPath);
             ex.printStackTrace(System.err);
         }
         return null;

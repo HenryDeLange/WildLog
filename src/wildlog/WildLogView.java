@@ -25,9 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -397,7 +397,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.2");
+        jLabel12.setText("version 4.2.BETA");
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
@@ -1477,7 +1477,7 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null, null), tabbedPanel);
+                UtilsPanelGenerator.openBulkUploadTab(new BulkUploadPanel(app, this, null, null, null, null), tabbedPanel);
                 return null;
             }
         });
@@ -1942,7 +1942,7 @@ public final class WildLogView extends JFrame {
                         // First check database files
                         // Maak seker alle files in die tabel wys na 'n location/element/ens wat bestaan (geen "floaters" mag teenwoordig wees nie)
                         setMessage("Cleanup Step 1: Validate database references to the files in the Workspace... " + getProgress() + "%");
-                        finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
+                        finalHandleFeedback.println("** Starting Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
                         finalHandleFeedback.println("1) Make sure the File records in the database contain valid values and correctly link to existing data and Workspace files.");
                         List<WildLogFile> allFiles = app.getDBI().list(new WildLogFile());
                         int filesWithoutID = 0;
@@ -2318,7 +2318,7 @@ public final class WildLogView extends JFrame {
                         // Scan through the entire folder and delete all non-wildlog files and folders (remember to keep Maps, Backup and the feedback file)
                         // TODO: Maybe delete all non-wildlog files during cleanup
 
-                        finalHandleFeedback.println("** Finished Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(Calendar.getInstance().getTime()));
+                        finalHandleFeedback.println("** Finished Workspace Cleanup: " + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("+++++++++++++++++++ SUMMARY ++++++++++++++++++++");
                         finalHandleFeedback.println("File on disk moved to new folder: " + filesMoved.counter);
@@ -2756,7 +2756,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(13);
                         setMessage("Import WildNote Sync " + getProgress() + "%");
                         // Setup the Visit
-                        Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(Calendar.getInstance().getTime()),
+                        Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()),
                                 WildLogConstants.WILDNOTE_LOCATION_NAME);
                         while (app.getDBI().count(tempVisit) > 0) {
                             tempVisit = new Visit(tempVisit.getName() + "_wl", tempVisit.getLocationName());

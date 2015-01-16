@@ -5,7 +5,9 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -29,13 +31,16 @@ import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.SlideshowDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.FileDrop;
+import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
+import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
@@ -89,6 +94,32 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         lastSavedVisit = visit.cloneShallow();
         sighting = new Sighting();
         setupUI();
+        // Setup the drag and drop on the buttons
+        final PanelVisit panelVisitHandle = this;
+        FileDrop.SetupFileDrop(btnBulkImport, false, new FileDrop.Listener() {
+            @Override
+            public void filesDropped(List<File> inFiles) {
+                if (inFiles != null && inFiles.size() == 1) {
+                    final Path importPath;
+                    if (inFiles.get(0).isDirectory()) {
+                        importPath = inFiles.get(0).toPath().toAbsolutePath();
+                    }
+                    else {
+                        importPath = inFiles.get(0).toPath().getParent().toAbsolutePath();
+                    }
+                    if (visit.getName() != null && !visit.getName().isEmpty()) {
+                        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                            @Override
+                            protected Object doInBackground() throws Exception {
+                                UtilsPanelGenerator.openBulkUploadTab(
+                                        new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), importPath, panelVisitHandle), (JTabbedPane)getParent());
+                                return null;
+                            }
+                        });
+                    }
+                }
+            }
+        });
     }
 
     private void setupUI() {
@@ -221,10 +252,16 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                 }
             });
         }
-        else 
-        if (inIndicator instanceof PanelVisit) {
+        //else 
+        //if (inIndicator instanceof PanelVisit) {
             // Most likly the delete button was pressed.
-            // Don't select anything.
+            // Don't select anything extra.
+        //}
+        else
+        if (inIndicator instanceof Visit) {
+            visit = (Visit) inIndicator;
+            dtpStartDate.setDate(visit.getStartDate());
+            dtpEndDate.setDate(visit.getEndDate());
         }
     }
 
@@ -285,12 +322,13 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         pnlButtons = new javax.swing.JPanel();
         btnUpdate = new javax.swing.JButton();
         btnGoLocation = new javax.swing.JButton();
-        btnBrowse = new javax.swing.JButton();
         btnReport = new javax.swing.JButton();
         btnMapSighting = new javax.swing.JButton();
-        btnSlideshow = new javax.swing.JButton();
         btnHTML = new javax.swing.JButton();
         btnAdvanced = new javax.swing.JButton();
+        btnBulkImport = new javax.swing.JButton();
+        btnSlideshow = new javax.swing.JButton();
+        btnBrowse = new javax.swing.JButton();
         pnlInfo = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -526,20 +564,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
-        btnBrowse.setBackground(new java.awt.Color(230, 228, 240));
-        btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
-        btnBrowse.setText("Browse");
-        btnBrowse.setToolTipText("Open the Browse tab and automatically select this Period in the tree.");
-        btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnBrowse.setName("btnBrowse"); // NOI18N
-        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBrowseActionPerformed(evt);
-            }
-        });
-
         btnReport.setBackground(new java.awt.Color(230, 228, 240));
         btnReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
         btnReport.setText("View Reports");
@@ -567,21 +591,6 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         btnMapSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMapSightingActionPerformed(evt);
-            }
-        });
-
-        btnSlideshow.setBackground(new java.awt.Color(230, 228, 240));
-        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
-        btnSlideshow.setText("Slideshows");
-        btnSlideshow.setToolTipText("View slideshow videos of linked images for this Period.");
-        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSlideshow.setFocusPainted(false);
-        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnSlideshow.setName("btnSlideshow"); // NOI18N
-        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSlideshowActionPerformed(evt);
             }
         });
 
@@ -616,46 +625,93 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             }
         });
 
+        btnBulkImport.setBackground(new java.awt.Color(230, 228, 240));
+        btnBulkImport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Bulk Import.png"))); // NOI18N
+        btnBulkImport.setText("<html><u>Bulk Import</u></html>");
+        btnBulkImport.setToolTipText("Open a Bulk Import tab for this Period. You can drag-and-drop a folder on the button to quickly start the Bulk Import process.");
+        btnBulkImport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBulkImport.setFocusPainted(false);
+        btnBulkImport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnBulkImport.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnBulkImport.setName("btnBulkImport"); // NOI18N
+        btnBulkImport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBulkImportActionPerformed(evt);
+            }
+        });
+
+        btnSlideshow.setBackground(new java.awt.Color(230, 228, 240));
+        btnSlideshow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Slideshow_Small.gif"))); // NOI18N
+        btnSlideshow.setText("Slideshows");
+        btnSlideshow.setToolTipText("View slideshow videos of linked images for this Period.");
+        btnSlideshow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSlideshow.setFocusPainted(false);
+        btnSlideshow.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSlideshow.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnSlideshow.setName("btnSlideshow"); // NOI18N
+        btnSlideshow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSlideshowActionPerformed(evt);
+            }
+        });
+
+        btnBrowse.setBackground(new java.awt.Color(230, 228, 240));
+        btnBrowse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
+        btnBrowse.setText("Browse");
+        btnBrowse.setToolTipText("Open the Browse tab and automatically select this Period in the tree.");
+        btnBrowse.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBrowse.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnBrowse.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnBrowse.setName("btnBrowse"); // NOI18N
+        btnBrowse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBrowseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlButtonsLayout = new javax.swing.GroupLayout(pnlButtons);
         pnlButtons.setLayout(pnlButtonsLayout);
         pnlButtonsLayout.setHorizontalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(7, 7, 7)
+                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMapSighting, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnReport, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnHTML, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
+                    .addComponent(btnSlideshow, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAdvanced, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(6, 6, 6)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5))
         );
         pnlButtonsLayout.setVerticalGroup(
             pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlButtonsLayout.createSequentialGroup()
-                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
                 .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
-                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(btnBulkImport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addGroup(pnlButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(pnlButtonsLayout.createSequentialGroup()
-                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(5, 5, 5)
-                        .addComponent(btnSlideshow, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAdvanced, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(4, 4, 4)
+                        .addComponent(btnMapSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)
+                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(3, 3, 3)))
                 .addGap(5, 5, 5))
         );
 
@@ -684,7 +740,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel4.setName("jLabel4"); // NOI18N
 
         dtpStartDate.setDate(visit.getStartDate());
-        dtpStartDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpStartDate.setName("dtpStartDate"); // NOI18N
 
         jLabel54.setText("Period Type:");
@@ -704,7 +760,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         jLabel53.setName("jLabel53"); // NOI18N
 
         dtpEndDate.setDate(visit.getEndDate());
-        dtpEndDate.setFormats(UtilsTime.WL_DATE_FORMATTER);
+        dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
         dtpEndDate.setName("dtpEndDate"); // NOI18N
 
         jLabel1.setText("Start Date:");
@@ -858,7 +914,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         pnlSightings.setLayout(pnlSightingsLayout);
         pnlSightingsLayout.setHorizontalGroup(
             pnlSightingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlSightingsLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlSightingsLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addGroup(pnlSightingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(pnlSightingsLayout.createSequentialGroup()
@@ -872,14 +928,14 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                             .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(5, 5, 5)
-                        .addComponent(jScrollPane1)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)))
                 .addGap(5, 5, 5))
             .addComponent(jSeparator5)
         );
         pnlSightingsLayout.setVerticalGroup(
             pnlSightingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlSightingsLayout.createSequentialGroup()
-                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(3, 3, 3)
                 .addGroup(pnlSightingsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5)
@@ -893,7 +949,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
                         .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE))
                 .addGap(5, 5, 5))
         );
 
@@ -1066,8 +1122,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                     .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3)
                 .addGroup(visitIncludesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(pnlInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlButtons, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0)
                 .addComponent(pnlSightings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1403,6 +1459,20 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         }
     }//GEN-LAST:event_btnAdvancedActionPerformed
 
+    private void btnBulkImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBulkImportActionPerformed
+        if (visit.getName() != null && !visit.getName().isEmpty()) {
+            final PanelVisit panelVisitHandle = this;
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    UtilsPanelGenerator.openBulkUploadTab(
+                            new BulkUploadPanel(app, this, visit.getLocationName(), visit.getName(), null, panelVisitHandle), (JTabbedPane)getParent());
+                    return null;
+                }
+            });
+        }
+    }//GEN-LAST:event_btnBulkImportActionPerformed
+
     private void populateVisitFromUI() {
         visit.setName(UtilsData.limitLength(txtName.getText(), 100));
         visit.setStartDate(dtpStartDate.getDate());
@@ -1439,6 +1509,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnAdvanced;
     private javax.swing.JButton btnBrowse;
+    private javax.swing.JButton btnBulkImport;
     private javax.swing.JButton btnDeleteImage;
     private javax.swing.JButton btnDeleteSighting;
     private javax.swing.JButton btnEditSighting;
