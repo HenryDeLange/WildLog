@@ -567,8 +567,18 @@ public abstract class DBI_JDBC implements DBI {
 
     protected <T extends VisitCore> void populateVisit(ResultSet inResults, T inVisit) throws SQLException {
         inVisit.setName(inResults.getString("NAME"));
-        inVisit.setStartDate(inResults.getDate("STARTDATE"));
-        inVisit.setEndDate(inResults.getDate("ENDDATE"));
+        if (inResults.getDate("STARTDATE") != null) {
+            inVisit.setStartDate(new Date(inResults.getDate("STARTDATE").getTime()));
+        }
+        else {
+            inVisit.setStartDate(null);
+        }
+        if (inResults.getDate("ENDDATE") != null) {
+            inVisit.setEndDate(new Date(inResults.getDate("ENDDATE").getTime()));
+        }
+        else {
+            inVisit.setEndDate(null);
+        }
         inVisit.setDescription(inResults.getString("DESCRIPTION"));
         inVisit.setGameWatchingIntensity(GameWatchIntensity.getEnumFromText(inResults.getString("GAMEWATCHINGINTENSITY")));
         inVisit.setType(VisitType.getEnumFromText(inResults.getString("VISITTYPE")));
@@ -606,7 +616,12 @@ public abstract class DBI_JDBC implements DBI {
 
     protected <T extends SightingCore> void populateSighting(ResultSet inResults, T inSighting) throws SQLException {
         inSighting.setSightingCounter(inResults.getLong("SIGHTINGCOUNTER"));
-        inSighting.setDate(inResults.getTimestamp("SIGHTINGDATE"));
+        if (inResults.getTimestamp("SIGHTINGDATE") != null) {
+            inSighting.setDate(new Date(inResults.getTimestamp("SIGHTINGDATE").getTime()));
+        }
+        else {
+            inSighting.setDate(null);
+        }
         inSighting.setElementName(inResults.getString("ELEMENTNAME"));
         inSighting.setLocationName(inResults.getString("LOCATIONNAME"));
         inSighting.setVisitName(inResults.getString("VISITNAME"));
@@ -690,7 +705,12 @@ public abstract class DBI_JDBC implements DBI {
         inWildLogFile.setFilename(inResults.getString("FILENAME"));
         inWildLogFile.setDBFilePath(inResults.getString("ORIGINALPATH"));
         inWildLogFile.setFileType(WildLogFileType.getEnumFromText(inResults.getString("FILETYPE")));
-        inWildLogFile.setUploadDate(inResults.getDate("UPLOADDATE"));
+        if (inResults.getDate("UPLOADDATE") != null) {
+            inWildLogFile.setUploadDate(new Date(inResults.getDate("UPLOADDATE").getTime()));
+        }
+        else {
+            inWildLogFile.setUploadDate(null);
+        }
         inWildLogFile.setDefaultFile(inResults.getBoolean("ISDEFAULT"));
     }
 
