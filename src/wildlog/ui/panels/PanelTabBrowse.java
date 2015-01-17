@@ -101,6 +101,9 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         treBrowsePhoto.setCellRenderer(new WildLogTreeCellRenderer());
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtBrowseInfo, true);
+        // Make dates pretty
+        dtpStartDate.getComponent(1).setBackground(getBackground());
+        dtpEndDate.getComponent(1).setBackground(getBackground());
         // Hide UI elements on first creation to prevent some flickering
         dtpStartDate.setVisible(false);
         dtpEndDate.setVisible(false);
@@ -147,7 +150,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         btnSetDefaultVisitImage = new javax.swing.JButton();
         btnViewEXIF = new javax.swing.JButton();
 
-        setBackground(new java.awt.Color(235, 233, 221));
+        setBackground(new java.awt.Color(204, 213, 186));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
                 formComponentHidden(evt);
@@ -157,7 +160,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        rdbBrowseLocation.setBackground(new java.awt.Color(235, 233, 221));
+        rdbBrowseLocation.setBackground(new java.awt.Color(204, 213, 186));
         buttonGroup1.add(rdbBrowseLocation);
         rdbBrowseLocation.setText("By Places");
         rdbBrowseLocation.setToolTipText("Sort the tree according to Places.");
@@ -168,6 +171,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        btnRefreshBrowseTree.setBackground(new java.awt.Color(204, 213, 186));
         btnRefreshBrowseTree.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRefreshBrowseTree.setText("Reload Tree");
         btnRefreshBrowseTree.setToolTipText("This will collapse all tree nodes and reload the tree.");
@@ -178,7 +182,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        rdbBrowseElement.setBackground(new java.awt.Color(235, 233, 221));
+        rdbBrowseElement.setBackground(new java.awt.Color(204, 213, 186));
         buttonGroup1.add(rdbBrowseElement);
         rdbBrowseElement.setText("By Creatures");
         rdbBrowseElement.setToolTipText("Sort the tree according to Creatures.");
@@ -201,7 +205,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         dtpStartDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
-        rdbBrowseDate.setBackground(new java.awt.Color(235, 233, 221));
+        rdbBrowseDate.setBackground(new java.awt.Color(204, 213, 186));
         buttonGroup1.add(rdbBrowseDate);
         rdbBrowseDate.setText("By Date");
         rdbBrowseDate.setToolTipText("Sort the tree based on the Observations Dates.");
@@ -212,7 +216,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnRotate.setBackground(new java.awt.Color(235, 233, 221));
+        btnRotate.setBackground(new java.awt.Color(204, 213, 186));
         btnRotate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRotate.setText("Rotate Image");
         btnRotate.setToolTipText("Rotate the image counter clockwise.");
@@ -230,7 +234,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         lblNumberOfImages.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        btnViewImage.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewImage.setBackground(new java.awt.Color(204, 213, 186));
         btnViewImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
         btnViewImage.setText("Open Original File");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
@@ -244,7 +248,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnRefreshDates.setBackground(new java.awt.Color(235, 233, 221));
+        btnRefreshDates.setBackground(new java.awt.Color(204, 213, 186));
         btnRefreshDates.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnRefreshDates.setToolTipText("Refresh the tree based on the provided values.");
         btnRefreshDates.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -266,7 +270,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         txtBrowseInfo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         scrTextArea.setViewportView(txtBrowseInfo);
 
-        btnZoomOut.setBackground(new java.awt.Color(235, 233, 221));
+        btnZoomOut.setBackground(new java.awt.Color(204, 213, 186));
         btnZoomOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete_Small.gif"))); // NOI18N
         btnZoomOut.setText("Zoom Out");
         btnZoomOut.setToolTipText("Zoom the image out.");
@@ -281,7 +285,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnDefault.setBackground(new java.awt.Color(235, 233, 221));
+        btnDefault.setBackground(new java.awt.Color(204, 213, 186));
         btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
         btnDefault.setText("Default File");
         btnDefault.setToolTipText("Set the current file as the default (first) file for the selected node in the tree.");
@@ -294,7 +298,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnBrowseNext.setBackground(new java.awt.Color(235, 233, 221));
+        btnBrowseNext.setBackground(new java.awt.Color(204, 213, 186));
         btnBrowseNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif"))); // NOI18N
         btnBrowseNext.setToolTipText("Load the next file.");
         btnBrowseNext.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -307,7 +311,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnBrowsePrev.setBackground(new java.awt.Color(235, 233, 221));
+        btnBrowsePrev.setBackground(new java.awt.Color(204, 213, 186));
         btnBrowsePrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
         btnBrowsePrev.setToolTipText("Load the previous file.");
         btnBrowsePrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -320,7 +324,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnZoomIn.setBackground(new java.awt.Color(235, 233, 221));
+        btnZoomIn.setBackground(new java.awt.Color(204, 213, 186));
         btnZoomIn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add_Small.gif"))); // NOI18N
         btnZoomIn.setText("Zoom In");
         btnZoomIn.setToolTipText("Zoom the image in.");
@@ -351,7 +355,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
 
         dtpEndDate.setFormats(new SimpleDateFormat(UtilsTime.DEFAULT_WL_DATE_FORMAT_PATTERN));
 
-        btnGoBrowseSelection.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoBrowseSelection.setBackground(new java.awt.Color(204, 213, 186));
         btnGoBrowseSelection.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoBrowseSelection.setToolTipText("Open the selected tree node for editing.");
         btnGoBrowseSelection.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -385,6 +389,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
         jScrollPane4.setViewportView(treBrowsePhoto);
 
+        btnSetDefaultElementImage.setBackground(new java.awt.Color(204, 213, 186));
         btnSetDefaultElementImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnSetDefaultElementImage.setText("Default Creature File");
         btnSetDefaultElementImage.setToolTipText("Set this file as the default for the related Creature.");
@@ -395,6 +400,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        btnSetDefaultLocationImage.setBackground(new java.awt.Color(204, 213, 186));
         btnSetDefaultLocationImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         btnSetDefaultLocationImage.setText("Default Place File");
         btnSetDefaultLocationImage.setToolTipText("Set this file as the default for the related Place.");
@@ -405,6 +411,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
+        btnSetDefaultVisitImage.setBackground(new java.awt.Color(204, 213, 186));
         btnSetDefaultVisitImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         btnSetDefaultVisitImage.setText("Default Period File");
         btnSetDefaultVisitImage.setToolTipText("Set this file as the default for the related Period.");
@@ -415,7 +422,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
             }
         });
 
-        btnViewEXIF.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewEXIF.setBackground(new java.awt.Color(204, 213, 186));
         btnViewEXIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
         btnViewEXIF.setText("Image Metadata");
         btnViewEXIF.setToolTipText("View the EXIF metadata for the image.");
@@ -1046,6 +1053,175 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                     }
                 });
                 popup.add(mnuView);
+                // Add
+                if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                        JMenuItem mnuAdd = new JMenuItem("Add Period", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        mnuAdd.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, 
+                                        (Location) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject());
+                            }
+                        });
+                        popup.add(mnuAdd);
+                    }
+                    else
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                        final PanelTabBrowse tabBrowseHandle = this;
+                        JMenuItem mnuAdd = new JMenuItem("Add Observation", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        mnuAdd.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                PanelSighting dialog = new PanelSighting(
+                                        app, app.getMainFrame(), "Add a New Observation",
+                                        new Sighting(), null, null, 
+                                        (Element) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
+                                        tabBrowseHandle, true, false, false);
+                                dialog.setVisible(true);
+                            }
+                        });
+                        popup.add(mnuAdd);
+                    }
+                    else
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                        final PanelTabBrowse tabBrowseHandle = this;
+                        JMenuItem mnuAdd = new JMenuItem("Add Observation", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        mnuAdd.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                PanelSighting dialog = new PanelSighting(
+                                        app, app.getMainFrame(), "Add a New Observation",
+                                        new Sighting(), 
+                                        app.getDBI().find(new Location(((Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getLocationName())), 
+                                        (Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject(), 
+                                        null, tabBrowseHandle, true, false, false);
+                                dialog.setVisible(true);
+                            }
+                        });
+                        popup.add(mnuAdd);
+                    }
+                    else
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                        // Nothing to add
+                    }
+                    else {
+                        // Most likely the root WildLog folder
+                        JMenuItem mnuAddLocation = new JMenuItem("Add Place", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        mnuAddLocation.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
+                            }
+                        });
+                        popup.add(mnuAddLocation);
+                        JMenuItem mnuAddElement = new JMenuItem("Add Creature", new ImageIcon(app.getClass().getResource("resources/icons/Add.gif")));
+                        mnuAddElement.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
+                            }
+                        });
+                        popup.add(mnuAddElement);
+                    }
+                }
+                // Delete
+                if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
+                        JMenuItem mnuDelete = new JMenuItem("Delete Place", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                        mnuDelete.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                            "Are you sure you want to delete this Place? This will delete all Periods, Observations and files linked to the Place as well.",
+                                            "Delete Place", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    }
+                                });
+                                if (result == JOptionPane.YES_OPTION) {
+                                    Location location = (Location) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                    UtilsPanelGenerator.removeOpenedTab(location.getName(), PanelCanSetupHeader.TabTypes.LOCATION, (JTabbedPane)getParent());
+                                    app.getDBI().delete(location);
+                                    doTheRefresh(null);
+                                }
+                            }
+                        });
+                        popup.add(mnuDelete);
+                    }
+                    else
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
+                        JMenuItem mnuDelete = new JMenuItem("Delete Creature", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                        mnuDelete.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                            "Are you sure you want to delete this Creature? This will delete all Observations and files linked to the Creature as well.",
+                                            "Delete Creature", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    }
+                                });
+                                if (result == JOptionPane.YES_OPTION) {
+                                    Element element = (Element) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                    UtilsPanelGenerator.removeOpenedTab(element.getPrimaryName(), PanelCanSetupHeader.TabTypes.ELEMENT, (JTabbedPane)getParent());
+                                    app.getDBI().delete(element);
+                                    doTheRefresh(null);
+                                }
+                            }
+                        });
+                        popup.add(mnuDelete);
+                    }
+                    else
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
+                        JMenuItem mnuDelete = new JMenuItem("Delete Period", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                        mnuDelete.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                            "Are you sure you want to delete this Period? This will delete all Observations and files linked to the Period as well.",
+                                            "Delete Period", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    }
+                                });
+                                if (result == JOptionPane.YES_OPTION) {
+                                    Visit visit = (Visit) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                    UtilsPanelGenerator.removeOpenedTab(visit.getName(), PanelCanSetupHeader.TabTypes.VISIT, (JTabbedPane)getParent());
+                                    app.getDBI().delete(visit);
+                                    doTheRefresh(null);
+                                }
+                            }
+                        });
+                        popup.add(mnuDelete);
+                    }
+                    else
+                    if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
+                        JMenuItem mnuDelete = new JMenuItem("Delete Observation", new ImageIcon(app.getClass().getResource("resources/icons/Delete.gif")));
+                        mnuDelete.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                                    @Override
+                                    public int showDialog() {
+                                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                            "Are you sure you want to delete this Observation? This will delete all files linked to the Observation as well.",
+                                            "Delete Observation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                                    }
+                                });
+                                if (result == JOptionPane.YES_OPTION) {
+                                    SightingWrapper sightingWrapper = (SightingWrapper) ((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
+                                    app.getDBI().delete(sightingWrapper.getSighting());
+                                    doTheRefresh(null);
+                                }
+                            }
+                        });
+                        popup.add(mnuDelete);
+                    }
+                }
                 // Map
                 JMenuItem mnuMap = new JMenuItem("Map", new ImageIcon(app.getClass().getResource("resources/icons/Map_Small.gif")));
                 mnuMap.addActionListener(new ActionListener() {

@@ -7,7 +7,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-      <Color blue="dd" green="e9" red="eb" type="rgb"/>
+      <Color blue="ba" green="d5" red="cc" type="rgb"/>
     </Property>
   </Properties>
   <Events>
@@ -179,7 +179,7 @@
     <Component class="javax.swing.JRadioButton" name="rdbBrowseLocation">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroup1"/>
@@ -196,6 +196,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnRefreshBrowseTree">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+        </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
         </Property>
@@ -212,7 +215,7 @@
     <Component class="javax.swing.JRadioButton" name="rdbBrowseElement">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroup1"/>
@@ -254,7 +257,7 @@
     <Component class="javax.swing.JRadioButton" name="rdbBrowseDate">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="buttonGroup1"/>
@@ -272,7 +275,7 @@
     <Component class="javax.swing.JButton" name="btnRotate">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
@@ -304,7 +307,7 @@
     <Component class="javax.swing.JButton" name="btnViewImage">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/WildLog Icon Small.gif"/>
@@ -327,7 +330,7 @@
     <Component class="javax.swing.JButton" name="btnRefreshDates">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
@@ -376,7 +379,7 @@
     <Component class="javax.swing.JButton" name="btnZoomOut">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Delete_Small.gif"/>
@@ -400,7 +403,7 @@
     <Component class="javax.swing.JButton" name="btnDefault">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/DefaultImage.gif"/>
@@ -420,7 +423,7 @@
     <Component class="javax.swing.JButton" name="btnBrowseNext">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Next.gif"/>
@@ -442,7 +445,7 @@
     <Component class="javax.swing.JButton" name="btnBrowsePrev">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Previous.gif"/>
@@ -464,7 +467,7 @@
     <Component class="javax.swing.JButton" name="btnZoomIn">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Add_Small.gif"/>
@@ -520,7 +523,7 @@
     <Component class="javax.swing.JButton" name="btnGoBrowseSelection">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Go.gif"/>
@@ -560,6 +563,9 @@
     </Container>
     <Component class="javax.swing.JButton" name="btnSetDefaultElementImage">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+        </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Element.gif"/>
         </Property>
@@ -575,6 +581,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnSetDefaultLocationImage">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+        </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
         </Property>
@@ -590,6 +599,9 @@
     </Component>
     <Component class="javax.swing.JButton" name="btnSetDefaultVisitImage">
       <Properties>
+        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+        </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/Visit.gif"/>
         </Property>
@@ -606,7 +618,7 @@
     <Component class="javax.swing.JButton" name="btnViewEXIF">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="dd" green="e9" red="eb" type="rgb"/>
+          <Color blue="ba" green="d5" red="cc" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>

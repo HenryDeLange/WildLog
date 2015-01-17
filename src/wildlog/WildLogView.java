@@ -94,6 +94,7 @@ import wildlog.ui.helpers.filters.WildNoteSyncFilter;
 import wildlog.ui.panels.PanelTabBrowse;
 import wildlog.ui.panels.PanelTabElements;
 import wildlog.ui.panels.PanelTabLocations;
+import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.reports.ReportsBaseDialog;
@@ -112,6 +113,7 @@ import wildlog.utils.WildLogSystemImages;
  * The application's main frame.
  */
 public final class WildLogView extends JFrame {
+    private final int STATIC_TAB_COUNT = 5;
     private final WildLogApp app;
     private final Timer messageTimer;
     private final Timer busyIconTimer;
@@ -190,11 +192,12 @@ public final class WildLogView extends JFrame {
         setupTabHeaderBrowse();
         setupTabHeaderLocation();
         setupTabHeaderElement();
+        setupTabHeaderSightings();
         // Set the minimum size of the frame
         this.setMinimumSize(new Dimension(1024, 705));
     }
 
-    public void setupTabHeaderHome() {
+    private void setupTabHeaderHome() {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif"));
         tabHeader.add(new JLabel(icon));
@@ -206,7 +209,7 @@ public final class WildLogView extends JFrame {
         UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 0);
     }
 
-    public void setupTabHeaderBrowse() {
+    private void setupTabHeaderBrowse() {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Browse.png"));
         tabHeader.add(new JLabel(icon));
@@ -221,7 +224,7 @@ public final class WildLogView extends JFrame {
         tabbedPanel.setComponentAt(1, panelTabBrowse);
     }
 
-    public void setupTabHeaderLocation() {
+    private void setupTabHeaderLocation() {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"));
         tabHeader.add(new JLabel(icon));
@@ -235,7 +238,7 @@ public final class WildLogView extends JFrame {
         tabbedPanel.setComponentAt(2, new PanelTabLocations(app, tabbedPanel));
     }
 
-    public void setupTabHeaderElement() {
+    private void setupTabHeaderElement() {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/ElementList.gif"));
         tabHeader.add(new JLabel(icon));
@@ -247,6 +250,20 @@ public final class WildLogView extends JFrame {
         UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 3);
         // Setup content
         tabbedPanel.setComponentAt(3, new PanelTabElements(app, tabbedPanel));
+    }
+    
+    private void setupTabHeaderSightings() {
+        JPanel tabHeader = new JPanel();
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+        tabHeader.add(new JLabel(icon));
+        tabHeader.add(new JLabel("Observations"));
+        tabHeader.setBackground(new Color(0, 0, 0, 0));
+        tabbedPanel.setTitleAt(4, "Observations");
+        tabbedPanel.setIconAt(4, icon);
+        tabbedPanel.setTabComponentAt(4, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 4);
+        // Setup content
+        tabbedPanel.setComponentAt(4, new PanelTabSightings(app, tabbedPanel));
     }
 
     /** This method is called from within the constructor to
@@ -282,6 +299,7 @@ public final class WildLogView extends JFrame {
         tabBrowse = new javax.swing.JPanel();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
+        tabSightings = new javax.swing.JPanel();
         statusPanel = new javax.swing.JPanel();
         statusMessageLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -586,7 +604,7 @@ public final class WildLogView extends JFrame {
 
         tabbedPanel.addTab("Home", tabHome);
 
-        tabBrowse.setBackground(new java.awt.Color(235, 233, 221));
+        tabBrowse.setBackground(new java.awt.Color(204, 213, 186));
         tabBrowse.setMinimumSize(new java.awt.Dimension(1000, 630));
         tabBrowse.setName("tabBrowse"); // NOI18N
         tabBrowse.setPreferredSize(new java.awt.Dimension(1000, 630));
@@ -604,11 +622,17 @@ public final class WildLogView extends JFrame {
         tabElement.setPreferredSize(new java.awt.Dimension(1000, 600));
         tabbedPanel.addTab("All Creatures", tabElement);
 
+        tabSightings.setBackground(new java.awt.Color(235, 233, 221));
+        tabSightings.setMinimumSize(new java.awt.Dimension(1000, 600));
+        tabSightings.setName("tabSightings"); // NOI18N
+        tabSightings.setPreferredSize(new java.awt.Dimension(1000, 600));
+        tabbedPanel.addTab("All Sightings", tabSightings);
+
         mainPanel.add(tabbedPanel);
 
         getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
-        statusPanel.setBackground(new java.awt.Color(232, 238, 220));
+        statusPanel.setBackground(new java.awt.Color(204, 213, 186));
         statusPanel.setName("statusPanel"); // NOI18N
         statusPanel.setLayout(new java.awt.BorderLayout(10, 0));
 
@@ -1355,8 +1379,8 @@ public final class WildLogView extends JFrame {
         });
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > 4) {
-                tabbedPanel.remove(4);
+            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             MergeElementsDialog dialog = new MergeElementsDialog(app);
             dialog.setVisible(true);
@@ -1375,8 +1399,8 @@ public final class WildLogView extends JFrame {
         });
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > 4) {
-                tabbedPanel.remove(4);
+            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             MoveVisitDialog dialog = new MoveVisitDialog(app, null);
             dialog.setVisible(true);
@@ -1408,8 +1432,8 @@ public final class WildLogView extends JFrame {
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
                 tabbedPanel.setSelectedIndex(0);
-//                while (tabbedPanel.getTabCount() > 4) {
-//                    tabbedPanel.remove(4);
+//                while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+//                    tabbedPanel.remove(STATIC_TAB_COUNT);
 //                }
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
@@ -1816,8 +1840,8 @@ public final class WildLogView extends JFrame {
         if (result == JOptionPane.OK_OPTION) {
             // Close all tabs and go to the home tab
             tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > 4) {
-                tabbedPanel.remove(4);
+            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             // Lock the input/display and show busy message
             // Note: we never remove the Busy dialog and greyed out background since the app wil be restarted anyway when done (Don't use JDialog since it stops the code until the dialog is closed...)
@@ -2404,8 +2428,8 @@ public final class WildLogView extends JFrame {
             if (choice != JOptionPane.CLOSED_OPTION) {
                 // Close all tabs and go to the home tab
                 tabbedPanel.setSelectedIndex(0);
-//                while (tabbedPanel.getTabCount() > 4) {
-//                    tabbedPanel.remove(4);
+//                while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+//                    tabbedPanel.remove(STATIC_TAB_COUNT);
 //                }
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                     @Override
@@ -2576,8 +2600,8 @@ public final class WildLogView extends JFrame {
         });
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > 4) {
-                tabbedPanel.remove(4);
+            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             MergeLocationDialog dialog = new MergeLocationDialog(app);
             dialog.setVisible(true);
@@ -2596,8 +2620,8 @@ public final class WildLogView extends JFrame {
         });
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > 4) {
-                tabbedPanel.remove(4);
+            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             MergeVisitDialog dialog = new MergeVisitDialog(app);
             dialog.setVisible(true);
@@ -2933,8 +2957,8 @@ public final class WildLogView extends JFrame {
                 if (choiceForName != JOptionPane.CLOSED_OPTION) {
                     // Close all tabs and go to the home tab
                     tabbedPanel.setSelectedIndex(0);
-                    while (tabbedPanel.getTabCount() > 4) {
-                        tabbedPanel.remove(4);
+                    while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                        tabbedPanel.remove(STATIC_TAB_COUNT);
                     }
                     UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                         @Override
@@ -3041,8 +3065,8 @@ public final class WildLogView extends JFrame {
         });
         if (result == JOptionPane.OK_OPTION) {
             tabbedPanel.setSelectedIndex(0);
-            while (tabbedPanel.getTabCount() > 4) {
-                tabbedPanel.remove(4);
+            while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
+                tabbedPanel.remove(STATIC_TAB_COUNT);
             }
             // Display dialog to select which names should be switched
             int option = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
@@ -3091,9 +3115,9 @@ public final class WildLogView extends JFrame {
 
     public boolean closeAllTabs() {
         boolean closeStatus = true;
-        while ((tabbedPanel.getTabCount() > 4) && (closeStatus)) {
-            tabbedPanel.setSelectedIndex(4);
-            PanelCanSetupHeader tab = (PanelCanSetupHeader) tabbedPanel.getComponentAt(4);
+        while ((tabbedPanel.getTabCount() > STATIC_TAB_COUNT) && (closeStatus)) {
+            tabbedPanel.setSelectedIndex(STATIC_TAB_COUNT);
+            PanelCanSetupHeader tab = (PanelCanSetupHeader) tabbedPanel.getComponentAt(STATIC_TAB_COUNT);
             closeStatus = tab.closeTab();
         }
         return closeStatus;
@@ -3201,6 +3225,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPanel tabElement;
     private javax.swing.JPanel tabHome;
     private javax.swing.JPanel tabLocation;
+    private javax.swing.JPanel tabSightings;
     private javax.swing.JTabbedPane tabbedPanel;
     private javax.swing.JMenu workspaceMenu;
     // End of variables declaration//GEN-END:variables

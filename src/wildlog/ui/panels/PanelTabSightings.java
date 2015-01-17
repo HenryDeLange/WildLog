@@ -76,6 +76,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
         btnGoElement_LocTab1 = new javax.swing.JButton();
         btnGoElement_LocTab = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 formComponentShown(evt);
@@ -104,7 +105,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblLocation);
 
-        btnGoLocation_LocTab.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoLocation_LocTab.setBackground(new java.awt.Color(235, 233, 221));
         btnGoLocation_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
         btnGoLocation_LocTab.setToolTipText("Open a tab for the selected Place.");
         btnGoLocation_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -115,7 +116,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
             }
         });
 
-        btnAddLocation.setBackground(new java.awt.Color(194, 207, 214));
+        btnAddLocation.setBackground(new java.awt.Color(235, 233, 221));
         btnAddLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
         btnAddLocation.setToolTipText("Open a tab for a new Place to be added.");
         btnAddLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -126,7 +127,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
             }
         });
 
-        btnDeleteLocation.setBackground(new java.awt.Color(194, 207, 214));
+        btnDeleteLocation.setBackground(new java.awt.Color(235, 233, 221));
         btnDeleteLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
         btnDeleteLocation.setToolTipText("<html>Delete the selected Place. <br/>This will delete all linked Periods, Observations and files as well.</html>");
         btnDeleteLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -262,13 +263,16 @@ public class PanelTabSightings extends javax.swing.JPanel {
                 .addGap(5, 5, 5))
         );
 
+        jButton1.setBackground(new java.awt.Color(235, 233, 221));
         jButton1.setText("View Map");
 
+        jButton2.setBackground(new java.awt.Color(235, 233, 221));
         jButton2.setText("View Reports");
 
+        jButton3.setBackground(new java.awt.Color(235, 233, 221));
         jButton3.setText("View Exports");
 
-        btnGoVisit_LocTab.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoVisit_LocTab.setBackground(new java.awt.Color(235, 233, 221));
         btnGoVisit_LocTab.setText("View  Place");
         btnGoVisit_LocTab.setToolTipText("Open a tab for the selected Period.");
         btnGoVisit_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -279,7 +283,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
             }
         });
 
-        btnGoElement_LocTab1.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoElement_LocTab1.setBackground(new java.awt.Color(235, 233, 221));
         btnGoElement_LocTab1.setText("View Period");
         btnGoElement_LocTab1.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement_LocTab1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -290,7 +294,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
             }
         });
 
-        btnGoElement_LocTab.setBackground(new java.awt.Color(194, 207, 214));
+        btnGoElement_LocTab.setBackground(new java.awt.Color(235, 233, 221));
         btnGoElement_LocTab.setText("View Creatures");
         btnGoElement_LocTab.setToolTipText("Open a tab for the selected Creature.");
         btnGoElement_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -320,7 +324,7 @@ public class PanelTabSightings extends javax.swing.JPanel {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton2)
