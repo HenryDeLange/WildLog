@@ -1286,7 +1286,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (rdbBrowseDate.isSelected() && dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
                             ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpStartDate.getDate())) 
                                     + " to " + UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(dtpEndDate.getDate())), 
-                                    app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class));
+                                    app.getDBI().searchSightings(dtpStartDate.getDate(), dtpEndDate.getDate(), null, null, null, Sighting.class));
                             dialog.setVisible(true);
                             somethingToReportOn = true;
                         }
@@ -1561,7 +1561,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     private void browseByDate() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog");
         if (dtpStartDate.getDate() != null && dtpEndDate.getDate() != null) {
-            List<Sighting> sightings = app.getDBI().searchSightingOnDate(dtpStartDate.getDate(), dtpEndDate.getDate(), Sighting.class);
+            List<Sighting> sightings = app.getDBI().searchSightings(dtpStartDate.getDate(), dtpEndDate.getDate(), null, null, null, Sighting.class);
             if (sightings.isEmpty()) {
                 DefaultMutableTreeNode lazyNode = new DefaultMutableTreeNode("No Observations found.");
                 root.add(lazyNode);

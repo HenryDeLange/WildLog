@@ -26,17 +26,8 @@ import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
-import wildlog.data.enums.ActiveTimeSpesific;
-import wildlog.data.enums.Age;
-import wildlog.data.enums.Certainty;
-import wildlog.data.enums.ElementType;
-import wildlog.data.enums.GPSAccuracy;
-import wildlog.data.enums.LifeStatus;
-import wildlog.data.enums.Moonlight;
-import wildlog.data.enums.Sex;
-import wildlog.data.enums.SightingEvidence;
-import wildlog.data.enums.TimeAccuracy;
-import wildlog.data.enums.VisitType;
+import wildlog.ui.dialogs.FilterDataListDialog;
+import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.reports.implementations.DayAndNightChart;
@@ -52,14 +43,13 @@ import wildlog.ui.reports.implementations.TimeOfDayChart;
 import wildlog.ui.reports.implementations.TimelineChart;
 import wildlog.ui.reports.implementations.VisitChart;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
-import wildlog.ui.utils.UtilsTime;
 
 
 public class ReportsBaseDialog extends JFrame {
     private final JFXPanel jfxReportChartPanel;
     private final JFXPanel jfxReportListPanel;
     private final List<Sighting> lstOriginalData;
-    private List<Sighting> lstFilteredData;
+    private final List<Sighting> lstFilteredData;
     private List<Element> lstFilteredElements;
     private List<Location> lstFilteredLocations;
     private List<Visit> lstFilteredVisits;
@@ -184,14 +174,18 @@ public class ReportsBaseDialog extends JFrame {
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Report.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(920, 600));
 
+        pnlReportsAndFilters.setBackground(new java.awt.Color(179, 198, 172));
         pnlReportsAndFilters.setMinimumSize(new java.awt.Dimension(200, 500));
         pnlReportsAndFilters.setPreferredSize(new java.awt.Dimension(240, 500));
 
+        pnlReports.setBackground(new java.awt.Color(179, 198, 172));
         pnlReports.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
         pnlReports.setLayout(new java.awt.BorderLayout());
 
+        pnlExport.setBackground(new java.awt.Color(179, 198, 172));
         pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Export Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
+        bntExport.setBackground(new java.awt.Color(179, 198, 172));
         bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         bntExport.setText("Export Report");
         bntExport.setToolTipText("Export the report to PDF or PNG.");
@@ -217,12 +211,14 @@ public class ReportsBaseDialog extends JFrame {
             pnlExportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlExportLayout.createSequentialGroup()
                 .addGap(2, 2, 2)
-                .addComponent(bntExport, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bntExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2))
         );
 
+        pnlFilters.setBackground(new java.awt.Color(179, 198, 172));
         pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
+        btnFilterProperties.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
         btnFilterProperties.setText("Filter on Properties");
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -234,6 +230,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
+        btnFilterElement.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnFilterElement.setText("Filter by Creature");
         btnFilterElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -245,6 +242,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
+        btnFilterLocation.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         btnFilterLocation.setText("Filter by Place");
         btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -256,6 +254,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
+        btnFilterVisit.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         btnFilterVisit.setText("Filter by Period");
         btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -267,6 +266,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
+        btnFilterSightings.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
         btnFilterSightings.setText("View Filtered Observations");
         btnFilterSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -278,6 +278,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
+        btnResetFilters.setBackground(new java.awt.Color(179, 198, 172));
         btnResetFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnResetFilters.setText("Reset Active Data Filters");
         btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -289,6 +290,7 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
+        jPanel4.setBackground(new java.awt.Color(192, 207, 186));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -319,7 +321,7 @@ public class ReportsBaseDialog extends JFrame {
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(5, 5, 5)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(lblTotalRecords))
@@ -327,7 +329,7 @@ public class ReportsBaseDialog extends JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblFilteredRecords)
                     .addComponent(jLabel10))
-                .addContainerGap())
+                .addGap(5, 5, 5))
         );
 
         javax.swing.GroupLayout pnlFiltersLayout = new javax.swing.GroupLayout(pnlFilters);
@@ -346,18 +348,18 @@ public class ReportsBaseDialog extends JFrame {
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFiltersLayout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
-                .addComponent(btnFilterProperties)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnFilterElement)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnFilterLocation)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnFilterVisit)
-                .addGap(10, 10, 10)
+                .addComponent(btnFilterElement, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(btnFilterLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
                 .addComponent(btnFilterSightings)
                 .addGap(10, 10, 10)
-                .addComponent(btnResetFilters)
+                .addComponent(btnResetFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
         );
 
@@ -392,6 +394,7 @@ public class ReportsBaseDialog extends JFrame {
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel5.setLayout(new java.awt.BorderLayout(0, 2));
 
+        pnlChartDescription.setBackground(new java.awt.Color(213, 230, 205));
         pnlChartDescription.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Description", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         lblReportDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -466,7 +469,9 @@ public class ReportsBaseDialog extends JFrame {
         if (dialog.isSelectionMade()) {
             lstFilteredElements = dialog.getSelectedData();
             // Filter the original results using the provided values
-            doFiltering();
+            UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
+                    lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
+                    lblFilteredRecords, activeReport, jfxReportChartPanel);
         }
     }//GEN-LAST:event_btnFilterElementActionPerformed
 
@@ -476,7 +481,9 @@ public class ReportsBaseDialog extends JFrame {
         if (dialog.isSelectionMade()) {
             lstFilteredLocations = dialog.getSelectedData();
             // Filter the original results using the provided values
-            doFiltering();
+            UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
+                    lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
+                    lblFilteredRecords, activeReport, jfxReportChartPanel);
         }
     }//GEN-LAST:event_btnFilterLocationActionPerformed
 
@@ -486,7 +493,9 @@ public class ReportsBaseDialog extends JFrame {
         if (dialog.isSelectionMade()) {
             lstFilteredVisits = dialog.getSelectedData();
             // Filter the original results using the provided values
-            doFiltering();
+            UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
+                    lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
+                    lblFilteredRecords, activeReport, jfxReportChartPanel);
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
@@ -506,7 +515,9 @@ public class ReportsBaseDialog extends JFrame {
         if (dialog.isSelectionMade()) {
             filterProperties = dialog.getSelectedFilterProperties();
             // Filter the original results using the provided values
-            doFiltering();
+            UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
+                    lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
+                    lblFilteredRecords, activeReport, jfxReportChartPanel);
         }
     }//GEN-LAST:event_btnFilterPropertiesActionPerformed
 
@@ -514,359 +525,10 @@ public class ReportsBaseDialog extends JFrame {
         lstFilteredElements = null;
         lstFilteredLocations = null;
         lstFilteredVisits = null;
-        doFiltering();
+        UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
+                lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
+                lblFilteredRecords, activeReport, jfxReportChartPanel);
     }//GEN-LAST:event_btnResetFiltersActionPerformed
-
-    private void doFiltering() {
-        // NOTE: Don't create a new ArrayList (clear existing instead), because the reports are holding on to the reference 
-        //       and will be stuck with an old list otherwise. Easiest to just keep the reference constant than to try and 
-        //       update the all reports everytime (the active report already gets updated explicitly).
-        lstFilteredData.clear();
-        // All filters need to be taken into account all the time, even if only one was changed the results must still fullfill the other filters...
-        for (Sighting sighting : lstOriginalData) {
-            // Check filtered Elements
-            if (lstFilteredElements != null) {
-                boolean found = false;
-                for (Element element : lstFilteredElements) {
-                    if (sighting.getElementName().equals(element.getPrimaryName())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    continue;
-                }
-            }
-            // Check filtered Locations
-            if (lstFilteredLocations != null) {
-                boolean found = false;
-                for (Location location : lstFilteredLocations) {
-                    if (sighting.getLocationName().equals(location.getName())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    continue;
-                }
-            }
-            // Check filtered Visits
-            if (lstFilteredVisits != null) {
-                boolean found = false;
-                for (Visit visit : lstFilteredVisits) {
-                    if (sighting.getVisitName().equals(visit.getName())) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    continue;
-                }
-            }
-            // Check filtered Sightings
-            // TODO: mmm dit gaan dalk tricky wees...
-            
-            // Check filtered Properties
-            if (filterProperties != null) {
-                // Date
-                if (filterProperties.getStartDate() != null) {
-                    if (UtilsTime.getLocalDateFromDate(sighting.getDate()).isBefore(filterProperties.getStartDate())) {
-                        continue;
-                    }
-                }
-                if (filterProperties.getEndDate() != null) {
-                    if (UtilsTime.getLocalDateFromDate(sighting.getDate()).isAfter(filterProperties.getEndDate())) {
-                        continue;
-                    }
-                }
-                // Time
-                if (filterProperties.getStartTime() != null) {
-                    if (UtilsTime.getLocalTimeFromDate(sighting.getDate()).isBefore(filterProperties.getStartTime())) {
-                        continue;
-                    }
-                }
-                if (filterProperties.getEndTime() != null) {
-                    if (UtilsTime.getLocalTimeFromDate(sighting.getDate()).isAfter(filterProperties.getEndTime())) {
-                        continue;
-                    }
-                }
-                // Time of day
-                if (filterProperties.getActiveTimes() != null) {
-                    boolean found = false;
-                    for (ActiveTimeSpesific activeTimeSpesific : filterProperties.getActiveTimes()) {
-                        if (activeTimeSpesific.equals(sighting.getTimeOfDay())) {
-                            found = true;
-                            break;
-                        }
-                        if (activeTimeSpesific.equals(ActiveTimeSpesific.UNKNOWN)) {
-                            if (sighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(sighting.getTimeOfDay())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Moonlight
-                if (filterProperties.getMoonlights() != null) {
-                    boolean found = false;
-                    for (Moonlight moonlight : filterProperties.getMoonlights()) {
-                        if (moonlight.equals(sighting.getMoonlight())) {
-                            found = true;
-                            break;
-                        }
-                        if (moonlight.equals(Moonlight.UNKNOWN)) {
-                            if (sighting.getMoonlight() == null || Moonlight.NONE.equals(sighting.getMoonlight())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Moonphase
-                if (!(filterProperties.isMoonphaseIsLess() && filterProperties.isMoonphaseIsMore()) && sighting.getMoonPhase()  >= 0) {
-                    boolean found = false;
-                    if (filterProperties.getMoonphase() == sighting.getMoonPhase()) {
-                        found = true;
-                    }
-                    else
-                    if (filterProperties.isMoonphaseIsLess() && sighting.getMoonPhase() < filterProperties.getMoonphase()) {
-                        found = true;
-                    }
-                    else
-                    if (filterProperties.isMoonphaseIsMore() && sighting.getMoonPhase() > filterProperties.getMoonphase()) {
-                        found = true;
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                
-                // Visit Type
-                if (filterProperties.getVisitTypes() != null) {
-                    boolean found = false;
-                    Visit visit = WildLogApp.getApplication().getDBI().find(new Visit(sighting.getVisitName()));
-                    for (VisitType visitType : filterProperties.getVisitTypes()) {
-                        if (visit != null) {
-                            if (visitType.equals(visit.getType())) {
-                                found = true;
-                                break;
-                            }
-                            if (visitType.equals(VisitType.UNKNOWN)) {
-                                if (visit.getType() == null || VisitType.NONE.equals(visit.getType())) {
-                                    found = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Evidence
-                if (filterProperties.getEvidences() != null) {
-                    boolean found = false;
-                    for (SightingEvidence sightingEvidence : filterProperties.getEvidences()) {
-                        if (sightingEvidence.equals(sighting.getSightingEvidence())) {
-                            found = true;
-                            break;
-                        }
-                        if (sightingEvidence.equals(SightingEvidence.UNKNOWN)) {
-                            if (sighting.getSightingEvidence() == null || SightingEvidence.NONE.equals(sighting.getSightingEvidence())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Life Status
-                if (filterProperties.getLifeStatuses() != null) {
-                    boolean found = false;
-                    for (LifeStatus lifeStatus : filterProperties.getLifeStatuses()) {
-                        if (lifeStatus.equals(sighting.getLifeStatus())) {
-                            found = true;
-                            break;
-                        }
-                        if (lifeStatus.equals(LifeStatus.UNKNOWN)) {
-                            if (sighting.getLifeStatus() == null || LifeStatus.NONE.equals(sighting.getLifeStatus())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Time Accuracy
-                if (filterProperties.getTimeAccuracies() != null) {
-                    boolean found = false;
-                    for (TimeAccuracy timeAccuracy : filterProperties.getTimeAccuracies()) {
-                        if (timeAccuracy.equals(sighting.getTimeAccuracy())) {
-                            found = true;
-                            break;
-                        }
-                        if (timeAccuracy.equals(TimeAccuracy.UNKNOWN)) {
-                            if (sighting.getTimeAccuracy() == null || TimeAccuracy.NONE.equals(sighting.getTimeAccuracy())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Sighting Certianty
-                if (filterProperties.getCertainties() != null) {
-                    boolean found = false;
-                    for (Certainty certainty : filterProperties.getCertainties()) {
-                        if (certainty.equals(sighting.getCertainty())) {
-                            found = true;
-                            break;
-                        }
-                        if (certainty.equals(Certainty.UNKNOWN)) {
-                            if (sighting.getCertainty() == null || Certainty.NONE.equals(sighting.getCertainty())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // GPS Certainty
-                if (filterProperties.getGPSAccuracies() != null) {
-                    boolean found = false;
-                    for (GPSAccuracy gpsAccuracy : filterProperties.getGPSAccuracies()) {
-                        if (gpsAccuracy.equals(sighting.getGPSAccuracy())) {
-                            found = true;
-                            break;
-                        }
-                        if (gpsAccuracy.equals(GPSAccuracy.UNKNOWN)) {
-                            if (sighting.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(sighting.getGPSAccuracy())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Age
-                if (filterProperties.getAges() != null) {
-                    boolean found = false;
-                    for (Age age : filterProperties.getAges()) {
-                        if (age.equals(sighting.getAge())) {
-                            found = true;
-                            break;
-                        }
-                        if (age.equals(Age.UNKNOWN)) {
-                            if (sighting.getAge() == null || Age.NONE.equals(sighting.getAge())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Sex
-                if (filterProperties.getSexes() != null) {
-                    boolean found = false;
-                    for (Sex sex : filterProperties.getSexes()) {
-                        if (sex.equals(sighting.getSex())) {
-                            found = true;
-                            break;
-                        }
-                        if (sex.equals(Sex.UNKNOWN)) {
-                            if (sighting.getSex() == null || Sex.NONE.equals(sighting.getSex())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Number of individuals
-                if (!(filterProperties.isNumberOfElementsIsLess()&& filterProperties.isNumberOfElementsIsMore()) && sighting.getNumberOfElements() >= 0) {
-                    boolean found = false;
-                    if (filterProperties.getNumberOfElements() == sighting.getNumberOfElements()) {
-                        found = true;
-                    }
-                    else
-                    if (filterProperties.isNumberOfElementsIsLess() && sighting.getNumberOfElements() < filterProperties.getNumberOfElements()) {
-                        found = true;
-                    }
-                    else
-                    if (filterProperties.isNumberOfElementsIsMore() && sighting.getNumberOfElements() > filterProperties.getNumberOfElements()) {
-                        found = true;
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Tag
-                if (sighting.getTag() == null || sighting.getTag().trim().isEmpty()) {
-                    if (!filterProperties.isIncludeEmptyTags()) {
-                        continue;
-                    }
-                }
-                else
-                if (filterProperties.getTags() != null && !filterProperties.getTags().isEmpty()) {
-                    boolean found = false;
-                    for (String tag : filterProperties.getTags()) {
-                        if (!tag.trim().isEmpty() && sighting.getTag().trim().toLowerCase().contains(tag.trim().toLowerCase())) {
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-                // Element Type
-                if (filterProperties.getElementTypes()!= null) {
-                    boolean found = false;
-                    Element element = WildLogApp.getApplication().getDBI().find(new Element(sighting.getElementName()));
-                    for (ElementType elementType : filterProperties.getElementTypes()) {
-                        if (element != null) {
-                            if (elementType.equals(element.getType())) {
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!found) {
-                        continue;
-                    }
-                }
-            }
-            // If we haven't breaked from the for loop yet (aka continued to the next record), 
-            // then this record can be added to the list
-            lstFilteredData.add(sighting.cloneShallow());
-        }
-        lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
-        // Redraw the chart
-        if (activeReport != null) {
-            activeReport.setDataList(lstFilteredData);
-            activeReport.createReport(jfxReportChartPanel.getScene());
-        }
-    }
     
     private List<Sighting> getCopiedList(List<Sighting> inList) {
         List<Sighting> list = new ArrayList<>(inList.size());

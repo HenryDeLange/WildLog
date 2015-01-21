@@ -2,43 +2,51 @@ package wildlog.ui.panels;
 
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.table.DefaultTableModel;
 import wildlog.WildLogApp;
+import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.ui.dialogs.FilterDataListDialog;
+import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
+import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 
 
-public class PanelTabSightings extends javax.swing.JPanel {
+public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDataChanges {
     private final WildLogApp app;
     private final JTabbedPane tabbedPanel;
-    private final Location searchLocation;
+    private List<Sighting> lstOriginalData;
+    private List<Sighting> lstFilteredData;
+    private List<Element> lstFilteredElements;
+    private List<Location> lstFilteredLocations;
+    private List<Visit> lstFilteredVisits;
+//    private List<Sighting> lstFilteredSightings;
+    private FilterProperties filterProperties = null;
 
     public PanelTabSightings(WildLogApp inApp, JTabbedPane inTabbedPanel) {
         app = inApp;
         tabbedPanel = inTabbedPanel;
-        searchLocation = new Location();
         initComponents();
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
         // Add key listeners to table to allow the selection of rows based on key events.
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblLocation);
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblElement);
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblVisit);
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblSightings);
         // Add listner to auto resize columns.
-        UtilsTableGenerator.setupColumnResizingListener(tblLocation, 1);
-        UtilsTableGenerator.setupColumnResizingListener(tblElement, 1);
-        UtilsTableGenerator.setupColumnResizingListener(tblVisit, 1);
+        UtilsTableGenerator.setupColumnResizingListener(tblSightings, 1);
     }
 
     /**
@@ -50,31 +58,34 @@ public class PanelTabSightings extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblLocation = new javax.swing.JTable();
-        btnGoLocation_LocTab = new javax.swing.JButton();
-        btnAddLocation = new javax.swing.JButton();
-        btnDeleteLocation = new javax.swing.JButton();
+        tblSightings = new javax.swing.JTable();
+        btnGoSighting = new javax.swing.JButton();
+        btnAddSighting = new javax.swing.JButton();
+        btnDeleteSighting = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblVisit = new javax.swing.JTable();
-        jXDatePicker1 = new org.jdesktop.swingx.JXDatePicker();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tblElement = new javax.swing.JTable();
-        jXDatePicker2 = new org.jdesktop.swingx.JXDatePicker();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tblElement1 = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnGoElement = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnGoVisit = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        btnGoLocation = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        btnGoVisit_LocTab = new javax.swing.JButton();
-        btnGoElement_LocTab1 = new javax.swing.JButton();
-        btnGoElement_LocTab = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        btnFilterProperties = new javax.swing.JButton();
+        lblFilteredRecords = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        btnFilterElements = new javax.swing.JButton();
+        btnFilterLocation = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnFilterVisit = new javax.swing.JButton();
+        lblTotalRecords = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -83,58 +94,58 @@ public class PanelTabSightings extends javax.swing.JPanel {
             }
         });
 
-        tblLocation.setAutoCreateRowSorter(true);
-        tblLocation.setMaximumSize(new java.awt.Dimension(300, 300));
-        tblLocation.setMinimumSize(new java.awt.Dimension(300, 300));
-        tblLocation.setSelectionBackground(new java.awt.Color(67, 97, 113));
-        tblLocation.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblSightings.setAutoCreateRowSorter(true);
+        tblSightings.setMaximumSize(new java.awt.Dimension(300, 300));
+        tblSightings.setMinimumSize(new java.awt.Dimension(300, 300));
+        tblSightings.setSelectionBackground(new java.awt.Color(125, 120, 93));
+        tblSightings.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblLocationMouseClicked(evt);
+                tblSightingsMouseClicked(evt);
             }
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                tblLocationMouseReleased(evt);
+                tblSightingsMouseReleased(evt);
             }
         });
-        tblLocation.addKeyListener(new java.awt.event.KeyAdapter() {
+        tblSightings.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblLocationKeyPressed(evt);
+                tblSightingsKeyPressed(evt);
             }
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                tblLocationKeyReleased(evt);
+                tblSightingsKeyReleased(evt);
             }
         });
-        jScrollPane1.setViewportView(tblLocation);
+        jScrollPane1.setViewportView(tblSightings);
 
-        btnGoLocation_LocTab.setBackground(new java.awt.Color(235, 233, 221));
-        btnGoLocation_LocTab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
-        btnGoLocation_LocTab.setToolTipText("Open a tab for the selected Place.");
-        btnGoLocation_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoLocation_LocTab.setFocusPainted(false);
-        btnGoLocation_LocTab.addActionListener(new java.awt.event.ActionListener() {
+        btnGoSighting.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
+        btnGoSighting.setToolTipText("Open a tab for the selected Place.");
+        btnGoSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoSighting.setFocusPainted(false);
+        btnGoSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoLocation_LocTabActionPerformed(evt);
-            }
-        });
-
-        btnAddLocation.setBackground(new java.awt.Color(235, 233, 221));
-        btnAddLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
-        btnAddLocation.setToolTipText("Open a tab for a new Place to be added.");
-        btnAddLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAddLocation.setFocusPainted(false);
-        btnAddLocation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddLocationActionPerformed(evt);
+                btnGoSightingActionPerformed(evt);
             }
         });
 
-        btnDeleteLocation.setBackground(new java.awt.Color(235, 233, 221));
-        btnDeleteLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnDeleteLocation.setToolTipText("<html>Delete the selected Place. <br/>This will delete all linked Periods, Observations and files as well.</html>");
-        btnDeleteLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnDeleteLocation.setFocusPainted(false);
-        btnDeleteLocation.addActionListener(new java.awt.event.ActionListener() {
+        btnAddSighting.setBackground(new java.awt.Color(235, 233, 221));
+        btnAddSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Add.gif"))); // NOI18N
+        btnAddSighting.setToolTipText("Open a tab for a new Place to be added.");
+        btnAddSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAddSighting.setFocusPainted(false);
+        btnAddSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteLocationActionPerformed(evt);
+                btnAddSightingActionPerformed(evt);
+            }
+        });
+
+        btnDeleteSighting.setBackground(new java.awt.Color(235, 233, 221));
+        btnDeleteSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
+        btnDeleteSighting.setToolTipText("<html>Delete the selected Place. <br/>This will delete all linked Periods, Observations and files as well.</html>");
+        btnDeleteSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDeleteSighting.setFocusPainted(false);
+        btnDeleteSighting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteSightingActionPerformed(evt);
             }
         });
 
@@ -156,154 +167,230 @@ public class PanelTabSightings extends javax.swing.JPanel {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("All Observations:");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Filter Options:"));
+        jPanel1.setBackground(new java.awt.Color(235, 233, 221));
 
-        tblVisit.setAutoCreateRowSorter(true);
-        tblVisit.setSelectionBackground(new java.awt.Color(96, 92, 116));
-        tblVisit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblVisitMouseClicked(evt);
+        btnGoElement.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnGoElement.setText("View Creatures");
+        btnGoElement.setToolTipText("Open a tab for the selected Creature.");
+        btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoElement.setFocusPainted(false);
+        btnGoElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoElement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoElementActionPerformed(evt);
             }
         });
-        tblVisit.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblVisitKeyPressed(evt);
+
+        jButton2.setBackground(new java.awt.Color(235, 233, 221));
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        jButton2.setText("View Reports");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        btnGoVisit.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnGoVisit.setText("View Period");
+        btnGoVisit.setToolTipText("Open a tab for the selected Creature.");
+        btnGoVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoVisit.setFocusPainted(false);
+        btnGoVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoVisit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoVisitActionPerformed(evt);
             }
         });
-        jScrollPane2.setViewportView(tblVisit);
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel4.setText("Filter by Dates:");
+        jButton1.setBackground(new java.awt.Color(235, 233, 221));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        jButton1.setText("View Map");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel3.setText("Filter by Places:");
-
-        tblElement.setAutoCreateRowSorter(true);
-        tblElement.setSelectionBackground(new java.awt.Color(82, 115, 79));
-        tblElement.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblElementMouseClicked(evt);
+        btnGoLocation.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnGoLocation.setText("View  Place");
+        btnGoLocation.setToolTipText("Open a tab for the selected Period.");
+        btnGoLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoLocation.setFocusPainted(false);
+        btnGoLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoLocationActionPerformed(evt);
             }
         });
-        tblElement.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblElementKeyPressed(evt);
-            }
-        });
-        jScrollPane3.setViewportView(tblElement);
 
-        tblElement1.setAutoCreateRowSorter(true);
-        tblElement1.setSelectionBackground(new java.awt.Color(82, 115, 79));
-        tblElement1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblElement1MouseClicked(evt);
-            }
-        });
-        tblElement1.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                tblElement1KeyPressed(evt);
-            }
-        });
-        jScrollPane4.setViewportView(tblElement1);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel2.setText("Filter by Creatures:");
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Filter by Periods:");
+        jButton3.setBackground(new java.awt.Color(235, 233, 221));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        jButton3.setText("View Exports");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(351, 351, 351))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                        .addGap(10, 10, 10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                .addGap(0, 0, 0))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jXDatePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jXDatePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1))
+                .addGap(31, 31, 31)
+                .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(5, 5, 5))
+                .addComponent(btnGoVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
-        jButton1.setBackground(new java.awt.Color(235, 233, 221));
-        jButton1.setText("View Map");
+        jPanel2.setBackground(new java.awt.Color(235, 233, 221));
 
-        jButton2.setBackground(new java.awt.Color(235, 233, 221));
-        jButton2.setText("View Reports");
+        jLabel3.setText("Selected 8 Creatures of 8 in total.");
 
-        jButton3.setBackground(new java.awt.Color(235, 233, 221));
-        jButton3.setText("View Exports");
+        jButton5.setBackground(new java.awt.Color(235, 233, 221));
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        jButton5.setText("Reset all filters");
 
-        btnGoVisit_LocTab.setBackground(new java.awt.Color(235, 233, 221));
-        btnGoVisit_LocTab.setText("View  Place");
-        btnGoVisit_LocTab.setToolTipText("Open a tab for the selected Period.");
-        btnGoVisit_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoVisit_LocTab.setFocusPainted(false);
-        btnGoVisit_LocTab.addActionListener(new java.awt.event.ActionListener() {
+        btnFilterProperties.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
+        btnFilterProperties.setText("Filter Observations");
+        btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoVisit_LocTabActionPerformed(evt);
+                btnFilterPropertiesActionPerformed(evt);
             }
         });
 
-        btnGoElement_LocTab1.setBackground(new java.awt.Color(235, 233, 221));
-        btnGoElement_LocTab1.setText("View Period");
-        btnGoElement_LocTab1.setToolTipText("Open a tab for the selected Creature.");
-        btnGoElement_LocTab1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement_LocTab1.setFocusPainted(false);
-        btnGoElement_LocTab1.addActionListener(new java.awt.event.ActionListener() {
+        lblFilteredRecords.setText("000");
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel10.setText("Selected Records:");
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel8.setText("Total Records:");
+
+        btnFilterElements.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterElements.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnFilterElements.setText("Filter by Creature");
+        btnFilterElements.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoElement_LocTab1ActionPerformed(evt);
+                btnFilterElementsActionPerformed(evt);
             }
         });
 
-        btnGoElement_LocTab.setBackground(new java.awt.Color(235, 233, 221));
-        btnGoElement_LocTab.setText("View Creatures");
-        btnGoElement_LocTab.setToolTipText("Open a tab for the selected Creature.");
-        btnGoElement_LocTab.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement_LocTab.setFocusPainted(false);
-        btnGoElement_LocTab.addActionListener(new java.awt.event.ActionListener() {
+        btnFilterLocation.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnFilterLocation.setText("Filter by Place");
+        btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoElement_LocTabActionPerformed(evt);
+                btnFilterLocationActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("Selected 5 places of 10");
+
+        btnFilterVisit.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnFilterVisit.setText("Filter by Period");
+        btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterVisitActionPerformed(evt);
+            }
+        });
+
+        lblTotalRecords.setText("000");
+
+        jLabel2.setText("Selected 7 Periods of 10 in total");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setText("<html><u>Observation Filters:</u></html>");
+
+        jLabel5.setText("Apply filters to view more/less Observations in the table.");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnFilterProperties, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTotalRecords)
+                            .addComponent(lblFilteredRecords))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnFilterLocation)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel1))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnFilterVisit)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnFilterElements)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel3))
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(lblTotalRecords))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblFilteredRecords)
+                            .addComponent(jLabel10))))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFilterLocation)
+                    .addComponent(jLabel1))
+                .addGap(15, 15, 15)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFilterVisit)
+                    .addComponent(jLabel2))
+                .addGap(15, 15, 15)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(btnFilterElements))
+                .addGap(18, 18, 18)
+                .addComponent(jButton5)
+                .addGap(21, 21, 21))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -311,33 +398,21 @@ public class PanelTabSightings extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDeleteSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAddSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                        .addComponent(btnGoSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
+                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGoLocation_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(10, 10, 10)
-                        .addComponent(jScrollPane1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton3)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnGoElement_LocTab1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnGoElement_LocTab)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(28, 28, 28)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -346,249 +421,258 @@ public class PanelTabSightings extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(13, 13, 13)
-                        .addComponent(btnGoLocation_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnGoSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
-                        .addComponent(btnAddLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAddSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20)
-                        .addComponent(btnDeleteLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnGoElement_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGoElement_LocTab1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnGoVisit_LocTab, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)
-                            .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 83, Short.MAX_VALUE)))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblLocationMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseClicked
+    private void tblSightingsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseClicked
         if (evt.getClickCount() == 2) {
-            btnGoLocation_LocTabActionPerformed(null);
+            btnGoSightingActionPerformed(null);
         }
-    }//GEN-LAST:event_tblLocationMouseClicked
+    }//GEN-LAST:event_tblSightingsMouseClicked
 
-    private void tblLocationMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLocationMouseReleased
-        if (tblLocation.getSelectedRowCount() == 1) {
-            if (!(evt instanceof UtilsUI.GeneratedMouseEvent)) {
-                tblVisit.clearSelection();
-                tblElement.clearSelection();
-            }
-            // Get Image
-            final Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
-            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(tempLocation.getWildLogFileID()));
-            if (fotos.size() > 0) {
-                UtilsImageProcessing.setupFoto(tempLocation.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
+    private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
+        if (tblSightings.getSelectedRowCount() == 1) {
+            Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 7)));
+            List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
+            if (fotos.size() > 0 ) {
+                UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
             }
             else {
                 lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
             }
-            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, tempLocation);
-            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, tempLocation);
         }
         else {
             lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
-            UtilsTableGenerator.setupVisitTableSmallWithSightings(app, tblVisit, null);
-            UtilsTableGenerator.setupElementsTableMediumForLocation(app, tblElement, null);
-            if (tblLocation.getSelectedRowCount() == 0) {
-                tblVisit.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
-                tblElement.setModel(new DefaultTableModel(new String[]{"No Place Selected"}, 0));
-            }
-            else {
-                tblVisit.setModel(new DefaultTableModel(new String[]{"More Than One Place Selected"}, 0));
-                tblElement.setModel(new DefaultTableModel(new String[]{"More Than One Place Selected"}, 0));
-            }
         }
-    }//GEN-LAST:event_tblLocationMouseReleased
+    }//GEN-LAST:event_tblSightingsMouseReleased
 
-    private void tblLocationKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyPressed
+    private void tblSightingsKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnGoLocation_LocTabActionPerformed(null);
+            btnGoSightingActionPerformed(null);
         }
         else
         if (evt.getKeyCode() == KeyEvent.VK_DELETE) {
-            btnDeleteLocationActionPerformed(null);
+            btnDeleteSightingActionPerformed(null);
         }
-    }//GEN-LAST:event_tblLocationKeyPressed
+    }//GEN-LAST:event_tblSightingsKeyPressed
 
-    private void tblLocationKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblLocationKeyReleased
+    private void tblSightingsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblSightingsKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_UP || evt.getKeyCode() == KeyEvent.VK_DOWN) {
-            tblLocationMouseReleased(null);
+            tblSightingsMouseReleased(null);
         }
-    }//GEN-LAST:event_tblLocationKeyReleased
+    }//GEN-LAST:event_tblSightingsKeyReleased
 
-    private void tblVisitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblVisitMouseClicked
-        if (evt.getClickCount() == 2) {
-            btnGoVisit_LocTabActionPerformed(null);
+    private void btnGoSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoSightingActionPerformed
+        if (tblSightings.getSelectedRowCount() == 1) {
+            Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 7)));
+            Element element = app.getDBI().find(new Element((String) tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 0)));
+            Location location = app.getDBI().find(new Location((String) tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 1)));
+            Visit visit = app.getDBI().find(new Visit((String) tblSightings.getModel().getValueAt(
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 2)));
+            PanelSighting dialog = new PanelSighting(
+                    app, app.getMainFrame(), "Edit an Existing Observation",
+                    sighting, location, visit, element, this, false, false, false);
+            dialog.setVisible(true);
+            doTheRefresh(this);
         }
-    }//GEN-LAST:event_tblVisitMouseClicked
-
-    private void tblVisitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblVisitKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnGoVisit_LocTabActionPerformed(null);
-        }
-    }//GEN-LAST:event_tblVisitKeyPressed
-
-    private void btnGoLocation_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocation_LocTabActionPerformed
-        app.getMainFrame().getGlassPane().setVisible(true);
-        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        int[] selectedRows = tblLocation.getSelectedRows();
-        for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)),
-                PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
-        }
-        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
-        app.getMainFrame().getGlassPane().setVisible(false);
-    }//GEN-LAST:event_btnGoLocation_LocTabActionPerformed
-
-    private void btnGoElement_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTabActionPerformed
-        app.getMainFrame().getGlassPane().setVisible(true);
-        app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        int[] selectedRows = tblElement.getSelectedRows();
-        for (int t = 0; t < selectedRows.length; t++) {
-            UtilsPanelGenerator.openPanelAsTab(app, (String)(tblElement.getModel().getValueAt(tblElement.convertRowIndexToModel(selectedRows[t]), 1)),
-                PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
-        }
-        app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
-        app.getMainFrame().getGlassPane().setVisible(false);
-    }//GEN-LAST:event_btnGoElement_LocTabActionPerformed
-
-    private void btnAddLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddLocationActionPerformed
-        UtilsPanelGenerator.openNewPanelAsTab(app, PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
-    }//GEN-LAST:event_btnAddLocationActionPerformed
-
-    private void btnDeleteLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLocationActionPerformed
-        if (tblLocation.getSelectedRowCount() > 0) {
-            int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
-                @Override
-                public int showDialog() {
-                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
-                        "Are you sure you want to delete the Place(s)? This will delete all Periods, Observations and files linked to this Place(s) as well.",
-                        "Delete Place(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                }
-            });
-            if (result == JOptionPane.YES_OPTION) {
-                int[] selectedRows = tblLocation.getSelectedRows();
-                for (int t = 0; t < selectedRows.length; t++) {
-                    Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(selectedRows[t]), 1)));
-                    Visit tempVisit = new Visit();
-                    tempVisit.setLocationName(tempLocation.getName());
-                    List<Visit> visits = app.getDBI().list(tempVisit);
-                    for (int i = 0; i < visits.size(); i++) {
-                        UtilsPanelGenerator.removeOpenedTab(visits.get(i).getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel);
+        else {
+            UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        JOptionPane.showMessageDialog(app.getMainFrame(),
+                                "Only one Observation can be viewed at a time. Please select one row in the table and try again.",
+                                "Select One Observation", JOptionPane.WARNING_MESSAGE);
+                        return 0;
                     }
-                    // Daar kan steeds tabs wees wat nuwe visits het vir die location wat nog nie gesave was nie wat ek ook moet toe maak...
-                    // Build up list and delete on components not index to prevent index issues when removing
-                    List<PanelCanSetupHeader.HeaderPanel> tabsToRemove = new ArrayList<>(tabbedPanel.getTabCount());
-                    for (int i = 0; i < tabbedPanel.getTabCount(); i++) {
-                        if (tabbedPanel.getTabComponentAt(i) instanceof PanelCanSetupHeader.HeaderPanel) {
-                            PanelCanSetupHeader.HeaderPanel headerPanel = (PanelCanSetupHeader.HeaderPanel)tabbedPanel.getTabComponentAt(i);
-                            if (headerPanel.getTabType() != null && PanelCanSetupHeader.TabTypes.VISIT.equals(headerPanel.getTabType())) {
-                                PanelVisit panelVisit = (PanelVisit)headerPanel.getParentPanel();
-                                if (panelVisit.getLocationForVisit() != null
-                                    && tempLocation.getName().equalsIgnoreCase(panelVisit.getLocationForVisit().getName())) {
-                                    tabsToRemove.add(headerPanel);
-                                }
-                            }
-                        }
-                    }
-                    for (PanelCanSetupHeader.HeaderPanel headerPanel : tabsToRemove) {
-                        tabbedPanel.remove(headerPanel.getParentPanel());
-                    }
-                    // Remove die loation se eie tab
-                    UtilsPanelGenerator.removeOpenedTab(tempLocation.getName(), PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel);
-                    app.getDBI().delete(tempLocation);
-                }
-                formComponentShown(null);
-            }
+           });
         }
-    }//GEN-LAST:event_btnDeleteLocationActionPerformed
+    }//GEN-LAST:event_btnGoSightingActionPerformed
 
-    private void tblElementMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElementMouseClicked
-        if (evt.getClickCount() == 2) {
-            btnGoElement_LocTabActionPerformed(null);
-        }
-    }//GEN-LAST:event_tblElementMouseClicked
-
-    private void tblElementKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElementKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            btnGoElement_LocTabActionPerformed(null);
-        }
-    }//GEN-LAST:event_tblElementKeyPressed
-
-    private void btnGoVisit_LocTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisit_LocTabActionPerformed
-        if (tblLocation.getSelectedRow() != -1) {
+    private void btnGoElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElementActionPerformed
+        if (tblSightings.getSelectedRowCount() >= 1) {
             app.getMainFrame().getGlassPane().setVisible(true);
             app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
-            int[] selectedRows = tblVisit.getSelectedRows();
-            for (int t = 0; t < selectedRows.length; t++) {
-                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblVisit.getModel().getValueAt(tblVisit.convertRowIndexToModel(selectedRows[t]), 1)),
-                    PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, tempLocation);
+            for (int t = 0; t < tblSightings.getSelectedRows().length; t++) {
+                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 0)),
+                    PanelCanSetupHeader.TabTypes.ELEMENT, tabbedPanel, null);
             }
             app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
             app.getMainFrame().getGlassPane().setVisible(false);
         }
-    }//GEN-LAST:event_btnGoVisit_LocTabActionPerformed
+    }//GEN-LAST:event_btnGoElementActionPerformed
+
+    private void btnAddSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddSightingActionPerformed
+        tblSightings.clearSelection();
+        PanelSighting dialog = new PanelSighting(
+                app, app.getMainFrame(), "Add a New Observation",
+                new Sighting(), null, null, null, this, true, false, false);
+        dialog.setVisible(true);
+        doTheRefresh(this);
+    }//GEN-LAST:event_btnAddSightingActionPerformed
+
+    private void btnDeleteSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteSightingActionPerformed
+        if (tblSightings.getSelectedRowCount() > 0) {
+           int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                    @Override
+                    public int showDialog() {
+                        return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                                "Are you sure you want to delete the selected Observation(s)? This will delete all files linked to the Observation(s) as well.",
+                                "Delete Observations(s)", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    }
+           });
+            if (result == JOptionPane.YES_OPTION) {
+                for (int row : tblSightings.getSelectedRows())  {
+                    Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
+                            tblSightings.convertRowIndexToModel(row), 7)));
+                    app.getDBI().delete(sighting);
+                }
+                doTheRefresh(this);
+            }
+        }
+    }//GEN-LAST:event_btnDeleteSightingActionPerformed
+
+    private void btnGoLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoLocationActionPerformed
+        if (tblSightings.getSelectedRowCount() >= 1) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            for (int t = 0; t < tblSightings.getSelectedRows().length; t++) {
+                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 1)),
+                    PanelCanSetupHeader.TabTypes.LOCATION, tabbedPanel, null);
+            }
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+            app.getMainFrame().getGlassPane().setVisible(false);
+        }
+    }//GEN-LAST:event_btnGoLocationActionPerformed
 
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
-        if (tblLocation.getSelectedRowCount() == 1) {
-            Location tempLocation = app.getDBI().find(new Location((String)tblLocation.getModel().getValueAt(tblLocation.convertRowIndexToModel(tblLocation.getSelectedRow()), 1)));
+        if (tblSightings.getSelectedRowCount() == 1) {
+            Location tempLocation = app.getDBI().find(new Location((String)tblSightings.getModel().getValueAt(tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 1)));
             UtilsFileProcessing.openFile(tempLocation.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, searchLocation);
+        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, new Date(2014 + 1900, 1, 1), new Date(), null, null, null);
     }//GEN-LAST:event_formComponentShown
 
-    private void tblElement1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblElement1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblElement1MouseClicked
+    @Override
+    public void doTheRefresh(Object inIndicator) {
+        
+    }
+    
+    private void btnGoVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoVisitActionPerformed
+        if (tblSightings.getSelectedRowCount() >= 1) {
+            app.getMainFrame().getGlassPane().setVisible(true);
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            for (int t = 0; t < tblSightings.getSelectedRows().length; t++) {
+                UtilsPanelGenerator.openPanelAsTab(app, (String)(tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 2)),
+                    PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, 
+                    new Location((String)(tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(tblSightings.getSelectedRows()[t]), 1))));
+            }
+            app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+            app.getMainFrame().getGlassPane().setVisible(false);
+        }
+    }//GEN-LAST:event_btnGoVisitActionPerformed
 
-    private void tblElement1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblElement1KeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tblElement1KeyPressed
+    private void btnFilterPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterPropertiesActionPerformed
+        FilterPropertiesDialog<Sighting> dialog = new FilterPropertiesDialog<>(app.getMainFrame(), lstOriginalData, filterProperties);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            filterProperties = dialog.getSelectedFilterProperties();
+            // Filter the original results using the provided values
+            UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
+                    lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
+                    lblFilteredRecords, null, null);
+        }
+    }//GEN-LAST:event_btnFilterPropertiesActionPerformed
 
-    private void btnGoElement_LocTab1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoElement_LocTab1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnGoElement_LocTab1ActionPerformed
+    private void btnFilterElementsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementsActionPerformed
+        FilterDataListDialog<Element> dialog = new FilterDataListDialog<Element>(app.getMainFrame(), 
+                app.getDBI().list(new Element()), lstFilteredElements);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredElements = dialog.getSelectedData();
+            // Filter the original results using the provided values
+            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, null, null, null, null, dialog.getSelectedData());
+        }
+    }//GEN-LAST:event_btnFilterElementsActionPerformed
+
+    private void btnFilterLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterLocationActionPerformed
+        FilterDataListDialog<Location> dialog = new FilterDataListDialog<Location>(app.getMainFrame(), 
+                app.getDBI().list(new Location()), lstFilteredLocations);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredLocations = dialog.getSelectedData();
+            // Filter the original results using the provided values
+            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, null, null, dialog.getSelectedData(), null, null);
+        }
+    }//GEN-LAST:event_btnFilterLocationActionPerformed
+
+    private void btnFilterVisitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterVisitActionPerformed
+        FilterDataListDialog<Visit> dialog = new FilterDataListDialog<Visit>(app.getMainFrame(), 
+                app.getDBI().list(new Visit()), lstFilteredVisits);
+        dialog.setVisible(true);
+        if (dialog.isSelectionMade()) {
+            lstFilteredVisits = dialog.getSelectedData();
+            // Filter the original results using the provided values
+            UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, null, null, null, dialog.getSelectedData(), null);
+        }
+    }//GEN-LAST:event_btnFilterVisitActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddLocation;
-    private javax.swing.JButton btnDeleteLocation;
-    private javax.swing.JButton btnGoElement_LocTab;
-    private javax.swing.JButton btnGoElement_LocTab1;
-    private javax.swing.JButton btnGoLocation_LocTab;
-    private javax.swing.JButton btnGoVisit_LocTab;
+    private javax.swing.JButton btnAddSighting;
+    private javax.swing.JButton btnDeleteSighting;
+    private javax.swing.JButton btnFilterElements;
+    private javax.swing.JButton btnFilterLocation;
+    private javax.swing.JButton btnFilterProperties;
+    private javax.swing.JButton btnFilterVisit;
+    private javax.swing.JButton btnGoElement;
+    private javax.swing.JButton btnGoLocation;
+    private javax.swing.JButton btnGoSighting;
+    private javax.swing.JButton btnGoVisit;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker1;
-    private org.jdesktop.swingx.JXDatePicker jXDatePicker2;
+    private javax.swing.JLabel lblFilteredRecords;
     private javax.swing.JLabel lblImage;
-    private javax.swing.JTable tblElement;
-    private javax.swing.JTable tblElement1;
-    private javax.swing.JTable tblLocation;
-    private javax.swing.JTable tblVisit;
+    private javax.swing.JLabel lblTotalRecords;
+    private javax.swing.JTable tblSightings;
     // End of variables declaration//GEN-END:variables
 }

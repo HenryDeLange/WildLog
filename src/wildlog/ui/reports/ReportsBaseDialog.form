@@ -48,6 +48,9 @@
       <SubComponents>
         <Container class="javax.swing.JPanel" name="pnlReportsAndFilters">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ac" green="c6" red="b3" type="rgb"/>
+            </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[200, 500]"/>
             </Property>
@@ -91,6 +94,9 @@
           <SubComponents>
             <Container class="javax.swing.JPanel" name="pnlReports">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                     <TitledBorder justification="2" title="Report Types">
@@ -106,6 +112,9 @@
             </Container>
             <Container class="javax.swing.JPanel" name="pnlExport">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                     <TitledBorder justification="2" title="Export Options">
@@ -131,7 +140,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-                          <Component id="bntExport" min="-2" pref="35" max="-2" attributes="0"/>
+                          <Component id="bntExport" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -140,6 +149,9 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="bntExport">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Export.png"/>
                     </Property>
@@ -159,6 +171,9 @@
             </Container>
             <Container class="javax.swing.JPanel" name="pnlFilters">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                     <TitledBorder justification="2" title="Report Data Options">
@@ -186,18 +201,18 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <Component id="btnFilterProperties" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnFilterProperties" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="btnFilterElement" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnFilterLocation" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="btnFilterVisit" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+                          <Component id="btnFilterElement" min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                          <Component id="btnFilterLocation" min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                          <Component id="btnFilterVisit" min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
                           <Component id="btnFilterSightings" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnResetFilters" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnResetFilters" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -206,6 +221,9 @@
               <SubComponents>
                 <Component class="javax.swing.JButton" name="btnFilterProperties">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
                     </Property>
@@ -222,6 +240,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnFilterElement">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Element.gif"/>
                     </Property>
@@ -238,6 +259,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnFilterLocation">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
                     </Property>
@@ -254,6 +278,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnFilterVisit">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Visit.gif"/>
                     </Property>
@@ -270,6 +297,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnFilterSightings">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Sighting Small.gif"/>
                     </Property>
@@ -286,6 +316,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="btnResetFilters">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
+                    </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
                     </Property>
@@ -302,6 +335,9 @@
                 </Component>
                 <Container class="javax.swing.JPanel" name="jPanel4">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ba" green="cf" red="c0" type="rgb"/>
+                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                         <EtchetBorder/>
@@ -330,7 +366,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="lblTotalRecords" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -340,7 +376,7 @@
                                   <Component id="lblFilteredRecords" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -416,6 +452,9 @@
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="pnlChartDescription">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="cd" green="e6" red="d5" type="rgb"/>
+                    </Property>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
                         <TitledBorder justification="2" title="Report Description">

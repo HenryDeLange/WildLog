@@ -392,7 +392,7 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cmbTimeOfDay">
           <Properties>
-            <Property name="maximumRowCount" type="int" value="11"/>
+            <Property name="maximumRowCount" type="int" value="15"/>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="new DefaultComboBoxModel(ActiveTimeSpesific.values())" type="code"/>
             </Property>
@@ -875,6 +875,7 @@
             <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="!disableEditing" type="code"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="cmbTimeFormat" noResource="true"/>
           </Properties>
           <Events>
@@ -1621,6 +1622,7 @@
             <Property name="selectedItem" type="java.lang.Object" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
               <Connection code="sighting.getTimeAccuracy()" type="code"/>
             </Property>
+            <Property name="focusable" type="boolean" value="false"/>
             <Property name="name" type="java.lang.String" value="cmbTimeAccuracy" noResource="true"/>
           </Properties>
           <Constraints>

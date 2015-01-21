@@ -1,4 +1,4 @@
-package wildlog.ui.reports;
+package wildlog.ui.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,35 +32,26 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private List<T> lstSelectedValues;
 
 // TODO: Sal dit nie beter wees as hierdie lyste net die opsies wys wat actully in die sighting lys teenwoordig is nadat die properties filter apply was nie? Of andersins sit 'n toggle op om dit te doen?
+// TODO: Maak 'n Cell renderer of iets wat 'n checkbox sal teken op die rye om te wys wat gekies is en wat nie.
+// TODO: Sit 'n search box bo aan om makliker te kan filter na spesifieke waardes.
+// TODO: Die class (en veral die constructors en weird generics) kan doen met review/cleanup...
     
+    /**
+     * Use this constructor when the input is derived from a list of Sightings. 
+     * (For example used from the reports popup.)
+     */
     public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);
         initComponents();
+        // Do the initial shared setup
+        doSharedSetup(inParent);
+        // Load table content
         try {
             typeInstance = inClassType.newInstance();
         }
         catch (IllegalAccessException | InstantiationException ex) {
             ex.printStackTrace(System.err);
         }
-        // Setup the escape key
-        final FilterDataListDialog<T> thisHandler = this;
-        thisHandler.getRootPane().registerKeyboardAction(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        thisHandler.setSelectionMade(false);
-                        thisHandler.setVisible(false);
-                        thisHandler.dispose();
-                    }
-                },
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
-        // Position the dialog
-        UtilsDialog.setDialogToCenter(inParent, thisHandler);
-        UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
-        // Attach listeners etc.
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblData);
-        // Load table content
         if (typeInstance instanceof Element) {
             Set<String> setOriginalData = new HashSet<>();
             for (Sighting sighting : inLstOriginalData) {
@@ -106,6 +97,51 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                 lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
             }
         });
+        // Wrap up the shared setup
+        doSharedSetup_post(inLstOldSelectedData);
+    }
+    
+    /**
+     * Use this constructor when working with a known set of Locations, Visits or Elements. 
+     * (For example from the All Sightings tab.)
+     */
+    public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<T> inLstOldSelectedData) {
+        super(inParent);
+        // Do the initial shared setup
+        doSharedSetup(inParent);
+        // Load table content
+        if (inLstOriginalData != null && !inLstOriginalData.isEmpty()) {
+            typeInstance = inLstOriginalData.get(0);
+        }
+        else {
+            typeInstance = null;
+        }
+        if (typeInstance instanceof Element) {
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, (List<Element>) inLstOriginalData);
+        }
+        else
+        if (typeInstance instanceof Location) {
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, (List<Location>) inLstOriginalData);
+        }
+        else
+        if (typeInstance instanceof Visit) {
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, (List<Visit>) inLstOriginalData);
+        }
+        else
+        if (typeInstance instanceof Sighting) {
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOriginalData);
+        }
+        tblData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent evt) {
+                lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
+            }
+        });
+        // Wrap up the shared setup
+        doSharedSetup_post(inLstOldSelectedData);
+    }
+
+    private void doSharedSetup_post(List<T> inLstOldSelectedData) {
         // Setup previously selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         final int indexOfID;
@@ -131,7 +167,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                             }
                         }
                     }
-                    
                 }
                 else {
                     for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
@@ -142,6 +177,28 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                 lblTotalOriginal.setText("Total Records: " + tblData.getRowCount());
             }
         });
+    }
+    
+    private void doSharedSetup(JFrame inParent) {
+        initComponents();
+        // Setup the escape key
+        final FilterDataListDialog<T> thisHandler = this;
+        thisHandler.getRootPane().registerKeyboardAction(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        thisHandler.setSelectionMade(false);
+                        thisHandler.setVisible(false);
+                        thisHandler.dispose();
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        // Position the dialog
+        UtilsDialog.setDialogToCenter(inParent, thisHandler);
+        UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
+        // Attach listeners etc.
+        UtilsUI.attachKeyListernerToSelectKeyedRows(tblData);
     }
 
     /**

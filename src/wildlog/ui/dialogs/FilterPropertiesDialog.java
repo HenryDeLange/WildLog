@@ -1,4 +1,4 @@
-package wildlog.ui.reports;
+package wildlog.ui.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

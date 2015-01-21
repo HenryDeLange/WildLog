@@ -638,7 +638,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbWeather.setName("cmbWeather"); // NOI18N
         sightingIncludes.add(cmbWeather, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 250, 210, -1));
 
-        cmbTimeOfDay.setMaximumRowCount(11);
+        cmbTimeOfDay.setMaximumRowCount(15);
         cmbTimeOfDay.setModel(new DefaultComboBoxModel(ActiveTimeSpesific.values()));
         cmbTimeOfDay.setSelectedItem(sighting.getTimeOfDay());
         cmbTimeOfDay.setEnabled(!disableEditing);
@@ -854,6 +854,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         cmbTimeFormat.setModel(new DefaultComboBoxModel(TimeFormat.values()));
         cmbTimeFormat.setSelectedIndex(0);
         cmbTimeFormat.setEnabled(!disableEditing);
+        cmbTimeFormat.setFocusable(false);
         cmbTimeFormat.setName("cmbTimeFormat"); // NOI18N
         cmbTimeFormat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1159,6 +1160,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
 
         cmbTimeAccuracy.setModel(new DefaultComboBoxModel(TimeAccuracy.values()));
         cmbTimeAccuracy.setSelectedItem(sighting.getTimeAccuracy());
+        cmbTimeAccuracy.setFocusable(false);
         cmbTimeAccuracy.setName("cmbTimeAccuracy"); // NOI18N
         sightingIncludes.add(cmbTimeAccuracy, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 67, 210, -1));
 
