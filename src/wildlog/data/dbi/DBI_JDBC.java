@@ -1645,24 +1645,78 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> List<T> searchSightingOnDate(Date inStartDate, Date inEndDate, Class<T> inReturnType) {
+    public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
+        List<S> searchSightings(Date inStartDate, Date inEndDate, 
+            List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
+            Class<S> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
-        List<T> tempList = new ArrayList<T>();
+        List<S> tempList = new ArrayList<S>();
         try {
             String sql = "SELECT * FROM SIGHTINGS";
-            if (inStartDate != null && inEndDate != null) {
-                sql = sql + " WHERE SIGHTINGDATE > ? AND SIGHTINGDATE < ?";
-                state = conn.prepareStatement(sql);
-                state.setDate(1, new java.sql.Date(inStartDate.getTime()));
-                state.setDate(2, new java.sql.Date(inEndDate.getTime()));
+            // Build SQL
+            String andKeyword = " WHERE";
+            if (inStartDate != null) {
+                sql = sql + andKeyword + " SIGHTINGDATE >= ?";
+                andKeyword = " AND";
             }
-            else {
-                state = conn.prepareStatement(sql);
+            if (inEndDate != null) {
+                sql = sql + andKeyword + " SIGHTINGDATE <= ?";
+                andKeyword = " AND";
             }
+            if (inActiveLocations != null && !inActiveLocations.isEmpty()) {
+                sql = sql + andKeyword + " LOCATIONNAME IN (";
+                for (int t = 0; t < inActiveLocations.size(); t++) {
+                    sql = sql + "?,";
+                }
+                sql = sql.substring(0, sql.length() - 1) + ")";
+                andKeyword = " AND";
+            }
+            if (inActiveVisits != null && !inActiveVisits.isEmpty()) {
+                sql = sql + andKeyword + " VISITNAME IN (";
+                for (int t = 0; t < inActiveVisits.size(); t++) {
+                    sql = sql + "?,";
+                }
+                sql = sql.substring(0, sql.length() - 1) + ")";
+                andKeyword = " AND";
+            }
+            if (inActiveElements != null && !inActiveElements.isEmpty()) {
+                sql = sql + andKeyword + " ELEMENTNAME IN (";
+                for (int t = 0; t < inActiveElements.size(); t++) {
+                    sql = sql + "?,";
+                }
+                sql = sql.substring(0, sql.length() - 1) + ")";
+                andKeyword = " AND";
+            }
+            state = conn.prepareStatement(sql);
+            // Add parameters
+            int paramCounter = 1;
+            if (inStartDate != null) {
+                state.setDate(paramCounter++, new java.sql.Date(inStartDate.getTime()));
+            }
+            if (inEndDate != null) {
+                state.setDate(paramCounter++, new java.sql.Date(inEndDate.getTime()));
+            }
+            if (inActiveLocations != null && !inActiveLocations.isEmpty()) {
+                for (LocationCore activeLocation : inActiveLocations) {
+                    state.setString(paramCounter++, activeLocation.getName());
+                }
+            }
+            if (inActiveVisits != null && !inActiveVisits.isEmpty()) {
+                for (VisitCore activeVisit : inActiveVisits) {
+                    state.setString(paramCounter++, activeVisit.getName());
+                }
+            }
+            if (inActiveElements != null && !inActiveElements.isEmpty()) {
+                for (ElementCore activeElement : inActiveElements) {
+                    state.setString(paramCounter++, activeElement.getPrimaryName());
+                }
+            }
+            // Execute SQL
             results = state.executeQuery();
+            // Load results
             while (results.next()) {
-                T tempSighting = inReturnType.newInstance();
+                S tempSighting = inReturnType.newInstance();
                 populateSighting(results, tempSighting);
                 tempList.add(tempSighting);
             }

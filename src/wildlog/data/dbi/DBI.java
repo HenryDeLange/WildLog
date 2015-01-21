@@ -49,7 +49,11 @@ public interface DBI {
     public <T extends SightingCore> boolean delete(T inSighting);
     public <T extends WildLogFileCore> boolean delete(T inWildLogFile);
 
-    public <T extends SightingCore> List<T> searchSightingOnDate(Date inStartDate, Date inEndDate, Class<T> inReturnType);
+    public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
+        List<S> searchSightings(Date inStartDate, Date inEndDate, 
+            List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
+            Class<S> inReturnType);
+    
     public <T extends LocationCount, V extends ElementCore> List<T> queryLocationCountForElement(V inElement, Class<T> inReturnType);
 
 }
