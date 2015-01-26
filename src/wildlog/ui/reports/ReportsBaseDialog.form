@@ -117,7 +117,7 @@
                 </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder justification="2" title="Export Options">
+                    <TitledBorder justification="2" title="Report Exports">
                       <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                         <EtchetBorder/>
                       </Border>
@@ -156,7 +156,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/Export.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Export Report"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Export the report to PDF or PNG."/>
+                    <Property name="toolTipText" type="java.lang.String" value="Export the shown report to one of many export formats."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -176,7 +176,7 @@
                 </Property>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-                    <TitledBorder justification="2" title="Report Data Options">
+                    <TitledBorder justification="2" title="Report Data Filters">
                       <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.EtchedBorderInfo">
                         <EtchetBorder/>
                       </Border>
@@ -188,13 +188,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="btnResetFilters" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnFilterLocation" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnFilterVisit" alignment="0" max="32767" attributes="0"/>
                       <Component id="btnFilterElement" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnFilterSightings" alignment="0" max="32767" attributes="0"/>
-                      <Component id="btnFilterProperties" alignment="0" max="32767" attributes="0"/>
                       <Component id="jPanel4" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnFilterProperties" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnResetFilters" alignment="0" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
@@ -202,15 +201,13 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jPanel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                          <Component id="btnFilterProperties" min="-2" pref="30" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Component id="btnFilterElement" min="-2" pref="25" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Component id="btnFilterLocation" min="-2" pref="25" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                           <Component id="btnFilterVisit" min="-2" pref="25" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                          <Component id="btnFilterElement" min="-2" pref="25" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
-                          <Component id="btnFilterSightings" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnFilterProperties" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           <Component id="btnResetFilters" min="-2" pref="30" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
@@ -228,6 +225,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Filter on Properties"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter the Observations according to the value of its data fields."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -247,6 +245,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/Element.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Filter by Creature"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter the Observations according to its Creature."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -266,6 +265,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/Location.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Filter by Place"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter the Observations according to its Place."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -285,6 +285,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/Visit.gif"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Filter by Period"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Filter the Observations according to its Period."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -293,25 +294,6 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFilterVisitActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="btnFilterSightings">
-                  <Properties>
-                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                      <Color blue="ac" green="c6" red="b3" type="rgb"/>
-                    </Property>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/Sighting Small.gif"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="View Filtered Observations"/>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Hand Cursor"/>
-                    </Property>
-                    <Property name="focusPainted" type="boolean" value="false"/>
-                    <Property name="horizontalAlignment" type="int" value="2"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnFilterSightingsActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="btnResetFilters">
@@ -323,6 +305,7 @@
                       <Image iconType="3" name="/wildlog/resources/icons/Refresh.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Reset Active Data Filters"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Remove all the active filters."/>
                     <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
                       <Color id="Hand Cursor"/>
                     </Property>
@@ -349,17 +332,17 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="lblTotalRecords" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblFilteredRecords" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblTotalRecords" max="32767" attributes="0"/>
+                                  <Component id="lblFilteredRecords" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
+                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                     </DimensionLayout>
@@ -387,7 +370,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="11" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Selected Records:"/>
+                        <Property name="text" type="java.lang.String" value="Selected Observations:"/>
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="lblTotalRecords">
@@ -409,7 +392,7 @@
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Tahoma" size="11" style="1"/>
                         </Property>
-                        <Property name="text" type="java.lang.String" value="Total Records:"/>
+                        <Property name="text" type="java.lang.String" value="Total Observations:"/>
                       </Properties>
                     </Component>
                   </SubComponents>

@@ -158,7 +158,6 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterElement = new javax.swing.JButton();
         btnFilterLocation = new javax.swing.JButton();
         btnFilterVisit = new javax.swing.JButton();
-        btnFilterSightings = new javax.swing.JButton();
         btnResetFilters = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -183,12 +182,12 @@ public class ReportsBaseDialog extends JFrame {
         pnlReports.setLayout(new java.awt.BorderLayout());
 
         pnlExport.setBackground(new java.awt.Color(179, 198, 172));
-        pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Export Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlExport.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Exports", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         bntExport.setBackground(new java.awt.Color(179, 198, 172));
         bntExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
         bntExport.setText("Export Report");
-        bntExport.setToolTipText("Export the report to PDF or PNG.");
+        bntExport.setToolTipText("Export the shown report to one of many export formats.");
         bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bntExport.setFocusPainted(false);
         bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -216,11 +215,12 @@ public class ReportsBaseDialog extends JFrame {
         );
 
         pnlFilters.setBackground(new java.awt.Color(179, 198, 172));
-        pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Options", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Filters", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         btnFilterProperties.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
         btnFilterProperties.setText("Filter on Properties");
+        btnFilterProperties.setToolTipText("Filter the Observations according to the value of its data fields.");
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterProperties.setFocusPainted(false);
         btnFilterProperties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -233,6 +233,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterElement.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
         btnFilterElement.setText("Filter by Creature");
+        btnFilterElement.setToolTipText("Filter the Observations according to its Creature.");
         btnFilterElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterElement.setFocusPainted(false);
         btnFilterElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -245,6 +246,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterLocation.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
         btnFilterLocation.setText("Filter by Place");
+        btnFilterLocation.setToolTipText("Filter the Observations according to its Place.");
         btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterLocation.setFocusPainted(false);
         btnFilterLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -257,6 +259,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterVisit.setBackground(new java.awt.Color(179, 198, 172));
         btnFilterVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
         btnFilterVisit.setText("Filter by Period");
+        btnFilterVisit.setToolTipText("Filter the Observations according to its Period.");
         btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterVisit.setFocusPainted(false);
         btnFilterVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -266,21 +269,10 @@ public class ReportsBaseDialog extends JFrame {
             }
         });
 
-        btnFilterSightings.setBackground(new java.awt.Color(179, 198, 172));
-        btnFilterSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Sighting Small.gif"))); // NOI18N
-        btnFilterSightings.setText("View Filtered Observations");
-        btnFilterSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnFilterSightings.setFocusPainted(false);
-        btnFilterSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnFilterSightings.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterSightingsActionPerformed(evt);
-            }
-        });
-
         btnResetFilters.setBackground(new java.awt.Color(179, 198, 172));
         btnResetFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
         btnResetFilters.setText("Reset Active Data Filters");
+        btnResetFilters.setToolTipText("Remove all the active filters.");
         btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnResetFilters.setFocusPainted(false);
         btnResetFilters.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -294,29 +286,29 @@ public class ReportsBaseDialog extends JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel10.setText("Selected Records:");
+        jLabel10.setText("Selected Observations:");
 
         lblTotalRecords.setText(Integer.toString(lstOriginalData.size()));
 
         lblFilteredRecords.setText(Integer.toString(lstFilteredData.size()));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel8.setText("Total Records:");
+        jLabel8.setText("Total Observations:");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(5, 5, 5)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTotalRecords)
-                    .addComponent(lblFilteredRecords))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblTotalRecords, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblFilteredRecords, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(9, 9, 9))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,28 +328,25 @@ public class ReportsBaseDialog extends JFrame {
         pnlFilters.setLayout(pnlFiltersLayout);
         pnlFiltersLayout.setHorizontalGroup(
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnResetFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnFilterLocation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnFilterVisit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnFilterElement, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnFilterSightings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(btnFilterProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFilterProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnResetFilters, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         pnlFiltersLayout.setVerticalGroup(
             pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFiltersLayout.createSequentialGroup()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
-                .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(btnFilterElement, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
                 .addComponent(btnFilterLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
+                .addGap(5, 5, 5)
                 .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addComponent(btnFilterElement, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(8, 8, 8)
-                .addComponent(btnFilterSightings)
+                .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addComponent(btnResetFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5))
@@ -499,16 +488,6 @@ public class ReportsBaseDialog extends JFrame {
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
-    private void btnFilterSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterSightingsActionPerformed
-        FilterDataListDialog<Sighting> dialog = new FilterDataListDialog<Sighting>(this, lstOriginalData, lstFilteredData, Sighting.class);
-        dialog.setVisible(true);
-//        if (dialog.isSelectionMade()) {
-//            lstFilteredSightings = dialog.getSelectedData();
-//            // Filter the original results using the provided values
-//            doFiltering();
-//        }
-    }//GEN-LAST:event_btnFilterSightingsActionPerformed
-
     private void btnFilterPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterPropertiesActionPerformed
         FilterPropertiesDialog<Sighting> dialog = new FilterPropertiesDialog<>(this, lstOriginalData, filterProperties);
         dialog.setVisible(true);
@@ -547,7 +526,6 @@ public class ReportsBaseDialog extends JFrame {
     private javax.swing.JButton btnFilterElement;
     private javax.swing.JButton btnFilterLocation;
     private javax.swing.JButton btnFilterProperties;
-    private javax.swing.JButton btnFilterSightings;
     private javax.swing.JButton btnFilterVisit;
     private javax.swing.JButton btnResetFilters;
     private javax.swing.JLabel jLabel10;

@@ -37,7 +37,8 @@ public enum WildLogPaths {
     WILDLOG_EXPORT                        (Paths.get("Export")),
     WILDLOG_EXPORT_KML                    (Paths.get("Export", "KML")),
     WILDLOG_EXPORT_KML_THUMBNAILS         (Paths.get("Export", "KML", "Thumbnails")),
-    WILDLOG_EXPORT_CSV                    (Paths.get("Export", "Spreadsheet")),
+    WILDLOG_EXPORT_CSV                    (Paths.get("Export", "Spreadsheet", "Complete")),
+    WILDLOG_EXPORT_CSV_BASIC              (Paths.get("Export", "Spreadsheet", "Basic")),
     WILDLOG_EXPORT_REPORTS_PDF            (Paths.get("Export", "Reports", "PDF")),
     WILDLOG_EXPORT_REPORTS_PNG            (Paths.get("Export", "Reports", "Image")),
     WILDLOG_EXPORT_REPORTS_CSV            (Paths.get("Export", "Reports", "Spreadsheet")),
@@ -49,6 +50,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_WILDNOTE_SYNC          (Paths.get("Export", "WildNoteSync")),
     WILDLOG_EXPORT_SLIDESHOW              (Paths.get("Export", "Slideshow")),
     WILDLOG_EXPORT_FILES                  (Paths.get("Export", "OriginalFiles")),
+    WILDLOG_EXPORT_XML                    (Paths.get("Export", "XML")),
     WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace"));
 
     private static Path activeWorkspacePrefix;

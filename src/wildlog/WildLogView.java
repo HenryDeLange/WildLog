@@ -323,6 +323,7 @@ public final class WildLogView extends JFrame {
         mnuExportCSV = new javax.swing.JMenuItem();
         mnuExportHTML = new javax.swing.JMenuItem();
         mnuExportKML = new javax.swing.JMenuItem();
+        mnuExportXML = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
@@ -632,7 +633,7 @@ public final class WildLogView extends JFrame {
 
         getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
-        statusPanel.setBackground(new java.awt.Color(204, 213, 186));
+        statusPanel.setBackground(new java.awt.Color(212, 217, 201));
         statusPanel.setName("statusPanel"); // NOI18N
         statusPanel.setLayout(new java.awt.BorderLayout(10, 0));
 
@@ -644,12 +645,13 @@ public final class WildLogView extends JFrame {
         statusMessageLabel.setPreferredSize(new java.awt.Dimension(500, 20));
         statusPanel.add(statusMessageLabel, java.awt.BorderLayout.CENTER);
 
-        jPanel1.setBackground(new java.awt.Color(232, 238, 220));
+        jPanel1.setBackground(new java.awt.Color(212, 217, 201));
         jPanel1.setMaximumSize(new java.awt.Dimension(400, 20));
         jPanel1.setMinimumSize(new java.awt.Dimension(50, 16));
         jPanel1.setName("jPanel1"); // NOI18N
         jPanel1.setLayout(new java.awt.BorderLayout(5, 0));
 
+        progressBar.setBackground(new java.awt.Color(204, 213, 186));
         progressBar.setMaximumSize(new java.awt.Dimension(400, 20));
         progressBar.setMinimumSize(new java.awt.Dimension(50, 14));
         progressBar.setName("progressBar"); // NOI18N
@@ -805,6 +807,17 @@ public final class WildLogView extends JFrame {
             }
         });
         exportMenu.add(mnuExportKML);
+
+        mnuExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.gif"))); // NOI18N
+        mnuExportXML.setText("Export All to XML");
+        mnuExportXML.setToolTipText("Export all data to XML files. (Open in text editor, web browser, etc.)");
+        mnuExportXML.setName("mnuExportXML"); // NOI18N
+        mnuExportXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportXMLActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportXML);
 
         jSeparator10.setName("jSeparator10"); // NOI18N
         exportMenu.add(jSeparator10);
@@ -1593,7 +1606,7 @@ public final class WildLogView extends JFrame {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    setMessage("Creating the Custom Slideshow");
+                    setMessage("Starting the Custom Slideshow");
                     List<File> files = Arrays.asList(fileChooser.getSelectedFiles());
                     List<String> fileNames = new ArrayList<String>(files.size());
                     for (File tempFile : files) {
@@ -1611,7 +1624,7 @@ public final class WildLogView extends JFrame {
                         });
                     if (result == JFileChooser.APPROVE_OPTION) {
                         // Now create the slideshow
-                        setMessage("Creating the Custom Slideshow (Busy writing the file, this may take a while.)");
+                        setMessage("Busy with the Custom Slideshow (this may take a while)");
                         UtilsMovies.generateSlideshow(fileNames, app, fileChooser.getSelectedFile().toPath());
                         setMessage("Done with the Custom Slideshow");
                     }
@@ -1633,11 +1646,15 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
+                setProgress(0);
                 setMessage("Starting the CSV Export");
                 Path path = WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath();
                 Files.createDirectories(path);
-                app.getDBI().doExportCSV(path, true, null, null, null, null);
+                setProgress(0);
+                setMessage("Busy with the CSV Export");
+                app.getDBI().doExportCSV(path, true, null, null, null, null, null);
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_CSV.getAbsoluteFullPath());
+                setProgress(100);
                 setMessage("Done with the CSV Export");
                 return null;
             }
@@ -1648,7 +1665,7 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the HTML Export for All Records");
+                setMessage("Starting the HTML Export for All Records");
                 setProgress(0);
                 // Elements
                 List<Element> listElements = app.getDBI().list(new Element());
@@ -1656,35 +1673,35 @@ public final class WildLogView extends JFrame {
                     // TODO: Sal vinniger gaan as ek die multithreaded kan doen, maar dan moet ek weer die progressbar sync issue probeer fix...
                     UtilsHTML.exportHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
-                    setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 }
                 setProgress(25);
                 // Locations
-                setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 List<Location> listLocations = app.getDBI().list(new Location());
                 for (int t = 0; t < listLocations.size(); t++) {
                     UtilsHTML.exportHTML(listLocations.get(t), app, null);
                     setProgress(25 + (int)((t/(double)listLocations.size())*25));
-                    setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 }
-                setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 // Visits
                 List<Visit> listVisits = app.getDBI().list(new Visit());
                 for (int t = 0; t < listVisits.size(); t++) {
                     UtilsHTML.exportHTML(listVisits.get(t), app, null);
                     setProgress(50 + (int)((t/(double)listVisits.size())*25));
-                    setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 }
-                setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 // Sightings
                 List<Sighting> listSightings = app.getDBI().list(new Sighting());
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
-                    setMessage("Creating the HTML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 }
                 setProgress(100);
-                setMessage("Creating the HTML Export for All Records " + getProgress());
+                setMessage("Busy with the HTML Export for All Records " + getProgress());
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath());
                 setMessage("Done with the HTML Export for All Records");
                 return null;
@@ -1696,9 +1713,9 @@ public final class WildLogView extends JFrame {
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
-                setMessage("Creating the KML Export for All Records");
+                setMessage("Starting the KML Export for All Records");
                 setProgress(0);
-                setMessage("Creating the KML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 // Make sure icons and folders exist
                 Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogSystemFile.WILDLOG_FOLDER_PREFIX);
                 Files.createDirectories(iconPath);
@@ -1711,7 +1728,7 @@ public final class WildLogView extends JFrame {
                 // Get entries for Sightings and Locations
                 Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>(200);
                 setProgress(5);
-                setMessage("Creating the KML Export for All Records " + getProgress() + "%");
+                setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 // Sightings
                 List<Sighting> listSightings = app.getDBI().list(new Sighting());
                 Collections.sort(listSightings);
@@ -1722,7 +1739,7 @@ public final class WildLogView extends JFrame {
                      }
                     entries.get(key).add(listSightings.get(t).toKML(t, app));
                     setProgress(5 + (int)((t/(double)listSightings.size())*80));
-                    setMessage("Creating the KML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 }
                 // Locations
                 List<Location> listLocations = app.getDBI().list(new Location());
@@ -1734,7 +1751,7 @@ public final class WildLogView extends JFrame {
                     // Note: Die ID moet aangaan waar die sightings gestop het
                     entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, app));
                     setProgress(85 + (int)((t/(double)listLocations.size())*10));
-                    setMessage("Creating the KML Export for All Records " + getProgress() + "%");
+                    setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 }
                 // Generate KML
                 kmlgen.generateFile(entries, UtilsKML.getKmlStyles(iconPath));
@@ -2511,7 +2528,7 @@ public final class WildLogView extends JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Export WildNote Sync " + getProgress() + "%");
+                setMessage("Starting the Export of the WildNote Sync File " + getProgress() + "%");
                 WildLogDBI syncDBI = null;
                 try {
                     // Make sure the old files are deleted
@@ -2520,12 +2537,12 @@ public final class WildLogView extends JFrame {
                     Path syncDatabase = WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE);
                     // Setup export DB
                     setTaskProgress(10);
-                    setMessage("Export WildNote Sync " + getProgress() + "%");
+                    setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     syncDBI = new WildLogDBI_h2("jdbc:h2:" + syncDatabase + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
                     // Export the elements
                     List<Element> listElements = app.getDBI().list(new Element());
                     setTaskProgress(20);
-                    setMessage("Export WildNote Sync " + getProgress() + "%");
+                    setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     int counter = 0;
                     for (Element element : listElements) {
                         // Save the element to the new DB
@@ -2561,7 +2578,7 @@ public final class WildLogView extends JFrame {
                             syncDBI.createOrUpdate(wildLogFile, false);
                         }
                         setProgress(20 + (int)(counter++/(double)listElements.size()*70));
-                        setMessage("Export WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                     }
                 }
                 catch (Exception ex) {
@@ -2573,7 +2590,7 @@ public final class WildLogView extends JFrame {
                     }
                 }
                 setProgress(90);
-                setMessage("Export WildNote Sync " + getProgress() + "%");
+                setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                 // Zip the content to make copying it accross easier
                 UtilsCompression.zipIt(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve("WildNoteSync.zip").toString(),
                         WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().toFile());
@@ -2581,7 +2598,7 @@ public final class WildLogView extends JFrame {
 //                    UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath()
 //                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath()).toFile());
                 setProgress(100);
-                setMessage("Export WildNote Sync Done");
+                setMessage("Done with the Export of the WildNote Sync File");
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath());
                 return null;
             }
@@ -2709,7 +2726,7 @@ public final class WildLogView extends JFrame {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
-                    setMessage("Starting Import WildNote Sync...");
+                    setMessage("Starting the Import of the WildNote Sync File");
                     // Get linked images
                     int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                         @Override
@@ -2725,7 +2742,7 @@ public final class WildLogView extends JFrame {
                     });
                     final Map<Long, List<File>> mapFilesToLink;
                     if (result == JOptionPane.YES_OPTION) {
-                        setMessage("Import WildNote Sync: Scanning folder...");
+                        setMessage("Busy with the Import of the WildNote Sync File (scanning folder)");
                         final JFileChooser folderChooser = new JFileChooser();
                         folderChooser.setAcceptAllFileFilterUsed(false);
                         folderChooser.setMultiSelectionEnabled(false);
@@ -2750,7 +2767,7 @@ public final class WildLogView extends JFrame {
                                 }
                                 lstFiles.add(file);
                                 setProgress((int)(t++/(double)folderChooser.getSelectedFile().listFiles().length*10));
-                                setMessage("Import WildNote Sync " + getProgress() + "%");
+                                setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                             }
                         }
                         else {
@@ -2765,12 +2782,12 @@ public final class WildLogView extends JFrame {
                     try {
                         // Setup export DB
                         setTaskProgress(10);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         syncDBI = new WildLogDBI_h2("jdbc:h2:" + fileChooser.getSelectedFile().toPath().toAbsolutePath().getParent()
                                 .resolve(WildLogConstants.WILDNOTE_SYNC_DATABASE).toString()
                                     + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
                         setTaskProgress(11);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Location
                         Location wildNoteLocation = app.getDBI().find(new Location(WildLogConstants.WILDNOTE_LOCATION_NAME));
                         if (wildNoteLocation == null) {
@@ -2778,7 +2795,7 @@ public final class WildLogView extends JFrame {
                             app.getDBI().createOrUpdate(wildNoteLocation, null);
                         }
                         setTaskProgress(13);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Setup the Visit
                         Visit tempVisit = new Visit(WildLogConstants.WILDNOTE_VISIT_NAME + " - " + UtilsTime.WL_DATE_FORMATTER_FOR_VISIT_NAME.format(LocalDateTime.now()),
                                 WildLogConstants.WILDNOTE_LOCATION_NAME);
@@ -2787,7 +2804,7 @@ public final class WildLogView extends JFrame {
                         }
                         app.getDBI().createOrUpdate(tempVisit, null);
                         setTaskProgress(15);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Elements
                         List<Element> listElements = syncDBI.list(new Element());
                         for (int t = 0; t < listElements.size(); t++) {
@@ -2796,10 +2813,10 @@ public final class WildLogView extends JFrame {
                                 app.getDBI().createOrUpdate(element, null);
                             }
                             setTaskProgress(15 + (int)(t/(double)listElements.size()*10));
-                            setMessage("Import WildNote Sync " + getProgress() + "%");
+                            setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         }
                         setTaskProgress(25);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Sightings
                         List<Sighting> listSightings = syncDBI.list(new Sighting());
                         for (int t = 0; t < listSightings.size(); t++) {
@@ -2826,13 +2843,13 @@ public final class WildLogView extends JFrame {
                                         app, false, null, true, false);
                             }
                             setTaskProgress(25 + (int)(t/(double)listSightings.size()*70));
-                            setMessage("Import WildNote Sync " + getProgress() + "%");
+                            setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         }
                         setTaskProgress(95);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         UtilsPanelGenerator.openPanelAsTab(app, tempVisit.getName(), PanelCanSetupHeader.TabTypes.VISIT, tabbedPanel, wildNoteLocation);
                         setTaskProgress(97);
-                        setMessage("Import WildNote Sync " + getProgress() + "%");
+                        setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                     }
                     catch (Exception ex) {
                         ex.printStackTrace(System.err);
@@ -2843,7 +2860,7 @@ public final class WildLogView extends JFrame {
                         }
                     }
                     setProgress(100);
-                    setMessage("Import WildNote Sync Done");
+                    setMessage("Done with the Import of the WildNote Sync File");
                     return null;
                 }
             });
@@ -3101,6 +3118,24 @@ public final class WildLogView extends JFrame {
         }
     }//GEN-LAST:event_mnuSwitchElementNamesActionPerformed
 
+    private void mnuExportXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportXMLActionPerformed
+        UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+            @Override
+            protected Object doInBackground() throws Exception {
+                setProgress(0);
+                setMessage("Starting the XML Export for Observations");
+                // TODO
+//                for (Sighting tempSighting : lstSightings) {
+//                    UtilsXML.exportXML(tempSighting, app, this);
+//                }
+                setProgress(100);
+                setMessage("Done with the XML Export for Observations");
+                UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_XML.getAbsoluteFullPath());
+                return null;
+            }
+        });
+    }//GEN-LAST:event_mnuExportXMLActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3198,6 +3233,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuExportKML;
     private javax.swing.JMenuItem mnuExportWildNoteSync;
     private javax.swing.JMenuItem mnuExportWorkspace;
+    private javax.swing.JMenuItem mnuExportXML;
     private javax.swing.JMenuItem mnuGPSInput;
     private javax.swing.JMenuItem mnuImportCSV;
     private javax.swing.JMenuItem mnuImportWildNote;

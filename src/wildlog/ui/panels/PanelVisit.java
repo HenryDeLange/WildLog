@@ -1362,7 +1362,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ExportDialog dialog = new ExportDialog(app, null, null, visit, null);
+            ExportDialog dialog = new ExportDialog(app, null, null, visit, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnHTMLActionPerformed
@@ -1376,16 +1376,9 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            if (sighting != null) {
-                // Only one row is selected
-                MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting);
-                dialog.setVisible(true);
-            }
-            else {
-                // TODO: As ek die mapping oor doen moet ek maak dat mens 'n array van sightings kan stuur...
-                MappingDialog dialog = new MappingDialog(app, null, null, visit, null);
-                dialog.setVisible(true);
-            }
+            List<Sighting> lstSightings = app.getDBI().list(new Sighting(null, locationForVisit.getName(), visit.getName()));
+            MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting, lstSightings);
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapSightingActionPerformed
 

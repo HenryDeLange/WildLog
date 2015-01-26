@@ -3,15 +3,17 @@ package wildlog.data.dataobjects;
 import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.UnitsSize;
 import wildlog.data.enums.UnitsWeight;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.xml.utils.UtilsXML;
 
 
-public class Element extends ElementCore implements DataObjectWithHTML {
+public class Element extends ElementCore implements DataObjectWithHTML, DataObjectWithXML {
 
     public Element() {
         super();
@@ -162,4 +164,66 @@ public class Element extends ElementCore implements DataObjectWithHTML {
         return html;
     }
 
+    @Override
+    public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIsRecursive) {
+        StringBuilder builder = new StringBuilder(500);
+        builder.append("<Creature>");
+        builder.append("<primaryName>").append(primaryName).append("</primaryName>");
+        builder.append("<otherName>").append(otherName).append("</otherName>");
+        builder.append("<scientificName>").append(scientificName).append("</scientificName>");
+        builder.append("<referenceID>").append(referenceID).append("</referenceID>");
+        builder.append("<type>").append(type).append("</type>");
+        builder.append("<feedingClass>").append(feedingClass).append("</feedingClass>");
+        builder.append("<addFrequency>").append(addFrequency).append("</addFrequency>");
+        builder.append("<wishListRating>").append(wishListRating).append("</wishListRating>");
+        builder.append("<activeTime>").append(activeTime).append("</activeTime>");
+        builder.append("<endangeredStatus>").append(endangeredStatus).append("</endangeredStatus>");
+        builder.append("<waterDependance>").append(waterDependance).append("</waterDependance>");
+        builder.append("<nutrition>").append(nutrition).append("</nutrition>");
+        builder.append("<diagnosticDescription>").append(diagnosticDescription).append("</diagnosticDescription>");
+        builder.append("<description>").append(description).append("</description>");
+        builder.append("<distribution>").append(distribution).append("</distribution>");
+        builder.append("<behaviourDescription>").append(behaviourDescription).append("</behaviourDescription>");
+        builder.append("<lifespan>").append(lifespan).append("</lifespan>");
+        builder.append("<breedingDuration>").append(breedingDuration).append("</breedingDuration>");
+        builder.append("<breedingNumber>").append(breedingNumber).append("</breedingNumber>");
+        builder.append("<sizeType>").append(sizeType).append("</sizeType>");
+        builder.append("<sizeMaleMin>").append(sizeMaleMin).append("</sizeMaleMin>");
+        builder.append("<sizeMaleMax>").append(sizeMaleMax).append("</sizeMaleMax>");
+        builder.append("<sizeFemaleMin>").append(sizeFemaleMin).append("</sizeFemaleMin>");
+        builder.append("<sizeFemaleMax>").append(sizeFemaleMax).append("</sizeFemaleMax>");
+        builder.append("<sizeUnit>").append(sizeUnit).append("</sizeUnit>");
+        builder.append("<weightMaleMin>").append(weightMaleMin).append("</weightMaleMin>");
+        builder.append("<weightMaleMax>").append(weightMaleMax).append("</weightMaleMax>");
+        builder.append("<weightFemaleMin>").append(weightFemaleMin).append("</weightFemaleMin>");
+        builder.append("<weightFemaleMax>").append(weightFemaleMax).append("</weightFemaleMax>");
+        builder.append("<weightUnit>").append(weightUnit).append("</weightUnit>");
+        StringBuilder filesString = new StringBuilder(300);
+        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        for (int t = 0; t < files.size(); t++) {
+            filesString.append(UtilsXML.getWildLogFileInfoAsXML(files.get(t)));
+        }
+        builder.append("<Files>").append(filesString).append("</Files>");
+        if (inIsRecursive) {
+//            builder.append("<br/>");
+//            builder.append("</td></tr>");
+//            builder.append("<tr><td>");
+//            Sighting tempSighting = new Sighting();
+//            tempSighting.setElementName(primaryName);
+//            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+//            int counter = 0;
+//            for (Sighting temp : sightings) {
+//                builder.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
+//                if (inProgressbarTask != null) {
+//                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
+//                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+//                            + " " + inProgressbarTask.getProgress() + "%");
+//                    counter++;
+//                }
+//            }
+        }
+        builder.append("</Creature>");
+        return builder.toString();
+    }
+    
 }

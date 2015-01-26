@@ -17,6 +17,7 @@ import wildlog.mapping.utils.UtilsMapGenerator;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.utils.UtilsConcurency;
+import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
@@ -26,12 +27,14 @@ public class MappingDialog extends JDialog {
     private Element element;
     private Visit visit;
     private Sighting sighting;
+    private List<Sighting> lstSightings;
 
     public MappingDialog(WildLogApp inApp,
             Location inLocationToMap,
             Element inElementToMap,
             Visit inVisit,
-            Sighting inSighting) {
+            Sighting inSighting,
+            List<Sighting> inLstSightings) {
         super(inApp.getMainFrame());
         // Set passed in values
         app = inApp;
@@ -39,7 +42,7 @@ public class MappingDialog extends JDialog {
         element = inElementToMap;
         visit = inVisit;
         sighting = inSighting;
-
+        lstSightings = inLstSightings;
         // Auto generated code
         initComponents();
 
@@ -68,7 +71,7 @@ public class MappingDialog extends JDialog {
                 btnViewSightingsAndDistributionMap.setVisible(false);
             }
         }
-        if (location == null && element == null && visit == null) {
+        if (location == null && element == null && visit == null && lstSightings == null) {
             btnOpenKmlViewer.setVisible(false);
         }
         if (visit == null) {
@@ -77,10 +80,11 @@ public class MappingDialog extends JDialog {
         if (sighting == null) {
             btnViewSingleSighting.setVisible(false);
         }
-
+        if (inLstSightings == null) {
+            btnViewListOfSightings.setVisible(false);
+        }
         // Pack
         pack();
-
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
         UtilsDialog.setDialogToCenter(app.getMainFrame(), this);
@@ -101,6 +105,7 @@ public class MappingDialog extends JDialog {
         btnViewAllSightingsForVisit = new javax.swing.JButton();
         btnViewAllSightingsForElement = new javax.swing.JButton();
         btnViewSingleSighting = new javax.swing.JButton();
+        btnViewListOfSightings = new javax.swing.JButton();
         btnViewSightingsAndDistributionMap = new javax.swing.JButton();
         btnViewDistributionMap = new javax.swing.JButton();
         btnOpenKmlViewer = new javax.swing.JButton();
@@ -114,16 +119,16 @@ public class MappingDialog extends JDialog {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
         btnViewAllSightingsForLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewAllSightingsForLocation.setText("View All Observations at the Place");
+        btnViewAllSightingsForLocation.setText("View map of Observations at the Place");
         btnViewAllSightingsForLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForLocation.setFocusPainted(false);
         btnViewAllSightingsForLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewAllSightingsForLocation.setIconTextGap(10);
         btnViewAllSightingsForLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewAllSightingsForLocation.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewAllSightingsForLocation.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewAllSightingsForLocation.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewAllSightingsForLocation.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewAllSightingsForLocation.setName("btnViewAllSightingsForLocation"); // NOI18N
-        btnViewAllSightingsForLocation.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewAllSightingsForLocation.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewAllSightingsForLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewAllSightingsForLocationActionPerformed(evt);
@@ -132,16 +137,16 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewAllSightingsForLocation);
 
         btnViewLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewLocation.setText("View the Place on the Map");
+        btnViewLocation.setText("View map of the Place");
         btnViewLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewLocation.setFocusPainted(false);
         btnViewLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewLocation.setIconTextGap(10);
         btnViewLocation.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewLocation.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewLocation.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewLocation.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewLocation.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewLocation.setName("btnViewLocation"); // NOI18N
-        btnViewLocation.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewLocation.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewLocationActionPerformed(evt);
@@ -150,16 +155,16 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewLocation);
 
         btnViewAllSightingsForVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewAllSightingsForVisit.setText("View All Observations during the Period");
+        btnViewAllSightingsForVisit.setText("View map of Observations during the Period");
         btnViewAllSightingsForVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForVisit.setFocusPainted(false);
         btnViewAllSightingsForVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewAllSightingsForVisit.setIconTextGap(10);
         btnViewAllSightingsForVisit.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewAllSightingsForVisit.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewAllSightingsForVisit.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewAllSightingsForVisit.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewAllSightingsForVisit.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewAllSightingsForVisit.setName("btnViewAllSightingsForVisit"); // NOI18N
-        btnViewAllSightingsForVisit.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewAllSightingsForVisit.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewAllSightingsForVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewAllSightingsForVisitActionPerformed(evt);
@@ -168,16 +173,16 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewAllSightingsForVisit);
 
         btnViewAllSightingsForElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewAllSightingsForElement.setText("View All Observations of the Creature");
+        btnViewAllSightingsForElement.setText("View map of Observations of the Creature");
         btnViewAllSightingsForElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewAllSightingsForElement.setFocusPainted(false);
         btnViewAllSightingsForElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewAllSightingsForElement.setIconTextGap(10);
         btnViewAllSightingsForElement.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewAllSightingsForElement.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewAllSightingsForElement.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewAllSightingsForElement.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewAllSightingsForElement.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewAllSightingsForElement.setName("btnViewAllSightingsForElement"); // NOI18N
-        btnViewAllSightingsForElement.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewAllSightingsForElement.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewAllSightingsForElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewAllSightingsForElementActionPerformed(evt);
@@ -186,16 +191,16 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewAllSightingsForElement);
 
         btnViewSingleSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewSingleSighting.setText("View the selected Observation");
+        btnViewSingleSighting.setText("View map of the selected Observation");
         btnViewSingleSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewSingleSighting.setFocusPainted(false);
         btnViewSingleSighting.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewSingleSighting.setIconTextGap(10);
         btnViewSingleSighting.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewSingleSighting.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewSingleSighting.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewSingleSighting.setName("btnViewSingleSighting"); // NOI18N
-        btnViewSingleSighting.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewSingleSighting.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewSingleSighting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewSingleSightingActionPerformed(evt);
@@ -203,17 +208,35 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewSingleSighting);
 
+        btnViewListOfSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
+        btnViewListOfSightings.setText("View map of the Observation(s)");
+        btnViewListOfSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewListOfSightings.setFocusPainted(false);
+        btnViewListOfSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewListOfSightings.setIconTextGap(10);
+        btnViewListOfSightings.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        btnViewListOfSightings.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewListOfSightings.setMinimumSize(new java.awt.Dimension(275, 35));
+        btnViewListOfSightings.setName("btnViewListOfSightings"); // NOI18N
+        btnViewListOfSightings.setPreferredSize(new java.awt.Dimension(275, 35));
+        btnViewListOfSightings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewListOfSightingsActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnViewListOfSightings);
+
         btnViewSightingsAndDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewSightingsAndDistributionMap.setText("View All Observations and Distribution Map");
+        btnViewSightingsAndDistributionMap.setText("View map of Distribution and Observations");
         btnViewSightingsAndDistributionMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewSightingsAndDistributionMap.setFocusPainted(false);
         btnViewSightingsAndDistributionMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewSightingsAndDistributionMap.setIconTextGap(10);
         btnViewSightingsAndDistributionMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewSightingsAndDistributionMap.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewSightingsAndDistributionMap.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewSightingsAndDistributionMap.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewSightingsAndDistributionMap.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewSightingsAndDistributionMap.setName("btnViewSightingsAndDistributionMap"); // NOI18N
-        btnViewSightingsAndDistributionMap.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewSightingsAndDistributionMap.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewSightingsAndDistributionMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewSightingsAndDistributionMapActionPerformed(evt);
@@ -222,16 +245,16 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewSightingsAndDistributionMap);
 
         btnViewDistributionMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map.gif"))); // NOI18N
-        btnViewDistributionMap.setText("View Distribution Map");
+        btnViewDistributionMap.setText("View map of Distribution");
         btnViewDistributionMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnViewDistributionMap.setFocusPainted(false);
         btnViewDistributionMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnViewDistributionMap.setIconTextGap(10);
         btnViewDistributionMap.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        btnViewDistributionMap.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnViewDistributionMap.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnViewDistributionMap.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnViewDistributionMap.setMinimumSize(new java.awt.Dimension(275, 35));
         btnViewDistributionMap.setName("btnViewDistributionMap"); // NOI18N
-        btnViewDistributionMap.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnViewDistributionMap.setPreferredSize(new java.awt.Dimension(275, 35));
         btnViewDistributionMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnViewDistributionMapActionPerformed(evt);
@@ -240,16 +263,17 @@ public class MappingDialog extends JDialog {
         getContentPane().add(btnViewDistributionMap);
 
         btnOpenKmlViewer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
-        btnOpenKmlViewer.setText("Open KML File");
+        btnOpenKmlViewer.setText("Open KML File (needs external viewer)");
+        btnOpenKmlViewer.setToolTipText("Open a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
         btnOpenKmlViewer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnOpenKmlViewer.setFocusPainted(false);
         btnOpenKmlViewer.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnOpenKmlViewer.setIconTextGap(11);
         btnOpenKmlViewer.setMargin(new java.awt.Insets(2, 11, 2, 8));
-        btnOpenKmlViewer.setMaximumSize(new java.awt.Dimension(260, 35));
-        btnOpenKmlViewer.setMinimumSize(new java.awt.Dimension(260, 35));
+        btnOpenKmlViewer.setMaximumSize(new java.awt.Dimension(275, 35));
+        btnOpenKmlViewer.setMinimumSize(new java.awt.Dimension(275, 35));
         btnOpenKmlViewer.setName("btnOpenKmlViewer"); // NOI18N
-        btnOpenKmlViewer.setPreferredSize(new java.awt.Dimension(260, 35));
+        btnOpenKmlViewer.setPreferredSize(new java.awt.Dimension(275, 35));
         btnOpenKmlViewer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOpenKmlViewerActionPerformed(evt);
@@ -390,13 +414,19 @@ public class MappingDialog extends JDialog {
             @Override
             protected Object doInBackground() throws Exception {
                 if (location != null) {
-                    UtilsKML.exportKML(location, this, app);
+                    UtilsKML.exportKML(location, this, app, true);
                 }
                 if (element != null) {
-                    UtilsKML.exportKML(element, this, app);
+                    UtilsKML.exportKML(element, this, app, true);
                 }
                 if (visit != null) {
-                    UtilsKML.exportKML(visit, this, app);
+                    UtilsKML.exportKML(visit, this, app, true);
+                }
+                if (lstSightings != null) {
+                    for (Sighting tempSighting : lstSightings) {
+                        UtilsKML.exportKML(tempSighting, this, app, false);
+                    }
+                    UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_KML.getAbsoluteFullPath());
                 }
                 return null;
             }
@@ -539,6 +569,41 @@ public class MappingDialog extends JDialog {
         }
     }//GEN-LAST:event_btnViewSingleSightingActionPerformed
 
+    private void btnViewListOfSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewListOfSightingsActionPerformed
+        // Clear old points
+        UtilsMapGenerator.clearMap(app, false);
+        // Load points
+        for (Sighting sighting : lstSightings) {
+            if (sighting.getLatitude() != null && sighting.getLongitude() != null) {
+                if (!sighting.getLatitude().equals(Latitudes.NONE) && !sighting.getLongitude().equals(Longitudes.NONE)) {
+                    double lat = sighting.getLatDegrees();
+                    lat = lat + sighting.getLatMinutes()/60.0;
+                    lat = lat + (sighting.getLatSeconds()/60.0)/60.0;
+                    if (sighting.getLatitude().equals(Latitudes.SOUTH))
+                        lat = -1 * lat;
+                    double lon = sighting.getLonDegrees();
+                    lon = lon + sighting.getLonMinutes()/60.0;
+                    lon = lon + (sighting.getLonSeconds()/60.0)/60.0;
+                    if (sighting.getLongitude().equals(Longitudes.WEST))
+                        lon = -1 * lon;
+                    UtilsMapGenerator.addPoint(lat, lon, new Color(230, 90, 50), sighting, app, false);
+                }
+            }
+        }
+        setVisible(false);
+        dispose();
+        // Open Map
+        if (app.getWildLogOptions().isIsOnlinemapTheDefault()) {
+            app.getMapOnline().setTitle("WildLog Map - Online: Observations");
+            app.getMapOnline().setLocationRelativeTo(this);
+            app.getMapOnline().showMap(Color.yellow);
+        }
+        else {
+            app.getMapOffline().changeTitle("WildLog Map - Offline: Observations");
+            app.getMapOffline().showMap(app);
+        }
+    }//GEN-LAST:event_btnViewListOfSightingsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnOpenKmlViewer;
@@ -546,6 +611,7 @@ public class MappingDialog extends JDialog {
     private javax.swing.JButton btnViewAllSightingsForLocation;
     private javax.swing.JButton btnViewAllSightingsForVisit;
     private javax.swing.JButton btnViewDistributionMap;
+    private javax.swing.JButton btnViewListOfSightings;
     private javax.swing.JButton btnViewLocation;
     private javax.swing.JButton btnViewSightingsAndDistributionMap;
     private javax.swing.JButton btnViewSingleSighting;

@@ -192,6 +192,19 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportKMLActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportXML">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/Close.gif"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Export All to XML"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export all data to XML files. (Open in text editor, web browser, etc.)"/>
+                <Property name="name" type="java.lang.String" value="mnuExportXML" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportXMLActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator10">
               <Properties>
                 <Property name="name" type="java.lang.String" value="jSeparator10" noResource="true"/>
@@ -1289,7 +1302,7 @@
     <Container class="javax.swing.JPanel" name="statusPanel">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ba" green="d5" red="cc" type="rgb"/>
+          <Color blue="c9" green="d9" red="d4" type="rgb"/>
         </Property>
         <Property name="name" type="java.lang.String" value="statusPanel" noResource="true"/>
       </Properties>
@@ -1331,7 +1344,7 @@
         <Container class="javax.swing.JPanel" name="jPanel1">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-              <Color blue="dc" green="ee" red="e8" type="rgb"/>
+              <Color blue="c9" green="d9" red="d4" type="rgb"/>
             </Property>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[400, 20]"/>
@@ -1353,6 +1366,9 @@
           <SubComponents>
             <Component class="javax.swing.JProgressBar" name="progressBar">
               <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ba" green="d5" red="cc" type="rgb"/>
+                </Property>
                 <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
                   <Dimension value="[400, 20]"/>
                 </Property>

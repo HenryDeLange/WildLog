@@ -2,6 +2,7 @@ package wildlog.ui.panels;
 
 import java.awt.Cursor;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -14,13 +15,16 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.enums.WildLogThumbnailSizes;
+import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
 import wildlog.ui.dialogs.FilterPropertiesDialog;
+import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.UtilsPanelGenerator;
 import wildlog.ui.helpers.UtilsTableGenerator;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
+import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.reports.helpers.FilterProperties;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.UtilsFileProcessing;
@@ -59,33 +63,31 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSightings = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
         btnGoSighting = new javax.swing.JButton();
         btnAddSighting = new javax.swing.JButton();
         btnDeleteSighting = new javax.swing.JButton();
         lblImage = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        btnGoElement = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        btnGoVisit = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        pnlAdditionalButtons = new javax.swing.JPanel();
         btnGoLocation = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        btnFilterProperties = new javax.swing.JButton();
-        lblFilteredRecords = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        btnFilterElements = new javax.swing.JButton();
-        btnFilterLocation = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        btnFilterVisit = new javax.swing.JButton();
-        lblTotalRecords = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        btnGoVisit = new javax.swing.JButton();
+        btnGoElement = new javax.swing.JButton();
+        btnViewMap = new javax.swing.JButton();
+        btnViewReport = new javax.swing.JButton();
+        btnViewExport = new javax.swing.JButton();
+        pnlFilters = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        btnFilterLocation = new javax.swing.JButton();
+        btnFilterVisit = new javax.swing.JButton();
+        btnFilterElements = new javax.swing.JButton();
+        btnFilterProperties = new javax.swing.JButton();
+        btnResetFilters = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(235, 233, 221));
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -115,6 +117,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
         jScrollPane1.setViewportView(tblSightings);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setText("All Observations:");
 
         btnGoSighting.setBackground(new java.awt.Color(235, 233, 221));
         btnGoSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Go.gif"))); // NOI18N
@@ -163,49 +169,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel7.setText("All Observations:");
-
-        jPanel1.setBackground(new java.awt.Color(235, 233, 221));
-
-        btnGoElement.setBackground(new java.awt.Color(235, 233, 221));
-        btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        btnGoElement.setText("View Creatures");
-        btnGoElement.setToolTipText("Open a tab for the selected Creature.");
-        btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoElement.setFocusPainted(false);
-        btnGoElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGoElement.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoElementActionPerformed(evt);
-            }
-        });
-
-        jButton2.setBackground(new java.awt.Color(235, 233, 221));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
-        jButton2.setText("View Reports");
-        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-
-        btnGoVisit.setBackground(new java.awt.Color(235, 233, 221));
-        btnGoVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        btnGoVisit.setText("View Period");
-        btnGoVisit.setToolTipText("Open a tab for the selected Creature.");
-        btnGoVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnGoVisit.setFocusPainted(false);
-        btnGoVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnGoVisit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGoVisitActionPerformed(evt);
-            }
-        });
-
-        jButton1.setBackground(new java.awt.Color(235, 233, 221));
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
-        jButton1.setText("View Map");
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        pnlAdditionalButtons.setBackground(new java.awt.Color(235, 233, 221));
 
         btnGoLocation.setBackground(new java.awt.Color(235, 233, 221));
         btnGoLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
@@ -220,29 +184,85 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             }
         });
 
-        jButton3.setBackground(new java.awt.Color(235, 233, 221));
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
-        jButton3.setText("View Exports");
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoVisit.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnGoVisit.setText("View Period");
+        btnGoVisit.setToolTipText("Open a tab for the selected Creature.");
+        btnGoVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoVisit.setFocusPainted(false);
+        btnGoVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoVisit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoVisitActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+        btnGoElement.setBackground(new java.awt.Color(235, 233, 221));
+        btnGoElement.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnGoElement.setText("View Creatures");
+        btnGoElement.setToolTipText("Open a tab for the selected Creature.");
+        btnGoElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGoElement.setFocusPainted(false);
+        btnGoElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnGoElement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGoElementActionPerformed(evt);
+            }
+        });
+
+        btnViewMap.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Map_Small.gif"))); // NOI18N
+        btnViewMap.setText("View Map");
+        btnViewMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewMap.setFocusPainted(false);
+        btnViewMap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewMapActionPerformed(evt);
+            }
+        });
+
+        btnViewReport.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewReport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Report_Small.gif"))); // NOI18N
+        btnViewReport.setText("View Reports");
+        btnViewReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewReport.setFocusPainted(false);
+        btnViewReport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewReportActionPerformed(evt);
+            }
+        });
+
+        btnViewExport.setBackground(new java.awt.Color(235, 233, 221));
+        btnViewExport.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Export.png"))); // NOI18N
+        btnViewExport.setText("View Exports");
+        btnViewExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnViewExport.setFocusPainted(false);
+        btnViewExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnViewExport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewExportActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnlAdditionalButtonsLayout = new javax.swing.GroupLayout(pnlAdditionalButtons);
+        pnlAdditionalButtons.setLayout(pnlAdditionalButtonsLayout);
+        pnlAdditionalButtonsLayout.setHorizontalGroup(
+            pnlAdditionalButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAdditionalButtonsLayout.createSequentialGroup()
+                .addGroup(pnlAdditionalButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(btnViewExport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnViewReport, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                    .addComponent(btnViewMap, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(btnGoVisit, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(btnGoElement, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                     .addComponent(btnGoLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        pnlAdditionalButtonsLayout.setVerticalGroup(
+            pnlAdditionalButtonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlAdditionalButtonsLayout.createSequentialGroup()
                 .addGap(31, 31, 31)
                 .addComponent(btnGoLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -250,146 +270,153 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGoElement, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnViewMap, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnViewReport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnViewExport, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jPanel2.setBackground(new java.awt.Color(235, 233, 221));
-
-        jLabel3.setText("Selected 8 Creatures of 8 in total.");
-
-        jButton5.setBackground(new java.awt.Color(235, 233, 221));
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
-        jButton5.setText("Reset all filters");
-
-        btnFilterProperties.setBackground(new java.awt.Color(235, 233, 221));
-        btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
-        btnFilterProperties.setText("Filter Observations");
-        btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterPropertiesActionPerformed(evt);
-            }
-        });
-
-        lblFilteredRecords.setText("000");
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel10.setText("Selected Records:");
-
-        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel8.setText("Total Records:");
-
-        btnFilterElements.setBackground(new java.awt.Color(235, 233, 221));
-        btnFilterElements.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
-        btnFilterElements.setText("Filter by Creature");
-        btnFilterElements.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterElementsActionPerformed(evt);
-            }
-        });
-
-        btnFilterLocation.setBackground(new java.awt.Color(235, 233, 221));
-        btnFilterLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
-        btnFilterLocation.setText("Filter by Place");
-        btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterLocationActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Selected 5 places of 10");
-
-        btnFilterVisit.setBackground(new java.awt.Color(235, 233, 221));
-        btnFilterVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
-        btnFilterVisit.setText("Filter by Period");
-        btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFilterVisitActionPerformed(evt);
-            }
-        });
-
-        lblTotalRecords.setText("000");
-
-        jLabel2.setText("Selected 7 Periods of 10 in total");
+        pnlFilters.setBackground(new java.awt.Color(235, 233, 221));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel4.setText("<html><u>Observation Filters:</u></html>");
 
         jLabel5.setText("Apply filters to view more/less Observations in the table.");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        btnFilterLocation.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterLocation.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Location.gif"))); // NOI18N
+        btnFilterLocation.setText("Filter by Place");
+        btnFilterLocation.setToolTipText("Filter the Observations according to its Place.");
+        btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterLocation.setFocusPainted(false);
+        btnFilterLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterLocationActionPerformed(evt);
+            }
+        });
+
+        btnFilterVisit.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterVisit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnFilterVisit.setText("Filter by Period");
+        btnFilterVisit.setToolTipText("Filter the Observations according to its Period.");
+        btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterVisit.setFocusPainted(false);
+        btnFilterVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterVisitActionPerformed(evt);
+            }
+        });
+
+        btnFilterElements.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterElements.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Element.gif"))); // NOI18N
+        btnFilterElements.setText("Filter by Creature");
+        btnFilterElements.setToolTipText("Filter the Observations according to its Creature.");
+        btnFilterElements.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterElements.setFocusPainted(false);
+        btnFilterElements.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterElements.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterElementsActionPerformed(evt);
+            }
+        });
+
+        btnFilterProperties.setBackground(new java.awt.Color(235, 233, 221));
+        btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
+        btnFilterProperties.setText("Filter Observations");
+        btnFilterProperties.setToolTipText("Filter the Observations according to the value of its data fields.");
+        btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFilterProperties.setFocusPainted(false);
+        btnFilterProperties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFilterPropertiesActionPerformed(evt);
+            }
+        });
+
+        btnResetFilters.setBackground(new java.awt.Color(235, 233, 221));
+        btnResetFilters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Refresh.png"))); // NOI18N
+        btnResetFilters.setText("Reset all filters");
+        btnResetFilters.setToolTipText("Remove all the active filters.");
+        btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnResetFilters.setFocusPainted(false);
+        btnResetFilters.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+
+        jLabel1.setText("Selected 5 places of 10");
+
+        jLabel2.setText("Selected 7 Periods of 10 in total");
+
+        jLabel3.setText("Selected 8 Creatures of 8 in total.");
+
+        jLabel8.setText("Selected Observation properties to filter on");
+
+        jLabel6.setText("Selected start date 1 Jan 2010 and end date 31 Des 2014");
+
+        javax.swing.GroupLayout pnlFiltersLayout = new javax.swing.GroupLayout(pnlFilters);
+        pnlFilters.setLayout(pnlFiltersLayout);
+        pnlFiltersLayout.setHorizontalGroup(
+            pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFiltersLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnFilterProperties, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTotalRecords)
-                            .addComponent(lblFilteredRecords))
-                        .addContainerGap())
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnFilterLocation)
+                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFiltersLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addContainerGap(170, Short.MAX_VALUE))
+                    .addGroup(pnlFiltersLayout.createSequentialGroup()
+                        .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pnlFiltersLayout.createSequentialGroup()
+                                .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2))
+                            .addGroup(pnlFiltersLayout.createSequentialGroup()
+                                .addComponent(btnFilterLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel1))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnFilterVisit)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel2))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnFilterElements)
+                            .addGroup(pnlFiltersLayout.createSequentialGroup()
+                                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(btnResetFilters, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnFilterProperties, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnFilterElements, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel3))
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel8))))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        pnlFiltersLayout.setVerticalGroup(
+            pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFiltersLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(lblTotalRecords))
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFilteredRecords)
-                            .addComponent(jLabel10))))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFilterLocation)
+                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFilterLocation, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
                     .addComponent(jLabel1))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnFilterVisit)
+                .addGap(10, 10, 10)
+                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFilterVisit, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(15, 15, 15)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(btnFilterElements))
-                .addGap(18, 18, 18)
-                .addComponent(jButton5)
-                .addGap(21, 21, 21))
+                .addGap(10, 10, 10)
+                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnFilterElements, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(10, 10, 10)
+                .addGroup(pnlFiltersLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnFilterProperties, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlFiltersLayout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel8)))
+                .addGap(10, 10, 10)
+                .addComponent(btnResetFilters, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -401,7 +428,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(pnlAdditionalButtons, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnDeleteSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAddSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                         .addComponent(btnGoSighting, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)))
@@ -409,7 +436,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1))
@@ -425,7 +452,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                         .addGap(9, 9, 9)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(pnlFilters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addGap(13, 13, 13)
@@ -435,7 +462,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
                         .addGap(20, 20, 20)
                         .addComponent(btnDeleteSighting, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(pnlAdditionalButtons, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 83, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -607,7 +634,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             // Filter the original results using the provided values
             UtilsDialog.doFiltering(lstOriginalData, lstFilteredData, 
                     lstFilteredElements, lstFilteredLocations, lstFilteredVisits, filterProperties, 
-                    lblFilteredRecords, null, null);
+                    null, null, null);
         }
     }//GEN-LAST:event_btnFilterPropertiesActionPerformed
 
@@ -644,6 +671,51 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         }
     }//GEN-LAST:event_btnFilterVisitActionPerformed
 
+    private void btnViewMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMapActionPerformed
+        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        if (!lstSightingsToUse.isEmpty()) {
+            MappingDialog dialog = new MappingDialog(app, null, null, null, null, lstSightingsToUse);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnViewMapActionPerformed
+
+    private void btnViewReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewReportActionPerformed
+        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        if (!lstSightingsToUse.isEmpty()) {
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - Observations", lstSightingsToUse);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnViewReportActionPerformed
+
+    private void btnViewExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewExportActionPerformed
+        List<Sighting> lstSightingsToUse = getListOfSightingsFromTable();
+        if (!lstSightingsToUse.isEmpty()) {
+            ExportDialog dialog = new ExportDialog(app, null, null, null, null, lstSightingsToUse);
+            dialog.setVisible(true);
+        }
+    }//GEN-LAST:event_btnViewExportActionPerformed
+
+    private List<Sighting> getListOfSightingsFromTable() {
+        List<Sighting> lstSightingsToMap;
+        if (tblSightings.getSelectedRowCount() == 0) {
+            // Use all Sightings
+            lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
+            for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
+                lstSightingsToMap.add(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 7))));
+            }
+        }
+        else {
+            // Use selected Sightings
+            lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
+            for (int row : tblSightings.getSelectedRows()) {
+                lstSightingsToMap.add(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 7))));
+            }
+        }
+        return lstSightingsToMap;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddSighting;
     private javax.swing.JButton btnDeleteSighting;
@@ -655,24 +727,22 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private javax.swing.JButton btnGoLocation;
     private javax.swing.JButton btnGoSighting;
     private javax.swing.JButton btnGoVisit;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnResetFilters;
+    private javax.swing.JButton btnViewExport;
+    private javax.swing.JButton btnViewMap;
+    private javax.swing.JButton btnViewReport;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblFilteredRecords;
     private javax.swing.JLabel lblImage;
-    private javax.swing.JLabel lblTotalRecords;
+    private javax.swing.JPanel pnlAdditionalButtons;
+    private javax.swing.JPanel pnlFilters;
     private javax.swing.JTable tblSightings;
     // End of variables declaration//GEN-END:variables
 }

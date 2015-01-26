@@ -192,8 +192,8 @@ public final class UtilsKML {
         UtilsFileProcessing.createFileFromStream(WildLogApp.class.getResourceAsStream("resources/mapping/Location.gif"), inIconPath.resolve("Location.gif"));
     }
 
-    public static void exportKML(DataObjectBasicInfo inDataObject, ProgressbarTask inProgressbarTask, WildLogApp inApp) throws IOException {
-        inProgressbarTask.setMessage("Creating the KML Export for '" + inDataObject.getDisplayName() + "'");
+    public static void exportKML(DataObjectBasicInfo inDataObject, ProgressbarTask inProgressbarTask, WildLogApp inApp, boolean inOpenFile) throws IOException {
+        inProgressbarTask.setMessage("Starting the KML Export for '" + inDataObject.getDisplayName() + "'");
         inProgressbarTask.setTaskProgress(0);
         // Make sure all folders, thumbnails and icons exist
         Path iconPath = WildLogPaths.WILDLOG_EXPORT_KML_THUMBNAILS.getAbsoluteFullPath().resolve(WildLogSystemFile.WILDLOG_FOLDER_PREFIX);
@@ -210,7 +210,7 @@ public final class UtilsKML {
             groupByLocationName = true;
         }
         inProgressbarTask.setTaskProgress(5);
-        inProgressbarTask.setMessage("Creating the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+        inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         // Add Sighting entries
         Sighting tempSighting = new Sighting();
         if (inDataObject instanceof Location) {
@@ -245,7 +245,7 @@ public final class UtilsKML {
              }
             entries.get(key).add(listSightings.get(t).toKML(t, inApp));
             inProgressbarTask.setTaskProgress(5 + (int)((t/(double)listSightings.size())*85));
-            inProgressbarTask.setMessage("Creating the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+            inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         }
         if (!groupByLocationName) {
             // Add Locations entries
@@ -273,15 +273,17 @@ public final class UtilsKML {
                  }
                 entries.get(key).add(listLocations.get(t).toKML(listSightings.size() + t, inApp));
                 inProgressbarTask.setTaskProgress(90 + (int)((t/(double)listLocations.size())*5));
-                inProgressbarTask.setMessage("Creating the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+                inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
             }
         }
         inProgressbarTask.setTaskProgress(95);
-        inProgressbarTask.setMessage("Creating the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
+        inProgressbarTask.setMessage("Busy with the KML Export for '" + inDataObject.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
         // Generate KML
         kmlgen.generateFile(entries, UtilsKML.getKmlStyles(iconPath));
         // Try to open the Kml file
-        UtilsFileProcessing.openFile(finalPath);
+        if (inOpenFile) {
+            UtilsFileProcessing.openFile(finalPath);
+        }
         inProgressbarTask.setTaskProgress(100);
         inProgressbarTask.setMessage("Done with the KML Export for '" + inDataObject.getDisplayName() + "'");
     }

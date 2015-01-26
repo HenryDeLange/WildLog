@@ -5,13 +5,15 @@ import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
+import wildlog.xml.utils.UtilsXML;
 
 
-public class Location extends LocationCore implements DataObjectWithHTML, DataObjectWithKML {
+public class Location extends LocationCore implements DataObjectWithHTML, DataObjectWithKML, DataObjectWithXML {
 
     public Location() {
         super();
@@ -109,6 +111,50 @@ public class Location extends LocationCore implements DataObjectWithHTML, DataOb
         entry.setLatitude(UtilsGps.getDecimalDegree(latitude, latDegrees, latMinutes, latSeconds));
         entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         return entry;
+    }
+
+    @Override
+    public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIsRecursive) {
+        StringBuilder builder = new StringBuilder(500);
+        builder.append("<Place>");
+        builder.append("<name>").append(name).append("</name>");
+        builder.append("<description>").append(description).append("</description>");
+        builder.append("<rating>").append(rating).append("</rating>");
+        builder.append("<gameViewingRating>").append(gameViewingRating).append("</gameViewingRating>");
+        builder.append("<habitatType>").append(habitatType).append("</habitatType>");
+        builder.append("<accommodationType>").append(accommodationType).append("</accommodationType>");
+        builder.append("<catering>").append(catering).append("</catering>");
+        builder.append("<contactNumbers>").append(contactNumbers).append("</contactNumbers>");
+        builder.append("<website>").append(website).append("</website>");
+        builder.append("<email>").append(email).append("</email>");
+        builder.append("<directions>").append(directions).append("</directions>");
+        builder.append(UtilsXML.getGPSInfoAsXML(this));
+        StringBuilder filesString = new StringBuilder(200);
+        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        for (int t = 0; t < files.size(); t++) {
+            filesString.append(UtilsXML.getWildLogFileInfoAsXML(files.get(t)));
+        }
+        builder.append("<Files>").append(filesString).append("</Files>");
+        if (inIsRecursive) {
+//            builder.append("<br/>");
+//            builder.append("</td></tr>");
+//            builder.append("<tr><td>");
+//            Sighting tempSighting = new Sighting();
+//            tempSighting.setElementName(primaryName);
+//            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+//            int counter = 0;
+//            for (Sighting temp : sightings) {
+//                builder.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
+//                if (inProgressbarTask != null) {
+//                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
+//                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+//                            + " " + inProgressbarTask.getProgress() + "%");
+//                    counter++;
+//                }
+//            }
+        }
+        builder.append("</Place>");
+        return builder.toString();
     }
 
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.interfaces.DataObjectWithHTML;
 import wildlog.data.dataobjects.interfaces.DataObjectWithKML;
+import wildlog.data.dataobjects.interfaces.DataObjectWithXML;
 import wildlog.data.enums.ElementType;
 import wildlog.data.enums.FeedingClass;
 import wildlog.data.enums.Latitudes;
@@ -17,9 +18,10 @@ import wildlog.html.utils.UtilsHTMLExportTypes;
 import wildlog.mapping.utils.UtilsGps;
 import wildlog.ui.helpers.ProgressbarTask;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.xml.utils.UtilsXML;
 
 
-public class Sighting extends SightingCore implements DataObjectWithHTML, DataObjectWithKML {
+public class Sighting extends SightingCore implements DataObjectWithHTML, DataObjectWithKML, DataObjectWithXML {
 
     public Sighting() {
         super();
@@ -304,6 +306,62 @@ public class Sighting extends SightingCore implements DataObjectWithHTML, DataOb
             entry.setLongitude(UtilsGps.getDecimalDegree(longitude, lonDegrees, lonMinutes, lonSeconds));
         }
         return entry;
+    }
+
+    @Override
+    public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIsRecursive) {
+        StringBuilder builder = new StringBuilder(700);
+        builder.append("<Observation>");
+        builder.append("<sightingCounter>").append(sightingCounter).append("</sightingCounter>");
+        builder.append("<date>").append(UtilsHTML.formatDateAsString(date, true)).append("</date>");
+        builder.append("<elementName>").append(elementName).append("</elementName>");
+        builder.append("<locationName>").append(locationName).append("</locationName>");
+        builder.append("<visitName>").append(visitName).append("</visitName>");
+        builder.append("<timeOfDay>").append(timeOfDay).append("</timeOfDay>");
+        builder.append("<timeAccuracy>").append(timeAccuracy).append("</timeAccuracy>");
+        builder.append("<certainty>").append(certainty).append("</certainty>");
+        builder.append("<numberOfElements>").append(numberOfElements).append("</numberOfElements>");
+        builder.append("<details>").append(details).append("</details>");
+        builder.append("<sightingEvidence>").append(sightingEvidence).append("</sightingEvidence>");
+        builder.append("<moonPhase>").append(moonPhase).append("</moonPhase>");
+        builder.append("<moonlight>").append(moonlight).append("</moonlight>");
+        builder.append("<sex>").append(sex).append("</sex>");
+        builder.append("<lifeStatus>").append(lifeStatus).append("</lifeStatus>");
+        builder.append("<tag>").append(tag).append("</tag>");
+        builder.append("<temperature>").append(temperature).append("</temperature>");
+        builder.append("<unitsTemperature>").append(unitsTemperature).append("</unitsTemperature>");
+        builder.append("<durationMinutes>").append(durationMinutes).append("</durationMinutes>");
+        builder.append("<durationSeconds>").append(durationSeconds).append("</durationSeconds>");
+        builder.append("<weather>").append(weather).append("</weather>");
+        builder.append("<viewRating>").append(viewRating).append("</viewRating>");
+        builder.append("<age>").append(age).append("</age>");
+        builder.append(UtilsXML.getGPSInfoAsXML(this));
+        StringBuilder filesString = new StringBuilder(300);
+        List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
+        for (int t = 0; t < files.size(); t++) {
+            filesString.append(UtilsXML.getWildLogFileInfoAsXML(files.get(t)));
+        }
+        builder.append("<Files>").append(filesString).append("</Files>");
+        if (inIsRecursive) {
+//            builder.append("<br/>");
+//            builder.append("</td></tr>");
+//            builder.append("<tr><td>");
+//            Sighting tempSighting = new Sighting();
+//            tempSighting.setElementName(primaryName);
+//            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+//            int counter = 0;
+//            for (Sighting temp : sightings) {
+//                builder.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
+//                if (inProgressbarTask != null) {
+//                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
+//                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+//                            + " " + inProgressbarTask.getProgress() + "%");
+//                    counter++;
+//                }
+//            }
+        }
+        builder.append("</Observation>");
+        return builder.toString();
     }
 
 }

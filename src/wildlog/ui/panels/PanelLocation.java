@@ -1268,7 +1268,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            ExportDialog dialog = new ExportDialog(app, locationWL, null, null, null);
+            ExportDialog dialog = new ExportDialog(app, locationWL, null, null, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnHTMLActionPerformed
@@ -1314,7 +1314,7 @@ public class PanelLocation extends PanelCanSetupHeader {
 
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (locationWL.getName() != null && !locationWL.getName().isEmpty()) {
-            MappingDialog dialog = new MappingDialog(app, locationWL, null, null, null);
+            MappingDialog dialog = new MappingDialog(app, locationWL, null, null, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed

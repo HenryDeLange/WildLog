@@ -1230,25 +1230,25 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                MappingDialog mappingDialog = new MappingDialog(app, tempLocation, null, null, null);
+                                MappingDialog mappingDialog = new MappingDialog(app, tempLocation, null, null, null, null);
                                 mappingDialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                MappingDialog mappingDialog = new MappingDialog(app, null, tempElement, null, null);
+                                MappingDialog mappingDialog = new MappingDialog(app, null, tempElement, null, null, null);
                                 mappingDialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                MappingDialog mappingDialog = new MappingDialog(app, null, null, tempVisit, null);
+                                MappingDialog mappingDialog = new MappingDialog(app, null, null, tempVisit, null, null);
                                 mappingDialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                                MappingDialog mappingDialog = new MappingDialog(app, null, null, null, tempSighting);
+                                MappingDialog mappingDialog = new MappingDialog(app, null, null, null, tempSighting, null);
                                 mappingDialog.setVisible(true);
                             }
                         }
@@ -1312,25 +1312,25 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ExportDialog exportDialog = new ExportDialog(app, tempLocation, null, null, null);
+                                ExportDialog exportDialog = new ExportDialog(app, tempLocation, null, null, null, null);
                                 exportDialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ExportDialog exportDialog = new ExportDialog(app, null, tempElement, null, null);
+                                ExportDialog exportDialog = new ExportDialog(app, null, tempElement, null, null, null);
                                 exportDialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ExportDialog exportDialog = new ExportDialog(app, null, null, tempVisit, null);
+                                ExportDialog exportDialog = new ExportDialog(app, null, null, tempVisit, null, null);
                                 exportDialog.setVisible(true);
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof SightingWrapper) {
                                 Sighting tempSighting = ((SightingWrapper)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject()).getSighting();
-                                ExportDialog exportDialog = new ExportDialog(app, null, null, null, tempSighting);
+                                ExportDialog exportDialog = new ExportDialog(app, null, null, null, tempSighting, null);
                                 exportDialog.setVisible(true);
                             }
                         }

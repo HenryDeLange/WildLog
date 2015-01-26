@@ -105,6 +105,10 @@ public final class UtilsHTML {
             inProgressbarTask.setTaskProgress(0);
         }
         Path toFile = WildLogPaths.WILDLOG_EXPORT_HTML.getAbsoluteFullPath().resolve(inDataObject.getExportPrefix()).resolve(inDataObject.getDisplayName() + ".html");
+        if (inProgressbarTask != null) {
+            inProgressbarTask.setTaskProgress(1);
+            inProgressbarTask.setMessage("Busy with the HTML Export for '" + inDataObject.getDisplayName() + "' ");
+        }
         UtilsFileProcessing.createFileFromBytes(inDataObject.toHTML(true, true, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask).getBytes(), toFile);
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(100);

@@ -1580,7 +1580,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
     private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
             MappingDialog dialog = new MappingDialog(app,
-                    null, element, null, null);
+                    null, element, null, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnMapActionPerformed
@@ -1647,7 +1647,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
 
     private void btnHTMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHTMLActionPerformed
         if (element.getPrimaryName() != null && !element.getPrimaryName().isEmpty()) {
-            ExportDialog dialog = new ExportDialog(app, null, element, null, null);
+            ExportDialog dialog = new ExportDialog(app, null, element, null, null, null);
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnHTMLActionPerformed
