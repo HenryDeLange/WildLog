@@ -183,7 +183,7 @@ public class ExportDialog extends JDialog {
         getContentPane().add(btnExportCSV);
 
         btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.gif"))); // NOI18N
-        btnExportXML.setText("Export as XML (Complete)");
+        btnExportXML.setText("Export as XML");
         btnExportXML.setToolTipText("Export a XML file for all relevant Observations and linked records.");
         btnExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExportXML.setFocusPainted(false);
@@ -891,7 +891,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsFileProcessing.openFile(UtilsXML.exportXML(element, app, this));
+                    UtilsFileProcessing.openFile(UtilsXML.exportXML(element, app, this, true));
                     return null;
                 }
             });
@@ -900,7 +900,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsFileProcessing.openFile(UtilsXML.exportXML(location, app, this));
+                    UtilsFileProcessing.openFile(UtilsXML.exportXML(location, app, this, true));
                     return null;
                 }
             });
@@ -909,7 +909,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsFileProcessing.openFile(UtilsXML.exportXML(visit, app, this));
+                    UtilsFileProcessing.openFile(UtilsXML.exportXML(visit, app, this, true));
                     return null;
                 }
             });
@@ -918,7 +918,7 @@ public class ExportDialog extends JDialog {
             UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
                 @Override
                 protected Object doInBackground() throws Exception {
-                    UtilsFileProcessing.openFile(UtilsXML.exportXML(sighting, app, this));
+                    UtilsFileProcessing.openFile(UtilsXML.exportXML(sighting, app, this, true));
                     return null;
                 }
             });
@@ -930,7 +930,7 @@ public class ExportDialog extends JDialog {
                     setProgress(0);
                     setMessage("Starting the XML Export for Observations");
                     for (Sighting tempSighting : lstSightings) {
-                        UtilsXML.exportXML(tempSighting, app, this);
+                        UtilsXML.exportXML(tempSighting, app, this, true);
                     }
                     setProgress(100);
                     setMessage("Done with the XML Export for Observations");

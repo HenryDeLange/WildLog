@@ -11,9 +11,12 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.WildLogPaths;
 
 
-public class UtilsXML {
+public final class UtilsXML {
+    
+    private UtilsXML() {
+    }
 
-    public static Path exportXML(DataObjectWithXML inDataObject, WildLogApp inApp, ProgressbarTask inProgressbarTask) {
+    public static Path exportXML(DataObjectWithXML inDataObject, WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIncludeSightings) {
         if (inProgressbarTask != null) {
             inProgressbarTask.setMessage("Starting the XML Export for '" + inDataObject.getDisplayName() + "' ");
             inProgressbarTask.setTaskProgress(0);
@@ -23,7 +26,7 @@ public class UtilsXML {
             inProgressbarTask.setTaskProgress(1);
             inProgressbarTask.setMessage("Busy with the XML Export for '" + inDataObject.getDisplayName() + "' ");
         }
-        UtilsFileProcessing.createFileFromBytes(inDataObject.toXML(inApp, inProgressbarTask, false).getBytes(), toFile);
+        UtilsFileProcessing.createFileFromBytes(inDataObject.toXML(inApp, inProgressbarTask, inIncludeSightings).getBytes(), toFile);
         if (inProgressbarTask != null) {
             inProgressbarTask.setTaskProgress(100);
             inProgressbarTask.setMessage("Done with the XML Export for '" + inDataObject.getDisplayName() + "' ");

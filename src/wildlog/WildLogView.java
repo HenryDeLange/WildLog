@@ -108,6 +108,7 @@ import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogFileExtentions;
 import wildlog.utils.WildLogPaths;
 import wildlog.utils.WildLogSystemImages;
+import wildlog.xml.utils.UtilsXML;
 
 /**
  * The application's main frame.
@@ -1670,7 +1671,8 @@ public final class WildLogView extends JFrame {
                 // Elements
                 List<Element> listElements = app.getDBI().list(new Element());
                 for (int t = 0; t < listElements.size(); t++) {
-                    // TODO: Sal vinniger gaan as ek die multithreaded kan doen, maar dan moet ek weer die progressbar sync issue probeer fix...
+// TODO: Sal vinniger gaan as ek die multithreaded kan doen, maar dan moet ek weer die progressbar sync issue probeer fix... 
+//       (dink ek het toe 'n manier gekry om die progressbar beter te sync...)
                     UtilsHTML.exportHTML(listElements.get(t), app, null);
                     setProgress(0 + (int)((t/(double)listElements.size())*25));
                     setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
@@ -3119,17 +3121,45 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuSwitchElementNamesActionPerformed
 
     private void mnuExportXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportXMLActionPerformed
+// TODO: Maak dalk eendag 'n popup wat vra of dit een file of baie moet wees. En ook of die Files ingesluit moet word of nie. Maar ek gaan nie juis self binnekort dit nodig he nie...
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
                 setProgress(0);
-                setMessage("Starting the XML Export for Observations");
-                // TODO
-//                for (Sighting tempSighting : lstSightings) {
-//                    UtilsXML.exportXML(tempSighting, app, this);
-//                }
+                setMessage("Starting the XML Export for All Records");
+                // Elements
+                List<Element> listElements = app.getDBI().list(new Element());
+                for (int t = 0; t < listElements.size(); t++) {
+                    UtilsXML.exportXML(listElements.get(t), app, null, false);
+                    setProgress(0 + (int)((t/(double)listElements.size())*25));
+                    setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
+                }
+                // Locations
+                setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
+                List<Location> listLocations = app.getDBI().list(new Location());
+                for (int t = 0; t < listLocations.size(); t++) {
+                    UtilsXML.exportXML(listLocations.get(t), app, null, false);
+                    setProgress(25 + (int)((t/(double)listLocations.size())*25));
+                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                }
+                setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
+                // Visits
+                List<Visit> listVisits = app.getDBI().list(new Visit());
+                for (int t = 0; t < listVisits.size(); t++) {
+                    UtilsXML.exportXML(listVisits.get(t), app, null, false);
+                    setProgress(50 + (int)((t/(double)listVisits.size())*25));
+                    setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
+                }
+                setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
+                // Sightings
+                List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                for (int t = 0; t < listSightings.size(); t++) {
+                    UtilsXML.exportXML(listSightings.get(t), app, null, false);
+                    setProgress(75 + (int)((t/(double)listSightings.size())*25));
+                    setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
+                }
                 setProgress(100);
-                setMessage("Done with the XML Export for Observations");
+                setMessage("Done with the XML Export for All Records");
                 UtilsFileProcessing.openFile(WildLogPaths.WILDLOG_EXPORT_XML.getAbsoluteFullPath());
                 return null;
             }

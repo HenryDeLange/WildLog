@@ -85,7 +85,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
     }
 
     @Override
-    public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIsRecursive) {
+    public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIncludeSightings) {
         StringBuilder builder = new StringBuilder(300);
         builder.append("<Period>");
         builder.append("<name>").append(name).append("</name>");
@@ -97,27 +97,31 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         builder.append("<locationName>").append(locationName).append("</locationName>");
         StringBuilder filesString = new StringBuilder(200);
         List<WildLogFile> files = inApp.getDBI().list(new WildLogFile(getWildLogFileID()));
-        for (int t = 0; t < files.size(); t++) {
-            filesString.append(UtilsXML.getWildLogFileInfoAsXML(files.get(t)));
+        int counter = 0;
+        for (WildLogFile file : files) {
+            filesString.append(UtilsXML.getWildLogFileInfoAsXML(file));
+            if (inProgressbarTask != null) {
+                inProgressbarTask.setTaskProgress(5 + (int)((counter/(double)files.size())*10));
+                inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                        + " " + inProgressbarTask.getProgress() + "%");
+                counter++;
+            }
         }
         builder.append("<Files>").append(filesString).append("</Files>");
-        if (inIsRecursive) {
-//            builder.append("<br/>");
-//            builder.append("</td></tr>");
-//            builder.append("<tr><td>");
-//            Sighting tempSighting = new Sighting();
-//            tempSighting.setElementName(primaryName);
-//            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
-//            int counter = 0;
-//            for (Sighting temp : sightings) {
-//                builder.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
-//                if (inProgressbarTask != null) {
-//                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(94)));
-//                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
-//                            + " " + inProgressbarTask.getProgress() + "%");
-//                    counter++;
-//                }
-//            }
+        if (inIncludeSightings) {
+            StringBuilder sightingString = new StringBuilder(1024);
+            List<Sighting> sightings = inApp.getDBI().list(new Sighting(null, null, name));
+            counter = 0;
+            for (Sighting temp : sightings) {
+                sightingString.append(temp.toXML(inApp, null, false));
+                if (inProgressbarTask != null) {
+                    inProgressbarTask.setTaskProgress(5 + (int)(((double)counter/sightings.size())*(84)));
+                    inProgressbarTask.setMessage(inProgressbarTask.getMessage().substring(0, inProgressbarTask.getMessage().lastIndexOf(' '))
+                            + " " + inProgressbarTask.getProgress() + "%");
+                    counter++;
+                }
+            }
+            builder.append("<Observations>").append(sightingString).append("</Observations>");
         }
         builder.append("</Period>");
         return builder.toString();

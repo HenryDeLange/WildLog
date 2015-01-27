@@ -18,7 +18,7 @@ import wildlog.data.enums.TimeFormat;
 import wildlog.mapping.utils.UtilsGps;
 
 
-public class UtilsTime {
+public final class UtilsTime {
     // The default pattern used in WildLog to display dates. 
     // This pattern is used by the SimpleDateFormat instances used by the JXDatePicker's
     // TODO: Vervang eendag al die SwingX date pickers met iets beter, dalk JavaFX, en raak dan ontslae van SimpleDateFormat.
