@@ -230,11 +230,12 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Certainty"));
 
-        lsbCertainty.setBackground(new java.awt.Color(149, 156, 137));
-        lsbCertainty.setForeground(new java.awt.Color(51, 51, 51));
+        lsbCertainty.setBackground(new java.awt.Color(230, 226, 224));
+        lsbCertainty.setForeground(new java.awt.Color(176, 153, 145));
         lsbCertainty.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Certainty.values())));
         lsbCertainty.setFocusable(false);
-        lsbCertainty.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbCertainty.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbCertainty.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbCertainty.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane10.setViewportView(lsbCertainty);
 
@@ -242,21 +243,23 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel6.setText("GPS Accuracy:");
 
-        lsbGPSAccuracy.setBackground(new java.awt.Color(149, 156, 137));
-        lsbGPSAccuracy.setForeground(new java.awt.Color(51, 51, 51));
+        lsbGPSAccuracy.setBackground(new java.awt.Color(230, 226, 224));
+        lsbGPSAccuracy.setForeground(new java.awt.Color(176, 153, 145));
         lsbGPSAccuracy.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(GPSAccuracy.values())));
         lsbGPSAccuracy.setFocusable(false);
-        lsbGPSAccuracy.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbGPSAccuracy.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbGPSAccuracy.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbGPSAccuracy.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane12.setViewportView(lsbGPSAccuracy);
 
         jLabel9.setText("Certainty:");
 
-        lsbTimeAccuracy.setBackground(new java.awt.Color(149, 156, 137));
-        lsbTimeAccuracy.setForeground(new java.awt.Color(51, 51, 51));
+        lsbTimeAccuracy.setBackground(new java.awt.Color(230, 226, 224));
+        lsbTimeAccuracy.setForeground(new java.awt.Color(176, 153, 145));
         lsbTimeAccuracy.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(TimeAccuracy.values())));
         lsbTimeAccuracy.setFocusable(false);
-        lsbTimeAccuracy.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbTimeAccuracy.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbTimeAccuracy.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbTimeAccuracy.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane11.setViewportView(lsbTimeAccuracy);
 
@@ -318,19 +321,21 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel12.setText("Sex:");
 
-        lsbSex.setBackground(new java.awt.Color(149, 156, 137));
-        lsbSex.setForeground(new java.awt.Color(51, 51, 51));
+        lsbSex.setBackground(new java.awt.Color(230, 226, 224));
+        lsbSex.setForeground(new java.awt.Color(176, 153, 145));
         lsbSex.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Sex.values())));
         lsbSex.setFocusable(false);
-        lsbSex.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbSex.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbSex.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbSex.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane4.setViewportView(lsbSex);
 
-        lsbAge.setBackground(new java.awt.Color(149, 156, 137));
-        lsbAge.setForeground(new java.awt.Color(51, 51, 51));
+        lsbAge.setBackground(new java.awt.Color(230, 226, 224));
+        lsbAge.setForeground(new java.awt.Color(176, 153, 145));
         lsbAge.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Age.values())));
         lsbAge.setFocusable(false);
-        lsbAge.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbAge.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbAge.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbAge.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane5.setViewportView(lsbAge);
 
@@ -422,29 +427,32 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel15.setText("Evidence:");
 
-        lsbEvidence.setBackground(new java.awt.Color(149, 156, 137));
-        lsbEvidence.setForeground(new java.awt.Color(51, 51, 51));
+        lsbEvidence.setBackground(new java.awt.Color(230, 226, 224));
+        lsbEvidence.setForeground(new java.awt.Color(176, 153, 145));
         lsbEvidence.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(SightingEvidence.values())));
         lsbEvidence.setFocusable(false);
-        lsbEvidence.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbEvidence.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbEvidence.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbEvidence.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane7.setViewportView(lsbEvidence);
 
-        lsbLifeStatus.setBackground(new java.awt.Color(149, 156, 137));
-        lsbLifeStatus.setForeground(new java.awt.Color(51, 51, 51));
+        lsbLifeStatus.setBackground(new java.awt.Color(230, 226, 224));
+        lsbLifeStatus.setForeground(new java.awt.Color(176, 153, 145));
         lsbLifeStatus.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(LifeStatus.values())));
         lsbLifeStatus.setFocusable(false);
-        lsbLifeStatus.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbLifeStatus.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbLifeStatus.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbLifeStatus.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane6.setViewportView(lsbLifeStatus);
 
         jLabel14.setText("Life Status:");
 
-        lsbVisitType.setBackground(new java.awt.Color(149, 156, 137));
-        lsbVisitType.setForeground(new java.awt.Color(51, 51, 51));
+        lsbVisitType.setBackground(new java.awt.Color(230, 226, 224));
+        lsbVisitType.setForeground(new java.awt.Color(176, 153, 145));
         lsbVisitType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(VisitType.values())));
         lsbVisitType.setFocusable(false);
-        lsbVisitType.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbVisitType.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbVisitType.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbVisitType.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane1.setViewportView(lsbVisitType);
 
@@ -452,11 +460,12 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel8.setText("Creature Type:");
 
-        lsbElementType.setBackground(new java.awt.Color(149, 156, 137));
-        lsbElementType.setForeground(new java.awt.Color(51, 51, 51));
+        lsbElementType.setBackground(new java.awt.Color(230, 226, 224));
+        lsbElementType.setForeground(new java.awt.Color(176, 153, 145));
         lsbElementType.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ElementType.values())));
         lsbElementType.setFocusable(false);
-        lsbElementType.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbElementType.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbElementType.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbElementType.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane3.setViewportView(lsbElementType);
 
@@ -511,21 +520,23 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
 
         jLabel19.setText("Moonlight:");
 
-        lsbTimeOfDay.setBackground(new java.awt.Color(149, 156, 137));
-        lsbTimeOfDay.setForeground(new java.awt.Color(51, 51, 51));
+        lsbTimeOfDay.setBackground(new java.awt.Color(230, 226, 224));
+        lsbTimeOfDay.setForeground(new java.awt.Color(176, 153, 145));
         lsbTimeOfDay.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(ActiveTimeSpesific.values())));
         lsbTimeOfDay.setFocusable(false);
-        lsbTimeOfDay.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbTimeOfDay.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbTimeOfDay.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbTimeOfDay.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane8.setViewportView(lsbTimeOfDay);
 
         spnMoonphase.setModel(new javax.swing.SpinnerNumberModel(0, 0, 100, 1));
 
-        lsbMoonlight.setBackground(new java.awt.Color(149, 156, 137));
-        lsbMoonlight.setForeground(new java.awt.Color(51, 51, 51));
+        lsbMoonlight.setBackground(new java.awt.Color(230, 226, 224));
+        lsbMoonlight.setForeground(new java.awt.Color(176, 153, 145));
         lsbMoonlight.setModel(new DefaultComboBoxModel(UtilsReports.removeEmptyEntries(Moonlight.values())));
         lsbMoonlight.setFocusable(false);
-        lsbMoonlight.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        lsbMoonlight.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        lsbMoonlight.setSelectionForeground(new java.awt.Color(23, 38, 4));
         lsbMoonlight.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane9.setViewportView(lsbMoonlight);
 

@@ -374,8 +374,9 @@ public final class WildLogView extends JFrame {
         chkMnuUseScienteficName = new javax.swing.JCheckBoxMenuItem();
         chkMnuEnableSounds = new javax.swing.JCheckBoxMenuItem();
         javax.swing.JMenu helpMenu = new javax.swing.JMenu();
-        javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
         mnuAboutWildNote = new javax.swing.JMenuItem();
+        jSeparator16 = new javax.swing.JPopupMenu.Separator();
+        javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v4.2");
@@ -1214,6 +1215,20 @@ public final class WildLogView extends JFrame {
         helpMenu.setText("About");
         helpMenu.setName("helpMenu"); // NOI18N
 
+        mnuAboutWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
+        mnuAboutWildNote.setText("Information about WildNote");
+        mnuAboutWildNote.setToolTipText("More information about WildNote.");
+        mnuAboutWildNote.setName("mnuAboutWildNote"); // NOI18N
+        mnuAboutWildNote.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuAboutWildNoteActionPerformed(evt);
+            }
+        });
+        helpMenu.add(mnuAboutWildNote);
+
+        jSeparator16.setName("jSeparator16"); // NOI18N
+        helpMenu.add(jSeparator16);
+
         mnuAboutWildLog.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
         mnuAboutWildLog.setText("About WildLog");
         mnuAboutWildLog.setToolTipText("Display information about this version of WildLog.");
@@ -1224,17 +1239,6 @@ public final class WildLogView extends JFrame {
             }
         });
         helpMenu.add(mnuAboutWildLog);
-
-        mnuAboutWildNote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildNoteIcon.png"))); // NOI18N
-        mnuAboutWildNote.setText("About WildNote");
-        mnuAboutWildNote.setToolTipText("More information about WildNote.");
-        mnuAboutWildNote.setName("mnuAboutWildNote"); // NOI18N
-        mnuAboutWildNote.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuAboutWildNoteActionPerformed(evt);
-            }
-        });
-        helpMenu.add(mnuAboutWildNote);
 
         menuBar.add(helpMenu);
 
@@ -3227,6 +3231,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator13;
     private javax.swing.JPopupMenu.Separator jSeparator14;
     private javax.swing.JPopupMenu.Separator jSeparator15;
+    private javax.swing.JPopupMenu.Separator jSeparator16;
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator4;

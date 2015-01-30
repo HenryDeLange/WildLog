@@ -103,7 +103,7 @@ public final class UtilsUI {
         });
     }
 
-    public static void attachKeyListernerToFilterTableRows(final JTextComponent inTxtSearch, final JTable inTable) {
+    public static void attachKeyListernerToFilterTableRows(final JTextComponent inTxtSearch, final JTable inTable, final int... inColumnsToSearch) {
         inTxtSearch.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent inEvent) {
@@ -117,7 +117,12 @@ public final class UtilsUI {
                 }
                 // Note: The regexFilter method seems to be able to take optional parameters...
                 // The (?i) makes the matching ignore case...
-                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inTxtSearch.getText()), 1));
+                if (inColumnsToSearch == null || inColumnsToSearch.length == 0) {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inTxtSearch.getText()), new int[] {1}));
+                }
+                else {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(inTxtSearch.getText()), inColumnsToSearch));
+                }
                 // Kan dit ook glo so doen:
                 //sorter.setRowFilter(RowFilter.regexFilter(Pattern.compile(txtSearchField.getText(), Pattern.CASE_INSENSITIVE).toString()));
                 inTable.setRowSorter(sorter);

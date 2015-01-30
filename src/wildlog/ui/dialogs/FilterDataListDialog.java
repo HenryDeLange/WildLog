@@ -31,9 +31,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private DataObjectWithWildLogFile typeInstance;
     private List<T> lstSelectedValues;
 
-// TODO: Sal dit nie beter wees as hierdie lyste net die opsies wys wat actully in die sighting lys teenwoordig is nadat die properties filter apply was nie? Of andersins sit 'n toggle op om dit te doen?
-// TODO: Maak 'n Cell renderer of iets wat 'n checkbox sal teken op die rye om te wys wat gekies is en wat nie.
-// TODO: Sit 'n search box bo aan om makliker te kan filter na spesifieke waardes.
 // TODO: Die class (en veral die constructors en weird generics) kan doen met review/cleanup...
     
     /**
@@ -177,6 +174,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                 lblTotalOriginal.setText("Total Records: " + tblData.getRowCount());
             }
         });
+        // Add key listener for textfields to auto search the tables
+        UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblData, 2);
+        // Attach clipboard
+        UtilsUI.attachClipboardPopup(txtSearch);
     }
     
     private void doSharedSetup(JFrame inParent) {
@@ -193,12 +194,9 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                     }
                 },
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-
         // Position the dialog
         UtilsDialog.setDialogToCenter(inParent, thisHandler);
         UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
-        // Attach listeners etc.
-        UtilsUI.attachKeyListernerToSelectKeyedRows(tblData);
     }
 
     /**
@@ -208,6 +206,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtSearch = new javax.swing.JTextField();
         btnSelect = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -222,6 +221,12 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         setMinimumSize(new java.awt.Dimension(550, 300));
         setModal(true);
 
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
         btnSelect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Update.png"))); // NOI18N
         btnSelect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSelect.setFocusPainted(false);
@@ -235,9 +240,18 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         jLabel1.setText("Select the data records that should be included:");
 
         tblData.setAutoCreateRowSorter(true);
-        tblData.setBackground(new java.awt.Color(149, 156, 137));
-        tblData.setForeground(new java.awt.Color(51, 51, 51));
-        tblData.setSelectionBackground(new java.awt.Color(31, 68, 11));
+        tblData.setBackground(new java.awt.Color(230, 226, 224));
+        tblData.setForeground(new java.awt.Color(176, 153, 145));
+        tblData.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        tblData.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        tblData.setSelectionForeground(new java.awt.Color(23, 38, 4));
         tblData.setSelectionModel(new CtrlClickSelectionModel());
         jScrollPane2.setViewportView(tblData);
 
@@ -270,12 +284,17 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 621, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtSearch)))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnSelect, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
@@ -293,7 +312,9 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnSelect, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -303,8 +324,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSelectAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(btnClearAll, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -356,7 +376,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
-        for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
+        for (int t = 0; t < tblData.getRowCount(); t++) {
             tblData.getSelectionModel().addSelectionInterval(t, t);
         }
     }//GEN-LAST:event_btnSelectAllActionPerformed
@@ -364,6 +384,17 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
         tblData.clearSelection();
     }//GEN-LAST:event_btnClearAllActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER && tblData.getSelectedRowCount() == 1) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    btnSelectActionPerformed(null);
+                }
+            });
+        }
+    }//GEN-LAST:event_txtSearchKeyReleased
 
     public boolean isSelectionMade() {
         return selectionMade;
@@ -386,5 +417,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private javax.swing.JLabel lblTotalOriginal;
     private javax.swing.JLabel lblTotalSelected;
     private javax.swing.JTable tblData;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

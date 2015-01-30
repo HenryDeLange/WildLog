@@ -602,7 +602,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, new Date(2014 + 1900, 1, 1), new Date(), null, null, null);
+        UtilsTableGenerator.setupSightingTableForMainTab(app, tblSightings, new Date(2014 - 1900, 1, 1), new Date(), null, null, null);
     }//GEN-LAST:event_formComponentShown
 
     @Override

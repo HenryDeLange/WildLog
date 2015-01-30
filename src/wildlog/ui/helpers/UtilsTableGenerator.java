@@ -39,13 +39,14 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
-import wildlog.ui.helpers.cellrenderers.DateCellRenderer;
-import wildlog.ui.helpers.cellrenderers.DateTimeCellRenderer;
-import wildlog.ui.helpers.cellrenderers.IconCellRenderer;
-import wildlog.ui.helpers.cellrenderers.TextCellRenderer;
-import wildlog.ui.helpers.cellrenderers.WildLogDataModelWrapperCellRenderer;
-import wildlog.ui.helpers.cellrenderers.WildLogTableModel;
-import wildlog.ui.helpers.cellrenderers.WildLogTableModelDataWrapper;
+import wildlog.ui.helpers.renderers.DateCellRenderer;
+import wildlog.ui.helpers.renderers.DateTimeCellRenderer;
+import wildlog.ui.helpers.renderers.IconCellRenderer;
+import wildlog.ui.helpers.renderers.SelectedIndicatorCellRenderer;
+import wildlog.ui.helpers.renderers.TextCellRenderer;
+import wildlog.ui.helpers.renderers.WildLogDataModelWrapperCellRenderer;
+import wildlog.ui.helpers.renderers.WildLogTableModel;
+import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.UtilsImageProcessing;
@@ -124,7 +125,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(220);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(240);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(150);
@@ -208,7 +209,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(140);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(150);
                     inTable.getColumnModel().getColumn(2).setMinWidth(50);
@@ -284,7 +285,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(180);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(200);
                     inTable.getColumnModel().getColumn(2).setMinWidth(90);
@@ -379,7 +380,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(110);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(130);
                     inTable.getColumnModel().getColumn(2).setMinWidth(75);
@@ -460,7 +461,7 @@ public final class UtilsTableGenerator {
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
-                        setupRenderersAndThumbnailRows(inTable, false, false);
+                        setupRenderersAndThumbnailRows(inTable, false, false, 0);
                         inTable.getColumnModel().getColumn(1).setMinWidth(75);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(85);
                         inTable.getColumnModel().getColumn(2).setMinWidth(80);
@@ -536,7 +537,7 @@ public final class UtilsTableGenerator {
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
-                        setupRenderersAndThumbnailRows(inTable, false, false);
+                        setupRenderersAndThumbnailRows(inTable, false, false, 0);
                         inTable.getColumnModel().getColumn(1).setMinWidth(90);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(100);
                         inTable.getColumnModel().getColumn(2).setMinWidth(75);
@@ -630,7 +631,7 @@ public final class UtilsTableGenerator {
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
-                        setupRenderersAndThumbnailRows(inTable, true, false);
+                        setupRenderersAndThumbnailRows(inTable, true, false, 0);
                         inTable.getColumnModel().getColumn(1).setMinWidth(100);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
                         inTable.getColumnModel().getColumn(2).setMinWidth(100);
@@ -737,7 +738,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, true, true);
+                    setupRenderersAndThumbnailRows(inTable, true, true, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(2).setMinWidth(100);
@@ -832,7 +833,7 @@ public final class UtilsTableGenerator {
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
-                        setupRenderersAndThumbnailRows(inTable, false, false);
+                        setupRenderersAndThumbnailRows(inTable, false, false, 0);
                         inTable.getColumnModel().getColumn(1).setMinWidth(90);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
                         inTable.getColumnModel().getColumn(2).setMinWidth(70);
@@ -917,7 +918,7 @@ public final class UtilsTableGenerator {
                         // Create the new model
                         setupTableModel(inTable, data, columnNames);
                         // Setup the column and row sizes etc.
-                        setupRenderersAndThumbnailRows(inTable, false, false);
+                        setupRenderersAndThumbnailRows(inTable, false, false, 0);
                         inTable.getColumnModel().getColumn(1).setMinWidth(90);
                         inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
                         inTable.getColumnModel().getColumn(2).setMinWidth(70);
@@ -988,7 +989,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(105);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
                     inTable.getColumnModel().getColumn(2).setMinWidth(65);
@@ -1050,7 +1051,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(105);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
@@ -1122,7 +1123,7 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 0);
                     inTable.getColumnModel().getColumn(1).setMinWidth(115);
                     inTable.getColumnModel().getColumn(1).setPreferredWidth(135);
                     inTable.getColumnModel().getColumn(2).setMinWidth(65);
@@ -1266,18 +1267,18 @@ public final class UtilsTableGenerator {
         }
     }
 
-    private static void setupRenderersAndThumbnailRows(JTable inTable, boolean inShowDatesWithTime, boolean inHideThumbnails) {
+    private static void setupRenderersAndThumbnailRows(JTable inTable, boolean inShowDatesWithTime, boolean inHideThumbnails, int inIconOffset) {
         int primaryColumn;
         if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables() || inHideThumbnails) {
             inTable.setRowHeight(25);
-            primaryColumn = 0;
+            primaryColumn = 0 + inIconOffset;
         }
         else {
             inTable.setRowHeight(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            inTable.getColumnModel().getColumn(0).setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            inTable.getColumnModel().getColumn(0).setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
-            inTable.getColumnModel().getColumn(0).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.VERY_SMALL.getSize()));
-            primaryColumn = 1;
+            inTable.getColumnModel().getColumn(0 + inIconOffset).setMinWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0 + inIconOffset).setMaxWidth(WildLogThumbnailSizes.VERY_SMALL.getSize() + 4);
+            inTable.getColumnModel().getColumn(0 + inIconOffset).setCellRenderer(new IconCellRenderer(WildLogThumbnailSizes.VERY_SMALL.getSize()));
+            primaryColumn = 1 + inIconOffset;
         }
         inTable.setDefaultRenderer(Object.class, new TextCellRenderer(primaryColumn));
         inTable.setDefaultRenderer(Integer.class, new TextCellRenderer(primaryColumn));
@@ -1355,7 +1356,7 @@ public final class UtilsTableGenerator {
                     String[] columnNames;
                     if (inList.get(0) instanceof Element) {
                         columnNames = new String[] {
-                                                    "",
+                                                    "", "",
                                                     "Creature Name",
                                                     "Creature Type"
                                                     };
@@ -1363,14 +1364,14 @@ public final class UtilsTableGenerator {
                     else
                     if (inList.get(0) instanceof Location) {
                         columnNames = new String[] {
-                                                    "",
+                                                    "", "",
                                                     "Place Name"
                                                     };
                     }
                     else
                     if (inList.get(0) instanceof Visit) {
                         columnNames = new String[] {
-                                                    "",
+                                                    "", "",
                                                     "Period Name",
                                                     "Place Name",
                                                     "Start Date",
@@ -1380,7 +1381,7 @@ public final class UtilsTableGenerator {
                     else
                     if (inList.get(0) instanceof Sighting) {
                         columnNames = new String[] {
-                                                    "",
+                                                    "", "",
                                                     "Creature Name",
                                                     "Place Name",
                                                     "Date",
@@ -1391,7 +1392,7 @@ public final class UtilsTableGenerator {
                     }
                     else {
                         columnNames = new String[] {
-                                                    "",
+                                                    "", "",
                                                     "Unknown Data"
                                                     };
                     }
@@ -1405,10 +1406,11 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 DataObjectWithWildLogFile dataObject = inList.get(finalT);
-                                data[finalT][0] = setupThumbnailIcon(inApp, dataObject);
-                                data[finalT][1] = dataObject.getDisplayName();
+                                data[finalT][0] = true;
+                                data[finalT][1] = setupThumbnailIcon(inApp, dataObject);
+                                data[finalT][2] = dataObject.getDisplayName();
                                 if (dataObject instanceof Element) {
-                                    data[finalT][2] = inApp.getDBI().find((Element)dataObject).getType();
+                                    data[finalT][3] = inApp.getDBI().find((Element)dataObject).getType();
                                 }
                                 else
                                 if (dataObject instanceof Location) {
@@ -1417,19 +1419,19 @@ public final class UtilsTableGenerator {
                                 else
                                 if (dataObject instanceof Visit) {
                                     Visit visit = inApp.getDBI().find((Visit)dataObject);
-                                    data[finalT][2] = visit.getLocationName();
-                                    data[finalT][3] = visit.getStartDate();
-                                    data[finalT][4] = visit.getType();
+                                    data[finalT][3] = visit.getLocationName();
+                                    data[finalT][4] = visit.getStartDate();
+                                    data[finalT][5] = visit.getType();
                                 }
                                 else
                                 if (dataObject instanceof Sighting) {
                                     Sighting sighting = inApp.getDBI().find((Sighting)dataObject);
-                                    data[finalT][1] = sighting.getElementName();
-                                    data[finalT][2] = sighting.getLocationName();
-                                    data[finalT][3] = sighting.getDate();
-                                    data[finalT][4] = sighting.getVisitName();
-                                    data[finalT][5] = sighting.getCertainty();
-                                    data[finalT][6] = sighting.getSightingCounter();
+                                    data[finalT][2] = sighting.getElementName();
+                                    data[finalT][3] = sighting.getLocationName();
+                                    data[finalT][4] = sighting.getDate();
+                                    data[finalT][5] = sighting.getVisitName();
+                                    data[finalT][6] = sighting.getCertainty();
+                                    data[finalT][7] = sighting.getSightingCounter();
                                 }
                                 return null;
                             }
@@ -1444,17 +1446,53 @@ public final class UtilsTableGenerator {
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
-                    setupRenderersAndThumbnailRows(inTable, false, false);
-                    inTable.getColumnModel().getColumn(1).setMinWidth(105);
-                    inTable.getColumnModel().getColumn(1).setPreferredWidth(125);
+                    inTable.setDefaultRenderer(Boolean.class, new SelectedIndicatorCellRenderer());
+                    inTable.getColumnModel().getColumn(0).setMinWidth(25);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+                    inTable.getColumnModel().getColumn(0).setMaxWidth(25);
+                    setupRenderersAndThumbnailRows(inTable, false, false, 1);
+                    inTable.getColumnModel().getColumn(2).setMinWidth(135);
+                    inTable.getColumnModel().getColumn(2).setPreferredWidth(155);
                     
-                    // TODO: set sizes
-                    
+                    if (inList.get(0) instanceof Element) {
+                        inTable.getColumnModel().getColumn(3).setMinWidth(85);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(125);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(135);
+                    }
+                    else
+                    if (inList.get(0) instanceof Location) {
+                        // No exstra columns...
+                    }
+                    else
+                    if (inList.get(0) instanceof Visit) {
+                        inTable.getColumnModel().getColumn(3).setMinWidth(85);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(135);
+                        inTable.getColumnModel().getColumn(3).setMaxWidth(155);
+                        inTable.getColumnModel().getColumn(4).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(4).setPreferredWidth(85);
+                        inTable.getColumnModel().getColumn(4).setMaxWidth(105);
+                        inTable.getColumnModel().getColumn(5).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(5).setPreferredWidth(85);
+                        inTable.getColumnModel().getColumn(5).setMaxWidth(115);
+                    }
+                    else
+                    if (inList.get(0) instanceof Sighting) {
+                        inTable.getColumnModel().getColumn(3).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(3).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(4).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(5).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(5).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(6).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(6).setPreferredWidth(75);
+                        inTable.getColumnModel().getColumn(7).setMinWidth(75);
+                        inTable.getColumnModel().getColumn(7).setPreferredWidth(75);
+                    }
                     if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
-                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
+                        inTable.removeColumn(inTable.getColumnModel().getColumn(1));
                     }
                     // Setup default sorting
-                    setupRowSorter(inTable, 1);
+                    setupRowSorter(inTable, 2);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Data"}, 0));

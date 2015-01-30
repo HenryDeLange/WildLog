@@ -57,7 +57,7 @@ import wildlog.ui.dialogs.MappingDialog;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.helpers.LazyTreeNode;
 import wildlog.ui.helpers.UtilsPanelGenerator;
-import wildlog.ui.helpers.cellrenderers.WildLogTreeCellRenderer;
+import wildlog.ui.helpers.renderers.WildLogTreeCellRenderer;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
 import wildlog.ui.panels.interfaces.PanelNeedsRefreshWhenDataChanges;
 import wildlog.ui.reports.ReportsBaseDialog;
