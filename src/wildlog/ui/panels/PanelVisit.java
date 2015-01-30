@@ -710,8 +710,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
                         .addGap(3, 3, 3)
                         .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
-                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(3, 3, 3)))
+                        .addComponent(btnHTML, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(5, 5, 5))
         );
 
@@ -877,7 +876,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
         btnDeleteSighting.setBackground(new java.awt.Color(228, 240, 237));
         btnDeleteSighting.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Delete.gif"))); // NOI18N
-        btnDeleteSighting.setToolTipText("Delete the selected Observation. This will delete all linked files as well.");
+        btnDeleteSighting.setToolTipText("<html>Delete the selected Observation. <br/>This will delete all linked files as well.</html>");
         btnDeleteSighting.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnDeleteSighting.setFocusPainted(false);
         btnDeleteSighting.setName("btnDeleteSighting"); // NOI18N

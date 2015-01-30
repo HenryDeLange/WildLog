@@ -878,7 +878,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         }
     }
     
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClearAll;
     private javax.swing.JButton btnSelect;

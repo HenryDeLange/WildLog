@@ -10,9 +10,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 public class TextCellRenderer extends DefaultTableCellRenderer {
     private int primaryColumn = -1;
+    private int[] leftAlignColumns;
 
-    public TextCellRenderer(int inPrimaryColumn) {
+    public TextCellRenderer(int inPrimaryColumn, int... inLeftAlignColumns) {
         primaryColumn = inPrimaryColumn;
+        leftAlignColumns = inLeftAlignColumns;
     }
 
     @Override
@@ -26,6 +28,15 @@ public class TextCellRenderer extends DefaultTableCellRenderer {
         }
         else {
             setHorizontalAlignment(JLabel.CENTER);
+            // If specific left alignment columns where specified, then overwrite the alignment
+            if (leftAlignColumns != null) {
+                for (int col : leftAlignColumns) {
+                    if (inColumn == col) {
+                        setHorizontalAlignment(JLabel.LEFT);
+                        break;
+                    }
+                }
+            }
         }
         setToolTipText(getText());
         if (!inTable.isEnabled()) {

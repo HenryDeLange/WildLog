@@ -58,7 +58,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             for (String temp : setOriginalData) {
                 originalData.add(new Element(temp));
             }
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
         else
         if (typeInstance instanceof Location) {
@@ -70,7 +70,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             for (String temp : setOriginalData) {
                 originalData.add(new Location(temp));
             }
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
         else
         if (typeInstance instanceof Visit) {
@@ -82,16 +82,16 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             for (String temp : setOriginalData) {
                 originalData.add(new Visit(temp));
             }
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, originalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, originalData);
         }
         else
         if (typeInstance instanceof Sighting) {
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOriginalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, inLstOriginalData);
         }
-        tblData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
+                lblTotalSelected.setText("Selected Records: " + table.getSelectedRowCount());
             }
         });
         // Wrap up the shared setup
@@ -114,24 +114,24 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             typeInstance = null;
         }
         if (typeInstance instanceof Element) {
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, (List<Element>) inLstOriginalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Element>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Location) {
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, (List<Location>) inLstOriginalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Location>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Visit) {
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, (List<Visit>) inLstOriginalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, (List<Visit>) inLstOriginalData);
         }
         else
         if (typeInstance instanceof Sighting) {
-            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), tblData, inLstOriginalData);
+            UtilsTableGenerator.setupFilterTable(WildLogApp.getApplication(), table, inLstOriginalData);
         }
-        tblData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent evt) {
-                lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
+                lblTotalSelected.setText("Selected Records: " + table.getSelectedRowCount());
             }
         });
         // Wrap up the shared setup
@@ -143,39 +143,39 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         // Wag eers vir die table om klaar te load voor ek iets probeer select
         final int indexOfID;
         if (typeInstance instanceof Sighting) {
-            indexOfID = 6;
+            indexOfID = 7;
             btnSelect.setEnabled(false);
             btnClearAll.setEnabled(false);
             btnSelectAll.setEnabled(false);
-            tblData.setEnabled(false);
+            table.setEnabled(false);
         }
         else {
-            indexOfID = 1;
+            indexOfID = 2;
         }
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 if (inLstOldSelectedData != null) {
-                    for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
+                    for (int t = 0; t < table.getModel().getRowCount(); t++) {
                         for (DataObjectWithWildLogFile dataObject : inLstOldSelectedData) {
-                            if (tblData.getModel().getValueAt(tblData.convertRowIndexToModel(t), indexOfID).toString().equals(dataObject.getIDField())) {
-                                tblData.getSelectionModel().addSelectionInterval(t, t);
+                            if (table.getModel().getValueAt(table.convertRowIndexToModel(t), indexOfID).toString().equals(dataObject.getIDField())) {
+                                table.getSelectionModel().addSelectionInterval(t, t);
                                 break;
                             }
                         }
                     }
                 }
                 else {
-                    for (int t = 0; t < tblData.getModel().getRowCount(); t++) {
-                        tblData.getSelectionModel().addSelectionInterval(t, t);
+                    for (int t = 0; t < table.getModel().getRowCount(); t++) {
+                        table.getSelectionModel().addSelectionInterval(t, t);
                     }
                 }
-                lblTotalSelected.setText("Selected Records: " + tblData.getSelectedRowCount());
-                lblTotalOriginal.setText("Total Records: " + tblData.getRowCount());
+                lblTotalSelected.setText("Selected Records: " + table.getSelectedRowCount());
+                lblTotalOriginal.setText("Total Records: " + table.getRowCount());
             }
         });
         // Add key listener for textfields to auto search the tables
-        UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, tblData, 2);
+        UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, table, 2);
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
     }
@@ -210,7 +210,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         btnSelect = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblData = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         lblTotalOriginal = new javax.swing.JLabel();
         lblTotalSelected = new javax.swing.JLabel();
         btnSelectAll = new javax.swing.JButton();
@@ -220,6 +220,11 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         setTitle("Filter Data Selection");
         setMinimumSize(new java.awt.Dimension(550, 300));
         setModal(true);
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                formComponentShown(evt);
+            }
+        });
 
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -239,10 +244,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel1.setText("Select the data records that should be included:");
 
-        tblData.setAutoCreateRowSorter(true);
-        tblData.setBackground(new java.awt.Color(230, 226, 224));
-        tblData.setForeground(new java.awt.Color(176, 153, 145));
-        tblData.setModel(new javax.swing.table.DefaultTableModel(
+        table.setAutoCreateRowSorter(true);
+        table.setBackground(new java.awt.Color(230, 226, 224));
+        table.setForeground(new java.awt.Color(176, 153, 145));
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -250,10 +255,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
 
             }
         ));
-        tblData.setSelectionBackground(new java.awt.Color(193, 209, 179));
-        tblData.setSelectionForeground(new java.awt.Color(23, 38, 4));
-        tblData.setSelectionModel(new CtrlClickSelectionModel());
-        jScrollPane2.setViewportView(tblData);
+        table.setSelectionBackground(new java.awt.Color(193, 209, 179));
+        table.setSelectionForeground(new java.awt.Color(23, 38, 4));
+        table.setSelectionModel(new CtrlClickSelectionModel());
+        jScrollPane2.setViewportView(table);
 
         lblTotalOriginal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTotalOriginal.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -334,12 +339,12 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private void loadRowIDForType(int inRow) throws NumberFormatException {
         int indexOfID;
         if (typeInstance instanceof Sighting) {
-            indexOfID = 6;
+            indexOfID = 7;
         }
         else {
-            indexOfID = 1;
+            indexOfID = 2;
         }
-        String selectedID = tblData.getModel().getValueAt(tblData.convertRowIndexToModel(inRow), indexOfID).toString();
+        String selectedID = table.getModel().getValueAt(table.convertRowIndexToModel(inRow), indexOfID).toString();
         if (typeInstance instanceof Element) {
             ((Element) typeInstance).setPrimaryName(selectedID);
         }
@@ -359,8 +364,8 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
         selectionMade = true;
-        lstSelectedValues = new ArrayList<>(tblData.getSelectedRowCount());
-        int[] selectedRows = tblData.getSelectedRows();
+        lstSelectedValues = new ArrayList<>(table.getSelectedRowCount());
+        int[] selectedRows = table.getSelectedRows();
         for (int row : selectedRows) {
             try {
                 typeInstance = typeInstance.getClass().newInstance();
@@ -376,17 +381,17 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     }//GEN-LAST:event_btnSelectActionPerformed
 
     private void btnSelectAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectAllActionPerformed
-        for (int t = 0; t < tblData.getRowCount(); t++) {
-            tblData.getSelectionModel().addSelectionInterval(t, t);
+        for (int t = 0; t < table.getRowCount(); t++) {
+            table.getSelectionModel().addSelectionInterval(t, t);
         }
     }//GEN-LAST:event_btnSelectAllActionPerformed
 
     private void btnClearAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearAllActionPerformed
-        tblData.clearSelection();
+        table.clearSelection();
     }//GEN-LAST:event_btnClearAllActionPerformed
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER && tblData.getSelectedRowCount() == 1) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER && table.getSelectedRowCount() == 1) {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -395,6 +400,10 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
             });
         }
     }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        txtSearch.requestFocus();
+    }//GEN-LAST:event_formComponentShown
 
     public boolean isSelectionMade() {
         return selectionMade;
@@ -416,7 +425,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblTotalOriginal;
     private javax.swing.JLabel lblTotalSelected;
-    private javax.swing.JTable tblData;
+    private javax.swing.JTable table;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

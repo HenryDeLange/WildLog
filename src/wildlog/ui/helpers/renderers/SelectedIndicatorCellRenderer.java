@@ -21,16 +21,17 @@ public class SelectedIndicatorCellRenderer extends JCheckBox implements TableCel
         setBorderPainted(true);
     }
 
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        if (isSelected) {
-            setForeground(table.getSelectionForeground());
-            super.setBackground(table.getSelectionBackground());
+    @Override
+    public Component getTableCellRendererComponent(JTable inTable, Object inValue, boolean inIsSelected, boolean inHasFocus, int inRow, int inColumn) {
+        if (inIsSelected) {
+            setForeground(inTable.getSelectionForeground());
+            super.setBackground(inTable.getSelectionBackground());
         }
         else {
-            setForeground(table.getForeground());
-            setBackground(table.getBackground());
+            setForeground(inTable.getForeground());
+            setBackground(inTable.getBackground());
         }
-        setSelected(isSelected);
+        setSelected(inIsSelected);
         setBorder(noFocusBorder);
         return this;
     }

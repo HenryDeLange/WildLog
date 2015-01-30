@@ -35,6 +35,7 @@ import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.dbi.queryobjects.LocationCount;
+import wildlog.data.enums.Certainty;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
@@ -47,8 +48,11 @@ import wildlog.ui.helpers.renderers.TextCellRenderer;
 import wildlog.ui.helpers.renderers.WildLogDataModelWrapperCellRenderer;
 import wildlog.ui.helpers.renderers.WildLogTableModel;
 import wildlog.ui.helpers.renderers.WildLogTableModelDataWrapper;
+import wildlog.ui.reports.helpers.FilterProperties;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
+import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsImageProcessing;
 
 
@@ -671,30 +675,33 @@ public final class UtilsTableGenerator {
         });
     }
     
-    public static void setupSightingTableForMainTab(final WildLogApp inApp, final JTable inTable, 
-            Date inStartDate, Date inEndDate, List<Location> inActiveLocations, List<Visit> inActiveVisits, List<Element> inActiveElements) {
+    public static void setupSightingTableForMainTab(final WildLogApp inApp, final JTable inTable, final JLabel inLblFilterDetails,
+            final FilterProperties inFilterProperties, 
+            final List<Location> inActiveLocations, final List<Visit> inActiveVisits, final List<Element> inActiveElements) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 6);
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 7);
         // Setup header
         setupLoadingHeader(inTable);
+        inLblFilterDetails.setText("<html><br/>Loading filters...<br/><br/></html>");
         // Load the table content
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 // Setup column names
                 String[] columnNames = {
-                                        "Creature Name",
-                                        "Place Name",
-                                        "Period Name",
                                         "Date",
-                                        "Evidence",
-                                        "Certainty",
+                                        "Creature",
+                                        "Place",
+                                        "Period",
                                         "Type",
+                                        "Certainty",
+                                        "Tag",
                                         "ID",
                                         "GPS"
                                         };
                 // Load data from DB
-                final List<Sighting> listSightings = inApp.getDBI().searchSightings(inStartDate, inEndDate, 
+                final List<Sighting> listSightings = inApp.getDBI().searchSightings(
+                        UtilsTime.getDateFromLocalDate(inFilterProperties.getStartDate()), UtilsTime.getDateFromLocalDate(inFilterProperties.getEndDate()), 
                         inActiveLocations, inActiveVisits, inActiveElements, Sighting.class);
                 if (!listSightings.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
@@ -706,13 +713,20 @@ public final class UtilsTableGenerator {
                             @Override
                             public Object call() throws Exception {
                                 Sighting tempSighting = listSightings.get(finalT);
-                                data[finalT][0] = tempSighting.getElementName();
-                                data[finalT][1] = tempSighting.getLocationName();
-                                data[finalT][2] = tempSighting.getVisitName();
-                                data[finalT][3] = tempSighting.getDate();
-                                data[finalT][4] = tempSighting.getSightingEvidence();
-                                data[finalT][5] = tempSighting.getCertainty();
-                                data[finalT][6] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
+                                data[finalT][0] = tempSighting.getDate();
+                                data[finalT][1] = tempSighting.getElementName();
+                                data[finalT][2] = tempSighting.getLocationName();
+                                data[finalT][3] = tempSighting.getVisitName();
+                                data[finalT][4] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
+                                if (tempSighting.getCertainty() != null && !Certainty.NONE.equals(tempSighting.getCertainty())
+                                        && !Certainty.UNKNOWN.equals(tempSighting.getCertainty())) {
+                                    String temp = tempSighting.getCertainty().toString();
+                                    data[finalT][5] = temp.substring(temp.indexOf('(') + 1, temp.length() - 1);
+                                }
+                                else {
+                                    data[finalT][5] = tempSighting.getCertainty();
+                                }
+                                data[finalT][6] = tempSighting.getTag();
                                 data[finalT][7] = tempSighting.getSightingCounter();
                                 if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
                                     if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
@@ -729,50 +743,66 @@ public final class UtilsTableGenerator {
                             }
                         });
                     }
-                    try {
-                        executorService.invokeAll(listCallables);
-                    }
-                    catch (InterruptedException ex) {
-                        ex.printStackTrace(System.err);
-                    }
+                    // This Sighting table is slightly different and uses filters. Wait for the table data to finish loading.
+                    UtilsConcurency.waitForExecutorToRunTasks(executorService, listCallables);
                     // Create the new model
                     setupTableModel(inTable, data, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, true, true, 0);
+                    // Set a different TextCellRenderer to left align some rows
+                    inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1, 2, 3));
+                    // Continue to setup the column sizes
+                    inTable.getColumnModel().getColumn(0).setMinWidth(110);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(115);
+                    inTable.getColumnModel().getColumn(0).setMaxWidth(120);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
-                    inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(120);
+                    inTable.getColumnModel().getColumn(1).setMaxWidth(150);
                     inTable.getColumnModel().getColumn(2).setMinWidth(100);
-                    inTable.getColumnModel().getColumn(2).setPreferredWidth(110);
-                    inTable.getColumnModel().getColumn(2).setMaxWidth(115);
-                    inTable.getColumnModel().getColumn(3).setMinWidth(50);
-                    inTable.getColumnModel().getColumn(3).setPreferredWidth(60);
-                    inTable.getColumnModel().getColumn(3).setMaxWidth(105);
+                    inTable.getColumnModel().getColumn(2).setPreferredWidth(135);
+                    inTable.getColumnModel().getColumn(2).setMaxWidth(150);
+                    inTable.getColumnModel().getColumn(3).setMinWidth(120);
+                    inTable.getColumnModel().getColumn(3).setPreferredWidth(135);
+                    inTable.getColumnModel().getColumn(3).setMaxWidth(150);
                     inTable.getColumnModel().getColumn(4).setMinWidth(55);
                     inTable.getColumnModel().getColumn(4).setPreferredWidth(65);
-                    inTable.getColumnModel().getColumn(4).setMaxWidth(115);
-                    inTable.getColumnModel().getColumn(5).setMinWidth(60);
-                    inTable.getColumnModel().getColumn(5).setPreferredWidth(70);
-                    inTable.getColumnModel().getColumn(5).setMaxWidth(80);
-                    inTable.getColumnModel().getColumn(6).setMinWidth(25);
-                    inTable.getColumnModel().getColumn(6).setPreferredWidth(35);
+                    inTable.getColumnModel().getColumn(4).setMaxWidth(75);
+                    inTable.getColumnModel().getColumn(5).setMinWidth(50);
+                    inTable.getColumnModel().getColumn(5).setPreferredWidth(60);
+                    inTable.getColumnModel().getColumn(5).setMaxWidth(70);
+                    inTable.getColumnModel().getColumn(6).setMinWidth(35);
+                    inTable.getColumnModel().getColumn(6).setPreferredWidth(55);
                     inTable.getColumnModel().getColumn(6).setMaxWidth(125);
                     inTable.getColumnModel().getColumn(7).setMinWidth(20);
                     inTable.getColumnModel().getColumn(7).setPreferredWidth(30);
-                    inTable.getColumnModel().getColumn(7).setMaxWidth(35);
-                    inTable.getColumnModel().getColumn(8).setMinWidth(20);
+                    inTable.getColumnModel().getColumn(7).setMaxWidth(85);
+                    inTable.getColumnModel().getColumn(8).setMinWidth(25);
                     inTable.getColumnModel().getColumn(8).setPreferredWidth(30);
                     inTable.getColumnModel().getColumn(8).setMaxWidth(35);
-                    if (!WildLogApp.getApplication().getWildLogOptions().isUseThumbnailTables()) {
-                        inTable.removeColumn(inTable.getColumnModel().getColumn(0));
-                    }
                     // Setup default sorting
-                    setupRowSorter(inTable, 0, 1, 2, 3, SortOrder.ASCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
+                    setupRowSorter(inTable, 0, 1, 2, 3, SortOrder.DESCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 6);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 7);
                 }
                 else {
-                    inTable.setModel(new DefaultTableModel(new String[]{"No Observations"}, 0));
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Observations found that match the currently active filters..."}, 0));
                 }
+                // Need to wait for the table to finish loading before updating the label
+                SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            inLblFilterDetails.setText("<html>"
+                                    + "Showing " + inTable.getModel().getRowCount() + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations."
+                                    + "<br/>The current filters are using"
+                                    + " " + inActiveLocations.size() + " (of " + inApp.getDBI().count(new Location()) + ") Places"
+                                    + ", " + inActiveVisits.size() + " (of " + inApp.getDBI().count(new Visit()) + ") Periods "
+                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures."
+                                    + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER) 
+                                    + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER) + "."
+                                    + "<br/>Additional Observation properties may also be active."
+                                    + "</html>");
+                        }
+                    });
             }
         });
     }
@@ -1176,12 +1206,12 @@ public final class UtilsTableGenerator {
         inTable.getRowSorter().setSortKeys(tempList);
     }
     
-    public static void setupPreviousRowSelection(JTable inTable, String[] inSelectedRowIDs, int inCol) {
+    public static void setupPreviousRowSelection(JTable inTable, String[] inSelectedRowIDs, int inColWithID) {
         if (inSelectedRowIDs.length > 0) {
             int found = 0;
             for (int t = 0; t < inTable.getRowSorter().getViewRowCount(); t++) {
                 for (String selectedRowID : inSelectedRowIDs) {
-                    if (inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), inCol).toString().equals(selectedRowID)) {
+                    if (inTable.getModel().getValueAt(inTable.convertRowIndexToModel(t), inColWithID).toString().equals(selectedRowID)) {
                         inTable.getSelectionModel().addSelectionInterval(t, t);
                         inTable.scrollRectToVisible(inTable.getCellRect(t, 0, true));
                         int x;
