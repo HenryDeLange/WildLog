@@ -52,7 +52,7 @@ public interface DBI {
     public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
         List<S> searchSightings(Date inStartDate, Date inEndDate, 
             List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
-            Class<S> inReturnType);
+            boolean inIncludeCachedValues, Class<S> inReturnType);
     
     public <T extends LocationCount, V extends ElementCore> List<T> queryLocationCountForElement(V inElement, Class<T> inReturnType);
 

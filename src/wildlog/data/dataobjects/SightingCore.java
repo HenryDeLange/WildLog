@@ -6,6 +6,7 @@ import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.ElementType;
 import wildlog.data.enums.LifeStatus;
 import wildlog.data.enums.Moonlight;
 import wildlog.data.enums.Sex;
@@ -13,6 +14,7 @@ import wildlog.data.enums.SightingEvidence;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.UnitsTemperature;
 import wildlog.data.enums.ViewRating;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.Weather;
 
 
@@ -42,6 +44,9 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
     protected double durationSeconds;
     protected TimeAccuracy timeAccuracy;
     protected Age age;
+    // Adding some extra fields that can optionally be cached for performance reasons
+    protected ElementType cachedElementType;
+    protected VisitType cachedVisitType;
 
 
     public SightingCore() {
@@ -325,6 +330,22 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
 
     public void setAge(Age inAge) {
         age = inAge;
+    }
+
+    public ElementType getCachedElementType() {
+        return cachedElementType;
+    }
+
+    public void setCachedElementType(ElementType inCachedElementType) {
+        cachedElementType = inCachedElementType;
+    }
+
+    public VisitType getCachedVisitType() {
+        return cachedVisitType;
+    }
+
+    public void setCachedVisitType(VisitType inCachedVisitType) {
+        cachedVisitType = inCachedVisitType;
     }
 
 }

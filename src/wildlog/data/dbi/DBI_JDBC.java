@@ -1648,12 +1648,20 @@ public abstract class DBI_JDBC implements DBI {
     public <S extends SightingCore, L extends LocationCore, V extends VisitCore, E extends ElementCore> 
         List<S> searchSightings(Date inStartDate, Date inEndDate, 
             List<L> inActiveLocations, List<V> inActiveVisits, List<E> inActiveElements, 
-            Class<S> inReturnType) {
+            boolean inIncludeCachedValues, Class<S> inReturnType) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<S> tempList = new ArrayList<S>();
         try {
-            String sql = "SELECT * FROM SIGHTINGS";
+            String sql = "SELECT SIGHTINGS.*";
+            if (inIncludeCachedValues) {
+                sql = sql + ", ELEMENTS.ELEMENTTYPE, VISITS.VISITTYPE FROM SIGHTINGS"
+                          + " LEFT JOIN ELEMENTS ON ELEMENTS.PRIMARYNAME = SIGHTINGS.ELEMENTNAME" 
+                          + " LEFT JOIN VISITS ON VISITS.NAME = SIGHTINGS.VISITNAME";
+            }
+            else {
+                sql = sql + " FROM SIGHTINGS";
+            }
             // Build SQL
             String andKeyword = " WHERE";
             if (inStartDate != null) {
@@ -1665,7 +1673,7 @@ public abstract class DBI_JDBC implements DBI {
                 andKeyword = " AND";
             }
             if (inActiveLocations != null && !inActiveLocations.isEmpty()) {
-                sql = sql + andKeyword + " LOCATIONNAME IN (";
+                sql = sql + andKeyword + " SIGHTINGS.LOCATIONNAME IN (";
                 for (int t = 0; t < inActiveLocations.size(); t++) {
                     sql = sql + "?,";
                 }
@@ -1718,6 +1726,10 @@ public abstract class DBI_JDBC implements DBI {
             while (results.next()) {
                 S tempSighting = inReturnType.newInstance();
                 populateSighting(results, tempSighting);
+                if (inIncludeCachedValues) {
+                    tempSighting.setCachedElementType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
+                    tempSighting.setCachedVisitType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
+                }
                 tempList.add(tempSighting);
             }
         }
