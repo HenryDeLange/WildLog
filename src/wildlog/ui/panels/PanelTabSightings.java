@@ -36,7 +36,6 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private final WildLogApp app;
     private final JTabbedPane tabbedPanel;
     private List<Sighting> lstOriginalData;
-    private List<Sighting> lstFilteredData;
     private List<Element> lstFilteredElements;
     private List<Location> lstFilteredLocations;
     private List<Visit> lstFilteredVisits;
@@ -458,7 +457,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void tblSightingsMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSightingsMouseReleased
         if (tblSightings.getSelectedRowCount() == 1) {
             Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 7)));
+                            tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
             List<WildLogFile> fotos = app.getDBI().list(new WildLogFile(sighting.getWildLogFileID()));
             if (fotos.size() > 0 ) {
                 UtilsImageProcessing.setupFoto(sighting.getWildLogFileID(), 0, lblImage, WildLogThumbnailSizes.NORMAL, app);
@@ -491,7 +490,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void btnGoSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGoSightingActionPerformed
         if (tblSightings.getSelectedRowCount() == 1) {
             Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 7)));
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
             Element element = app.getDBI().find(new Element((String) tblSightings.getModel().getValueAt(
                     tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 1)));
             Location location = app.getDBI().find(new Location((String) tblSightings.getModel().getValueAt(
@@ -553,7 +552,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             if (result == JOptionPane.YES_OPTION) {
                 for (int row : tblSightings.getSelectedRows())  {
                     Sighting sighting = app.getDBI().find(new Sighting((Long)tblSightings.getModel().getValueAt(
-                            tblSightings.convertRowIndexToModel(row), 7)));
+                            tblSightings.convertRowIndexToModel(row), 8)));
                     app.getDBI().delete(sighting);
                 }
                 doTheRefresh(this);
@@ -578,7 +577,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
     private void lblImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblImageMouseReleased
         if (tblSightings.getSelectedRowCount() == 1) {
             Sighting tempSighting = app.getDBI().find(new Sighting((long)tblSightings.getModel().getValueAt(
-                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 7)));
+                    tblSightings.convertRowIndexToModel(tblSightings.getSelectedRow()), 8)));
             UtilsFileProcessing.openFile(tempSighting.getWildLogFileID(), 0, app);
         }
     }//GEN-LAST:event_lblImageMouseReleased
@@ -697,7 +696,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
             for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
                 lstSightingsToMap.add(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 7))));
+                        tblSightings.convertRowIndexToModel(row), 8))));
             }
         }
         else {
@@ -705,7 +704,7 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
             for (int row : tblSightings.getSelectedRows()) {
                 lstSightingsToMap.add(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 7))));
+                        tblSightings.convertRowIndexToModel(row), 8))));
             }
         }
         return lstSightingsToMap;
@@ -725,8 +724,8 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         filterProperties.setActiveTimes(new ArrayList<>(0));
         filterProperties.setMoonlights(new ArrayList<>(0));
         filterProperties.setMoonphase(0);
-        filterProperties.setMoonphaseIsLess(false);
-        filterProperties.setMoonphaseIsMore(false);
+        filterProperties.setMoonphaseIsLess(true);
+        filterProperties.setMoonphaseIsMore(true);
         filterProperties.setVisitTypes(new ArrayList<>(0));
         filterProperties.setEvidences(new ArrayList<>(0));
         filterProperties.setLifeStatuses(new ArrayList<>(0));
@@ -736,10 +735,10 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
         filterProperties.setAges(new ArrayList<>(0));
         filterProperties.setSexes(new ArrayList<>(0));
         filterProperties.setNumberOfElements(0);
-        filterProperties.setNumberOfElementsIsLess(false);
-        filterProperties.setNumberOfElementsIsMore(false);
+        filterProperties.setNumberOfElementsIsLess(true);
+        filterProperties.setNumberOfElementsIsMore(true);
         filterProperties.setTags(new ArrayList<>(0));
-        filterProperties.setIncludeEmptyTags(false);
+        filterProperties.setIncludeEmptyTags(true);
         filterProperties.setElementTypes(new ArrayList<>(0));
     }
  

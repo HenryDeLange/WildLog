@@ -14,8 +14,8 @@ import wildlog.mapping.layers.MapOnlinePointLayer;
 
 
 public class MapFrameOnline extends JFrame {
-    private JXMapKit map;
-    private MapOnlinePointLayer pointLayer;
+    private final JXMapKit map;
+    private final MapOnlinePointLayer pointLayer;
 
     public MapFrameOnline(String inTitle, JXMapKit inMap, final WildLogApp inApp) {
         super(inTitle);
@@ -27,7 +27,10 @@ public class MapFrameOnline extends JFrame {
         WildLogScrollPanel scrollPane = new WildLogScrollPanel(textPane);
         map.getMainMap().add(scrollPane);
         // FIXME: Maak dat die dialog altyd weg gaan as mens click
-        textPane.setText("Information Box <br/><br/> Click on 'n point on the map to view more details. Use the buttons at the bottom of the map to cycle between Observations that overlap on the map. (Clicking on the map will make this dialog dissapear.)");
+        textPane.setText("<u><b>Information Box:</b></u> "
+                + "<br/><br/>Click on a point on the map to view more details. "
+                + "<br/><br/>If you clicked on a point with more than one Observation use the buttons on the left/right of the map to cycle between the Observations. "
+                + "<br/><br/>Clicking on an area on the map without a Observation will make this Information Box dialog dissapear.");
         scrollPane.setLocation(new Point(50, 15));
         //scrollPane.setVisible(false);
         pointLayer = new MapOnlinePointLayer(map);

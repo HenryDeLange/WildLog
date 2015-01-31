@@ -79,6 +79,7 @@ public class ZoomDialog extends javax.swing.JDialog {
 
         btnPrev.setBackground(new java.awt.Color(0, 0, 0));
         btnPrev.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif"))); // NOI18N
+        btnPrev.setToolTipText("");
         btnPrev.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPrev.setFocusPainted(false);
         btnPrev.addActionListener(new java.awt.event.ActionListener() {

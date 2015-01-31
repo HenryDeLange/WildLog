@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Age;
@@ -770,8 +771,8 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setActiveTimes(new ArrayList<>(0));
         filterProperties.setMoonlights(new ArrayList<>(0));
         filterProperties.setMoonphase(0);
-        filterProperties.setMoonphaseIsLess(false);
-        filterProperties.setMoonphaseIsMore(false);
+        filterProperties.setMoonphaseIsLess(true);
+        filterProperties.setMoonphaseIsMore(true);
         filterProperties.setVisitTypes(new ArrayList<>(0));
         filterProperties.setEvidences(new ArrayList<>(0));
         filterProperties.setLifeStatuses(new ArrayList<>(0));
@@ -781,10 +782,10 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
         filterProperties.setAges(new ArrayList<>(0));
         filterProperties.setSexes(new ArrayList<>(0));
         filterProperties.setNumberOfElements(0);
-        filterProperties.setNumberOfElementsIsLess(false);
-        filterProperties.setNumberOfElementsIsMore(false);
+        filterProperties.setNumberOfElementsIsLess(true);
+        filterProperties.setNumberOfElementsIsMore(true);
         filterProperties.setTags(new ArrayList<>(0));
-        filterProperties.setIncludeEmptyTags(false);
+        filterProperties.setIncludeEmptyTags(true);
         filterProperties.setElementTypes(new ArrayList<>(0));
         selectOldValues();
     }//GEN-LAST:event_btnClearAllActionPerformed
@@ -876,6 +877,295 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
                 }
             }
         }
+    }
+    
+    public static boolean checkFilterPropertiesMatch(FilterProperties inFilterProperties, Sighting inSighting) {
+        if (inFilterProperties != null) {
+            // Date
+            if (inFilterProperties.getStartDate() != null) {
+                if (UtilsTime.getLocalDateFromDate(inSighting.getDate()).isBefore(inFilterProperties.getStartDate())) {
+                    return false;
+                }
+            }
+            if (inFilterProperties.getEndDate() != null) {
+                if (UtilsTime.getLocalDateFromDate(inSighting.getDate()).isAfter(inFilterProperties.getEndDate())) {
+                    return false;
+                }
+            }
+            // Time
+            if (inFilterProperties.getStartTime() != null) {
+                if (UtilsTime.getLocalTimeFromDate(inSighting.getDate()).isBefore(inFilterProperties.getStartTime())) {
+                    return false;
+                }
+            }
+            if (inFilterProperties.getEndTime() != null) {
+                if (UtilsTime.getLocalTimeFromDate(inSighting.getDate()).isAfter(inFilterProperties.getEndTime())) {
+                    return false;
+                }
+            }
+            // Time of day
+            if (inFilterProperties.getActiveTimes() != null && !inFilterProperties.getActiveTimes().isEmpty()) {
+                boolean found = false;
+                for (ActiveTimeSpesific activeTimeSpesific : inFilterProperties.getActiveTimes()) {
+                    if (activeTimeSpesific.equals(inSighting.getTimeOfDay())) {
+                        found = true;
+                        break;
+                    }
+                    if (activeTimeSpesific.equals(ActiveTimeSpesific.UNKNOWN)) {
+                        if (inSighting.getTimeOfDay() == null || ActiveTimeSpesific.NONE.equals(inSighting.getTimeOfDay())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Moonlight
+            if (inFilterProperties.getMoonlights() != null && !inFilterProperties.getMoonlights().isEmpty()) {
+                boolean found = false;
+                for (Moonlight moonlight : inFilterProperties.getMoonlights()) {
+                    if (moonlight.equals(inSighting.getMoonlight())) {
+                        found = true;
+                        break;
+                    }
+                    if (moonlight.equals(Moonlight.UNKNOWN)) {
+                        if (inSighting.getMoonlight() == null || Moonlight.NONE.equals(inSighting.getMoonlight())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Moonphase
+            if (!(inFilterProperties.isMoonphaseIsLess() && inFilterProperties.isMoonphaseIsMore()) 
+                    && inSighting.getMoonPhase() >= 0 && inFilterProperties.getMoonphase() >= 0) {
+                boolean found = false;
+                if (inFilterProperties.getMoonphase() == inSighting.getMoonPhase()) {
+                    found = true;
+                }
+                else
+                if (inFilterProperties.isMoonphaseIsLess() && inSighting.getMoonPhase() < inFilterProperties.getMoonphase()) {
+                    found = true;
+                }
+                else
+                if (inFilterProperties.isMoonphaseIsMore() && inSighting.getMoonPhase() > inFilterProperties.getMoonphase()) {
+                    found = true;
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+
+            // Visit Type
+            if (inFilterProperties.getVisitTypes() != null && !inFilterProperties.getVisitTypes().isEmpty()) {
+                boolean found = false;
+                for (VisitType visitType : inFilterProperties.getVisitTypes()) {
+                    if (visitType.equals(inSighting.getCachedVisitType())) {
+                        found = true;
+                        break;
+                    }
+                    if (visitType.equals(VisitType.UNKNOWN)) {
+                        if (inSighting.getCachedVisitType() == null || VisitType.NONE.equals(inSighting.getCachedVisitType())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Evidence
+            if (inFilterProperties.getEvidences() != null && !inFilterProperties.getEvidences().isEmpty()) {
+                boolean found = false;
+                for (SightingEvidence sightingEvidence : inFilterProperties.getEvidences()) {
+                    if (sightingEvidence.equals(inSighting.getSightingEvidence())) {
+                        found = true;
+                        break;
+                    }
+                    if (sightingEvidence.equals(SightingEvidence.UNKNOWN)) {
+                        if (inSighting.getSightingEvidence() == null || SightingEvidence.NONE.equals(inSighting.getSightingEvidence())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Life Status
+            if (inFilterProperties.getLifeStatuses() != null && !inFilterProperties.getLifeStatuses().isEmpty()) {
+                boolean found = false;
+                for (LifeStatus lifeStatus : inFilterProperties.getLifeStatuses()) {
+                    if (lifeStatus.equals(inSighting.getLifeStatus())) {
+                        found = true;
+                        break;
+                    }
+                    if (lifeStatus.equals(LifeStatus.UNKNOWN)) {
+                        if (inSighting.getLifeStatus() == null || LifeStatus.NONE.equals(inSighting.getLifeStatus())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Time Accuracy
+            if (inFilterProperties.getTimeAccuracies() != null && !inFilterProperties.getTimeAccuracies().isEmpty()) {
+                boolean found = false;
+                for (TimeAccuracy timeAccuracy : inFilterProperties.getTimeAccuracies()) {
+                    if (timeAccuracy.equals(inSighting.getTimeAccuracy())) {
+                        found = true;
+                        break;
+                    }
+                    if (timeAccuracy.equals(TimeAccuracy.UNKNOWN)) {
+                        if (inSighting.getTimeAccuracy() == null || TimeAccuracy.NONE.equals(inSighting.getTimeAccuracy())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Sighting Certianty
+            if (inFilterProperties.getCertainties() != null && !inFilterProperties.getCertainties().isEmpty()) {
+                boolean found = false;
+                for (Certainty certainty : inFilterProperties.getCertainties()) {
+                    if (certainty.equals(inSighting.getCertainty())) {
+                        found = true;
+                        break;
+                    }
+                    if (certainty.equals(Certainty.UNKNOWN)) {
+                        if (inSighting.getCertainty() == null || Certainty.NONE.equals(inSighting.getCertainty())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // GPS Certainty
+            if (inFilterProperties.getGPSAccuracies() != null && !inFilterProperties.getGPSAccuracies().isEmpty()) {
+                boolean found = false;
+                for (GPSAccuracy gpsAccuracy : inFilterProperties.getGPSAccuracies()) {
+                    if (gpsAccuracy.equals(inSighting.getGPSAccuracy())) {
+                        found = true;
+                        break;
+                    }
+                    if (gpsAccuracy.equals(GPSAccuracy.UNKNOWN)) {
+                        if (inSighting.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(inSighting.getGPSAccuracy())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Age
+            if (inFilterProperties.getAges() != null && !inFilterProperties.getAges().isEmpty()) {
+                boolean found = false;
+                for (Age age : inFilterProperties.getAges()) {
+                    if (age.equals(inSighting.getAge())) {
+                        found = true;
+                        break;
+                    }
+                    if (age.equals(Age.UNKNOWN)) {
+                        if (inSighting.getAge() == null || Age.NONE.equals(inSighting.getAge())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Sex
+            if (inFilterProperties.getSexes() != null && !inFilterProperties.getSexes().isEmpty()) {
+                boolean found = false;
+                for (Sex sex : inFilterProperties.getSexes()) {
+                    if (sex.equals(inSighting.getSex())) {
+                        found = true;
+                        break;
+                    }
+                    if (sex.equals(Sex.UNKNOWN)) {
+                        if (inSighting.getSex() == null || Sex.NONE.equals(inSighting.getSex())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Number of individuals
+            if (!(inFilterProperties.isNumberOfElementsIsLess() && inFilterProperties.isNumberOfElementsIsMore()) 
+                    && inSighting.getNumberOfElements() >= 0 && inFilterProperties.getNumberOfElements() >= 0) {
+                boolean found = false;
+                if (inFilterProperties.getNumberOfElements() == inSighting.getNumberOfElements()) {
+                    found = true;
+                }
+                else
+                if (inFilterProperties.isNumberOfElementsIsLess() && inSighting.getNumberOfElements() < inFilterProperties.getNumberOfElements()) {
+                    found = true;
+                }
+                else
+                if (inFilterProperties.isNumberOfElementsIsMore() && inSighting.getNumberOfElements() > inFilterProperties.getNumberOfElements()) {
+                    found = true;
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Tag
+            if (inSighting.getTag() == null || inSighting.getTag().trim().isEmpty()) {
+                if (!inFilterProperties.isIncludeEmptyTags()) {
+                    return false;
+                }
+            }
+            else
+            if (inFilterProperties.getTags() != null && !inFilterProperties.getTags().isEmpty()) {
+                boolean found = false;
+                for (String tag : inFilterProperties.getTags()) {
+                    if (!tag.trim().isEmpty() && inSighting.getTag().trim().toLowerCase().contains(tag.trim().toLowerCase())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            // Element Type
+            if (inFilterProperties.getElementTypes()!= null && !inFilterProperties.getElementTypes().isEmpty()) {
+                boolean found = false;
+                for (ElementType elementType : inFilterProperties.getElementTypes()) {
+                    if (elementType.equals(inSighting.getCachedElementType())) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

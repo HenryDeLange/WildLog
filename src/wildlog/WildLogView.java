@@ -3072,7 +3072,7 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuChangeWorkspaceNameActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        List<Sighting> sightings = app.getDBI().searchSightings(new Date(2000-1900, 02, 01), new Date(), null, null, null, Sighting.class);
+        List<Sighting> sightings = app.getDBI().searchSightings(new Date(2000-1900, 02, 01), new Date(), null, null, null, true, Sighting.class);
         ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - TOETS", sightings);
         dialog.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed

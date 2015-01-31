@@ -40,6 +40,7 @@ import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.ui.dialogs.FilterPropertiesDialog;
 import wildlog.ui.helpers.renderers.DateCellRenderer;
 import wildlog.ui.helpers.renderers.DateTimeCellRenderer;
 import wildlog.ui.helpers.renderers.IconCellRenderer;
@@ -679,7 +680,7 @@ public final class UtilsTableGenerator {
             final FilterProperties inFilterProperties, 
             final List<Location> inActiveLocations, final List<Visit> inActiveVisits, final List<Element> inActiveElements) {
         // Deterimine the row IDs of the previously selected rows.
-        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 7);
+        final String[] selectedRowIDs = getSelectedRowIDs(inTable, 8);
         // Setup header
         setupLoadingHeader(inTable);
         inLblFilterDetails.setText("<html><br/>Loading filters...<br/><br/></html>");
@@ -693,51 +694,58 @@ public final class UtilsTableGenerator {
                                         "Creature",
                                         "Place",
                                         "Period",
-                                        "Type",
+                                        "Period Type",
+                                        "Creature Type",
                                         "Certainty",
                                         "Tag",
                                         "ID",
                                         "GPS"
                                         };
-                // Load data from DB
+                // Load data from DB (filtering on date and lists)
                 final List<Sighting> listSightings = inApp.getDBI().searchSightings(
                         UtilsTime.getDateFromLocalDate(inFilterProperties.getStartDate()), UtilsTime.getDateFromLocalDate(inFilterProperties.getEndDate()), 
-                        inActiveLocations, inActiveVisits, inActiveElements, Sighting.class);
+                        inActiveLocations, inActiveVisits, inActiveElements, true, Sighting.class);
                 if (!listSightings.isEmpty()) {
-                    Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
+                    Collection<Callable<Object>> listCallables = Collections.synchronizedList(new ArrayList<>(listSightings.size()));
                     // Setup new table data
-                    final Object[][] data = new Object[listSightings.size()][columnNames.length];
+                    final List<Object[]> data = new ArrayList<>(listSightings.size());
                     for (int t = 0; t < listSightings.size(); t++) {
                         final int finalT = t;
                         listCallables.add(new Callable<Object>() {
                             @Override
                             public Object call() throws Exception {
                                 Sighting tempSighting = listSightings.get(finalT);
-                                data[finalT][0] = tempSighting.getDate();
-                                data[finalT][1] = tempSighting.getElementName();
-                                data[finalT][2] = tempSighting.getLocationName();
-                                data[finalT][3] = tempSighting.getVisitName();
-                                data[finalT][4] = inApp.getDBI().find(new Element(tempSighting.getElementName())).getType();
-                                if (tempSighting.getCertainty() != null && !Certainty.NONE.equals(tempSighting.getCertainty())
-                                        && !Certainty.UNKNOWN.equals(tempSighting.getCertainty())) {
-                                    String temp = tempSighting.getCertainty().toString();
-                                    data[finalT][5] = temp.substring(temp.indexOf('(') + 1, temp.length() - 1);
-                                }
-                                else {
-                                    data[finalT][5] = tempSighting.getCertainty();
-                                }
-                                data[finalT][6] = tempSighting.getTag();
-                                data[finalT][7] = tempSighting.getSightingCounter();
-                                if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
-                                    if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
-                                        data[finalT][8] = "GPS";
+                                // Do additional filtering on Sighting properties
+                                if (FilterPropertiesDialog.checkFilterPropertiesMatch(inFilterProperties, tempSighting)) {
+                                    Object[] rowData = new Object[columnNames.length];
+                                    rowData[0] = tempSighting.getDate();
+                                    rowData[1] = tempSighting.getElementName();
+                                    rowData[2] = tempSighting.getLocationName();
+                                    rowData[3] = tempSighting.getVisitName();
+                                    rowData[4] = tempSighting.getCachedVisitType();
+                                    rowData[5] = tempSighting.getCachedElementType();
+                                    if (tempSighting.getCertainty() != null && !Certainty.NONE.equals(tempSighting.getCertainty())
+                                            && !Certainty.UNKNOWN.equals(tempSighting.getCertainty())) {
+                                        String temp = tempSighting.getCertainty().toString();
+                                        rowData[6] = temp.substring(temp.indexOf('(') + 1, temp.length() - 1);
                                     }
                                     else {
-                                        data[finalT][8] = "";
+                                        rowData[6] = tempSighting.getCertainty();
                                     }
-                                }
-                                else {
-                                    data[finalT][8] = "";
+                                    rowData[7] = tempSighting.getTag();
+                                    rowData[8] = tempSighting.getSightingCounter();
+                                    if (tempSighting.getLatitude() != null && tempSighting.getLongitude() != null) {
+                                        if (!tempSighting.getLatitude().equals(Latitudes.NONE) && !tempSighting.getLongitude().equals(Longitudes.NONE)) {
+                                            rowData[9] = "GPS";
+                                        }
+                                        else {
+                                            rowData[9] = "";
+                                        }
+                                    }
+                                    else {
+                                        rowData[9] = "";
+                                    }
+                                    data.add(rowData);
                                 }
                                 return null;
                             }
@@ -746,43 +754,50 @@ public final class UtilsTableGenerator {
                     // This Sighting table is slightly different and uses filters. Wait for the table data to finish loading.
                     UtilsConcurency.waitForExecutorToRunTasks(executorService, listCallables);
                     // Create the new model
-                    setupTableModel(inTable, data, columnNames);
+                    Object[][] tableData = new Object[data.size()][columnNames.length];
+                    for(int row = 0; row < data.size(); row++) {
+                        System.arraycopy(data.get(row), 0, tableData[row], 0, data.get(row).length);
+                    }
+                    setupTableModel(inTable, tableData, columnNames);
                     // Setup the column and row sizes etc.
                     setupRenderersAndThumbnailRows(inTable, true, true, 0);
                     // Set a different TextCellRenderer to left align some rows
                     inTable.setDefaultRenderer(Object.class, new TextCellRenderer(0, 1, 2, 3));
                     // Continue to setup the column sizes
                     inTable.getColumnModel().getColumn(0).setMinWidth(110);
-                    inTable.getColumnModel().getColumn(0).setPreferredWidth(115);
+                    inTable.getColumnModel().getColumn(0).setPreferredWidth(110);
                     inTable.getColumnModel().getColumn(0).setMaxWidth(120);
                     inTable.getColumnModel().getColumn(1).setMinWidth(100);
-                    inTable.getColumnModel().getColumn(1).setPreferredWidth(120);
-                    inTable.getColumnModel().getColumn(1).setMaxWidth(150);
+                    inTable.getColumnModel().getColumn(1).setPreferredWidth(110);
+                    inTable.getColumnModel().getColumn(1).setMaxWidth(250);
                     inTable.getColumnModel().getColumn(2).setMinWidth(100);
                     inTable.getColumnModel().getColumn(2).setPreferredWidth(135);
-                    inTable.getColumnModel().getColumn(2).setMaxWidth(150);
+                    inTable.getColumnModel().getColumn(2).setMaxWidth(280);
                     inTable.getColumnModel().getColumn(3).setMinWidth(120);
-                    inTable.getColumnModel().getColumn(3).setPreferredWidth(135);
-                    inTable.getColumnModel().getColumn(3).setMaxWidth(150);
+                    inTable.getColumnModel().getColumn(3).setPreferredWidth(125);
+                    inTable.getColumnModel().getColumn(3).setMaxWidth(290);
                     inTable.getColumnModel().getColumn(4).setMinWidth(55);
-                    inTable.getColumnModel().getColumn(4).setPreferredWidth(65);
-                    inTable.getColumnModel().getColumn(4).setMaxWidth(75);
-                    inTable.getColumnModel().getColumn(5).setMinWidth(50);
-                    inTable.getColumnModel().getColumn(5).setPreferredWidth(60);
-                    inTable.getColumnModel().getColumn(5).setMaxWidth(70);
-                    inTable.getColumnModel().getColumn(6).setMinWidth(35);
+                    inTable.getColumnModel().getColumn(4).setPreferredWidth(75);
+                    inTable.getColumnModel().getColumn(4).setMaxWidth(90);
+                    inTable.getColumnModel().getColumn(5).setMinWidth(65);
+                    inTable.getColumnModel().getColumn(5).setPreferredWidth(80);
+                    inTable.getColumnModel().getColumn(5).setMaxWidth(95);
+                    inTable.getColumnModel().getColumn(6).setMinWidth(50);
                     inTable.getColumnModel().getColumn(6).setPreferredWidth(55);
-                    inTable.getColumnModel().getColumn(6).setMaxWidth(125);
-                    inTable.getColumnModel().getColumn(7).setMinWidth(20);
-                    inTable.getColumnModel().getColumn(7).setPreferredWidth(30);
-                    inTable.getColumnModel().getColumn(7).setMaxWidth(85);
-                    inTable.getColumnModel().getColumn(8).setMinWidth(25);
-                    inTable.getColumnModel().getColumn(8).setPreferredWidth(30);
-                    inTable.getColumnModel().getColumn(8).setMaxWidth(35);
+                    inTable.getColumnModel().getColumn(6).setMaxWidth(70);
+                    inTable.getColumnModel().getColumn(7).setMinWidth(35);
+                    inTable.getColumnModel().getColumn(7).setPreferredWidth(45);
+                    inTable.getColumnModel().getColumn(7).setMaxWidth(175);
+                    inTable.getColumnModel().getColumn(8).setMinWidth(20);
+                    inTable.getColumnModel().getColumn(8).setPreferredWidth(20);
+                    inTable.getColumnModel().getColumn(8).setMaxWidth(125);
+                    inTable.getColumnModel().getColumn(9).setMinWidth(25);
+                    inTable.getColumnModel().getColumn(9).setPreferredWidth(30);
+                    inTable.getColumnModel().getColumn(9).setMaxWidth(35);
                     // Setup default sorting
                     setupRowSorter(inTable, 0, 1, 2, 3, SortOrder.DESCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING, SortOrder.ASCENDING);
                     // Setup row selection
-                    setupPreviousRowSelection(inTable, selectedRowIDs, 7);
+                    setupPreviousRowSelection(inTable, selectedRowIDs, 8);
                 }
                 else {
                     inTable.setModel(new DefaultTableModel(new String[]{"No Observations found that match the currently active filters..."}, 0));
@@ -791,16 +806,24 @@ public final class UtilsTableGenerator {
                 SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
-                            inLblFilterDetails.setText("<html>"
+                            String text = "<html>"
                                     + "Showing " + inTable.getModel().getRowCount() + " (of " + inApp.getDBI().count(new Sighting()) + ") Observations."
                                     + "<br/>The current filters are using"
                                     + " " + inActiveLocations.size() + " (of " + inApp.getDBI().count(new Location()) + ") Places"
                                     + ", " + inActiveVisits.size() + " (of " + inApp.getDBI().count(new Visit()) + ") Periods "
-                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures."
-                                    + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER) 
-                                    + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER) + "."
+                                    + " and " + inActiveElements.size() + " (of " + inApp.getDBI().count(new Element()) + ") Creatures";
+                            if (inFilterProperties.getStartDate() != null) {
+                                text = text + "." 
+                                    + "<br/>Filtering on all Observations from " + inFilterProperties.getStartDate().format(UtilsTime.WL_DATE_FORMATTER);
+                            }
+                            if (inFilterProperties.getEndDate() != null) {
+                                text = text
+                                    + " to " + inFilterProperties.getEndDate().format(UtilsTime.WL_DATE_FORMATTER);
+                            }
+                            text = text + "." 
                                     + "<br/>Additional Observation properties may also be active."
-                                    + "</html>");
+                                    + "</html>";
+                            inLblFilterDetails.setText(text);
                         }
                     });
             }

@@ -31,7 +31,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     private DataObjectWithWildLogFile typeInstance;
     private List<T> lstSelectedValues;
 
-// TODO: Die class (en veral die constructors en weird generics) kan doen met review/cleanup...
     
     /**
      * Use this constructor when the input is derived from a list of Sightings. 
@@ -39,9 +38,8 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
      */
     public FilterDataListDialog(JFrame inParent, List<Sighting> inLstOriginalData, List<T> inLstOldSelectedData, Class<T> inClassType) {
         super(inParent);
-        initComponents();
         // Do the initial shared setup
-        doSharedSetup(inParent);
+        doSharedSetup_pre(inParent);
         // Load table content
         try {
             typeInstance = inClassType.newInstance();
@@ -105,7 +103,7 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
     public FilterDataListDialog(JFrame inParent, List<T> inLstOriginalData, List<T> inLstOldSelectedData) {
         super(inParent);
         // Do the initial shared setup
-        doSharedSetup(inParent);
+        doSharedSetup_pre(inParent);
         // Load table content
         if (inLstOriginalData != null && !inLstOriginalData.isEmpty()) {
             typeInstance = inLstOriginalData.get(0);
@@ -137,7 +135,26 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         // Wrap up the shared setup
         doSharedSetup_post(inLstOldSelectedData);
     }
-
+    
+    private void doSharedSetup_pre(JFrame inParent) {
+        initComponents();
+        // Setup the escape key
+        final FilterDataListDialog<T> thisHandler = this;
+        thisHandler.getRootPane().registerKeyboardAction(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        thisHandler.setSelectionMade(false);
+                        thisHandler.setVisible(false);
+                        thisHandler.dispose();
+                    }
+                },
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
+        // Position the dialog
+        UtilsDialog.setDialogToCenter(inParent, thisHandler);
+        UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
+    }
+    
     private void doSharedSetup_post(List<T> inLstOldSelectedData) {
         // Setup previously selected values
         // Wag eers vir die table om klaar te load voor ek iets probeer select
@@ -178,25 +195,6 @@ public class FilterDataListDialog<T extends DataObjectWithWildLogFile> extends J
         UtilsUI.attachKeyListernerToFilterTableRows(txtSearch, table, 2);
         // Attach clipboard
         UtilsUI.attachClipboardPopup(txtSearch);
-    }
-    
-    private void doSharedSetup(JFrame inParent) {
-        initComponents();
-        // Setup the escape key
-        final FilterDataListDialog<T> thisHandler = this;
-        thisHandler.getRootPane().registerKeyboardAction(
-                new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        thisHandler.setSelectionMade(false);
-                        thisHandler.setVisible(false);
-                        thisHandler.dispose();
-                    }
-                },
-                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
-        // Position the dialog
-        UtilsDialog.setDialogToCenter(inParent, thisHandler);
-        UtilsDialog.addModalBackgroundPanel(inParent, thisHandler);
     }
 
     /**

@@ -1,5 +1,7 @@
 package wildlog;
 
+import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,8 +39,6 @@ import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
-import org.netbeans.lib.awtextra.AbsoluteConstraints;
-import org.netbeans.lib.awtextra.AbsoluteLayout;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
@@ -431,26 +431,21 @@ public class WildLogApp extends Application {
         // Setup MapFrame - Note: If this is in the constructor the frame keeps poping up when the application starts
         if (mapOnlineFrame == null) {
             final GeoPosition defaultPosition = new GeoPosition(getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude());
-
             mapOnline = new JXMapKit();
-
             mapOnlineFrame = new MapFrameOnline("WildLog Map - Online", mapOnline, this);
             mapOnlineFrame.setPreferredSize(new Dimension(758, 560));
-            mapOnlineFrame.setLayout(new AbsoluteLayout());
-            ImageIcon icon = new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Map Icon.gif"));
-            mapOnlineFrame.setIconImage(icon.getImage());
-
+            mapOnlineFrame.setLayout(new BorderLayout());
+            mapOnlineFrame.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Map Icon.gif")).getImage());
             mapOnline.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
-            mapOnline.setPreferredSize(new Dimension(750, 500));
+            mapOnline.setPreferredSize(new Dimension(850, 550));
             mapOnline.setAddressLocationShown(false);
             mapOnline.setName("mapOnline");
             mapOnline.setAddressLocation(defaultPosition);
             mapOnline.setZoom(12);
-            mapOnlineFrame.add(mapOnline, new AbsoluteConstraints(0, 0, -1, -1), 0);
-
-            // Add buttons
+            mapOnlineFrame.add(mapOnline, BorderLayout.CENTER);
             final WildLogApp app = this;
-            JButton btnPrevMapPoint = new JButton("Prev");
+            // Previous button
+            JButton btnPrevMapPoint = new JButton();
             btnPrevMapPoint.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -458,9 +453,13 @@ public class WildLogApp extends Application {
                 }
             });
             btnPrevMapPoint.setPreferredSize(new Dimension(70, 25));
-            mapOnlineFrame.add(btnPrevMapPoint, new AbsoluteConstraints(0, 505, -1, -1));
-
-            JButton btnNextMapPoint = new JButton("Next");
+            btnPrevMapPoint.setFocusPainted(false);
+            btnPrevMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif")));
+            btnPrevMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnPrevMapPoint.setToolTipText("Load the previous Observation in the information panel.");
+            mapOnlineFrame.add(btnPrevMapPoint, BorderLayout.WEST);
+            // Next button
+            JButton btnNextMapPoint = new JButton();
             btnNextMapPoint.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -468,9 +467,12 @@ public class WildLogApp extends Application {
                 }
             });
             btnNextMapPoint.setPreferredSize(new Dimension(70, 25));
-            mapOnlineFrame.add(btnNextMapPoint, new AbsoluteConstraints(70, 505, -1, -1));
+            btnNextMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
+            btnNextMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnNextMapPoint.setToolTipText("Load the next Observation in the information panel.");
+            mapOnlineFrame.add(btnNextMapPoint, BorderLayout.EAST);
             mapOnlineFrame.pack();
-            mapOnlineFrame.setResizable(false);
+//            mapOnlineFrame.setResizable(false);
             // Setup the escape key
             final JFrame mapHandler = (JFrame)mapOnlineFrame;
             ActionListener escListiner = new ActionListener() {
