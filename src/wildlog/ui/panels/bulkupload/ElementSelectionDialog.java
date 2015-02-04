@@ -71,8 +71,7 @@ public class ElementSelectionDialog extends JDialog {
             @Override
             public void run() {
                 for (int t = 0; t < tblElement.getRowCount(); t++) {
-                    // FIXME: As ek die getModel hier gebruik en dan die table.convertrowstuff roep, is dit nie beter as die if hier bo nie?
-                    if (tblElement.getValueAt(t, columnToUse).equals(inSelectedElement)) {
+                    if (tblElement.getModel().getValueAt(t, columnToUse).equals(inSelectedElement)) {
                         tblElement.getSelectionModel().setSelectionInterval(t, t);
                         int scrollRow = t;
                         if (t < (tblElement.getRowCount()) - 1) {

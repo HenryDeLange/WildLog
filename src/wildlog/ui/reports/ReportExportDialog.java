@@ -1,7 +1,6 @@
 package wildlog.ui.reports;
 
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,6 +8,7 @@ import java.nio.file.Path;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
@@ -25,7 +25,8 @@ import wildlog.utils.WildLogPaths;
 public class ReportExportDialog extends JDialog {
     private final BufferedImage chartImage;
 
-    public ReportExportDialog(Frame inParent, BufferedImage inChartImage) {
+    
+    public ReportExportDialog(JFrame inParent, BufferedImage inChartImage) {
         super(inParent);
         // Set passed in values
         chartImage = inChartImage;
@@ -35,8 +36,8 @@ public class ReportExportDialog extends JDialog {
         pack();
         // Setup the default behavior
         UtilsDialog.addEscapeKeyListener(this);
-        UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
-        UtilsDialog.addModalBackgroundPanel(WildLogApp.getApplication().getMainFrame(), this);
+        UtilsDialog.setDialogToCenter(inParent, this);
+        UtilsDialog.addModalBackgroundPanel(inParent, this);
     }
 
     /** This method is called from within the constructor to
@@ -205,6 +206,7 @@ public class ReportExportDialog extends JDialog {
                 @Override
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
+// TODO: gebruik die regte name vir al die exports
                     setMessage("Exporting Report Image for '" + "TODO" + "'");
                     Path filePath = WildLogPaths.WILDLOG_EXPORT_REPORTS_PNG.getAbsoluteFullPath().resolve("Report_" + System.currentTimeMillis() + ".png");
                     Files.createDirectories(filePath);

@@ -67,7 +67,7 @@ public final class UtilsFileProcessing {
 //        fileChooser.setFileFilter(new MovieFilter());
 //        fileChooser.setFileFilter(new ImageFilter());
 //        fileChooser.setAccessory(new ImagePreview(fileChooser));
-        // TODO: Ek nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FIleChooser eendag :D
+// TODO: Ek nie seker of die filters reg werk nie... GEBRUIK EERDER JavaFx se FileChooser eendag :D
         fileChooser.setFilenameFilter(new MovieFilter());
 //        fileChooser.setFile("*.jpg");
         fileChooser.setFilenameFilter(new ImageFilter());
@@ -317,7 +317,7 @@ public final class UtilsFileProcessing {
      * @throws IOException
      */
     public static void deleteRecursive(File inFile) throws IOException {
-        // TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
+// TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
         if (inFile.isDirectory()) {
             for (File content : inFile.listFiles()) {
                 deleteRecursive(content);
@@ -334,7 +334,7 @@ public final class UtilsFileProcessing {
      * @throws IOException
      */
     public static void deleteRecursiveOnlyEmptyFolders(File inFile) throws IOException {
-        // TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
+// TODO: Verander die dalk eendag om Paths en 'n walker te gebruik
         if (inFile.isDirectory()) {
             for (File content : inFile.listFiles()) {
                 deleteRecursiveOnlyEmptyFolders(content);

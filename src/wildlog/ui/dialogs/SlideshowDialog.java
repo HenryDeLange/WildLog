@@ -30,16 +30,14 @@ import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
-/**
- * Wys die popup om SlideShows to maak.
- * Ongelukkig weet ek nie hoelank dit gaan vat nie so die ProgressBar kan nie vordering wys nie.
- */
+
 public class SlideshowDialog extends JDialog {
     private WildLogApp app;
     private Visit visit;
     private Location location;
     private Element element;
 
+    
     public SlideshowDialog(WildLogApp inApp, Visit inVisit, Location inLocation, Element inElement) {
         super();
         // Set passed in values
@@ -350,7 +348,6 @@ public class SlideshowDialog extends JDialog {
     }//GEN-LAST:event_btnSlideshowElementSightingsActionPerformed
 
     private void btnGIFElementSightingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGIFElementSightingsActionPerformed
-        // TODO: Warning if there are many files
         UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
             @Override
             protected Object doInBackground() throws Exception {
@@ -373,12 +370,11 @@ public class SlideshowDialog extends JDialog {
                         ImageOutputStream output = null;
                         try {
                             output = new FileImageOutputStream(outputPath.toFile());
+// TODO: gebruik die slideshow setting vir size en speed...
                             int thumbnailSize = WildLogThumbnailSizes.LARGE.getSize();
-                            // FIXME: Wys 'n ander bter prentjie hier, maar dit lyk my dis belangrik dat die eerste image die hele area vol is naders sukkel die res van die images om reg te wys...
                             ImageIcon image = UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.LARGE);
                             BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
                             Graphics2D graphics2D = bufferedImage.createGraphics();
-                            // TODO: Skuif die gedeelte kode in 'n util method in
                             graphics2D.drawImage(image.getImage(), 
                                         (thumbnailSize - image.getIconWidth())/2, 
                                         (thumbnailSize - image.getIconHeight())/2, 
@@ -393,7 +389,6 @@ public class SlideshowDialog extends JDialog {
                                 image = UtilsImageProcessing.getScaledIcon(Paths.get(slideshowList.get(t)), thumbnailSize);
                                 bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
                                 graphics2D = bufferedImage.createGraphics();
-                                // TODO: centre the images and give it black background
                                 graphics2D.drawImage(image.getImage(), 
                                         (thumbnailSize - image.getIconWidth())/2, 
                                         (thumbnailSize - image.getIconHeight())/2, 

@@ -79,7 +79,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         + "</i></div></html>";
     private final int CACHE_LIMIT_FOR_SELECTED_NODE = 5;
     private final int CACHE_LIMIT_FOR_NEIGHBOURING_NODES = 3;
-    // TODO: Not the sexiest code, but it seems to work now... Maybe oneday I can waste more time on it and try to get rid of some of the lists I'm keeping track off...
+// TODO: Not the sexiest code, but it seems to work now... Maybe oneday I can waste more time on it and try to get rid of some of the lists I'm keeping track off...
     private Map<String, Image> preloadedImages = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
     private final Map<String, Future> submittedTasks = new HashMap<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);
     private Set<String> preloadedImageNames = new HashSet<>(CACHE_LIMIT_FOR_SELECTED_NODE + CACHE_LIMIT_FOR_NEIGHBOURING_NODES);

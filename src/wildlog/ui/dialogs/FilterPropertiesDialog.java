@@ -41,8 +41,6 @@ public class FilterPropertiesDialog<T extends DataObjectWithWildLogFile> extends
     private boolean selectionMade = false;
     private FilterProperties filterProperties;
 
-    // FIXME: Die is nog bietjie snaaks om te gebruik. Veral as ek bv net Camera Trap records wil sien en dan 'n clear all doen en net camera trap kies, dan kry mens niks...
-    // TODO: Maak dat mens sekere settings kan save en 'n naam gee en dan kies vanaf 'n droplist sodat mens nie altyd alles weer hoef te kies nie...
     
     public FilterPropertiesDialog(JFrame inParent, List<T> inLstOriginalData, FilterProperties inFilterProperties) {
         super(inParent);

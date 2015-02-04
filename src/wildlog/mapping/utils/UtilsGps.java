@@ -117,16 +117,16 @@ public final class UtilsGps {
         }
     }
 
-    public static void copyGpsBetweenDOs(DataObjectWithGPS inToDO, DataObjectWithGPS inFromDO) {
-        if (inFromDO != null && inToDO != null) {
-            inToDO.setLatitude(inFromDO.getLatitude());
-            inToDO.setLatDegrees(inFromDO.getLatDegrees());
-            inToDO.setLatMinutes(inFromDO.getLatMinutes());
-            inToDO.setLatSeconds(inFromDO.getLatSeconds());
-            inToDO.setLongitude(inFromDO.getLongitude());
-            inToDO.setLonDegrees(inFromDO.getLonDegrees());
-            inToDO.setLonMinutes(inFromDO.getLonMinutes());
-            inToDO.setLonSeconds(inFromDO.getLonSeconds());
+    public static void copyGpsBetweenDOs(DataObjectWithGPS inToGpsDO, DataObjectWithGPS inFromGpsDO) {
+        if (inFromGpsDO != null && inToGpsDO != null) {
+            inToGpsDO.setLatitude(inFromGpsDO.getLatitude());
+            inToGpsDO.setLatDegrees(inFromGpsDO.getLatDegrees());
+            inToGpsDO.setLatMinutes(inFromGpsDO.getLatMinutes());
+            inToGpsDO.setLatSeconds(inFromGpsDO.getLatSeconds());
+            inToGpsDO.setLongitude(inFromGpsDO.getLongitude());
+            inToGpsDO.setLonDegrees(inFromGpsDO.getLonDegrees());
+            inToGpsDO.setLonMinutes(inFromGpsDO.getLonMinutes());
+            inToGpsDO.setLonSeconds(inFromGpsDO.getLonSeconds());
         }
     }
 

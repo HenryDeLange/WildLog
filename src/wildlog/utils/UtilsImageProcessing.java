@@ -83,7 +83,7 @@ public class UtilsImageProcessing {
 //            System.out.println("---Loading took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
             Image img = getScaledImage(image, finalWidth, finalHeight);
 //            System.out.println("**Before new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
-            // TODO: verander al die JLabels om eerder JavaFx se ImageView te gebruik. 'n Vinnige toets wys dat dit dalk vinniger mag wees... Die ImageIcon is baie stadig om die icon te maak vir die label, veral sekere nonstandard colour modes in jpg files.
+// TODO: verander al die JLabels om eerder JavaFx se ImageView te gebruik. 'n Vinnige toets wys dat dit dalk vinniger mag wees... Die ImageIcon is baie stadig om die icon te maak vir die label, veral sekere nonstandard colour modes in jpg files.
             ImageIcon temp = new ImageIcon(img);
 //            System.out.println("**After new ImageIcon " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
 //            System.out.println("--Calculating scale " + inSize + "px took " + (Calendar.getInstance().getTimeInMillis() - startTime) + " ms                             " + inAbsolutePathToScale);
@@ -340,7 +340,7 @@ public class UtilsImageProcessing {
     }
 
     private static Date getExifDateFromJpeg(Metadata inMeta) {
-        // FIXME: Die ou Moultrie images het 'n issue waar hulle 'n EXIF value het wat altyd na dieselfde datum point, ek moet 'n reel maak wat daai files kan optel en dan die file.lastmodified gebruik...
+// FIXME: Die ou Moultrie images het 'n issue waar hulle 'n EXIF value het wat altyd na dieselfde datum point, ek moet 'n reel maak wat daai files kan optel en dan die file.lastmodified gebruik...
         if (inMeta != null) {
             Iterator<Directory> directories = inMeta.getDirectories().iterator();
             while (directories.hasNext()) {
@@ -457,7 +457,7 @@ public class UtilsImageProcessing {
      */
     public static void createThumbnailOnDisk(Path inThumbnailAbsolutePath, Path inOriginalAbsolutePath, WildLogThumbnailSizes inSize) {
         // Resize the file and then save the thumbnail to into WildLog's folders
-        // TODO: Soek 'n beter manier om die image te save wat nie dependant is op die ImageIcon nie...
+// TODO: Soek 'n beter manier om die image te save wat nie dependant is op die ImageIcon nie...
         ImageIcon thumbnail = UtilsImageProcessing.getScaledIcon(inOriginalAbsolutePath, inSize.getSize());
         try {
             // Make the folder

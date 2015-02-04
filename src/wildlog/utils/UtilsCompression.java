@@ -4,78 +4,61 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-// FIXME: Gaan deur die code en maak dit nice, soos dit is is dit 'n copy-hack van internet voorbeeld
-public class UtilsCompression {
+public final class UtilsCompression {
+    
+    private UtilsCompression() {
+    }
 
-    /**
-     * Zip it
-     * @param zipFile output ZIP file location
-     */
-    public static void zipIt(String zipFile, File sourceFolder){
+    public static void zipFolder(Path inZipFilePath, Path inSourceFolderPath) {
         byte[] buffer = new byte[1024];
         try {
-            FileOutputStream fos = new FileOutputStream(zipFile);
-            ZipOutputStream zos = new ZipOutputStream(fos);
-//    	System.out.println("Output to Zip : " + zipFile);
-            List<String> fileList = generateFileList(sourceFolder, new ArrayList<String>(), sourceFolder);
-            for (String file : fileList) {
-                if (!Paths.get(file).getFileName().toString().equals(Paths.get(zipFile).getFileName().toString())) {
-//                    System.out.println("File Added : " + file);
-                    ZipEntry ze = new ZipEntry(file);
-                    zos.putNextEntry(ze);
-                    FileInputStream in = new FileInputStream(sourceFolder + File.separator + file);
-                    int len;
-                    while ((len = in.read(buffer)) > 0) {
-                        zos.write(buffer, 0, len);
+            FileOutputStream fileOutputStream = new FileOutputStream(inZipFilePath.toFile());
+            try (ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream)) {
+                List<String> fileList = generateFileList(inSourceFolderPath, new ArrayList<String>(35), inSourceFolderPath);
+                for (String fileString : fileList) {
+                    if (!Paths.get(fileString).getFileName().toString().equals(inZipFilePath.getFileName().toString())) {
+                        ZipEntry zipEntry = new ZipEntry(fileString);
+                        zipOutputStream.putNextEntry(zipEntry);
+                        try (FileInputStream fileInputStream = new FileInputStream(inSourceFolderPath + File.separator + fileString)) {
+                            int len;
+                            while ((len = fileInputStream.read(buffer)) > 0) {
+                                zipOutputStream.write(buffer, 0, len);
+                            }
+                        }
                     }
-                    in.close();
                 }
-//            else {
-//                System.out.println("File skipped : " + file);
-//            }
+                zipOutputStream.closeEntry();
             }
-            zos.closeEntry();
-            //remember close it
-            zos.close();
-//    	System.out.println("Done");
         }
         catch (IOException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
     }
 
-    /**
-     * Traverse a directory and get all files,
-     * and add the file into fileList
-     * @param node file or directory
-     */
-    private static List<String> generateFileList(File node, List<String> fileList, File inSourceRoot){
-    	//add file only
-	if(node.isFile()){
-            fileList.add(generateZipEntry(node.getAbsoluteFile().toString(), inSourceRoot));
+    private static List<String> generateFileList(Path inFile, List<String> inFileList, Path inFileRoot) {
+        // Traverse a directory and get all (only) files
+	if (Files.isRegularFile(inFile)) {
+            // Get a relative path for using in the zip by removing the first part of the path
+            inFileList.add(inFile.toAbsolutePath().toString().substring(
+                    inFileRoot.toAbsolutePath().toString().length() + 1, 
+                    inFile.toAbsolutePath().toString().length()));
 	}
-	if(node.isDirectory()){
-            String[] subNote = node.list();
-            for(String filename : subNote){
-                    generateFileList(new File(node, filename), fileList, inSourceRoot);
+        else
+	if (Files.isDirectory(inFile)) {
+            String[] subFile = inFile.toFile().list();
+            for (String subFilename : subFile) {
+                generateFileList(inFile.resolve(subFilename), inFileList, inFileRoot);
             }
 	}
-        return fileList;
-    }
-
-    /**
-     * Format the file path for zip
-     * @param file file path
-     * @return Formatted file path
-     */
-    private static String generateZipEntry(String file, File inSourceRoot){
-    	return file.substring(inSourceRoot.getAbsolutePath().length()+1, file.length());
+        return inFileList;
     }
 
 }

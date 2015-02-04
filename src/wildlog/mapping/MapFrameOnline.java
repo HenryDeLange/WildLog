@@ -26,7 +26,6 @@ public class MapFrameOnline extends JFrame {
         textPane.setPreferredSize(new Dimension(350, 450));
         WildLogScrollPanel scrollPane = new WildLogScrollPanel(textPane);
         map.getMainMap().add(scrollPane);
-        // FIXME: Maak dat die dialog altyd weg gaan as mens click
         textPane.setText("<u><b>Information Box:</b></u> "
                 + "<br/><br/>Click on a point on the map to view more details. "
                 + "<br/><br/>If you clicked on a point with more than one Observation use the buttons on the left/right of the map to cycle between the Observations. "

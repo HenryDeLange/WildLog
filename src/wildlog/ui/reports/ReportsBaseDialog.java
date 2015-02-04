@@ -54,7 +54,6 @@ public class ReportsBaseDialog extends JFrame {
     private List<Element> lstFilteredElements;
     private List<Location> lstFilteredLocations;
     private List<Visit> lstFilteredVisits;
-//    private List<Sighting> lstFilteredSightings;
     private FilterProperties filterProperties = null;
     private AbstractReport activeReport = null;
 
@@ -122,7 +121,7 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
         reports.add(new DurationChart(lstFilteredData, lblReportDescription));
         reports.add(new TextReports(lstFilteredData, lblReportDescription));
-        // TODO: Maak 'n paar charts wat die duration van sightings wys. Dalk handigste om min/ave/max van 'n spesie te sien. (Barchart met 3 series per spesie om x-axis).
+// TODO: Maak 'n paar charts wat die duration van sightings wys. Dalk handigste om min/ave/max van 'n spesie te sien. (Barchart met 3 series per spesie om x-axis).
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
@@ -430,7 +429,6 @@ public class ReportsBaseDialog extends JFrame {
 
     private void bntExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportActionPerformed
         // The snapshot needs to be loaded from a JavaFX thread
-// FIXME: Die export wys oor die main app en nieoor die report popup nie...?
         final JFrame parent = this;
         Platform.runLater(new Runnable() {
             @Override
@@ -570,9 +568,6 @@ public class ReportsBaseDialog extends JFrame {
                     continue;
                 }
             }
-            // Check filtered Sightings
-            // TODO: mmm dit gaan dalk tricky wees...
-            
             // Check filtered Properties
             if (!FilterPropertiesDialog.checkFilterPropertiesMatch(filterProperties, sighting)) {
                 continue;

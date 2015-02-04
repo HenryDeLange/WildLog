@@ -14,12 +14,12 @@ public abstract class AbstractReport<T> {
     protected JLabel lblReportDescription;
 
     
-    // TODO: Maak 'n opsie om te kies omdie totale bo op die bars te sien of nie
-    // TODO: Maak opsie om te kies watse taal om te gebruik vir spesies
-    // TODO: Maak opsie om te kies of die charts moet sorteer volgens alfabet of totale
-    // TODO: Wanneer die chart te veel categories (creatures) is daar eintlik net twee opsies: 
-    //          of laat die shart scroll, of wys niks (mens kan die font kleiner maak tot op 'n punt),
-    //          want dit raak net stupid as die labels begin uitgelaat word.
+// TODO: Maak 'n opsie om te kies om die totale bo op die bars te sien of nie
+// TODO: Maak opsie om te kies watse taal om te gebruik vir spesies
+// TODO: Maak opsie om te kies of die charts moet sorteer volgens alfabet of totale
+// TODO: Wanneer die chart te veel categories (creatures) is daar eintlik net twee opsies: 
+//          of laat die shart scroll, of wys niks (mens kan die font kleiner maak tot op 'n punt),
+//          want dit raak net stupid as die labels begin uitgelaat word.
     
     
     public AbstractReport(String inReportButtonName, List<T> inList, JLabel inChartDescLabel) {

@@ -714,7 +714,7 @@ public class GPSDialog extends JDialog {
     }//GEN-LAST:event_btnUseImageActionPerformed
 
     private void btnUseMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseMapActionPerformed
-        // TODO: GPS point from map - Ek sal die deel later moet uitfigure en doen...
+// TODO: GPS point from map - Ek sal die deel later moet uitfigure en doen...
     }//GEN-LAST:event_btnUseMapActionPerformed
 
     private void btnRemoveGPSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveGPSActionPerformed

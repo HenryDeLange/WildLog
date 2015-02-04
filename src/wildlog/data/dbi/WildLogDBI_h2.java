@@ -1,6 +1,5 @@
 package wildlog.data.dbi;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,7 +7,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Properties;
 import javax.swing.JOptionPane;
@@ -26,7 +24,6 @@ import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
-import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
@@ -114,20 +111,22 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
 
 
     @Override
-    public void doBackup(Path inFolder) {
+    public void doBackup(Path inDestinationFolder) {
         Statement state = null;
         try {
             state = conn.createStatement();
-            // Backup
-            File dirs = inFolder.resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(LocalDateTime.now()) + ")").toFile();
-            dirs.mkdirs();
+            // Create the folders
+            Files.createDirectories(inDestinationFolder);
             // Create a database file backup
-            state.execute("BACKUP TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - H2.zip'");
+            state.execute("BACKUP TO '" + inDestinationFolder.resolve("WildLog Backup - H2.zip").toAbsolutePath().toString() + "'");
             // Create a SQL dump
-            state.execute("SCRIPT TO '" + dirs.getPath() + File.separatorChar + "WildLog Backup - SQL.zip' COMPRESSION ZIP");
+            state.execute("SCRIPT TO '" + inDestinationFolder.resolve("WildLog Backup - SQL.zip").toAbsolutePath().toString() + "' COMPRESSION ZIP");
         }
         catch (SQLException ex) {
             printSQLException(ex);
+        }
+        catch (IOException ex) {
+            ex.printStackTrace(System.err);
         }
         finally {
             // Statement
@@ -561,7 +560,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             results = state.executeQuery("SELECT * FROM WILDLOG");
             // If there isn't a row create one
             if (!results.next()) {
-// FIXME: Error when opining a WildNote v1.1 export with WildLog v4.2: "Column count does not match"
+// FIXME: Error when opening a WildNote v1.1 export with WildLog v4.2: "Column count does not match"
                 createOrUpdate(new WildLogOptions());
             }
             // Read the row
@@ -851,6 +850,8 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
             
 // TODO: Update the sun and moon phase (recalculate it)
+            
+// FIXME: Ek is redelik seker daar is nog upgrade stuff wat ek sal moet doen...
             
             // Increase the cache size slightly (doubled)
             state.execute("SET CACHE_SIZE 32768");

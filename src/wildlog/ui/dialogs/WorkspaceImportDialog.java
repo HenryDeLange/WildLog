@@ -344,7 +344,7 @@ public class WorkspaceImportDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
-        // TODO: Improve error handeling and feedback
+// TODO: Improve error handeling and feedback
         if (txtPrefix.getText() == null || txtPrefix.getText().isEmpty()) {
             int result = UtilsDialog.showDialogBackgroundWrapper(this, new UtilsDialog.DialogWrapper() {
                 @Override

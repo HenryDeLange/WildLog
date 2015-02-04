@@ -331,7 +331,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         try {
             final File destination = showFileChooser();
-            // TODO: Toets dalk eendag dat die persoon nie 'n reeds bestaande Workspace probeer overwrite nie...
+// TODO: Toets dalk eendag dat die persoon nie 'n reeds bestaande Workspace probeer overwrite nie... (Toets dat die WildLog folder nog nie bestaan nie)
             if (destination != null) {
                 app.getMainFrame().getTabbedPane().setSelectedIndex(0);
                 UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {

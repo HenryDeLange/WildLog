@@ -21,7 +21,7 @@ import wildlog.mapping.utils.UtilsGps;
 public final class UtilsTime {
     // The default pattern used in WildLog to display dates. 
     // This pattern is used by the SimpleDateFormat instances used by the JXDatePicker's
-    // TODO: Vervang eendag al die SwingX date pickers met iets beter, dalk JavaFX, en raak dan ontslae van SimpleDateFormat.
+// TODO: Vervang eendag al die SwingX date pickers met iets beter, dalk JavaFX, en raak dan ontslae van SimpleDateFormat.
     public static final String DEFAULT_WL_DATE_FORMAT_PATTERN = "dd MMM yyyy";
     // Preffer to use DateTimeFormatter because it is threadsafe and SimpleDateFormat is not.
     public static final DateTimeFormatter WL_DATE_FORMATTER = DateTimeFormatter.ofPattern(DEFAULT_WL_DATE_FORMAT_PATTERN);
@@ -29,6 +29,7 @@ public final class UtilsTime {
     public static final DateTimeFormatter WL_DATE_FORMATTER_WITH_HHMMSS = DateTimeFormatter.ofPattern("dd MMM yyyy (HH:mm:ss)");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_VISIT_NAME = DateTimeFormatter.ofPattern("dd MMM yyyy (HH'h'mm)");
     public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_FILES = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY = DateTimeFormatter.ofPattern("yyyy-MM, MMM 'week' W");
 
     private UtilsTime() {
     }
@@ -128,8 +129,6 @@ public final class UtilsTime {
             }
         }
     }
-    
-    // TODO: Vind eendag 'n manier om seker te maak alle datums in WildLog is onafhankklik van timezone en daylight savings.
     
     public static Date getDateFromLocalDateTime(LocalDateTime inLocalDateTime) {
         if (inLocalDateTime != null) {

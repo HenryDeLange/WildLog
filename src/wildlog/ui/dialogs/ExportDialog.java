@@ -837,7 +837,7 @@ public class ExportDialog extends JDialog {
                 }
             });
         }
-        // TODO
+// TODO: Generate fancy HTML
         setVisible(false);
         dispose();
     }//GEN-LAST:event_btnExportHTMLAdvancedActionPerformed

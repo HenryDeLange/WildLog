@@ -3,6 +3,8 @@ package wildlog;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -15,14 +17,22 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.EventObject;
 import java.util.Properties;
+import java.util.TimeZone;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -39,6 +49,11 @@ import org.jdesktop.application.TaskMonitor;
 import org.jdesktop.application.TaskService;
 import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
+import wildlog.data.dataobjects.Element;
+import wildlog.data.dataobjects.Location;
+import wildlog.data.dataobjects.Sighting;
+import wildlog.data.dataobjects.Visit;
+import wildlog.data.dataobjects.WildLogFile;
 import wildlog.data.dataobjects.WildLogOptions;
 import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
@@ -46,6 +61,7 @@ import wildlog.mapping.MapFrameOffline;
 import wildlog.mapping.MapFrameOnline;
 import wildlog.ui.dialogs.utils.UtilsDialog;
 import wildlog.ui.utils.UtilsTime;
+import wildlog.utils.NamedThreadFactory;
 import wildlog.utils.WildLogPaths;
 
 /**
@@ -111,14 +127,73 @@ public class WildLogApp extends Application {
             }
         }
         while (openedWorkspace == false);
-        // Check to do monthly backup
-        File dirs = new File(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath() + "Backup ("
-                + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(LocalDateTime.now()) + ")");
-        if (!dirs.exists()) {
-            dbi.doBackup(WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath());
-        }
         // Load the WildLogOptions
         wildLogOptions = dbi.find(new WildLogOptions());
+        // Check to do monthly backup and try to upload the logs and user data to the MyWild DB
+        Path folderPath = WildLogPaths.WILDLOG_BACKUPS_MONTHLY.getAbsoluteFullPath()
+                .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_BACKUP_MONTHLY.format(LocalDateTime.now()) + ")");
+        if (!Files.exists(folderPath)) {
+            // Do the backup
+            dbi.doBackup(folderPath.toAbsolutePath());
+            // Try to upload log data
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_UserInfoLogger"));
+            executor.schedule(new Runnable() {
+                @Override
+                public void run() {
+System.out.println("WEB REQUEST");
+                    try {
+                        // Open a connection to the site
+                        URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
+                        URLConnection con = url.openConnection();
+                        // Activate the output
+                        con.setDoOutput(true);
+                        try (PrintStream printStream = new PrintStream(con.getOutputStream())) {
+                            // Load some of the info needed
+                            long maxMemory = Runtime.getRuntime().maxMemory();
+                            GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                            int width = graphicsDevice.getDisplayMode().getWidth();
+                            int height = graphicsDevice.getDisplayMode().getHeight();
+                            String info = "OS Name    : " + System.getProperty("os.name") + "\n"
+                                        + "OS version : " + System.getProperty("os.version") + "\n"
+                                        + "OS Arch    : " + System.getProperty("os.arch") + "\n"
+                                        + "Timezone   : " + TimeZone.getDefault().getDisplayName() + " [" + ZonedDateTime.now().format(DateTimeFormatter.ofPattern("(z) VV")) + "]\n"
+                                        + "JVM CPU cores   : " + Runtime.getRuntime().availableProcessors() + "\n"
+                                        + "JVM Used Memory : " + Math.round((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024.0*1024.0) * 100) / 100.0 + " MB" + "\n"
+                                        + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
+                                        + "Screen Size : " + width + "x" + height + "\n"
+                                        + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
+                            // Send the parameters to the site
+                            //printStream.print("DateAndTime=" + "set by server");
+                            printStream.print("&WorkspaceID=" + wildLogOptions.getInternalWorkspaceID());
+                            printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
+                            printStream.print("&WorkspaceDatabaseVersion=" + wildLogOptions.getDatabaseVersion());
+                            //printStream.print("&IP=" + "set by server");
+                            printStream.print("&SystemUsername=" + System.getProperty("user.name"));
+                            printStream.print("&SystemInfo=" + info);
+                            printStream.print("&NumberOfElements=" + dbi.count(new Element()));
+                            printStream.print("&NumberOfLocations=" + dbi.count(new Location()));
+                            printStream.print("&NumberOfVisits=" + dbi.count(new Visit()));
+                            printStream.print("&NumberOfSightings=" + dbi.count(new Sighting()));
+                            printStream.print("&NumberOfFiles=" + dbi.count(new WildLogFile()));
+                            printStream.print("&PartialLog=" + "some log info");
+                            // Have to get the input stream in order to actually send the request
+                            try (InputStream inputStream = con.getInputStream()) {
+                                StringBuilder response = new StringBuilder(25);
+                                byte[] respBuffer = new byte[4096];
+                                while (inputStream.read(respBuffer) >= 0) {
+                                    response.append(new String(respBuffer).trim());
+                                }
+System.out.println("WEB RESPONSE: " + response.toString());
+                            }
+                        }
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }, 1, TimeUnit.SECONDS);
+            executor.shutdown();
+        }
     }
 
     private boolean openWorkspace() {

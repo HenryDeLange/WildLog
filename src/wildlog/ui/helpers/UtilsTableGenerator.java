@@ -58,8 +58,7 @@ import wildlog.utils.UtilsImageProcessing;
 
 
 public final class UtilsTableGenerator {
-    private static final ExecutorService executorService =
-            Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_TableGenerator"));
+    private static final ExecutorService executorService = Executors.newFixedThreadPool(WildLogApp.getApplication().getThreadCount(), new NamedThreadFactory("WL_TableGenerator"));
     // NOTE: Ek kan dalk eendag 'n ConnectionPool gebruik vir elke table thread want hulle almal gebruik tans die een connection.
     //       Maar ek het 'n toets gedoen met 'n ConnectionPool en dit maak nog nie juis 'n groot verskil nie, so vir eenvoud hou ek dit soos dit nou is.
 
@@ -153,8 +152,8 @@ public final class UtilsTableGenerator {
                     }
                     // Setup default sorting
                     setupRowSorter(inTable, 1);
-                    // FIXME: The code below is copied from UtilsUI.attachKeyListernerToFilterTableRows(). This is not ideal.
-//                    String[] oldSelection = UtilsTableGenerator.getSelectedRowIDs(inTable, 1);
+                    // Since the table model has changed, the row sorter needs to be setup again
+// FIXME: The code below is copied from UtilsUI.attachKeyListernerToFilterTableRows(). This is not ideal, but OK for now...
                     TableRowSorter<TableModel> sorter = (TableRowSorter<TableModel>)inTable.getRowSorter();
                     if (sorter == null) {
                         sorter = new TableRowSorter<>(inTable.getModel());

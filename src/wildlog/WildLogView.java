@@ -353,6 +353,7 @@ public final class WildLogView extends JFrame {
         extraMenu = new javax.swing.JMenu();
         mnuExifMenuItem = new javax.swing.JMenuItem();
         mnuCreateSlideshow = new javax.swing.JMenuItem();
+        mnuCreateGIF = new javax.swing.JMenuItem();
         mnuSunAndMoon = new javax.swing.JMenuItem();
         jSeparator3 = new javax.swing.JPopupMenu.Separator();
         externalMenu = new javax.swing.JMenu();
@@ -1038,6 +1039,11 @@ public final class WildLogView extends JFrame {
         });
         extraMenu.add(mnuCreateSlideshow);
 
+        mnuCreateGIF.setText("Create an Animated GIF");
+        mnuCreateGIF.setToolTipText("Create an animated GIF slideshow using a folder of images anywhere on your computer.");
+        mnuCreateGIF.setName("mnuCreateGIF"); // NOI18N
+        extraMenu.add(mnuCreateGIF);
+
         mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
         mnuSunAndMoon.setText("View Sun And Moon Phase");
         mnuSunAndMoon.setToolTipText("Opens up a Sun and Moon Phase dialog that can be used to determine the phases at any time and location.");
@@ -1341,7 +1347,8 @@ public final class WildLogView extends JFrame {
         WildLogOptions options = app.getWildLogOptions();
         app.getMainFrame().getGlassPane().setVisible(true);
         String inputFramerate = JOptionPane.showInputDialog(app.getMainFrame(),
-                "Please specify the default framerate to use for the slideshows. \n (This can be any positive decimal value, for example 1 or 0.3)",
+                "Please specify the default framerate (in frames per second) to use for the slideshows. \n "
+                        + "This can be any positive decimal value, for example 1 or 0.3 frames per second.",
                 options.getDefaultSlideshowSpeed());
         app.getMainFrame().getGlassPane().setVisible(false);
         if (inputFramerate != null) {
@@ -1780,7 +1787,8 @@ public final class WildLogView extends JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 setMessage("Starting the Database Backup");
-                app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath());
+                app.getDBI().doBackup(WildLogPaths.WILDLOG_BACKUPS.getAbsoluteFullPath()
+                        .resolve("Backup (" + UtilsTime.WL_DATE_FORMATTER_FOR_FILES.format(LocalDateTime.now()) + ")"));
                 setMessage("Done with the Database Backup");
                 UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
                     @Override
@@ -2042,7 +2050,6 @@ public final class WildLogView extends JFrame {
                                 filesWithBadType++;
                             }
                             // Check the WildLogFile's linkage
-                            // FIXME: Ek skiem ek kan hierdie net een keer roep met die generic interfaces, ens.
                             if (wildLogFile.getId().startsWith(Element.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())));
@@ -2060,7 +2067,8 @@ public final class WildLogView extends JFrame {
                                         Paths.get(Element.WILDLOG_FOLDER_PREFIX, temp.getPrimaryName()),
                                         filesMoved);
                             }
-                            else if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
+                            else 
+                            if (wildLogFile.getId().startsWith(Visit.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
@@ -2077,7 +2085,8 @@ public final class WildLogView extends JFrame {
                                         Paths.get(Visit.WILDLOG_FOLDER_PREFIX, temp.getLocationName(), temp.getName()),
                                         filesMoved);
                             }
-                            else if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
+                            else 
+                            if (wildLogFile.getId().startsWith(Location.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
@@ -2094,7 +2103,8 @@ public final class WildLogView extends JFrame {
                                         Paths.get(Location.WILDLOG_FOLDER_PREFIX, temp.getName()),
                                         filesMoved);
                             }
-                            else if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
+                            else 
+                            if (wildLogFile.getId().startsWith(Sighting.WILDLOGFILE_ID_PREFIX)) {
                                 // Make sure it is linked
                                 Sighting temp = null;
                                 try {
@@ -2598,8 +2608,8 @@ public final class WildLogView extends JFrame {
                 setProgress(90);
                 setMessage("Busy with the Export of the WildNote Sync File " + getProgress() + "%");
                 // Zip the content to make copying it accross easier
-                UtilsCompression.zipIt(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve("WildNoteSync.zip").toString(),
-                        WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().toFile());
+                UtilsCompression.zipFolder(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve("WildNoteSync.zip"),
+                        WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath());
 //                    // TODO: Delete everthing except for the zip
 //                    UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath()
 //                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath()).toFile());
@@ -3259,6 +3269,7 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenuItem mnuChangeWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuChangeWorkspaceName;
     private javax.swing.JMenuItem mnuCleanWorkspace;
+    private javax.swing.JMenuItem mnuCreateGIF;
     private javax.swing.JMenuItem mnuCreateSlideshow;
     private javax.swing.JMenuItem mnuCreateWorkspaceMenuItem;
     private javax.swing.JMenuItem mnuDBConsole;
