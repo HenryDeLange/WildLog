@@ -54,7 +54,7 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace"));
 
     private static Path activeWorkspacePrefix;
-    private Path path;
+    private final Path path;
 
     private WildLogPaths(Path inPath) {
         path = inPath.normalize();

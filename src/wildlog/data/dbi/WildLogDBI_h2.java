@@ -848,6 +848,10 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             // Make changes to WildLog Options
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USESCIENTIFICNAMES smallint DEFAULT true");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACENAME varchar(50) DEFAULT 'WildLog Workspace'");
+            state.execute("ALTER TABLE WILDLOG ADD COLUMN WORKSPACEID bigint DEFAULT 0");
+            WildLogOptions options = find(new WildLogOptions());
+            options.setWorkspaceID(generateID());
+            createOrUpdate(options);
             
 // TODO: Update the sun and moon phase (recalculate it)
             

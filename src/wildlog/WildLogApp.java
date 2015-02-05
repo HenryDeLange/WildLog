@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -69,8 +70,10 @@ import wildlog.utils.WildLogPaths;
  */
 // Note: Ek kan nie regtig die SwingAppFramework los nie want die progressbar en paar ander goed gebruik dit. Ek sal dan daai goed moet oorskryf...
 public class WildLogApp extends Application {
+    public static String WILDLOG_VERSION = "4.2.BETA";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
     private static boolean useNimbusLF = false;
+    private static boolean logToFile = false;
     // Only open one MapFrame for the application (to reduce memory use)
     private MapFrameOffline mapOffline;
     private JXMapKit mapOnline;
@@ -135,12 +138,43 @@ public class WildLogApp extends Application {
         if (!Files.exists(folderPath)) {
             // Do the backup
             dbi.doBackup(folderPath.toAbsolutePath());
-            // Try to upload log data
-            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_UserInfoLogger"));
+            // Do some online calls
+            ScheduledExecutorService executor = Executors.newScheduledThreadPool(1, new NamedThreadFactory("WL_MyWildCalls"));
+            // Try to check the latest version
             executor.schedule(new Runnable() {
                 @Override
                 public void run() {
-System.out.println("WEB REQUEST");
+                    try {
+                        // Open a connection to the site
+                        URL url = new URL("http://www.mywild.co.za/wildlog/getLatestWildLogVersion.php");
+                        URLConnection con = url.openConnection();
+                        // Activate the output
+                        con.setDoOutput(true);
+                        // Have to get the input stream in order to actually send the request
+                        try (InputStream inputStream = con.getInputStream()) {
+                            StringBuilder response = new StringBuilder(25);
+                            byte[] respBuffer = new byte[4096];
+                            while (inputStream.read(respBuffer) >= 0) {
+                                response.append(new String(respBuffer).trim());
+                            }
+                           if (!WILDLOG_VERSION.equalsIgnoreCase(response.toString())) {
+                               JOptionPane.showMessageDialog(null, 
+                                       "A newer version of WildLog is available.\n"
+                                       + "You can visit http://www.mywild.co.za to download the latest version.\n",
+                                       "WildLog " + response.toString() + " is now available", 
+                                       JOptionPane.INFORMATION_MESSAGE);
+                           }
+                        }
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
+                }
+            }, 20, TimeUnit.SECONDS);
+            // Try to upload log data
+            executor.schedule(new Runnable() {
+                @Override
+                public void run() {
                     try {
                         // Open a connection to the site
                         URL url = new URL("http://www.mywild.co.za/wildlog/uploadWildLogInfo.php");
@@ -162,11 +196,29 @@ System.out.println("WEB REQUEST");
                                         + "JVM Max Memory  : " + (maxMemory == Long.MAX_VALUE ? "no limit" : Math.round((maxMemory) / (1024.0*1024.0) * 100) / 100.0) + " MB" + "\n"
                                         + "Screen Size : " + width + "x" + height + "\n"
                                         + "Screen Count: " + GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices().length;
+                            String logFileSnippit = "(Not using logfile)";
+                            if (logToFile) {
+                                try {
+                                    byte[] fileBytes = Files.readAllBytes(ACTIVE_WILDLOG_SETTINGS_FOLDER.resolve("errorlog.txt"));
+                                    String logInfo = new String(fileBytes, Charset.defaultCharset());
+                                    int logLength = 9999;
+                                    if (logInfo.length() > logLength) {
+                                        logFileSnippit = "...\n...\n" + logInfo.substring(logInfo.length() - logLength);
+                                    }
+                                    else {
+                                        logFileSnippit = logInfo;
+                                    }
+                                }
+                                catch (IOException  ex) {
+                                    ex.printStackTrace(System.err);
+                                }
+                            }
                             // Send the parameters to the site
                             //printStream.print("DateAndTime=" + "set by server");
-                            printStream.print("&WorkspaceID=" + wildLogOptions.getInternalWorkspaceID());
-                            printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
+                            printStream.print("&WildLogVersion=" + WILDLOG_VERSION);
                             printStream.print("&WorkspaceDatabaseVersion=" + wildLogOptions.getDatabaseVersion());
+                            printStream.print("&WorkspaceID=" + wildLogOptions.getWorkspaceID());
+                            printStream.print("&WorkspaceName=" + wildLogOptions.getWorkspaceName());
                             //printStream.print("&IP=" + "set by server");
                             printStream.print("&SystemUsername=" + System.getProperty("user.name"));
                             printStream.print("&SystemInfo=" + info);
@@ -175,7 +227,7 @@ System.out.println("WEB REQUEST");
                             printStream.print("&NumberOfVisits=" + dbi.count(new Visit()));
                             printStream.print("&NumberOfSightings=" + dbi.count(new Sighting()));
                             printStream.print("&NumberOfFiles=" + dbi.count(new WildLogFile()));
-                            printStream.print("&PartialLog=" + "some log info");
+                            printStream.print("&PartialLog=" + logFileSnippit);
                             // Have to get the input stream in order to actually send the request
                             try (InputStream inputStream = con.getInputStream()) {
                                 StringBuilder response = new StringBuilder(25);
@@ -183,7 +235,7 @@ System.out.println("WEB REQUEST");
                                 while (inputStream.read(respBuffer) >= 0) {
                                     response.append(new String(respBuffer).trim());
                                 }
-System.out.println("WEB RESPONSE: " + response.toString());
+                            System.out.println("WEB RESPONSE (uploadWildLogInfo): " + response.toString());
                             }
                         }
                     }
@@ -191,7 +243,7 @@ System.out.println("WEB RESPONSE: " + response.toString());
                         ex.printStackTrace(System.err);
                     }
                 }
-            }, 1, TimeUnit.SECONDS);
+            }, 30, TimeUnit.SECONDS);
             executor.shutdown();
         }
     }
@@ -316,7 +368,6 @@ System.out.println("WEB RESPONSE: " + response.toString());
     public static void main(String[] args) {
         // Set default startup settings
         ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().normalize().toAbsolutePath();
-        boolean logToFile = false;
         useNimbusLF = true;
         // Load the startup settings from the properties file
         BufferedReader reader = null;

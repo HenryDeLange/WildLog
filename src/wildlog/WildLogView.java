@@ -380,7 +380,7 @@ public final class WildLogView extends JFrame {
         javax.swing.JMenuItem mnuAboutWildLog = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v4.2");
+        setTitle(app.getWildLogOptions().getWorkspaceName() + " -- WildLog v" + WildLogApp.WILDLOG_VERSION);
         setIconImage(new ImageIcon(app.getClass().getResource("resources/icons/WildLog Icon.gif")).getImage());
 
         mainPanel.setMaximumSize(new java.awt.Dimension(2500, 1300));
@@ -419,7 +419,7 @@ public final class WildLogView extends JFrame {
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(237, 230, 221));
-        jLabel12.setText("version 4.2.BETA");
+        jLabel12.setText("version " + WildLogApp.WILDLOG_VERSION);
         jLabel12.setName("jLabel12"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
