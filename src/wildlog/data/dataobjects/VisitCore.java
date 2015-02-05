@@ -156,8 +156,8 @@ public class VisitCore implements DataObjectWithWildLogFile {
         return locationName;
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setLocationName(String inLocationName) {
+        locationName = inLocationName;
     }
 
 }

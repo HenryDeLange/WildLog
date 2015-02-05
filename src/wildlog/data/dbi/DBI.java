@@ -35,7 +35,7 @@ public interface DBI {
     public <T extends SightingCore> List<T> list(T inSighting);
     public <T extends WildLogFileCore> List<T> list(T inWildLogFile);
 
-    // TODO: Split these methods into propper create and update versions...
+// TODO: Split these methods into propper create and update versions...
     public <T extends ElementCore> boolean createOrUpdate(T inElement, String inOldName);
     public <T extends LocationCore> boolean createOrUpdate(T inLocation, String inOldName);
     public <T extends VisitCore> boolean createOrUpdate(T inVisit, String inOldName);

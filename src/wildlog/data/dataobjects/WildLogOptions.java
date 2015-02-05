@@ -18,6 +18,7 @@ public class WildLogOptions {
     private boolean enableSounds;
     private boolean useScientificNames;
     private String workspaceName;
+    private long workspaceID;
 
 
     public int getDatabaseVersion() {
@@ -122,6 +123,14 @@ public class WildLogOptions {
 
     public void setWorkspaceName(String inWorkspaceName) {
         workspaceName = inWorkspaceName;
+    }
+
+    public long getWorkspaceID() {
+        return workspaceID;
+    }
+
+    public void setWorkspaceID(long inWorkspaceID) {
+        workspaceID = inWorkspaceID;
     }
 
 }
