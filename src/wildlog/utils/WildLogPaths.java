@@ -42,6 +42,8 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_REPORTS_PDF            (Paths.get("Export", "Reports", "PDF")),
     WILDLOG_EXPORT_REPORTS_PNG            (Paths.get("Export", "Reports", "Image")),
     WILDLOG_EXPORT_REPORTS_CSV            (Paths.get("Export", "Reports", "Spreadsheet")),
+    WILDLOG_EXPORT_REPORTS_HTML           (Paths.get("Export", "Reports", "HTML")),
+    WILDLOG_EXPORT_REPORTS_HTML_IMAGES    (Paths.get("Export", "Reports", "HTML", "Images")),
     WILDLOG_EXPORT_HTML                   (Paths.get("Export", "HTML")),
     WILDLOG_EXPORT_HTML_THUMBNAILS        (Paths.get("Export", "HTML", "Thumbnails")),
     WILDLOG_EXPORT_HTML_FANCY             (Paths.get("Export", "HTML(Advanced)")),

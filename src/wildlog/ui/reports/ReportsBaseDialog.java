@@ -173,6 +173,8 @@ public class ReportsBaseDialog extends JFrame {
         setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Report.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(920, 600));
 
+        jSplitPane1.setMinimumSize(new java.awt.Dimension(210, 450));
+
         pnlReportsAndFilters.setBackground(new java.awt.Color(179, 198, 172));
         pnlReportsAndFilters.setMinimumSize(new java.awt.Dimension(200, 500));
         pnlReportsAndFilters.setPreferredSize(new java.awt.Dimension(240, 500));
@@ -428,27 +430,30 @@ public class ReportsBaseDialog extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bntExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntExportActionPerformed
-        // The snapshot needs to be loaded from a JavaFX thread
-        final JFrame parent = this;
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    WritableImage writableImage = jfxReportChartPanel.getScene().snapshot(null);
-                    BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage);
-                            dialog.setVisible(true);
-                        }
-                    });
+        if (activeReport != null) {
+            // The snapshot needs to be loaded from a JavaFX thread
+            final JFrame parent = this;
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        WritableImage writableImage = jfxReportChartPanel.getScene().snapshot(null);
+                        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(writableImage, null);
+                        SwingUtilities.invokeLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                ReportExportDialog dialog = new ReportExportDialog(parent, bufferedImage, jfxReportChartPanel.getScene().getRoot(), 
+                                        activeReport.getReportButtonName(), lstFilteredData);
+                                dialog.setVisible(true);
+                            }
+                        });
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace(System.err);
+                    }
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace(System.err);
-                }
-            }
-        });
+            });
+        }
     }//GEN-LAST:event_bntExportActionPerformed
 
     private void btnFilterElementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterElementActionPerformed
