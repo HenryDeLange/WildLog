@@ -28,7 +28,6 @@ import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.enums.ActiveTime;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
-import wildlog.ui.reports.implementations.helpers.PieChartChangeListener;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
 import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
@@ -42,7 +41,6 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     
     public DayAndNightChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Day and Night Cycles Reports", inLstData, inChartDescLabel);
-//        "<html>This collection of charts focus on day and night cycle of Observations.</html>"
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
         Button btnPieChart = new Button("Pie Chart");
@@ -51,29 +49,27 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                
+                setupChartDescriptionLabel("<html>123123</html>");
             }
         });
         lstCustomButtons.add(btnPieChart);
-        // Area/Line Chart
         Button btnLineAllChart = new Button("Line Chart");
         btnLineAllChart.setCursor(Cursor.HAND);
         btnLineAllChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                
+                setupChartDescriptionLabel("<html>123123</html>");
             }
         });
         lstCustomButtons.add(btnLineAllChart);
-        // Area/Line Chart
         Button btnLineCreatureChart = new Button("Stacked Line Chart");
         btnLineCreatureChart.setCursor(Cursor.HAND);
         btnLineCreatureChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.STACKED_LINE_CHART;
-                
+                setupChartDescriptionLabel("<html>123123</html>");
             }
         });
         lstCustomButtons.add(btnLineCreatureChart);
@@ -147,11 +143,11 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             PieChart.Data data = new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
-            data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_DAY_NIGHT_TWILIGHT));
+//            data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_DAY_NIGHT_TWILIGHT));
             chartData.add(data);
         }
         // Setup chart
-        PieChart chart = new PieChart(chartData);
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;
@@ -159,7 +155,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     
     private Chart createLineChartForAll(List<Sighting> inSightings) {
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         // Sort sightings (by date)
         Collections.sort(inSightings);
         // Get the data in the correct structure
@@ -227,7 +223,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     
     private Chart createStackedChartForAll(List<Sighting> inSightings) {
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         // Sort sightings (by date)
         Collections.sort(inSightings);
         // Get the data in the correct structure
@@ -297,7 +293,6 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
     //    Dit is nog nie regtig handig nie, en dis misleidend omdat die punte aand die einde 'n kleiner impak het op die 
     //    grafiek as die eerste punte. Basies begin die storie net uit-average en 'n mens verloor die impak van klein veranderings oor
     //    tyd. Dit is maklikker om die pie chart en line chart te gebruik en te filter op datums en dan die grafieke te vergelyk...
-    
 //    private Chart create100PercentStackedChartForAll(List<Sighting> inSightings) {
 //        NumberAxis axisY = new NumberAxis();
 //        axisY.setLabel("Number of Observations");

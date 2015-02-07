@@ -42,7 +42,7 @@ import wildlog.utils.WildLogPaths;
 public class WorkspaceImportDialog extends javax.swing.JDialog {
     private WildLogApp app;
     private Path importWorkspace;
-    WildLogDBI importDBI = null;
+    private WildLogDBI importDBI = null;
 
 
     public WorkspaceImportDialog(WildLogApp inApp, Path inImportPath) {

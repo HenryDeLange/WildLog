@@ -36,17 +36,7 @@ public class VisitChart extends AbstractReport<Sighting> {
         super("Period Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(2);
         // Pie charts
-        Button btnPieChartType = new Button("Observations per Period Type");
-        btnPieChartType.setCursor(Cursor.HAND);
-        btnPieChartType.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.PIE_CHART_TYPE;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Period Type.</html>");
-            }
-        });
-        lstCustomButtons.add(btnPieChartType);
-        Button btnPieChartName = new Button("Observations per Period");
+        Button btnPieChartName = new Button("Observations per Period (Pie)");
         btnPieChartName.setCursor(Cursor.HAND);
         btnPieChartName.setOnAction(new EventHandler() {
             @Override
@@ -56,6 +46,16 @@ public class VisitChart extends AbstractReport<Sighting> {
             }
         });
         lstCustomButtons.add(btnPieChartName);
+        Button btnPieChartType = new Button("Observations per Period Type (Pie)");
+        btnPieChartType.setCursor(Cursor.HAND);
+        btnPieChartType.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.PIE_CHART_TYPE;
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Period Type.</html>");
+            }
+        });
+        lstCustomButtons.add(btnPieChartType);
     }
 
     @Override

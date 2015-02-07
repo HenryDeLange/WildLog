@@ -36,46 +36,47 @@ import wildlog.ui.utils.UtilsTime;
 
 public class SightingStatsChart extends AbstractReport<Sighting> {
     private enum ChartType {NUMBER_PER_SIGHTING_CHART, SUBSEQUENT_CHART, SIGHTINGS_PER_DAY_CHART};
+    private final RadioButton chkAve;
+    private final RadioButton chkMax;
     private ChartType chartType = ChartType.NUMBER_PER_SIGHTING_CHART;
     private Chart displayedChart;
-    private RadioButton chkAve;
-    private RadioButton chkMax;
+    
       
     
     public SightingStatsChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Observation Statistics Reports", inLstData, inChartDescLabel);
-//        "<html>This collection of charts focus on statistics of the Observations.</html>"
         lstCustomButtons = new ArrayList<>(6);
-        // Bar chart
-        Button btnElementPerSightingBarChart = new Button("Number of Individuals");
+        // Bar charts
+        Button btnElementPerSightingBarChart = new Button("Number of Individuals (Bar)");
         btnElementPerSightingBarChart.setCursor(Cursor.HAND);
         btnElementPerSightingBarChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.NUMBER_PER_SIGHTING_CHART;
-                
+                setupChartDescriptionLabel("<html>This chart shows the maximum/average number of individuals recorded in the Observation record for each of the listed Creatures."
+                        + "<br/>Note: Only Observation records with data values are taken into account (the record must have more than 0 number of individuals recorded).</html>");
             }
         });
         lstCustomButtons.add(btnElementPerSightingBarChart);
-        // Bar chart
-        Button btnSightingsPerDayBarChart = new Button("Observations per Day");
+        Button btnSightingsPerDayBarChart = new Button("Observations per Day (Bar)");
         btnSightingsPerDayBarChart.setCursor(Cursor.HAND);
         btnSightingsPerDayBarChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.SIGHTINGS_PER_DAY_CHART;
-                
+                setupChartDescriptionLabel("<html>This chart shows the maximum/average number of Observations recorded during a full day-night cycle for each of the listed Creatures. "
+                        + "<br/>(A day-night cycle starts at dawn and continues throughout the day into the night and ends at the next dawn.)</html>");
             }
         });
         lstCustomButtons.add(btnSightingsPerDayBarChart);
-        // Bar chart
-        Button btnSightingChanceBarChart = new Button("Subsequent Observations");
+        Button btnSightingChanceBarChart = new Button("Subsequent Observations (Bar)");
         btnSightingChanceBarChart.setCursor(Cursor.HAND);
         btnSightingChanceBarChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.SUBSEQUENT_CHART;
-                
+                setupChartDescriptionLabel("<html>This chart shows the percentage of full day-night cycles with more than one Observation for each of the listed Creatures. "
+                        + "<br/>(A day-night cycle starts at dawn and continues throughout the day into the night and ends at the next dawn.)</html>");
             }
         });
         lstCustomButtons.add(btnSightingChanceBarChart);
@@ -87,7 +88,6 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         chkAve.setCursor(Cursor.HAND);
         chkAve.setSelected(true);
         lstCustomButtons.add(chkAve);
-        // Maximum
         chkMax = new RadioButton("Maximum");
         chkMax.setToggleGroup(toggleGroup);
         chkMax.setCursor(Cursor.HAND);
@@ -95,7 +95,6 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         lstCustomButtons.add(chkMax);
 // TODO: Sit dalk nog 'n "mode" (nee dis nie regtig mode waarvoor ek soek nie) ook by, dit sal dalk resultate gee wat meer sin maak vir goed soos buffels wat normaalweg net 1-5 is, maar soms 200+
 // TODO: SO verander die radiobuttons dalk in 'n combobox met opsies Max, Average (Mean), Most Frequent Value (Mode) en Significt Frequency Distribution (The more time a value is present the more relevant it becomes)
-
     }
 
     @Override
@@ -166,9 +165,13 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         if (chkAve.isSelected()) {
             indicator = "Average ";
         }
-        UtilsReports.setupNumberAxis(numAxis, indicator + "number of individual Creatures seen per Observation");
-        CategoryAxis yAxis = new CategoryAxis();
-        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, yAxis, lstFinalChartDataSeries);
+        UtilsReports.setupNumberAxis(numAxis, true);
+        CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, mapElemNum.size(), false);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, catAxis, lstFinalChartDataSeries);
+        chart.getStyleClass().add("wl-bar-single-color");
+        chart.setLegendVisible(false);
+        chart.setTitle(indicator + "number of individuals seen per Observation");
         return chart;
     }
     
@@ -257,9 +260,13 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
         if (chkAve.isSelected()) {
             indicator = "Average ";
         }
-        UtilsReports.setupNumberAxis(numAxis, indicator + "number of Observations per day-night cycle");
-        CategoryAxis yAxis = new CategoryAxis();
-        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, yAxis, lstFinalChartDataSeries);
+        UtilsReports.setupNumberAxis(numAxis, true);
+        CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, mapElemCount.size(), false);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, catAxis, lstFinalChartDataSeries);
+        chart.getStyleClass().add("wl-bar-single-color");
+        chart.setLegendVisible(false);
+        chart.setTitle(indicator + "number of Observations per day-night cycle");
         return chart;
     }
     
@@ -335,7 +342,6 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 lstCountForElements));
         // Setup the axis and chart
         NumberAxis numAxis = new NumberAxis(0, 100, 10);
-        String indicator = "";
         numAxis.setTickLabelFormatter(new StringConverter<Number>() {
             @Override
             public String toString(Number object) {
@@ -346,9 +352,13 @@ public class SightingStatsChart extends AbstractReport<Sighting> {
                 return Integer.parseInt(string.substring(0, string.length() - 1));
             }
         });
-        UtilsReports.setupNumberAxis(numAxis, indicator + "Chance of subsequent Observations per day-night cycle");
-        CategoryAxis yAxis = new CategoryAxis();
-        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, yAxis, lstFinalChartDataSeries);
+        UtilsReports.setupNumberAxis(numAxis, true);
+        CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, mapElemCount.size(), false);
+        BarChart<Number, String> chart = new BarChart<Number, String>(numAxis, catAxis, lstFinalChartDataSeries);
+        chart.getStyleClass().add("wl-bar-single-color");
+        chart.setLegendVisible(false);
+        chart.setTitle("Percentage of day-night cycles with multiple Observations");
         return chart;
     }
 

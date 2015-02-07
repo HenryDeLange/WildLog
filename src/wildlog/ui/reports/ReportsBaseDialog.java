@@ -58,8 +58,6 @@ public class ReportsBaseDialog extends JFrame {
     private AbstractReport activeReport = null;
 
     
-// TODO: Add option to switch between Primary and Other names that get displayed for the creatures
-    
     public ReportsBaseDialog(String inTitle, List<Sighting> inSightings) {
         super(inTitle);
         lstOriginalData = inSightings;
@@ -177,7 +175,7 @@ public class ReportsBaseDialog extends JFrame {
 
         pnlReportsAndFilters.setBackground(new java.awt.Color(179, 198, 172));
         pnlReportsAndFilters.setMinimumSize(new java.awt.Dimension(200, 500));
-        pnlReportsAndFilters.setPreferredSize(new java.awt.Dimension(240, 500));
+        pnlReportsAndFilters.setPreferredSize(new java.awt.Dimension(250, 500));
 
         pnlReports.setBackground(new java.awt.Color(179, 198, 172));
         pnlReports.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Types", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));

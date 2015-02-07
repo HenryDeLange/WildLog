@@ -137,7 +137,7 @@ public class EventineChart extends AbstractReport<Sighting> {
         chartData.add(new AreaChart.Series<String, Number>("Observations (" + lstData.size() + ")", allSightings));
         // Setup chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList());
 //        catAxis.setTickLabelRotation(-90);
@@ -195,7 +195,7 @@ public class EventineChart extends AbstractReport<Sighting> {
         }
         // Setup chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList());
         catAxis.setTickLabelFont(Font.font(12));

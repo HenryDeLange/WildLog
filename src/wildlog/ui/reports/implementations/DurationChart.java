@@ -134,7 +134,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         chartData.add(new AreaChart.Series<String, Number>("Observations (" + lstData.size() + ")", allSightings));
         // Setup chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList(maxMinutes));
         catAxis.setTickLabelFont(Font.font(12));
@@ -195,7 +195,7 @@ public class DurationChart extends AbstractReport<Sighting> {
         }
         // Setup chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(getAllTimesAsList(maxMinutes));
         catAxis.setTickLabelFont(Font.font(12));

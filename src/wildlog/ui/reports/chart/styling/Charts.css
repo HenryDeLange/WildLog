@@ -35,6 +35,83 @@
 }
 
 
+// ------ STYLE: wl-bar-30-color ------
+// Bar Chart using 30 bar colors
+.wl-bar-30-color .chart-bar {
+    -fx-background-radius: 3 3 0 0;
+}
+.wl-bar-30-color .chart-plot-background {
+    -fx-background-color: transparent;
+}
+.wl-bar-30-color .chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.wl-bar-30-color .chart-vertical-grid-lines {
+    visibility: hidden;
+}
+.wl-bar-30-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-bar-30-color .axis {
+    -fx-minor-tick-visible: false;
+}
+.wl-bar-30-color .axis-label {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.2em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-bar-30-color .chart-legend {
+    -fx-background-color: transparent;
+}
+// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
+// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+.default-color0.chart-bar  { -fx-bar-fill: #5E8325; }
+.default-color1.chart-bar  { -fx-bar-fill: #1D643E; }
+.default-color2.chart-bar  { -fx-bar-fill: #22355F; }
+.default-color3.chart-bar  { -fx-bar-fill: #481F5F; }
+.default-color4.chart-bar  { -fx-bar-fill: #772249; }
+.default-color5.chart-bar  { -fx-bar-fill: #8E3428; }
+.default-color6.chart-bar  { -fx-bar-fill: #E28E44; }
+.default-color7.chart-bar  { -fx-bar-fill: #8E8428; }
+// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+.data0.chart-bar  { -fx-bar-fill: #5E8325; }
+.data1.chart-bar  { -fx-bar-fill: #1D643E; }
+.data2.chart-bar  { -fx-bar-fill: #22355F; }
+.data3.chart-bar  { -fx-bar-fill: #481F5F; }
+.data4.chart-bar  { -fx-bar-fill: #772249; }
+.data5.chart-bar  { -fx-bar-fill: #8E3428; }
+.data6.chart-bar  { -fx-bar-fill: #E28E44; }
+.data7.chart-bar  { -fx-bar-fill: #8E8428; }
+.data8.chart-bar  { -fx-bar-fill: #A1D059; }
+.data9.chart-bar  { -fx-bar-fill: #44A06F; }
+.data10.chart-bar { -fx-bar-fill: #4A6197; }
+.data11.chart-bar { -fx-bar-fill: #7A4597; }
+.data12.chart-bar { -fx-bar-fill: #BE5183; }
+.data13.chart-bar { -fx-bar-fill: #E26F60; }
+.data14.chart-bar { -fx-bar-fill: #E2BB60; }
+.data15.chart-bar { -fx-bar-fill: #E2D560; }
+.data16.chart-bar { -fx-bar-fill: #B8DE63; }
+.data17.chart-bar { -fx-bar-fill: #7EB9C3; }
+.data18.chart-bar { -fx-bar-fill: #709DC6; }
+.data19.chart-bar { -fx-bar-fill: #9E81D3; }
+.data20.chart-bar { -fx-bar-fill: #E8A0C1; }
+.data21.chart-bar { -fx-bar-fill: #FFBAB1; }
+.data22.chart-bar { -fx-bar-fill: #FFE8B1; }
+.data23.chart-bar { -fx-bar-fill: #FFF7B1; }
+.data24.chart-bar { -fx-bar-fill: #BEDA41; }
+.data25.chart-bar { -fx-bar-fill: #89C786; }
+.data26.chart-bar { -fx-bar-fill: #8E93CF; }
+.data27.chart-bar { -fx-bar-fill: #4C3E69; }
+.data28.chart-bar { -fx-bar-fill: #625B15; }
+.data29.chart-bar { -fx-bar-fill: #B94F41; }
+
+
 // ------ STYLE: wl-bar-custom-color ------
 // Bar Chart using one series and a custom bar color defined dynamically in the code
 .wl-bar-custom-color .chart-bar {

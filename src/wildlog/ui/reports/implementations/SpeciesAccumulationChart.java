@@ -96,7 +96,7 @@ public class SpeciesAccumulationChart extends AbstractReport<Sighting> {
 //        lstChartData.add(new AreaChart.Data<>(endTime + tick/3, counter - 1, ""));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Creatures");
+        UtilsReports.setupNumberAxis(numAxis, false);
 //        NumberAxis dateAxis = new NumberAxis(startTime - tick/10, endTime + tick/10, tick);
         NumberAxis dateAxis = new NumberAxis();
         dateAxis.setAutoRanging(true);

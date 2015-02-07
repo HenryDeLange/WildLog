@@ -111,14 +111,15 @@ public final class UtilsReports {
         });
     }
     
-    public static void setupNumberAxis(NumberAxis inNumAxism, String inLabel) {
-//        inNumAxism.setLabel(inLabel);
-        inNumAxism.setAutoRanging(true);
+    public static void setupNumberAxis(NumberAxis inNumAxism, boolean inSetSizeOnly) {
         inNumAxism.setTickLabelFont(Font.font(14));
-        inNumAxism.setTickLabelFormatter(new IntegerTickLabelFormatter());
+        if (!inSetSizeOnly) {
+            inNumAxism.setAutoRanging(true);
+            inNumAxism.setTickLabelFormatter(new IntegerTickLabelFormatter());
+        }
     }
     
-    public static void setupCategoryAxis(CategoryAxis inCategoryAxis, int inNumberOfCategories) {
+    public static void setupCategoryAxis(CategoryAxis inCategoryAxis, int inNumberOfCategories, boolean inRotateText) {
         // Setup the label size based onthe number of entries
         if (inNumberOfCategories < 10) {
             inCategoryAxis.setTickLabelFont(Font.font(14));
@@ -131,13 +132,13 @@ public final class UtilsReports {
             inCategoryAxis.setTickLabelFont(Font.font(10));
         }
         // Rotate the text if to many are being shown
-        if (inNumberOfCategories > 30) {
+        if (inRotateText && inNumberOfCategories > 30) {
             inCategoryAxis.setTickLabelRotation(-90);
         }
     }
     
     public static PieChart createPieChartWithStyleIndexReset(ObservableList<PieChart.Data> inLstData) {
-        // FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
+        // FIXME: FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
         // andersins begin dit die default kleure gebruik nadat ek 'n paar keer 'n pie chart laai...
         PieChart chart = new PieChart();
         try {

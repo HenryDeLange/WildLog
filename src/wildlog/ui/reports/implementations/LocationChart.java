@@ -45,7 +45,7 @@ public class LocationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART_SIGHITNGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Place.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations that have been recorded at each Place as a pie chart.</html>");
             }
         });
         lstCustomButtons.add(btnPieChartSightings);
@@ -56,17 +56,17 @@ public class LocationChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_SIGHITNGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Place.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations that have been recorded at each Place as a bar chart.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
-        Button btnBarChartElements = new Button("Creatures per Place");
+        Button btnBarChartElements = new Button("Creatures per Place (Bar)");
         btnBarChartElements.setCursor(Cursor.HAND);
         btnBarChartElements.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ELEMENTS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Creatures per Place.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Creatures (species) that have been observed at each Place.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartElements);
@@ -117,9 +117,9 @@ public class LocationChart extends AbstractReport<Sighting> {
         chartData.add(new BarChart.Series<String, Number>("Places (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
-        UtilsReports.setupCategoryAxis(catAxis, mapData.size());
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
@@ -149,9 +149,9 @@ public class LocationChart extends AbstractReport<Sighting> {
         chartData.add(new BarChart.Series<String, Number>("Places (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Creatures");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
-        UtilsReports.setupCategoryAxis(catAxis, mapData.size());
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);

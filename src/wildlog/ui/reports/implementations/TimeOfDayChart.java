@@ -19,7 +19,6 @@ import javafx.scene.chart.Chart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
 import javax.swing.JLabel;
 import wildlog.data.dataobjects.Sighting;
@@ -37,38 +36,37 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
     
     public TimeOfDayChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Time of Day Reports", inLstData, inChartDescLabel);
-        lstCustomButtons = new ArrayList<>(7);
-        // All Observations
-        lstCustomButtons.add(new Label("Time of Day for All Observations:"));
-        Button btnPieChart = new Button("Pie Chart (For All)");
+        lstCustomButtons = new ArrayList<>(4);
+        // Pie charts
+        Button btnPieChart = new Button("Observation Time of Day (Pie)");
         btnPieChart.setCursor(Cursor.HAND);
         btnPieChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category as a pie chart.</html>");
             }
         });
         lstCustomButtons.add(btnPieChart);
-        Button btnBarChart = new Button("Bar Chart (For All)");
+        // Bar charts
+        Button btnBarChart = new Button("Observation Time of Day (Bar)");
         btnBarChart.setCursor(Cursor.HAND);
         btnBarChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations for each Time Of Day category as a bar chart.</html>");
             }
         });
         lstCustomButtons.add(btnBarChart);
-        // Per Creature
-        lstCustomButtons.add(new Label("Time of Day per Creature:"));
-        Button btnLineChart = new Button("Line Chart (Per Creature)");
+        // Line charts
+        Button btnLineChart = new Button("Creature Time of Day (Line)");
         btnLineChart.setCursor(Cursor.HAND);
         btnLineChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature for every Time Of Day category.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature for every Time Of Day category as a line chart.</html>");
             }
         });
         lstCustomButtons.add(btnLineChart);
@@ -138,11 +136,11 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis(0, (int)(maxCount*1.2), maxCount/10);
 // FIXME: Autoranging kap soms die boonste getalletjie af...??
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         List<String> lstActiveTimeSpesific = ActiveTimeSpesific.getEnumListAsString();
         catAxis.setCategories(FXCollections.<String>observableArrayList(lstActiveTimeSpesific));
-        UtilsReports.setupCategoryAxis(catAxis, lstActiveTimeSpesific.size());
+        UtilsReports.setupCategoryAxis(catAxis, lstActiveTimeSpesific.size(), true);
         catAxis.setTickLabelRotation(-90);
         chartData.add(new BarChart.Series<String, Number>("Observations (" + allSightings.size() + ")", allSightings));
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
@@ -293,10 +291,10 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         }
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
         catAxis.setCategories(FXCollections.<String>observableArrayList(lstActiveTimeSpesific));
-        UtilsReports.setupCategoryAxis(catAxis, lstActiveTimeSpesific.size());
+        UtilsReports.setupCategoryAxis(catAxis, lstActiveTimeSpesific.size(), true);
         catAxis.setTickLabelRotation(-90);
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-line-30-color");

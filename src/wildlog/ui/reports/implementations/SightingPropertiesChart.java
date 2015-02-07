@@ -1,6 +1,5 @@
 package wildlog.ui.reports.implementations;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ import wildlog.data.dataobjects.Sighting;
 import wildlog.data.utils.UtilsData;
 import wildlog.ui.reports.implementations.helpers.AbstractReport;
 import wildlog.ui.reports.implementations.helpers.ReportDataWrapper;
+import wildlog.ui.reports.utils.UtilsReports;
 
 
 public class SightingPropertiesChart extends AbstractReport<Sighting> {
@@ -34,7 +34,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
     private ChartType chartType;
     private Chart displayedChart;
     private final ComboBox<String> cmbCategories;
-    private final String[] options = new String[] {"Number Observed", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type"};
+    private final String[] options = new String[] {"Number of Individuals", "Sex", "Age", "Life Status", "Evidence", "Certainty", "Rating", "Info Tag", "Creature Type"};
     private Scene scene = null;
     
     
@@ -60,7 +60,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
             public void changed(ObservableValue<? extends Boolean> inObservable, Boolean inWasShowing, Boolean inIsShowing) {
                 if (!inIsShowing && !cmbCategories.getSelectionModel().isEmpty()) {
                     chartType = ChartType.PIE_CHART;
-                    setupChartDescriptionLabel("<html>This collection of charts focuses on the ratio of Observations for the selected category.</html>");
+                    setupChartDescriptionLabel("<html>These charts will display a pie chart with the number of Observations for each of the entries of the selected category.</html>");
                     createReport(scene);
                 }
             }
@@ -92,7 +92,7 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         for (Sighting sighting : inSightings) {
             String categoryValue = null;
             if (cmbCategories.getSelectionModel().getSelectedItem().equals(options[0])) {
-                categoryValue = Integer.toString(sighting.getNumberOfElements()) + " Observations";
+                categoryValue = "Observed " + Integer.toString(sighting.getNumberOfElements()) + " individuals";
                 title = "Number of Observations with the specified Number of Individuals";
             }
             else
@@ -158,25 +158,10 @@ public class SightingPropertiesChart extends AbstractReport<Sighting> {
         Collections.sort(keys);
         for (String key : keys) {
             PieChart.Data data = new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
-//            data.nodeProperty().addListener(new PieChartChangeListener<>(chartData.size(), UtilsReports.COLOURS_30));
             chartData.add(data);
         }
-        PieChart chart = new PieChart();
-        // Set the stylesheet to use
-        chart.getStylesheets().add("/wildlog/ui/reports/chart/styling/Charts.css");
-        // FOKKEN BELAGLIKKE HACK: Ek moet reflection gebruik om te kry dat elke nuwe donnerse chart se stylesheet index weer by 0 begin, 
-        // andersins begin dit die default kleure gebruik nadat ek 'n paar keer 'n ander chart select het...
-// TODO: Die CSS stel die spesifieke data kleure, maar moet ek nie dalk eerder die default kleure stel nie, en dan sal die code hier onder dalk nie meer nodig wees nie??
-        try {
-            Class<PieChart> cls = PieChart.class;
-            Field f = cls.getDeclaredField("uniqueId");
-            f.setAccessible(true);
-            f.setInt(chart, 0);
-        } 
-        catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        chart.setData(chartData);
+        PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
+        chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle(title);
         return chart;
     }

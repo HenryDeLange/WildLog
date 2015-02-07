@@ -42,26 +42,26 @@ public class ElementsChart extends AbstractReport<Sighting> {
         super("Creature Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Pie charts
+        Button btnPieChartElementTypes = new Button("Creatures per Type (Pie)");
+        btnPieChartElementTypes.setCursor(Cursor.HAND);
+        btnPieChartElementTypes.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.PIE_CHART_ELEMENT_TYPES;
+                setupChartDescriptionLabel("<html>This chart shows the number of Creatures (species) that have been observed for each Creature Type.</html>");
+            }
+        });
+        lstCustomButtons.add(btnPieChartElementTypes);
         Button btnPieChartSightings = new Button("Observations per Creature (Pie)");
         btnPieChartSightings.setCursor(Cursor.HAND);
         btnPieChartSightings.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART_SIGHTINGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature as a pie chart.</html>");
             }
         });
         lstCustomButtons.add(btnPieChartSightings);
-        Button btnPieChartElementTypes = new Button("Creatures per Creature Type (Pie)");
-        btnPieChartElementTypes.setCursor(Cursor.HAND);
-        btnPieChartElementTypes.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.PIE_CHART_ELEMENT_TYPES;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature Type.</html>");
-            }
-        });
-        lstCustomButtons.add(btnPieChartElementTypes);
         // Bar charts
         Button btnBarChartSightings = new Button("Observations per Creature (Bar)");
         btnBarChartSightings.setCursor(Cursor.HAND);
@@ -69,7 +69,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_SIGHTINGS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Observations per Creature.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations of each Creature as a bar chart.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartSightings);
@@ -79,7 +79,7 @@ public class ElementsChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_LOCATIONS;
-                setupChartDescriptionLabel("<html>This chart shows the number of Places per Creature.</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Places where a Creature has been observed.</html>");
             }
         });
         lstCustomButtons.add(btnBarChartElements);
@@ -134,9 +134,9 @@ public class ElementsChart extends AbstractReport<Sighting> {
         chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Observations");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
-        UtilsReports.setupCategoryAxis(catAxis, mapData.size());
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
@@ -166,9 +166,9 @@ public class ElementsChart extends AbstractReport<Sighting> {
         chartData.add(new BarChart.Series<String, Number>("Creatures (" + mapData.keySet().size() + ")", allSightings));
         // Setup axis and chart
         NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, "Number of Places");
+        UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
-        UtilsReports.setupCategoryAxis(catAxis, mapData.size());
+        UtilsReports.setupCategoryAxis(catAxis, mapData.size(), true);
         BarChart<String, Number> chart = new BarChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-bar-single-color");
         chart.setLegendVisible(false);
