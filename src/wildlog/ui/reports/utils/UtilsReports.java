@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -143,9 +144,9 @@ public final class UtilsReports {
         PieChart chart = new PieChart();
         try {
             Class<PieChart> cls = PieChart.class;
-            Field f = cls.getDeclaredField("uniqueId");
-            f.setAccessible(true);
-            f.setInt(chart, 0);
+            Field field = cls.getDeclaredField("uniqueId");
+            field.setAccessible(true);
+            field.setInt(chart, 0);
         } 
         catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
             e.printStackTrace();
@@ -154,4 +155,30 @@ public final class UtilsReports {
         return chart;
     }
 
+    public static StackedBarChart createStackedBarChartWithStyleIndexBiggerThanEight(CategoryAxis inCategoryAxis, NumberAxis inNumberAxis,
+            ObservableList<StackedBarChart.Series<String, Number>> inLstData) {
+        // FIXME: FOKKEN BELAGLIKKE HACK: Die legend se style kleure word gehardcode na mod 8, nou moet ek met reflection dit fix...
+        StackedBarChart chart = new StackedBarChart(inCategoryAxis, inNumberAxis, inLstData) {
+            private int fixer = 0;
+            @Override
+            protected void seriesAdded(XYChart.Series series, int seriesIndex) {
+                super.seriesAdded(series, seriesIndex);
+                // Overwrite the default style that was added
+                String fixedDefaultColorStyleClass = "data" + (fixer % 8);
+                fixer++;
+                try {
+                    Class<StackedBarChart> cls = StackedBarChart.class;
+                    Field field = cls.getDeclaredField("seriesDefaultColorMap");
+                    field.setAccessible(true);
+                    Map<XYChart.Series, String> seriesDefaultColorMap = (Map<XYChart.Series, String>) field.get(this);
+                    seriesDefaultColorMap.put(series, fixedDefaultColorStyleClass);
+                } 
+                catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        return chart;
+    }
+    
 }

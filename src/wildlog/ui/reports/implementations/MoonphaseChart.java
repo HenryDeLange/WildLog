@@ -48,55 +48,59 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
     public MoonphaseChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Moon Phase Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(9);
-        // Moonphase charts
-        Button btnLineChart = new Button("Bar Chart (For All)");
-        btnLineChart.setCursor(Cursor.HAND);
-        btnLineChart.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.BAR_CHART_ALL;
-                setupChartDescriptionLabel("<html>1111111"
-                        + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
-            }
-        });
-        lstCustomButtons.add(btnLineChart);
-        Button btnBarChart = new Button("Line Chart (For All)");
-        btnBarChart.setCursor(Cursor.HAND);
-        btnBarChart.setOnAction(new EventHandler() {
-            @Override
-            public void handle(Event event) {
-                chartType = ChartType.LINE_CHART_ALL;
-                setupChartDescriptionLabel("<html>1111111</html>");
-            }
-        });
-        lstCustomButtons.add(btnBarChart);
-        Button btnPieChart = new Button("Pie Chart (For All)");
+        // Charts
+        Button btnPieChart = new Button("All Observations Together (Pie)");
         btnPieChart.setCursor(Cursor.HAND);
         btnPieChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>1111111</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase as a pie chart."
+                        + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
         lstCustomButtons.add(btnPieChart);
-        Button btnStackedBarChart = new Button("Bar Chart (Per Creature)");
+        Button btnLineChart = new Button("All Observations Together (Bar)");
+        btnLineChart.setCursor(Cursor.HAND);
+        btnLineChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.BAR_CHART_ALL;
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase as a bar chart."
+                        + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
+            }
+        });
+        lstCustomButtons.add(btnLineChart);
+        Button btnBarChart = new Button("All Observations Together (Line)");
+        btnBarChart.setCursor(Cursor.HAND);
+        btnBarChart.setOnAction(new EventHandler() {
+            @Override
+            public void handle(Event event) {
+                chartType = ChartType.LINE_CHART_ALL;
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during a certain Moon Phase as a line chart."
+                        + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
+            }
+        });
+        lstCustomButtons.add(btnBarChart);
+        Button btnStackedBarChart = new Button("Grouped by Creatures (Bar)");
         btnStackedBarChart.setCursor(Cursor.HAND);
         btnStackedBarChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.BAR_CHART_ELEMENTS;
-                setupChartDescriptionLabel("<html>1111111</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Creature during a certain Moon Phase as a bar chart."
+                        + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
         lstCustomButtons.add(btnStackedBarChart);
-        Button btnBarChart2 = new Button("Line Chart (Per Creature)");
+        Button btnBarChart2 = new Button("Grouped by Creatures (Line)");
         btnBarChart2.setCursor(Cursor.HAND);
         btnBarChart2.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART_ELEMENTS;
-                setupChartDescriptionLabel("<html>1111111</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded for each Creature during a certain Moon Phase as a bar chart."
+                        + "<br/>(The phase and visibilaty of the moon isn't tied to the sun and can be visible during the day or night.)</html>");
             }
         });
         lstCustomButtons.add(btnBarChart2);
@@ -109,18 +113,16 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             @Override
             public void handle(Event event) {
                 showDayOrNight = chkShowDetails.isSelected();
-                setupChartDescriptionLabel("<html>1111111</html>");
             }
         });
         lstCustomButtons.add(chkShowDetails);
-        CheckBox chkShowMoonlight = new CheckBox("Show Moonlight");
+        CheckBox chkShowMoonlight = new CheckBox("Show Moon Shining/No Moon");
         chkShowMoonlight.setCursor(Cursor.HAND);
         chkShowMoonlight.setSelected(false);
         chkShowMoonlight.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 showMoonShiningOrNot = chkShowMoonlight.isSelected();
-                setupChartDescriptionLabel("<html>1111111</html>");
             }
         });
         lstCustomButtons.add(chkShowMoonlight);
@@ -133,11 +135,11 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
             public void run() {
                 displayedChart = null;
                 if (chartType.equals(ChartType.BAR_CHART_ALL)) {
-                    displayedChart = createBarChartForAll(lstData);
+                    displayedChart = createBarChart(lstData, true);
                 }
                 else
                 if (chartType.equals(ChartType.BAR_CHART_ELEMENTS)) {
-                    displayedChart = createBarChartForElements(lstData);
+                    displayedChart = createBarChart(lstData, false);
                 }
                 else
                 if (chartType.equals(ChartType.LINE_CHART_ALL)) {
@@ -157,22 +159,29 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         });
     }
     
-    private Chart createBarChartForAll(List<Sighting> inSightings) {
+    private Chart createBarChart(List<Sighting> inSightings, boolean inIsForAllObservations) {
         // Build the data map that will be displayed
-        Map<String, ObservableList<StackedBarChart.Data<String, Number>>> mapChartDataGroupedForSeries = new HashMap<>();
+        Map<String, Map<String, ReportDataWrapper>> mapChartDataGroupedForSeries = new HashMap<>();
+        String temp = null;
+        if (inIsForAllObservations) {
+            temp = "All Observations";
+        }
         for (Sighting sighting : inSightings) {
-            ObservableList<StackedBarChart.Data<String, Number>> lstChartData = mapChartDataGroupedForSeries.get("All Observations" + getDetailsString(sighting));
-            if (lstChartData == null) {
-                lstChartData = FXCollections.observableArrayList();
-                mapChartDataGroupedForSeries.put("All Observations" + getDetailsString(sighting), lstChartData);
+            if (!inIsForAllObservations) {
+                temp = sighting.getElementName();
+            }
+            Map<String, ReportDataWrapper> mapChartData = mapChartDataGroupedForSeries.get(temp + getDetailsString(sighting));
+            if (mapChartData == null) {
+                mapChartData = new HashMap<>();
+                mapChartDataGroupedForSeries.put(temp + getDetailsString(sighting), mapChartData);
             }
             if (sighting.getMoonPhase() >= 0) {
                 if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
-                    lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 0-50% Full", 1));
+                    increaseCountInMap(mapChartData, "Moon 0-50% Full");
                 } 
                 else
                 if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
-                    lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 50-100% Full", 1));
+                    increaseCountInMap(mapChartData, "Moon 50-100% Full");
                 } 
                 else
                 // If the moon is 50% then base it on whether the moon is growing or shrinking.
@@ -180,22 +189,22 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
                     LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
                     int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
                     if (testMoonphase >= 0 && testMoonphase < 50) {
-                        lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 0-50% Full", 1));
+                        increaseCountInMap(mapChartData, "Moon 0-50% Full");
                     } 
                     else
                     if (testMoonphase > 50 && testMoonphase <= 100) {
-                        lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 50-100% Full", 1));
+                        increaseCountInMap(mapChartData, "Moon 50-100% Full");
                     } 
                     else {
-                        lstChartData.add(new StackedBarChart.Data<String, Number>("Unknown", 1));
+                        increaseCountInMap(mapChartData, "Unknown");
                     }
                 }
                 else {
-                    lstChartData.add(new StackedBarChart.Data<String, Number>("Unknown", 1));
+                    increaseCountInMap(mapChartData, "Unknown");
                 }
             }
             else {
-                lstChartData.add(new StackedBarChart.Data<String, Number>("Unknown", 1));
+                increaseCountInMap(mapChartData, "Unknown");
             }
         }
         // Setup the final data series to be displayed
@@ -203,9 +212,15 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         List<String> keys = new ArrayList<>(mapChartDataGroupedForSeries.keySet());
         Collections.sort(keys);
         for (String key : keys) {
-            StackedBarChart.Series<String, Number> series = new StackedBarChart.Series<String, Number>(
-                    key + " (" + mapChartDataGroupedForSeries.get(key).size() + ")", 
-                    mapChartDataGroupedForSeries.get(key));
+            StackedBarChart.Series<String, Number> series = new StackedBarChart.Series<String,Number>();
+            Map<String, ReportDataWrapper> mapChartData = mapChartDataGroupedForSeries.get(key);
+            int total = 0;
+            for (String mapKey : mapChartData.keySet()) {
+                int count = mapChartData.get(mapKey).count;
+                total = total + count;
+                series.getData().add(new StackedBarChart.Data<String, Number>(mapKey, count));
+            }
+            series.setName(key + " (" + total + ")");
             lstChartSeries.add(series);
         }
         // Setup axis and chart
@@ -214,11 +229,19 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         CategoryAxis catAxis = new CategoryAxis();
         UtilsReports.setupCategoryAxis(catAxis, 3, true);
         catAxis.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
-        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(catAxis, numAxis, lstChartSeries);
-        chart.getStyleClass().add("wl-bar-30-color");
-        chart.setLegendVisible(false);
+        StackedBarChart<String, Number> chart = UtilsReports.createStackedBarChartWithStyleIndexBiggerThanEight(catAxis, numAxis, lstChartSeries);
+        chart.getStyleClass().add("wl-stacked-bar-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
         return chart;
+    }
+    
+    private void increaseCountInMap(Map<String, ReportDataWrapper> inMap, String inKey) {
+        ReportDataWrapper dataWrapper = inMap.get(inKey);
+        if (dataWrapper == null) {
+            dataWrapper = new ReportDataWrapper(inKey, inKey, 0);
+            inMap.put(inKey, dataWrapper);
+        }
+        dataWrapper.increaseCount();
     }
     
     private Chart createPieChart(List<Sighting> inSightings) {
@@ -276,66 +299,6 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
         chart.getStyleClass().add("wl-pie-30-color");
         chart.setTitle("Number of Observations for each Moon Phase");
-        return chart;
-    }
-    
-    private Chart createBarChartForElements(List<Sighting> inSightings) {
-        // Build the data map that will be displayed
-        Map<String, ObservableList<StackedBarChart.Data<String, Number>>> mapChartDataGroupedForSeries = new HashMap<>();
-        for (Sighting sighting : inSightings) {
-            ObservableList<StackedBarChart.Data<String, Number>> lstChartData = mapChartDataGroupedForSeries.get(sighting.getElementName() + getDetailsString(sighting));
-            if (lstChartData == null) {
-                lstChartData = FXCollections.observableArrayList();
-                mapChartDataGroupedForSeries.put(sighting.getElementName() + getDetailsString(sighting), lstChartData);
-            }
-            if (sighting.getMoonPhase() >= 0) {
-                if (sighting.getMoonPhase() >= 0 && sighting.getMoonPhase() < 50) {
-                    lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 0-50% Full", 1));
-                } 
-                else
-                if (sighting.getMoonPhase() > 50 && sighting.getMoonPhase() <= 100) {
-                    lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 50-100% Full", 1));
-                } 
-                else
-                // If the moon is 50% then base it on whether the moon is growing or shrinking.
-                if (sighting.getMoonPhase() == 50) {
-                    LocalDateTime futureTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate()).plusDays(2);
-                    int testMoonphase = AstroCalculator.getMoonPhase(Date.from(futureTime.atZone(ZoneId.systemDefault()).toInstant()));
-                    if (testMoonphase >= 0 && testMoonphase < 50) {
-                        lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 0-50% Full", 1));
-                    } 
-                    else
-                    if (testMoonphase > 50 && testMoonphase <= 100) {
-                        lstChartData.add(new StackedBarChart.Data<String, Number>("Moon 50-100% Full", 1));
-                    } 
-                    else {
-                        lstChartData.add(new StackedBarChart.Data<String, Number>("Unknown", 1));
-                    }
-                }
-                else {
-                    lstChartData.add(new StackedBarChart.Data<String, Number>("Unknown", 1));
-                }
-            }
-            else {
-                lstChartData.add(new StackedBarChart.Data<String, Number>("Unknown", 1));
-            }
-        }
-        // Setup the final data series to be displayed
-        ObservableList<StackedBarChart.Series<String, Number>> lstChartSeries = FXCollections.observableArrayList();
-        List<String> keys = new ArrayList<>(mapChartDataGroupedForSeries.keySet());
-        Collections.sort(keys);
-        for (String key : keys) {
-            StackedBarChart.Series<String, Number> series = new StackedBarChart.Series<String, Number>(
-                    key + " (" + mapChartDataGroupedForSeries.get(key).size() + ")", 
-                    mapChartDataGroupedForSeries.get(key));
-            lstChartSeries.add(series);
-        }
-        // Setup axis and chart
-        NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, false);
-        CategoryAxis axisX = new CategoryAxis();
-        axisX.setCategories(FXCollections.<String>observableArrayList(new String[]{"Moon 0-50% Full", "Moon 50-100% Full", "Unknown"}));
-        StackedBarChart<String, Number> chart = new StackedBarChart<String, Number>(axisX, numAxis, lstChartSeries);
         return chart;
     }
     
@@ -408,6 +371,7 @@ public class MoonphaseChart extends AbstractReport<Sighting> {
         NumberAxis numAxis = new NumberAxis();
         UtilsReports.setupNumberAxis(numAxis, false);
         CategoryAxis catAxis = new CategoryAxis();
+        UtilsReports.setupCategoryAxis(catAxis, 3, false);
         catAxis.setCategories(lstXCategories);
         AreaChart<String, Number> chart = new AreaChart<String, Number>(catAxis, numAxis, chartData);
         chart.getStyleClass().add("wl-line-30-color");

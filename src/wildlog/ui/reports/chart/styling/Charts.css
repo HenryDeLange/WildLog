@@ -148,6 +148,166 @@
 }
 
 
+// ------ STYLE: wl-stacked-bar-30-color ------
+// Bar Chart using up to 30 colors
+.wl-stacked-bar-30-color .chart-plot-background {
+    -fx-background-color: transparent;
+}
+.wl-stacked-bar-30-color .chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.wl-stacked-bar-30-color .chart-vertical-grid-lines {
+    visibility: hidden;
+}
+.wl-stacked-bar-30-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-stacked-bar-30-color .axis {
+    -fx-minor-tick-visible: false;
+}
+.wl-stacked-bar-30-color .axis-label {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.2em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-stacked-bar-30-color .chart-legend {
+    -fx-background-color: transparent;
+}
+// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
+// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+//   ... The defauls are already defined with wl-bar-30-color ...
+// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+// -------------------------------------------------------------
+// NOTE: I'm only using this for moon phase which has a fixed data (bar) number of 3, 
+//       so I can get away with not defining more.
+// -------------------------------------------------------------
+.series0.data0.chart-bar  { -fx-bar-fill: #5E8325; }
+.series0.data1.chart-bar  { -fx-bar-fill: #5E8325; }
+.series0.data2.chart-bar  { -fx-bar-fill: #5E8325; }
+.series0.data2.chart-bar  { -fx-bar-fill: #5E8325; }
+.series1.data0.chart-bar  { -fx-bar-fill: #1D643E; }
+.series1.data1.chart-bar  { -fx-bar-fill: #1D643E; }
+.series1.data2.chart-bar  { -fx-bar-fill: #1D643E; }
+.series1.data3.chart-bar  { -fx-bar-fill: #1D643E; }
+.series2.data0.chart-bar  { -fx-bar-fill: #22355F; }
+.series2.data1.chart-bar  { -fx-bar-fill: #22355F; }
+.series2.data2.chart-bar  { -fx-bar-fill: #22355F; }
+.series2.data3.chart-bar  { -fx-bar-fill: #22355F; }
+.series3.data0.chart-bar  { -fx-bar-fill: #481F5F; }
+.series3.data1.chart-bar  { -fx-bar-fill: #481F5F; }
+.series3.data2.chart-bar  { -fx-bar-fill: #481F5F; }
+.series3.data3.chart-bar  { -fx-bar-fill: #481F5F; }
+.series4.data0.chart-bar  { -fx-bar-fill: #772249; }
+.series4.data1.chart-bar  { -fx-bar-fill: #772249; }
+.series4.data2.chart-bar  { -fx-bar-fill: #772249; }
+.series4.data3.chart-bar  { -fx-bar-fill: #772249; }
+.series5.data0.chart-bar  { -fx-bar-fill: #8E3428; }
+.series5.data1.chart-bar  { -fx-bar-fill: #8E3428; }
+.series5.data2.chart-bar  { -fx-bar-fill: #8E3428; }
+.series5.data3.chart-bar  { -fx-bar-fill: #8E3428; }
+.series6.data0.chart-bar  { -fx-bar-fill: #E28E44; }
+.series6.data1.chart-bar  { -fx-bar-fill: #E28E44; }
+.series6.data2.chart-bar  { -fx-bar-fill: #E28E44; }
+.series6.data3.chart-bar  { -fx-bar-fill: #E28E44; }
+.series7.data0.chart-bar  { -fx-bar-fill: #8E8428; }
+.series7.data1.chart-bar  { -fx-bar-fill: #8E8428; }
+.series7.data2.chart-bar  { -fx-bar-fill: #8E8428; }
+.series7.data3.chart-bar  { -fx-bar-fill: #8E8428; }
+.series8.data0.chart-bar  { -fx-bar-fill: #A1D059; }
+.series8.data1.chart-bar  { -fx-bar-fill: #A1D059; }
+.series8.data2.chart-bar  { -fx-bar-fill: #A1D059; }
+.series8.data3.chart-bar  { -fx-bar-fill: #A1D059; }
+.series9.data0.chart-bar  { -fx-bar-fill: #44A06F; }
+.series9.data1.chart-bar  { -fx-bar-fill: #44A06F; }
+.series9.data2.chart-bar  { -fx-bar-fill: #44A06F; }
+.series9.data3.chart-bar  { -fx-bar-fill: #44A06F; }
+.series10.data0.chart-bar  { -fx-bar-fill: #4A6197; }
+.series10.data1.chart-bar  { -fx-bar-fill: #4A6197; }
+.series10.data2.chart-bar  { -fx-bar-fill: #4A6197; }
+.series10.data2.chart-bar  { -fx-bar-fill: #4A6197; }
+.series11.data0.chart-bar  { -fx-bar-fill: #7A4597; }
+.series11.data1.chart-bar  { -fx-bar-fill: #7A4597; }
+.series11.data2.chart-bar  { -fx-bar-fill: #7A4597; }
+.series11.data3.chart-bar  { -fx-bar-fill: #7A4597; }
+.series12.data0.chart-bar  { -fx-bar-fill: #BE5183; }
+.series12.data1.chart-bar  { -fx-bar-fill: #BE5183; }
+.series12.data2.chart-bar  { -fx-bar-fill: #BE5183; }
+.series12.data3.chart-bar  { -fx-bar-fill: #BE5183; }
+.series13.data0.chart-bar  { -fx-bar-fill: #E26F60; }
+.series13.data1.chart-bar  { -fx-bar-fill: #E26F60; }
+.series13.data2.chart-bar  { -fx-bar-fill: #E26F60; }
+.series13.data3.chart-bar  { -fx-bar-fill: #E26F60; }
+.series14.data0.chart-bar  { -fx-bar-fill: #E2BB60; }
+.series14.data1.chart-bar  { -fx-bar-fill: #E2BB60; }
+.series14.data2.chart-bar  { -fx-bar-fill: #E2BB60; }
+.series14.data3.chart-bar  { -fx-bar-fill: #E2BB60; }
+.series15.data0.chart-bar  { -fx-bar-fill: #E2D560; }
+.series15.data1.chart-bar  { -fx-bar-fill: #E2D560; }
+.series15.data2.chart-bar  { -fx-bar-fill: #E2D560; }
+.series15.data3.chart-bar  { -fx-bar-fill: #E2D560; }
+.series16.data0.chart-bar  { -fx-bar-fill: #B8DE63; }
+.series16.data1.chart-bar  { -fx-bar-fill: #B8DE63; }
+.series16.data2.chart-bar  { -fx-bar-fill: #B8DE63; }
+.series16.data3.chart-bar  { -fx-bar-fill: #B8DE63; }
+.series17.data0.chart-bar  { -fx-bar-fill: #7EB9C3; }
+.series17.data1.chart-bar  { -fx-bar-fill: #7EB9C3; }
+.series17.data2.chart-bar  { -fx-bar-fill: #7EB9C3; }
+.series17.data3.chart-bar  { -fx-bar-fill: #7EB9C3; }
+.series18.data0.chart-bar  { -fx-bar-fill: #709DC6; }
+.series18.data1.chart-bar  { -fx-bar-fill: #709DC6; }
+.series18.data2.chart-bar  { -fx-bar-fill: #709DC6; }
+.series18.data3.chart-bar  { -fx-bar-fill: #709DC6; }
+.series19.data0.chart-bar  { -fx-bar-fill: #9E81D3; }
+.series19.data1.chart-bar  { -fx-bar-fill: #9E81D3; }
+.series19.data2.chart-bar  { -fx-bar-fill: #9E81D3; }
+.series19.data3.chart-bar  { -fx-bar-fill: #9E81D3; }
+.series20.data0.chart-bar  { -fx-bar-fill: #E8A0C1; }
+.series20.data1.chart-bar  { -fx-bar-fill: #E8A0C1; }
+.series20.data2.chart-bar  { -fx-bar-fill: #E8A0C1; }
+.series20.data2.chart-bar  { -fx-bar-fill: #E8A0C1; }
+.series21.data0.chart-bar  { -fx-bar-fill: #FFBAB1; }
+.series21.data1.chart-bar  { -fx-bar-fill: #FFBAB1; }
+.series21.data2.chart-bar  { -fx-bar-fill: #FFBAB1; }
+.series21.data3.chart-bar  { -fx-bar-fill: #FFBAB1; }
+.series22.data0.chart-bar  { -fx-bar-fill: #FFE8B1; }
+.series22.data1.chart-bar  { -fx-bar-fill: #FFE8B1; }
+.series22.data2.chart-bar  { -fx-bar-fill: #FFE8B1; }
+.series22.data3.chart-bar  { -fx-bar-fill: #FFE8B1; }
+.series23.data0.chart-bar  { -fx-bar-fill: #FFF7B1; }
+.series23.data1.chart-bar  { -fx-bar-fill: #FFF7B1; }
+.series23.data2.chart-bar  { -fx-bar-fill: #FFF7B1; }
+.series23.data3.chart-bar  { -fx-bar-fill: #FFF7B1; }
+.series24.data0.chart-bar  { -fx-bar-fill: #BEDA41; }
+.series24.data1.chart-bar  { -fx-bar-fill: #BEDA41; }
+.series24.data2.chart-bar  { -fx-bar-fill: #BEDA41; }
+.series24.data3.chart-bar  { -fx-bar-fill: #BEDA41; }
+.series25.data0.chart-bar  { -fx-bar-fill: #89C786; }
+.series25.data1.chart-bar  { -fx-bar-fill: #89C786; }
+.series25.data2.chart-bar  { -fx-bar-fill: #89C786; }
+.series25.data3.chart-bar  { -fx-bar-fill: #89C786; }
+.series26.data0.chart-bar  { -fx-bar-fill: #8E93CF; }
+.series26.data1.chart-bar  { -fx-bar-fill: #8E93CF; }
+.series26.data2.chart-bar  { -fx-bar-fill: #8E93CF; }
+.series26.data3.chart-bar  { -fx-bar-fill: #8E93CF; }
+.series27.data0.chart-bar  { -fx-bar-fill: #4C3E69; }
+.series27.data1.chart-bar  { -fx-bar-fill: #4C3E69; }
+.series27.data2.chart-bar  { -fx-bar-fill: #4C3E69; }
+.series27.data3.chart-bar  { -fx-bar-fill: #4C3E69; }
+.series28.data0.chart-bar  { -fx-bar-fill: #625B15; }
+.series28.data1.chart-bar  { -fx-bar-fill: #625B15; }
+.series28.data2.chart-bar  { -fx-bar-fill: #625B15; }
+.series28.data3.chart-bar  { -fx-bar-fill: #625B15; }
+.series29.data0.chart-bar  { -fx-bar-fill: #B94F41; }
+.series29.data1.chart-bar  { -fx-bar-fill: #B94F41; }
+.series29.data2.chart-bar  { -fx-bar-fill: #B94F41; }
+.series29.data3.chart-bar  { -fx-bar-fill: #B94F41; }
+
 // ------ STYLE: wl-pie-30-color ------
 // Pie Chart using up to 30 colors
 .wl-pie-30-color .chart-title {
