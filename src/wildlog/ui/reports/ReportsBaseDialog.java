@@ -130,6 +130,7 @@ public class ReportsBaseDialog extends JFrame {
                     @Override
                     public void handle(ActionEvent event) {
                         setActiveReport(report);
+                        jfxReportChartPanel.getScene().setRoot(new Label("Loading..."));
                         report.createReport(jfxReportChartPanel.getScene());
                     }
                 });

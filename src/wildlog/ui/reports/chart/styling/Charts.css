@@ -393,7 +393,7 @@
 .wl-line-30-color .chart-legend {
     -fx-background-color:  transparent;
 }
-// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded int he JavaFx code...
+// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
 // Once the specific colours defined below run out these defaults will be iterated over for the rest.
 .default-color0.chart-series-area-line  { -fx-stroke: #5E8325; }
 .default-color1.chart-series-area-line  { -fx-stroke: #1D643E; }

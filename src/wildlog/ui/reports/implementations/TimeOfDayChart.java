@@ -127,6 +127,7 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
         int maxCount = 0;
         for (String key : keys) {
             BarChart.Data<String, Number> data = new BarChart.Data<String, Number>(key, mapData.get(key).count);
+            // Setup custom colour based on the Enum value
             data.nodeProperty().addListener(new CustomColourBarChartChangeListener<>(mapData.size(), data, UtilsReports.COLOURS_TIME_OF_DAY, key));
             allSightings.add(data);
             if (mapData.get(key).count > maxCount) {
@@ -224,9 +225,12 @@ public class TimeOfDayChart extends AbstractReport<Sighting> {
             }
             else {
 // FIXME: Kry 'n manier om die lee data se labels te hide want dit lyk simpel
-                PieChart.Data data = new PieChart.Data(text + " (0)", 0);
-//                data.nodeProperty().addListener(new PieChartChangeListener<>(key, null));
-                chartData.add(data);
+                if (!ActiveTimeSpesific.UNKNOWN.equals(ActiveTimeSpesific.getEnumFromText(key))
+                        && !ActiveTimeSpesific.NONE.equals(ActiveTimeSpesific.getEnumFromText(key))) {
+                    PieChart.Data data = new PieChart.Data(text + " (0)", 0);
+//                    data.nodeProperty().addListener(new PieChartChangeListener<>(key, null));
+                    chartData.add(data);
+                }
             }
         }
         // Setup chart

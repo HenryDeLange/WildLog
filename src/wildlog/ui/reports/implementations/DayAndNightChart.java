@@ -43,33 +43,33 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         super("Day and Night Cycles Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(4);
         // Area/Line Chart
-        Button btnPieChart = new Button("Pie Chart");
+        Button btnPieChart = new Button("Day/Night Observations (Pie)");
         btnPieChart.setCursor(Cursor.HAND);
         btnPieChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.PIE_CHART;
-                setupChartDescriptionLabel("<html>123123</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight as a pie chart.</html>");
             }
         });
         lstCustomButtons.add(btnPieChart);
-        Button btnLineAllChart = new Button("Line Chart");
+        Button btnLineAllChart = new Button("Day/Night Observations (Line)");
         btnLineAllChart.setCursor(Cursor.HAND);
         btnLineAllChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.LINE_CHART;
-                setupChartDescriptionLabel("<html>123123</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight as a line chart.</html>");
             }
         });
         lstCustomButtons.add(btnLineAllChart);
-        Button btnLineCreatureChart = new Button("Stacked Line Chart");
+        Button btnLineCreatureChart = new Button("Day/Night Observations (Stacked)");
         btnLineCreatureChart.setCursor(Cursor.HAND);
         btnLineCreatureChart.setOnAction(new EventHandler() {
             @Override
             public void handle(Event event) {
                 chartType = ChartType.STACKED_LINE_CHART;
-                setupChartDescriptionLabel("<html>123123</html>");
+                setupChartDescriptionLabel("<html>This chart shows the number of Observations recorded during the day, night or twilight as a stacked line chart.</html>");
             }
         });
         lstCustomButtons.add(btnLineCreatureChart);
@@ -123,10 +123,6 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
         });
     }
     
-    
-    // FIXME: Verander die om die regte custom kleure te gebruik...
-    
-    
     private Chart createPieChart(List<Sighting> inSightings) {
         Map<String, ReportDataWrapper> mapGroupedData = new HashMap<>(4);
         for (Sighting sighting : inSightings) {
@@ -139,23 +135,30 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         }
         ObservableList<PieChart.Data> chartData = FXCollections.observableArrayList();
-        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
+        List<String> keys = ActiveTime.getEnumListAsStringForReports();
         Collections.sort(keys);
         for (String key : keys) {
-            PieChart.Data data = new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount());
-//            data.nodeProperty().addListener(new PieChartChangeListener<>(key, UtilsReports.COLOURS_DAY_NIGHT_TWILIGHT));
-            chartData.add(data);
+            ReportDataWrapper dataWrapper = mapGroupedData.get(key);
+            if (dataWrapper != null) {
+                chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
+            }
+            else {
+// FIXME: Kry 'n manier om die lee data se labels te hide want dit lyk simpel
+                if (!ActiveTime.UNKNOWN.equals(ActiveTime.getEnumFromText(key))
+                        && !ActiveTime.NONE.equals(ActiveTime.getEnumFromText(key))) {
+                    chartData.add(new PieChart.Data(key + " (0)", 0));
+                }
+            }
         }
         // Setup chart
         PieChart chart = UtilsReports.createPieChartWithStyleIndexReset(chartData);
-        chart.getStyleClass().add("wl-pie-30-color");
+        chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsDayNightTwilight.css");
+        chart.getStyleClass().add("wl-pie-day-night-color");
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;
     }
     
     private Chart createLineChartForAll(List<Sighting> inSightings) {
-        NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, false);
         // Sort sightings (by date)
         Collections.sort(inSightings);
         // Get the data in the correct structure
@@ -184,46 +187,62 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         }
         // Setup the final chart data
-        long startTime = inSightings.get(0).getDate().getTime();
-        long endTime = inSightings.get(inSightings.size() - 1).getDate().getTime();
-        ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
-        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
-        Collections.sort(keys);
-        for (String key : keys) {
-            Map<Long, ReportDataWrapper> mapChartData = mapGroupedData.get(key);
-            ObservableList<AreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
-            lstChartData.add(new AreaChart.Data<>(startTime, 0, null));
-            for (long time : mapChartData.keySet()) {
-                ReportDataWrapper dataWrapper = mapChartData.get(time);
-                lstChartData.add(new AreaChart.Data<>(time, dataWrapper.count, null));
+        AreaChart<Number, Number> chart;
+        if (!inSightings.isEmpty()) {
+            long startTime = inSightings.get(0).getDate().getTime();
+            long endTime = inSightings.get(inSightings.size() - 1).getDate().getTime();
+            ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
+            List<String> keys = ActiveTime.getEnumListAsStringForReports();
+            Collections.sort(keys);
+// FIXME: Handle die kleure as daar lee entries is
+            for (String key : keys) {
+                Map<Long, ReportDataWrapper> mapChartData = mapGroupedData.get(key);
+                if (mapChartData != null) {
+                    ObservableList<AreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
+                    lstChartData.add(new AreaChart.Data<>(startTime, 0, null));
+                    for (long time : mapChartData.keySet()) {
+                        ReportDataWrapper dataWrapper = mapChartData.get(time);
+                        lstChartData.add(new AreaChart.Data<>(time, dataWrapper.count, null));
+                    }
+                    lstChartData.add(new AreaChart.Data<>(endTime, mapCategoryCounter.get(key).count, null));
+                    chartData.add(new AreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
+                }
+                else {
+                    if (!ActiveTime.UNKNOWN.equals(ActiveTime.getEnumFromText(key))
+                            && !ActiveTime.NONE.equals(ActiveTime.getEnumFromText(key))) {
+                        chartData.add(new AreaChart.Series<>(key + " (0)", FXCollections.observableArrayList()));
+                    }
+                }
             }
-            lstChartData.add(new AreaChart.Data<>(endTime, mapCategoryCounter.get(key).count, null));
-            chartData.add(new AreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
+            // Setup the axis and chart
+            NumberAxis numAxis = new NumberAxis();
+            UtilsReports.setupNumberAxis(numAxis, false);
+            double tick = (endTime - startTime)/7;
+            NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
+            dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
+                @Override
+                public String toString(Number object) {
+                    return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
+                }
+                @Override
+                public Number fromString(String string) {
+                    return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
+                }
+            });
+            dateAxis.setTickLabelFont(Font.font(12));
+            chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
         }
-        // Setup the axis and chart
-        double tick = (endTime - startTime)/7;
-        NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
-        dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
-            @Override
-            public String toString(Number object) {
-                return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
-            }
-            @Override
-            public Number fromString(String string) {
-                return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
-            }
-        });
-        dateAxis.setTickLabelFont(Font.font(12));
-        AreaChart<Number, Number> chart = new AreaChart<Number, Number>(dateAxis, numAxis, chartData);
-        chart.getStyleClass().add("wl-line-30-color");
+        else {
+            chart = new AreaChart<Number, Number>(new NumberAxis(), new NumberAxis(), FXCollections.observableArrayList());
+        }
+        chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsDayNightTwilight.css");
+        chart.getStyleClass().add("wl-line-day-night-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;
     }
     
     private Chart createStackedChartForAll(List<Sighting> inSightings) {
-        NumberAxis numAxis = new NumberAxis();
-        UtilsReports.setupNumberAxis(numAxis, false);
         // Sort sightings (by date)
         Collections.sort(inSightings);
         // Get the data in the correct structure
@@ -252,38 +271,57 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             }
         }
         // Setup the final chart data
-        long startTime = inSightings.get(0).getDate().getTime();
-        long endTime = inSightings.get(inSightings.size() - 1).getDate().getTime();
-        ObservableList<StackedAreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
-        List<String> keys = new ArrayList<>(mapGroupedData.keySet());
-        Collections.sort(keys);
-        for (String key : keys) {
-            Map<Long, ReportDataWrapper> mapChartData = mapGroupedData.get(key);
-            ObservableList<StackedAreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
-            lstChartData.add(new StackedAreaChart.Data<>(startTime, 0, null));
-            for (long time : mapChartData.keySet()) {
-                ReportDataWrapper dataWrapper = mapChartData.get(time);
-                lstChartData.add(new StackedAreaChart.Data<>(time, dataWrapper.count, null));
+        StackedAreaChart<Number, Number> chart;
+        if (!inSightings.isEmpty()) {
+            long startTime = inSightings.get(0).getDate().getTime();
+            long endTime = inSightings.get(inSightings.size() - 1).getDate().getTime();
+            ObservableList<StackedAreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
+            List<String> keys = ActiveTime.getEnumListAsStringForReports();
+            Collections.sort(keys);
+            for (String key : keys) {
+                Map<Long, ReportDataWrapper> mapChartData = mapGroupedData.get(key);
+                if (mapChartData != null) {
+                    ObservableList<StackedAreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
+                    lstChartData.add(new StackedAreaChart.Data<>(startTime, 0, null));
+                    for (long time : mapChartData.keySet()) {
+                        ReportDataWrapper dataWrapper = mapChartData.get(time);
+                        lstChartData.add(new StackedAreaChart.Data<>(time, dataWrapper.count, null));
+                    }
+                    lstChartData.add(new StackedAreaChart.Data<>(endTime, mapCategoryCounter.get(key).count, null));
+                    chartData.add(new StackedAreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
+                }
+                else {
+                    if (!ActiveTime.UNKNOWN.equals(ActiveTime.getEnumFromText(key))
+                            && !ActiveTime.NONE.equals(ActiveTime.getEnumFromText(key))) {
+                        ObservableList<StackedAreaChart.Data<Number, Number>> lstChartData = FXCollections.observableArrayList();
+                        lstChartData.add(new StackedAreaChart.Data<>(0, 0, null));
+                        chartData.add(new StackedAreaChart.Series<>(key + " (0)", lstChartData));
+                    }
+                }
             }
-            lstChartData.add(new StackedAreaChart.Data<>(endTime, mapCategoryCounter.get(key).count, null));
-            chartData.add(new StackedAreaChart.Series<>(key + " (" + lstChartData.size() + ")", lstChartData));
+            // Setup the axis
+            NumberAxis numAxis = new NumberAxis();
+            UtilsReports.setupNumberAxis(numAxis, false);
+            double tick = (endTime - startTime)/7;
+            NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
+            dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
+                @Override
+                public String toString(Number object) {
+                    return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
+                }
+                @Override
+                public Number fromString(String string) {
+                    return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
+                }
+            });
+            dateAxis.setTickLabelFont(Font.font(12));
+            chart = new StackedAreaChart<Number, Number>(dateAxis, numAxis, chartData);
         }
-        // Setup the axis
-        double tick = (endTime - startTime)/7;
-        NumberAxis dateAxis = new NumberAxis(startTime - tick/3, endTime + tick/3, tick);
-        dateAxis.setTickLabelFormatter(new StringConverter<Number>() {
-            @Override
-            public String toString(Number object) {
-                return UtilsTime.WL_DATE_FORMATTER.format(UtilsTime.getLocalDateTimeFromDate(new Date(object.longValue())));
-            }
-            @Override
-            public Number fromString(String string) {
-                return UtilsTime.WL_DATE_FORMATTER.parse(string).get(ChronoField.MILLI_OF_SECOND);
-            }
-        });
-        dateAxis.setTickLabelFont(Font.font(12));
-        StackedAreaChart<Number, Number> chart = new StackedAreaChart<Number, Number>(dateAxis, numAxis, chartData);
-        chart.getStyleClass().add("wl-line-30-color");
+        else {
+            chart = new StackedAreaChart<Number, Number>(new NumberAxis(), new NumberAxis(), FXCollections.observableArrayList());
+        }
+        chart.getStylesheets().add("wildlog/ui/reports/chart/styling/ChartsDayNightTwilight.css");
+        chart.getStyleClass().add("wl-line-day-night-color");
         chart.setLegendVisible(true);
         chart.setTitle("Number of Observations per Day, Night and Twilight period");
         return chart;

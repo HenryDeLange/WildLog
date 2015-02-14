@@ -164,7 +164,7 @@ public final class UtilsReports {
             protected void seriesAdded(XYChart.Series series, int seriesIndex) {
                 super.seriesAdded(series, seriesIndex);
                 // Overwrite the default style that was added
-                String fixedDefaultColorStyleClass = "data" + (fixer % 8);
+                String fixedDefaultColorStyleClass = "data" + (fixer % 30);
                 fixer++;
                 try {
                     Class<StackedBarChart> cls = StackedBarChart.class;

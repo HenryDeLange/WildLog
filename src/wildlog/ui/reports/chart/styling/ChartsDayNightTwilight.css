@@ -1,0 +1,72 @@
+// STYLE: wl-pie-day-night-color
+// Pie Chart using specific colors for the time of day
+.wl-pie-day-night-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-pie-day-night-color .chart-legend {
+    -fx-background-color: transparent;
+}
+// These are "fixed" colors, thus I don't need to define any defaults.
+// (no defaults needed))
+// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+.data0.chart-pie  { -fx-pie-color: #B5441F; }
+.data1.chart-pie  { -fx-pie-color: #262D57; }
+.data2.chart-pie  { -fx-pie-color: #9771A8; }
+.data3.chart-pie  { -fx-pie-color: #D1D9C7; }
+.data4.chart-pie  { -fx-pie-color: #D1D9C7; }
+
+
+// ------ STYLE: wl-line-day-night-color -------
+// Area Chart using up to 30 colors
+.wl-line-day-night-color .chart-plot-background {
+    -fx-background-color: transparent;
+}
+.wl-line-day-night-color .chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}
+.wl-line-day-night-color .chart-vertical-grid-lines {
+    visibility: hidden;
+}
+.wl-line-day-night-color .chart-title {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.4em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-line-day-night-color .axis {
+    -fx-minor-tick-visible: false;
+}
+.wl-line-day-night-color .axis-label {
+    -fx-text-fill: #656863;
+    -fx-font-size: 1.2em;
+    -fx-font-family: sans-serif;
+    -fx-font-weight: bold;
+}
+.wl-line-day-night-color .chart-legend {
+    -fx-background-color:  transparent;
+}
+// Currently it is a waste to define more than 8 default colours, because 8 is hardcoded in the JavaFx code...
+// Once the specific colours defined below run out these defaults will be iterated over for the rest.
+// (no defaults needed))
+// Define the colours to use by the chart. (This needs to be defined after the default colours to work properly.)
+.chart-series-area-line.series0  { -fx-stroke: #B5441F; }
+.chart-series-area-line.series1  { -fx-stroke: #262D57; }
+.chart-series-area-line.series2  { -fx-stroke: #9771A8; }
+.chart-series-area-line.series3  { -fx-stroke: #D1D9C7; }
+.chart-series-area-line.series4  { -fx-stroke: #D1D9C7; }
+.chart-area-symbol.series0  { -fx-background-color: #B5441F; }
+.chart-area-symbol.series1  { -fx-background-color: #262D57; }
+.chart-area-symbol.series2  { -fx-background-color: #9771A8; }
+.chart-area-symbol.series3  { -fx-background-color: #D1D9C7; }
+.chart-area-symbol.series4  { -fx-background-color: #D1D9C7; }
+.chart-series-area-fill.series0  { -fx-fill: #B5441F22; }
+.chart-series-area-fill.series1  { -fx-fill: #262D5722; }
+.chart-series-area-fill.series2  { -fx-fill: #9771A822; }
+.chart-series-area-fill.series3  { -fx-fill: #D1D9C722; }
+.chart-series-area-fill.series4  { -fx-fill: #D1D9C722; }
+
