@@ -1,5 +1,8 @@
 package wildlog.data.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public enum ActiveTime {
     DAY("Day"),
@@ -55,6 +58,16 @@ public enum ActiveTime {
             return DAWN_OR_DUST;
         }
         return UNKNOWN;
+    }
+    
+    public static List<String> getEnumListAsStringForReports() {
+        List<String> tempList = new ArrayList<String>(ActiveTimeSpesific.values().length);
+        for (ActiveTime theEnum : ActiveTime.values()) {
+            if (!theEnum.equals(NONE) && !theEnum.equals(ALWAYS)) {
+                tempList.add(theEnum.text);
+            }
+        }
+        return tempList;
     }
 
 }
