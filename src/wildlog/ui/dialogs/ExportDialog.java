@@ -144,7 +144,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportKML);
 
-        btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        btnExportCSVBasic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSVBasic.setText("Export as Spreadsheet (Basic)");
         btnExportCSVBasic.setToolTipText("Export a CSV file for all relevant Observations. Can be opened in Excel, etc.");
         btnExportCSVBasic.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -163,7 +163,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportCSVBasic);
 
-        btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSV.setText("Export as Spreadsheet (Complete)");
         btnExportCSV.setToolTipText("Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -182,7 +182,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportCSV);
 
-        btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.gif"))); // NOI18N
+        btnExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
         btnExportXML.setText("Export as XML");
         btnExportXML.setToolTipText("Export a XML file for all relevant Observations and linked records.");
         btnExportXML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -201,7 +201,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportXML);
 
-        btnExportFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        btnExportFiles.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
         btnExportFiles.setText("Export Files");
         btnExportFiles.setToolTipText("Save copies of all relevant files in the Export folder.");
         btnExportFiles.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -220,7 +220,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportFiles);
 
-        btnExportFilesObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        btnExportFilesObservations.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File.png"))); // NOI18N
         btnExportFilesObservations.setText("Export Files of linked Observations");
         btnExportFilesObservations.setToolTipText("Save copies of all relevant files in the Export folder.");
         btnExportFilesObservations.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

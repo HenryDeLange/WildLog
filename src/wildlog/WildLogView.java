@@ -97,7 +97,6 @@ import wildlog.ui.panels.PanelTabLocations;
 import wildlog.ui.panels.PanelTabSightings;
 import wildlog.ui.panels.bulkupload.BulkUploadPanel;
 import wildlog.ui.panels.interfaces.PanelCanSetupHeader;
-import wildlog.ui.reports.ReportsBaseDialog;
 import wildlog.ui.utils.UtilsTime;
 import wildlog.ui.utils.UtilsUI;
 import wildlog.utils.NamedThreadFactory;
@@ -255,7 +254,7 @@ public final class WildLogView extends JFrame {
     
     private void setupTabHeaderSightings() {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Sighting.gif"));
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/SightingList.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Observations"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
@@ -296,7 +295,6 @@ public final class WildLogView extends JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         lblSettingsPath = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         tabBrowse = new javax.swing.JPanel();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
@@ -321,10 +319,10 @@ public final class WildLogView extends JFrame {
         mnuBackupDatabase = new javax.swing.JMenuItem();
         mnuBackupWorkspace = new javax.swing.JMenuItem();
         exportMenu = new javax.swing.JMenu();
-        mnuExportCSV = new javax.swing.JMenuItem();
         mnuExportHTML = new javax.swing.JMenuItem();
-        mnuExportKML = new javax.swing.JMenuItem();
+        mnuExportCSV = new javax.swing.JMenuItem();
         mnuExportXML = new javax.swing.JMenuItem();
+        mnuExportKML = new javax.swing.JMenuItem();
         jSeparator10 = new javax.swing.JPopupMenu.Separator();
         mnuExportWildNoteSync = new javax.swing.JMenuItem();
         jSeparator9 = new javax.swing.JPopupMenu.Separator();
@@ -366,8 +364,8 @@ public final class WildLogView extends JFrame {
         otherMenu = new javax.swing.JMenu();
         mnuGPSInput = new javax.swing.JMenuItem();
         slideshowMenu = new javax.swing.JMenu();
-        mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
         mnuSetSlideshowSize = new javax.swing.JMenuItem();
+        mnuSetSlideshowSpeed = new javax.swing.JMenuItem();
         mnuPerformance = new javax.swing.JMenu();
         chkMnuUseIconTables = new javax.swing.JCheckBoxMenuItem();
         chkMnuBrowseWithThumbnails = new javax.swing.JCheckBoxMenuItem();
@@ -495,14 +493,6 @@ public final class WildLogView extends JFrame {
         lblSettingsPath.setText(WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().normalize().toAbsolutePath().toString());
         lblSettingsPath.setName("lblSettingsPath"); // NOI18N
 
-        jButton1.setText("New Reports for testing");
-        jButton1.setName("jButton1"); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout tabHomeLayout = new javax.swing.GroupLayout(tabHome);
         tabHome.setLayout(tabHomeLayout);
         tabHomeLayout.setHorizontalGroup(
@@ -557,8 +547,6 @@ public final class WildLogView extends JFrame {
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblWorkspaceName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jSeparator5, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
-                .addGap(121, 121, 121)
-                .addComponent(jButton1)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         tabHomeLayout.setVerticalGroup(
@@ -589,9 +577,7 @@ public final class WildLogView extends JFrame {
                 .addGap(11, 11, 11)
                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                .addComponent(lblWorkspaceName, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
                 .addGroup(tabHomeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -778,17 +764,6 @@ public final class WildLogView extends JFrame {
 
         exportMenu.setText("Export");
 
-        mnuExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
-        mnuExportCSV.setText("Export All to CSV");
-        mnuExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
-        mnuExportCSV.setName("mnuExportCSV"); // NOI18N
-        mnuExportCSV.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportCSVActionPerformed(evt);
-            }
-        });
-        exportMenu.add(mnuExportCSV);
-
         mnuExportHTML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/HTML Icon.gif"))); // NOI18N
         mnuExportHTML.setText("Export All to HTML");
         mnuExportHTML.setToolTipText("Export all data and linked thumbnails to HTML files. (Viewable in a web browser, etc.)");
@@ -800,6 +775,28 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnuExportHTML);
 
+        mnuExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
+        mnuExportCSV.setText("Export All to CSV");
+        mnuExportCSV.setToolTipText("Export all data to CSV files. (Open in Excel, ArcGIS, etc.)");
+        mnuExportCSV.setName("mnuExportCSV"); // NOI18N
+        mnuExportCSV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportCSVActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportCSV);
+
+        mnuExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/XML.png"))); // NOI18N
+        mnuExportXML.setText("Export All to XML");
+        mnuExportXML.setToolTipText("Export all data to XML files. (Open in text editor, web browser, etc.)");
+        mnuExportXML.setName("mnuExportXML"); // NOI18N
+        mnuExportXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportXMLActionPerformed(evt);
+            }
+        });
+        exportMenu.add(mnuExportXML);
+
         mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
         mnuExportKML.setText("Export All to KML");
         mnuExportKML.setToolTipText("Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)");
@@ -810,17 +807,6 @@ public final class WildLogView extends JFrame {
             }
         });
         exportMenu.add(mnuExportKML);
-
-        mnuExportXML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Close.gif"))); // NOI18N
-        mnuExportXML.setText("Export All to XML");
-        mnuExportXML.setToolTipText("Export all data to XML files. (Open in text editor, web browser, etc.)");
-        mnuExportXML.setName("mnuExportXML"); // NOI18N
-        mnuExportXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuExportXMLActionPerformed(evt);
-            }
-        });
-        exportMenu.add(mnuExportXML);
 
         jSeparator10.setName("jSeparator10"); // NOI18N
         exportMenu.add(jSeparator10);
@@ -855,7 +841,7 @@ public final class WildLogView extends JFrame {
         importMenu.setText("Import");
         importMenu.setName("importMenu"); // NOI18N
 
-        mnuImportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        mnuImportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         mnuImportCSV.setText("Import from CSV");
         mnuImportCSV.setToolTipText("<html>Import the data contained in the CSV files. <br/>All imported data will be prefixed by the provided value. <br/>(Note: This import uses the same format as files generated by the CSV Export.)</html>");
         mnuImportCSV.setName("mnuImportCSV"); // NOI18N
@@ -951,7 +937,7 @@ public final class WildLogView extends JFrame {
         });
         advancedMenu.add(mnuCalcSunMoon);
 
-        mnuCalcDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        mnuCalcDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration_Small.png"))); // NOI18N
         mnuCalcDuration.setText("Calculate Duration for all Observations");
         mnuCalcDuration.setToolTipText("WARNING: This action might recalculate and overwrite the Duration information for all Observations.");
         mnuCalcDuration.setName("mnuCalcDuration"); // NOI18N
@@ -1039,9 +1025,15 @@ public final class WildLogView extends JFrame {
         });
         extraMenu.add(mnuCreateSlideshow);
 
+        mnuCreateGIF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GIF_Small.png"))); // NOI18N
         mnuCreateGIF.setText("Create an Animated GIF");
         mnuCreateGIF.setToolTipText("Create an animated GIF slideshow using a folder of images anywhere on your computer.");
         mnuCreateGIF.setName("mnuCreateGIF"); // NOI18N
+        mnuCreateGIF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuCreateGIFActionPerformed(evt);
+            }
+        });
         extraMenu.add(mnuCreateGIF);
 
         mnuSunAndMoon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/SunAndMoon_big.png"))); // NOI18N
@@ -1138,17 +1130,7 @@ public final class WildLogView extends JFrame {
         slideshowMenu.setText("Slideshow Settings");
         slideshowMenu.setName("slideshowMenu"); // NOI18N
 
-        mnuSetSlideshowSpeed.setText("Set Slideshow Speed");
-        mnuSetSlideshowSpeed.setToolTipText("Set the framerate that will be used for all generated Slideshows.");
-        mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
-        mnuSetSlideshowSpeed.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuSetSlideshowSpeedActionPerformed(evt);
-            }
-        });
-        slideshowMenu.add(mnuSetSlideshowSpeed);
-
-        mnuSetSlideshowSize.setText("Set Slideshow Size");
+        mnuSetSlideshowSize.setText("Set Slideshow and Animated GIF Size");
         mnuSetSlideshowSize.setToolTipText("Set the size to which the images should be resized for the generated Slideshows.");
         mnuSetSlideshowSize.setName("mnuSetSlideshowSize"); // NOI18N
         mnuSetSlideshowSize.addActionListener(new java.awt.event.ActionListener() {
@@ -1157,6 +1139,16 @@ public final class WildLogView extends JFrame {
             }
         });
         slideshowMenu.add(mnuSetSlideshowSize);
+
+        mnuSetSlideshowSpeed.setText("Set Slideshow and Animated GIF Speed");
+        mnuSetSlideshowSpeed.setToolTipText("Set the framerate that will be used for all generated Slideshows.");
+        mnuSetSlideshowSpeed.setName("mnuSetSlideshowSpeed"); // NOI18N
+        mnuSetSlideshowSpeed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuSetSlideshowSpeedActionPerformed(evt);
+            }
+        });
+        slideshowMenu.add(mnuSetSlideshowSpeed);
 
         settingsMenu.add(slideshowMenu);
 
@@ -3081,12 +3073,6 @@ public final class WildLogView extends JFrame {
         app.getMainFrame().setTitle(app.getMainFrame().getTitle().replace(oldName, options.getWorkspaceName()));
     }//GEN-LAST:event_mnuChangeWorkspaceNameActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        List<Sighting> sightings = app.getDBI().searchSightings(new Date(2000-1900, 02, 01), new Date(), null, null, null, true, Sighting.class);
-        ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - TOETS", sightings);
-        dialog.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     private void mnuSwitchElementNamesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSwitchElementNamesActionPerformed
         int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
             @Override
@@ -3180,6 +3166,10 @@ public final class WildLogView extends JFrame {
         });
     }//GEN-LAST:event_mnuExportXMLActionPerformed
 
+    private void mnuCreateGIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateGIFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mnuCreateGIFActionPerformed
+
     public void browseSelectedElement(Element inElement) {
         panelTabBrowse.browseSelectedElement(inElement);
     }
@@ -3223,7 +3213,6 @@ public final class WildLogView extends JFrame {
     private javax.swing.JMenu externalMenu;
     private javax.swing.JMenu extraMenu;
     private javax.swing.JMenu importMenu;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;

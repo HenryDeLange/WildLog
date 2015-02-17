@@ -75,7 +75,7 @@ public class ReportExportDialog extends JDialog {
         setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.Y_AXIS));
 
-        btnExportImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/EXIF.png"))); // NOI18N
+        btnExportImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Image.png"))); // NOI18N
         btnExportImage.setText("Export as Image (Recommended)");
         btnExportImage.setToolTipText("Create a PNG image file of the active report. This is the recommened way to export a report.");
         btnExportImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -113,7 +113,7 @@ public class ReportExportDialog extends JDialog {
         });
         getContentPane().add(btnExportHTML);
 
-        btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        btnExportPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/PDF.png"))); // NOI18N
         btnExportPDF.setText("Export as PDF");
         btnExportPDF.setToolTipText("Create a PDF file of the active report.");
         btnExportPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -132,7 +132,7 @@ public class ReportExportDialog extends JDialog {
         });
         getContentPane().add(btnExportPDF);
 
-        btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV Icon.gif"))); // NOI18N
+        btnExportCSV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/CSV.png"))); // NOI18N
         btnExportCSV.setText("Export as Spreadsheet");
         btnExportCSV.setToolTipText("Create a CSV file of all relevant Observations used by this report. Can be opened in Excel, etc.");
         btnExportCSV.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -151,7 +151,7 @@ public class ReportExportDialog extends JDialog {
         });
         getContentPane().add(btnExportCSV);
 
-        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon.gif"))); // NOI18N
+        btnPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Selected.gif"))); // NOI18N
         btnPrint.setText("Print the Report");
         btnPrint.setToolTipText("Try to print the report using your default installed printer.");
         btnPrint.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

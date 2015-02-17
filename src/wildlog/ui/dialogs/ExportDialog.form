@@ -129,7 +129,7 @@
     <Component class="javax.swing.JButton" name="btnExportCSVBasic">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/CSV Icon.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as Spreadsheet (Basic)"/>
         <Property name="toolTipText" type="java.lang.String" value="Export a CSV file for all relevant Observations. Can be opened in Excel, etc."/>
@@ -160,7 +160,7 @@
     <Component class="javax.swing.JButton" name="btnExportCSV">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/CSV Icon.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as Spreadsheet (Complete)"/>
         <Property name="toolTipText" type="java.lang.String" value="Export a CSV file for all relevant Observations and linked records. Can be opened in Excel, etc."/>
@@ -191,7 +191,7 @@
     <Component class="javax.swing.JButton" name="btnExportXML">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Close.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/XML.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export as XML"/>
         <Property name="toolTipText" type="java.lang.String" value="Export a XML file for all relevant Observations and linked records."/>
@@ -222,7 +222,7 @@
     <Component class="javax.swing.JButton" name="btnExportFiles">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
+          <Image iconType="3" name="/wildlog/resources/icons/File.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export Files"/>
         <Property name="toolTipText" type="java.lang.String" value="Save copies of all relevant files in the Export folder."/>
@@ -253,7 +253,7 @@
     <Component class="javax.swing.JButton" name="btnExportFilesObservations">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/EXIF.png"/>
+          <Image iconType="3" name="/wildlog/resources/icons/File.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Export Files of linked Observations"/>
         <Property name="toolTipText" type="java.lang.String" value="Save copies of all relevant files in the Export folder."/>

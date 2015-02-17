@@ -128,7 +128,7 @@
     <Component class="javax.swing.JButton" name="btnSetDuration">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Duration.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/Duration.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Recalculate the Duration"/>
         <Property name="toolTipText" type="java.lang.String" value="Automatically calculate the duration for all Observations based on the dates of the uploaded files."/>
@@ -139,7 +139,7 @@
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="8"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 12, 2, 8]"/>
+          <Insets value="[2, 10, 2, 8]"/>
         </Property>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[375, 35]"/>
@@ -159,7 +159,7 @@
     <Component class="javax.swing.JButton" name="btnCorrectTime">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Visit.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/AdjustTime.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Adjust the Date and Time for all Observations"/>
         <Property name="toolTipText" type="java.lang.String" value="Automatically adjust the time of all Observations by the specified amount."/>
@@ -170,7 +170,7 @@
         <Property name="horizontalAlignment" type="int" value="2"/>
         <Property name="iconTextGap" type="int" value="8"/>
         <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-          <Insets value="[2, 12, 2, 8]"/>
+          <Insets value="[2, 10, 2, 8]"/>
         </Property>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[375, 35]"/>

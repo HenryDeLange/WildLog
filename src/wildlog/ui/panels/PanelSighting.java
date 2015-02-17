@@ -731,7 +731,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sightingIncludes.add(btnDeleteImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 335, 90, -1));
 
         btnSetMainImage.setBackground(new java.awt.Color(208, 204, 181));
-        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
+        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
         btnSetMainImage.setText("Default");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Observation.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

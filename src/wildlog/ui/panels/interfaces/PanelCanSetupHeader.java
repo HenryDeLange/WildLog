@@ -96,7 +96,11 @@ public abstract class PanelCanSetupHeader extends JPanel {
         btnClose.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnClose.setPreferredSize(new Dimension(12, 12));
         btnClose.setToolTipText("Close this tab.");
-        btnClose.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/icons/Close.gif")));
+        btnClose.setIcon(new ImageIcon(WildLogApp.class.getResource("resources/icons/Close.png")));
+        btnClose.setBorder(null);
+        btnClose.setBorderPainted(false);
+        btnClose.setContentAreaFilled(false);
+        btnClose.setRolloverEnabled(false);
         btnClose.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {

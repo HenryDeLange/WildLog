@@ -235,7 +235,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         lblNumberOfImages.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         btnViewImage.setBackground(new java.awt.Color(204, 213, 186));
-        btnViewImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/WildLog Icon Small.gif"))); // NOI18N
+        btnViewImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/File_Small.png"))); // NOI18N
         btnViewImage.setText("Open Original File");
         btnViewImage.setToolTipText("Ask the opperating system to open the original file (outside of WildLog).");
         btnViewImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -286,7 +286,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         });
 
         btnDefault.setBackground(new java.awt.Color(204, 213, 186));
-        btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
+        btnDefault.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
         btnDefault.setText("Default File");
         btnDefault.setToolTipText("Set the current file as the default (first) file for the selected node in the tree.");
         btnDefault.setFocusPainted(false);
@@ -463,7 +463,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         .addComponent(btnGoBrowseSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(cmbElementTypesBrowseTab, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(3, 3, 3)
-                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 190, 375)
+                .addComponent(scrTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 242, 375)
                 .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()

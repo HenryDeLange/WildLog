@@ -473,6 +473,9 @@ public class UtilsImageProcessing {
             graphics2D.dispose();
         }
         catch (IOException ex) {
+            // FIXME: This can generate "Access is denied" IO exceptions when multiple threads try to create the icons for the first time. 
+            //        I'm OK with that and don't want to add sync blocks just to hadle that initial posible scenario. 
+            //        If it continues or gives problems with "real" files, then fix it properly...
             ex.printStackTrace(System.err);
         }
     }

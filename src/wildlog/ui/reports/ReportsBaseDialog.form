@@ -227,7 +227,7 @@
                       <Color blue="ac" green="c6" red="b3" type="rgb"/>
                     </Property>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/wildlog/resources/icons/Browse.png"/>
+                      <Image iconType="3" name="/wildlog/resources/icons/FilterSightings.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Filter on Properties"/>
                     <Property name="toolTipText" type="java.lang.String" value="Filter the Observations according to the value of its data fields."/>

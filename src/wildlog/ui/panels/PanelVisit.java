@@ -458,7 +458,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
         });
 
         btnSetMainImage.setBackground(new java.awt.Color(228, 240, 237));
-        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
+        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
         btnSetMainImage.setText("Default");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Period.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

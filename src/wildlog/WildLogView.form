@@ -153,19 +153,6 @@
             <Property name="text" type="java.lang.String" value="Export"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExportCSV">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/CSV Icon.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Export All to CSV"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files. (Open in Excel, ArcGIS, etc.)"/>
-                <Property name="name" type="java.lang.String" value="mnuExportCSV" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportCSVActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportHTML">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -179,6 +166,32 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportHTMLActionPerformed"/>
               </Events>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportCSV">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Export All to CSV"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export all data to CSV files. (Open in Excel, ArcGIS, etc.)"/>
+                <Property name="name" type="java.lang.String" value="mnuExportCSV" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportCSVActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="mnuExportXML">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/XML.png"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Export All to XML"/>
+                <Property name="toolTipText" type="java.lang.String" value="Export all data to XML files. (Open in text editor, web browser, etc.)"/>
+                <Property name="name" type="java.lang.String" value="mnuExportXML" noResource="true"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportXMLActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuExportKML">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
@@ -190,19 +203,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportKMLActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mnuExportXML">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Close.gif"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Export All to XML"/>
-                <Property name="toolTipText" type="java.lang.String" value="Export all data to XML files. (Open in text editor, web browser, etc.)"/>
-                <Property name="name" type="java.lang.String" value="mnuExportXML" noResource="true"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuExportXMLActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JPopupMenu$Separator" name="jSeparator10">
@@ -252,7 +252,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuImportCSV">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/CSV Icon.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/CSV.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Import from CSV"/>
                 <Property name="toolTipText" type="java.lang.String" value="&lt;html&gt;Import the data contained in the CSV files. &lt;br/&gt;All imported data will be prefixed by the provided value. &lt;br/&gt;(Note: This import uses the same format as files generated by the CSV Export.)&lt;/html&gt;"/>
@@ -375,7 +375,7 @@
             <MenuItem class="javax.swing.JMenuItem" name="mnuCalcDuration">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/Duration.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/Duration_Small.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Calculate Duration for all Observations"/>
                 <Property name="toolTipText" type="java.lang.String" value="WARNING: This action might recalculate and overwrite the Duration information for all Observations."/>
@@ -483,10 +483,16 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuCreateGIF">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/wildlog/resources/icons/GIF_Small.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Create an Animated GIF"/>
                 <Property name="toolTipText" type="java.lang.String" value="Create an animated GIF slideshow using a folder of images anywhere on your computer."/>
                 <Property name="name" type="java.lang.String" value="mnuCreateGIF" noResource="true"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuCreateGIFActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="mnuSunAndMoon">
               <Properties>
@@ -613,24 +619,24 @@
                 <Property name="name" type="java.lang.String" value="slideshowMenu" noResource="true"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="mnuSetSlideshowSpeed">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Set Slideshow Speed"/>
-                    <Property name="toolTipText" type="java.lang.String" value="Set the framerate that will be used for all generated Slideshows."/>
-                    <Property name="name" type="java.lang.String" value="mnuSetSlideshowSpeed" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSetSlideshowSpeedActionPerformed"/>
-                  </Events>
-                </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mnuSetSlideshowSize">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Set Slideshow Size"/>
+                    <Property name="text" type="java.lang.String" value="Set Slideshow and Animated GIF Size"/>
                     <Property name="toolTipText" type="java.lang.String" value="Set the size to which the images should be resized for the generated Slideshows."/>
                     <Property name="name" type="java.lang.String" value="mnuSetSlideshowSize" noResource="true"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSetSlideshowSizeActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mnuSetSlideshowSpeed">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Set Slideshow and Animated GIF Speed"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Set the framerate that will be used for all generated Slideshows."/>
+                    <Property name="name" type="java.lang.String" value="mnuSetSlideshowSpeed" noResource="true"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mnuSetSlideshowSpeedActionPerformed"/>
                   </Events>
                 </MenuItem>
               </SubComponents>
@@ -920,8 +926,6 @@
                               <Component id="lblWorkspaceName" max="32767" attributes="0"/>
                               <Component id="jSeparator5" pref="437" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="121" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -957,10 +961,7 @@
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                           <Component id="jSeparator5" min="-2" pref="10" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="lblWorkspaceName" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
-                              <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="lblWorkspaceName" min="-2" pref="50" max="-2" attributes="0"/>
                           <EmptySpace pref="93" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLabel3" alignment="1" min="-2" pref="228" max="-2" attributes="0"/>
@@ -1205,15 +1206,6 @@
                     </Property>
                     <Property name="name" type="java.lang.String" value="lblSettingsPath" noResource="true"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="jButton1">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="New Reports for testing"/>
-                    <Property name="name" type="java.lang.String" value="jButton1" noResource="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
-                  </Events>
                 </Component>
               </SubComponents>
             </Container>

@@ -129,14 +129,14 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnSetSunAndMoon);
 
-        btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        btnSetDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.png"))); // NOI18N
         btnSetDuration.setText("Recalculate the Duration");
         btnSetDuration.setToolTipText("Automatically calculate the duration for all Observations based on the dates of the uploaded files.");
         btnSetDuration.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSetDuration.setFocusPainted(false);
         btnSetDuration.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSetDuration.setIconTextGap(8);
-        btnSetDuration.setMargin(new java.awt.Insets(2, 12, 2, 8));
+        btnSetDuration.setMargin(new java.awt.Insets(2, 10, 2, 8));
         btnSetDuration.setMaximumSize(new java.awt.Dimension(375, 35));
         btnSetDuration.setMinimumSize(new java.awt.Dimension(375, 35));
         btnSetDuration.setName("btnSetDuration"); // NOI18N
@@ -148,14 +148,14 @@ public class AdvancedDialog extends JDialog {
         });
         getContentPane().add(btnSetDuration);
 
-        btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Visit.gif"))); // NOI18N
+        btnCorrectTime.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/AdjustTime.png"))); // NOI18N
         btnCorrectTime.setText("Adjust the Date and Time for all Observations");
         btnCorrectTime.setToolTipText("Automatically adjust the time of all Observations by the specified amount.");
         btnCorrectTime.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCorrectTime.setFocusPainted(false);
         btnCorrectTime.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnCorrectTime.setIconTextGap(8);
-        btnCorrectTime.setMargin(new java.awt.Insets(2, 12, 2, 8));
+        btnCorrectTime.setMargin(new java.awt.Insets(2, 10, 2, 8));
         btnCorrectTime.setMaximumSize(new java.awt.Dimension(375, 35));
         btnCorrectTime.setMinimumSize(new java.awt.Dimension(375, 35));
         btnCorrectTime.setName("btnCorrectTime"); // NOI18N

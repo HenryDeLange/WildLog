@@ -336,7 +336,7 @@
                   <Color blue="ed" green="f0" red="e4" type="rgb"/>
                 </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/wildlog/resources/icons/DefaultImage.gif"/>
+                  <Image iconType="3" name="/wildlog/resources/icons/DefaultImage.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Default"/>
                 <Property name="toolTipText" type="java.lang.String" value="Make this the default (first) file for the Period."/>

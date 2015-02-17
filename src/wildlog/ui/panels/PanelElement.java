@@ -369,7 +369,7 @@ public class PanelElement extends PanelCanSetupHeader implements PanelNeedsRefre
         pnlFiles.setName("pnlFiles"); // NOI18N
 
         btnSetMainImage.setBackground(new java.awt.Color(227, 240, 227));
-        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.gif"))); // NOI18N
+        btnSetMainImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/DefaultImage.png"))); // NOI18N
         btnSetMainImage.setText("Default");
         btnSetMainImage.setToolTipText("Make this the default (first) file for the Creature.");
         btnSetMainImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

@@ -20,7 +20,6 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -29,6 +28,7 @@ import wildlog.utils.UtilsConcurency;
 import wildlog.utils.UtilsFileProcessing;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
+import wildlog.utils.WildLogSystemImages;
 
 
 public class SlideshowDialog extends JDialog {
@@ -100,10 +100,10 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowVisit.setIconTextGap(10);
         btnSlideshowVisit.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowVisit.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnSlideshowVisit.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnSlideshowVisit.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnSlideshowVisit.setMinimumSize(new java.awt.Dimension(260, 35));
         btnSlideshowVisit.setName("btnSlideshowVisit"); // NOI18N
-        btnSlideshowVisit.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnSlideshowVisit.setPreferredSize(new java.awt.Dimension(260, 35));
         btnSlideshowVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSlideshowVisitActionPerformed(evt);
@@ -118,10 +118,10 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowVisitSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowVisitSightings.setIconTextGap(10);
         btnSlideshowVisitSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowVisitSightings.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnSlideshowVisitSightings.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnSlideshowVisitSightings.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnSlideshowVisitSightings.setMinimumSize(new java.awt.Dimension(260, 35));
         btnSlideshowVisitSightings.setName("btnSlideshowVisitSightings"); // NOI18N
-        btnSlideshowVisitSightings.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnSlideshowVisitSightings.setPreferredSize(new java.awt.Dimension(260, 35));
         btnSlideshowVisitSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSlideshowVisitSightingsActionPerformed(evt);
@@ -136,10 +136,10 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowLocation.setIconTextGap(10);
         btnSlideshowLocation.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowLocation.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnSlideshowLocation.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnSlideshowLocation.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnSlideshowLocation.setMinimumSize(new java.awt.Dimension(260, 35));
         btnSlideshowLocation.setName("btnSlideshowLocation"); // NOI18N
-        btnSlideshowLocation.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnSlideshowLocation.setPreferredSize(new java.awt.Dimension(260, 35));
         btnSlideshowLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSlideshowLocationActionPerformed(evt);
@@ -154,10 +154,10 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowLocationSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowLocationSightings.setIconTextGap(10);
         btnSlideshowLocationSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowLocationSightings.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnSlideshowLocationSightings.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnSlideshowLocationSightings.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnSlideshowLocationSightings.setMinimumSize(new java.awt.Dimension(260, 35));
         btnSlideshowLocationSightings.setName("btnSlideshowLocationSightings"); // NOI18N
-        btnSlideshowLocationSightings.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnSlideshowLocationSightings.setPreferredSize(new java.awt.Dimension(260, 35));
         btnSlideshowLocationSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSlideshowLocationSightingsActionPerformed(evt);
@@ -172,10 +172,10 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowElement.setIconTextGap(10);
         btnSlideshowElement.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowElement.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnSlideshowElement.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnSlideshowElement.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnSlideshowElement.setMinimumSize(new java.awt.Dimension(260, 35));
         btnSlideshowElement.setName("btnSlideshowElement"); // NOI18N
-        btnSlideshowElement.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnSlideshowElement.setPreferredSize(new java.awt.Dimension(260, 35));
         btnSlideshowElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSlideshowElementActionPerformed(evt);
@@ -190,10 +190,10 @@ public class SlideshowDialog extends JDialog {
         btnSlideshowElementSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnSlideshowElementSightings.setIconTextGap(10);
         btnSlideshowElementSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnSlideshowElementSightings.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnSlideshowElementSightings.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnSlideshowElementSightings.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnSlideshowElementSightings.setMinimumSize(new java.awt.Dimension(260, 35));
         btnSlideshowElementSightings.setName("btnSlideshowElementSightings"); // NOI18N
-        btnSlideshowElementSightings.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnSlideshowElementSightings.setPreferredSize(new java.awt.Dimension(260, 35));
         btnSlideshowElementSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSlideshowElementSightingsActionPerformed(evt);
@@ -201,16 +201,17 @@ public class SlideshowDialog extends JDialog {
         });
         getContentPane().add(btnSlideshowElementSightings);
 
-        btnGIFElementSightings.setText("GIF of the Observations' Images");
+        btnGIFElementSightings.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GIF.png"))); // NOI18N
+        btnGIFElementSightings.setText("Animated GIF of the Observations' Images");
         btnGIFElementSightings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGIFElementSightings.setFocusPainted(false);
         btnGIFElementSightings.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btnGIFElementSightings.setIconTextGap(10);
         btnGIFElementSightings.setMargin(new java.awt.Insets(2, 6, 2, 6));
-        btnGIFElementSightings.setMaximumSize(new java.awt.Dimension(240, 35));
-        btnGIFElementSightings.setMinimumSize(new java.awt.Dimension(240, 35));
+        btnGIFElementSightings.setMaximumSize(new java.awt.Dimension(260, 35));
+        btnGIFElementSightings.setMinimumSize(new java.awt.Dimension(260, 35));
         btnGIFElementSightings.setName("btnGIFElementSightings"); // NOI18N
-        btnGIFElementSightings.setPreferredSize(new java.awt.Dimension(240, 35));
+        btnGIFElementSightings.setPreferredSize(new java.awt.Dimension(260, 35));
         btnGIFElementSightings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGIFElementSightingsActionPerformed(evt);
@@ -370,9 +371,8 @@ public class SlideshowDialog extends JDialog {
                         ImageOutputStream output = null;
                         try {
                             output = new FileImageOutputStream(outputPath.toFile());
-// TODO: gebruik die slideshow setting vir size en speed...
-                            int thumbnailSize = WildLogThumbnailSizes.LARGE.getSize();
-                            ImageIcon image = UtilsImageProcessing.getScaledIconForMovies(WildLogThumbnailSizes.LARGE);
+                            int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
+                            ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize);
                             BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
                             Graphics2D graphics2D = bufferedImage.createGraphics();
                             graphics2D.drawImage(image.getImage(), 
@@ -381,7 +381,8 @@ public class SlideshowDialog extends JDialog {
                                         image.getIconWidth(), 
                                         image.getIconHeight(), 
                                         Color.BLACK, null);
-                            AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), 1000, true);
+                            int timeBetweenFrames = (int) (1000.0 / ((double) app.getWildLogOptions().getDefaultSlideshowSpeed()));
+                            AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), timeBetweenFrames, true);
                             gifWriter.writeToGIF(bufferedImage);
                             setProgress(2);
                             setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "' " + getProgress() + "%");

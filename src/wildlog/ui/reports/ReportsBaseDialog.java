@@ -119,7 +119,6 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
         reports.add(new DurationChart(lstFilteredData, lblReportDescription));
         reports.add(new TextReports(lstFilteredData, lblReportDescription));
-// TODO: Maak 'n paar charts wat die duration van sightings wys. Dalk handigste om min/ave/max van 'n spesie te sien. (Barchart met 3 series per spesie om x-axis).
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
@@ -130,6 +129,7 @@ public class ReportsBaseDialog extends JFrame {
                     @Override
                     public void handle(ActionEvent event) {
                         setActiveReport(report);
+// TODO: Maak die laoding boodskap beter (dalk met 'n fade effek as ek kan om die flikker te verminder?)
                         jfxReportChartPanel.getScene().setRoot(new Label("Loading..."));
                         report.createReport(jfxReportChartPanel.getScene());
                     }
@@ -219,7 +219,7 @@ public class ReportsBaseDialog extends JFrame {
         pnlFilters.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Data Filters", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         btnFilterProperties.setBackground(new java.awt.Color(179, 198, 172));
-        btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Browse.png"))); // NOI18N
+        btnFilterProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/FilterSightings.png"))); // NOI18N
         btnFilterProperties.setText("Filter on Properties");
         btnFilterProperties.setToolTipText("Filter the Observations according to the value of its data fields.");
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
