@@ -37,6 +37,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageOutputStream;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -76,6 +78,7 @@ import wildlog.data.utils.WildLogConstants;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.mapping.utils.UtilsGps;
+import wildlog.movies.gifmovie.AnimatedGIFWriter;
 import wildlog.movies.utils.UtilsMovies;
 import wildlog.ui.dialogs.MergeElementsDialog;
 import wildlog.ui.dialogs.MergeLocationDialog;
@@ -3167,7 +3170,107 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuExportXMLActionPerformed
 
     private void mnuCreateGIFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCreateGIFActionPerformed
-        // TODO add your handling code here:
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setFileFilter(new FileNameExtensionFilter("JPG Images",
+                WildLogFileExtentions.Images.JPG.getExtention().toLowerCase(), WildLogFileExtentions.Images.JPEG.getExtention().toLowerCase(),
+                WildLogFileExtentions.Images.JPG.getExtention().toUpperCase(), WildLogFileExtentions.Images.JPG.getExtention().toUpperCase()));
+        fileChooser.setDialogTitle("Select the JPG images to use for the Custom Animated GIF...");
+        int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return fileChooser.showOpenDialog(app.getMainFrame());
+                }
+            });
+        if (result == JFileChooser.APPROVE_OPTION) {
+            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
+                @Override
+                protected Object doInBackground() throws Exception {
+                    setMessage("Creating the Custom Animated GIF");
+                    List<File> files = Arrays.asList(fileChooser.getSelectedFiles());
+                    List<String> fileNames = new ArrayList<String>(files.size());
+                    for (File tempFile : files) {
+                        fileNames.add(tempFile.getAbsolutePath());
+                    }
+                    fileChooser.setDialogTitle("Please select where to save the Custom Animated GIF...");
+                    fileChooser.setMultiSelectionEnabled(false);
+                    fileChooser.setSelectedFile(new File("animated_gif.gif"));
+                    fileChooser.setFileFilter(new FileNameExtensionFilter("Animated GIF", "gif"));
+                    int result = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                            @Override
+                            public int showDialog() {
+                                return fileChooser.showSaveDialog(app.getMainFrame());
+                            }
+                        });
+                    if (result == JFileChooser.APPROVE_OPTION) {
+                        setProgress(1);
+                        setMessage("Creating the Custom Animated GIF " + getProgress() + "%");
+                        // Now create the GIF
+                        if (!fileNames.isEmpty()) {
+                            Path outputPath = fileChooser.getSelectedFile().toPath();
+                            Files.createDirectories(outputPath.getParent());
+                            ImageOutputStream output = null;
+                            try {
+                                output = new FileImageOutputStream(outputPath.toFile());
+                                int thumbnailSize = app.getWildLogOptions().getDefaultSlideshowSize();
+                                ImageIcon image = UtilsImageProcessing.getScaledIcon(WildLogSystemImages.MOVIES.getWildLogFile().getAbsolutePath(), thumbnailSize);
+                                BufferedImage bufferedImage = new BufferedImage(image.getIconWidth(), image.getIconHeight(), BufferedImage.TYPE_INT_RGB);
+                                Graphics2D graphics2D = bufferedImage.createGraphics();
+                                graphics2D.drawImage(image.getImage(), 
+                                            (thumbnailSize - image.getIconWidth())/2, 
+                                            (thumbnailSize - image.getIconHeight())/2, 
+                                            image.getIconWidth(), 
+                                            image.getIconHeight(), 
+                                            Color.BLACK, null);
+                                int timeBetweenFrames = (int) (1000.0 / ((double) app.getWildLogOptions().getDefaultSlideshowSpeed()));
+                                AnimatedGIFWriter gifWriter = new AnimatedGIFWriter(output, bufferedImage.getType(), timeBetweenFrames, true);
+                                gifWriter.writeToGIF(bufferedImage);
+                                setProgress(2);
+                                setMessage("Creating the Custom Animated GIF " + getProgress() + "%");
+                                for (int t = 0; t < fileNames.size(); t++) {
+                                    image = UtilsImageProcessing.getScaledIcon(Paths.get(fileNames.get(t)), thumbnailSize);
+                                    bufferedImage = new BufferedImage(thumbnailSize, thumbnailSize, BufferedImage.TYPE_INT_RGB);
+                                    graphics2D = bufferedImage.createGraphics();
+                                    graphics2D.drawImage(image.getImage(), 
+                                            (thumbnailSize - image.getIconWidth())/2, 
+                                            (thumbnailSize - image.getIconHeight())/2, 
+                                            image.getIconWidth(), 
+                                            image.getIconHeight(), 
+                                            Color.BLACK, null);
+                                    gifWriter.writeToGIF(bufferedImage);
+                                    setProgress(2 + (int)((((double)t)/((double)fileNames.size()))*97));
+                                    setMessage("Creating the Custom Animated GIF " + getProgress() + "%");
+                                }
+                                gifWriter.finishGIF();
+                            }
+                            catch (IOException ex) {
+                                ex.printStackTrace(System.err);
+                            }
+                            finally {
+                                if (output != null) {
+                                    try {
+                                        output.flush();
+                                    }
+                                    catch (IOException ex) {
+                                        ex.printStackTrace(System.err);
+                                    }
+                                    try {
+                                        output.close();
+                                    }
+                                    catch (IOException ex) {
+                                        ex.printStackTrace(System.err);
+                                    }
+                                }
+                            }
+                            UtilsFileProcessing.openFile(outputPath.getParent());
+                        }
+                    }
+                    setProgress(100);
+                    setMessage("Done with the Custom Animated GIF");
+                    return null;
+                }
+            });
+        }
     }//GEN-LAST:event_mnuCreateGIFActionPerformed
 
     public void browseSelectedElement(Element inElement) {
