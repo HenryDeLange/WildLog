@@ -32,7 +32,7 @@ public interface DBI {
     public <T extends ElementCore> List<T> list(T inElement);
     public <T extends LocationCore> List<T> list(T inLocation);
     public <T extends VisitCore> List<T> list(T inVisit);
-    public <T extends SightingCore> List<T> list(T inSighting);
+    public <T extends SightingCore> List<T> list(T inSighting, boolean inIncludeCachedValues);
     public <T extends WildLogFileCore> List<T> list(T inWildLogFile);
 
 // TODO: Split these methods into propper create and update versions...

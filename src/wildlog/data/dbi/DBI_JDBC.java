@@ -79,7 +79,7 @@ public abstract class DBI_JDBC implements DBI {
     // List
     protected static final String listLocation = "SELECT * FROM LOCATIONS";
     protected static final String listVisit = "SELECT * FROM VISITS";
-    protected static final String listSighting = "SELECT * FROM SIGHTINGS";
+//    protected static final String listSighting = "SELECT * FROM SIGHTINGS";
     protected static final String listElement = "SELECT * FROM ELEMENTS";
     protected static final String listFile = "SELECT * FROM FILES";
     // Create
@@ -898,12 +898,20 @@ public abstract class DBI_JDBC implements DBI {
     }
 
     @Override
-    public <T extends SightingCore> List<T> list(T inSighting) {
+    public <T extends SightingCore> List<T> list(T inSighting, boolean inIncludeCachedValues) {
         PreparedStatement state = null;
         ResultSet results = null;
         List<T> tempList = new ArrayList<T>();
         try {
-            String sql = listSighting;
+            String sql = "SELECT SIGHTINGS.*";
+            if (inIncludeCachedValues) {
+                sql = sql + ", ELEMENTS.ELEMENTTYPE, VISITS.VISITTYPE FROM SIGHTINGS"
+                          + " LEFT JOIN ELEMENTS ON ELEMENTS.PRIMARYNAME = SIGHTINGS.ELEMENTNAME" 
+                          + " LEFT JOIN VISITS ON VISITS.NAME = SIGHTINGS.VISITNAME";
+            }
+            else {
+                sql = sql + " FROM SIGHTINGS";
+            }
             if (inSighting.getSightingCounter() > 0) {
                 sql = sql + " WHERE SIGHTINGCOUNTER = ?";
                 state = conn.prepareStatement(sql);
@@ -963,6 +971,10 @@ public abstract class DBI_JDBC implements DBI {
             while (results.next()) {
                 T tempSighting = (T) inSighting.getClass().newInstance();
                 populateSighting(results, tempSighting);
+                if (inIncludeCachedValues) {
+                    tempSighting.setCachedElementType(ElementType.getEnumFromText(results.getString("ELEMENTTYPE")));
+                    tempSighting.setCachedVisitType(VisitType.getEnumFromText(results.getString("VISITTYPE")));
+                }
                 tempList.add(tempSighting);
             }
         }
@@ -1053,7 +1065,7 @@ public abstract class DBI_JDBC implements DBI {
                     // Update the Sightings
                     SightingCore sighting = new SightingCore();
                     sighting.setElementName(inOldName);
-                    List<SightingCore> sightings = list(sighting);
+                    List<SightingCore> sightings = list(sighting, false);
                     for (SightingCore temp : sightings) {
                         temp.setElementName(inElement.getPrimaryName());
                         createOrUpdate(temp, false);
@@ -1134,7 +1146,7 @@ public abstract class DBI_JDBC implements DBI {
                     // Update the Sightings
                     SightingCore sighting = new SightingCore();
                     sighting.setLocationName(inOldName);
-                    List<SightingCore> sightings = list(sighting);
+                    List<SightingCore> sightings = list(sighting, false);
                     for (SightingCore temp : sightings) {
                         temp.setLocationName(inLocation.getName());
                         createOrUpdate(temp, false);
@@ -1211,7 +1223,7 @@ public abstract class DBI_JDBC implements DBI {
                     // Update the Sightings
                     SightingCore sighting = new SightingCore();
                     sighting.setVisitName(inOldName);
-                    List<SightingCore> sightings = list(sighting);
+                    List<SightingCore> sightings = list(sighting, false);
                     for (SightingCore temp : sightings) {
                         temp.setVisitName(inVisit.getName());
                         createOrUpdate(temp, false);
@@ -1463,7 +1475,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete all Sightings for this ElementCore
             SightingCore sighting = new SightingCore();
             sighting.setElementName(inElement.getPrimaryName());
-            List<SightingCore> sightingList = list(sighting);
+            List<SightingCore> sightingList = list(sighting, false);
             for (SightingCore temp : sightingList) {
                 delete(temp);
             }
@@ -1530,7 +1542,7 @@ public abstract class DBI_JDBC implements DBI {
             // Delete Sightings for this VisitCore
             SightingCore sighting = new SightingCore();
             sighting.setVisitName(inVisit.getName());
-            List<SightingCore> sightingList = list(sighting);
+            List<SightingCore> sightingList = list(sighting, false);
             for (SightingCore temp : sightingList) {
                 delete(temp);
             }

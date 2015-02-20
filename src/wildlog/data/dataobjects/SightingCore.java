@@ -134,6 +134,8 @@ public class SightingCore extends DataObjectWithGPS implements DataObjectWithWil
             sighting.setViewRating(viewRating);
             sighting.setVisitName(visitName);
             sighting.setWeather(weather);
+            sighting.setCachedElementType(cachedElementType);
+            sighting.setCachedVisitType(cachedVisitType);
             return sighting;
         }
         catch (InstantiationException ex) {
