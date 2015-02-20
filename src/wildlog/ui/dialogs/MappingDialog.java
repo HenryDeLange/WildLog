@@ -262,7 +262,7 @@ public class MappingDialog extends JDialog {
         });
         getContentPane().add(btnViewDistributionMap);
 
-        btnOpenKmlViewer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
+        btnOpenKmlViewer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         btnOpenKmlViewer.setText("Open KML File (needs external viewer)");
         btnOpenKmlViewer.setToolTipText("Open a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
         btnOpenKmlViewer.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -322,7 +322,7 @@ public class MappingDialog extends JDialog {
         // Load points
         Sighting tempSighting = new Sighting();
         tempSighting.setLocationName(location.getName());
-        List<Sighting> sightings = app.getDBI().list(tempSighting);
+        List<Sighting> sightings = app.getDBI().list(tempSighting, false);
         for (int i = 0; i < sightings.size(); i++) {
             if (sightings.get(i).getLatitude() != null && sightings.get(i).getLongitude() != null) {
                 if (!sightings.get(i).getLatitude().equals(Latitudes.NONE) && !sightings.get(i).getLongitude().equals(Longitudes.NONE)) {
@@ -360,7 +360,7 @@ public class MappingDialog extends JDialog {
         // Load points
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
-        List<Sighting> sightingList = app.getDBI().list(sigting);
+        List<Sighting> sightingList = app.getDBI().list(sigting, false);
         boolean foundPosition;
         for (int t = 0; t < sightingList.size(); t++) {
             foundPosition = false;
@@ -456,7 +456,7 @@ public class MappingDialog extends JDialog {
         // Load points
         Sighting sigting = new Sighting();
         sigting.setElementName(element.getPrimaryName());
-        List<Sighting> sightingList = app.getDBI().list(sigting);
+        List<Sighting> sightingList = app.getDBI().list(sigting, false);
         boolean foundPosition;
         for (int t = 0; t < sightingList.size(); t++) {
             foundPosition = false;
@@ -504,7 +504,7 @@ public class MappingDialog extends JDialog {
         // Load points
         Sighting tempSighting = new Sighting();
         tempSighting.setVisitName(visit.getName());
-        List<Sighting> sightings = app.getDBI().list(tempSighting);
+        List<Sighting> sightings = app.getDBI().list(tempSighting, false);
         for (int t = 0; t < sightings.size(); t++) {
             if (sightings.get(t).getLatitude() != null && sightings.get(t).getLongitude() != null)
             if (!sightings.get(t).getLatitude().equals(Latitudes.NONE) && !sightings.get(t).getLongitude().equals(Longitudes.NONE)) {

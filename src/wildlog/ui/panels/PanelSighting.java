@@ -1097,7 +1097,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sightingIncludes.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 277, -1, 20));
 
         btnCalculateDuration.setBackground(new java.awt.Color(208, 204, 181));
-        btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration.gif"))); // NOI18N
+        btnCalculateDuration.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Duration_Small.png"))); // NOI18N
         btnCalculateDuration.setText("<html>Calculate <b>Duration</b> from <b>Image</b> data</html>");
         btnCalculateDuration.setToolTipText("Attempt to calculate the Duration of the Observation based on times specified on the uploaded images.");
         btnCalculateDuration.setEnabled(!disableEditing && !bulkUploadMode);
@@ -1176,7 +1176,7 @@ public class PanelSighting extends JDialog implements PanelNeedsRefreshWhenDataC
         sightingIncludes.add(cmbAge, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 60, 140, -1));
 
         btnGetGPSFromImage.setBackground(new java.awt.Color(208, 204, 181));
-        btnGetGPSFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS.png"))); // NOI18N
+        btnGetGPSFromImage.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GPS_Small.png"))); // NOI18N
         btnGetGPSFromImage.setText("<html>Load <b>GPS</b> from <b>Image </b>data</html>");
         btnGetGPSFromImage.setToolTipText("Attempt to load the GPS from the image's EXIF data.");
         btnGetGPSFromImage.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

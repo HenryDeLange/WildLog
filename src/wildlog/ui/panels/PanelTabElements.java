@@ -440,8 +440,8 @@ public class PanelTabElements extends javax.swing.JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
         lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
+        UtilsTableGenerator.setupElementTableLarge(app, tblElement, searchElement, txtSearch.getText());
     }//GEN-LAST:event_formComponentShown
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased

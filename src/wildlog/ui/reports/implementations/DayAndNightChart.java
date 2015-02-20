@@ -143,7 +143,7 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
                 chartData.add(new PieChart.Data(key + " (" + mapGroupedData.get(key).getCount() + ")", mapGroupedData.get(key).getCount()));
             }
             else {
-// FIXME: Kry 'n manier om die lee data se labels te hide want dit lyk simpel
+// FIXME: Kry 'n manier om die lee data se labels te hide want dit lyk simpel (vir nou is die if hier onder OK)
                 if (!ActiveTime.UNKNOWN.equals(ActiveTime.getEnumFromText(key))
                         && !ActiveTime.NONE.equals(ActiveTime.getEnumFromText(key))) {
                     chartData.add(new PieChart.Data(key + " (0)", 0));
@@ -194,7 +194,6 @@ public class DayAndNightChart extends AbstractReport<Sighting> {
             ObservableList<AreaChart.Series<Number, Number>> chartData = FXCollections.observableArrayList();
             List<String> keys = ActiveTime.getEnumListAsStringForReports();
             Collections.sort(keys);
-// FIXME: Handle die kleure as daar lee entries is
             for (String key : keys) {
                 Map<Long, ReportDataWrapper> mapChartData = mapGroupedData.get(key);
                 if (mapChartData != null) {

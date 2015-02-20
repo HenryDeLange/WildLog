@@ -32,10 +32,10 @@ import wildlog.utils.WildLogSystemImages;
 
 
 public class SlideshowDialog extends JDialog {
-    private WildLogApp app;
-    private Visit visit;
-    private Location location;
-    private Element element;
+    private final WildLogApp app;
+    private final Visit visit;
+    private final Location location;
+    private final Element element;
 
     
     public SlideshowDialog(WildLogApp inApp, Visit inVisit, Location inLocation, Element inElement) {
@@ -246,7 +246,7 @@ public class SlideshowDialog extends JDialog {
                 setMessage("Creating the Slideshow for '" + visit.getName() + "'");
                 Sighting temp = new Sighting();
                 temp.setVisitName(visit.getName());
-                List<Sighting> sightingList = app.getDBI().list(temp);
+                List<Sighting> sightingList = app.getDBI().list(temp, false);
                 Collections.sort(sightingList);
                 List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
                 for (Sighting tempSighting : sightingList) {
@@ -288,7 +288,7 @@ public class SlideshowDialog extends JDialog {
                 setMessage("Creating the Slideshow for '" + location.getName() + "'");
                 Sighting temp = new Sighting();
                 temp.setLocationName(location.getName());
-                List<Sighting> sightingList = app.getDBI().list(temp);
+                List<Sighting> sightingList = app.getDBI().list(temp, false);
                 Collections.sort(sightingList);
                 List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
                 for (Sighting tempSighting : sightingList) {
@@ -330,7 +330,7 @@ public class SlideshowDialog extends JDialog {
                 setMessage("Creating the Slideshow for '" + element.getPrimaryName() + "'");
                 Sighting temp = new Sighting();
                 temp.setElementName(element.getPrimaryName());
-                List<Sighting> sightingList = app.getDBI().list(temp);
+                List<Sighting> sightingList = app.getDBI().list(temp, false);
                 Collections.sort(sightingList);
                 List<String> slideshowList = new ArrayList<String>(sightingList.size() * 3);
                 for (Sighting tempSighting : sightingList) {
@@ -355,7 +355,7 @@ public class SlideshowDialog extends JDialog {
                 setMessage("Creating the Animated GIF for '" + element.getPrimaryName() + "'");
                 Sighting temp = new Sighting();
                 temp.setElementName(element.getPrimaryName());
-                List<Sighting> sightingList = app.getDBI().list(temp);
+                List<Sighting> sightingList = app.getDBI().list(temp, false);
                 if (!sightingList.isEmpty()) {
                     Collections.sort(sightingList);
                     setProgress(1);

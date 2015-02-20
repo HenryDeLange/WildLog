@@ -614,7 +614,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(location, false));
             root.add(locationNode);
-            List<Sighting> sightings = app.getDBI().list(new Sighting(null, location.getName(), null));
+            List<Sighting> sightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {
@@ -661,7 +661,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             mapVisits = new HashMap<>(500);
             DefaultMutableTreeNode elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(element, false));
             root.add(elementNode);
-            List<Sighting> sightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null));
+            List<Sighting> sightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
             Collections.sort(sightings, new Comparator<Sighting>() {
                 @Override
                 public int compare(Sighting sighting1, Sighting sighting2) {

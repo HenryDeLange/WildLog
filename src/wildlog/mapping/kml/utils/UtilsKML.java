@@ -229,7 +229,7 @@ public final class UtilsKML {
                 tempSighting = (Sighting) inDataObject;
             }
         }
-        List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
+        List<Sighting> listSightings = inApp.getDBI().list(tempSighting, false);
         Collections.sort(listSightings);
         Map<String, List<KmlEntry>> entries = new HashMap<String, List<KmlEntry>>(50);
         for (int t = 0; t < listSightings.size(); t++) {

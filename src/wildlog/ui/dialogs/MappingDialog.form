@@ -275,7 +275,7 @@
     <Component class="javax.swing.JButton" name="btnOpenKmlViewer">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" noResource="true" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/Google Earth Icon.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/GoogleEarth.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Open KML File (needs external viewer)"/>
         <Property name="toolTipText" type="java.lang.String" value="Open a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc."/>

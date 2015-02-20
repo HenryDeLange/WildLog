@@ -183,7 +183,7 @@ public class DateChangeDialog extends JDialog {
         }
         else {
             // Update the Sightings
-            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+            List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
             for (Sighting sighting : listSightings) {
                 LocalDateTime currentSightingTime = UtilsTime.getLocalDateTimeFromDate(sighting.getDate());
                 if (rdbIncrease.isSelected()) {

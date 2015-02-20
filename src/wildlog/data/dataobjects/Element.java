@@ -101,7 +101,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
             htmlElement.append("<tr><td>");
             Sighting tempSighting = new Sighting();
             tempSighting.setElementName(primaryName);
-            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+            List<Sighting> sightings = inApp.getDBI().list(tempSighting, false);
             int counter = 0;
             for (Sighting temp : sightings) {
                 htmlElement.append("<br/>").append(temp.toHTML(false, inIncludeImages, inApp, inExportType, null));
@@ -151,7 +151,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         html = html.replace("___INSERT_DETAILS___", toHTML(false, false, inApp, UtilsHTMLExportTypes.ForHTML, inProgressbarTask));
         // Sightings
         String sightings = "";
-        List<Sighting> listSightings = inApp.getDBI().list(new Sighting(primaryName, null, null));
+        List<Sighting> listSightings = inApp.getDBI().list(new Sighting(primaryName, null, null), false);
         int counter = 0;
         for (Sighting temp : listSightings) {
             sightings = sightings + "\n" + temp.toFancyHTML(inApp, null);
@@ -173,10 +173,10 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         }
         StringBuilder builder = new StringBuilder(500);
         builder.append("<Creature>");
-        builder.append("<primaryName>").append(primaryName).append("</primaryName>");
-        builder.append("<otherName>").append(otherName).append("</otherName>");
-        builder.append("<scientificName>").append(scientificName).append("</scientificName>");
-        builder.append("<referenceID>").append(referenceID).append("</referenceID>");
+        builder.append("<primaryName><![CDATA[").append(primaryName).append("]]></primaryName>");
+        builder.append("<otherName><![CDATA[").append(otherName).append("]]></otherName>");
+        builder.append("<scientificName><![CDATA[").append(scientificName).append("]]></scientificName>");
+        builder.append("<referenceID><![CDATA[").append(referenceID).append("]]></referenceID>");
         builder.append("<type>").append(type).append("</type>");
         builder.append("<feedingClass>").append(feedingClass).append("</feedingClass>");
         builder.append("<addFrequency>").append(addFrequency).append("</addFrequency>");
@@ -184,14 +184,14 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         builder.append("<activeTime>").append(activeTime).append("</activeTime>");
         builder.append("<endangeredStatus>").append(endangeredStatus).append("</endangeredStatus>");
         builder.append("<waterDependance>").append(waterDependance).append("</waterDependance>");
-        builder.append("<nutrition>").append(nutrition).append("</nutrition>");
-        builder.append("<diagnosticDescription>").append(diagnosticDescription).append("</diagnosticDescription>");
-        builder.append("<description>").append(description).append("</description>");
-        builder.append("<distribution>").append(distribution).append("</distribution>");
-        builder.append("<behaviourDescription>").append(behaviourDescription).append("</behaviourDescription>");
-        builder.append("<lifespan>").append(lifespan).append("</lifespan>");
-        builder.append("<breedingDuration>").append(breedingDuration).append("</breedingDuration>");
-        builder.append("<breedingNumber>").append(breedingNumber).append("</breedingNumber>");
+        builder.append("<nutrition><![CDATA[").append(nutrition).append("]]></nutrition>");
+        builder.append("<diagnosticDescription><![CDATA[").append(diagnosticDescription).append("]]></diagnosticDescription>");
+        builder.append("<description><![CDATA[").append(description).append("]]></description>");
+        builder.append("<distribution><![CDATA[").append(distribution).append("]]></distribution>");
+        builder.append("<behaviourDescription><![CDATA[").append(behaviourDescription).append("]]></behaviourDescription>");
+        builder.append("<lifespan><![CDATA[").append(lifespan).append("]]></lifespan>");
+        builder.append("<breedingDuration><![CDATA[").append(breedingDuration).append("]]></breedingDuration>");
+        builder.append("<breedingNumber><![CDATA[").append(breedingNumber).append("]]></breedingNumber>");
         builder.append("<sizeType>").append(sizeType).append("</sizeType>");
         builder.append("<sizeMaleMin>").append(sizeMaleMin).append("</sizeMaleMin>");
         builder.append("<sizeMaleMax>").append(sizeMaleMax).append("</sizeMaleMax>");
@@ -226,7 +226,7 @@ public class Element extends ElementCore implements DataObjectWithHTML, DataObje
         }
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().list(new Sighting(primaryName, null, null));
+            List<Sighting> sightings = inApp.getDBI().list(new Sighting(primaryName, null, null), false);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));

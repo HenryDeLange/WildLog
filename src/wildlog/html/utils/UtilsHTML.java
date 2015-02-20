@@ -24,7 +24,6 @@ public final class UtilsHTML {
     private UtilsHTML() {
     }
 
-//FIXME: probleme as files ' in het
     public static String generateHTMLImages(WildLogFile inWildLogFile, UtilsHTMLExportTypes inExportType) {
         Path fromFile = inWildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
         Path toFileAsRelativePath;

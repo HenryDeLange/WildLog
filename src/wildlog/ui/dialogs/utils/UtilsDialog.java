@@ -97,15 +97,15 @@ public final class UtilsDialog {
                 point.y + (inParentComponent.getHeight() - inComponentToCenter.getHeight())/2);
     }
 
-    public static ActionListener addEscapeKeyListener(final JDialog inDialog) {
+    public static <T extends Window & RootPaneContainer> ActionListener addEscapeKeyListener(final T inPopup) {
         ActionListener escListiner = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        inDialog.setVisible(false);
-                        inDialog.dispose();
+                        inPopup.setVisible(false);
+                        inPopup.dispose();
                     }
                 };
-        inDialog.getRootPane().registerKeyboardAction(
+        inPopup.getRootPane().registerKeyboardAction(
                 escListiner,
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);

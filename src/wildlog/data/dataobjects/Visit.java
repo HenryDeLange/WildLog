@@ -60,7 +60,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
             htmlVisit.append("<tr><td>");
             Sighting tempSighting = new Sighting();
             tempSighting.setVisitName(name);
-            List<Sighting> sightings = inApp.getDBI().list(tempSighting);
+            List<Sighting> sightings = inApp.getDBI().list(tempSighting, false);
             int counter = 0;
             for (int t = 0; t < sightings.size(); t++) {
                 htmlVisit.append("<br/>").append(sightings.get(t).toHTML(inIsRecursive, inIncludeImages, inApp, inExportType, null)).append("<br/>");
@@ -88,10 +88,10 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
     public String toXML(WildLogApp inApp, ProgressbarTask inProgressbarTask, boolean inIncludeSightings) {
         StringBuilder builder = new StringBuilder(300);
         builder.append("<Period>");
-        builder.append("<name>").append(name).append("</name>");
+        builder.append("<name><![CDATA[").append(name).append("]]></name>");
         builder.append("<startDate>").append(UtilsHTML.formatDateAsString(startDate, false)).append("</startDate>");
         builder.append("<endDate>").append(UtilsHTML.formatDateAsString(endDate, false)).append("</endDate>");
-        builder.append("<description>").append(description).append("</description>");
+        builder.append("<description><![CDATA[").append(description).append("]]></description>");
         builder.append("<gameWatchingIntensity>").append(gameWatchingIntensity).append("</gameWatchingIntensity>");
         builder.append("<type>").append(type).append("</type>");
         builder.append("<locationName>").append(locationName).append("</locationName>");
@@ -110,7 +110,7 @@ public class Visit extends VisitCore implements DataObjectWithHTML, DataObjectWi
         builder.append("<Files>").append(filesString).append("</Files>");
         if (inIncludeSightings) {
             StringBuilder sightingString = new StringBuilder(1024);
-            List<Sighting> sightings = inApp.getDBI().list(new Sighting(null, null, name));
+            List<Sighting> sightings = inApp.getDBI().list(new Sighting(null, null, name), false);
             counter = 0;
             for (Sighting temp : sightings) {
                 sightingString.append(temp.toXML(inApp, null, false));

@@ -192,10 +192,10 @@ public final class WildLogView extends JFrame {
         });
         // Setup the tab headers
         setupTabHeaderHome();
-        setupTabHeaderBrowse();
-        setupTabHeaderLocation();
-        setupTabHeaderElement();
-        setupTabHeaderSightings();
+        setupTabHeaderLocation(1);
+        setupTabHeaderElement(2);
+        setupTabHeaderSightings(3);
+        setupTabHeaderBrowse(4);
         // Set the minimum size of the frame
         this.setMinimumSize(new Dimension(1024, 705));
     }
@@ -212,61 +212,61 @@ public final class WildLogView extends JFrame {
         UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 0);
     }
 
-    private void setupTabHeaderBrowse() {
+    private void setupTabHeaderBrowse(int inIndex) {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/Browse.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Browse"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        tabbedPanel.setTitleAt(1, "Browse");
-        tabbedPanel.setIconAt(1, icon);
-        tabbedPanel.setTabComponentAt(1, tabHeader);
-        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 1);
+        tabbedPanel.setTitleAt(inIndex, "Browse");
+        tabbedPanel.setIconAt(inIndex, icon);
+        tabbedPanel.setTabComponentAt(inIndex, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, inIndex);
         // Setup content
         panelTabBrowse = new PanelTabBrowse(app, tabbedPanel);
-        tabbedPanel.setComponentAt(1, panelTabBrowse);
+        tabbedPanel.setComponentAt(inIndex, panelTabBrowse);
     }
 
-    private void setupTabHeaderLocation() {
+    private void setupTabHeaderLocation(int inIndex) {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/LocationList.gif"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Places"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        tabbedPanel.setTitleAt(2, "Places");
-        tabbedPanel.setIconAt(2, icon);
-        tabbedPanel.setTabComponentAt(2, tabHeader);
-        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 2);
+        tabbedPanel.setTitleAt(inIndex, "Places");
+        tabbedPanel.setIconAt(inIndex, icon);
+        tabbedPanel.setTabComponentAt(inIndex, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, inIndex);
         // Setup content
-        tabbedPanel.setComponentAt(2, new PanelTabLocations(app, tabbedPanel));
+        tabbedPanel.setComponentAt(inIndex, new PanelTabLocations(app, tabbedPanel));
     }
 
-    private void setupTabHeaderElement() {
+    private void setupTabHeaderElement(int inIndex) {
         JPanel tabHeader = new JPanel();
-        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/ElementList.gif"));
+        ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/ElementList.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Creatures"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        tabbedPanel.setTitleAt(3, "Creatures");
-        tabbedPanel.setIconAt(3, icon);
-        tabbedPanel.setTabComponentAt(3, tabHeader);
-        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 3);
+        tabbedPanel.setTitleAt(inIndex, "Creatures");
+        tabbedPanel.setIconAt(inIndex, icon);
+        tabbedPanel.setTabComponentAt(inIndex, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, inIndex);
         // Setup content
-        tabbedPanel.setComponentAt(3, new PanelTabElements(app, tabbedPanel));
+        tabbedPanel.setComponentAt(inIndex, new PanelTabElements(app, tabbedPanel));
     }
     
-    private void setupTabHeaderSightings() {
+    private void setupTabHeaderSightings(int inIndex) {
         JPanel tabHeader = new JPanel();
         ImageIcon icon = new ImageIcon(app.getClass().getResource("resources/icons/SightingList.png"));
         tabHeader.add(new JLabel(icon));
         tabHeader.add(new JLabel("Observations"));
         tabHeader.setBackground(new Color(0, 0, 0, 0));
-        tabbedPanel.setTitleAt(4, "Observations");
-        tabbedPanel.setIconAt(4, icon);
-        tabbedPanel.setTabComponentAt(4, tabHeader);
-        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, 4);
+        tabbedPanel.setTitleAt(inIndex, "Observations");
+        tabbedPanel.setIconAt(inIndex, icon);
+        tabbedPanel.setTabComponentAt(inIndex, tabHeader);
+        UtilsUI.attachMouseScrollToTabs(tabbedPanel, tabHeader, inIndex);
         // Setup content
-        tabbedPanel.setComponentAt(4, new PanelTabSightings(app, tabbedPanel));
+        tabbedPanel.setComponentAt(inIndex, new PanelTabSightings(app, tabbedPanel));
     }
 
     /** This method is called from within the constructor to
@@ -298,10 +298,10 @@ public final class WildLogView extends JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
         lblSettingsPath = new javax.swing.JLabel();
-        tabBrowse = new javax.swing.JPanel();
         tabLocation = new javax.swing.JPanel();
         tabElement = new javax.swing.JPanel();
         tabSightings = new javax.swing.JPanel();
+        tabBrowse = new javax.swing.JPanel();
         statusPanel = new javax.swing.JPanel();
         statusMessageLabel = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -597,12 +597,6 @@ public final class WildLogView extends JFrame {
 
         tabbedPanel.addTab("Home", tabHome);
 
-        tabBrowse.setBackground(new java.awt.Color(204, 213, 186));
-        tabBrowse.setMinimumSize(new java.awt.Dimension(1000, 630));
-        tabBrowse.setName("tabBrowse"); // NOI18N
-        tabBrowse.setPreferredSize(new java.awt.Dimension(1000, 630));
-        tabbedPanel.addTab("Browse All", tabBrowse);
-
         tabLocation.setBackground(new java.awt.Color(194, 207, 214));
         tabLocation.setMinimumSize(new java.awt.Dimension(1000, 600));
         tabLocation.setName("tabLocation"); // NOI18N
@@ -620,6 +614,12 @@ public final class WildLogView extends JFrame {
         tabSightings.setName("tabSightings"); // NOI18N
         tabSightings.setPreferredSize(new java.awt.Dimension(1000, 600));
         tabbedPanel.addTab("All Sightings", tabSightings);
+
+        tabBrowse.setBackground(new java.awt.Color(204, 213, 186));
+        tabBrowse.setMinimumSize(new java.awt.Dimension(1000, 630));
+        tabBrowse.setName("tabBrowse"); // NOI18N
+        tabBrowse.setPreferredSize(new java.awt.Dimension(1000, 630));
+        tabbedPanel.addTab("Browse All", tabBrowse);
 
         mainPanel.add(tabbedPanel);
 
@@ -800,7 +800,7 @@ public final class WildLogView extends JFrame {
         });
         exportMenu.add(mnuExportXML);
 
-        mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
+        mnuExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         mnuExportKML.setText("Export All to KML");
         mnuExportKML.setToolTipText("Export all data and linked thumbnails to a KML file. (Open in Google Earth, etc.)");
         mnuExportKML.setName("mnuExportKML"); // NOI18N
@@ -1463,7 +1463,7 @@ public final class WildLogView extends JFrame {
                             // Update all Observations
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            List<Sighting> sightings = app.getDBI().list(new Sighting());
+                            List<Sighting> sightings = app.getDBI().list(new Sighting(), false);
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 UtilsTime.calculateSunAndMoon(sighting);
@@ -1479,7 +1479,7 @@ public final class WildLogView extends JFrame {
                             // Update only Observations without Sun and Moon phase
                             setMessage("Starting the Sun and Moon Calculation");
                             setProgress(0);
-                            List<Sighting> sightings = app.getDBI().list(new Sighting());
+                            List<Sighting> sightings = app.getDBI().list(new Sighting(), false);
                             for (int t = 0; t < sightings.size(); t++) {
                                 Sighting sighting = sightings.get(t);
                                 if (sighting.getTimeAccuracy() != null && sighting.getTimeAccuracy().isUsableTime()) {
@@ -1702,7 +1702,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the HTML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsHTML.exportHTML(listSightings.get(t), app, null);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));
@@ -1738,7 +1738,7 @@ public final class WildLogView extends JFrame {
                 setProgress(5);
                 setMessage("Busy with the KML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
                 Collections.sort(listSightings);
                 for (int t = 0; t < listSightings.size(); t++) {
                     String key = listSightings.get(t).getElementName();
@@ -2229,7 +2229,7 @@ public final class WildLogView extends JFrame {
                             setProgress(65 + (int)(countVisits/(double)allVisits.size()*3));
                             setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
                         }
-                        List<Sighting> allSightings = app.getDBI().list(new Sighting());
+                        List<Sighting> allSightings = app.getDBI().list(new Sighting(), false);
                         int countSightings = 0;
                         for (Sighting sighting : allSightings) {
                             // Check Location
@@ -2467,7 +2467,7 @@ public final class WildLogView extends JFrame {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
                             setProgress(0);
-                            List<Sighting> sightingList = app.getDBI().list(new Sighting());
+                            List<Sighting> sightingList = app.getDBI().list(new Sighting(), false);
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
                                 WildLogFile searchFile = new WildLogFile(sighting.getWildLogFileID());
@@ -2497,7 +2497,7 @@ public final class WildLogView extends JFrame {
                             // Update all observations
                             setMessage("Starting the Duration Calculation");
                             setProgress(0);
-                            List<Sighting> sightingList = app.getDBI().list(new Sighting());
+                            List<Sighting> sightingList = app.getDBI().list(new Sighting(), false);
                             for (int t = 0; t < sightingList.size(); t++) {
                                 Sighting sighting = sightingList.get(t);
                                 if (sighting.getDurationMinutes() == 0 && sighting.getDurationSeconds() == 0.0) {
@@ -2605,7 +2605,7 @@ public final class WildLogView extends JFrame {
                 // Zip the content to make copying it accross easier
                 UtilsCompression.zipFolder(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath().resolve("WildNoteSync.zip"),
                         WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath());
-//                    // TODO: Delete everthing except for the zip
+// TODO: Delete everthing except for the zip
 //                    UtilsFileProcessing.deleteRecursive(WildLogPaths.WILDLOG_EXPORT_WILDNOTE_SYNC.getAbsoluteFullPath()
 //                            .resolve(WildLogPaths.WildLogPathPrefixes.PREFIX_ELEMENT.toPath()).toFile());
                 setProgress(100);
@@ -2829,7 +2829,7 @@ public final class WildLogView extends JFrame {
                         setTaskProgress(25);
                         setMessage("Busy with the Import of the WildNote Sync File " + getProgress() + "%");
                         // Import the Sightings
-                        List<Sighting> listSightings = syncDBI.list(new Sighting());
+                        List<Sighting> listSightings = syncDBI.list(new Sighting(), false);
                         for (int t = 0; t < listSightings.size(); t++) {
                             Sighting sighting = listSightings.get(t);
                             sighting.setVisitName(tempVisit.getName());
@@ -3155,7 +3155,7 @@ public final class WildLogView extends JFrame {
                 }
                 setMessage("Busy with the XML Export for All Records " + getProgress() + "%");
                 // Sightings
-                List<Sighting> listSightings = app.getDBI().list(new Sighting());
+                List<Sighting> listSightings = app.getDBI().list(new Sighting(), false);
                 for (int t = 0; t < listSightings.size(); t++) {
                     UtilsXML.exportXML(listSightings.get(t), app, null, false);
                     setProgress(75 + (int)((t/(double)listSightings.size())*25));

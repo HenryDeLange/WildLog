@@ -362,7 +362,7 @@ public final class UtilsTableGenerator {
                                 data[finalT][4] = tempVisit.getType();
                                 Sighting tempSighting = new Sighting();
                                 tempSighting.setVisitName(tempVisit.getName());
-                                List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
+                                List<Sighting> listSightings = inApp.getDBI().list(tempSighting, false);
                                 data[finalT][5] = listSightings.size();
                                 Set<String> countElements = new HashSet<String>(listSightings.size()/2);
                                 for (Sighting sighting : listSightings) {
@@ -593,7 +593,7 @@ public final class UtilsTableGenerator {
                 if (inVisit != null) {
                     Sighting sighting = new Sighting();
                     sighting.setVisitName(inVisit.getName());
-                    final List<Sighting> listSightings = inApp.getDBI().list(sighting);
+                    final List<Sighting> listSightings = inApp.getDBI().list(sighting, false);
                     if (!listSightings.isEmpty()) {
                         Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                         // Setup new table data
@@ -799,7 +799,7 @@ public final class UtilsTableGenerator {
                     setupPreviousRowSelection(inTable, selectedRowIDs, 8);
                 }
                 else {
-                    inTable.setModel(new DefaultTableModel(new String[]{"No Observations found that match the currently active filters..."}, 0));
+                    inTable.setModel(new DefaultTableModel(new String[]{"No Observations were found that match the currently active filters"}, 0));
                 }
                 // Need to wait for the table to finish loading before updating the label
                 SwingUtilities.invokeLater(new Runnable() {
@@ -850,7 +850,7 @@ public final class UtilsTableGenerator {
                 if (inVisit != null) {
                     Sighting temp = new Sighting();
                     temp.setVisitName(inVisit.getName());
-                    List<Sighting> allSightings = inApp.getDBI().list(temp);
+                    List<Sighting> allSightings = inApp.getDBI().list(temp, false);
                     final List<String> listElements = new ArrayList<String>();
                     for (Sighting tempSighting : allSightings) {
                         if (!listElements.contains(tempSighting.getElementName())) {
@@ -936,7 +936,7 @@ public final class UtilsTableGenerator {
                 if (inLocation != null) {
                     Sighting temp = new Sighting();
                     temp.setLocationName(inLocation.getName());
-                    List<Sighting> allSightings = inApp.getDBI().list(temp);
+                    List<Sighting> allSightings = inApp.getDBI().list(temp, false);
                     final List<String> listElements = new ArrayList<String>();
                     for (Sighting tempSighting : allSightings) {
                         if (!listElements.contains(tempSighting.getElementName())) {
@@ -1147,7 +1147,7 @@ public final class UtilsTableGenerator {
                 // Load data from DB
                 Sighting tempSighting = new Sighting();
                 tempSighting.setElementName(inElement.getPrimaryName());
-                final List<Sighting> listSightings = inApp.getDBI().list(tempSighting);
+                final List<Sighting> listSightings = inApp.getDBI().list(tempSighting, false);
                 if (!listSightings.isEmpty()) {
                     Collection<Callable<Object>> listCallables = new ArrayList<>(listSightings.size());
                     // Setup new table data

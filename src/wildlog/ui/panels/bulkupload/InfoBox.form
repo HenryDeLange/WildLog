@@ -207,7 +207,7 @@
           <Color blue="d4" green="f1" red="e5" type="rgb"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/wildlog/resources/icons/ElementList.gif"/>
+          <Image iconType="3" name="/wildlog/resources/icons/ElementList.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;u&gt;Creature&lt;/u&gt;&lt;/html&gt;"/>
         <Property name="toolTipText" type="java.lang.String" value="Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature."/>

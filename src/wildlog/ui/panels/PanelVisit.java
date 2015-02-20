@@ -1137,7 +1137,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
             UtilsTableGenerator.setupSightingTableLarge(app, tblSightings, visit);
             Sighting tempSighting = new Sighting();
             tempSighting.setVisitName(visit.getName());
-            List<Sighting> sightings = app.getDBI().list(tempSighting);
+            List<Sighting> sightings = app.getDBI().list(tempSighting, false);
             lblNumberOfSightings.setText(Integer.toString(sightings.size()));
             setupNumberOfSightingImages();
             List<String> allElements = new ArrayList<String>();
@@ -1375,7 +1375,7 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnMapSightingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapSightingActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            List<Sighting> lstSightings = app.getDBI().list(new Sighting(null, locationForVisit.getName(), visit.getName()));
+            List<Sighting> lstSightings = app.getDBI().list(new Sighting(null, locationForVisit.getName(), visit.getName()), false);
             MappingDialog dialog = new MappingDialog(app, null, null, visit, sighting, lstSightings);
             dialog.setVisible(true);
         }
@@ -1383,7 +1383,8 @@ public class PanelVisit extends PanelCanSetupHeader implements PanelNeedsRefresh
 
     private void btnReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportActionPerformed
         if (visit.getName() != null && !visit.getName().isEmpty()) {
-            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + visit.getName(), app.getDBI().list(new Sighting(null, null, visit.getName())));
+            ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + visit.getName(), 
+                    app.getDBI().list(new Sighting(null, null, visit.getName()), true));
             dialog.setVisible(true);
         }
     }//GEN-LAST:event_btnReportActionPerformed

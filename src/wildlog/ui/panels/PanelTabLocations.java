@@ -463,6 +463,7 @@ public class PanelTabLocations extends JPanel {
     }//GEN-LAST:event_lblImageMouseReleased
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
+        lblImage.setIcon(UtilsImageProcessing.getScaledIconForNoFiles(WildLogThumbnailSizes.NORMAL));
         UtilsTableGenerator.setupLocationTableLarge(app, tblLocation, searchLocation);
     }//GEN-LAST:event_formComponentShown
 

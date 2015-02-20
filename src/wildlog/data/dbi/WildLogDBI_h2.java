@@ -24,6 +24,7 @@ import wildlog.data.enums.EndangeredStatus;
 import wildlog.data.enums.TimeAccuracy;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.utils.UtilsDialog;
+import wildlog.ui.utils.UtilsTime;
 import wildlog.utils.UtilsImageProcessing;
 import wildlog.utils.WildLogPaths;
 
@@ -814,7 +815,7 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             state.execute("ALTER TABLE WILDLOG ADD COLUMN USETHUMBNAILBROWSE smallint DEFAULT false");
             state.execute("ALTER TABLE WILDLOG ADD COLUMN ENABLESOUNDS smallint DEFAULT true");
             // Update Sightings and WildLog files to use the new UUIDs
-            List<Sighting> listSightings = list(new Sighting());
+            List<Sighting> listSightings = list(new Sighting(), false);
             for (Sighting sighting : listSightings) {
                 long newID = sighting.getDate().getTime()*1000000L + randomGenerator.nextInt(999999);
                 results = state.executeQuery("SELECT COUNT(SIGHTINGCOUNTER) FROM SIGHTINGS WHERE SIGHTINGCOUNTER = " + newID);
@@ -852,11 +853,12 @@ public class WildLogDBI_h2 extends DBI_JDBC implements WildLogDBI {
             WildLogOptions options = find(new WildLogOptions());
             options.setWorkspaceID(generateID());
             createOrUpdate(options);
-            
-// TODO: Update the sun and moon phase (recalculate it)
-            
-// FIXME: Ek is redelik seker daar is nog upgrade stuff wat ek sal moet doen...
-            
+            // Recalculate all sun and moon phase info (the enums changed)
+            List<Sighting> lstSightings = list(new Sighting(), false);
+            for (Sighting sighting : lstSightings) {
+                UtilsTime.calculateSunAndMoon(sighting);
+                createOrUpdate(sighting, false);
+            }
             // Increase the cache size slightly (doubled)
             state.execute("SET CACHE_SIZE 32768");
             // Update the version number

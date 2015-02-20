@@ -165,7 +165,7 @@ public class MoveVisitDialog extends JDialog {
                 // Update the sightings
                 Sighting temp = new Sighting();
                 temp.setVisitName(tempVisit.getName());
-                List<Sighting> sightings = app.getDBI().list(temp);
+                List<Sighting> sightings = app.getDBI().list(temp, false);
                 for (Sighting tempSighting : sightings) {
                     tempSighting.setLocationName(tempLocation);
                     tempSighting.setVisitName(tempVisit.getName());

@@ -15,6 +15,8 @@ import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
+import wildlog.data.enums.ElementType;
+import wildlog.data.enums.VisitType;
 import wildlog.data.enums.WildLogThumbnailSizes;
 import wildlog.ui.dialogs.ExportDialog;
 import wildlog.ui.dialogs.FilterDataListDialog;
@@ -695,16 +697,26 @@ public class PanelTabSightings extends JPanel implements PanelNeedsRefreshWhenDa
             // Use all Sightings
             lstSightingsToMap = new ArrayList<>(tblSightings.getRowCount());
             for (int row = 0; row < tblSightings.getModel().getRowCount(); row++) {
-                lstSightingsToMap.add(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 8))));
+                Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 8)));
+                sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 4));
+                sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 5));
+                lstSightingsToMap.add(sighting);
             }
         }
         else {
             // Use selected Sightings
             lstSightingsToMap = new ArrayList<>(tblSightings.getSelectedRowCount());
             for (int row : tblSightings.getSelectedRows()) {
-                lstSightingsToMap.add(app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
-                        tblSightings.convertRowIndexToModel(row), 8))));
+                Sighting sighting = app.getDBI().find(new Sighting((long) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 8)));
+                sighting.setCachedVisitType((VisitType) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 4));
+                sighting.setCachedElementType((ElementType) tblSightings.getModel().getValueAt(
+                        tblSightings.convertRowIndexToModel(row), 5));
+                lstSightingsToMap.add(sighting);
             }
         }
         return lstSightingsToMap;

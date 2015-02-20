@@ -65,9 +65,9 @@ public final class UtilsXML {
     public static String getWildLogFileInfoAsXML(WildLogFile inWildLogFile) {
         StringBuilder builder = new StringBuilder(100);
         builder.append("<File>");
-        builder.append("<filename>").append(inWildLogFile.getFilename()).append("</filename>");
+        builder.append("<filename><![CDATA[").append(inWildLogFile.getFilename()).append("]]></filename>");
         builder.append("<filetype>").append(inWildLogFile.getFileType()).append("</filetype>");
-        builder.append("<filepath>").append(inWildLogFile.getRelativePath()).append("</filepath>");
+        builder.append("<filepath><![CDATA[").append(inWildLogFile.getRelativePath()).append("]]></filepath>");
         builder.append("</File>");
         return builder.toString();
     }

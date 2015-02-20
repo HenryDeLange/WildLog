@@ -125,7 +125,7 @@ public class ExportDialog extends JDialog {
         });
         getContentPane().add(btnExportHTMLAdvanced);
 
-        btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/Google Earth Icon.gif"))); // NOI18N
+        btnExportKML.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/GoogleEarth.png"))); // NOI18N
         btnExportKML.setText("Export as KML");
         btnExportKML.setToolTipText("Export a KML file for all relevant Observations and linked records. Can be opened in Google Earth, etc.");
         btnExportKML.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -475,7 +475,7 @@ public class ExportDialog extends JDialog {
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
                             .resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null));
+                    List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
                     exportSightings(element, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
                     UtilsFileProcessing.openFile(destinationRoot);
                     setProgress(100);
@@ -493,7 +493,7 @@ public class ExportDialog extends JDialog {
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
                             .resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null));
+                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
                     exportSightings(location, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
                     UtilsFileProcessing.openFile(destinationRoot);
                     setProgress(100);
@@ -511,7 +511,7 @@ public class ExportDialog extends JDialog {
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
                             .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
                     exportSightings(visit, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
                     UtilsFileProcessing.openFile(destinationRoot);
                     setProgress(100);
@@ -529,7 +529,7 @@ public class ExportDialog extends JDialog {
                     Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
                             .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
                             .resolve(sighting.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(sighting);
+                    List<Sighting> listSightings = app.getDBI().list(sighting, false);
                     exportSightings(sighting, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
                     UtilsFileProcessing.openFile(destinationRoot);
                     setProgress(100);
@@ -735,7 +735,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Observation Files for '" + element.getDisplayName() + "'");
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null));
+                    List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Element.WILDLOG_FOLDER_PREFIX)
                             .resolve(element.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
@@ -766,7 +766,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Observation Files for '" + location.getDisplayName() + "'");
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null));
+                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Location.WILDLOG_FOLDER_PREFIX)
                             .resolve(location.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);
@@ -797,7 +797,7 @@ public class ExportDialog extends JDialog {
                 protected Object doInBackground() throws Exception {
                     setProgress(0);
                     setMessage("Exporting Observation Files for '" + visit.getDisplayName() + "'");
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()));
+                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
                     Path destination = WildLogPaths.WILDLOG_EXPORT_FILES.getAbsoluteFullPath()
                             .resolve(Visit.WILDLOG_FOLDER_PREFIX)
                             .resolve(visit.getDisplayName()).resolve(Sighting.WILDLOG_FOLDER_PREFIX);

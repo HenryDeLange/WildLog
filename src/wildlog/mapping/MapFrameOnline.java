@@ -23,7 +23,7 @@ public class MapFrameOnline extends JFrame {
         JTextPane textPane = new JTextPane();
         textPane.setEditable(false);
         textPane.setContentType("text/html");
-        textPane.setPreferredSize(new Dimension(350, 450));
+        textPane.setPreferredSize(new Dimension(450, 550));
         WildLogScrollPanel scrollPane = new WildLogScrollPanel(textPane);
         map.getMainMap().add(scrollPane);
         textPane.setText("<u><b>Information Box:</b></u> "

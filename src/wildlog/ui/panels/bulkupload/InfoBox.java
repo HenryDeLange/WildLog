@@ -154,7 +154,7 @@ public class InfoBox extends JPanel {
         add(lblImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(5, 85, 150, 150));
 
         btnChooseCreature.setBackground(new java.awt.Color(229, 241, 212));
-        btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.gif"))); // NOI18N
+        btnChooseCreature.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wildlog/resources/icons/ElementList.png"))); // NOI18N
         btnChooseCreature.setText("<html><u>Creature</u></html>");
         btnChooseCreature.setToolTipText("Select a Creature for this Observation. You can RIGHT-CLICK to automatically select the previously saved Creature.");
         btnChooseCreature.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));

@@ -1264,21 +1264,24 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
                         if (treBrowsePhoto.getLastSelectedPathComponent() != null) {
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Location) {
                                 Location tempLocation = (Location)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempLocation.getName(), app.getDBI().list(new Sighting(null, tempLocation.getName(), null)));
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempLocation.getName(), 
+                                        app.getDBI().list(new Sighting(null, tempLocation.getName(), null), true));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Element) {
                                 Element tempElement = (Element)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempElement.getPrimaryName(), app.getDBI().list(new Sighting(tempElement.getPrimaryName(), null, null)));
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempElement.getPrimaryName(), 
+                                        app.getDBI().list(new Sighting(tempElement.getPrimaryName(), null, null), true));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
                             else
                             if (((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject() instanceof Visit) {
                                 Visit tempVisit = (Visit)((DefaultMutableTreeNode)treBrowsePhoto.getLastSelectedPathComponent()).getUserObject();
-                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempVisit.getName(), app.getDBI().list(new Sighting(null, null, tempVisit.getName())));
+                                ReportsBaseDialog dialog = new ReportsBaseDialog("WildLog Reports - " + tempVisit.getName(), 
+                                        app.getDBI().list(new Sighting(null, null, tempVisit.getName()), true));
                                 dialog.setVisible(true);
                                 somethingToReportOn = true;
                             }
@@ -1492,7 +1495,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof Visit) {
             if (rdbBrowseLocation.isSelected()) {
-                List<Sighting> sightings = app.getDBI().list(new Sighting(null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName()));
+                List<Sighting> sightings = app.getDBI().list(new Sighting(null, ((Visit) treeNode.getUserObject()).getLocationName(), ((Visit) treeNode.getUserObject()).getName()), false);
                 Collections.sort(sightings);
                 for (Sighting tempSighting : sightings) {
                     LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, true), false);
@@ -1503,7 +1506,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         else
         if (treeNode.getUserObject() instanceof Element) {
             if (rdbBrowseElement.isSelected()) {
-                List<Sighting> sightings = app.getDBI().list(new Sighting(((Element) treeNode.getUserObject()).getPrimaryName(), null, null));
+                List<Sighting> sightings = app.getDBI().list(new Sighting(((Element) treeNode.getUserObject()).getPrimaryName(), null, null), false);
                 Collections.sort(sightings);
                 for (Sighting tempSighting : sightings) {
                     LazyTreeNode lazyNode = new LazyTreeNode(new SightingWrapper(tempSighting, false), false);
@@ -1857,7 +1860,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
         if (inElement != null) {
             rdbBrowseElement.setSelected(true);
             cmbElementTypesBrowseTab.setSelectedIndex(-1);
-            tabbedPanel.setSelectedIndex(1);
+            tabbedPanel.setSelectedIndex(4);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {

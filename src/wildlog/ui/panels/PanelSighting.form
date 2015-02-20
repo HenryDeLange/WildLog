@@ -1499,7 +1499,7 @@
               <Color blue="b5" green="cc" red="d0" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/wildlog/resources/icons/Duration.gif"/>
+              <Image iconType="3" name="/wildlog/resources/icons/Duration_Small.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;Calculate &lt;b&gt;Duration&lt;/b&gt; from &lt;b&gt;Image&lt;/b&gt; data&lt;/html&gt;"/>
             <Property name="toolTipText" type="java.lang.String" value="Attempt to calculate the Duration of the Observation based on times specified on the uploaded images."/>
@@ -1666,7 +1666,7 @@
               <Color blue="b5" green="cc" red="d0" type="rgb"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/wildlog/resources/icons/GPS.png"/>
+              <Image iconType="3" name="/wildlog/resources/icons/GPS_Small.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="&lt;html&gt;Load &lt;b&gt;GPS&lt;/b&gt; from &lt;b&gt;Image &lt;/b&gt;data&lt;/html&gt;"/>
             <Property name="toolTipText" type="java.lang.String" value="Attempt to load the GPS from the image&apos;s EXIF data."/>

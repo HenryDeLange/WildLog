@@ -9,6 +9,8 @@ import javafx.embed.swing.JFXPanel;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
@@ -18,6 +20,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -68,6 +72,7 @@ public class ReportsBaseDialog extends JFrame {
         // Initialise the rest of the screen 
         UtilsDialog.setDialogToCenter(WildLogApp.getApplication().getMainFrame(), this);
         UtilsDialog.setupGlassPaneOnMainFrame(this);
+        UtilsDialog.addEscapeKeyListener(this);
         // Create the nested JavaFx panels
         Platform.setImplicitExit(false);
         jfxReportChartPanel = new JFXPanel();
@@ -100,7 +105,12 @@ public class ReportsBaseDialog extends JFrame {
         // Setup the report panel (om een of ander rede mot die een tweede wees)
         VBox vbox = new VBox();
         // Workaround: Lyk my die snapshot werk beter as ek eers iets anders in die scene laai voor ek die charts laai...
-        Label lblInfo = new Label("Please select the report you would like to view from the list at the top left of this screen.");
+        Label lblInfo = new Label("Please select the report you would like to view from the list on the left.\n\n"
+                + "You can filter the number of Observation records that are used in the report by using the Filter buttons.\n\n"
+                + "Reports can be exported using the Export Report button.");
+        lblInfo.setPadding(new Insets(20));
+        lblInfo.setFont(new Font(18));
+        lblInfo.setWrapText(true);
         vbox.getChildren().add(lblInfo);
         Scene sceneCharts = new Scene(vbox);
         sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
@@ -119,6 +129,12 @@ public class ReportsBaseDialog extends JFrame {
         reports.add(new TimelineChart(lstFilteredData, lblReportDescription));
         reports.add(new DurationChart(lstFilteredData, lblReportDescription));
         reports.add(new TextReports(lstFilteredData, lblReportDescription));
+        // Setup loading label
+        final Label lblLoading = new Label("... LOADING ...");
+        lblLoading.setPadding(new Insets(20));
+        lblLoading.setFont(new Font(24));
+        lblLoading.setTextAlignment(TextAlignment.CENTER);
+        lblLoading.setAlignment(Pos.CENTER);
         // Add the reports
         for (final AbstractReport<Sighting> report : reports) {
             VBox vBox = new VBox(5);
@@ -129,8 +145,7 @@ public class ReportsBaseDialog extends JFrame {
                     @Override
                     public void handle(ActionEvent event) {
                         setActiveReport(report);
-// TODO: Maak die laoding boodskap beter (dalk met 'n fade effek as ek kan om die flikker te verminder?)
-                        jfxReportChartPanel.getScene().setRoot(new Label("Loading..."));
+                        jfxReportChartPanel.getScene().setRoot(lblLoading);
                         report.createReport(jfxReportChartPanel.getScene());
                     }
                 });
@@ -169,7 +184,7 @@ public class ReportsBaseDialog extends JFrame {
         lblReportDescription = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/Report.gif")).getImage());
+        setIconImage(new ImageIcon(WildLogApp.getApplication().getClass().getResource("resources/icons/WildLog Report Icon.gif")).getImage());
         setMinimumSize(new java.awt.Dimension(920, 600));
 
         jSplitPane1.setMinimumSize(new java.awt.Dimension(210, 450));
@@ -192,6 +207,7 @@ public class ReportsBaseDialog extends JFrame {
         bntExport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         bntExport.setFocusPainted(false);
         bntExport.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        bntExport.setIconTextGap(10);
         bntExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bntExportActionPerformed(evt);
@@ -225,6 +241,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterProperties.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterProperties.setFocusPainted(false);
         btnFilterProperties.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterProperties.setIconTextGap(10);
         btnFilterProperties.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFilterPropertiesActionPerformed(evt);
@@ -238,6 +255,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterElement.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterElement.setFocusPainted(false);
         btnFilterElement.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterElement.setIconTextGap(10);
         btnFilterElement.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFilterElementActionPerformed(evt);
@@ -251,6 +269,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterLocation.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterLocation.setFocusPainted(false);
         btnFilterLocation.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterLocation.setIconTextGap(10);
         btnFilterLocation.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFilterLocationActionPerformed(evt);
@@ -264,6 +283,7 @@ public class ReportsBaseDialog extends JFrame {
         btnFilterVisit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFilterVisit.setFocusPainted(false);
         btnFilterVisit.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnFilterVisit.setIconTextGap(10);
         btnFilterVisit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFilterVisitActionPerformed(evt);
@@ -277,6 +297,7 @@ public class ReportsBaseDialog extends JFrame {
         btnResetFilters.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnResetFilters.setFocusPainted(false);
         btnResetFilters.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnResetFilters.setIconTextGap(10);
         btnResetFilters.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnResetFiltersActionPerformed(evt);
@@ -388,7 +409,6 @@ public class ReportsBaseDialog extends JFrame {
         pnlChartDescription.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Report Description", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         lblReportDescription.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblReportDescription.setText("Select a Report Type to view from the list on the left.");
 
         javax.swing.GroupLayout pnlChartDescriptionLayout = new javax.swing.GroupLayout(pnlChartDescription);
         pnlChartDescription.setLayout(pnlChartDescriptionLayout);

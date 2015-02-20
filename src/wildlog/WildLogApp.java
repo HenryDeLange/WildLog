@@ -559,11 +559,11 @@ public class WildLogApp extends Application {
             final GeoPosition defaultPosition = new GeoPosition(getWildLogOptions().getDefaultLatitude(), getWildLogOptions().getDefaultLongitude());
             mapOnline = new JXMapKit();
             mapOnlineFrame = new MapFrameOnline("WildLog Map - Online", mapOnline, this);
-            mapOnlineFrame.setPreferredSize(new Dimension(758, 560));
+            mapOnlineFrame.setPreferredSize(new Dimension(950, 650));
             mapOnlineFrame.setLayout(new BorderLayout());
             mapOnlineFrame.setIconImage(new ImageIcon(WildLogApp.class.getResource("resources/icons/WildLog Map Icon.gif")).getImage());
             mapOnline.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
-            mapOnline.setPreferredSize(new Dimension(850, 550));
+//            mapOnline.setPreferredSize(new Dimension(950, 650));
             mapOnline.setAddressLocationShown(false);
             mapOnline.setName("mapOnline");
             mapOnline.setAddressLocation(defaultPosition);
@@ -578,7 +578,7 @@ public class WildLogApp extends Application {
                     mapOnlineFrame.getPointLayer().loadPrevClickedPoint(app);
                 }
             });
-            btnPrevMapPoint.setPreferredSize(new Dimension(70, 25));
+            btnPrevMapPoint.setPreferredSize(new Dimension(60, 25));
             btnPrevMapPoint.setFocusPainted(false);
             btnPrevMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Previous.gif")));
             btnPrevMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -592,7 +592,7 @@ public class WildLogApp extends Application {
                     mapOnlineFrame.getPointLayer().loadNextClickedPoint(app);
                 }
             });
-            btnNextMapPoint.setPreferredSize(new Dimension(70, 25));
+            btnNextMapPoint.setPreferredSize(new Dimension(60, 25));
             btnNextMapPoint.setIcon(new ImageIcon(getClass().getResource("/wildlog/resources/icons/Next.gif")));
             btnNextMapPoint.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btnNextMapPoint.setToolTipText("Load the next Observation in the information panel.");
