@@ -1880,7 +1880,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     public void browseSelectedLocation(final Location inLocation) {
         if (inLocation != null) {
             rdbBrowseLocation.setSelected(true);
-            tabbedPanel.setSelectedIndex(1);
+            tabbedPanel.setSelectedIndex(4);
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -1900,7 +1900,7 @@ public class PanelTabBrowse extends JPanel implements PanelNeedsRefreshWhenDataC
     public void browseSelectedVisit(final Visit inVisit) {
         if (inVisit != null) {
             rdbBrowseLocation.setSelected(true);
-            tabbedPanel.setSelectedIndex(1);
+            tabbedPanel.setSelectedIndex(4);
             // Expand location
             SwingUtilities.invokeLater(new Runnable() {
                 @Override

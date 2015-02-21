@@ -72,6 +72,7 @@ import wildlog.utils.WildLogPaths;
 public class WildLogApp extends Application {
     public static String WILDLOG_VERSION = "4.2.BETA";
     private static Path ACTIVE_WILDLOG_SETTINGS_FOLDER;
+    private static Path ACTIVEWILDLOG_CODE_FOLDER;
     private static boolean useNimbusLF = false;
     private static boolean logToFile = false;
     // Only open one MapFrame for the application (to reduce memory use)
@@ -367,7 +368,7 @@ public class WildLogApp extends Application {
      */
     public static void main(String[] args) {
         // Set default startup settings
-        ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().normalize().toAbsolutePath();
+        ACTIVE_WILDLOG_SETTINGS_FOLDER = WildLogPaths.DEFAUL_SETTINGS_FOLDER.getRelativePath().toAbsolutePath().normalize();
         useNimbusLF = true;
         // Load the startup settings from the properties file
         BufferedReader reader = null;
@@ -389,8 +390,10 @@ public class WildLogApp extends Application {
             logToFile = Boolean.parseBoolean(props.getProperty("logToFile"));
             useNimbusLF = Boolean.parseBoolean(props.getProperty("useNimbus"));
             if (props.getProperty("settingsFolderLocation") != null && !props.getProperty("settingsFolderLocation").trim().isEmpty()) {
-                ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).normalize().toAbsolutePath();
+                ACTIVE_WILDLOG_SETTINGS_FOLDER = Paths.get(props.getProperty("settingsFolderLocation")).normalize().toAbsolutePath().normalize();
             }
+            // Get the active application folder
+            ACTIVEWILDLOG_CODE_FOLDER = Paths.get(WildLogApp.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent();
         }
         catch (IOException | URISyntaxException ex) {
             ex.printStackTrace(System.err);
@@ -474,6 +477,7 @@ public class WildLogApp extends Application {
         System.out.println("STARTING UP WildLog - "
                 + UtilsTime.WL_DATE_FORMATTER_WITH_HHMMSS.format(LocalDateTime.now()));
         System.out.println("WildLog Setting Folder: " + ACTIVE_WILDLOG_SETTINGS_FOLDER.toAbsolutePath().toString());
+        System.out.println("WildLog Application Folder: " + ACTIVEWILDLOG_CODE_FOLDER.toAbsolutePath().toString());
         // Launch the Swing application on the event dispatch thread
         launch(WildLogApp.class, args);
     }
@@ -634,6 +638,10 @@ public class WildLogApp extends Application {
 
     public static Path getACTIVE_WILDLOG_SETTINGS_FOLDER() {
         return ACTIVE_WILDLOG_SETTINGS_FOLDER;
+    }
+
+    public static Path getACTIVEWILDLOG_CODE_FOLDER() {
+        return ACTIVEWILDLOG_CODE_FOLDER;
     }
 
     public WildLogView getMainFrame() {

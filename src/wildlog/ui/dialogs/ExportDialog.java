@@ -6,17 +6,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
 import wildlog.WildLogApp;
 import wildlog.data.dataobjects.Element;
 import wildlog.data.dataobjects.Location;
 import wildlog.data.dataobjects.Sighting;
 import wildlog.data.dataobjects.Visit;
 import wildlog.data.dataobjects.WildLogFile;
-import wildlog.data.dataobjects.WildLogOptions;
-import wildlog.data.dataobjects.interfaces.DataObjectBasicInfo;
-import wildlog.data.dataobjects.interfaces.DataObjectWithWildLogFile;
-import wildlog.data.dbi.WildLogDBI;
-import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.html.utils.UtilsHTML;
 import wildlog.mapping.kml.utils.UtilsKML;
 import wildlog.ui.dialogs.utils.UtilsDialog;
@@ -29,11 +25,11 @@ import wildlog.xml.utils.UtilsXML;
 
 
 public class ExportDialog extends JDialog {
-    private WildLogApp app;
-    private Location location;
-    private Element element;
-    private Visit visit;
-    private Sighting sighting;
+    private final WildLogApp app;
+    private final Location location;
+    private final Element element;
+    private final Visit visit;
+    private final Sighting sighting;
     private List<Sighting> lstSightings;
 
     public ExportDialog(WildLogApp inApp, Location inLocation, Element inElement, Visit inVisit, Sighting inSighting, List<Sighting> inLstSightings) {
@@ -466,166 +462,62 @@ public class ExportDialog extends JDialog {
     }//GEN-LAST:event_btnExportFilesActionPerformed
 
     private void btnExportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportWorkspaceActionPerformed
+        Path destinationRoot;
         if (element != null) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Exporting Workspace for '" + element.getDisplayName() + "'");
-                    Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(Element.WILDLOG_FOLDER_PREFIX)
-                            .resolve(element.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
-                    exportSightings(element, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
-                    UtilsFileProcessing.openFile(destinationRoot);
-                    setProgress(100);
-                    setMessage("Done Exporting Workspace for '" + element.getDisplayName() + "'");
-                    return null;
-                }
-            });
+            destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(Element.WILDLOG_FOLDER_PREFIX)
+                    .resolve(element.getDisplayName())
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
+            lstSightings = app.getDBI().list(new Sighting(element.getPrimaryName(), null, null), false);
         }
+        else
         if (location != null) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Exporting Workspace for '" + location.getDisplayName() + "'");
-                    Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(Location.WILDLOG_FOLDER_PREFIX)
-                            .resolve(location.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
-                    exportSightings(location, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
-                    UtilsFileProcessing.openFile(destinationRoot);
-                    setProgress(100);
-                    setMessage("Done Exporting Workspace for '" + location.getDisplayName() + "'");
-                    return null;
-                }
-            });
+            destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(Location.WILDLOG_FOLDER_PREFIX)
+                    .resolve(location.getDisplayName())
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
+            lstSightings = app.getDBI().list(new Sighting(null, location.getName(), null), false);
         }
+        else
         if (visit != null) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Exporting Workspace for '" + visit.getDisplayName() + "'");
-                    Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(Visit.WILDLOG_FOLDER_PREFIX)
-                            .resolve(visit.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
-                    exportSightings(visit, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
-                    UtilsFileProcessing.openFile(destinationRoot);
-                    setProgress(100);
-                    setMessage("Done Exporting Workspace for '" + visit.getDisplayName() + "'");
-                    return null;
-                }
-            });
+            destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(Visit.WILDLOG_FOLDER_PREFIX)
+                    .resolve(visit.getDisplayName())
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
+            lstSightings = app.getDBI().list(new Sighting(null, null, visit.getName()), false);
         }
+        else
         if (sighting != null) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Exporting Workspace for '" + sighting.getDisplayName() + "'");
-                    Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                            .resolve(sighting.getDisplayName());
-                    List<Sighting> listSightings = app.getDBI().list(sighting, false);
-                    exportSightings(sighting, listSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
-                    UtilsFileProcessing.openFile(destinationRoot);
-                    setProgress(100);
-                    setMessage("Done Exporting Workspace for '" + sighting.getDisplayName() + "'");
-                    return null;
-                }
-            });
+            destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
+                    .resolve(sighting.getDisplayName())
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
+            lstSightings = app.getDBI().list(sighting, false);
         }
+        else
         if (lstSightings != null && !lstSightings.isEmpty()) {
-            UtilsConcurency.kickoffProgressbarTask(app, new ProgressbarTask(app) {
-                @Override
-                protected Object doInBackground() throws Exception {
-                    setProgress(0);
-                    setMessage("Exporting Workspace for Observations");
-                    Path destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
-                            .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
-                            .resolve("Observations");
-                    exportSightings(sighting, lstSightings, destinationRoot.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()), this);
-                    UtilsFileProcessing.openFile(destinationRoot);
-                    setProgress(100);
-                    setMessage("Done Exporting Workspace for Observations");
-                    return null;
-                }
-            });
+            destinationRoot = WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(Sighting.WILDLOG_FOLDER_PREFIX)
+                    .resolve("Observations")
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()));
         }
+        else {
+            destinationRoot = null;
+        }
+        // Hide this dialog
         setVisible(false);
         dispose();
+        // Show the Workspace export dialog
+        if (destinationRoot != null && lstSightings != null && !lstSightings.isEmpty()) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    WorkspaceExportDialog dialog = new WorkspaceExportDialog(app, destinationRoot, lstSightings);
+                    dialog.setVisible(true);
+                }
+            });
+        }
     }//GEN-LAST:event_btnExportWorkspaceActionPerformed
-
-    private void exportSightings(DataObjectBasicInfo inDataObjectBasicInfo, List<Sighting> inListSightings, Path inDestinationWorkspace, ProgressbarTask inProgressbarTask) throws Exception {
-        if (inDataObjectBasicInfo == null) {
-            inDataObjectBasicInfo = new Location("Observations");
-        }
-        WildLogDBI newDBI = null;
-        try {
-            Files.createDirectories(inDestinationWorkspace);
-            newDBI = new WildLogDBI_h2("jdbc:h2:"
-                + (inDestinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
-                + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
-            // Set the new workspace name
-            WildLogOptions options = newDBI.find(new WildLogOptions());
-            options.setWorkspaceName("Exported Workspace (" + UtilsTime.WL_DATE_FORMATTER.format(LocalDateTime.now()) + ")");
-            newDBI.createOrUpdate(options);
-            inProgressbarTask.setTaskProgress(1);
-            inProgressbarTask.setMessage("Exporting Workspace for '" + inDataObjectBasicInfo.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
-            // Export Sightings (with linked locations, visits, element)
-            int counter = 0;
-            for (Sighting exportSighting : inListSightings) {
-                // Sighting
-                newDBI.createOrUpdate(exportSighting, true);
-                saveFiles(newDBI, inDestinationWorkspace, exportSighting);
-                // Location
-                if (newDBI.find(new Location(exportSighting.getLocationName())) == null) {
-                    Location exportLocation = app.getDBI().find(new Location(exportSighting.getLocationName()));
-                    newDBI.createOrUpdate(exportLocation, null);
-                    saveFiles(newDBI, inDestinationWorkspace, exportLocation);
-                }
-                // Visit
-                if (newDBI.find(new Visit(exportSighting.getVisitName())) == null) {
-                    Visit exportVisit = app.getDBI().find(new Visit(exportSighting.getVisitName()));
-                    newDBI.createOrUpdate(exportVisit, null);
-                    saveFiles(newDBI, inDestinationWorkspace, exportVisit);
-                }
-                // Element
-                if (newDBI.find(new Element(exportSighting.getElementName())) == null) {
-                    Element exportElement = app.getDBI().find(new Element(exportSighting.getElementName()));
-                    newDBI.createOrUpdate(exportElement, null);
-                    saveFiles(newDBI, inDestinationWorkspace, exportElement);
-                }
-                inProgressbarTask.setTaskProgress(1 + (int)(counter/(double)inListSightings.size()*97));
-                inProgressbarTask.setMessage("Exporting Workspace for '" + inDataObjectBasicInfo.getDisplayName() + "' " + inProgressbarTask.getProgress() + "%");
-                counter++;
-            }
-        }
-        catch (Exception ex) {
-            throw ex;
-        }
-        finally {
-            setVisible(false);
-            dispose();
-            if (newDBI != null) {
-                newDBI.close();
-            }
-        }
-    }
-    
-    private void saveFiles(WildLogDBI inNewDBI, Path inDestinationWorkspace, DataObjectWithWildLogFile inDataObjectWithWildLogFile) {
-        WildLogFile tempWildLogFile = new WildLogFile(inDataObjectWithWildLogFile.getWildLogFileID());
-        List<WildLogFile> listFiles = app.getDBI().list(tempWildLogFile);
-        for (WildLogFile wildLogFile : listFiles) {
-            if (inNewDBI.find(wildLogFile) == null) {
-                UtilsFileProcessing.copyFile(wildLogFile.getAbsolutePath(), inDestinationWorkspace.resolve(wildLogFile.getRelativePath()), false, true);
-                inNewDBI.createOrUpdate(wildLogFile, false);
-            }
-        }
-    }
 
     private void btnExportKMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportKMLActionPerformed
         if (location != null) {

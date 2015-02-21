@@ -68,6 +68,7 @@ import wildlog.data.dbi.WildLogDBI;
 import wildlog.data.dbi.WildLogDBI_h2;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Certainty;
+import wildlog.data.enums.GPSAccuracy;
 import wildlog.data.enums.Latitudes;
 import wildlog.data.enums.Longitudes;
 import wildlog.data.enums.Moonlight;
@@ -1864,6 +1865,19 @@ public final class WildLogView extends JFrame {
             }
         });
         if (result == JOptionPane.OK_OPTION) {
+            final int recreateThumbnailsResult = UtilsDialog.showDialogBackgroundWrapper(app.getMainFrame(), new UtilsDialog.DialogWrapper() {
+                @Override
+                public int showDialog() {
+                    return JOptionPane.showConfirmDialog(app.getMainFrame(),
+                            "<html>Would you like to also recreate all cached thumbnails?"
+                            + "<br/>Recreating the thumbnails can improve system performance and might correct any thumbnails that "
+                            + "are still displaying incorrectly after the aplication has been restarted."
+                            + "<br/>Warining: This step is optional and can take very long to complete."
+                            + "<br/>If this step is skipped the existing thumbnails will be used and new ones will be created dynamically as needed.</html>",
+                            "Recreate Thumbnails?",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
+            });
             // Close all tabs and go to the home tab
             tabbedPanel.setSelectedIndex(0);
             while (tabbedPanel.getTabCount() > STATIC_TAB_COUNT) {
@@ -1875,12 +1889,12 @@ public final class WildLogView extends JFrame {
             JPanel panel = new JPanel(new AbsoluteLayout());
             panel.setPreferredSize(new Dimension(400, 50));
             panel.setBorder(new LineBorder(new Color(245, 80, 40), 3));
-            JLabel label = new JLabel("<html>Busy cleaning Workspace. Please be patient, this might take a while. <br>"
+            JLabel label = new JLabel("<html>Busy cleaning Workspace. Please be patient, this might take a while. <br/>"
                     + "Don't close the application until the process is finished.</html>");
             label.setFont(new Font("Tahoma", Font.BOLD, 12));
             label.setBorder(new LineBorder(new Color(195, 65, 20), 4));
             panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.95f));
-            panel.add(label, new AbsoluteConstraints(310, 20, -1, -1));
+            panel.add(label, new AbsoluteConstraints(410, 20, -1, -1));
             panel.setBackground(new Color(0.22f, 0.26f, 0.20f, 0.25f));
             JPanel glassPane = (JPanel) app.getMainFrame().getGlassPane();
             glassPane.removeAll();
@@ -2009,7 +2023,7 @@ public final class WildLogView extends JFrame {
                         for (WildLogFile wildLogFile : allFiles) {
                             // Check the WildLogFile's content
                             if (wildLogFile.getId() == null) {
-                                finalHandleFeedback.println("ERROR:     File record without an ID. FilePath: " + wildLogFile.getRelativePath());
+                                finalHandleFeedback.println("ERROR:     File record without an ID. FilePath: " + wildLogFile.getDBFilePath());
                                 finalHandleFeedback.println("+RESOLVED: Tried to delete the database file record and file on disk.");
                                 app.getDBI().delete(wildLogFile);
                                 filesWithoutID++;
@@ -2023,7 +2037,7 @@ public final class WildLogView extends JFrame {
                                 continue;
                             }
                             if (!Files.exists(wildLogFile.getAbsolutePath(), LinkOption.NOFOLLOW_LINKS)) {
-                                finalHandleFeedback.println("ERROR:     File record in the database can't be found on disk. FilePath: " + wildLogFile.getRelativePath());
+                                finalHandleFeedback.println("ERROR:     File record in the database can't be found on disk. FilePath: " + wildLogFile.getDBFilePath());
                                 finalHandleFeedback.println("+RESOLVED: Deleted the database file record.");
                                 app.getDBI().delete(wildLogFile);
                                 filesNotOnDisk++;
@@ -2037,7 +2051,7 @@ public final class WildLogView extends JFrame {
                                 filesWithMissingData++;
                             }
                             if (wildLogFile.getFileType() == null || WildLogFileType.NONE.equals(WildLogFileType.getEnumFromText(wildLogFile.getFileType().toString()))) {
-                                finalHandleFeedback.println("ERROR:     Unknown FileType of database file record. FilePath: " + wildLogFile.getRelativePath()
+                                finalHandleFeedback.println("ERROR:     Unknown FileType of database file record. FilePath: " + wildLogFile.getDBFilePath()
                                         + ", FileType: " + wildLogFile.getFileType());
                                 finalHandleFeedback.println("+RESOLVED: Changed FileType to " + WildLogFileType.OTHER + ".");
                                 wildLogFile.setFileType(WildLogFileType.OTHER);
@@ -2049,7 +2063,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure it is linked
                                 final Element temp = app.getDBI().find(new Element(wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getRelativePath()
+                                    finalHandleFeedback.println("ERROR:     Could not find linked Creature for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", CreatureName Used: " + wildLogFile.getId().substring(Element.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
                                     app.getDBI().delete(wildLogFile);
@@ -2067,7 +2081,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure it is linked
                                 final Visit temp = app.getDBI().find(new Visit(wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getRelativePath()
+                                    finalHandleFeedback.println("ERROR:     Could not find linked Period for this file record. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PeriodName Used: " + wildLogFile.getId().substring(Visit.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file databse record and file from disk.");
                                     app.getDBI().delete(wildLogFile);
@@ -2085,7 +2099,7 @@ public final class WildLogView extends JFrame {
                                 // Make sure it is linked
                                 final Location temp = app.getDBI().find(new Location(wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length())));
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR:     Could not find linked Place for this file. FilePath: " + wildLogFile.getRelativePath()
+                                    finalHandleFeedback.println("ERROR:     Could not find linked Place for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", PlaceName Used: " + wildLogFile.getId().substring(Location.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
                                     app.getDBI().delete(wildLogFile);
@@ -2110,7 +2124,7 @@ public final class WildLogView extends JFrame {
                                     finalHandleFeedback.println("-UNRESOLVED: Try to continue to delete the file.");
                                 }
                                 if (temp == null) {
-                                    finalHandleFeedback.println("ERROR:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getRelativePath()
+                                    finalHandleFeedback.println("ERROR:     Could not find linked Observation for this file. FilePath: " + wildLogFile.getDBFilePath()
                                             + ", ID: " + wildLogFile.getId() + ", ObservationID Used: " + wildLogFile.getId().substring(Sighting.WILDLOGFILE_ID_PREFIX.length()));
                                     finalHandleFeedback.println("+RESOLVED: Deleted the file database record and file from disk.");
                                     app.getDBI().delete(wildLogFile);
@@ -2213,7 +2227,7 @@ public final class WildLogView extends JFrame {
                             Location temp = app.getDBI().find(new Location(visit.getLocationName()));
                             if (temp == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("ERROR: Could not find link between Period and Place. "
+                                finalHandleFeedback.println("ERROR:     Could not find link between Period and Place. "
                                         + "Period: " + visit.getName() + ", Place: " + visit.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
@@ -2236,7 +2250,7 @@ public final class WildLogView extends JFrame {
                             Location tempLocation = app.getDBI().find(new Location(sighting.getLocationName()));
                             if (tempLocation == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("ERROR: Could not find link between Observation and Place. "
+                                finalHandleFeedback.println("ERROR:     Could not find link between Observation and Place. "
                                         + "Observation: " + sighting.getSightingCounter() + ", Place: " + sighting.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
@@ -2251,7 +2265,7 @@ public final class WildLogView extends JFrame {
                             Element tempElement = app.getDBI().find(new Element(sighting.getElementName()));
                             if (tempElement == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("ERROR: Could not find link between Observation and Creature. "
+                                finalHandleFeedback.println("ERROR:     Could not find link between Observation and Creature. "
                                         + "Observation: " + sighting.getSightingCounter() + ", Creature: " + sighting.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Creature called 'WildLog_lost_and_found'.");
                                 Element newElement = app.getDBI().find(new Element("WildLog_lost_and_found"));
@@ -2266,7 +2280,7 @@ public final class WildLogView extends JFrame {
                             Visit tempVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
                             if (tempVisit == null) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("ERROR: Could not find link between Observation and Period. "
+                                finalHandleFeedback.println("ERROR:     Could not find link between Observation and Period. "
                                         + "Observation: " + sighting.getSightingCounter() + ", Period: " + sighting.getVisitName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation to a new Period called 'WildLog_lost_and_found'.");
                                 // Visit
@@ -2290,7 +2304,7 @@ public final class WildLogView extends JFrame {
                             Visit checkSightingVisit = app.getDBI().find(new Visit(sighting.getVisitName()));
                             if (!checkSightingVisit.getLocationName().equalsIgnoreCase(sighting.getLocationName())) {
                                 badDataLinks++;
-                                finalHandleFeedback.println("ERROR: The Observation and Period references different Places. "
+                                finalHandleFeedback.println("ERROR:     The Observation and Period references different Places. "
                                         + "Observation: " + sighting.getLocationName() + ", Period: " + checkSightingVisit.getLocationName());
                                 finalHandleFeedback.println("+RESOLVED: Moved Observation and Period to a new Place called 'WildLog_lost_and_found'.");
                                 Location newLocation = app.getDBI().find(new Location("WildLog_lost_and_found"));
@@ -2306,53 +2320,121 @@ public final class WildLogView extends JFrame {
                                 app.getDBI().createOrUpdate(checkSightingVisit, checkSightingVisit.getName());
                             }
                             countSightings++;
-                            setProgress(68 + (int)(countSightings/(double)allSightings.size()*7));
+                            setProgress(68 + (int)(countSightings/(double)allSightings.size()*4));
                             setMessage("Cleanup Step 5: Check links between records in the database... " + getProgress() + "%");
                         }
-                        setProgress(75);
+                        setProgress(72);
 
                         // ---------------------6---------------------
-                        // Re-create die default thumbnails
-                        setMessage("Cleanup Step 6: (Optional) Recreating default thumbnails... " + getProgress() + "%");
-                        finalHandleFeedback.println("6) Recreate the default thumbnails for all images.");
-                        final List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile());
-                        ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
-                        final CleanupCounter countThumbnails = new CleanupCounter();
-                        for (final WildLogFile wildLogFile : listFiles) {
-                            executorService.submit(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-                                        if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
-//                                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-//                                                wildLogFile.getAbsoluteThumbnailPath(size);
-//                                            }
-                                            // Maak net die nodigste thumbnails, want anders vat dinge donners lank
-                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
-                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
-                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
-                                            wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
-                                        }
-                                    }
-                                    // Not going to bother with synchornization here, since it's just the progress bar
-                                    countThumbnails.counter++;
-                                    setProgress(75 + (int)(countThumbnails.counter/(double)listFiles.size()*24));
-                                    setMessage("Cleanup Step 6: (Optional) Recreating default thumbnails... " + getProgress() + "%");
-                                }
-                            });
-                        }
-                        for (WildLogSystemImages systemFile : WildLogSystemImages.values()) {
-                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
-                                systemFile.getWildLogFile().getAbsoluteThumbnailPath(size);
+                        // Check GPS Accuracy
+                        setMessage("Cleanup Step 6: Check the GPS Accuracy values... " + getProgress() + "%");
+                        finalHandleFeedback.println("6) Check the GPS Accuracy values.");
+                        allSightings = app.getDBI().list(new Sighting(), false);
+                        int countGPSAccuracy = 0;
+                        int badGPSAccuracy = 0;
+                        for (Sighting sighting : allSightings) {
+                            if ((sighting.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(sighting.getGPSAccuracy()))
+                                    && sighting.getLatitude() != null && !Latitudes.NONE.equals(sighting.getLatitude())
+                                    && sighting.getLongitude() != null && !Longitudes.NONE.equals(sighting.getLongitude())) {
+                                sighting.setGPSAccuracy(GPSAccuracy.AVERAGE);
+                                app.getDBI().createOrUpdate(sighting, false);
+                                badGPSAccuracy++;
+                                finalHandleFeedback.println("ERROR:     GPS information found without GPS Accuracy for Observation (" + sighting.getSightingCounter() + ").");
+                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
                             }
+                            else {
+                                if ((sighting.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(sighting.getGPSAccuracy()))
+                                        && (sighting.getLatitude() == null || Latitudes.NONE.equals(sighting.getLatitude())
+                                        || sighting.getLongitude() == null || Longitudes.NONE.equals(sighting.getLongitude()))) {
+                                    sighting.setGPSAccuracy(GPSAccuracy.NONE);
+                                    app.getDBI().createOrUpdate(sighting, false);
+                                    badGPSAccuracy++;
+                                    finalHandleFeedback.println("ERROR:     GPS Accuracy information found without GPS location for Observation (" + sighting.getSightingCounter() + ").");
+                                    finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
+                                }
+                            }
+                            countGPSAccuracy++;
+                            setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
+                            setMessage("Cleanup Step 6: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
-                        // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), becaue this might take much-much longer
-                        executorService.shutdown();
-                        if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
-                            finalHandleFeedback.println("ERROR:       Processing the thumbnails took too long.");
-                            finalHandleFeedback.println("-UNRESOLVED: Thumbnails can be created on demand by the application.");
+                        List<Location> allLocations = app.getDBI().list(new Location());
+                        countGPSAccuracy = 0;
+                        for (Location location : allLocations) {
+                            if ((location.getGPSAccuracy() == null || GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
+                                    && location.getLatitude() != null && !Latitudes.NONE.equals(location.getLatitude())
+                                    && location.getLongitude() != null && !Longitudes.NONE.equals(location.getLongitude())) {
+                                location.setGPSAccuracy(GPSAccuracy.AVERAGE);
+                                app.getDBI().createOrUpdate(location, location.getName());
+                                badGPSAccuracy++;
+                                finalHandleFeedback.println("ERROR:     GPS information found without GPS Accuracy for Place (" + location.getName() + ").");
+                                finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a default value of AVERAGE.");
+                            }
+                            else {
+                                if ((location.getGPSAccuracy() != null && !GPSAccuracy.NONE.equals(location.getGPSAccuracy()))
+                                        && (location.getLatitude() == null || Latitudes.NONE.equals(location.getLatitude())
+                                        || location.getLongitude() == null || Longitudes.NONE.equals(location.getLongitude()))) {
+                                    location.setGPSAccuracy(GPSAccuracy.NONE);
+                                    app.getDBI().createOrUpdate(location, location.getName());
+                                    badGPSAccuracy++;
+                                    finalHandleFeedback.println("ERROR:     GPS Accuracy information found without GPS location for Place (" + location.getName() + ").");
+                                    finalHandleFeedback.println("+RESOLVED: Set the GPS Accuracy to a value of NONE.");
+                                }
+                            }
+                            countGPSAccuracy++;
+                            setProgress(72 + (int)(countGPSAccuracy/(double)allSightings.size()*2));
+                            setMessage("Cleanup Step 6: Check the GPS Accuracy values... " + getProgress() + "%");
                         }
-                        setProgress(99);
+                        setProgress(76);
+                        
+                        // ---------------------7---------------------
+                        // Re-create die default thumbnails
+                        if (recreateThumbnailsResult == JOptionPane.YES_OPTION) {
+                            setMessage("Cleanup Step 7: (Optional) Recreating default thumbnails... " + getProgress() + "%");
+                            finalHandleFeedback.println("7) Recreate the default thumbnails for all images.");
+                            final List<WildLogFile> listFiles = app.getDBI().list(new WildLogFile());
+                            ExecutorService executorService = Executors.newFixedThreadPool(app.getThreadCount(), new NamedThreadFactory("WL_CleanWorkspace"));
+                            final CleanupCounter countThumbnails = new CleanupCounter();
+                            for (final WildLogFile wildLogFile : listFiles) {
+                                executorService.submit(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+                                            if (WildLogFileType.IMAGE.equals(wildLogFile.getFileType())) {
+    //                                            for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+    //                                                wildLogFile.getAbsoluteThumbnailPath(size);
+    //                                            }
+                                                // Maak net die nodigste thumbnails, want anders vat dinge donners lank
+                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.VERY_SMALL);
+                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.SMALL);
+                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.MEDIUM_SMALL);
+                                                wildLogFile.getAbsoluteThumbnailPath(WildLogThumbnailSizes.NORMAL);
+                                            }
+                                        }
+                                        // Not going to bother with synchornization here, since it's just the progress bar
+                                        countThumbnails.counter++;
+                                        setProgress(76 + (int)(countThumbnails.counter/(double)listFiles.size()*23));
+                                        setMessage("Cleanup Step 7: (Optional) Recreating default thumbnails... " + getProgress() + "%");
+                                    }
+                                });
+                            }
+                            for (WildLogSystemImages systemFile : WildLogSystemImages.values()) {
+                                for (WildLogThumbnailSizes size : WildLogThumbnailSizes.values()) {
+                                    systemFile.getWildLogFile().getAbsoluteThumbnailPath(size);
+                                }
+                            }
+                            // Don't use UtilsConcurency.waitForExecutorToShutdown(executorService), because this might take much-much longer
+                            executorService.shutdown();
+                            if (!executorService.awaitTermination(2, TimeUnit.DAYS)) {
+                                finalHandleFeedback.println("ERROR:       Processing the thumbnails took too long.");
+                                finalHandleFeedback.println("-UNRESOLVED: Thumbnails can be created on demand by the application.");
+                            }
+                            setProgress(99);
+                        }
+                        else {
+                            setProgress(99);
+                            setMessage("Cleanup Step 7: (Optional) Recreating default thumbnails... SKIPPED " + getProgress() + "%");
+                            finalHandleFeedback.println("7) Recreate the default thumbnails for all images. SKIPPED");
+                        }
 
                         // ---------------------?---------------------
                         // Recreate the database (to optimise file size and indexes)
@@ -2382,6 +2464,7 @@ public final class WildLogView extends JFrame {
                         finalHandleFeedback.println("Database file record was missing non-essential data: " + filesWithMissingData);
                         finalHandleFeedback.println("Workspace file not found in the database: " + filesNotInDB.counter);
                         finalHandleFeedback.println("Incorrect links between database records: " + badDataLinks);
+                        finalHandleFeedback.println("Records with incorrect GPS Accuracy: " + badGPSAccuracy);
                         finalHandleFeedback.println("");
                         finalHandleFeedback.println("+++++++++++++++++++ DURATION +++++++++++++++++++");
                         long duration = System.currentTimeMillis() - startTime;
@@ -2711,7 +2794,11 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuImportWorkspaceActionPerformed
 
     private void mnuExportWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportWorkspaceActionPerformed
-        WorkspaceExportDialog dialog = new WorkspaceExportDialog(app);
+        WorkspaceExportDialog dialog = new WorkspaceExportDialog(app, 
+                WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath()
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()))),
+                null);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuExportWorkspaceActionPerformed
 
@@ -2879,7 +2966,11 @@ public final class WildLogView extends JFrame {
     }//GEN-LAST:event_mnuImportWildNoteActionPerformed
 
     private void mnuBackupWorkspaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuBackupWorkspaceActionPerformed
-        WorkspaceExportDialog dialog = new WorkspaceExportDialog(app);
+        WorkspaceExportDialog dialog = new WorkspaceExportDialog(app, 
+                WildLogPaths.WILDLOG_EXPORT_WORKSPACE.getAbsoluteFullPath()
+                    .resolve(WildLogPaths.WILDLOG_BACKUPS.getRelativePath()
+                    .resolve(UtilsTime.WL_DATE_FORMATTER_FOR_FILES_WITH_TIMESTAMP.format(LocalDateTime.now()))),
+                null);
         dialog.setVisible(true);
     }//GEN-LAST:event_mnuBackupWorkspaceActionPerformed
 

@@ -75,8 +75,6 @@
                                       <Component id="rdbOrderByLocation" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Component id="rdbOrderByElement" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                                      <Component id="rdbOrderByDate" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
@@ -89,7 +87,16 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="jCheckBox1" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="jSeparator2" min="-2" pref="573" max="-2" attributes="0"/>
+                                  <Component id="jSeparator2" min="-2" pref="600" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="chkIncludeWildLogApp" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="chkDefaultDestinationFolder" min="-2" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnConfirm" min="-2" pref="110" max="-2" attributes="0"/>
@@ -105,7 +112,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace min="5" pref="5" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="btnConfirm" alignment="0" min="-2" pref="60" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -127,6 +134,13 @@
                           <Component id="jCheckBox1" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel4" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkIncludeWildLogApp" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkDefaultDestinationFolder" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Component id="jSeparator2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
@@ -134,15 +148,14 @@
                           <Component id="jLabel1" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                           <Component id="rdbOrderByLocation" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="rdbOrderByElement" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="rdbOrderByDate" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
               <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="500" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+              <Component id="jScrollPane1" pref="332" max="32767" attributes="0"/>
+              <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -344,20 +357,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdbOrderByElementActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JRadioButton" name="rdbOrderByDate">
-      <Properties>
-        <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
-          <ComponentRef name="grpTreeOrder"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Order by Date"/>
-        <Property name="toolTipText" type="java.lang.String" value="Order the tree nodes by Year Month Day and then Time."/>
-        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
-        </Property>
-        <Property name="enabled" type="boolean" value="false"/>
-        <Property name="focusPainted" type="boolean" value="false"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt;&lt;i&gt;The records marked with the WildLog (W) icon will be exported. Hold down the Ctrl key to select only the record, without it&apos;s sub-records.&lt;/i&gt;&lt;/html&gt;"/>
@@ -381,6 +380,42 @@
           <Color id="Hand Cursor"/>
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
+        <Property name="focusPainted" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel5">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Application:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkIncludeWildLogApp">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Include the WildLog Application with the Workspace"/>
+        <Property name="toolTipText" type="java.lang.String" value="Include the WildLog application with the exported Workspace."/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
+        <Property name="focusPainted" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jLabel6">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Destination:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkDefaultDestinationFolder">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="Use default export folder"/>
+        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
+          <Color id="Hand Cursor"/>
+        </Property>
         <Property name="focusPainted" type="boolean" value="false"/>
       </Properties>
     </Component>

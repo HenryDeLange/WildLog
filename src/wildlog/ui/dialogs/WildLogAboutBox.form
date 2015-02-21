@@ -32,32 +32,38 @@
               <Component id="imageLabel" min="-2" pref="132" max="-2" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="appDescLabel" alignment="0" pref="667" max="32767" attributes="0"/>
-                  <Component id="appTitleLabel" alignment="0" pref="667" max="32767" attributes="0"/>
+                  <Component id="lblDescription" alignment="0" pref="667" max="32767" attributes="0"/>
+                  <Component id="lblTitle" alignment="0" pref="667" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="versionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="vendorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="developerLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="versionLabel1" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="emailAddressLabel2" max="-2" attributes="0"/>
-                                  <Component id="appVendorLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="developerNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="emailAddressLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="emailAddressLabel1" max="-2" attributes="0"/>
+                                  <Component id="lblWorkspace" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblVersion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblEmail" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblCopyright" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblWebsite" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblJava" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="lblSettings" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace min="1" pref="1" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="lblActiveVersion" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblDeveloper" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblEmailAddress" alignment="0" min="-2" max="-2" attributes="0"/>
+                                          <Component id="lblWebsiteAddress" max="-2" attributes="0"/>
+                                          <Component id="lblActiveJava" alignment="0" max="-2" attributes="0"/>
+                                          <Component id="lblActiveApplication" alignment="0" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <Component id="lblActiveWorkspace" max="-2" attributes="0"/>
+                                  <Component id="lblActiveSettings" alignment="0" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Component id="appVersionLabel1" alignment="0" max="-2" attributes="0"/>
-                          <Component id="appVersionLabel" max="-2" attributes="0"/>
+                          <Component id="lblApplication" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -70,129 +76,137 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Component id="imageLabel" min="-2" pref="180" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <Component id="appTitleLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="imageLabel" min="-2" pref="180" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="lblTitle" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                      <Component id="appDescLabel" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDescription" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="versionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="appVersionLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblWorkspace" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblActiveWorkspace" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="versionLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="appVersionLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblSettings" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblActiveSettings" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="emailLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailAddressLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblApplication" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblActiveApplication" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="vendorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="appVendorLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblJava" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblActiveJava" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblVersion" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblActiveVersion" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="developerNameLabel" min="-2" max="-2" attributes="0"/>
-                          <Component id="developerLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblDeveloper" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblCopyright" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="emailLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailAddressLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblEmail" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblEmailAddress" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="emailLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailAddressLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblWebsite" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblWebsiteAddress" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="appTitleLabel">
+    <Component class="javax.swing.JLabel" name="lblTitle">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="appTitleLabel" property="font" relativeSize="true" size="3"/>
+            <Font bold="true" component="lblTitle" property="font" relativeSize="true" size="3"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="About WildLog"/>
         <Property name="toolTipText" type="java.lang.String" value=""/>
-        <Property name="name" type="java.lang.String" value="appTitleLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblTitle" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="versionLabel">
+    <Component class="javax.swing.JLabel" name="lblWorkspace">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="versionLabel" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblWorkspace" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Active Workspace:"/>
-        <Property name="name" type="java.lang.String" value="versionLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblWorkspace" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="appVersionLabel">
+    <Component class="javax.swing.JLabel" name="lblActiveWorkspace">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="WildLogPaths.getFullWorkspacePrefix().toString()" type="code"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="appVersionLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblActiveWorkspace" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="vendorLabel">
+    <Component class="javax.swing.JLabel" name="lblVersion">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="vendorLabel" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblVersion" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Product Version:"/>
-        <Property name="name" type="java.lang.String" value="vendorLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblVersion" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="appVendorLabel">
+    <Component class="javax.swing.JLabel" name="lblActiveVersion">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="WildLogApp.WILDLOG_VERSION" type="code"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="appVendorLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblActiveVersion" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="appDescLabel">
+    <Component class="javax.swing.JLabel" name="lblDescription">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt; Use at own risk. WildLog was written in Java by Henry de Lange (myself) and uses third party libraries to help with some of the functionality including OpenMap, H2, SwingX, JMF, MetadataExtractor, MediaUtil and PDFBox. See the application folder for license details.&lt;/html&gt;"/>
-        <Property name="name" type="java.lang.String" value="appDescLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblDescription" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
@@ -211,129 +225,156 @@
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="developerLabel">
+    <Component class="javax.swing.JLabel" name="lblCopyright">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="developerLabel" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblCopyright" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Copyright &amp; Developer:"/>
-        <Property name="name" type="java.lang.String" value="developerLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblCopyright" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="developerNameLabel">
+    <Component class="javax.swing.JLabel" name="lblDeveloper">
       <Properties>
         <Property name="text" type="java.lang.String" value="Henry de Lange"/>
-        <Property name="name" type="java.lang.String" value="developerNameLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblDeveloper" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="emailLabel">
+    <Component class="javax.swing.JLabel" name="lblEmail">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="emailLabel" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblEmail" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Contact &amp; Support Email:"/>
-        <Property name="name" type="java.lang.String" value="emailLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblEmail" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="emailAddressLabel">
+    <Component class="javax.swing.JLabel" name="lblEmailAddress">
       <Properties>
         <Property name="text" type="java.lang.String" value="support@mywild.co.za"/>
-        <Property name="name" type="java.lang.String" value="emailAddressLabel" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblEmailAddress" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="emailLabel1">
+    <Component class="javax.swing.JLabel" name="lblWebsite">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="emailLabel1" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblWebsite" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Website:"/>
-        <Property name="name" type="java.lang.String" value="emailLabel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblWebsite" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="emailAddressLabel1">
+    <Component class="javax.swing.JLabel" name="lblWebsiteAddress">
       <Properties>
         <Property name="text" type="java.lang.String" value="&lt;html&gt; http://www.mywild.co.za &lt;/html&gt;"/>
-        <Property name="name" type="java.lang.String" value="emailAddressLabel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblWebsiteAddress" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="emailLabel2">
+    <Component class="javax.swing.JLabel" name="lblJava">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="emailLabel2" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblJava" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Active Java Runtime:"/>
-        <Property name="name" type="java.lang.String" value="emailLabel2" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblJava" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="emailAddressLabel2">
+    <Component class="javax.swing.JLabel" name="lblActiveJava">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="System.getProperty(&quot;java.home&quot;)" type="code"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="emailAddressLabel2" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblActiveJava" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="versionLabel1">
+    <Component class="javax.swing.JLabel" name="lblSettings">
       <Properties>
         <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
           <FontInfo relative="true">
-            <Font bold="true" component="versionLabel1" property="font" relativeSize="true" size="0"/>
+            <Font bold="true" component="lblSettings" property="font" relativeSize="true" size="0"/>
           </FontInfo>
         </Property>
         <Property name="text" type="java.lang.String" value="Active Settings Folder:"/>
-        <Property name="name" type="java.lang.String" value="versionLabel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblSettings" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="appVersionLabel1">
+    <Component class="javax.swing.JLabel" name="lblActiveSettings">
       <Properties>
         <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
           <Connection code="WildLogApp.getACTIVE_WILDLOG_SETTINGS_FOLDER().toAbsolutePath().toString()" type="code"/>
         </Property>
-        <Property name="name" type="java.lang.String" value="appVersionLabel1" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="lblActiveSettings" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblApplication">
+      <Properties>
+        <Property name="font" type="java.awt.Font" noResource="true" editor="org.netbeans.modules.form.editors2.FontEditor">
+          <FontInfo relative="true">
+            <Font bold="true" component="lblApplication" property="font" relativeSize="true" size="0"/>
+          </FontInfo>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Active Application Folder:"/>
+        <Property name="name" type="java.lang.String" value="lblApplication" noResource="true"/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblActiveApplication">
+      <Properties>
+        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+          <Connection code="WildLogApp.getACTIVEWILDLOG_CODE_FOLDER().toAbsolutePath().toString()" type="code"/>
+        </Property>
+        <Property name="name" type="java.lang.String" value="lblActiveApplication" noResource="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>

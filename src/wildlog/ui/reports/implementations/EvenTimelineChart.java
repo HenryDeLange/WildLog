@@ -33,7 +33,7 @@ import wildlog.ui.reports.utils.UtilsReports;
 import wildlog.ui.utils.UtilsTime;
 
 
-public class EventineChart extends AbstractReport<Sighting> {
+public class EvenTimelineChart extends AbstractReport<Sighting> {
     private enum ChartType {TIMELINE_FOR_ALL, TIMELINE_PER_ELEMENT};
     private ChartType chartType = ChartType.TIMELINE_FOR_ALL;
     private Chart displayedChart;
@@ -43,7 +43,7 @@ public class EventineChart extends AbstractReport<Sighting> {
 // TODO: Soortgelyk aan 'n timeline, maar aan een lopend (nie geloop oor die dag nie). DIe idee is om al die sightings te sien soos hulle gebeur (met gaps tussen in en spikes wanneer daar sightings was...
     //      Dalk twee views, een met intervals en 'n areachart, en 'n ander een net die events na mekaar en "Grys" events wat stil tye wys...
     
-    public EventineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
+    public EvenTimelineChart(List<Sighting> inLstData, JLabel inChartDescLabel) {
         super("Timeline Reports", inLstData, inChartDescLabel);
         lstCustomButtons = new ArrayList<>(5);
         // Timeline for all

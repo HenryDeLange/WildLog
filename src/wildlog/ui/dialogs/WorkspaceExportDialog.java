@@ -2,15 +2,23 @@ package wildlog.ui.dialogs;
 
 import java.awt.Cursor;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -44,11 +52,15 @@ import wildlog.utils.WildLogPaths;
 
 
 public class WorkspaceExportDialog extends javax.swing.JDialog {
-    private WildLogApp app;
+    private final WildLogApp app;
+    private final Path defaultDestination;
+    private final List<Sighting> lstSightings;
 
 
-    public WorkspaceExportDialog(WildLogApp inApp) {
+    public WorkspaceExportDialog(WildLogApp inApp, Path inDefaultDestination, List<Sighting> inLimitedList) {
         app = inApp;
+        defaultDestination = inDefaultDestination;
+        lstSightings = inLimitedList;
         initComponents();
         // Setup the tree
         treWorkspace.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -90,11 +102,14 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         rdbOrderByLocation = new javax.swing.JRadioButton();
         rdbOrderByElement = new javax.swing.JRadioButton();
-        rdbOrderByDate = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jCheckBox1 = new javax.swing.JCheckBox();
+        jLabel5 = new javax.swing.JLabel();
+        chkIncludeWildLogApp = new javax.swing.JCheckBox();
+        jLabel6 = new javax.swing.JLabel();
+        chkDefaultDestinationFolder = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Export To A New Workspace");
@@ -217,13 +232,6 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             }
         });
 
-        grpTreeOrder.add(rdbOrderByDate);
-        rdbOrderByDate.setText("Order by Date");
-        rdbOrderByDate.setToolTipText("Order the tree nodes by Year Month Day and then Time.");
-        rdbOrderByDate.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        rdbOrderByDate.setEnabled(false);
-        rdbOrderByDate.setFocusPainted(false);
-
         jLabel3.setText("<html><i>The records marked with the WildLog (W) icon will be exported. Hold down the Ctrl key to select only the record, without it's sub-records.</i></html>");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -234,6 +242,22 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
         jCheckBox1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jCheckBox1.setEnabled(false);
         jCheckBox1.setFocusPainted(false);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Application:");
+
+        chkIncludeWildLogApp.setText("Include the WildLog Application with the Workspace");
+        chkIncludeWildLogApp.setToolTipText("Include the WildLog application with the exported Workspace.");
+        chkIncludeWildLogApp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkIncludeWildLogApp.setFocusPainted(false);
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("Destination:");
+
+        chkDefaultDestinationFolder.setSelected(true);
+        chkDefaultDestinationFolder.setText("Use default export folder");
+        chkDefaultDestinationFolder.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        chkDefaultDestinationFolder.setFocusPainted(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -269,9 +293,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addGap(5, 5, 5)
                                         .addComponent(rdbOrderByLocation)
                                         .addGap(0, 0, 0)
-                                        .addComponent(rdbOrderByElement)
-                                        .addGap(0, 0, 0)
-                                        .addComponent(rdbOrderByDate))
+                                        .addComponent(rdbOrderByElement))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -282,7 +304,15 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                                         .addComponent(chkRemoveTime)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jCheckBox1))
-                                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 600, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(chkIncludeWildLogApp)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel6)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(chkDefaultDestinationFolder)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(5, 5, 5))))
@@ -291,7 +321,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnConfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,19 +340,24 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             .addComponent(chkReduceGPS)
                             .addComponent(jCheckBox1)
                             .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(chkIncludeWildLogApp)
+                            .addComponent(jLabel6)
+                            .addComponent(chkDefaultDestinationFolder))
                         .addGap(4, 4, 4)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(3, 3, 3)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(rdbOrderByLocation)
-                            .addComponent(rdbOrderByElement)
-                            .addComponent(rdbOrderByDate))))
+                            .addComponent(rdbOrderByElement))))
                 .addGap(2, 2, 2)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(2, 2, 2)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
-                .addGap(5, 5, 5))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -330,7 +365,19 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         try {
-            final File destination = showFileChooser();
+            final Path destination;
+            if (chkDefaultDestinationFolder.isSelected() && defaultDestination != null) {
+                destination = defaultDestination;
+            }
+            else {
+                File file = showFileChooser();
+                if (file != null) {
+                    destination = file.toPath();
+                }
+                else {
+                    destination = null;
+                }
+            }
 // TODO: Toets dalk eendag dat die persoon nie 'n reeds bestaande Workspace probeer overwrite nie... (Toets dat die WildLog folder nog nie bestaan nie)
             if (destination != null) {
                 app.getMainFrame().getTabbedPane().setSelectedIndex(0);
@@ -343,7 +390,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         setVisible(false);
                         WildLogDBI newDBI = null;
                         try {
-                            Path destinationWorkspace = destination.toPath().resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
+                            Path destinationWorkspace = destination.resolve(WildLogPaths.DEFAULT_WORKSPACE_NAME.getRelativePath());
                             newDBI = new WildLogDBI_h2("jdbc:h2:"
                                 + (destinationWorkspace.resolve(WildLogPaths.WILDLOG_DATA.getRelativePath()).resolve(WildLogPaths.DEFAULT_DATABASE_NAME.getRelativePath())).toAbsolutePath()
                                 + ";AUTOCOMMIT=ON;IGNORECASE=TRUE", false);
@@ -358,6 +405,39 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                             setMessage("Workspace Export: " + getProgress() + "%");
                             // Save the selected nodes
                             saveChildren(newDBI, destinationWorkspace, (DefaultMutableTreeNode)treWorkspace.getModel().getRoot(), totalNodes, this, new ProgressCounter());
+                            setProgress(98);
+                            setMessage("Workspace Export: " + getProgress() + "%");
+                            // Export the WildLog application
+                            if (chkIncludeWildLogApp.isSelected()) {
+                                Path fullApplicationFolder = WildLogApp.getACTIVEWILDLOG_CODE_FOLDER().getParent();
+                                Path desitnationFolder = destinationWorkspace.resolve(WildLogPaths.WILDLOG_BUNDLED_APPLICATION.getRelativePath());
+                                // Copy the application files
+                                Files.walkFileTree(fullApplicationFolder, new SimpleFileVisitor<Path>() {
+                                    @Override
+                                    public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes attrs) throws IOException {
+                                        Files.createDirectories(desitnationFolder.resolve(fullApplicationFolder.relativize(dir)));
+                                        return FileVisitResult.CONTINUE;
+                                    }
+                                    @Override
+                                    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
+                                        Files.copy(file, desitnationFolder.resolve(fullApplicationFolder.relativize(file)));
+                                        return FileVisitResult.CONTINUE;
+                                    }
+                                });
+                                setProgress(99);
+                                setMessage("Workspace Export: " + getProgress() + "%");
+                                // Change the properties and settings files/folders to point to the exported workspace
+                                // NOTE: Vir die paths om reg te werk moet die app gestart word vanuit dieselfde folder as die hoof JAR file.
+                                //       Dit gaan te confusing en tricky raak om die EXE files in 'n ander folder te sit.
+                                Path settingsFile = desitnationFolder.resolve("WildLogSettings").resolve("wildloghome");
+                                Path propertiesFile = desitnationFolder.resolve("application").resolve("wildlog.properties");
+                                byte[] fileBytes = Files.readAllBytes(propertiesFile);
+                                String propertiesText = new String(fileBytes, Charset.defaultCharset());
+                                int index = propertiesText.indexOf("settingsFolderLocation=") + "settingsFolderLocation=".length();
+                                propertiesText = propertiesText.substring(0, index) + propertiesFile.getParent().relativize(settingsFile.getParent()).toString().replace('\\', '/');
+                                UtilsFileProcessing.createFileFromBytes(propertiesText.getBytes(), propertiesFile);
+                                UtilsFileProcessing.createFileFromBytes("../../".getBytes(), settingsFile);
+                            }
                             setProgress(100);
                             setMessage("Workspace Export: " + getProgress() + "%");
                         }
@@ -374,6 +454,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                         setProgress(100);
                         setMessage("Done with the Workspace Export");
                         app.getMainFrame().getGlassPane().setCursor(Cursor.getDefaultCursor());
+                        UtilsFileProcessing.openFile(destination);
                         return null;
                     }
                 });
@@ -493,7 +574,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                     }
                 }
             }
-            inProgressbarTask.setTaskProgress(3 + (int)(inCounter.counter/(double)inTotalNodes*96));
+            inProgressbarTask.setTaskProgress(3 + (int)(inCounter.counter/(double)inTotalNodes*95));
             inProgressbarTask.setMessage("Workspace Export: " + inProgressbarTask.getProgress() + "%");
             inCounter.counter++;
         }
@@ -553,7 +634,7 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_rdbExportNoFilesActionPerformed
 
     private void treWorkspaceMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_treWorkspaceMousePressed
-        // Gebruk die muis se posisie om die node te kry want die LastSelected node is verkeerd, vberal as mens die +/- gebruik om te expand/colapse...
+        // Gebruk die muis se posisie om die node te kry want die LastSelected node is verkeerd, veral as mens die +/- gebruik om te expand/colapse...
         TreePath clickedPath = treWorkspace.getPathForLocation(evt.getX(), evt.getY());
         if (clickedPath != null && clickedPath.getLastPathComponent() != null) {
             if (((DefaultMutableTreeNode) clickedPath.getLastPathComponent()).getUserObject() instanceof WorkspaceTreeDataWrapper) {
@@ -592,7 +673,6 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     private void rdbOrderByLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdbOrderByLocationActionPerformed
         if (rdbOrderByLocation.isSelected()) {
-            // Load the tree
             loadLocationTree();
         }
     }//GEN-LAST:event_rdbOrderByLocationActionPerformed
@@ -605,7 +685,20 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     private void loadLocationTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-        List<Location> locations = new ArrayList<Location>(app.getDBI().list(new Location()));
+        List<Location> locations;
+        if (lstSightings == null) {
+            locations = new ArrayList<Location>(app.getDBI().list(new Location()));
+        }
+        else {
+            Set<String> uniqueLocations = new HashSet<>();
+            locations = new ArrayList<>();
+            for (Sighting sighting : lstSightings) {
+                if (!uniqueLocations.contains(sighting.getLocationName())) {
+                    uniqueLocations.add(sighting.getLocationName());
+                    locations.add(new Location(sighting.getLocationName()));
+                }
+            }
+        }
         Map<String, DefaultMutableTreeNode> mapElements;
         Map<String, DefaultMutableTreeNode> mapVisits;
         Collections.sort(locations);
@@ -629,22 +722,36 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 }
             });
             for (Sighting sighting : sightings) {
-                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
-                if (visitNode == null) {
-                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-                    mapVisits.put(sighting.getVisitName(), visitNode);
-                    // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
-                    mapElements.clear();
+                boolean found = false;
+                if (lstSightings == null) {
+                    found = true;
                 }
-                locationNode.add(visitNode);
-                DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementName());
-                if (elementNode == null) {
-                    elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Element(sighting.getElementName()), false));
-                    mapElements.put(sighting.getElementName(), elementNode);
+                else {
+                    for (Sighting tempSighting : lstSightings) {
+                        if (sighting.getSightingCounter() == tempSighting.getSightingCounter()) {
+                            found = true;
+                            break;
+                        }
+                    }
                 }
-                visitNode.add(elementNode);
-                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
-                elementNode.add(sightingNode);
+                if (found) {
+                    DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
+                    if (visitNode == null) {
+                        visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
+                        mapVisits.put(sighting.getVisitName(), visitNode);
+                        // Clear die hashmap hier as 'n nuwe visit gelaai word (die sightings behoort volgens visit gesort te wees, so die visit sal nie weer verskyn nie.
+                        mapElements.clear();
+                    }
+                    locationNode.add(visitNode);
+                    DefaultMutableTreeNode elementNode = mapElements.get(sighting.getElementName());
+                    if (elementNode == null) {
+                        elementNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Element(sighting.getElementName()), false));
+                        mapElements.put(sighting.getElementName(), elementNode);
+                    }
+                    visitNode.add(elementNode);
+                    DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
+                    elementNode.add(sightingNode);
+                }
             }
         }
         treWorkspace.setModel(new DefaultTreeModel(root));
@@ -652,7 +759,20 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     private void loadElementTree() {
         DefaultMutableTreeNode root = new DefaultMutableTreeNode("WildLog Workspace");
-        List<Element> elements = new ArrayList<Element>(app.getDBI().list(new Element()));
+        List<Element> elements;
+        if (lstSightings == null) {
+            elements = new ArrayList<Element>(app.getDBI().list(new Element()));
+        }
+        else {
+            Set<String> uniqueLocations = new HashSet<>();
+            elements = new ArrayList<>();
+            for (Sighting sighting : lstSightings) {
+                if (!uniqueLocations.contains(sighting.getElementName())) {
+                    uniqueLocations.add(sighting.getElementName());
+                    elements.add(new Element(sighting.getElementName()));
+                }
+            }
+        }
         Map<String, DefaultMutableTreeNode> mapLocations;
         Map<String, DefaultMutableTreeNode> mapVisits;
         Collections.sort(elements);
@@ -676,20 +796,34 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
                 }
             });
             for (Sighting sighting : sightings) {
-                DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationName());
-                if (locationNode == null) {
-                    locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Location(sighting.getLocationName()), false));
-                    mapLocations.put(sighting.getLocationName(), locationNode);
+                boolean found = false;
+                if (lstSightings == null) {
+                    found = true;
                 }
-                elementNode.add(locationNode);
-                DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
-                if (visitNode == null) {
-                    visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
-                    mapVisits.put(sighting.getVisitName(), visitNode);
+                else {
+                    for (Sighting tempSighting : lstSightings) {
+                        if (sighting.getSightingCounter() == tempSighting.getSightingCounter()) {
+                            found = true;
+                            break;
+                        }
+                    }
                 }
-                locationNode.add(visitNode);
-                DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
-                visitNode.add(sightingNode);
+                if (found) {
+                    DefaultMutableTreeNode locationNode = mapLocations.get(sighting.getLocationName());
+                    if (locationNode == null) {
+                        locationNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Location(sighting.getLocationName()), false));
+                        mapLocations.put(sighting.getLocationName(), locationNode);
+                    }
+                    elementNode.add(locationNode);
+                    DefaultMutableTreeNode visitNode = mapVisits.get(sighting.getVisitName());
+                    if (visitNode == null) {
+                        visitNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new Visit(sighting.getVisitName()), false));
+                        mapVisits.put(sighting.getVisitName(), visitNode);
+                    }
+                    locationNode.add(visitNode);
+                    DefaultMutableTreeNode sightingNode = new DefaultMutableTreeNode(new WorkspaceTreeDataWrapper(new SightingWrapper(sighting, true), false));
+                    visitNode.add(sightingNode);
+                }
             }
         }
         treWorkspace.setModel(new DefaultTreeModel(root));
@@ -698,6 +832,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
+    private javax.swing.JCheckBox chkDefaultDestinationFolder;
+    private javax.swing.JCheckBox chkIncludeWildLogApp;
     private javax.swing.JCheckBox chkReduceGPS;
     private javax.swing.JCheckBox chkRemoveDescriptions;
     private javax.swing.JCheckBox chkRemoveTime;
@@ -709,6 +845,8 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -717,7 +855,6 @@ public class WorkspaceExportDialog extends javax.swing.JDialog {
     private javax.swing.JRadioButton rdbExportNoFiles;
     private javax.swing.JRadioButton rdbExportOriginalImages;
     private javax.swing.JRadioButton rdbExportThumbnails;
-    private javax.swing.JRadioButton rdbOrderByDate;
     private javax.swing.JRadioButton rdbOrderByElement;
     private javax.swing.JRadioButton rdbOrderByLocation;
     private javax.swing.JTree treWorkspace;

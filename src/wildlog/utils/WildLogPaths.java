@@ -53,7 +53,8 @@ public enum WildLogPaths {
     WILDLOG_EXPORT_SLIDESHOW              (Paths.get("Export", "Slideshow")),
     WILDLOG_EXPORT_FILES                  (Paths.get("Export", "OriginalFiles")),
     WILDLOG_EXPORT_XML                    (Paths.get("Export", "XML")),
-    WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace"));
+    WILDLOG_EXPORT_WORKSPACE              (Paths.get("Export", "Workspace")),
+    WILDLOG_BUNDLED_APPLICATION           (Paths.get("WildLogApplication"));
 
     private static Path activeWorkspacePrefix;
     private final Path path;
@@ -68,14 +69,14 @@ public enum WildLogPaths {
      */
     public static void setWorkspacePrefix(String inPrefix) {
         if (inPrefix == null || inPrefix.isEmpty()) {
-            activeWorkspacePrefix = Paths.get(File.separator).normalize().toAbsolutePath();
+            activeWorkspacePrefix = Paths.get(File.separator).toAbsolutePath().normalize();
         }
         else {
-            activeWorkspacePrefix = Paths.get(inPrefix).normalize().toAbsolutePath();
+            activeWorkspacePrefix = Paths.get(inPrefix).toAbsolutePath().normalize();
         }
         // Add the WildLog folder to the prefix if it was not selected
         if (!activeWorkspacePrefix.endsWith(DEFAULT_WORKSPACE_NAME.getRelativePath())) {
-            activeWorkspacePrefix = activeWorkspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath());
+            activeWorkspacePrefix = activeWorkspacePrefix.resolve(DEFAULT_WORKSPACE_NAME.getRelativePath()).normalize();
         }
     }
 
@@ -85,25 +86,25 @@ public enum WildLogPaths {
      * @return
      */
     public Path getAbsoluteFullPath() {
-        return activeWorkspacePrefix.resolve(path).normalize().toAbsolutePath();
+        return activeWorkspacePrefix.resolve(path).toAbsolutePath().normalize();
     }
 
     /**
      * Get only the Path. (For DEFAULT_WORKSPACE_NAME paths this is relative to the WildLog folder,
-     * <b>including the WildLog folder</b> in the path.)
+     * <b>excluding the WildLog folder</b> in the path.)
      * @return
      */
     public Path getRelativePath() {
-        return path;
+        return path.normalize();
     }
 
     /**
      * This will return the full absolute path of the Workspace Prefix.
-     * This value will not include the 'WildLog' part.
+     * This value will include the 'WildLog' part.
      * @return
      */
     public static Path getFullWorkspacePrefix() {
-        return activeWorkspacePrefix.toAbsolutePath();
+        return activeWorkspacePrefix.toAbsolutePath().normalize();
     }
 
     /**

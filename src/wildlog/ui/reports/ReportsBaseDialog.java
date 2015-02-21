@@ -116,6 +116,7 @@ public class ReportsBaseDialog extends JFrame {
         sceneCharts.getStylesheets().add("wildlog/ui/reports/chart/styling/Charts.css");
         jfxReportChartPanel.setScene(sceneCharts);
         // Setup the default reports
+// TODO: Organiseer die reports dalk bietjie beter saam
         List<AbstractReport<Sighting>> reports = new ArrayList<>(12);
         reports.add(new ElementsChart(lstFilteredData, lblReportDescription));
         reports.add(new LocationChart(lstFilteredData, lblReportDescription));
