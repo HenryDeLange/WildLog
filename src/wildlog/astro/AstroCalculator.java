@@ -3,10 +3,12 @@ package wildlog.astro;
 import astro.MoonPhase;
 import astro.MoonTimes;
 import astro.SunTimes;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import wildlog.data.enums.ActiveTimeSpesific;
 import wildlog.data.enums.Moonlight;
+import wildlog.ui.utils.UtilsTime;
 
 
 public class AstroCalculator {
@@ -29,10 +31,8 @@ public class AstroCalculator {
         //       There is thus a difference between the two time, the one shows the start of the event the other the end.
         //       Since it takes about 2+ minutes for the sun to move accross the horizon (longer at poles) 
         //       the start time will actually be earlier than the algorith time.
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(inDate);
-// FIXME: Gebruik LocalTime
-        double time = (double)(calendar.get(Calendar.HOUR_OF_DAY) + (((double)calendar.get(Calendar.MINUTE)) / 60.0));
+        LocalDateTime localDateTime = UtilsTime.getLocalDateTimeFromDate(inDate);
+        double time = (double)(localDateTime.getHour() + (((double)localDateTime.getMinute()) / 60.0));
         if (day[SunTimes.START] == SunTimes.BELOW_HORIZON || day[SunTimes.END] == SunTimes.BELOW_HORIZON
                 || day[SunTimes.START] == SunTimes.ABOVE_HORIZON || day[SunTimes.END] == SunTimes.ABOVE_HORIZON
                 || nearnight[SunTimes.START] == SunTimes.BELOW_HORIZON || nearnight[SunTimes.END] == SunTimes.BELOW_HORIZON
